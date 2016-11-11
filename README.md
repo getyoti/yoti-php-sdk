@@ -34,11 +34,11 @@ _We are not yet on packagist, so, for the moment, in order to use the SDK you ne
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/lampkicking/yoti-sdk-server-php.git"
+      "url": "https://github.com/getyoti/php.git"
     }
   ],
   "require": {
-    "yoti/yoti-sdk-server-php": "dev-master"
+    "yoti/yoti-php-sdk": "dev-master"
   }
 }
 ```
