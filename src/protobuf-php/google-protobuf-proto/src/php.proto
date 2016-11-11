@@ -1,0 +1,14 @@
+import "descriptor.proto";
+
+package php;
+
+option (php.package) = "google.protobuf.php";
+
+extend google.protobuf.FileOptions
+{
+    // Set the namespace (overrides package)
+    optional string package   = 50002;
+    // Generate interfaces for service definitions
+    optional bool generic_services = 50003 [default = false];
+}
+

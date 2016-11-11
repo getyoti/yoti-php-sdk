@@ -1,0 +1,37 @@
+sudo: false
+
+language: php
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+        - $HOME/protobuf
+
+php:
+    - 5.5
+    - 5.6
+    - 7.0
+    - hhvm
+    - nightly
+
+env:
+    - PROTOBUF_VERSION=2.6.1
+    - PROTOBUF_VERSION=3.0.0
+
+before_install:
+    - bash ./tests/travis/install-protobuf.sh
+
+install:
+    - composer self-update
+    - composer --prefer-source install
+    - export PATH=$PATH:$HOME/protobuf/$PROTOBUF_VERSION/bin/
+
+script:
+    - make phpcs proto-generate phpunit-coverage-clover
+
+after_script:
+    - ./vendor/bin/coveralls -v
+
+matrix:
+    allow_failures:
+        - php: nightly

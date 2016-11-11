@@ -1,0 +1,14 @@
+{
+  "name": "yoti/yoti-sdk-server-php",
+  "require-dev": {
+    "phpunit/phpunit": "5.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "attrpubapi_v1\\": "src/attrpubapi_v1",
+      "compubapi_v1\\": "src/compubapi_v1",
+      "Protobuf\\": "src/protobuf-php/protobuf/src",
+      "Yoti\\": "src/Yoti"
+    }
+  }
+}

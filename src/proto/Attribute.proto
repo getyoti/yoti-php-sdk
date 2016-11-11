@@ -1,0 +1,52 @@
+//syntax = "proto2";
+
+package attrpubapi_v1;
+
+option java_package = "com.yoti.attrpubapi_v1";
+option java_outer_classname = "AttrProto";
+
+
+// ContentType indicates how to interpret the ‘Value’ field of an Attribute.
+enum ContentType {
+	// UNDEFINED should not be seen, and is used as an error placeholder
+	// value.
+	UNDEFINED = 0;
+
+	// STRING means the value is UTF-8 encoded text.
+	STRING = 1;
+
+	// JPEG indicates a standard .jpeg image.
+	JPEG = 2;
+
+	// Date as string in RFC3339 format (YYYY-MM-DD).
+	DATE = 3;
+
+	// PNG indicates a standard .png image.
+	PNG = 4;
+}
+
+
+message Attribute {
+	optional string name = 1;
+
+	optional bytes value = 2;
+
+	optional ContentType content_type = 3;
+
+	repeated Anchor anchors = 4;
+}
+
+
+message Anchor {
+	optional bytes artifact_link = 1;
+
+	repeated bytes origin_server_certs = 2;
+
+	optional bytes artifact_signature = 3;
+
+	optional string sub_type = 4;
+
+	optional bytes signature = 5;
+
+	optional bytes signed_time_stamp = 6;
+}

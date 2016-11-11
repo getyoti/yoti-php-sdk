@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package ProtobufCompilerTest.Protos.Options;
+
+import "descriptor.proto";
+
+// option java_multiple_files = true;
+
+message MyOption
+{
+  optional int32 val = 3;
+  optional string value = 1;
+  optional string label = 2;
+}
+
+extend google.protobuf.FileOptions
+{
+  optional string my_file_option = 50000;
+}
+
+extend google.protobuf.MessageOptions
+{
+  optional int32 my_message_option        = 50001;
+  optional MyOption my_message_option_msg = 50002;
+}
+
+extend google.protobuf.FieldOptions
+{
+  optional float my_field_option = 50003;
+}
+
+extend google.protobuf.EnumOptions {
+  optional bool my_enum_option = 50004;
+}
+
+extend google.protobuf.EnumValueOptions {
+  optional uint32 my_enum_value_option = 50005;
+}
+
+option (my_file_option) = "Hello world!";
+
+message MyMessage
+{
+  option (my_message_option)           = 1234;
+  option (my_message_option_msg).val   = 0;
+  option (my_message_option_msg).value = "1234";
+  option (my_message_option_msg).label = "one,two,three,four";
+
+  optional int32  foo = 1 [(my_field_option) = 4.5];
+  optional string bar = 2;
+}
+
+enum MyEnum {
+  option (my_enum_option) = true;
+
+  FOO = 1 [(my_enum_value_option) = 321];
+  BAR = 2;
+}

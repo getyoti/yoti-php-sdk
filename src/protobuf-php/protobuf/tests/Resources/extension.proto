@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+package ProtobufTest.Protos.Extension;
+
+option java_multiple_files = true;
+
+// Animal
+
+message Animal
+{
+    extensions 100 to max;
+
+    enum Type
+    {
+        CAT = 1;
+        DOG = 2;
+    }
+
+    required Type type = 1;
+}
+
+extend Animal
+{
+    optional string habitat = 200;
+}
+
+message Cat
+{
+    extend Animal
+    {
+        optional Cat animal = 100;
+    }
+
+    optional bool declawed = 1;
+}
+
+message Dog
+{
+    extend Animal
+    {
+        optional Dog animal = 102;
+    }
+
+    optional uint32 bones_buried = 2;
+}
+
+//  command
+
+message Command
+{
+    extensions 100 to max;
+
+    enum CommandType
+    {
+        VERSION = 1;
+        LOGIN   = 2;
+    }
+
+    required CommandType type = 1;
+}
+
+extend Command
+{
+    optional bool verbose = 200 [default = false];
+}
+
+message VersionCommand
+{
+    extend Command
+    {
+        optional VersionCommand cmd = 100;
+    }
+
+    enum Protocol
+    {
+        V1 = 1;
+        V2 = 2;
+    }
+
+    required Protocol protocol = 1;
+    required fixed32 version   = 2;
+}
+
+message LoginCommand
+{
+    extend Command
+    {
+        optional LoginCommand cmd = 101;
+    }
+
+    required string username = 1;
+    required string password = 2;
+}

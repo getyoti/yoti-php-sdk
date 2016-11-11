@@ -1,0 +1,27 @@
+//syntax = "proto2";
+
+package attrpubapi_v1;
+
+import "Attribute.proto";
+
+option java_package = "com.yoti.attrpubapi_v1";
+option java_outer_classname = "AttrProto";
+
+
+// AttributeAndId is a simple container for holding an attribute's value
+// alongside its ID.
+message AttributeAndId {
+	optional Attribute attribute = 1;
+
+	optional bytes attribute_id = 2;
+}
+
+
+message AttributeAndIdList{
+    repeated AttributeAndId attribute_and_id_list = 1;
+}
+
+
+message AttributeList {
+    repeated Attribute attributes = 1;
+}

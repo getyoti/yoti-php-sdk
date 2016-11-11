@@ -1,0 +1,30 @@
+{
+    "name"          : "protobuf-php/google-protobuf-proto",
+    "description"   : "Protocol Buffers classes from Google's Protocol Buffers Compiler",
+    "keywords"      : ["protobuf", "protocol buffer", "serializing"],
+    "homepage"      : "https://github.com/protobuf-php/google-protobuf-proto",
+    "type"          : "library",
+    "license"       : "MIT",
+    "prefer-stable" : true,
+    "authors"    : [
+        {
+            "name"    : "Fabio B. Silva",
+            "email"   : "fabio.bat.silva@gmail.com",
+            "homepage": "https://github.com/FabioBatSilva"
+        }
+    ],
+    "require"    : {
+        "php" : ">=5.5.0"
+    },
+    "require-dev": {
+        "protobuf-php/protobuf-plugin" : ">=0.1"
+    },
+    "autoload"   : {
+        "psr-0": { "google\\protobuf": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}

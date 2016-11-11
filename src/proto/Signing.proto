@@ -1,0 +1,23 @@
+//syntax = "proto2";
+
+package attrpubapi_v1;
+
+import "Attribute.proto";
+
+option java_package = "com.yoti.attrpubapi_v1";
+option java_outer_classname = "AttrProto";
+
+
+message AttributeSigning {
+	optional string name = 1;
+
+	optional bytes value = 2;
+
+	optional ContentType content_type = 3;
+
+	optional bytes artifact_signature = 4;
+
+	optional string sub_type = 5;
+
+	optional bytes signed_time_stamp = 6;
+}

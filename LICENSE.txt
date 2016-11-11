@@ -1,0 +1,202 @@
+terms & conditions for DEVELOPERS
+
+
+By downloading the Software (as defined below), you are accepting and agreeing to these terms and conditions (“Terms”) which constitute a legal agreement between us. If you (the Developer) do not agree with these Terms, you should not download the Software. 
+
+
+We are Yoti Limited (the “Provider”) a company registered in England and Wales. Our company registration number is 08998951 and our registered office is at 7-8 St. Martin’s Place, London WC2N 4JH. Our registered VAT number is 199947617. You can contact us by writing to us at: hello@yoti.com, or at our registered office.
+
+
+1.          Interpretation
+   1. Definitions:
+Affiliate: in relation to a party, any entity that directly or indirectly controls, is controlled by, or is under common control with a party from time to time.
+Business Day: a day other than a Saturday, Sunday or public holiday in England when banks in London are open for business.
+Control: shall be as defined in section 1124 of the Corporation Tax Act 2010, and the expression change of Control shall be construed accordingly.
+Dashboard: a web application provided by the Supplier for the benefit of an an individual or organisation, which allows those individuals or organisations to manage their Yoti accounts.  
+Developer: the individual or entity or which accepts these Terms with the Provider.
+Intellectual Property Rights: patents, utility models, rights to inventions, copyright and related rights, trade marks and service marks, business names and domain names, rights in get-up, goodwill and the right to sue for passing off or unfair competition, rights in designs, rights in computer software, database rights, rights to use, and protect the confidentiality of, confidential information (including know-how and trade secrets), and any other intellectual property rights, in each case whether registered or unregistered and including all applications and rights to apply for and be granted, renewals or extensions of, and rights to claim priority from, such rights and all similar or equivalent rights or forms of protection which subsist or will subsist now or in the future in any part of the world.
+Maintenance Release: release of the Software that corrects faults, adds functionality or otherwise amends or upgrades the Software.
+Software: the web software development kit(s) provided to the Developer by the Provider that allows individuals and entities to  communicate with the Yoti Platform and which is managed through Dashboard. 
+Yoti: the Provider’s digital identity verification system for exchanging attributes.
+   1.  Unless the context otherwise requires:
+
+
+1. A reference to a statute or statutory provision is a reference to it as amended or re-enacted. A reference to a statute or statutory provision includes any subordinate legislation made under that statute or statutory provision, as amended or re-enacted.
+
+
+1. Any phrase introduced by the terms including, include, in particular or any similar expression, shall be construed as illustrative and shall not limit the sense of the words preceding those terms.
+
+
+1. A reference to writing or written includes email. 
+2.          Basis of contract
+2.1        These Terms apply to the exclusion of any other terms that the Developer seeks to impose or incorporate, or which are implied by trade, custom, practice or course of dealing.
+   1. The parties agree that the provisions of Regulation 9 of the Electronic Commerce (EC   Directive) Regulations 2002 shall not apply to these Terms.
+3.          LICENCE
+   1. In consideration of the sum of £1 paid by the Developer to the Provider, receipt and sufficiency of which the Provider hereby acknowledges, the Provider grants to the Developer a non-exclusive, royalty-free, revocable, worldwide licence to use the Software for the duration of these Terms.
+
+
+   1. In relation to scope of use:
+
+
+1. for the purposes of clause 3.1, use of the Software shall be for the purpose only of developing applications for the exploitation of Yoti by customers of the Provider, or otherwise in accordance with the specific instructions of the Provider.
+2. the Developer may not use the Software other than as specified in clause 3.1 and clause 3.2(a).
+3. the Developer may make backup copies of the Software as may be necessary for its lawful use.
+
+
+   1. The Developer shall not:
+
+   1. sell, sub-license, assign or novate the benefit or burden of these Terms in whole or in part;
+   2. allow the Software to become the subject of any charge, lien or encumbrance; and 
+   3. deal in any other manner with any or all of its rights and obligations under these Terms.
+
+
+   1. The Developer shall:
+
+
+   1. keep a complete and accurate record of the Developer's copying and disclosure of the Software (including any back up copies made pursuant to clause 3.2(c) above) and its users, and produce such record to the Provider on request from time to time;
+   2. take all reasonable steps to prevent unauthorised copying of the Software; and
+   3. notify the Provider as soon as it becomes aware of any unauthorised use of the Software by any person.
+
+
+   1. Developer’s Affiliates may make use of the Software, and Developer may grant access to the Software to such of its employees, or contractors and consultants under the direct control of the Developer (“Developer Personnel”), as necessary provided that the Developer:
+
+
+   1. procures that its Affiliates, and Developer Personnel are made aware of and at all times adhere to these Terms;
+   2. remains liable for the acts or omissions of its Affiliates and Developer Personnel as if they were its own; and
+   3. shall cease to make the Software available to any of its Affiliates immediately on that party ceasing to be an Affiliate, and to any of its Developer Personnel on that party ceasing to be employed or engaged by the Developer.
+   1. MAINTENANCE RELEASES
+The Provider will provide the Developer with all Maintenance Releases generally made available to its customers. 
+   1. Developer's obligations 
+
+      1. The Developer represents, warrants and undertakes that it will use the Software in compliance with all applicable laws and shall not: (a) resell, sublicense, lease or otherwise make available to any third party the Software; (b) attempt to gain or gain unauthorised access to, or disrupt the integrity or performance of the Software; (c) modify, copy, translate or create derivative works based on the Software or attempt to discover the source code or underlying ideas or algorithms thereof; (d) reverse engineer, decompile or disassemble the Software; (e) use the Software for the purpose of building a competitive product or service or copying its features, technology or user interface; (f) use the Software, or permit the foregoing to be used, for purposes of product evaluation, benchmarking or other comparative analysis intended for publication without  the Provider's prior written consent; (g) act or omit to act in any way that results in damage to the Provider's business or reputation; and (h) use or otherwise deal with the Provider’s logos, as notified to the Developer from time to time, other than in accordance with these Terms. 
+      2. Any breach by the Developer of any of the provisions in clause 5.1 shall be a material breach of these Terms and, without prejudice to its other rights and remedies, shall entitle the Provider to terminate these Terms immediately on written notice to the Developer.
+      1. dashboard
+
+
+      1. The Developer may only invite, and grant access to, authorised Developer Personnel to use the Dashboard and shall procure that any such Developer Personnel only uses the Dashboard (and any information contained therein) for the purposes as specified in clause 3.1 and 3.2(a), and not for any other purpose whatsoever. 
+
+         1. Intellectual property rights 
+         1. The Developer acknowledges that all Intellectual Property Rights in or arising out of or in connection with the Software shall be owned by the Provider, and neither the Developer nor any of its Affiliates have any rights other than to use the Software in accordance with these Terms.
+         2. The Developer agrees that it will not, and will procure that its Affiliates will not, do anything which could infringe the Intellectual Property Rights of the Provider including any of the Intellectual Property Rights arising from or in connection with the Software or otherwise pursuant to the terms of these Terms.  Any and all rights not expressly granted under these Terms shall be reserved by the Provider.
+         1. Limitation of liability and indemnities: THE DEVELOPER'S ATTENTION IS PARTICULARLY DRAWN TO THIS CLAUSE
+         1. Nothing in these Terms shall limit or exclude either party’s liability for:
+(a)  death or personal injury caused by its negligence, or the negligence of its employees, agents or subcontractors; or
+         1. fraud or fraudulent misrepresentation; or
+         2. any liability which cannot be limited or excluded by applicable law.
+
+
+         1. Subject to clause 9.1, the Provider shall not be liable to the Developer, whether in contract, tort (including negligence), for breach of statutory duty, or otherwise, arising under or in connection with these Terms for:
+(a) loss of profits;
+         1. loss of sales or business;
+         2. loss of agreements or contracts;
+         3. loss of anticipated savings;
+         4. loss of use or corruption of software, data or information;
+         5. loss of damage to goodwill; and
+         6. any indirect or consequential loss.
+
+
+         1. Except as expressly provided herein, neither party makes any warranties of any kind, whether implied, statutory or otherwise which are, to the fullest extent permitted by law, excluded from these Terms. The Provider does not warrant that the use of the Software will be uninterrupted or error-free. 
+         2. Subject to clauses 8.1, 8.2 and 8.3, the Provider shall indemnify on demand and hold harmless the Developer from and against any and all losses, demands, claims, damages, costs, expenses (including reasonable legal costs and expenses) and liabilities suffered or incurred, directly or indirectly, by the Developer and/or the Developer’s Affiliates as a result of or in connection with: (a) any third party claim brought against the Developer for infringement of a third party's rights (including any Intellectual Property Rights) arising out of, or in connection with, the receipt or use of the Software by the Developer strictly in accordance with the terms of these Terms; and (b) breach of clause 11.11 and 11.12.
+         3. Subject to clauses 9.1 and 9.2, the Developer shall indemnify on demand and hold harmless the Provider, directors, officers, employees, agents and shareholders from and against any and all losses, demands, claims, damages, costs, expenses (including reasonable legal costs and expenses) and liabilities suffered or incurred, directly or indirectly, by the Provider and/or the Provider’s Affiliates as a result of or in connection with breach of clauses 5.1, 10.11 and 10.12. 
+         4. In the event of any claim under either of the indemnities in clauses 9.5 or 9.6, the indemnified party shall:
+(a)  notify the indemnifying party in writing of any such claim (stating in reasonable detail the nature of the matter and if practicable the amount claimed); and
+         1. give the indemnifying party (at the indemnifying party’s own cost) conduct of the defence of such claim and all related settlement negotiations; and
+         2. provide the indemnifying party with reasonable assistance, information, and authority necessary to act in accordance with clause 9.7(b), all out-of-pocket expenses incurred by the indemnified party in providing such assistance, information and authority to be reimbursed by the indemnifying party.
+
+
+         1. The indemnified party shall have a duty to mitigate any loss which it may incur as a result of a matter giving rise to a right of indemnification under this clause 9. 
+         2. This clause 8 shall survive termination of these Terms.
+         1. TERM AND Termination
+         1. These Terms will continue in force from the date on which the Developer accepts these Terms until terminated in accordance with this clause. 
+         2. Either party may terminate these Terms at any time without cause by giving the other party no less than 5 Business Days’ written notice.
+         3. Without limiting any other rights or remedy available to it, either party may terminate these Terms with immediate effect by giving written notice to the other party if:
+(a) the other party commits a material breach of any term of these Terms which breach is irremediable or (if such a breach is remediable) fails to remedy that breach within 30 days after being notified to do so; or
+(b) in the case of the Provider only: (i) if there is a change of Control of the Developer; or (ii) if the Developer suffers or incurs any form of insolvency or arrangement with its creditors. 
+         1. Any provision of these Terms that expressly or by implication is intended to come into or continue in force on or after termination of these Terms shall remain in full force and effect.
+
+
+         1. Termination of these Terms shall not affect any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the right to claim damages in respect of any breach of these Terms which existed at or before the date of termination.
+
+
+         1. On termination of these Terms for any reason, the Developer shall immediately cease to use the Software, and shall procure that any of its Affiliates and the Developer Personnel shall cease to use the Software, and shall permanently delete, destroy or return to the Provider (at the Provider’s option) all copies of the Software then in its possession, custody or control.
+
+
+         1. General
+
+
+         1. Waiver
+
+
+No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it prevent or restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.
+
+
+         1. Rights and remedies
+
+
+Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.
+
+
+         1. Entire agreement
+(a) The Agreement and the documents otherwise referred to therein contain the whole agreement between the parties relating to the subject matter hereof and supersede all prior agreements, arrangements and understandings between the parties relating to that subject matter.
+
+         1. Each party acknowledges that, in entering into these Terms, it does not rely on any statement, representation, assurance or warranty (whether it was made negligently or innocently) of any person (whether a party to these Terms or not) (Representation) other than as expressly set out in these Terms or those documents. Each party agrees that the only rights and remedies available to it arising out of or in connection with a Representation shall be for breach of contract as expressly provided in these Terms. Nothing in this clause shall limit or exclude any liability for fraud.
+
+
+         1. Variation
+
+
+No variation of these Terms shall be effective unless it is in writing and signed by the parties (or their authorised representatives).
+
+
+         1. Severance
+
+
+If any provision or part-provision of these Terms is or becomes invalid, illegal or unenforceable, it shall be deemed modified to the minimum extent necessary to make it valid, legal and enforceable. If such modification is not possible, the relevant provision or part-provision shall be deemed deleted. Any modification to or deletion of a provision or part-provision under this clause shall not affect the validity and enforceability of the rest of these Terms.
+
+
+         1. Third parties
+
+
+A person who is not a party to these Terms shall not have any rights under the Contracts (Rights of Third Parties) Act 1999 to enforce any term of these Terms, but this does affect any right or remedy of a third party which exists, or is available, apart from that Act. Notwithstanding the foregoing, any of the Provider’s Affiliates may enforce the terms of these Terms subject to and in accordance with this clause 11.6, these Terms and the Contracts (Rights of Third Parties) Act 1999.
+
+
+         1. No partnership
+
+
+Nothing in this agreement is intended to, or shall be deemed to, establish any partnership or joint venture between any of the parties, constitute any party the agent of another party, or authorise any party to make or enter into any commitments for or on behalf of any other party. Each party confirms it is acting on its own behalf and not for the benefit of any other person.
+
+
+         1. Force majeure
+
+
+Neither party shall be in breach of these Terms nor liable for delay in performing, or failure to perform, any of its obligations under these Terms if such delay or failure result from events, circumstances or causes beyond its reasonable control, and the affected party shall be entitled to a reasonable extension of the time for performing such obligations. If the period of delay or non-performance continues for twelve weeks, the party not affected may terminate these Terms by giving 7 days’ written notice to the affected party.
+
+
+         1. Notices
+
+
+(a) Any notice or other communication given to a party under or in connection with these Terms shall be in writing, addressed to that party at its registered office or such other address as that party may have specified to the other party in writing in accordance with this clause, and shall be delivered personally, or sent by pre-paid first class post or other next working day delivery service, commercial courier, or email.
+         1. A notice or other communication shall be deemed to have been received: if delivered personally, when left at the address referred to in clause 11.9(a); if sent by pre-paid first class post or other next working day delivery service, at 9.00 am on the second Business Day after posting; if delivered by commercial courier, on the date and at the time that the courier's delivery receipt is signed; or, if sent by or email, one Business Day after transmission.
+(c)The provisions of this clause shall not apply to the service of any proceedings or other documents in any legal action.
+
+11.10  Assignment and other dealings
+(a) The Provider may at any time assign, transfer, mortgage, charge, subcontract or deal in any other manner with all or any of its rights under these Terms and may subcontract or delegate in any manner any or all of its obligations under these Terms to any third party or agent.
+         1. The Developer shall not, without the prior written consent of the Provider, assign, transfer, mortgage, charge, subcontract, declare a trust over or deal in any other manner with any or all of its rights or obligations under these Terms, other than as set out herein.
+
+
+         1. Data Protection
+ (a) Each party shall comply with all applicable data protection and data privacy laws and regulations applying to any Personal Data (as defined in the UK Data Protection Act 1998) exchanged in connection with these Terms, and each party shall have established privacy policies and processes or principles to ensure that it remains at all times in compliance with such laws and regulations.
+(b) The Developer shall ensure data minimisation and follow the ICO guidance for app developers ‘Privacy in mobile apps’ as may be updated and replaced from time to time.  
+11.12 Confidentiality
+         1. Each party shall, during the term of these Terms and thereafter, keep confidential all information of a confidential nature (including trade secrets and information of commercial value) which may become known to such party from the other party and which relates to the other party or any of its Affiliates. Neither party shall use the other party’s confidential information for its own purposes (other than implementation of these Terms) nor, without the prior written consent of the other, disclose it to any third party (except its professional advisors or as may be required by any law or any legal or regulatory authority). The foregoing obligations shall not apply (or shall cease to apply) if that information: (a) is public knowledge or already known to such party at the time of disclosure; or (b) subsequently becomes public knowledge other than by breach of this licence; or (c) subsequently comes lawfully into the possession of such party from a third party. Each party shall use its reasonable endeavours to prevent the unauthorised disclosure of any such information.
+
+
+         1. No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties (such consent not to be unreasonably withheld or delayed), except as required by law, any governmental or regulatory authority (including, without limitation, any relevant securities exchange), any court or other authority of competent jurisdiction.
+
+
+
+
+         1. Audit 
+The Developer acknowledges and agrees that the Provider may, at the reasonable request of the Provider, inspect and have access to such of the Developer’s personnel, facilities and books and records, relevant to the use of the Software, for the purposes of ensuring that the Developer is complying with the terms of these Terms, provided that the Provider provides reasonable advance notice to the Developer of such inspections, which shall take place at reasonable times, unless otherwise requested by any governmental or regulatory body having jurisdiction over the Provider.
+         1. Governing law and jurisdiction
+The Agreement, and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non-contractual disputes or claims) shall be governed by, and construed in accordance with the law of England and Wales. The parties irrevocably agree that the courts of England and Wales shall have exclusive jurisdiction to settle any dispute or claim that arises out of or in connection with these Terms or its subject matter or formation (including non-contractual disputes or claims).

@@ -1,0 +1,15 @@
+// syntax = "proto2";
+
+package compubapi_v1;
+
+option java_package = "com.yoti.compubapi_v1";
+option java_outer_classname = "EncryptedDataProto";
+
+message EncryptedData {
+    // the iv will be used in conjunction with the secret key
+    // received via other channel in order to decrypt the cipher_text
+    optional bytes iv = 1;
+
+    // block of bytes to be decrypted
+    optional bytes cipher_text = 2;
+}
