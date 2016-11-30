@@ -68,9 +68,12 @@ This is done as follows:
 ```php
 <?php
 $activityDetails = $client->getActivityDetails();
-if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
-    $profile = $activityDetails->getUserProfile();
-} else {
+if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS)
+{
+    $profile = $activityDetails->getProfileAttribute();
+}
+else
+{
     // handle unhappy path
 }
 ``` 
@@ -92,7 +95,7 @@ if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
         // handle registration
     }
 } else {
-		// handle unhappy path
+    // handle unhappy path
 }
 ```
 Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId. 
