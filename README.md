@@ -68,7 +68,7 @@ This is done as follows:
 ```php
 <?php
 $activityDetails = $client->getActivityDetails();
-if ($activityDetails->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
+if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
     $profile = $activityDetails->getUserProfile();
 } else {
     // handle unhappy path
@@ -84,7 +84,7 @@ Here is an example of how this works:
 ```php
 <?php
 $activityDetails = $client->getActivityDetails();
-if ($activityDetails->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
+if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
     $user = yourUserSearchFunction($activityDetails->getUserId());
     if ($user) {
         // handle login
