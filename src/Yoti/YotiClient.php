@@ -64,7 +64,7 @@ class YotiClient
      */
     public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API)
     {
-        $requiredModules = ['curl', 'mcrypt', 'json'];
+        $requiredModules = ['curl',  'json'];
         foreach ($requiredModules as $mod)
         {
             if (!extension_loaded($mod))
@@ -147,6 +147,9 @@ class YotiClient
 
         $this->_receipt = $this->getReceipt($encryptedConnectToken);
         $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
+
+        
+        
         $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
 
         // get profile
@@ -238,6 +241,7 @@ class YotiClient
 
             // check response code
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
             if ($httpCode != 200)
             {
                 throw new \Exception("Server responded with $httpCode");
@@ -350,12 +354,15 @@ class YotiClient
         openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $this->_pem);
 
         // decipher encrypted data with unwrapped key and IV
-        $cipherText = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $unwrappedKey, $encryptedData->getCipherText(), MCRYPT_MODE_CBC, $encryptedData->getIv());
-        $padding = ord($cipherText[strlen($cipherText) - 1]);
-        $decipheredData = substr($cipherText, 0, -$padding);
+        $cipherText = openssl_decrypt(
+            $encryptedData->getCipherText(),
+            'aes-256-cbc',
+            $unwrappedKey,
+            OPENSSL_RAW_DATA,
+            $encryptedData->getIv()
+        );
 
-        // parse deciphered data into protobuf attribute list
-        $attributeList = new \attrpubapi_v1\AttributeList($decipheredData);
+        $attributeList = new \attrpubapi_v1\AttributeList($cipherText);
 
         return $attributeList;
     }
