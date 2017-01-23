@@ -23,7 +23,7 @@ class YotiClient
 //        const DEFAULT_CONNECT_API = 'https://staging0.api.yoti.com:8443/api/v1';
 
     // base url for connect page (user will be redirected to this page eg. baseurl/app-id)
-    const CONNECT_BASE_URL = 'https://code.yoti.com/app';
+    const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
 //    const CONNECT_BASE_URL = 'https://staging0.www.yoti.com/connect';
 
     // dashboard login
@@ -264,6 +264,12 @@ class YotiClient
         if (!array_key_exists('receipt', $json))
         {
             throw new \Exception("Receipt not found in response");
+        }
+
+        // check response was success
+        if (!$this->getOutcome() !== self::OUTCOME_SUCCESS)
+        {
+            throw new \Exception("Outcome was unsuccessful");
         }
 
         return $json['receipt'];
