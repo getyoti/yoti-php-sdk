@@ -149,7 +149,7 @@ class YotiClient
         $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
 
         // check response was success
-        if (!$this->getOutcome() !== self::OUTCOME_SUCCESS)
+        if ($this->getOutcome() !== self::OUTCOME_SUCCESS)
         {
             throw new \Exception("Outcome was unsuccessful");
         }
