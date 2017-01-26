@@ -148,7 +148,11 @@ class YotiClient
         $this->_receipt = $this->getReceipt($encryptedConnectToken);
         $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
 
-        
+        // check response was success
+        if (!$this->getOutcome() !== self::OUTCOME_SUCCESS)
+        {
+            throw new \Exception("Outcome was unsuccessful");
+        }
         
         $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
 
@@ -264,12 +268,6 @@ class YotiClient
         if (!array_key_exists('receipt', $json))
         {
             throw new \Exception("Receipt not found in response");
-        }
-
-        // check response was success
-        if (!$this->getOutcome() !== self::OUTCOME_SUCCESS)
-        {
-            throw new \Exception("Outcome was unsuccessful");
         }
 
         return $json['receipt'];
