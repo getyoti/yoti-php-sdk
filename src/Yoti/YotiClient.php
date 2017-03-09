@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti;
 
 use compubapi_v1\EncryptedData;
@@ -20,15 +21,15 @@ class YotiClient
 
     // default url for api (is passed in via constructor)
     const DEFAULT_CONNECT_API = 'https://api.yoti.com:443/api/v1';
-//        const DEFAULT_CONNECT_API = 'https://staging0.api.yoti.com:8443/api/v1';
+    //        const DEFAULT_CONNECT_API = 'https://staging0.api.yoti.com:8443/api/v1';
 
     // base url for connect page (user will be redirected to this page eg. baseurl/app-id)
     const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
-//    const CONNECT_BASE_URL = 'https://staging0.www.yoti.com/connect';
+    //    const CONNECT_BASE_URL = 'https://staging0.www.yoti.com/connect';
 
     // dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
-//    const DASHBOARD_URL = 'https://staging0.www.yoti.com/dashboard/login';
+    //    const DASHBOARD_URL = 'https://staging0.www.yoti.com/dashboard/login';
 
     /**
      * @var string
@@ -64,7 +65,7 @@ class YotiClient
      */
     public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API)
     {
-        $requiredModules = ['curl',  'json'];
+        $requiredModules = ['curl', 'json'];
         foreach ($requiredModules as $mod)
         {
             if (!extension_loaded($mod))
@@ -114,7 +115,7 @@ class YotiClient
      */
     public static function getLoginUrl($appId)
     {
-        return self::CONNECT_BASE_URL."/$appId";
+        return self::CONNECT_BASE_URL . "/$appId";
     }
 
     /**
@@ -153,16 +154,21 @@ class YotiClient
         {
             throw new \Exception("Outcome was unsuccessful");
         }
-        
+
+        // set remember me id
+        $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : null;
+
+        // if no profile return empty ActivityDetails object
+        if (empty($this->_receipt['profile_content']))
+        {
+            return new ActivityDetails([], $rememberMeId);
+        }
+
+        // decrypt attribute list
         $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
 
         // get profile
-        $profile = ActivityDetails::constructFromAttributeList(
-            $attributeList,
-            array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : null
-        );
-
-        return $profile;
+        return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
     }
 
     /**
