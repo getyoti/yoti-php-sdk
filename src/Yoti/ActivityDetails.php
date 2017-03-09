@@ -12,12 +12,15 @@ use attrpubapi_v1\AttributeList;
  */
 class ActivityDetails
 {
-    const ATTR_SELFIE = 'selfie';
-    const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FAMILY_NAME = 'family_name';
-    const ATTR_PHONE_NUMBER = 'phone_number';
+    const ATTR_GIVEN_NAMES = 'given_names';
+    const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
+    const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
+    const ATTR_PHONE_NUMBER = 'phone_number';
+    const ATTR_SELFIE = 'selfie';
+    const ATTR_EMAIL_ADDRESS = 'email_address';
 
     /**
      * @var string receipt identifier
