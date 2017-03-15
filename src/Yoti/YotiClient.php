@@ -159,7 +159,7 @@ class YotiClient
         $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : null;
 
         // if no profile return empty ActivityDetails object
-        if (empty($this->_receipt['profile_content']))
+        if (empty($this->_receipt['other_party_profile_content']))
         {
             return new ActivityDetails([], $rememberMeId);
         }
