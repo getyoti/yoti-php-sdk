@@ -21,6 +21,7 @@ class ActivityDetails
     const ATTR_PHONE_NUMBER = 'phone_number';
     const ATTR_SELFIE = 'selfie';
     const ATTR_EMAIL_ADDRESS = 'email_address';
+    const ATTR_POSTAL_ADDRESS = 'postal_address';
 
     /**
      * @var string receipt identifier
