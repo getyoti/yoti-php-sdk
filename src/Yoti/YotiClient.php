@@ -9,7 +9,7 @@ use compubapi_v1\EncryptedData;
  *
  * @package Yoti
  * @author Simon Tong <simon.tong@yoti.com>
- *
+ *;
  * todo: change staging url
  */
 class YotiClient
