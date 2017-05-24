@@ -84,7 +84,7 @@ class ActivityDetails
     /**
      * Get user profile attribute
      * @param null|string $param
-     * @return array
+     * @return array|mixed
      */
     public function getProfileAttribute($param = null)
     {
