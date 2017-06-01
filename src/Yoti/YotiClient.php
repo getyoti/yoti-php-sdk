@@ -9,8 +9,6 @@ use compubapi_v1\EncryptedData;
  *
  * @package Yoti
  * @author Simon Tong <simon.tong@yoti.com>
- *;
- * todo: change staging url
  */
 class YotiClient
 {
@@ -21,15 +19,12 @@ class YotiClient
 
     // default url for api (is passed in via constructor)
     const DEFAULT_CONNECT_API = 'https://api.yoti.com:443/api/v1';
-//            const DEFAULT_CONNECT_API = 'https://staging0.api.yoti.com:8443/api/v1';
 
     // base url for connect page (user will be redirected to this page eg. baseurl/app-id)
     const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
-//        const CONNECT_BASE_URL = 'https://staging0.www.yoti.com/connect';
 
     // dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
-//        const DASHBOARD_URL = 'https://staging0.www.yoti.com/dashboard/login';
 
     /**
      * @var string
