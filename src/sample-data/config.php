@@ -8,6 +8,6 @@ return [
         'contents' => file_get_contents('/mnt/storage/code/clients/yoti/sdk/example/keys/node-sdk-test.pem'),
     ],
 
-    'yoti_only_existing' => 1,
+    'yoti_only_existing' => 0,
     'yoti_connect_email' => 0,
 ];
