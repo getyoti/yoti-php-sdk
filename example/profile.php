@@ -1,9 +1,8 @@
 <?php
-require_once __DIR__ . '/../src/boot.php';
-require_once './vendor/autoload.php';
+//require_once __DIR__ . '/../src/boot.php';
+require_once './vendor/autoload.php';//uses composer
 
 $config = [
-    
     'sdkId' => 'add your SDK ID here',
     'pemFile' => __DIR__ . '/keys/your-key-name.pem',
 ];
@@ -20,7 +19,6 @@ $selfie = base64_encode($attributes['selfie']);
      <title>PROFILE PAGE </title>
    </head>
    <body>
-
        <?php echo $attributes['given_names']; ?><br>
        <?php echo $attributes['family_name']; ?><br>
        <?php echo $attributes['phone_number']; ?><br>
