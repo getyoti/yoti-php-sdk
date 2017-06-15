@@ -9,7 +9,7 @@ $config = [
 ];
 
 $client = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
-$profile = $client->getActivityDetails($output['token']);
+$profile = $client->getActivityDetails($parsedQueryString['token']);
 $attributes = $profile->getProfileAttribute();
 $selfie = base64_encode($attributes['selfie']);
 
