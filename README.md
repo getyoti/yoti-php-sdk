@@ -1,7 +1,30 @@
 Yoti PHP SDK
 =============
 
-Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly integrate your PHP back-end with Yoti, so that your users can share their identity details with your application in a secure and trusted way.    
+Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly integrate your PHP back-end with Yoti, so that your users can share their identity details with your application in a secure and trusted way.
+
+## Table of Contents
+
+1) [An Architectural view](#an-architectural-view) -
+High level overview of integration
+
+2) [Requirements](#requirements)-
+Check you have what you need
+
+3) [Enabling the SDK](#enabling-the-sdk)-
+How to install our SDK
+
+4) [Client initialisation](#client-initialisation)-
+How to initialise your configuration
+
+5) [Profile Retrieval](#profile-retrieval)-
+How to retrieve a Yoti profile using the token
+
+6) [Handling users](#handling-users)-
+How to manage users
+
+7) [Support](#support)-
+Please feel free to reach out
 
 ## An architectural view
 To integrate your application with Yoti, your back-end must expose a GET endpoint that Yoti will use to forward tokens.
@@ -15,6 +38,10 @@ Yoti SDK carries out steps 6 through 9 for you, including profile decryption and
 
 Yoti also allows you to enable user details verification from your mobile app by means of the Android (TBA) and iOS (TBA) SDKs. In that scenario, your Yoti-enabled mobile app is playing both the role of the browser and the Yoti app. By the way, your back-end doesn't need to handle these cases in a significantly different way. You might just decide to handle the `User-Agent` header in order to provide different responses for web and mobile clients.
    
+## Requirements
+
+* PHP 5.3
+* CURL PHP extension
 
 ## Enabling the SDK
 To import the Yoti SDK inside your project, you can use your favourite dependency management system.
@@ -23,23 +50,6 @@ If you are using Composer, you need to add the following dependency:
 ```json
 "require": {
     "yoti-php-sdk" : "1.0.*"
-}
-```
-
-_We are not yet on packagist, so, for the moment, in order to use the SDK you need to add the following to your `composer.json` file._
-
-```json
-{
-  "minimum-stability": "dev",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/getyoti/php.git"
-    }
-  ],
-  "require": {
-    "yoti/yoti-php-sdk": "dev-master"
-  }
 }
 ```
 
@@ -105,13 +115,18 @@ The `ActivityDetails` class provides a set of methods to retrieve different user
 
 #### ActivityDetails
 The set of attributes the user has configured for the transaction.
+
 #### YotiClient
+
 Allows your app to retrieve a user profile, given an encrypted token.
  
-## Requirements
-* PHP 5.3
-* CURL PHP extension
+## Support
 
-## Misc
-* By default, Yoti SDKs fetch profiles from [https://api.yoti.com/api/v1](https://api.yoti.com/api/v1).
-If necessary, this can be overridden by setting the *yoti.api.url* system property.
+For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).
+Please provide the following the get you up and working as quick as possible:
+
+- Computer Type
+- OS Version
+- Version of PHP being used
+- Screenshot
+
