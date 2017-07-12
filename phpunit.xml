@@ -3,6 +3,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         bootstrap="bootstrap.php"
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Yoti Test Suite">

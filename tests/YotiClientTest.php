@@ -1,9 +1,8 @@
 <?php
 use Yoti\YotiClient;
 
-require_once __DIR__ . '/../src/boot.php';
 
-define('PEM_FILE', __DIR__ . '/../src/sample-data/node-sdk-test.pem');
+define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
 //define('APP_ID', 'e5eca4a1-f9fc-42dd-b986-b23c96848ace');
 define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
 define('YOTI_CONNECT_TOKEN', file_get_contents(__DIR__ . '/../src/sample-data/connect-token.txt'));
