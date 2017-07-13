@@ -23,7 +23,10 @@ How to retrieve a Yoti profile using the token
 6) [Handling users](#handling-users)-
 How to manage users
 
-7) [Support](#support)-
+7) [How to run the examples](#how-to-run-the-examples)-
+How to run the examples
+
+8) [Support](#support)-
 Please feel free to reach out
 
 ## An architectural view
@@ -119,6 +122,16 @@ The set of attributes the user has configured for the transaction.
 #### YotiClient
 
 Allows your app to retrieve a user profile, given an encrypted token.
+
+## How to run the examples
+
+The examples can be found in the [examples folder](https://github.com/getyoti/php/tree/master/example) which requires few setups to work as explained below.
+
+- Create your application in Yoti Dashboard (this requires having a Yoti account)
+- Fill in YOTI_APPLICATION_ID and YOTI_APPLICATION_SCENARIO_ID inside index.html file 
+- Fill in the config details SDK_ID and pem file path inside profile.php
+- Make sure you point your Yoti application callback url to http://your-local-url.domain/profile.php
+- Run composer update command inside [example folder](https://github.com/getyoti/php/tree/master/example) 
  
 ## Support
 

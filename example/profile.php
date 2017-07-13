@@ -1,11 +1,11 @@
 <?php
-require_once './vendor/autoload.php';//make sure you run composer update inside the example folder before trying them
+require_once './vendor/autoload.php'; // Make sure you run composer update inside the example folder before trying them
 $errorMsg = '';
-//get and sanitize the token
+// Get and sanitize the token
 $token = (isset($_GET['token']))? preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['token']) : '';
 $config = [
-    'sdkId' => 'add your SDK ID here', //this is your SDK ID associated with the Yoti Application you created on Dashboard
-    'pemFile' => __DIR__ . '/keys/your-key-name.pem', //This is the public key (in .pem format) associated with the Yoti Application you created on Dashboard
+    'sdkId' => 'add your SDK ID here', // This is your SDK ID associated with the Yoti Application you created on Dashboard
+    'pemFile' => __DIR__ . '/keys/your-key-name.pem', // This is the public key (in .pem format) associated with the Yoti Application you created on Dashboard
 ];
 
 try {
@@ -31,7 +31,7 @@ try {
             <strong>Family Name</strong> <?php echo $attributes['family_name']; ?><br>
             <strong>Phone</strong> <?php echo $attributes['phone_number']; ?><br>
             <strong>Email</strong> <?php echo $attributes['email_address']; ?><br>
-            <strong>DOB</strong> <?php echo $attributes['date_of_birth']; ?><br>
+            <strong>Date Of Birth</strong> <?php echo $attributes['date_of_birth']; ?><br>
             <strong>Address</strong> <?php echo $attributes['postal_address']; ?><br>
             <strong>Gender</strong> <?php echo $attributes['gender']; ?><br>
             <strong>Nationality</strong> <?php echo $attributes['nationality']; ?><br>
