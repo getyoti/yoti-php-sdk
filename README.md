@@ -131,7 +131,7 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 - Fill in YOTI_APPLICATION_ID and YOTI_APPLICATION_SCENARIO_ID inside index.html file 
 - Fill in the config details SDK_ID and pem file path inside profile.php
 - Make sure you point your Yoti application callback url to http://your-local-url.domain/profile.php
-- Run composer update command inside [example folder](https://github.com/getyoti/php/tree/master/example) 
+- Run `composer update` command inside [example folder](https://github.com/getyoti/php/tree/master/example) 
  
 ## Support
 
