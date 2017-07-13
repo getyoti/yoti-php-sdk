@@ -8,6 +8,11 @@
   "homepage": "https://yoti.com",
   "authors": [
     {
+      "name": "Moussa Sidibe",
+      "email": "moussa.sidibe@yoti.com",
+      "role": "Developer"
+    },
+    {
       "name": "Simon Tong",
       "email": "simon.tong@yoti.com",
       "role": "Developer"
