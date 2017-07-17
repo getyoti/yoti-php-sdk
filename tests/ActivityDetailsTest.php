@@ -125,18 +125,36 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test we are not returning a wrong given name
+     * Test the use of magic getter on user profile attribute
      */
-    public function testWrongGivenNames()
+    public function testUserProfileAttributeMagicGetter()
     {
-        $this->assertNotEquals("WrongGivenName", $this->profile->getGivenNames());
+        $activityDetails = new ActivityDetails(
+            array_merge($this->dummyProfile, ['title' => 'Mr']),
+            $this->userId
+        );
+        // Use the magic getter to get attribute $title
+        $this->assertEquals('Mr', $activityDetails->getTitle());
     }
 
     /**
-     * Test we are not returning a wrong Family Name
+     * Test the use of magic setter on user profile attribute
      */
-    public function testWrongFamilyName()
+    public function testUserProfileAttributeMagicSetter()
     {
-        $this->assertNotEquals("WrongGivenName", $this->profile->getFamilyName());
+        // Use magic setter to set attribute $title
+        $this->profile->setTitle('Mrs');
+
+        // Use magic getter to get attribute $title
+        $this->assertEquals('Mrs', $this->profile->getTitle());
+    }
+
+    /**
+     * Test the use of magic getter on undefined user profile attribute
+     */
+    public function testUndefinedUserProfileAttribute()
+    {
+        // Because attribute $title is not set, it should return null
+        $this->assertEmpty($this->profile->getTitle());
     }
 }

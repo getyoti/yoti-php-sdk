@@ -193,4 +193,72 @@ class ActivityDetails
     {
         return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
     }
+
+    /**
+     * Gets a user generic profile attribute
+     * @param $param
+     * @return mixed|null
+     */
+    protected function get($param)
+    {
+        // Getting attribute $param
+        return (!empty($param)) ? $this->getProfileAttribute($param) : null;
+    }
+
+    /**
+     * Check the number of arguments supplied
+     * @param array $args
+     * @param int $min
+     * @param int $max
+     * @param $method
+     */
+    protected function checkArguments(array $args, $min, $max, $method)
+    {
+        $argCounts  = count($args);
+        $min        = (int)$min;
+        $max        = (int)$max;
+
+        if($argCounts < $min || $argCounts > $max) {
+            throw new \Exception("Method {$method} needs minimum {$min} and maximum {$max} argument(s), {$argCounts} arguments given");
+        }
+    }
+
+    /**
+     * Handles a call to an undefined function
+     * @param $method
+     * @param $args
+     * @return mixed|null|void
+     */
+    public function __call($method, $args)
+    {
+        // Check method name is alphanumeric
+        if (!preg_match('~^[0-9a-z]+$~i', $method)) {
+            throw new \Exception('Method name can only be alphanumerical');
+        }
+
+        // Get the first thee characters of the method
+        $methodPrefix = substr($method, 0, 3);
+        // Methods Prefix allowed in the magic method
+        $allowedMethodPrefix = ['get', 'set'];
+
+        if (in_array($methodPrefix, $allowedMethodPrefix)) {
+            // Get the attribute name and make its first character lower case
+            $attribute = lcfirst(substr($method, 3));
+
+            switch($methodPrefix)
+            {
+                case 'get':
+                    // Check there is no argument supplied
+                    $this->checkArguments($args, 0, 0, $method);
+                    // Returns
+                    return $this->get($attribute);
+                case 'set':
+                   // Check there is only one argument supplied
+                    $this->checkArguments($args, 1, 1, $method);
+                   return $this->setProfileAttribute($attribute, $args[0]);
+            }
+        }
+
+        throw new \Exception("Call to undefined method {$method}");
+    }
 }
