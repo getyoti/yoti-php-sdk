@@ -238,13 +238,13 @@ class ActivityDetails
             throw new \Exception('Method name can only be alphanumerical');
         }
 
-        // Get the first thee characters of the method
+        // Get the first three characters of the method
         $methodPrefix = substr($method, 0, 3);
         // Methods Prefix allowed in the magic method
         $allowedMethodPrefix = ['get', 'set'];
 
         if (in_array($methodPrefix, $allowedMethodPrefix)) {
-            // Get the attribute name and make its first character lower case
+            // Get the attribute name and make its first character lowercase
             $attribute = lcfirst(substr($method, 3));
 
             switch($methodPrefix)
