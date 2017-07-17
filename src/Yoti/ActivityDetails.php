@@ -78,7 +78,9 @@ class ActivityDetails
      */
     protected function setProfileAttribute($param, $value)
     {
-        $this->_profile[$param] = $value;
+        if (!empty($param)) {
+            $this->_profile[$param] = $value;
+        }
     }
 
     /**
