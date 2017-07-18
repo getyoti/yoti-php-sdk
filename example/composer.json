@@ -1,12 +1,6 @@
 {
   "description": "testing yoti-php-sdk",
   "require": {
-    "yoti/yoti-php-sdk": "dev-master"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url":  "https://github.com/getyoti/php.git"
-    }
-  ]
+    "yoti/yoti-php-sdk": "1.0.*"
+  }
 }
