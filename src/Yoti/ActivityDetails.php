@@ -78,7 +78,9 @@ class ActivityDetails
      */
     protected function setProfileAttribute($param, $value)
     {
-        $this->_profile[$param] = $value;
+        if (!empty($param)) {
+            $this->_profile[$param] = $value;
+        }
     }
 
     /**
@@ -112,5 +114,85 @@ class ActivityDetails
     public function getUserId()
     {
         return $this->_rememberMeId;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFamilyName()
+    {
+        return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGivenNames()
+    {
+        return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFullName()
+    {
+        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDateOfBirth()
+    {
+        return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGender()
+    {
+        return $this->getProfileAttribute(self::ATTR_GENDER);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNationality()
+    {
+        return $this->getProfileAttribute(self::ATTR_NATIONALITY);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->getProfileAttribute(self::ATTR_PHONE_NUMBER);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSelfie()
+    {
+        return $this->getProfileAttribute(self::ATTR_SELFIE);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEmailAddress()
+    {
+        return $this->getProfileAttribute(self::ATTR_EMAIL_ADDRESS);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPostalAddress()
+    {
+        return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
     }
 }
