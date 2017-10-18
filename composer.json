@@ -6,6 +6,7 @@
     "sdk"
   ],
   "homepage": "https://yoti.com",
+  "license": "MIT",
   "authors": [
     {
       "name": "Moussa Sidibe",
