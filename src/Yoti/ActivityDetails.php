@@ -50,9 +50,11 @@ class ActivityDetails
     }
 
     /**
-     * Construct model from attributelist
+     * Construct model from attributelist.
+     *
      * @param AttributeList $attributeList
-     * @param $rememberMeId
+     * @param int $rememberMeId
+     *
      * @return \Yoti\ActivityDetails
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
@@ -72,7 +74,8 @@ class ActivityDetails
     }
 
     /**
-     * Set a user profile attribute
+     * Set a user profile attribute.
+     *
      * @param $param
      * @param $value
      */
@@ -84,8 +87,10 @@ class ActivityDetails
     }
 
     /**
-     * Get user profile attribute
+     * Get user profile attribute.
+     *
      * @param null|string $param
+     *
      * @return array|mixed
      */
     public function getProfileAttribute($param = null)
@@ -99,7 +104,10 @@ class ActivityDetails
     }
 
     /**
-     * @param $param
+     * Check if attribute exists.
+     *
+     * @param string $param
+     *
      * @return bool
      */
     public function hasProfileAttribute($param)
@@ -108,7 +116,8 @@ class ActivityDetails
     }
 
     /**
-     * Get user id
+     * Get user id.
+     *
      * @return string
      */
     public function getUserId()
@@ -117,6 +126,8 @@ class ActivityDetails
     }
 
     /**
+     * Get family name.
+     *
      * @return null|string
      */
     public function getFamilyName()
@@ -125,6 +136,8 @@ class ActivityDetails
     }
 
     /**
+     * Get given names.
+     *
      * @return null|string
      */
     public function getGivenNames()
@@ -133,6 +146,8 @@ class ActivityDetails
     }
 
     /**
+     * Get fullname.
+     *
      * @return null|string
      */
     public function getFullName()
@@ -141,6 +156,8 @@ class ActivityDetails
     }
 
     /**
+     * Get date of birth.
+     *
      * @return null|string
      */
     public function getDateOfBirth()
@@ -149,6 +166,8 @@ class ActivityDetails
     }
 
     /**
+     * Get gender.
+     *
      * @return null|string
      */
     public function getGender()
@@ -157,6 +176,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user nationality.
+     *
      * @return null|string
      */
     public function getNationality()
@@ -165,6 +186,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user phone number.
+     *
      * @return null|string
      */
     public function getPhoneNumber()
@@ -173,6 +196,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user selfie image data.
+     *
      * @return null|string
      */
     public function getSelfie()
@@ -181,6 +206,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user email address.
+     *
      * @return null|string
      */
     public function getEmailAddress()
@@ -189,6 +216,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user address.
+     *
      * @return null|string
      */
     public function getPostalAddress()

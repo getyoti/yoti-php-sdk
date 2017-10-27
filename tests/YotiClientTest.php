@@ -33,11 +33,11 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
 
     /**
      * test passing invalid pem filepath
-     * @expectedException Exception
      */
     public function testInvalidPem()
     {
-        new YotiClient(SDK_ID, 'file://blahblah.pem');
+        $this->expectException('Exception');
+        $yotiClientObj = new YotiClient(SDK_ID, 'file://blahblah.pem');
     }
 
     /**
@@ -50,11 +50,24 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Exception
+     * Test invalid Token
      */
     public function testInvalidConnectToken()
     {
+        $this->expectException('Exception');
         new YotiClient(SDK_ID, 'file://blahblah.pem');
         $this->_yoti->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
+    }
+
+    public function testWrongYotiHeaderValue()
+    {
+        $this->expectException('Exception');
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'TEST');
+    }
+
+    public function testYotiHeaderValue()
+    {
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Wordpress');
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 }
