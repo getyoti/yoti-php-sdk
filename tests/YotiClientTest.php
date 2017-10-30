@@ -19,12 +19,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     {
         $this->_yoti = new YotiClient(SDK_ID, file_get_contents(PEM_FILE));
 
-        // switch this off when using real endpoints
+        // Switch this off when using real endpoints
         $this->_yoti->setMockRequests(true);
     }
 
     /**
-     * test using pem file path
+     * Test using pem file path
      */
     public function testPemFile()
     {
@@ -32,7 +32,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * test passing invalid pem filepath
+     * Test passing invalid pem filepath
      */
     public function testInvalidPem()
     {
@@ -59,15 +59,48 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $this->_yoti->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
     }
 
+    /**
+     * Test wrong http header value for X-Yoti-SDK
+     */
     public function testWrongYotiHeaderValue()
     {
         $this->expectException('Exception');
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'TEST');
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'WrongHeader');
     }
 
-    public function testYotiHeaderValue()
+    /**
+     * Test X-Yoti-SDK http header value for Wordpress
+     */
+    public function testYotiHeaderValueForWordpress()
     {
         $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Wordpress');
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for Drupal
+     */
+    public function testYotiHeaderValueForDrupal()
+    {
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Drupal');
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for Joomla
+     */
+    public function testYotiHeaderValueForJoomla()
+    {
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Joomla');
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for PHP
+     */
+    public function testYotiHeaderValueForPHP()
+    {
+        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'PHP');
         $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 }

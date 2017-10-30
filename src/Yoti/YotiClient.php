@@ -26,7 +26,7 @@ class YotiClient
     // Dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
 
-    // Accepted HTTP headers request
+    // Accepted HTTP header values for X-Yoti-SDK header
     const YOTI_ACCEPTED_HTTP_HEADERS = [
         'PHP',
         'Wordpress',
@@ -81,20 +81,20 @@ class YotiClient
         {
             if (!extension_loaded($mod))
             {
-                throw new \Exception("PHP module '$mod' not installed");
+                throw new \Exception("PHP module '$mod' not installed", 501);
             }
         }
 
         // Check sdk id passed
         if (!$sdkId)
         {
-            throw new \Exception('SDK ID is required');
+            throw new \Exception('SDK ID is required', 400);
         }
 
         // Check pem passed
         if (!$pem)
         {
-            throw new \Exception('PEM file is required');
+            throw new \Exception('PEM file is required', 400);
         }
 
         // Check if user passed pem as file path rather than file contents
@@ -102,7 +102,7 @@ class YotiClient
         {
             if (!file_exists($pem))
             {
-                throw new \Exception('PEM file was not found.');
+                throw new \Exception('PEM file was not found.', 400);
             }
 
             $pem = file_get_contents($pem);
@@ -111,7 +111,7 @@ class YotiClient
         // Check key is valid
         if (!openssl_get_privatekey($pem))
         {
-            throw new \Exception('PEM key is invalid');
+            throw new \Exception('PEM key is invalid', 400);
         }
 
         $this->_sdkId = $sdkId;
@@ -238,7 +238,7 @@ class YotiClient
         $token = $this->decryptConnectToken($encryptedConnectToken);
         if (!$token)
         {
-            throw new \Exception('Could not connect decrypt token.', 502);
+            throw new \Exception('Could not connect decrypt token.', 401);
         }
 
         // Get path for this endpoint
@@ -307,7 +307,7 @@ class YotiClient
         // Check receipt is in response
         if (!array_key_exists('receipt', $json))
         {
-            throw new \Exception('Receipt not found in response', 404);
+            throw new \Exception('Receipt not found in response', 502);
         }
 
         return $json['receipt'];
@@ -423,17 +423,17 @@ class YotiClient
     /**
      * Get and validate Yoti header.
      *
-     * @param string $headerToUse
+     * @param string $customHeader
      *
      * @return mixed
      * @throws \Exception
      */
-    private function getYotiHttpHeader($headerToUse)
+    private function getYotiHttpHeader($customHeader)
     {
-        if(in_array($headerToUse, self::YOTI_ACCEPTED_HTTP_HEADERS, FALSE)) {
-            return $headerToUse;
+        if(in_array($customHeader, self::YOTI_ACCEPTED_HTTP_HEADERS, TRUE)) {
+            return $customHeader;
         }
 
-        throw new \Exception('Wrong Yoti HTTP header value provided',406);
+        throw new \Exception("Wrong Yoti HTTP header value provided: {$customHeader}", 406);
     }
 }
