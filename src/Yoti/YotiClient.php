@@ -8,7 +8,7 @@ use compubapi_v1\EncryptedData;
  * Class YotiClient
  *
  * @package Yoti
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Yoti SDK <websdk@yoti.com>
  */
 class YotiClient
 {
@@ -27,7 +27,7 @@ class YotiClient
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
 
     // Accepted HTTP header values for X-Yoti-SDK header
-    const YOTI_ACCEPTED_HTTP_HEADERS = [
+    const YOTI_ACCEPTED_SDK_HEADERS = [
         'PHP',
         'Wordpress',
         'Drupal',
@@ -62,7 +62,7 @@ class YotiClient
     /**
      * @var string
      */
-    private $_yotiHttpHeader;
+    private $_yotiSdkHeader;
 
     /**
      * YotiClient constructor.
@@ -70,11 +70,11 @@ class YotiClient
      * @param string $sdkId SDK Id from dashboard (not to be mistaken for App ID)
      * @param string $pem can be passed in as contents of pem file or file://<file> format or actual path
      * @param string $connectApi
-     * @param string $yotiHttpHeader
+     * @param string $yotiSdkHeader
      *
      * @throws \Exception
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $yotiHttpHeader = 'PHP')
+    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $yotiSdkHeader = 'PHP')
     {
         $requiredModules = ['curl', 'json'];
         foreach ($requiredModules as $mod)
@@ -114,8 +114,9 @@ class YotiClient
             throw new \Exception('PEM key is invalid', 400);
         }
 
-        if($this->validYotiHttpHeader($yotiHttpHeader)) {
-            $this->_yotiHttpHeader = $yotiHttpHeader;
+        // Validate and set X-Yoti-SDK header value
+        if($this->isValidYotiSdkHeader($yotiSdkHeader)) {
+            $this->_yotiSdkHeader = $yotiSdkHeader;
         }
 
         $this->_sdkId = $sdkId;
@@ -268,7 +269,7 @@ class YotiClient
         $headers = [
             "X-Yoti-Auth-Key: {$authKey}",
             "X-Yoti-Auth-Digest: {$messageSignature}",
-            "X-Yoti-SDK: {$this->_yotiHttpHeader}",
+            "X-Yoti-SDK: {$this->_yotiSdkHeader}",
             "Content-Type: application/json",
             "Accept: application/json",
         ];
@@ -426,17 +427,17 @@ class YotiClient
     /**
      * Validate Yoti header.
      *
-     * @param $customHeader
+     * @param $providedHeader
      *
      * @return bool
      * @throws \Exception
      */
-    private function validYotiHttpHeader($customHeader)
+    private function isValidYotiSdkHeader($providedHeader)
     {
-        if(in_array($customHeader, self::YOTI_ACCEPTED_HTTP_HEADERS, TRUE)) {
+        if(in_array($providedHeader, self::YOTI_ACCEPTED_SDK_HEADERS, TRUE)) {
             return TRUE;
         }
 
-        throw new \Exception("Wrong Yoti HTTP header value provided: {$customHeader}", 406);
+        throw new \Exception("Wrong Yoti HTTP header value provided: {$providedHeader}", 406);
     }
 }

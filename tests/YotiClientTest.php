@@ -24,15 +24,16 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test using pem file path
+     * Test the use of pem file
      */
-    public function testPemFile()
+    public function testCanUsePemFile()
     {
-        new YotiClient(SDK_ID, 'file://' . PEM_FILE);
+        $yotiClientObj = new YotiClient(SDK_ID, 'file://' . PEM_FILE);
+        $this->assertInstanceOf(\Yoti\YotiClient::class, $yotiClientObj);
     }
 
     /**
-     * Test passing invalid pem filepath
+     * Test passing invalid pem file path
      */
     public function testInvalidPem()
     {
@@ -55,14 +56,13 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testInvalidConnectToken()
     {
         $this->expectException('Exception');
-        new YotiClient(SDK_ID, 'file://blahblah.pem');
         $this->_yoti->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
     }
 
     /**
-     * Test wrong http header value for X-Yoti-SDK
+     * Test invalid http header value for X-Yoti-SDK
      */
-    public function testWrongYotiHeaderValue()
+    public function testInvalidYotiHeaderValue()
     {
         $this->expectException('Exception');
         $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'WrongHeader');
@@ -71,36 +71,60 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Test X-Yoti-SDK http header value for Wordpress
      */
-    public function testYotiHeaderValueForWordpress()
+    public function testCanUseWordpressAsYotiHeaderValue()
     {
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Wordpress');
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $expectedValue  = 'Wordpress';
+        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Wordpress');
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_yotiSdkHeader');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
 
     /**
      * Test X-Yoti-SDK http header value for Drupal
      */
-    public function testYotiHeaderValueForDrupal()
+    public function testCanUseDrupalAsYotiHttpHeaderValue()
     {
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Drupal');
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $expectedValue  = 'Drupal';
+        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Drupal');
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_yotiSdkHeader');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
 
     /**
      * Test X-Yoti-SDK http header value for Joomla
      */
-    public function testYotiHeaderValueForJoomla()
+    public function testCanUseJoomlaAsYotiHttpHeaderValue()
     {
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Joomla');
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $expectedValue  = 'Joomla';
+        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Joomla');
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_yotiSdkHeader');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
 
     /**
      * Test X-Yoti-SDK http header value for PHP
      */
-    public function testYotiHeaderValueForPHP()
+    public function testCanUsePHPAsYotiHttpHeaderValue()
     {
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'PHP');
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $expectedValue  = 'PHP';
+        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'PHP');
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_yotiSdkHeader');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+    }
+
+    /**
+     * Get private or protected property of a class.
+     *
+     * @param 	string $className
+     * @param 	string $propertyName
+     * @return	ReflectionProperty
+     */
+    public function getPrivateProperty($className, $propertyName)
+    {
+        $reflector = new ReflectionClass($className);
+        $property = $reflector->getProperty($propertyName);
+        $property->setAccessible(TRUE);
+
+        return $property;
     }
 }
