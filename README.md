@@ -52,7 +52,7 @@ If you are using Composer, you need to add the following dependency:
 
 ```json
 "require": {
-    "yoti-php-sdk" : "1.0.*"
+    "yoti/yoti-php-sdk" : "1.0.*"
 }
 ```
 
