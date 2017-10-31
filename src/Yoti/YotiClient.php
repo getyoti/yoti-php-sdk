@@ -13,7 +13,7 @@ use compubapi_v1\EncryptedData;
 class YotiClient
 {
     /**
-     * outcomes
+     * Request successful outcome
      */
     const OUTCOME_SUCCESS = 'SUCCESS';
 
@@ -147,7 +147,7 @@ class YotiClient
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function getOutcome()
     {
@@ -157,7 +157,7 @@ class YotiClient
     /**
      * Return Yoti user profile.
      *
-     * @param null $encryptedConnectToken
+     * @param string $encryptedConnectToken
      *
      * @return \Yoti\ActivityDetails
      *
@@ -398,7 +398,7 @@ class YotiClient
     }
 
     /**
-     * Return Yoti usr profile attributes.
+     * Return Yoti user profile attributes.
      *
      * @param EncryptedData $encryptedData
      * @param $wrappedReceiptKey
