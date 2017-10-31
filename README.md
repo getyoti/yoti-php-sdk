@@ -104,8 +104,6 @@ $familyName         = $activityDetails->getFamilyName();
 
 $givenName          = $activityDetails->getGivenNames();
 
-$fullName           = $activityDetails->getFullName();
-
 $dateOfBirth        = $activityDetails->getDateOfBirth();
 
 $gender             = $activityDetails->getGender();
