@@ -114,10 +114,13 @@ class YotiClient
             throw new \Exception('PEM key is invalid', 400);
         }
 
+        if($this->validYotiHttpHeader($yotiHttpHeader)) {
+            $this->_yotiHttpHeader = $yotiHttpHeader;
+        }
+
         $this->_sdkId = $sdkId;
         $this->_pem = $pem;
         $this->_connectApi = $connectApi;
-        $this->_yotiHttpHeader = $this->getYotiHttpHeader($yotiHttpHeader);
     }
 
     /**
@@ -421,17 +424,17 @@ class YotiClient
     }
 
     /**
-     * Get and validate Yoti header.
+     * Validate Yoti header.
      *
-     * @param string $customHeader
+     * @param $customHeader
      *
-     * @return mixed
+     * @return bool
      * @throws \Exception
      */
-    private function getYotiHttpHeader($customHeader)
+    private function validYotiHttpHeader($customHeader)
     {
         if(in_array($customHeader, self::YOTI_ACCEPTED_HTTP_HEADERS, TRUE)) {
-            return $customHeader;
+            return TRUE;
         }
 
         throw new \Exception("Wrong Yoti HTTP header value provided: {$customHeader}", 406);
