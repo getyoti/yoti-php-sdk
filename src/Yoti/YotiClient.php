@@ -438,6 +438,6 @@ class YotiClient
             return TRUE;
         }
 
-        throw new \Exception("Wrong Yoti HTTP header value provided: {$providedHeader}", 406);
+        throw new \Exception("Wrong Yoti SDK header value provided: {$providedHeader}", 406);
     }
 }
