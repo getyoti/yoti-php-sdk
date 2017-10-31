@@ -71,7 +71,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Test X-Yoti-SDK http header value for Wordpress
      */
-    public function testCanUseWordpressAsYotiHeaderValue()
+    public function testCanUseWordpressAsYotiSdkHeaderValue()
     {
         $expectedValue  = 'Wordpress';
         $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Wordpress');
@@ -82,7 +82,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Test X-Yoti-SDK http header value for Drupal
      */
-    public function testCanUseDrupalAsYotiHttpHeaderValue()
+    public function testCanUseDrupalAsYotiSdkHeaderValue()
     {
         $expectedValue  = 'Drupal';
         $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Drupal');
@@ -93,7 +93,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Test X-Yoti-SDK http header value for Joomla
      */
-    public function testCanUseJoomlaAsYotiHttpHeaderValue()
+    public function testCanUseJoomlaAsYotiSdkHeaderValue()
     {
         $expectedValue  = 'Joomla';
         $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'Joomla');
@@ -104,7 +104,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Test X-Yoti-SDK http header value for PHP
      */
-    public function testCanUsePHPAsYotiHttpHeaderValue()
+    public function testCanUsePHPAsYotiSdkHeaderValue()
     {
         $expectedValue  = 'PHP';
         $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'PHP');
