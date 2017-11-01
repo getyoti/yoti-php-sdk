@@ -8,13 +8,12 @@ use attrpubapi_v1\AttributeList;
  * Class ActivityDetails
  *
  * @package Yoti
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Yoti SDK <websdk@yoti.com>
  */
 class ActivityDetails
 {
     const ATTR_FAMILY_NAME = 'family_name';
     const ATTR_GIVEN_NAMES = 'given_names';
-    const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
@@ -50,9 +49,11 @@ class ActivityDetails
     }
 
     /**
-     * Construct model from attributelist
+     * Construct model from attributelist.
+     *
      * @param AttributeList $attributeList
-     * @param $rememberMeId
+     * @param int $rememberMeId
+     *
      * @return \Yoti\ActivityDetails
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
@@ -72,7 +73,8 @@ class ActivityDetails
     }
 
     /**
-     * Set a user profile attribute
+     * Set a user profile attribute.
+     *
      * @param $param
      * @param $value
      */
@@ -84,22 +86,27 @@ class ActivityDetails
     }
 
     /**
-     * Get user profile attribute
+     * Get user profile attribute.
+     *
      * @param null|string $param
+     *
      * @return array|mixed
      */
     public function getProfileAttribute($param = null)
     {
         if ($param)
         {
-            return ($this->hasProfileAttribute($param)) ? $this->_profile[$param] : null;
+            return $this->hasProfileAttribute($param) ? $this->_profile[$param] : null;
         }
 
         return $this->_profile;
     }
 
     /**
-     * @param $param
+     * Check if attribute exists.
+     *
+     * @param string $param
+     *
      * @return bool
      */
     public function hasProfileAttribute($param)
@@ -108,7 +115,8 @@ class ActivityDetails
     }
 
     /**
-     * Get user id
+     * Get user id.
+     *
      * @return string
      */
     public function getUserId()
@@ -117,6 +125,8 @@ class ActivityDetails
     }
 
     /**
+     * Get family name.
+     *
      * @return null|string
      */
     public function getFamilyName()
@@ -125,6 +135,8 @@ class ActivityDetails
     }
 
     /**
+     * Get given names.
+     *
      * @return null|string
      */
     public function getGivenNames()
@@ -133,14 +145,8 @@ class ActivityDetails
     }
 
     /**
-     * @return null|string
-     */
-    public function getFullName()
-    {
-        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
-    }
-
-    /**
+     * Get date of birth.
+     *
      * @return null|string
      */
     public function getDateOfBirth()
@@ -149,6 +155,8 @@ class ActivityDetails
     }
 
     /**
+     * Get gender.
+     *
      * @return null|string
      */
     public function getGender()
@@ -157,6 +165,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user nationality.
+     *
      * @return null|string
      */
     public function getNationality()
@@ -165,6 +175,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user phone number.
+     *
      * @return null|string
      */
     public function getPhoneNumber()
@@ -173,6 +185,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user selfie image data.
+     *
      * @return null|string
      */
     public function getSelfie()
@@ -181,6 +195,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user email address.
+     *
      * @return null|string
      */
     public function getEmailAddress()
@@ -189,6 +205,8 @@ class ActivityDetails
     }
 
     /**
+     * Get user address.
+     *
      * @return null|string
      */
     public function getPostalAddress()

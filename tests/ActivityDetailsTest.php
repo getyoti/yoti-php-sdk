@@ -23,7 +23,6 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
         $this->dummyProfile = [
             'family_name' => 'TestFamilyName',
             'given_names' => 'TestGivenName',
-            'full_name' => 'TestGivenName TestFamilyName',
             'date_of_birth' => '11-07-2017',
             'gender' => 'Male',
             'nationality' => 'British',
@@ -66,14 +65,6 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
     public function testGetFamilyName()
     {
         $this->assertEquals($this->dummyProfile['family_name'], $this->profile->getFamilyName());
-    }
-
-    /**
-     * Test getting Full Name
-     */
-    public function testGetFullName()
-    {
-        $this->assertEquals($this->dummyProfile['full_name'], $this->profile->getFullName());
     }
 
     /**

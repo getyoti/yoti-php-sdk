@@ -19,25 +19,26 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     {
         $this->_yoti = new YotiClient(SDK_ID, file_get_contents(PEM_FILE));
 
-        // switch this off when using real endpoints
+        // Switch this off when using real endpoints
         $this->_yoti->setMockRequests(true);
     }
 
     /**
-     * test using pem file path
+     * Test the use of pem file
      */
-    public function testPemFile()
+    public function testCanUsePemFile()
     {
-        new YotiClient(SDK_ID, 'file://' . PEM_FILE);
+        $yotiClientObj = new YotiClient(SDK_ID, 'file://' . PEM_FILE);
+        $this->assertInstanceOf(\Yoti\YotiClient::class, $yotiClientObj);
     }
 
     /**
-     * test passing invalid pem filepath
-     * @expectedException Exception
+     * Test passing invalid pem file path
      */
     public function testInvalidPem()
     {
-        new YotiClient(SDK_ID, 'file://blahblah.pem');
+        $this->expectException('Exception');
+        $yotiClientObj = new YotiClient(SDK_ID, 'file://blahblah.pem');
     }
 
     /**
@@ -50,11 +51,105 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Exception
+     * Test invalid Token
      */
     public function testInvalidConnectToken()
     {
-        new YotiClient(SDK_ID, 'file://blahblah.pem');
+        $this->expectException('Exception');
         $this->_yoti->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
+    }
+
+    /**
+     * Test invalid http header value for X-Yoti-SDK
+     */
+    public function testInvalidSdkIdentifier()
+    {
+        $this->expectException('Exception');
+        $yotiClientObj = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            'WrongHeader'
+        );
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for Wordpress
+     */
+    public function testCanUseWordPressAsSdkIdentifier()
+    {
+        $expectedValue  = 'WordPress';
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for Drupal
+     */
+    public function testCanUseDrupalAsSdkIdentifier()
+    {
+        $expectedValue  = 'Drupal';
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for Joomla
+     */
+    public function testCanUseJoomlaAsSdkIdentifier()
+    {
+        $expectedValue  = 'Joomla';
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+    }
+
+    /**
+     * Test X-Yoti-SDK http header value for PHP
+     */
+    public function testCanUsePHPAsSdkIdentifier()
+    {
+        $expectedValue  = 'PHP';
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
+        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
+        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+    }
+
+    /**
+     * Get private or protected property of a class.
+     *
+     * @param 	string $className
+     * @param 	string $propertyName
+     * @return	ReflectionProperty
+     */
+    public function getPrivateProperty($className, $propertyName)
+    {
+        $reflector = new ReflectionClass($className);
+        $property = $reflector->getProperty($propertyName);
+        $property->setAccessible(TRUE);
+
+        return $property;
     }
 }

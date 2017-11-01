@@ -8,23 +8,31 @@ use compubapi_v1\EncryptedData;
  * Class YotiClient
  *
  * @package Yoti
- * @author Simon Tong <simon.tong@yoti.com>
+ * @author Yoti SDK <websdk@yoti.com>
  */
 class YotiClient
 {
     /**
-     * outcomes
+     * Request successful outcome
      */
     const OUTCOME_SUCCESS = 'SUCCESS';
 
-    // default url for api (is passed in via constructor)
+    // Default url for api (is passed in via constructor)
     const DEFAULT_CONNECT_API = 'https://api.yoti.com:443/api/v1';
 
-    // base url for connect page (user will be redirected to this page eg. baseurl/app-id)
+    // Base url for connect page (user will be redirected to this page eg. baseurl/app-id)
     const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
 
-    // dashboard login
+    // Dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
+
+    // Accepted HTTP header values for X-Yoti-SDK header
+    const YOTI_ACCEPTED_SDK_IDENTIFIERS = [
+        'PHP',
+        'WordPress',
+        'Drupal',
+        'Joomla',
+    ];
 
     /**
      * @var string
@@ -52,50 +60,63 @@ class YotiClient
     private $_mockRequests = false;
 
     /**
+     * @var string
+     */
+    private $_sdkIdentifier;
+
+    /**
      * YotiClient constructor.
+     *
      * @param string $sdkId SDK Id from dashboard (not to be mistaken for App ID)
      * @param string $pem can be passed in as contents of pem file or file://<file> format or actual path
      * @param string $connectApi
+     * @param string $sdkIdentifier
+     *
      * @throws \Exception
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API)
+    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
     {
         $requiredModules = ['curl', 'json'];
         foreach ($requiredModules as $mod)
         {
             if (!extension_loaded($mod))
             {
-                throw new \Exception("PHP module '$mod' not installed");
+                throw new \Exception("PHP module '$mod' not installed", 501);
             }
         }
 
-        // check sdk id passed
+        // Check sdk id passed
         if (!$sdkId)
         {
-            throw new \Exception("SDK ID is required");
+            throw new \Exception('SDK ID is required', 400);
         }
 
-        // check pem passed
+        // Check pem passed
         if (!$pem)
         {
-            throw new \Exception("PEM file is required");
+            throw new \Exception('PEM file is required', 400);
         }
 
-        // check if user passed pem as file path rather than file contents
+        // Check if user passed pem as file path rather than file contents
         if (strpos($pem, 'file://') === 0 || file_exists($pem))
         {
             if (!file_exists($pem))
             {
-                throw new \Exception("PEM file was not found.");
+                throw new \Exception('PEM file was not found.', 400);
             }
 
             $pem = file_get_contents($pem);
         }
 
-        // check key is valid
+        // Check key is valid
         if (!openssl_get_privatekey($pem))
         {
-            throw new \Exception("PEM key is invalid");
+            throw new \Exception('PEM key is invalid', 400);
+        }
+
+        // Validate and set X-Yoti-SDK header value
+        if($this->isValidSdkIdentifier($sdkIdentifier)) {
+            $this->_sdkIdentifier = $sdkIdentifier;
         }
 
         $this->_sdkId = $sdkId;
@@ -104,8 +125,10 @@ class YotiClient
     }
 
     /**
-     * Get login url
+     * Get login url.
+     *
      * @param string $appId
+     *
      * @return string
      */
     public static function getLoginUrl($appId)
@@ -114,7 +137,8 @@ class YotiClient
     }
 
     /**
-     * Set to test environment so it won't make requests to actual API
+     * Set to test environment so it won't make requests to actual API.
+     *
      * @param bool $toggle
      */
     public function setMockRequests($toggle = true)
@@ -123,16 +147,21 @@ class YotiClient
     }
 
     /**
-     * @return null
+     * @return string|null
      */
     public function getOutcome()
     {
-        return (array_key_exists('sharing_outcome', $this->_receipt)) ? $this->_receipt['sharing_outcome'] : null;
+        return array_key_exists('sharing_outcome', $this->_receipt) ? $this->_receipt['sharing_outcome'] : null;
     }
 
     /**
-     * @param null $encryptedConnectToken
+     * Return Yoti user profile.
+     *
+     * @param string $encryptedConnectToken
+     *
      * @return \Yoti\ActivityDetails
+     *
+     * @throws \Exception
      */
     public function getActivityDetails($encryptedConnectToken = null)
     {
@@ -144,35 +173,38 @@ class YotiClient
         $this->_receipt = $this->getReceipt($encryptedConnectToken);
         $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
 
-        // check response was success
+        // Check response was success
         if ($this->getOutcome() !== self::OUTCOME_SUCCESS)
         {
-            throw new \Exception("Outcome was unsuccessful");
+            throw new \Exception('Outcome was unsuccessful', 502);
         }
 
-        // set remember me id
+        // Set remember me Id
         $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : null;
 
-        // if no profile return empty ActivityDetails object
+        // If no profile return empty ActivityDetails object
         if (empty($this->_receipt['other_party_profile_content']))
         {
             return new ActivityDetails([], $rememberMeId);
         }
 
-        // decrypt attribute list
+        // Decrypt attribute list
         $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
 
-        // get profile
+        // Get user profile
         return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
     }
 
     /**
-     * @param $endpoint
+     * Return Yoti dashboard endpoint.
+     *
+     * @param string $endpoint
+     *
      * @return string
      */
     private function getEndpointPath($endpoint)
     {
-        // prepare message to sign
+        // Prepare message to sign
         $nonce = $this->generateNonce();
         $timestamp = round(microtime(true) * 1000);
         $path = "{$endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->_sdkId}";
@@ -181,7 +213,10 @@ class YotiClient
     }
 
     /**
-     * @param $message
+     * Sign the message.
+     *
+     * @param string $message
+     *
      * @return string
      */
     private function getSignedRequest($message)
@@ -193,48 +228,53 @@ class YotiClient
     }
 
     /**
+     * Decrypt and return receipt data.
+     *
      * @param string $encryptedConnectToken
+     *
      * @return array
+     *
      * @throws \Exception
      */
     private function getReceipt($encryptedConnectToken)
     {
-        // decrypt connect token
+        // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
         if (!$token)
         {
-            throw new \Exception("Could not connect decrypt token.");
+            throw new \Exception('Could not connect decrypt token.', 401);
         }
 
-        // get path for this endpoint
+        // Get path for this endpoint
         $path = $this->getEndpointPath("/profile/$token");
 
-        // sign request
+        // Sign the request
         $messageSignature = $this->getSignedRequest("GET&{$path}");
         if (!$messageSignature)
         {
-            throw new \Exception("Could not sign request.");
+            throw new \Exception('Could not sign request.', 401);
         }
 
-        // get auth key
+        // Get auth key
         $authKey = $this->getAuthKeyFromPem();
         if (!$authKey)
         {
-            throw new \Exception("Could not retrieve key from PEM.");
+            throw new \Exception('Could not retrieve key from PEM.', 401);
         }
 
-        // url to hit
+        // Build Url to hit
         $url = $this->_connectApi . $path;
 
-        // prepare headers
+        // Prepare request headers
         $headers = [
-            "X-Yoti-Auth-Key: $authKey",
-            "X-Yoti-Auth-Digest: $messageSignature",
+            "X-Yoti-Auth-Key: {$authKey}",
+            "X-Yoti-Auth-Digest: {$messageSignature}",
+            "X-Yoti-SDK: {$this->_sdkIdentifier}",
             "Content-Type: application/json",
             "Accept: application/json",
         ];
 
-        // if !mockRequests then do the real thing
+        // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
         {
             $ch = curl_init($url);
@@ -246,31 +286,32 @@ class YotiClient
             ]);
             $response = curl_exec($ch);
 
-            // check response code
+            // Check response code
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            if ($httpCode != 200)
+            if ($httpCode !== 200)
             {
-                throw new \Exception("Server responded with $httpCode");
+                $httpCode = (int) $httpCode;
+                throw new \Exception("Server responded with {$httpCode}", $httpCode);
             }
         }
         else
         {
-            // sample receipt, don't make curl call instead spoof response from receipt.json
+            // Sample receipt, don't make curl call instead spoof response from receipt.json
             $response = file_get_contents(__DIR__ . '/../sample-data/receipt.json');
         }
 
-        // get json
+        // Get decoded response data
         $json = json_decode($response, true);
-        if (json_last_error() != JSON_ERROR_NONE)
+        if (json_last_error() !== JSON_ERROR_NONE)
         {
-            throw new \Exception("JSON response was invalid");
+            throw new \Exception('JSON response was invalid', 502);
         }
 
-        // check receipt is in response
+        // Check receipt is in response
         if (!array_key_exists('receipt', $json))
         {
-            throw new \Exception("Receipt not found in response");
+            throw new \Exception('Receipt not found in response', 502);
         }
 
         return $json['receipt'];
@@ -313,7 +354,7 @@ class YotiClient
             return null;
         }
 
-        // remove BEGIN PUBLIC KEY / END PUBLIC KEY lines
+        // Remove BEGIN PUBLIC KEY / END PUBLIC KEY lines
         $key = trim($details['key']);
         $_key = explode(PHP_EOL, $key);
         if (strpos($key, 'BEGIN') !== false)
@@ -327,7 +368,10 @@ class YotiClient
     }
 
     /**
-     * @param $encryptedConnectToken
+     * Decrypt connect token.
+     *
+     * @param string $encryptedConnectToken
+     *
      * @return mixed
      */
     private function decryptConnectToken($encryptedConnectToken)
@@ -339,28 +383,34 @@ class YotiClient
     }
 
     /**
+     * Return encrypted profile data.
+     *
      * @param $profileContent
+     *
      * @return \compubapi_v1\EncryptedData
      */
     private function getEncryptedData($profileContent)
     {
-        // get cipher_text and iv
-        $encryptedData = new \compubapi_v1\EncryptedData(base64_decode($profileContent));
+        // Get cipher_text and iv
+        $encryptedData = new EncryptedData(base64_decode($profileContent));
 
         return $encryptedData;
     }
 
     /**
+     * Return Yoti user profile attributes.
+     *
      * @param EncryptedData $encryptedData
      * @param $wrappedReceiptKey
+     *
      * @return \attrpubapi_v1\AttributeList
      */
     private function getAttributeList(EncryptedData $encryptedData, $wrappedReceiptKey)
     {
-        // unwrap key and get profile
+        // Unwrap key and get profile
         openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $this->_pem);
 
-        // decipher encrypted data with unwrapped key and IV
+        // Decipher encrypted data with unwrapped key and IV
         $cipherText = openssl_decrypt(
             $encryptedData->getCipherText(),
             'aes-256-cbc',
@@ -372,5 +422,22 @@ class YotiClient
         $attributeList = new \attrpubapi_v1\AttributeList($cipherText);
 
         return $attributeList;
+    }
+
+    /**
+     * Validate SDK identifier.
+     *
+     * @param $providedHeader
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function isValidSdkIdentifier($providedHeader)
+    {
+        if(in_array($providedHeader, self::YOTI_ACCEPTED_SDK_IDENTIFIERS, TRUE)) {
+            return TRUE;
+        }
+
+        throw new \Exception("Wrong Yoti SDK header value provided: {$providedHeader}", 406);
     }
 }
