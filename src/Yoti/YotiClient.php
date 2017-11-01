@@ -27,9 +27,9 @@ class YotiClient
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
 
     // Accepted HTTP header values for X-Yoti-SDK header
-    const YOTI_ACCEPTED_SDK_HEADERS = [
+    const YOTI_ACCEPTED_SDK_IDENTIFIERS = [
         'PHP',
-        'Wordpress',
+        'WordPress',
         'Drupal',
         'Joomla',
     ];
@@ -62,7 +62,7 @@ class YotiClient
     /**
      * @var string
      */
-    private $_yotiSdkHeader;
+    private $_sdkIdentifier;
 
     /**
      * YotiClient constructor.
@@ -70,11 +70,11 @@ class YotiClient
      * @param string $sdkId SDK Id from dashboard (not to be mistaken for App ID)
      * @param string $pem can be passed in as contents of pem file or file://<file> format or actual path
      * @param string $connectApi
-     * @param string $yotiSdkHeader
+     * @param string $sdkIdentifier
      *
      * @throws \Exception
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $yotiSdkHeader = 'PHP')
+    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
     {
         $requiredModules = ['curl', 'json'];
         foreach ($requiredModules as $mod)
@@ -115,8 +115,8 @@ class YotiClient
         }
 
         // Validate and set X-Yoti-SDK header value
-        if($this->isValidYotiSdkHeader($yotiSdkHeader)) {
-            $this->_yotiSdkHeader = $yotiSdkHeader;
+        if($this->isValidSdkIdentifier($sdkIdentifier)) {
+            $this->_sdkIdentifier = $sdkIdentifier;
         }
 
         $this->_sdkId = $sdkId;
@@ -269,7 +269,7 @@ class YotiClient
         $headers = [
             "X-Yoti-Auth-Key: {$authKey}",
             "X-Yoti-Auth-Digest: {$messageSignature}",
-            "X-Yoti-SDK: {$this->_yotiSdkHeader}",
+            "X-Yoti-SDK: {$this->_sdkIdentifier}",
             "Content-Type: application/json",
             "Accept: application/json",
         ];
@@ -292,7 +292,7 @@ class YotiClient
             if ($httpCode !== 200)
             {
                 $httpCode = (int) $httpCode;
-                throw new \Exception("Server responded with $httpCode", $httpCode);
+                throw new \Exception("Server responded with {$httpCode}", $httpCode);
             }
         }
         else
@@ -432,9 +432,9 @@ class YotiClient
      * @return bool
      * @throws \Exception
      */
-    private function isValidYotiSdkHeader($providedHeader)
+    private function isValidSdkIdentifier($providedHeader)
     {
-        if(in_array($providedHeader, self::YOTI_ACCEPTED_SDK_HEADERS, TRUE)) {
+        if(in_array($providedHeader, self::YOTI_ACCEPTED_SDK_IDENTIFIERS, TRUE)) {
             return TRUE;
         }
 
