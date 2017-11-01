@@ -65,7 +65,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testInvalidSdkIdentifier()
     {
         $this->expectException('Exception');
-        $yotiClientObj = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, 'WrongHeader');
+        $yotiClientObj = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            'WrongHeader'
+        );
     }
 
     /**
@@ -74,7 +79,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testCanUseWordPressAsSdkIdentifier()
     {
         $expectedValue  = 'WordPress';
-        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, $expectedValue);
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
         $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
         $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
@@ -85,7 +95,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testCanUseDrupalAsSdkIdentifier()
     {
         $expectedValue  = 'Drupal';
-        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, $expectedValue);
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
         $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
         $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
@@ -96,7 +111,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testCanUseJoomlaAsSdkIdentifier()
     {
         $expectedValue  = 'Joomla';
-        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, $expectedValue);
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
         $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
         $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
@@ -107,7 +127,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     public function testCanUsePHPAsSdkIdentifier()
     {
         $expectedValue  = 'PHP';
-        $yotiClientObj  = new YotiClient(SDK_ID, file_get_contents(PEM_FILE), YotiClient::DEFAULT_CONNECT_API, $expectedValue);
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            file_get_contents(PEM_FILE),
+            YotiClient::DEFAULT_CONNECT_API,
+            $expectedValue
+        );
         $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
         $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
