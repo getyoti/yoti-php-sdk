@@ -425,7 +425,7 @@ class YotiClient
     }
 
     /**
-     * Validate Yoti header.
+     * Validate SDK identifier.
      *
      * @param $providedHeader
      *
