@@ -48,13 +48,17 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Enabling the SDK
 To import the Yoti SDK inside your project, you can use your favourite dependency management system.
-If you are using Composer, you need to add the following dependency:
+If you are using Composer, you need to do one of the following:
+
+Add the Yoti SDK dependency:
 
 ```json
 "require": {
     "yoti/yoti-php-sdk" : "1.0.*"
 }
 ```
+Or run this Composer command
+`composer require yoti/yoti-php-sdk`
 
 ## Client Initialisation
 The YotiClient is the SDK entry point. To initialise it you need include the following snippet inside your endpoint initialisation section:
