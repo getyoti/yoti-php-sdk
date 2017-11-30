@@ -8,25 +8,25 @@ Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly in
 1) [An Architectural view](#an-architectural-view) -
 High level overview of integration
 
-2) [Requirements](#requirements)-
+2) [Requirements](#requirements) -
 Check you have what you need
 
-3) [Enabling the SDK](#enabling-the-sdk)-
+3) [Enabling the SDK](#enabling-the-sdk) -
 How to install our SDK
 
-4) [Client initialisation](#client-initialisation)-
+4) [Client initialisation](#client-initialisation) -
 How to initialise your configuration
 
-5) [Profile Retrieval](#profile-retrieval)-
+5) [Profile Retrieval](#profile-retrieval) -
 How to retrieve a Yoti profile using the token
 
-6) [Handling users](#handling-users)-
+6) [Handling users](#handling-users) -
 How to manage users
 
-7) [How to run the example](#how-to-run-the-example)-
+7) [How to run the example](#how-to-run-the-example) -
 How to run the example
 
-8) [Support](#support)-
+8) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
