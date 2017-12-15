@@ -26,8 +26,12 @@ class YotiClient
     // Dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
 
-    // Accepted HTTP header values for X-Yoti-SDK header
-    const YOTI_ACCEPTED_SDK_IDENTIFIERS = [
+    /**
+     * Accepted HTTP header values for X-Yoti-SDK header.
+     *
+     * @var array
+     */
+    protected $acceptedSDKIdentifiers = [
         'PHP',
         'WordPress',
         'Drupal',
@@ -434,7 +438,7 @@ class YotiClient
      */
     private function isValidSdkIdentifier($providedHeader)
     {
-        if(in_array($providedHeader, self::YOTI_ACCEPTED_SDK_IDENTIFIERS, TRUE)) {
+        if(in_array($providedHeader, $this->acceptedSDKIdentifiers, TRUE)) {
             return TRUE;
         }
 
