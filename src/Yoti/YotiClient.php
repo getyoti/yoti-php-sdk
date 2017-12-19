@@ -246,7 +246,7 @@ class YotiClient
         $token = $this->decryptConnectToken($encryptedConnectToken);
         if (!$token)
         {
-            throw new \Exception('Could not connect decrypt token.', 401);
+            throw new \Exception('Could not decrypt connect token.', 401);
         }
 
         // Get path for this endpoint
