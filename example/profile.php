@@ -14,7 +14,6 @@ $config = [
 try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
-    //$attributes = $profile->getProfileAttribute();
     $selfie = base64_encode($profile->getSelfie());
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
