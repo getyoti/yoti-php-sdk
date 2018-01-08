@@ -24,7 +24,7 @@ try {
 <html>
    <head>
         <meta charset="utf-8">
-        <title>Yoti PROFILE PAGE</title>
+        <title>PROFILE PAGE</title>
    </head>
    <body>
         <?php if (!empty($errorMsg)) : ?>
