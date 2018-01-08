@@ -29,7 +29,7 @@ try {
         <?php if (!empty($errorMsg)) : ?>
             <p><strong><?php echo $errorMsg; ?></strong></p>
         <?php else: ?>
-            <strong>Given Name</strong> <?php echo $profile->getGivenNames(); ?><br>
+            <strong>Given Name(s)</strong> <?php echo $profile->getGivenNames(); ?><br>
             <strong>Family Name</strong> <?php echo $profile->getFamilyName(); ?><br>
             <strong>Phone</strong> <?php echo $profile->getPhoneNumber(); ?><br>
             <strong>Email</strong> <?php echo $profile->getEmailAddress(); ?><br>
