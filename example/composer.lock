@@ -8,23 +8,23 @@
     "packages": [
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "1.0.3",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/getyoti/php.git",
-                "reference": "b945119d29c539140d245271358404d44a6e3e5d"
+                "url": "https://github.com/getyoti/yoti-php-sdk.git",
+                "reference": "cd87e8a7cc81b4cf807067f98540f805acf595c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/php/zipball/b945119d29c539140d245271358404d44a6e3e5d",
-                "reference": "b945119d29c539140d245271358404d44a6e3e5d",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/cd87e8a7cc81b4cf807067f98540f805acf595c6",
+                "reference": "cd87e8a7cc81b4cf807067f98540f805acf595c6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "5.4.*"
+                "phpunit/phpunit": "5.7.*"
             },
             "type": "library",
             "autoload": {
@@ -36,6 +36,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
                     "name": "Simon Tong",
@@ -51,6 +54,11 @@
                     "name": "Quirino Zagarese",
                     "email": "quirino.zagarese@yoti.com",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "Moussa Sidibe",
+                    "email": "moussa.sidibe@yoti.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
@@ -59,7 +67,7 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2017-03-15T12:22:50+00:00"
+            "time": "2017-12-15T11:41:46+00:00"
         }
     ],
     "packages-dev": [],
