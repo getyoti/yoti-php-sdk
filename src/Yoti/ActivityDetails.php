@@ -41,7 +41,7 @@ class ActivityDetails
     {
         $this->_rememberMeId = $rememberMeId;
 
-        // populate attributes
+        // Populate user profile attributes
         foreach ($attributes as $param => $value)
         {
             $this->setProfileAttribute($param, $value);

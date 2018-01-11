@@ -4,8 +4,7 @@
 require_once './vendor/autoload.php';
 // Log any error message
 $errorMsg = '';
-// Get and sanitize the token
-$token = isset($_GET['token']) ? preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['token']) : '';
+
 $config = [
     'sdkId' => 'add your SDK ID here', // This is your SDK ID associated with the Yoti Application you created on Dashboard
     'pemFile' => __DIR__ . '/keys/your-key-name.pem', // This is the private key (in .pem format) associated with the Yoti Application you created on Dashboard
@@ -13,7 +12,7 @@ $config = [
 
 try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
-    $profile = $yotiClient->getActivityDetails($token);
+    $profile = $yotiClient->getActivityDetails($_GET['token']);
     $selfie = base64_encode($profile->getSelfie());
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";

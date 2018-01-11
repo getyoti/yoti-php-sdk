@@ -31,7 +31,7 @@ class YotiClient
      *
      * @var array
      */
-    protected $acceptedSDKIdentifiers = [
+    private $acceptedSDKIdentifiers = [
         'PHP',
         'WordPress',
         'Drupal',
