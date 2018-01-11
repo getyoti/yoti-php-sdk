@@ -1,14 +1,14 @@
 <?php
 
-// Make sure you run composer update inside the example folder before trying them
+// Make sure you run composer update inside the example folder before trying this example out
 require_once './vendor/autoload.php';
-// Error message
+// Log any error message
 $errorMsg = '';
 // Get and sanitize the token
 $token = isset($_GET['token']) ? preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['token']) : '';
 $config = [
     'sdkId' => 'add your SDK ID here', // This is your SDK ID associated with the Yoti Application you created on Dashboard
-    'pemFile' => __DIR__ . '/keys/your-key-name.pem', // This is the public key (in .pem format) associated with the Yoti Application you created on Dashboard
+    'pemFile' => __DIR__ . '/keys/your-key-name.pem', // This is the private key (in .pem format) associated with the Yoti Application you created on Dashboard
 ];
 
 try {
