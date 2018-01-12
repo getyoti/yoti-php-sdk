@@ -18,7 +18,8 @@ $config = [
 try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
-    $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
+    $selfie = base64_encode($profile->getSelfie());
+    $selfieFile = ActivityDetailsHelper::createSelfieImage($profile);
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -41,8 +42,9 @@ try {
             <strong>Address</strong> <?php echo $profile->getPostalAddress() ?><br>
             <strong>Gender</strong> <?php echo $profile->getGender() ?><br>
             <strong>Nationality</strong> <?php echo $profile->getNationality() ?><br>
-            <strong>Photo</strong><br> <img src="<?php echo $base64Selfie ?>" />
+            <strong>Photo</strong><br> <img src="data:image/x-icon;base64,<?php echo $selfie ?>" />
             <br>
+            <strong>Selfie File</strong> <img src="<?php echo $selfieFile ?>" />
         <?php endif; ?>
    </body>
  </html>

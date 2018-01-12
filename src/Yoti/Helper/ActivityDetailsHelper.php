@@ -24,7 +24,7 @@ class ActivityDetailsHelper
      * @return null|string
      *   Image formatted data.
      */
-    public static function getBase64Selfie(ActivityDetails $activityDetails, $imageFormat = 'jpg')
+    public static function getBase64Selfie(ActivityDetails $activityDetails, $imageFormat = 'jpeg')
     {
         $selfieBase64Data = base64_encode($activityDetails->getSelfie());
 
@@ -52,6 +52,44 @@ class ActivityDetailsHelper
         $allowedImageFormat = explode(',',self::ALLOWED_IMAGE_FORMAT);
 
         return !empty($imageFormat) && in_array($imageFormat, $allowedImageFormat, TRUE);
+    }
+
+    /**
+     * Create selfie image file.
+     *
+     * @param ActivityDetails $activityDetails
+     *   Yoti user object.
+     * @param string $fileName
+     *   Image file name.
+     * @param null|string $selfieDir
+     *   Image file directory.
+     *
+     * @return bool|string
+     *   File full path or false.
+     */
+    public static function createSelfieImage(ActivityDetails $activityDetails, $fileName = 'selfie.jpeg', $selfieDir = NULL)
+    {
+        // Get the image format.
+        $imageFormat = !empty($fileName) ? pathinfo($fileName, PATHINFO_EXTENSION) : '';
+
+        // If the image format is not allowed return false.
+        if(self::isAllowedFormat($imageFormat)) {
+            return FALSE;
+        }
+
+        // If no directory is provided save it into the temp dir.
+        if($selfieDir === '.' || !is_dir($selfieDir)) {
+            $selfieDir = sys_get_temp_dir();
+        }
+
+        // Construct image full path.
+        $selfieFullPath = $selfieDir . "/{$fileName}";
+
+        // Create the image in the directory.
+        $selfieFile = file_put_contents($selfieFullPath, $activityDetails->getSelfie(), LOCK_EX);
+
+        // Return the path if successful or false.
+        return $selfieFile ? $selfieFullPath : FALSE;
     }
 
 }
