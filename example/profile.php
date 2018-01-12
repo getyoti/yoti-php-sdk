@@ -19,7 +19,7 @@ try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
     $selfie = base64_encode($profile->getSelfie());
-    $selfieFile = ActivityDetailsHelper::createSelfieImage($profile);
+    $selfieFile = ActivityDetailsHelper::createSelfieImage($profile, 'jpeg', '.');
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }

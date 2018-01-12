@@ -72,14 +72,9 @@ class ActivityDetailsHelper
         // Get the image format.
         $imageFormat = !empty($fileName) ? pathinfo($fileName, PATHINFO_EXTENSION) : '';
 
-        // If the image format is not allowed return false.
-        if(self::isAllowedFormat($imageFormat)) {
+        // If the image format is not allowed or it's not a valid directory return false.
+        if(!self::isAllowedFormat($imageFormat) || !is_dir($selfieDir)) {
             return FALSE;
-        }
-
-        // If no directory is provided save it into the temp dir.
-        if($selfieDir === '.' || !is_dir($selfieDir)) {
-            $selfieDir = sys_get_temp_dir();
         }
 
         // Construct image full path.
