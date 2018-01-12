@@ -24,7 +24,7 @@ class ActivityDetailsHelper
      * @return null|string
      *   Image formatted data.
      */
-    public static function getBase64Selfie(ActivityDetails $activityDetails, $imageFormat = 'jpeg')
+    public static function getBase64Selfie(ActivityDetails $activityDetails, $imageFormat = 'jpg')
     {
         $selfieBase64Data = base64_encode($activityDetails->getSelfie());
 

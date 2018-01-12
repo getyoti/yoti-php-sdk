@@ -18,8 +18,7 @@ $config = [
 try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
-    $selfie = base64_encode($profile->getSelfie());
-    $basease64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
+    $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -32,19 +31,18 @@ try {
    </head>
    <body>
         <?php if (!empty($errorMsg)) : ?>
-            <p><strong><?php echo $errorMsg; ?></strong></p>
+            <p><strong><?php echo $errorMsg ?></strong></p>
         <?php else: ?>
-            <strong>Given Name(s)</strong> <?php echo $profile->getGivenNames(); ?><br>
-            <strong>Family Name</strong> <?php echo $profile->getFamilyName(); ?><br>
-            <strong>Phone</strong> <?php echo $profile->getPhoneNumber(); ?><br>
-            <strong>Email</strong> <?php echo $profile->getEmailAddress(); ?><br>
-            <strong>Date Of Birth</strong> <?php echo $profile->getDateOfBirth(); ?><br>
-            <strong>Address</strong> <?php echo $profile->getPostalAddress(); ?><br>
-            <strong>Gender</strong> <?php echo $profile->getGender(); ?><br>
-            <strong>Nationality</strong> <?php echo $profile->getNationality(); ?><br>
-            <strong>Photo</strong><br> <img src="data:image/x-icon;base64,<?php echo $selfie ?>" />
+            <strong>Given Name(s)</strong> <?php echo $profile->getGivenNames() ?><br>
+            <strong>Family Name</strong> <?php echo $profile->getFamilyName() ?><br>
+            <strong>Phone</strong> <?php echo $profile->getPhoneNumber() ?><br>
+            <strong>Email</strong> <?php echo $profile->getEmailAddress() ?><br>
+            <strong>Date Of Birth</strong> <?php echo $profile->getDateOfBirth() ?><br>
+            <strong>Address</strong> <?php echo $profile->getPostalAddress() ?><br>
+            <strong>Gender</strong> <?php echo $profile->getGender() ?><br>
+            <strong>Nationality</strong> <?php echo $profile->getNationality() ?><br>
+            <strong>Photo</strong><br> <img src="<?php echo $base64Selfie ?>" />
             <br>
-            <strong>Test Selfie</strong><br><img src="<?php echo $basease64Selfie ?> " />
         <?php endif; ?>
    </body>
  </html>
