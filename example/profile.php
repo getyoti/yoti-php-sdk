@@ -2,6 +2,9 @@
 
 // Make sure you run composer update inside the example folder before trying this example out
 require_once './vendor/autoload.php';
+
+use Yoti\Helper\ActivityDetailsHelper;
+
 // Log any error message
 $errorMsg = '';
 // Get the token
@@ -16,6 +19,7 @@ try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
     $selfie = base64_encode($profile->getSelfie());
+    $basease64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -40,6 +44,7 @@ try {
             <strong>Nationality</strong> <?php echo $profile->getNationality(); ?><br>
             <strong>Photo</strong><br> <img src="data:image/x-icon;base64,<?php echo $selfie ?>" />
             <br>
+            <strong>Test Selfie</strong><br><img src="<?php echo $basease64Selfie ?> " />
         <?php endif; ?>
    </body>
  </html>
