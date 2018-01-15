@@ -26,12 +26,12 @@ class ActivityDetailsHelper
      */
     public static function getBase64Selfie(ActivityDetails $activityDetails, $imageFormat = 'jpeg')
     {
-        $selfieBase64Data = base64_encode($activityDetails->getSelfie());
+        $base64Selfie = base64_encode($activityDetails->getSelfie());
 
-        // Put the format in lower case
-        $imageFormat = strtolower($imageFormat);
-        if(!empty($selfieBase64Data) && self::isAllowedFormat($imageFormat)) {
-            return "data:image/{$imageFormat};base64,{$selfieBase64Data}";
+        // Make sure the image data is not empty and the format is allowed.
+        if(!empty($base64Selfie) && self::isAllowedFormat($imageFormat)) {
+            $imageFormat = strtolower($imageFormat);
+            return "data:image/{$imageFormat};base64,{$base64Selfie}";
         }
 
         return NULL;
@@ -48,43 +48,13 @@ class ActivityDetailsHelper
      */
     public static function isAllowedFormat($imageFormat)
     {
-        // Convert the provided format into an array
+        // Make the format lower case
+        $imageFormat = strtolower($imageFormat);
+
+        // Convert the allowed formats into an array
         $allowedImageFormat = explode(',',self::ALLOWED_IMAGE_FORMAT);
 
-        return !empty($imageFormat) && in_array($imageFormat, $allowedImageFormat, TRUE);
-    }
-
-    /**
-     * Create selfie image file.
-     *
-     * @param ActivityDetails $activityDetails
-     *   Yoti user object.
-     * @param string $fileName
-     *   Image file name.
-     * @param null|string $selfieDir
-     *   Image file directory.
-     *
-     * @return bool|string
-     *   File full path or false.
-     */
-    public static function createSelfieImage(ActivityDetails $activityDetails, $fileName = 'selfie.jpeg', $selfieDir = NULL)
-    {
-        // Get the image format.
-        $imageFormat = !empty($fileName) ? pathinfo($fileName, PATHINFO_EXTENSION) : '';
-
-        // If the image format is not allowed or it's not a valid directory return false.
-        if(!self::isAllowedFormat($imageFormat) || !is_dir($selfieDir)) {
-            return FALSE;
-        }
-
-        // Construct image full path.
-        $selfieFullPath = $selfieDir . "/{$fileName}";
-
-        // Create the image in the directory.
-        $selfieFile = file_put_contents($selfieFullPath, $activityDetails->getSelfie(), LOCK_EX);
-
-        // Return the path if successful or false.
-        return $selfieFile ? $selfieFullPath : FALSE;
+        return !empty($imageFormat) && isset($allowedImageFormat[$imageFormat]);
     }
 
 }
