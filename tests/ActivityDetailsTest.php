@@ -1,6 +1,7 @@
 <?php
 
 use \Yoti\ActivityDetails;
+use \Yoti\Entity\Selfie;
 
 define('DUMMY_SELFIE_FILE', __DIR__ . '/../src/sample-data/dummy-avatar.png');
 
@@ -27,7 +28,7 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
             'gender' => 'Male',
             'nationality' => 'British',
             'phone_number' => '07856836932',
-            'selfie' => file_get_contents(DUMMY_SELFIE_FILE),
+            'selfie' => new Selfie(file_get_contents(DUMMY_SELFIE_FILE), 'jpeg'),
             'email_address' => 'test_email@yoti.com',
             'postal_address' => '130 Fenchurch Street London, EC3M 5DJ'
         ];
@@ -113,5 +114,13 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
     public function testGetSelfie()
     {
         $this->assertEquals($this->dummyProfile['selfie'], $this->profile->getSelfie());
+    }
+
+    /**
+     * Test getting selfie object
+     */
+    public function testGetSelfieEntity()
+    {
+        $this->assertInstanceOf(Selfie::class, $this->profile->getSelfieEntity());
     }
 }

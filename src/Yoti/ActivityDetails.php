@@ -3,6 +3,7 @@ namespace Yoti;
 
 use attrpubapi_v1\Attribute;
 use attrpubapi_v1\AttributeList;
+use Yoti\Entity\Selfie;
 
 /**
  * Class ActivityDetails
@@ -59,12 +60,19 @@ class ActivityDetails
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
     {
         $attrs = array();
-        /**
-         * @var Attribute $item
-         */
-        foreach ($attributeList->getAttributesList() as $item)
+
+        foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
         {
-            $attrs[$item->getName()] = $item->getValue()->getContents();
+            if($item->getName() === 'selfie')
+            {
+                $attrs[$item->getName()] = new Selfie(
+                    $item->getValue()->getContents(),
+                    $item->getContentType()->name()
+                );
+            }
+            else {
+                $attrs[$item->getName()] = $item->getValue()->getContents();
+            }
         }
 
         $inst = new self($attrs, $rememberMeId);
@@ -191,7 +199,26 @@ class ActivityDetails
      */
     public function getSelfie()
     {
-        return $this->getProfileAttribute(self::ATTR_SELFIE);
+        $selfie = $this->getProfileAttribute(self::ATTR_SELFIE);
+
+        if($selfie instanceof Selfie)
+        {
+            $selfie = $selfie->getContent();
+        }
+
+        return $selfie;
+    }
+
+    /**
+     * Get selfie image object.
+     *
+     * @return null| \Yoti\Entity\Selfie $selfie
+     */
+    public function getSelfieEntity()
+    {
+        $selfieObj = $this->getProfileAttribute(self::ATTR_SELFIE);
+        // Returns selfie entity or null
+        return ($selfieObj instanceof Selfie) ? $selfieObj : NULL;
     }
 
     /**
