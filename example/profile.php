@@ -2,6 +2,7 @@
 
 // Make sure you run composer update inside the example folder before trying this example out
 require_once './vendor/autoload.php';
+
 // Log any error message
 $errorMsg = '';
 // Get the token
@@ -28,16 +29,16 @@ try {
    </head>
    <body>
         <?php if (!empty($errorMsg)) : ?>
-            <p><strong><?php echo $errorMsg; ?></strong></p>
+            <p><strong><?php echo $errorMsg ?></strong></p>
         <?php else: ?>
-            <strong>Given Name(s)</strong> <?php echo $profile->getGivenNames(); ?><br>
-            <strong>Family Name</strong> <?php echo $profile->getFamilyName(); ?><br>
-            <strong>Phone</strong> <?php echo $profile->getPhoneNumber(); ?><br>
-            <strong>Email</strong> <?php echo $profile->getEmailAddress(); ?><br>
-            <strong>Date Of Birth</strong> <?php echo $profile->getDateOfBirth(); ?><br>
-            <strong>Address</strong> <?php echo $profile->getPostalAddress(); ?><br>
-            <strong>Gender</strong> <?php echo $profile->getGender(); ?><br>
-            <strong>Nationality</strong> <?php echo $profile->getNationality(); ?><br>
+            <strong>Given Name(s)</strong> <?php echo $profile->getGivenNames() ?><br>
+            <strong>Family Name</strong> <?php echo $profile->getFamilyName() ?><br>
+            <strong>Phone</strong> <?php echo $profile->getPhoneNumber() ?><br>
+            <strong>Email</strong> <?php echo $profile->getEmailAddress() ?><br>
+            <strong>Date Of Birth</strong> <?php echo $profile->getDateOfBirth() ?><br>
+            <strong>Address</strong> <?php echo $profile->getPostalAddress() ?><br>
+            <strong>Gender</strong> <?php echo $profile->getGender() ?><br>
+            <strong>Nationality</strong> <?php echo $profile->getNationality() ?><br>
             <strong>Photo</strong><br> <img src="data:image/x-icon;base64,<?php echo $selfie ?>" />
             <br>
         <?php endif; ?>
