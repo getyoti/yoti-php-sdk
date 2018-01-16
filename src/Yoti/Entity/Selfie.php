@@ -2,14 +2,23 @@
 
 namespace Yoti\Entity;
 
+/**
+ * Selfie entity class.
+ *
+ * @package Yoti\Entity
+ */
 class Selfie
 {
     /**
+     * Selfie image data.
+     *
      * @var string
      */
     private $content;
 
     /**
+     * Selfie image type.
+     *
      * @var string
      */
     private $type;
@@ -21,6 +30,8 @@ class Selfie
     }
 
     /**
+     * Set selfie image data.
+     *
      * @param string $content
      */
     public function setContent($content)
@@ -31,14 +42,20 @@ class Selfie
     }
 
     /**
+     * Set selfie image type.
+     *
      * @param string $type
      */
     public function setType($type)
     {
-        $this->type = $type;
+        if(!empty($type)) {
+            $this->type = $type;
+        }
     }
 
     /**
+     * Returns selfie imagae data.
+     *
      * @return string
      */
     public function getContent()
@@ -47,6 +64,8 @@ class Selfie
     }
 
     /**
+     * Returns selfie image type.
+     *
      * @return string
      */
     public function getType()
