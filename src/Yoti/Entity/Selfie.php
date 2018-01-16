@@ -54,7 +54,7 @@ class Selfie
     }
 
     /**
-     * Returns selfie imagae data.
+     * Returns selfie image data.
      *
      * @return string
      */
