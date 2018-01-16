@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "033aba5372d11ec968aa12bf6e1b9253",
+    "content-hash": "54d488eb352f8f71a16e27d169ad51a6",
     "packages": [
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "1.0.6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "cd87e8a7cc81b4cf807067f98540f805acf595c6"
+                "reference": "45f0e18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/cd87e8a7cc81b4cf807067f98540f805acf595c6",
-                "reference": "cd87e8a7cc81b4cf807067f98540f805acf595c6",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/45f0e18",
+                "reference": "45f0e18",
                 "shasum": ""
             },
             "require": {
@@ -67,13 +67,15 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2017-12-15T11:41:46+00:00"
+            "time": "2018-01-16 14:58:42"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "yoti/yoti-php-sdk": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
