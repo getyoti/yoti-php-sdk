@@ -22,7 +22,7 @@ try {
     $profile = $yotiClient->getActivityDetails($token);
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
     $selfieEntity = $profile->getSelfieEntity();
-    // Get selfie image format
+    // Retrieve selfie image format
     $imageFormat = $selfieEntity ? $selfieEntity->getType() : 'jpeg';
     $selfieFile = "selfie.{$imageFormat}";
     // Create selfie image file.
@@ -36,12 +36,14 @@ try {
    <head>
         <meta charset="utf-8">
         <title>YOTI PROFILE</title>
+
         <link rel="stylesheet" type="text/css" href="css/style.css">
    </head>
    <body>
         <?php if (!empty($errorMsg)) : ?>
             <p><strong><?php echo $errorMsg ?></strong></p>
         <?php else: ?>
+            <h1>Yoti User Profile</h1>
             <dl>
                 <dt>Given Name(s)</dt>
                 <dd><?php echo $profile->getGivenNames() ?></dd>
