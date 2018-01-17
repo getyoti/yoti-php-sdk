@@ -7,8 +7,6 @@ use Yoti\Helper\ActivityDetailsHelper;
 
 // Log any error message
 $errorMsg = '';
-// Selfie file name.
-$selfieFile = 'selfie.jpeg';
 // Get the token
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 
@@ -21,12 +19,8 @@ try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
-    $selfieEntity = $profile->getSelfieEntity();
-    // Retrieve selfie image format
-    $imageFormat = $selfieEntity ? $selfieEntity->getType() : 'jpeg';
-    $selfieFile = "selfie.{$imageFormat}";
     // Create selfie image file.
-    file_put_contents($selfieFile, $profile->getSelfie(), LOCK_EX);
+    file_put_contents('selfie.jpeg', $profile->getSelfie(), LOCK_EX);
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -35,7 +29,7 @@ try {
 <html>
    <head>
         <meta charset="utf-8">
-        <title>YOTI PROFILE</title>
+        <title>Yoti Profile</title>
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
    </head>
