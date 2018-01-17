@@ -18,6 +18,7 @@ $config = [
 try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
+    // Create a base 64 selfie URI to be embedded in a HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
     // Create selfie image file.
     file_put_contents('selfie.jpeg', $profile->getSelfie(), LOCK_EX);
