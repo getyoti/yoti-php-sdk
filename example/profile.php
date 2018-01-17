@@ -21,7 +21,10 @@ try {
     $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
     $profile = $yotiClient->getActivityDetails($token);
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
-    $selfieFile = "selfie.{$profile->getSelfieEntity()->getType()}";
+    $selfieEntity = $profile->getSelfieEntity();
+    // Get selfie image format
+    $imageFormat = $selfieEntity ? $selfieEntity->getType() : 'jpeg';
+    $selfieFile = "selfie.{$imageFormat}";
     // Create selfie image file.
     file_put_contents($selfieFile, $profile->getSelfie(), LOCK_EX);
 } catch(\Exception $e) {
