@@ -1,2 +1,4 @@
 .idea/
 /vendor
+example/.env
+example/selfie.jpeg
