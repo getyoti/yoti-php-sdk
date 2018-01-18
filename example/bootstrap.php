@@ -5,5 +5,12 @@ require_once './vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
 
-$dotenv = new Dotenv();
-$dotenv->load(__DIR__.'/.env');
+// Load environment variables
+try {
+    $dotenv = new Dotenv();
+    $dotenv->load(__DIR__.'/.env');
+
+} catch(\Exception $e) {
+    $errorMessage = "Error loading env variables - {$e->getMessage()}";
+    die($errorMessage . PHP_EOL);
+}
