@@ -68,7 +68,7 @@ try {
                 <dd><img src="<?php echo $base64Selfie ?>" /></dd>
 
                 <dt>Selfie as image file</dt>
-                <dd><img src="./<?php echo $selfieFile ?>" /></dd>
+                <dd><img src="./selfie.jpeg" /></dd>
             </dl>
         <?php endif; ?>
    </body>
