@@ -1,7 +1,7 @@
 <?php
 
-// Make sure you run composer update inside the example folder before trying this example out
-require_once './vendor/autoload.php';
+// Load dependent packages and env data
+require_once __DIR__ . '/bootstrap.php';
 
 use Yoti\Helper\ActivityDetailsHelper;
 
@@ -10,13 +10,8 @@ $errorMsg = '';
 // Get the token
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 
-$config = [
-    'sdkId' => 'add your SDK ID here', // This is your SDK ID associated with the Yoti Application you created on Dashboard
-    'pemFile' => __DIR__ . '/keys/your-key-name.pem', // This is the private key (in .pem format) associated with the Yoti Application you created on Dashboard
-];
-
 try {
-    $yotiClient = new Yoti\YotiClient($config['sdkId'], $config['pemFile']);
+    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
     $profile = $yotiClient->getActivityDetails($token);
     // Create a base 64 selfie URI to be embedded in an HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);

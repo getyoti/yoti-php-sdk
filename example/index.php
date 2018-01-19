@@ -1,3 +1,8 @@
+<?php
+
+// Load dependent packages and env data
+require_once __DIR__ . '/bootstrap.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,9 +15,9 @@
     </head>
     <body>
         <h1>Your Site Information</h1>
-        <span data-yoti-application-id="your App ID"
+        <span data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
             data-yoti-type="inline"
-            data-yoti-scenario-id="your Scenario ID">
+            data-yoti-scenario-id="<?php echo getenv('YOTI_SCENARIO_ID') ?>">
          Use Yoti
         </span>
 

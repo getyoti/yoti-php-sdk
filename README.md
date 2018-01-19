@@ -170,10 +170,12 @@ Allows your app to retrieve a user profile, given an encrypted token.
 The example can be found in the [example folder](https://github.com/getyoti/php/tree/master/example). The steps required for the setup are explained below.
 
 * Create your application in the Yoti Dashboard (this requires having a Yoti account)
-* Fill in the YOTI_APPLICATION_ID and YOTI_SCENARIO_ID values in the index.html file
-* Fill in the SDK_ID and pem file path config details in the profile.php file
 * Point your Yoti application callback URL to `http://your-local-url.domain/profile.php`
-* Run `composer update` command inside [example folder](https://github.com/getyoti/php/tree/master/example)
+* Do the steps below inside the [example folder](https://github.com/getyoti/php/tree/master/example)
+* Copy `.env.dist` to `.env`
+* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
+* Run the `composer update` command
+* Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
 
 ## Support
 

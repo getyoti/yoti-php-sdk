@@ -4,20 +4,77 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "54d488eb352f8f71a16e27d169ad51a6",
+    "content-hash": "713eafbd21df6124d600ee73e8f55a3d",
     "packages": [
         {
-            "name": "yoti/yoti-php-sdk",
-            "version": "dev-master",
+            "name": "symfony/dotenv",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "45f0e18"
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "0f9d2e0545f79ac58e5ac473792a4e37d71cbd59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/45f0e18",
-                "reference": "45f0e18",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/0f9d2e0545f79ac58e5ac473792a4e37d71cbd59",
+                "reference": "0f9d2e0545f79ac58e5ac473792a4e37d71cbd59",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "symfony/process": "^3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Dotenv\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Registers environment variables from a .env file",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2017-04-27T07:47:28+00:00"
+        },
+        {
+            "name": "yoti/yoti-php-sdk",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getyoti/yoti-php-sdk.git",
+                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f347e8f3241a90c386a0215b03b377f78332fa40",
+                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40",
                 "shasum": ""
             },
             "require": {
@@ -67,15 +124,13 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-01-16 14:58:42"
+            "time": "2018-01-18T10:26:14+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "yoti/yoti-php-sdk": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
