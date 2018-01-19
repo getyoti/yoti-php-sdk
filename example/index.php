@@ -1,6 +1,6 @@
 <?php
 
-// Load dependency files and env data
+// Load dependency packages and env data
 require_once __DIR__ . '/bootstrap.php';
 ?>
 <!DOCTYPE html>
