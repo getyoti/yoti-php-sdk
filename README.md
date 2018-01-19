@@ -174,8 +174,8 @@ The example can be found in the [example folder](https://github.com/getyoti/php/
 * Do the steps below inside the [example folder](https://github.com/getyoti/php/tree/master/example)
 * Copy `.env.dist` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
-* Run `composer update` command
-* Run `php -S localhost:8000` command and navigate to `http://localhost:8000`
+* Run the `composer update` command
+* Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
 
 ## Support
 
