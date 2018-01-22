@@ -38,13 +38,6 @@ class SignedRequest
     private $pem;
 
     /**
-     * Signed message.
-     *
-     * @var string
-     */
-    private $message;
-
-    /**
      * SignedRequest constructor.
      *
      * @param Payload $payload
@@ -57,15 +50,14 @@ class SignedRequest
      */
     public function __construct(Payload $payload, $endpoint, $pem, $sdkId, $httpMethod = 'GET')
     {
-        $this->checkEndpoint($this->endpoint);
-
         $this->httpMethod = $httpMethod;
         $this->endpoint = $endpoint;
         $this->payload = $payload;
         $this->pem = $pem;
         $this->sdkId = $sdkId;
 
-        $this->createSignedMessage();
+        $this->checkEndpoint($this->endpoint);
+        $this->checkRequestMethod($this->httpMethod);
     }
 
     /**
@@ -73,17 +65,7 @@ class SignedRequest
      *
      * @return string
      */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Create signed message.
-     *
-     * @return string
-     */
-    private function createSignedMessage()
+    public function getSignedMessage()
     {
         $endpointPath = $this->getEndpointPath();
 
@@ -122,6 +104,19 @@ class SignedRequest
     {
         if(empty($endpoint) || $endpoint[0] !== '/') {
             throw new \Exception('Invalid endpoint', 401);
+        }
+    }
+
+    /**
+     * Check request method.
+     *
+     * @param $httpMethod
+     * @throws \Exception
+     */
+    public function checkRequestMethod($httpMethod)
+    {
+        if(empty($httpMethod)) {
+            throw new \Exception('Http method cannot be empty', 401);
         }
     }
 

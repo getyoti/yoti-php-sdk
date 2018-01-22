@@ -234,7 +234,7 @@ class YotiClient
             $httpMethod
         );
         // Sign the request
-        $messageSignature = $signedRequest->getMessage();
+        $messageSignature = $signedRequest->getSignedMessage();
         if (!$messageSignature)
         {
             throw new \Exception('Could not sign request.', 401);
