@@ -1,34 +1,13 @@
 <?php
 namespace Yoti\Http;
 
-class Request
+class RestRequest extends AbstractRequest
 {
-    private $headers;
-    private $url;
-
-    public function __construct(array $headers, $url)
-    {
-        $this->setHeaders($headers);
-        $this->setUrl($url);
-    }
-
-    public function setHeaders(array $headers)
-    {
-        if(empty($headers)) {
-            throw new \Exception('Request headers cannot be empty');
-        }
-
-        $this->headers = $headers;
-    }
-
-    public function setUrl($url)
-    {
-        if(empty($url)) {
-            throw new \Exception('Request Url cannot be empty');
-        }
-
-        $this->url = $url;
-    }
+    const METHOD_GET = 'GET';
+    const METHOD_POST = 'POST';
+    const METHOD_PUT = 'PUT';
+    const METHOD_PATCH = 'PATCH';
+    const METHOD_DELETE = 'DELETE';
 
     /**
      * Make request

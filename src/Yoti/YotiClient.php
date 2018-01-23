@@ -5,7 +5,7 @@ namespace Yoti;
 use compubapi_v1\EncryptedData;
 use Yoti\Http\Payload;
 use Yoti\Http\SignedRequest;
-use Yoti\Http\Request;
+use Yoti\Http\RestRequest;
 
 /**
  * Class YotiClient
@@ -213,7 +213,7 @@ class YotiClient
      *
      * @throws \Exception
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = SignedRequest::METHOD_GET)
+    private function getReceipt($encryptedConnectToken, $httpMethod = RestRequest::METHOD_GET)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -247,9 +247,6 @@ class YotiClient
             throw new \Exception('Could not retrieve key from PEM.', 401);
         }
 
-        // Build Url to hit
-        $url = $this->_connectApi . $path;
-
         // Prepare request headers
         $headers = [
             "X-Yoti-Auth-Key: {$authKey}",
@@ -262,7 +259,7 @@ class YotiClient
         // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
         {
-            $request = new Request($headers, $url);
+            $request = new RestRequest($headers, $this->getRequestUrl($path));
             $result = $request->exec();
 
             $response = $result['response'];
@@ -294,6 +291,23 @@ class YotiClient
         }
 
         return $json['receipt'];
+    }
+
+    /**
+     * Build full API Url.
+     *
+     * @param $endpoint
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getRequestUrl($endpoint)
+    {
+        if(empty($endpoint)) {
+            throw new \Exception('API endpoint cannot be empty', 401);
+        }
+        return $this->_connectApi . $endpoint;
     }
 
     /**

@@ -19,7 +19,7 @@ class Payload
     {
         $data = $this->convertData($this->data);
         // Convert string into byte array
-        $byteArray = reset(unpack('C*', $data));
+        $byteArray = array_values(unpack('C*', $data));
 
         return $byteArray;
     }
