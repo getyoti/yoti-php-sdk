@@ -230,9 +230,10 @@ class YotiClient
             new Payload(''),
             $path,
             $this->_pem,
-            $this->sdkId,
+            $this->_sdkId,
             $httpMethod
         );
+
         // Sign the request
         $messageSignature = $signedRequest->getSignedMessage();
         if (!$messageSignature)

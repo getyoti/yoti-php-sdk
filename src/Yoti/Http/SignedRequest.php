@@ -80,7 +80,8 @@ class SignedRequest
         // Prepare message to sign
         $nonce = $this->generateNonce();
         $timestamp = round(microtime(true) * 1000);
-        $payload = base64_encode($this->payload->getByteArray());
+        // Serialize the array into a string
+        $payload = base64_encode(serialize($this->payload->getByteArray()));
         $path = "{$this->endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->sdkId}";
         $path .= "&payload={$payload}";
 
