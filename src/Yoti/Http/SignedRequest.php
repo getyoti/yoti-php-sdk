@@ -72,6 +72,36 @@ class SignedRequest
     }
 
     /**
+     * Get Api Url request.
+     *
+     * @param $apiUrl
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public function getApiRequestUrl($apiUrl)
+    {
+        if(!$this->isValidUrl($apiUrl)) {
+            throw new \Exception('Invalid Api Url');
+        }
+
+        return $apiUrl . $this->endpointPath;
+    }
+
+    /**
+     * Validate Url.
+     *
+     * @param $url
+     *
+     * @return mixed
+     */
+    public function isValidUrl($url)
+    {
+        return filter_var($url, FILTER_VALIDATE_URL);
+    }
+
+    /**
      * Return Yoti dashboard endpoint including the payload.
      *
      * @return string
