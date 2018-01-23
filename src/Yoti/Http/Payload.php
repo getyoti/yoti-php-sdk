@@ -8,11 +8,6 @@ class Payload
     public function __construct($data)
     {
         $this->data = $data;
-
-        // If $data is a string convert it into utf-8.
-        if(is_string($this->data) && !empty($this->data)) {
-            $this->data = mb_convert_encoding($this->data, 'UTF-8');
-        }
     }
 
     /**
@@ -22,11 +17,31 @@ class Payload
      */
     public function getByteArray()
     {
-        // If the payload data is an array convert it into a binary string with serialize
-        $data = is_array($this->data) ? serialize($this->data) : $this->data;
+        $data = $this->convertData($this->data);
         // Convert string into byte array
         $byteArray = reset(unpack('C*', $data));
 
         return $byteArray;
+    }
+
+    /**
+     * Convert data into a binary string.
+     *
+     * @param $data
+     *
+     * @return mixed|string
+     */
+    public function convertData($data)
+    {
+        if(is_array($data)) {
+            // If the payload data is an array convert it into a binary string
+            $data = serialize($data);
+        }
+        else if(is_string($data)) {
+            // If payload data is a string convert it into utf-8.
+            $data = mb_convert_encoding($data, 'UTF-8');
+        }
+
+        return $data;
     }
 }
