@@ -31,6 +31,8 @@ class SignedRequest
      */
     private $pem;
 
+    private $endpointPath;
+
     /**
      * SignedRequest constructor.
      *
@@ -52,6 +54,7 @@ class SignedRequest
 
         $this->checkEndpoint($this->endpoint);
         $this->checkRequestMethod($this->httpMethod);
+        $this->generatePath();
     }
 
     /**
@@ -61,10 +64,8 @@ class SignedRequest
      */
     public function getSignedMessage()
     {
-        $endpointPath = $this->getEndpointPath();
-
-        $endpointPointRequest = "{$this->httpMethod}&$endpointPath";
-        openssl_sign($endpointPointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
+        $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
+        openssl_sign($endpointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
         $messageSignature = base64_encode($signature);
 
         return $messageSignature;
@@ -75,7 +76,12 @@ class SignedRequest
      *
      * @return string
      */
-    private function getEndpointPath()
+    public function getEndpointPath()
+    {
+        return $this->endpointPath;
+    }
+
+    public function generatePath()
     {
         // Prepare message to sign
         $nonce = $this->generateNonce();
@@ -85,7 +91,7 @@ class SignedRequest
         $path = "{$this->endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->sdkId}";
         $path .= "&payload={$payload}";
 
-        return $path;
+        $this->endpointPath = $path;
     }
 
     /**

@@ -260,7 +260,7 @@ class YotiClient
         // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
         {
-            $request = new RestRequest($headers, $this->getRequestUrl($path));
+            $request = new RestRequest($headers, $signedRequest->getEndpointPath());
             $result = $request->exec();
 
             $response = $result['response'];
