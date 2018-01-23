@@ -3,8 +3,8 @@ namespace Yoti\Http;
 
 abstract class AbstractRequest
 {
-    private $headers;
-    private $url;
+    protected $headers;
+    protected $url;
 
     public function __construct(array $headers, $url)
     {
