@@ -7,7 +7,12 @@ class Payload
 
     public function __construct($data)
     {
-        $this->data = $this->convertToUTF8($data);
+        $this->data = $data;
+
+        // If $data is a string convert it into utf-8.
+        if(is_string($this->data) && !empty($this->data)) {
+            $this->data = mb_convert_encoding($this->data, 'UTF-8');
+        }
     }
 
     /**
@@ -23,17 +28,5 @@ class Payload
         $byteArray = reset(unpack('C*', $data));
 
         return $byteArray;
-    }
-
-    /**
-     * If $data is a string convert it into utf-8.
-     *
-     * @param $data
-     *
-     * @return array|string
-     */
-    public function convertToUTF8($data)
-    {
-        return is_array($data) ? $data : mb_convert_encoding($data, 'UTF-8');
     }
 }
