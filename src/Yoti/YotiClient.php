@@ -295,23 +295,6 @@ class YotiClient
     }
 
     /**
-     * Build full API Url.
-     *
-     * @param $endpoint
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    private function getRequestUrl($endpoint)
-    {
-        if(empty($endpoint)) {
-            throw new \Exception('API endpoint cannot be empty', 401);
-        }
-        return $this->_connectApi . $endpoint;
-    }
-
-    /**
      * @return null|string
      */
     private function getAuthKeyFromPem()
