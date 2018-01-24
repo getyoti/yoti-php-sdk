@@ -54,6 +54,6 @@ class RestRequest extends AbstractRequest
             self::METHOD_PATCH,
         ];
 
-        return isset($allowedMethods[$httpMethod]);
+        return in_array($httpMethod, $allowedMethods, TRUE);
     }
 }
