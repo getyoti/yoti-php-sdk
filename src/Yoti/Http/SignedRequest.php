@@ -134,7 +134,7 @@ class SignedRequest
     public function checkEndpoint($endpoint)
     {
         if(empty($endpoint) || $endpoint[0] !== '/') {
-            throw new \Exception('Invalid endpoint', 401);
+            throw new \Exception('Invalid endpoint', 400);
         }
     }
 
@@ -146,8 +146,8 @@ class SignedRequest
      */
     public function checkRequestMethod($httpMethod)
     {
-        if(empty($httpMethod)) {
-            throw new \Exception('Http method cannot be empty', 401);
+        if(empty($httpMethod) || !RestRequest::isAllowed($httpMethod)) {
+            throw new \Exception('Http method cannot be empty', 400);
         }
     }
 

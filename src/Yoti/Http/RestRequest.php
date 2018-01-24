@@ -36,4 +36,24 @@ class RestRequest extends AbstractRequest
 
         return $result;
     }
+
+    /**
+     * Check the http method is allowed.
+     *
+     * @param $httpMethod
+     *
+     * @return bool
+     */
+    public static function isAllowed($httpMethod)
+    {
+        $allowedMethods = [
+            self::METHOD_GET,
+            self::METHOD_POST,
+            self::METHOD_PUT,
+            self::METHOD_DELETE,
+            self::METHOD_PATCH,
+        ];
+
+        return isset($allowedMethods[$httpMethod]);
+    }
 }

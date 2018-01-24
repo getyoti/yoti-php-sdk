@@ -15,7 +15,7 @@ abstract class AbstractRequest
     public function setHeaders(array $headers)
     {
         if(empty($headers)) {
-            throw new \Exception('Request headers cannot be empty');
+            throw new \Exception('Request headers cannot be empty', 400);
         }
 
         $this->headers = $headers;
@@ -24,7 +24,7 @@ abstract class AbstractRequest
     public function setUrl($url)
     {
         if(empty($url)) {
-            throw new \Exception('Request Url cannot be empty');
+            throw new \Exception('Request Url cannot be empty', 400);
         }
 
         $this->url = $url;
