@@ -147,7 +147,7 @@ class SignedRequest
     public function checkRequestMethod($httpMethod)
     {
         if(empty($httpMethod) || !RestRequest::isAllowed($httpMethod)) {
-            throw new \Exception('Http method cannot be empty', 400);
+            throw new \Exception('Invalid http method', 400);
         }
     }
 
