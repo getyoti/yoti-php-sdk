@@ -227,7 +227,7 @@ class YotiClient
 
         // This will throw an exception if an error occurs
         $signedRequest = new SignedRequest(
-            new Payload(''),
+            new Payload(),
             $path,
             $this->_pem,
             $this->_sdkId,
