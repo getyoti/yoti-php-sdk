@@ -3,9 +3,12 @@
 namespace Yoti;
 
 use compubapi_v1\EncryptedData;
+use Yoti\Http\AmlResult;
 use Yoti\Http\Payload;
 use Yoti\Http\SignedRequest;
 use Yoti\Http\RestRequest;
+use Yoti\Entity\AmlProfile;
+use Yoti\Exception\AmlException;
 
 /**
  * Class YotiClient
@@ -28,6 +31,13 @@ class YotiClient
 
     // Dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
+
+    // Connect request headers
+    const AUTH_KEY_HEADER = 'X-Yoti-Auth-Key';
+    const DIGEST_HEADER = 'X-Yoti-Auth-Digest';
+    const YOTI_SDK_HEADER = 'X-Yoti-SDK';
+
+    const AML_CHECK_ENDPOINT = '/aml-check';
 
     /**
      * Accepted HTTP header values for X-Yoti-SDK header.
@@ -202,6 +212,82 @@ class YotiClient
         return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
     }
 
+    public function performAmlCheck(AmlProfile $amlProfile)
+    {
+        // Get payload data from amlProfile
+        $amlPayload     = new Payload($amlProfile->getData());
+        // Initiate signedRequest
+        $signedRequest  = new SignedRequest(
+            $amlPayload,
+            self::AML_CHECK_ENDPOINT,
+            $this->_pem,
+            $this->_sdkId,
+            'POST'
+        );
+
+        // Get signedMessage
+        $signedMessage = $signedRequest->getSignedMessage();
+
+        // Get request headers
+        $headers = $this->getRequestHeaders($signedMessage);
+
+        // Make request
+        $restRequest = new RestRequest($headers, $signedRequest->getApiRequestUrl(RestRequest::ARISTOTLE_API));
+        $result = $restRequest->exec();
+
+        $this->checkResponse($result);
+
+        // Format result
+        return new AmlResult($result['response']);
+    }
+
+    public function checkResponse(array $result)
+    {
+        $httpCode = (int) $result['http_code'];
+
+        switch($httpCode)
+        {
+            case 200: #OK
+                break;
+            case 400:
+                throw new AmlException('BAD REQUEST - The request payload failed validation', 400);
+                break;
+
+            case 401:
+                throw new AmlException('UNAUTHORIZED - The request failed the signing verification', 401);
+                break;
+
+            default:
+                throw new AmlException("Server responded with {$httpCode}", $httpCode);
+        }
+    }
+
+    private function getRequestHeaders($signedMessage)
+    {
+        $authKey = $this->getAuthKeyFromPem();
+
+        // Check auth key
+        if (!$authKey)
+        {
+            throw new \Exception('Could not retrieve key from PEM.', 401);
+        }
+
+        // Check signed message
+        if (!$signedMessage)
+        {
+            throw new \Exception('Could not sign request.', 401);
+        }
+
+        // Prepare request headers
+        return [
+            self::AUTH_KEY_HEADER . ": {$authKey}",
+            self::DIGEST_HEADER . ": {$signedMessage}",
+            self::YOTI_SDK_HEADER . ": {$this->_sdkIdentifier}",
+            "Content-Type: application/json",
+            "Accept: application/json",
+        ];
+    }
+
     /**
      * Decrypt and return receipt data.
      *
@@ -236,26 +322,9 @@ class YotiClient
 
         // Sign the request
         $messageSignature = $signedRequest->getSignedMessage();
-        if (!$messageSignature)
-        {
-            throw new \Exception('Could not sign request.', 401);
-        }
-
-        // Get auth key
-        $authKey = $this->getAuthKeyFromPem();
-        if (!$authKey)
-        {
-            throw new \Exception('Could not retrieve key from PEM.', 401);
-        }
 
         // Prepare request headers
-        $headers = [
-            "X-Yoti-Auth-Key: {$authKey}",
-            "X-Yoti-Auth-Digest: {$messageSignature}",
-            "X-Yoti-SDK: {$this->_sdkIdentifier}",
-            "Content-Type: application/json",
-            "Accept: application/json",
-        ];
+        $headers = $this->getRequestHeaders($messageSignature);
 
         // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
