@@ -66,9 +66,7 @@ class SignedRequest
     {
         $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
         openssl_sign($endpointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
-        $messageSignature = base64_encode($signature);
-
-        return $messageSignature;
+        return base64_encode($signature);
     }
 
     /**
@@ -119,7 +117,7 @@ class SignedRequest
         // Serialize the array into a string
         $payload = base64_encode(serialize($this->payload->getByteArray()));
         $path = "{$this->endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->sdkId}";
-        $path .= "&payload={$payload}";
+        $path .= "&{$payload}";
 
         $this->endpointPath = $path;
     }
