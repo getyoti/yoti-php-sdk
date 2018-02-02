@@ -247,7 +247,7 @@ class YotiClient
         // Make request
         $restRequest = new RestRequest(
             $headers,
-            $signedRequest->getApiRequestUrl(RestRequest::ARISTOTLE_API),
+            $signedRequest->getApiRequestUrl($this->_connectApi),
             $amlPayload,
             RestRequest::METHOD_POST
         );

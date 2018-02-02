@@ -33,7 +33,7 @@ class RestRequest extends AbstractRequest
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
         }
 
-        // Set response
+        // Set response data
         $result['response'] = curl_exec($ch);
         // Set response code
         $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
