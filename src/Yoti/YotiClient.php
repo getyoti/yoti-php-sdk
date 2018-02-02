@@ -277,13 +277,13 @@ class YotiClient
 
         switch($httpCode)
         {
-            case 200: #OK
+            case RestRequest::SUCCESSFUL_REQUEST: #OK
                 break;
-            case 400:
+            case RestRequest::BAD_REQUEST_ERROR:
                 throw new AmlException('BAD REQUEST - The request payload failed validation', 400);
                 break;
 
-            case 401:
+            case RestRequest::UNAUTHORIZED_ERROR:
                 throw new AmlException('UNAUTHORIZED - The request failed the signing verification', 401);
                 break;
 
