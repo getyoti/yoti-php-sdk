@@ -229,10 +229,12 @@ class YotiClient
     {
         // Get payload data from amlProfile
         $amlPayload     = new Payload($amlProfile->getData());
+        // @todo Check if we need to send token here
+        $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
         // Initiate signedRequest
         $signedRequest  = new SignedRequest(
             $amlPayload,
-            self::AML_CHECK_ENDPOINT,
+            $amlCheckEndpoint,
             $this->_pem,
             $this->_sdkId,
             RestRequest::METHOD_POST
@@ -256,8 +258,10 @@ class YotiClient
 
         $this->checkResponse($result['http_code']);
 
+        // Get decoded response data
+        $responseArr = json_decode($result['response'], TRUE);
         // Set and return result
-        return new AmlResult($result['response']);
+        return new AmlResult($responseArr);
     }
 
     /**
