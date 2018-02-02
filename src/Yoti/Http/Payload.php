@@ -28,6 +28,16 @@ class Payload
     }
 
     /**
+     * Get base64 encoded payload value.
+     *
+     * @return string
+     */
+    public function getBase64Payload()
+    {
+        return base64_encode(serialize($this->getByteArray()));
+    }
+
+    /**
      * Convert data into a binary string.
      *
      * @param $data

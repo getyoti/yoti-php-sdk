@@ -27,11 +27,7 @@ class RestRequest extends AbstractRequest
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->httpMethod);
 
-        if (
-            $this->httpMethod === self::METHOD_POST
-            || $this->httpMethod === self::METHOD_PUT
-            || $this->httpMethod === self::METHOD_PATCH
-        ) {
+        if (self::methodCanSendPayload($this->httpMethod)) {
             // Send payload data as a JSON string
             $payloadJSON = json_encode($this->payload->getRawData());
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);

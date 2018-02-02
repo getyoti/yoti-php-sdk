@@ -65,10 +65,13 @@ class SignedRequest
     public function getSignedMessage()
     {
         $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
-        openssl_sign($endpointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
-        $messageSignature = base64_encode($signature);
+        if(RestRequest::methodCanSendPayload($this->httpMethod)) {
+            $endpointRequest .= "&{$this->payload->getBase64Payload()}";
+        }
 
-        return $messageSignature;
+        openssl_sign($endpointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
+
+        return base64_encode($signature);
     }
 
     /**
@@ -116,10 +119,8 @@ class SignedRequest
         // Prepare message to sign
         $nonce = $this->generateNonce();
         $timestamp = round(microtime(true) * 1000);
-        // Serialize the array into a string
-        $payload = base64_encode(serialize($this->payload->getByteArray()));
+
         $path = "{$this->endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->sdkId}";
-        $path .= "&{$payload}";
 
         $this->endpointPath = $path;
     }

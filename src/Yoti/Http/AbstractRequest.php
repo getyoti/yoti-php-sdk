@@ -8,6 +8,10 @@ abstract class AbstractRequest
     const METHOD_PUT = 'PUT';
     const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
+    /**
+     * Methods that are sending payload.
+     */
+    const METHODS_WITH_PAYLOAD = 'POST, PUT, PATCH';
 
     /**
      * @var string
@@ -132,6 +136,18 @@ abstract class AbstractRequest
     public function getPayload()
     {
         return $this->payload;
+    }
+
+    /**
+     * Check if the method is sending payload data.
+     *
+     * @param $httpMethod
+     * @return bool
+     */
+    public static function methodCanSendPayload($httpMethod)
+    {
+        $methodsWithPayload = explode(',', self::METHODS_WITH_PAYLOAD);
+        return in_array($httpMethod, $methodsWithPayload, TRUE);
     }
 
     /**
