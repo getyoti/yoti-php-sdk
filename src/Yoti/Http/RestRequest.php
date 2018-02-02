@@ -25,31 +25,23 @@ class RestRequest extends AbstractRequest
             CURLOPT_SSL_VERIFYHOST => 0,
         ]);
 
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->httpMethod);
+
+        if (
+            $this->httpMethod === self::METHOD_POST
+            || $this->httpMethod === self::METHOD_PUT
+            || $this->httpMethod === self::METHOD_PATCH
+        ) {
+            // Send payload data as a JSON string
+            $payloadJSON = json_encode($this->payload->getRawData());
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadJSON);
+        }
+
         // Set response
         $result['response'] = curl_exec($ch);
         // Set response code
         $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         return $result;
-    }
-
-    /**
-     * Check the http method is allowed.
-     *
-     * @param $httpMethod
-     *
-     * @return bool
-     */
-    public static function isAllowed($httpMethod)
-    {
-        $allowedMethods = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_DELETE,
-            self::METHOD_PATCH,
-        ];
-
-        return in_array($httpMethod, $allowedMethods, TRUE);
     }
 }

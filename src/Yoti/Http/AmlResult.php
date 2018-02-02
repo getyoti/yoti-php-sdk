@@ -13,13 +13,14 @@ class AmlResult
 
     private $onWatchList;
 
-    public function __construct($onPepList, $onFraudList, $onWatchList)
+    /**
+     * AmlResult constructor.
+     *
+     * @param array $result
+     */
+    public function __construct(array $result)
     {
-        $this->onPepList = $onPepList;
-
-        $this->onFraudList = $onFraudList;
-
-        $this->onWatchList = $onWatchList;
+        $this->setAttributes($result);
     }
 
     public function getOnPepList()
@@ -52,6 +53,19 @@ class AmlResult
         return $this->onWatchList;
     }
 
+    /**
+     * @param array $result
+     */
+    private function setAttributes(array $result)
+    {
+        $this->onPepList = isset($result[self::ON_PEP_LIST_KEY]) ? (bool) $result[self::ON_PEP_LIST_KEY] : FALSE;
+        $this->onFraudList = isset($result[self::ON_FRAUD_LIST_KEY]) ? (bool) $result[self::ON_FRAUD_LIST_KEY] : FALSE;
+        $this->onWatchList = isset($result[self::ON_WATCH_LIST_KEY]) ? (bool) $result[self::ON_WATCH_LIST_KEY] : FALSE;
+    }
+
+    /**
+     * @return array
+     */
     public function getResponseArray()
     {
         return [

@@ -3,6 +3,9 @@ namespace Yoti\Http;
 
 class Payload
 {
+    /**
+     * @var mixed
+     */
     private $data;
 
     public function __construct($data = '')
@@ -43,5 +46,13 @@ class Payload
         }
 
         return $data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawData()
+    {
+        return $this->data;
     }
 }

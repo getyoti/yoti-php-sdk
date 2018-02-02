@@ -53,7 +53,7 @@ class SignedRequest
         $this->sdkId = $sdkId;
 
         $this->checkEndpoint($this->endpoint);
-        $this->checkRequestMethod($this->httpMethod);
+        RestRequest::checkHttpMethod($this->httpMethod);
         $this->generatePath();
     }
 
@@ -66,7 +66,9 @@ class SignedRequest
     {
         $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
         openssl_sign($endpointRequest, $signature, $this->pem, OPENSSL_ALGO_SHA256);
-        return base64_encode($signature);
+        $messageSignature = base64_encode($signature);
+
+        return $messageSignature;
     }
 
     /**
@@ -81,7 +83,7 @@ class SignedRequest
     public function getApiRequestUrl($apiUrl)
     {
         if(!$this->isValidUrl($apiUrl)) {
-            throw new \Exception('Invalid Api Url');
+            throw new \Exception('Invalid Api Url', 400);
         }
 
         return $apiUrl . $this->endpointPath;
@@ -133,19 +135,6 @@ class SignedRequest
     {
         if(empty($endpoint) || $endpoint[0] !== '/') {
             throw new \Exception('Invalid endpoint', 400);
-        }
-    }
-
-    /**
-     * Check request method.
-     *
-     * @param $httpMethod
-     * @throws \Exception
-     */
-    public function checkRequestMethod($httpMethod)
-    {
-        if(empty($httpMethod) || !RestRequest::isAllowed($httpMethod)) {
-            throw new \Exception('Invalid http method', 400);
         }
     }
 

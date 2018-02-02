@@ -9,6 +9,7 @@ use Yoti\Http\SignedRequest;
 use Yoti\Http\RestRequest;
 use Yoti\Entity\AmlProfile;
 use Yoti\Exception\AmlException;
+use Yoti\Exception\ActivityDetailsException;
 
 /**
  * Class YotiClient
@@ -37,6 +38,7 @@ class YotiClient
     const DIGEST_HEADER = 'X-Yoti-Auth-Digest';
     const YOTI_SDK_HEADER = 'X-Yoti-SDK';
 
+    // Aml check endpoint
     const AML_CHECK_ENDPOINT = '/aml-check';
 
     /**
@@ -179,6 +181,7 @@ class YotiClient
      * @return \Yoti\ActivityDetails
      *
      * @throws \Exception
+     * @throws \Yoti\Exception\ActivityDetailsException
      */
     public function getActivityDetails($encryptedConnectToken = null)
     {
@@ -193,7 +196,7 @@ class YotiClient
         // Check response was success
         if ($this->getOutcome() !== self::OUTCOME_SUCCESS)
         {
-            throw new \Exception('Outcome was unsuccessful', 502);
+            throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
         // Set remember me Id
@@ -212,6 +215,16 @@ class YotiClient
         return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
     }
 
+    /**
+     * Do Aml check.
+     *
+     * @param AmlProfile $amlProfile
+     *
+     * @return AmlResult
+     *
+     * @throws AmlException
+     * @throws \Exception
+     */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
         // Get payload data from amlProfile
@@ -222,7 +235,7 @@ class YotiClient
             self::AML_CHECK_ENDPOINT,
             $this->_pem,
             $this->_sdkId,
-            'POST'
+            RestRequest::METHOD_POST
         );
 
         // Get signedMessage
@@ -232,18 +245,31 @@ class YotiClient
         $headers = $this->getRequestHeaders($signedMessage);
 
         // Make request
-        $restRequest = new RestRequest($headers, $signedRequest->getApiRequestUrl(RestRequest::ARISTOTLE_API));
+        $restRequest = new RestRequest(
+            $headers,
+            $signedRequest->getApiRequestUrl(RestRequest::ARISTOTLE_API),
+            $amlPayload,
+            RestRequest::METHOD_POST
+        );
+
         $result = $restRequest->exec();
 
-        $this->checkResponse($result);
+        $this->checkResponse($result['http_code']);
 
-        // Format result
+        // Set and return result
         return new AmlResult($result['response']);
     }
 
-    public function checkResponse(array $result)
+    /**
+     * Handle request result.
+     *
+     * @param $httpCode
+     *
+     * @throws AmlException
+     */
+    public function checkResponse($httpCode)
     {
-        $httpCode = (int) $result['http_code'];
+        $httpCode = (int) $httpCode;
 
         switch($httpCode)
         {
@@ -262,6 +288,15 @@ class YotiClient
         }
     }
 
+    /**
+     * Get request headers.
+     *
+     * @param $signedMessage
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
     private function getRequestHeaders($signedMessage)
     {
         $authKey = $this->getAuthKeyFromPem();
@@ -297,6 +332,7 @@ class YotiClient
      *
      * @return array
      *
+     * @throws \Yoti\Exception\ActivityDetailsException
      * @throws \Exception
      */
     private function getReceipt($encryptedConnectToken, $httpMethod = RestRequest::METHOD_GET)
@@ -305,15 +341,16 @@ class YotiClient
         $token = $this->decryptConnectToken($encryptedConnectToken);
         if (!$token)
         {
-            throw new \Exception('Could not decrypt connect token.', 401);
+            throw new ActivityDetailsException('Could not decrypt connect token.', 401);
         }
 
         // Get path for this endpoint
         $path = "/profile/{$token}";
+        $payload = new Payload();
 
         // This will throw an exception if an error occurs
         $signedRequest = new SignedRequest(
-            new Payload(),
+            $payload,
             $path,
             $this->_pem,
             $this->_sdkId,
@@ -329,7 +366,12 @@ class YotiClient
         // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
         {
-            $request = new RestRequest($headers, $signedRequest->getApiRequestUrl($this->_connectApi));
+            $request = new RestRequest(
+                $headers,
+                $signedRequest->getApiRequestUrl($this->_connectApi),
+                $payload
+            );
+
             $result = $request->exec();
 
             $response = $result['response'];
@@ -338,7 +380,7 @@ class YotiClient
             if ($httpCode !== 200)
             {
                 $httpCode = (int) $httpCode;
-                throw new \Exception("Server responded with {$httpCode}", $httpCode);
+                throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
             }
         }
         else
@@ -351,13 +393,13 @@ class YotiClient
         $json = json_decode($response, true);
         if (json_last_error() !== JSON_ERROR_NONE)
         {
-            throw new \Exception('JSON response was invalid', 502);
+            throw new ActivityDetailsException('JSON response was invalid', 502);
         }
 
         // Check receipt is in response
         if (!array_key_exists('receipt', $json))
         {
-            throw new \Exception('Receipt not found in response', 502);
+            throw new ActivityDetailsException('Receipt not found in response', 502);
         }
 
         return $json['receipt'];
