@@ -404,7 +404,6 @@ class YotiClient
 
         // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
         $key = trim($details['key']);
-        //$_key = explode(PHP_EOL, $key);
         // On *nix systems the new line is n, on older OS it is r and on Microsoft it is rn
         $_key = preg_split('/\r\n|\r|\n/', $key);
         if (strpos($key, 'BEGIN') !== FALSE)
