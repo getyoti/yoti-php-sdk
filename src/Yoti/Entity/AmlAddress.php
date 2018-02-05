@@ -6,10 +6,22 @@ class AmlAddress
     const POSTCODE_ATTR = 'post_code';
     const COUNTRY_ATTR = 'country';
 
+    /**
+     * @var string
+     */
     private $postcode;
 
+    /**
+     * @var \Yoti\Entity\Country
+     */
     private $country;
 
+    /**
+     * AmlAddress constructor.
+     *
+     * @param \Yoti\Entity\Country $country
+     * @param string $postcode
+     */
     public function __construct(Country $country, $postcode)
     {
         $this->country = $country;
@@ -36,6 +48,11 @@ class AmlAddress
         return $this->postcode;
     }
 
+    /**
+     * Get address data.
+     *
+     * @return array
+     */
     public function getData()
     {
         return [

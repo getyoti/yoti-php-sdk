@@ -3,8 +3,14 @@ namespace Yoti\Entity;
 
 class Country
 {
+    /**
+     * @var string
+     */
     private $name;
 
+    /**
+     * @var null|string
+     */
     private $code;
 
     public function __construct($name, $code = NULL)

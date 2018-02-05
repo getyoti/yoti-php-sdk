@@ -20,6 +20,7 @@ class Payload
      */
     public function getByteArray()
     {
+        // Convert data into a string
         $data = $this->convertData($this->data);
         // Convert string into byte array
         $byteArray = array_values(unpack('C*', $data));
@@ -28,7 +29,7 @@ class Payload
     }
 
     /**
-     * Get base64 encoded payload value.
+     * Get base64 encoded of payload byte array.
      *
      * @return string
      */
@@ -40,9 +41,9 @@ class Payload
     /**
      * Convert data into a binary string.
      *
-     * @param $data
+     * @param mixed $data
      *
-     * @return mixed|string
+     * @return string
      */
     public function convertData($data)
     {

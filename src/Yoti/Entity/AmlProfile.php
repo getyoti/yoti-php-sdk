@@ -1,6 +1,8 @@
 <?php
 namespace Yoti\Entity;
 
+use Yoti\Exception\AmlException;
+
 class AmlProfile
 {
     const GIVEN_NAMES_ATTR  = 'given_names';
@@ -8,10 +10,21 @@ class AmlProfile
     const SSN_ATTR          = 'ssn';
     const ADDRESS_ATTR      = 'address';
 
+    const USA_COUNTRY_NAME = 'USA';
+
+    /**
+     * @var string
+     */
     private $givenNames;
 
+    /**
+     * @var string
+     */
     private $familyName;
 
+    /**
+     * @var null|string
+     */
     private $ssn;
 
     /**
@@ -19,12 +32,25 @@ class AmlProfile
      */
     private $amlAddress;
 
-    public function __construct($givenNames, $familyName, $ssn, AmlAddress $amlAddress)
+    /**
+     * AmlProfile constructor.
+     *
+     * @param string $givenNames
+     * @param string $familyName
+     * @param \Yoti\Entity\AmlAddress $amlAddress
+     * @param null|string $ssn
+     *
+     * @throws \Yoti\Exception\AmlException
+     */
+    public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = NULL)
     {
         $this->givenNames = $givenNames;
         $this->familyName = $familyName;
         $this->ssn = $ssn;
         $this->amlAddress = $amlAddress;
+
+        $this->validateSsn();
+        $this->validatePostcode();
     }
 
     public function getGivenNames()
@@ -67,11 +93,46 @@ class AmlProfile
         $this->amlAddress = $amlAddress;
     }
 
+    /**
+     * Check Ssn is not provided when country is not USA.
+     *
+     * @throws \Yoti\Exception\AmlException
+     */
+    public function validateSsn()
+    {
+        $countryName = $this->amlAddress->getCountry()->getName();
+        if(NULL !== $this->ssn && $countryName !== self::USA_COUNTRY_NAME)
+        {
+            throw new AmlException('SSN should only be provided for ' . self::USA_COUNTRY_NAME);
+        }
+    }
+
+    /**
+     * Check postcode is not empty when country is USA.
+     *
+     * @throws \Yoti\Exception\AmlException
+     */
+    public function validatePostcode()
+    {
+        $postcode = $this->amlAddress->getPostcode();
+        $countryName = $this->amlAddress->getCountry()->getName();
+        if(empty($postcode) && $countryName === self::USA_COUNTRY_NAME)
+        {
+            throw new AmlException('Postcode is required for ' . self::USA_COUNTRY_NAME);
+        }
+    }
+
+    /**
+     * Get Aml profile data.
+     *
+     * @return array
+     */
     public function getData()
     {
         return [
             self::GIVEN_NAMES_ATTR  => $this->givenNames,
             self::FAMILY_NAME_ATTR  => $this->familyName,
+            self::SSN_ATTR => $this->ssn,
             self::ADDRESS_ATTR => $this->amlAddress->getData(),
         ];
     }

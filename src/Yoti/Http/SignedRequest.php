@@ -17,6 +17,11 @@ class SignedRequest
      */
     private $endpoint;
 
+    /**
+     * SDK Id from dashboard.
+     *
+     * @var string
+     */
     private $sdkId;
 
     /**
@@ -31,15 +36,20 @@ class SignedRequest
      */
     private $pem;
 
+    /**
+     * Request full endpoint path.
+     *
+     * @var string
+     */
     private $endpointPath;
 
     /**
      * SignedRequest constructor.
      *
      * @param Payload $payload
-     * @param $endpoint
-     * @param $pem
-     * @param $sdkId
+     * @param string $endpoint
+     * @param string $pem
+     * @param string $sdkId
      * @param string $httpMethod
      *
      * @throws \Exception
@@ -77,7 +87,7 @@ class SignedRequest
     /**
      * Get Api Url request.
      *
-     * @param $apiUrl
+     * @param string $apiUrl
      *
      * @return string
      *
@@ -95,17 +105,17 @@ class SignedRequest
     /**
      * Validate Url.
      *
-     * @param $url
+     * @param string $url
      *
-     * @return mixed
+     * @return bool
      */
     public function isValidUrl($url)
     {
-        return filter_var($url, FILTER_VALIDATE_URL);
+        return filter_var($url, FILTER_VALIDATE_URL) ? TRUE : FALSE;
     }
 
     /**
-     * Return Yoti dashboard endpoint including the payload.
+     * Return Api full endpoint.
      *
      * @return string
      */
@@ -114,6 +124,9 @@ class SignedRequest
         return $this->endpointPath;
     }
 
+    /**
+     * Generate Api full endpoint.
+     */
     public function generatePath()
     {
         // Prepare message to sign
@@ -128,7 +141,7 @@ class SignedRequest
     /**
      * Check the endpoint is valid.
      *
-     * @param $endpoint
+     * @param string $endpoint
      *
      * @throws \Exception
      */

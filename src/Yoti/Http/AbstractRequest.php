@@ -8,12 +8,14 @@ abstract class AbstractRequest
     const METHOD_PUT = 'PUT';
     const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
+
     /**
      * Methods that are sending payload.
+     * You can add more method to this list separated by comma ','
      */
-    const METHODS_WITH_PAYLOAD = 'POST, PUT, PATCH';
+    const METHODS_THAT_INCLUDE_PAYLOAD = 'POST,PUT,PATCH';
 
-    // Error code
+    // Http request error code
     const SUCCESSFUL_REQUEST = 200;
     const BAD_REQUEST_ERROR = 400;
     const UNAUTHORIZED_ERROR = 401;
@@ -21,13 +23,15 @@ abstract class AbstractRequest
     const SERVICE_UNAVAILABLE_ERROR = 503;
 
     /**
+     * API url.
+     *
      * @var string
      */
     protected $url;
     /**
      * @var array
      */
-    protected $headers;
+    protected $httpHeaders;
     /**
      * @var string
      */
@@ -40,44 +44,47 @@ abstract class AbstractRequest
     /**
      * AbstractRequest constructor.
      *
-     * @param array $headers
-     * @param $url
+     * @param array $httpHeaders
+     * @param string $url
      * @param Payload $payload
      * @param string $httpMethod
      *
      * @throws \Exception
      */
-    public function __construct(array $headers, $url, Payload $payload, $httpMethod = 'GET')
+    public function __construct(array $httpHeaders, $url, Payload $payload, $httpMethod = 'GET')
     {
-        $this->setHttpMethod($httpMethod);
-        $this->setHeaders($headers);
-        $this->setUrl($url);
         $this->payload = $payload;
+
+        $this->setUrl($url);
+        $this->setHttpHeaders($httpHeaders);
+        $this->setHttpMethod($httpMethod);
     }
 
     /**
      * @param array $headers
+     *
      * @throws \Exception
      */
-    public function setHeaders(array $headers)
+    public function setHttpHeaders(array $headers)
     {
         if(empty($headers)) {
-            throw new \Exception('Request headers cannot be empty', 400);
+            throw new \Exception('Request httpHeaders cannot be empty', 400);
         }
 
-        $this->headers = $headers;
+        $this->httpHeaders = $headers;
     }
 
     /**
      * @return mixed
      */
-    public function getHeaders()
+    public function getHttpHeaders()
     {
-        return $this->headers;
+        return $this->httpHeaders;
     }
 
     /**
-     * @param $url
+     * @param string $url
+     *
      * @throws \Exception
      */
     public function setUrl($url)
@@ -98,7 +105,8 @@ abstract class AbstractRequest
     }
 
     /**
-     * @param $httpMethod
+     * @param string $httpMethod
+     *
      * @throws \Exception
      */
     public function setHttpMethod($httpMethod)
@@ -117,9 +125,10 @@ abstract class AbstractRequest
     }
 
     /**
-     * Check http method is valid.
+     * Check the provided http method is valid.
      *
-     * @param $httpMethod
+     * @param string $httpMethod
+     *
      * @throws \Exception
      */
     public static function checkHttpMethod($httpMethod)
@@ -146,21 +155,22 @@ abstract class AbstractRequest
     }
 
     /**
-     * Check if the method is sending payload data.
+     * Check if the method can include payload data.
      *
-     * @param $httpMethod
+     * @param string $httpMethod
+     *
      * @return bool
      */
     public static function methodCanSendPayload($httpMethod)
     {
-        $methodsWithPayload = explode(',', self::METHODS_WITH_PAYLOAD);
-        return in_array($httpMethod, $methodsWithPayload, TRUE);
+        $methodsThatIncludePayload = explode(',', self::METHODS_THAT_INCLUDE_PAYLOAD);
+        return in_array($httpMethod, $methodsThatIncludePayload, TRUE);
     }
 
     /**
      * Check the http method is allowed.
      *
-     * @param $httpMethod
+     * @param string $httpMethod
      *
      * @return bool
      */

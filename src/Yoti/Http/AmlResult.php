@@ -1,6 +1,8 @@
 <?php
 namespace Yoti\Http;
 
+use Yoti\Exception\AmlException;
+
 class AmlResult
 {
     const ON_PEP_LIST_KEY = 'on_pep_list';
@@ -17,25 +19,12 @@ class AmlResult
      * AmlResult constructor.
      *
      * @param array $result
+     *
+     * @throws \Yoti\Exception\AmlException
      */
     public function __construct(array $result)
     {
         $this->setAttributes($result);
-    }
-
-    public function getOnPepList()
-    {
-        return $this->onPepList;
-    }
-
-    public function getOnFraudList()
-    {
-        return $this->onFraudList;
-    }
-
-    public function getOnWatchList()
-    {
-        return $this->onWatchList;
     }
 
     public function isOnPepList()
@@ -55,23 +44,40 @@ class AmlResult
 
     /**
      * @param array $result
+     *
+     * @throws \Yoti\Exception\AmlException
      */
     private function setAttributes(array $result)
     {
-        $this->onPepList = isset($result[self::ON_PEP_LIST_KEY]) ? (bool) $result[self::ON_PEP_LIST_KEY] : FALSE;
-        $this->onFraudList = isset($result[self::ON_FRAUD_LIST_KEY]) ? (bool) $result[self::ON_FRAUD_LIST_KEY] : FALSE;
-        $this->onWatchList = isset($result[self::ON_WATCH_LIST_KEY]) ? (bool) $result[self::ON_WATCH_LIST_KEY] : FALSE;
+        // Check no attribute is mmising from the result
+        AmlResult::checkAttributes($result);
+
+        $this->onPepList = (bool) $result[self::ON_PEP_LIST_KEY];
+        $this->onFraudList = (bool) $result[self::ON_FRAUD_LIST_KEY];
+        $this->onWatchList = (bool) $result[self::ON_WATCH_LIST_KEY];
     }
 
     /**
-     * @return array
+     * Check all the attributes are included in the result.
+     *
+     * @param array $result
+     *
+     * @throws \Yoti\Exception\AmlException
      */
-    public function getResponseArray()
+    public static function checkAttributes(array $result)
     {
-        return [
-            self::ON_PEP_LIST_KEY => $this->onPepList,
-            self::ON_FRAUD_LIST_KEY => $this->onFraudList,
-            self::ON_WATCH_LIST_KEY => $this->onWatchList,
+        $expectedAttributes = [
+            self::ON_PEP_LIST_KEY,
+            self::ON_WATCH_LIST_KEY,
+            self::ON_WATCH_LIST_KEY,
         ];
+        $providedAttributes = array_keys($result);
+        $diff = array_diff($expectedAttributes, $providedAttributes);
+
+        // Throw an error if any expected attribute is missing.
+        if(!empty($diff))
+        {
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $diff) , 404);
+        }
     }
 }
