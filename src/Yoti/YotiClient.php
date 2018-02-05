@@ -404,7 +404,7 @@ class YotiClient
 
         // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
         $key = trim($details['key']);
-        // On *nix systems the new line is n, on older OS it is r and on Microsoft it is rn
+        // Support line break on *nix systems, OS, older OS, and Microsoft
         $_key = preg_split('/\r\n|\r|\n/', $key);
         if (strpos($key, 'BEGIN') !== FALSE)
         {
