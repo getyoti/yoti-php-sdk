@@ -15,6 +15,7 @@ class ActivityDetails
 {
     const ATTR_FAMILY_NAME = 'family_name';
     const ATTR_GIVEN_NAMES = 'given_names';
+    const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
@@ -150,6 +151,16 @@ class ActivityDetails
     public function getGivenNames()
     {
         return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
+    }
+
+    /**
+     * Get full name.
+     *
+     * @return null|string
+     */
+    public function getFullName()
+    {
+        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
     }
 
     /**
