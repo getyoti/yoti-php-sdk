@@ -91,11 +91,7 @@ This is done as follows:
 ```php
 <?php
 $activityDetails = $client->getActivityDetails();
-if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS)
-{
-    $profile = $activityDetails->getProfileAttribute();
-}
-else
+if ($client->getOutcome() !== \Yoti\YotiClient::OUTCOME_SUCCESS)
 {
     // handle unhappy path
 }
@@ -115,7 +111,11 @@ $familyName         = $activityDetails->getFamilyName();
 
 $givenName          = $activityDetails->getGivenNames();
 
+$fullName           = $activityDetails->getFullName();
+
 $dateOfBirth        = $activityDetails->getDateOfBirth();
+
+$ageVerified        = $activityDetails->isAgeVerified();
 
 $gender             = $activityDetails->getGender();
 

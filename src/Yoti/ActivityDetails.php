@@ -161,7 +161,7 @@ class ActivityDetails
      */
     public function getFullName()
     {
-        return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
+        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
     }
 
     /**
