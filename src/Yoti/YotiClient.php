@@ -153,7 +153,7 @@ class YotiClient
      */
     public function getActivityDetails($encryptedConnectToken = NULL)
     {
-        if (!$encryptedConnectToken && array_key_exists('token', $_GET))
+        if(!$encryptedConnectToken && array_key_exists('token', $_GET))
         {
             $encryptedConnectToken = $_GET['token'];
         }
@@ -162,7 +162,7 @@ class YotiClient
         $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
 
         // Check response was success
-        if ($this->getOutcome() !== self::OUTCOME_SUCCESS)
+        if($this->getOutcome() !== self::OUTCOME_SUCCESS)
         {
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
@@ -171,7 +171,7 @@ class YotiClient
         $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : NULL;
 
         // If no profile return empty ActivityDetails object
-        if (empty($this->_receipt['other_party_profile_content']))
+        if(empty($this->_receipt['other_party_profile_content']))
         {
             return new ActivityDetails([], $rememberMeId);
         }
@@ -197,7 +197,7 @@ class YotiClient
     {
         // Get payload data from amlProfile
         $amlPayload     = new Payload($amlProfile->getData());
-        // @todo Check if we need to send token here
+        // Aml check endpoint
         $amlCheckEndpoint = self::AML_PROFILE_CHECK_ENDPOINT;
 
         // Initiate signedRequest
@@ -278,13 +278,13 @@ class YotiClient
         $authKey = $this->getAuthKeyFromPem();
 
         // Check auth key
-        if (!$authKey)
+        if(!$authKey)
         {
             throw new \Exception('Could not retrieve key from PEM.', 401);
         }
 
         // Check signed message
-        if (!$signedMessage)
+        if(!$signedMessage)
         {
             throw new \Exception('Could not sign request.', 401);
         }
@@ -370,7 +370,7 @@ class YotiClient
         $this->checkJsonError();
 
         // Check receipt is in response
-        if (!array_key_exists('receipt', $json))
+        if(!array_key_exists('receipt', $json))
         {
             throw new ActivityDetailsException('Receipt not found in response', 502);
         }
@@ -385,7 +385,7 @@ class YotiClient
      */
     public function checkJsonError()
     {
-        if (json_last_error() !== JSON_ERROR_NONE)
+        if(json_last_error() !== JSON_ERROR_NONE)
         {
             throw new \Exception('JSON response was invalid', 502);
         }
@@ -397,7 +397,7 @@ class YotiClient
     private function getAuthKeyFromPem()
     {
         $details = openssl_pkey_get_details(openssl_pkey_get_private($this->_pem));
-        if (!array_key_exists('key', $details))
+        if(!array_key_exists('key', $details))
         {
             return NULL;
         }
@@ -406,7 +406,7 @@ class YotiClient
         $key = trim($details['key']);
         // Support line break on *nix systems, OS, older OS, and Microsoft
         $_key = preg_split('/\r\n|\r|\n/', $key);
-        if (strpos($key, 'BEGIN') !== FALSE)
+        if(strpos($key, 'BEGIN') !== FALSE)
         {
             array_shift($_key);
             array_pop($_key);
@@ -517,7 +517,7 @@ class YotiClient
     public function checkSdkId($sdkId)
     {
         // Check sdk id passed
-        if (!$sdkId)
+        if(!$sdkId)
         {
             throw new \Exception('SDK ID is required', 400);
         }
@@ -531,9 +531,9 @@ class YotiClient
     public function checkRequiredModules()
     {
         $requiredModules = ['curl', 'json'];
-        foreach ($requiredModules as $mod)
+        foreach($requiredModules as $mod)
         {
-            if (!extension_loaded($mod))
+            if(!extension_loaded($mod))
             {
                 throw new \Exception("PHP module '$mod' not installed", 501);
             }

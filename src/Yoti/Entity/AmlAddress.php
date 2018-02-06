@@ -57,7 +57,7 @@ class AmlAddress
     {
         return [
             self::POSTCODE_ATTR => $this->postcode,
-            self::COUNTRY_ATTR => $this->country,
+            self::COUNTRY_ATTR => $this->country->getCode(),
         ];
     }
 }
