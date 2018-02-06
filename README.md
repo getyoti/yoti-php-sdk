@@ -25,7 +25,10 @@ How to manage users
 7) [How to run the example](#how-to-run-the-example) -
 How to run the example
 
-8) [Support](#support) -
+8) [API Coverage](#api-coverage) -
+Attributes defined
+
+9) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
@@ -115,8 +118,6 @@ $fullName           = $activityDetails->getFullName();
 
 $dateOfBirth        = $activityDetails->getDateOfBirth();
 
-$ageVerified        = $activityDetails->getProfileAttribute('age_over:18');
-
 $gender             = $activityDetails->getGender();
 
 $nationality        = $activityDetails->getNationality();
@@ -176,6 +177,23 @@ The example can be found in the [example folder](https://github.com/getyoti/php/
 * Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
 * Run the `composer update` command
 * Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
+
+## API Coverage
+
+* Activity Details
+    * [X] User ID `user_id`
+    * [X] Profile
+        * [X] Photo `selfie`
+        * [X] Given Names `given_names`
+        * [X] Family Name `family_name`
+        * [X] Full Name `full_name`
+        * [X] Mobile Number `phone_number`
+        * [X] Email address `email_address`
+        * [X] Age / Date of Birth `date_of_birth`
+        * [X] Age / Verify Condition `age_[over|under]:[1-999]`
+        * [X] Address `postal_address`
+        * [X] Gender `gender`
+        * [X] Nationality `nationality`
 
 ## Support
 
