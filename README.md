@@ -115,7 +115,7 @@ $fullName           = $activityDetails->getFullName();
 
 $dateOfBirth        = $activityDetails->getDateOfBirth();
 
-$ageVerified        = $activityDetails->isAgeVerified();
+$ageVerified        = $activityDetails->getProfileAttribute('age_over:18');
 
 $gender             = $activityDetails->getGender();
 

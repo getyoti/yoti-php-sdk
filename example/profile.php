@@ -15,7 +15,6 @@ try {
     $profile = $yotiClient->getActivityDetails($token);
     // Create a base 64 selfie URI to be embedded in an HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
-    $ageVerified = $profile->isAgeVerified();
     // Create selfie image file.
     file_put_contents('selfie.jpeg', $profile->getSelfie(), LOCK_EX);
 } catch(\Exception $e) {
@@ -55,7 +54,7 @@ try {
                 <dd><?php echo $profile->getDateOfBirth() ?></dd>
 
                 <dt>Age verified</dt>
-                <dd><?php echo is_bool($ageVerified) ? var_export($ageVerified, TRUE) : $ageVerified; ?></dd>
+                <dd><?php echo $profile->getProfileAttribute('age_over:18') ?></dd>
 
                 <dt>Address</dt>
                 <dd><?php echo $profile->getPostalAddress() ?></dd>

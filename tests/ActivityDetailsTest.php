@@ -26,7 +26,7 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
             'given_names' => 'TestGivenName',
             'full_name'   => 'TestGivenName TestFamilyName',
             'date_of_birth' => '11-07-2017',
-            'age_over:18'=> false,
+            'age_over:18'=> FALSE,
             'gender' => 'Male',
             'nationality' => 'British',
             'phone_number' => '07856836932',
@@ -87,11 +87,11 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test isAgeVerified
+     * Test age over 18.
      */
     public function testIsAgeVerified()
     {
-        $this->assertFalse($this->dummyProfile['age_over:18']);
+        $this->assertFalse($this->profile->getProfileAttribute('age_over:18'));
     }
 
     /**

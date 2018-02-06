@@ -17,7 +17,6 @@ class ActivityDetails
     const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_AGE_OVER = 'age_over:18';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
     const ATTR_PHONE_NUMBER = 'phone_number';
@@ -172,18 +171,6 @@ class ActivityDetails
     public function getDateOfBirth()
     {
         return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
-    }
-
-    /**
-     * Check age is over 18.
-     *
-     * @return null|bool
-     */
-    public function isAgeVerified()
-    {
-        $ageOver = $this->getProfileAttribute(self::ATTR_AGE_OVER);
-
-        return (NULL !== $ageOver) ? (bool) $ageOver : NULL;
     }
 
     /**
