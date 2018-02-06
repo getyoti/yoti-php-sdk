@@ -41,6 +41,9 @@ try {
                 <dt>Family Name</dt>
                 <dd><?php echo $profile->getFamilyName() ?></dd>
 
+                <dt>Full Name</dt>
+                <dd><?php echo $profile->getFullName() ?></dd>
+
                 <dt>Phone</dt>
                 <dd><?php echo $profile->getPhoneNumber() ?></dd>
 
@@ -49,6 +52,9 @@ try {
 
                 <dt>Date Of Birth</dt>
                 <dd><?php echo $profile->getDateOfBirth() ?></dd>
+
+                <dt>Age verified</dt>
+                <dd><?php echo $profile->isAgeVerified() ? 'Yes' : 'No' ?></dd>
 
                 <dt>Address</dt>
                 <dd><?php echo $profile->getPostalAddress() ?></dd>
