@@ -75,7 +75,7 @@ class SignedRequest
     public function getSignedMessage()
     {
         $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
-        if(RestRequest::methodCanSendPayload($this->httpMethod)) {
+        if(RestRequest::canSendPayload($this->httpMethod)) {
             $endpointRequest .= "&{$this->payload->getBase64Payload()}";
         }
 

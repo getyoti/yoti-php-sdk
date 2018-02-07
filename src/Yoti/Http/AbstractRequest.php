@@ -161,7 +161,7 @@ abstract class AbstractRequest
      *
      * @return bool
      */
-    public static function methodCanSendPayload($httpMethod)
+    public static function canSendPayload($httpMethod)
     {
         $methodsThatIncludePayload = explode(',', self::METHODS_THAT_INCLUDE_PAYLOAD);
         return in_array($httpMethod, $methodsThatIncludePayload, TRUE);

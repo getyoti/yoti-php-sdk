@@ -139,4 +139,12 @@ class AmlProfile
             self::ADDRESS_ATTR => $this->amlAddress->getData(),
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this->getData());
+    }
 }
