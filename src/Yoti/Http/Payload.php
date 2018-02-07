@@ -14,28 +14,13 @@ class Payload
     }
 
     /**
-     * Get byte array of a string or an array.
-     *
-     * @return mixed
-     */
-    public function getByteArray()
-    {
-        // Convert data into a string
-        $data = $this->convertData($this->data);
-        // Convert string into byte array
-        $byteArray = array_values(unpack('C*', $data));
-
-        return $byteArray;
-    }
-
-    /**
      * Get base64 encoded of payload byte array.
      *
      * @return string
      */
     public function getBase64Payload()
     {
-        return base64_encode(serialize($this->getByteArray()));
+        return base64_encode($this->convertData($this->data));
     }
 
     /**
@@ -48,8 +33,8 @@ class Payload
     public function convertData($data)
     {
         if(is_array($data)) {
-            // If the payload data is an array convert it into a binary string
-            $data = serialize($data);
+            // If the payload data is an array convert it into a JSON string
+            $data = json_encode($data);
         }
         else if(is_string($data)) {
             // If payload data is a string convert it into utf-8.
@@ -65,5 +50,13 @@ class Payload
     public function getRawData()
     {
         return $this->data;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this->getRawData());
     }
 }
