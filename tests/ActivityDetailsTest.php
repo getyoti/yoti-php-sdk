@@ -24,7 +24,9 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
         $this->dummyProfile = [
             'family_name' => 'TestFamilyName',
             'given_names' => 'TestGivenName',
+            'full_name'   => 'TestGivenName TestFamilyName',
             'date_of_birth' => '11-07-2017',
+            'age_over:18'=> 'false',
             'gender' => 'Male',
             'nationality' => 'British',
             'phone_number' => '07856836932',
@@ -69,11 +71,27 @@ class ActivityDetailsTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getting Full Name
+     */
+    public function testGetFullName()
+    {
+        $this->assertEquals($this->dummyProfile['full_name'], $this->profile->getFullName());
+    }
+
+    /**
      * Test getting Date Of Birth
      */
     public function testGetDateOfBirth()
     {
         $this->assertEquals($this->dummyProfile['date_of_birth'], $this->profile->getDateOfBirth());
+    }
+
+    /**
+     * Test age over 18.
+     */
+    public function testIsAgeVerified()
+    {
+        $this->assertEquals($this->dummyProfile['age_over:18'], $this->profile->getProfileAttribute('age_over:18'));
     }
 
     /**
