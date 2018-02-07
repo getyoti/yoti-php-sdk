@@ -20,9 +20,9 @@ class AmlAddress
      * AmlAddress constructor.
      *
      * @param \Yoti\Entity\Country $country
-     * @param string $postcode
+     * @param null|string $postcode
      */
-    public function __construct(Country $country, $postcode)
+    public function __construct(Country $country, $postcode = NULL)
     {
         $this->country = $country;
         $this->postcode = $postcode;

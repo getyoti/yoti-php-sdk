@@ -10,6 +10,7 @@ class AmlProfile
     const SSN_ATTR          = 'ssn';
     const ADDRESS_ATTR      = 'address';
 
+    // USA 3 letters country code
     const USA_COUNTRY_CODE = 'USA';
 
     /**
@@ -42,7 +43,7 @@ class AmlProfile
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = '')
+    public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = NULL)
     {
         $this->givenNames = $givenNames;
         $this->familyName = $familyName;
@@ -101,9 +102,10 @@ class AmlProfile
     public function validateSsn()
     {
         $countryCode = $this->amlAddress->getCountry()->getCode();
-        if(!empty($this->ssn) && $countryCode !== self::USA_COUNTRY_CODE)
+        // Throw an error if ssn is provided and the country code is not USA
+        if(!empty($this->ssn) && strcasecmp($countryCode, self::USA_COUNTRY_CODE) !== 0)
         {
-            throw new AmlException('SSN should only be provided for ' . self::USA_COUNTRY_CODE);
+            throw new AmlException('SSN should only be provided for country ' . self::USA_COUNTRY_CODE);
         }
     }
 
@@ -116,9 +118,10 @@ class AmlProfile
     {
         $postcode = $this->amlAddress->getPostcode();
         $countryCode = $this->amlAddress->getCountry()->getCode();
-        if(empty($postcode) && $countryCode === self::USA_COUNTRY_CODE)
+        // Throw an error if postcode is not provided and the country code is USA
+        if(empty($postcode) && strcasecmp($countryCode, self::USA_COUNTRY_CODE) === 0)
         {
-            throw new AmlException('Postcode is required for ' . self::USA_COUNTRY_CODE);
+            throw new AmlException('Postcode is required for country ' . self::USA_COUNTRY_CODE);
         }
     }
 

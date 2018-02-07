@@ -6,17 +6,17 @@ class Country
     /**
      * @var string
      */
-    private $name;
+    private $code;
 
     /**
      * @var null|string
      */
-    private $code;
+    private $name;
 
-    public function __construct($name, $code = NULL)
+    public function __construct($code, $name = NULL)
     {
-        $this->name = $name;
         $this->code = $code;
+        $this->name = $name;
     }
 
     public function setName($name)

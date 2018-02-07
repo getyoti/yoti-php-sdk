@@ -49,7 +49,7 @@ class AmlResult
      */
     private function setAttributes(array $result)
     {
-        // Check no attribute is mmising from the result
+        // Check no attribute is missing from the result
         AmlResult::checkAttributes($result);
 
         $this->onPepList = (bool) $result[self::ON_PEP_LIST_KEY];
@@ -72,12 +72,12 @@ class AmlResult
             self::ON_WATCH_LIST_KEY,
         ];
         $providedAttributes = array_keys($result);
-        $diff = array_diff($expectedAttributes, $providedAttributes);
+        $missingAttr = array_diff($expectedAttributes, $providedAttributes);
 
         // Throw an error if any expected attribute is missing.
-        if(!empty($diff))
+        if(!empty($missingAttr))
         {
-            throw new AmlException('Missing attributes from the result: ' . implode(',', $diff) , 404);
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr) , 404);
         }
     }
 }

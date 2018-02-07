@@ -38,8 +38,8 @@ class YotiClient
     const DIGEST_HEADER = 'X-Yoti-Auth-Digest';
     const YOTI_SDK_HEADER = 'X-Yoti-SDK';
 
-    // Aml profile check endpoint
-    const AML_PROFILE_CHECK_ENDPOINT = '/aml-check';
+    // Aml check endpoint
+    const AML_CHECK_ENDPOINT = '/aml-check';
 
     /**
      * Accepted HTTP header values for X-Yoti-SDK header.
@@ -198,7 +198,7 @@ class YotiClient
         // Get payload data from amlProfile
         $amlPayload     = new Payload($amlProfile->getData());
         // Aml check endpoint
-        $amlCheckEndpoint = self::AML_PROFILE_CHECK_ENDPOINT;
+        $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
 
         // Initiate signedRequest
         $signedRequest  = new SignedRequest(
