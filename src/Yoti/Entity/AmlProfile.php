@@ -54,41 +54,65 @@ class AmlProfile
         $this->validatePostcode();
     }
 
+    /**
+     * @return string
+     */
     public function getGivenNames()
     {
         return $this->givenNames;
     }
 
+    /**
+     * @return string
+     */
     public function getFamilyName()
     {
         return $this->familyName;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSsn()
     {
         return $this->ssn;
     }
 
+    /**
+     * @return AmlAddress
+     */
     public function getAmlAddress()
     {
         return $this->amlAddress;
     }
 
+    /**
+     * @param $givenNames
+     */
     public function setGivenNames($givenNames)
     {
         $this->givenNames = $givenNames;
     }
 
+    /**
+     * @param $familyName
+     */
     public function setFamilyName($familyName)
     {
         $this->familyName = $familyName;
     }
 
+    /**
+     * @param $ssn
+     */
     public function setSsn($ssn)
     {
         $this->ssn = $ssn;
     }
 
+    /**
+     * @param AmlAddress $amlAddress
+     */
     public function setAmlAddress(AmlAddress $amlAddress)
     {
         $this->amlAddress = $amlAddress;

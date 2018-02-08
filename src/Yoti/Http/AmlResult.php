@@ -9,11 +9,33 @@ class AmlResult
     const ON_FRAUD_LIST_KEY = 'on_fraud_list';
     const ON_WATCH_LIST_KEY = 'on_watch_list';
 
+    /**
+     * Politically exposed person.
+     *
+     * @var bool
+     */
     private $onPepList;
 
+    /**
+     * Fraud list.
+     *
+     * @var bool
+     */
     private $onFraudList;
 
+    /**
+     * Watch list.
+     *
+     * @var bool
+     */
     private $onWatchList;
+
+    /**
+     * Raw result.
+     *
+     * @var array
+     */
+    private $rawResult;
 
     /**
      * AmlResult constructor.
@@ -24,31 +46,48 @@ class AmlResult
      */
     public function __construct(array $result)
     {
-        $this->setAttributes($result);
+        $this->rawResult = $result;
+        $this->setAttributes();
     }
 
+    /**
+     * Check if user is a politically exposed person.
+     *
+     * @return bool
+     */
     public function isOnPepList()
     {
         return $this->onPepList;
     }
 
+    /**
+     * Check if user is on a fraud list.
+     *
+     * @return bool
+     */
     public function isOnFraudList()
     {
         return $this->onFraudList;
     }
 
+    /**
+     * Check if user is on a watch list.
+     *
+     * @return bool
+     */
     public function isOnWatchList()
     {
         return $this->onWatchList;
     }
 
     /**
-     * @param array $result
+     * Set attribute values.
      *
      * @throws \Yoti\Exception\AmlException
      */
-    private function setAttributes(array $result)
+    private function setAttributes()
     {
+        $result = $this->rawResult;
         // Check no attribute is missing from the result
         AmlResult::checkAttributes($result);
 
@@ -77,7 +116,17 @@ class AmlResult
         // Throw an error if any expected attribute is missing.
         if(!empty($missingAttr))
         {
-            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr) , 404);
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr) , 106);
         }
+    }
+
+    /**
+     * Returns json string of the raw data.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this->rawResult);
     }
 }

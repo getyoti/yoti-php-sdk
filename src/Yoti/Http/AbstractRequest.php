@@ -15,13 +15,6 @@ abstract class AbstractRequest
      */
     const METHODS_THAT_INCLUDE_PAYLOAD = 'POST,PUT,PATCH';
 
-    // Http request error code
-    const SUCCESSFUL_REQUEST = 200;
-    const BAD_REQUEST_ERROR = 400;
-    const UNAUTHORIZED_ERROR = 401;
-    const INTERNAL_SERVER_ERROR = 500;
-    const SERVICE_UNAVAILABLE_ERROR = 503;
-
     /**
      * API url.
      *

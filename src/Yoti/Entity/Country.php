@@ -19,21 +19,33 @@ class Country
         $this->name = $name;
     }
 
+    /**
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @param $code
+     */
     public function setCode($code)
     {
         $this->code = $code;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getCode()
     {
         return $this->code;

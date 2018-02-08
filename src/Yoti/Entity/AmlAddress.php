@@ -28,21 +28,33 @@ class AmlAddress
         $this->postcode = $postcode;
     }
 
+    /**
+     * @param Country $country
+     */
     public function setCountry(Country $country)
     {
         $this->country = $country;
     }
 
+    /**
+     * @return Country
+     */
     public function getCountry()
     {
         return $this->country;
     }
 
+    /**
+     * @param $postcode
+     */
     public function setPostcode($postcode)
     {
         $this->postcode = $postcode;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPostcode()
     {
         return $this->postcode;

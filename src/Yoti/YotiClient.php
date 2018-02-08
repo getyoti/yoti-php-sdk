@@ -369,7 +369,7 @@ class YotiClient
             $response = $result['response'];
             $httpCode = $result['http_code'];
 
-            if ($httpCode !== RestRequest::SUCCESSFUL_REQUEST)
+            if ($httpCode !== 200)
             {
                 $httpCode = (int) $httpCode;
                 throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
