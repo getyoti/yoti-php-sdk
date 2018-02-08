@@ -225,7 +225,7 @@ class YotiClient
 
         $result = $restRequest->exec();
 
-        $this->checkResult($result['http_code']);
+        $this->checkResult($result);
 
         // Get decoded response data
         $responseArr = json_decode($result['response'], TRUE);
@@ -238,30 +238,30 @@ class YotiClient
     /**
      * Handle request result.
      *
-     * @param int $httpCode
+     * @param array $result
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function checkResult($httpCode)
+    public function checkResult(array $result)
     {
-        $httpCode = (int) $httpCode;
+        $httpCode = (int) $result['http_code'];
 
-        switch($httpCode)
+        if($httpCode === RestRequest::SUCCESSFUL_REQUEST)
         {
-            case RestRequest::SUCCESSFUL_REQUEST: #OK
-                break;
-
-            case RestRequest::BAD_REQUEST_ERROR:
-                throw new AmlException('BAD REQUEST - The request payload failed validation', 400);
-                break;
-
-            case RestRequest::UNAUTHORIZED_ERROR:
-                throw new AmlException('UNAUTHORIZED - The request failed the signing verification', 401);
-                break;
-
-            default:
-                throw new AmlException("Server responded with {$httpCode}", $httpCode);
+            // The request is successful - nothing to do
+            return;
         }
+
+        $response = json_decode($result['response']);
+
+        // Throw the error message that's included in the response
+        if($response && !empty($response->message))
+        {
+            throw new AmlException("{$response->code} - {$response->message}", $httpCode);
+        }
+
+        // Throw a general error message
+        throw new AmlException("Server responded with {$httpCode}", $httpCode);
     }
 
     /**

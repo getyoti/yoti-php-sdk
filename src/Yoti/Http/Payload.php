@@ -20,28 +20,18 @@ class Payload
      */
     public function getBase64Payload()
     {
-        return base64_encode($this->convertData($this->data));
+        return base64_encode($this->getPayloadJSON());
     }
 
     /**
-     * Convert data into a binary string.
-     *
-     * @param mixed $data
+     * Convert data into a json string.
      *
      * @return string
      */
-    public function convertData($data)
+    public function getPayloadJSON()
     {
-        if(is_array($data)) {
-            // If the payload data is an array convert it into a JSON string
-            $data = json_encode($data);
-        }
-        else if(is_string($data)) {
-            // If payload data is a string convert it into utf-8.
-            $data = mb_convert_encoding($data, 'UTF-8');
-        }
-
-        return $data;
+        $data = is_string($this->data) ? mb_convert_encoding($this->data, 'UTF-8') : $this->data;
+        return json_encode($data);
     }
 
     /**

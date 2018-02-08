@@ -75,7 +75,8 @@ class SignedRequest
     public function getSignedMessage()
     {
         $endpointRequest = "{$this->httpMethod}&$this->endpointPath";
-        if(RestRequest::canSendPayload($this->httpMethod)) {
+        if(RestRequest::canSendPayload($this->httpMethod))
+        {
             $endpointRequest .= "&{$this->payload->getBase64Payload()}";
         }
 
@@ -95,7 +96,8 @@ class SignedRequest
      */
     public function getApiRequestUrl($apiUrl)
     {
-        if(!$this->isValidUrl($apiUrl)) {
+        if(!$this->isValidUrl($apiUrl))
+        {
             throw new \Exception('Invalid Api Url', 400);
         }
 
@@ -147,7 +149,8 @@ class SignedRequest
      */
     public function checkEndpoint($endpoint)
     {
-        if(empty($endpoint) || $endpoint[0] !== '/') {
+        if(empty($endpoint) || $endpoint[0] !== '/')
+        {
             throw new \Exception('Invalid endpoint', 400);
         }
     }
