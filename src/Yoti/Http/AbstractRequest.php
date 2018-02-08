@@ -148,7 +148,7 @@ abstract class AbstractRequest
     }
 
     /**
-     * Check if the method can include payload data.
+     * Check if the method can include payload data in the request body.
      *
      * @param string $httpMethod
      *
