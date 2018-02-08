@@ -14,7 +14,7 @@ class Payload
     }
 
     /**
-     * Get base64 encoded of payload byte array.
+     * Get base64 encoded of payload json string.
      *
      * @return string
      */
@@ -24,7 +24,7 @@ class Payload
     }
 
     /**
-     * Convert data into a json string.
+     * Get payload as a json string.
      *
      * @return string
      */

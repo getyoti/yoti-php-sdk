@@ -1,8 +1,6 @@
 <?php
 namespace Yoti\Entity;
 
-use Yoti\Exception\AmlException;
-
 class AmlProfile
 {
     const GIVEN_NAMES_ATTR  = 'given_names';
@@ -10,25 +8,30 @@ class AmlProfile
     const SSN_ATTR          = 'ssn';
     const ADDRESS_ATTR      = 'address';
 
-    // USA 3 letters country code
-    const USA_COUNTRY_CODE = 'USA';
-
     /**
+     * Given Names.
+     *
      * @var string
      */
     private $givenNames;
 
     /**
+     * Family Name.
+     *
      * @var string
      */
     private $familyName;
 
     /**
+     * Social Security number.
+     *
      * @var null|string
      */
     private $ssn;
 
     /**
+     * Full address.
+     *
      * @var \Yoti\Entity\AmlAddress
      */
     private $amlAddress;
@@ -40,8 +43,6 @@ class AmlProfile
      * @param string $familyName
      * @param \Yoti\Entity\AmlAddress $amlAddress
      * @param null|string $ssn
-     *
-     * @throws \Yoti\Exception\AmlException
      */
     public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = NULL)
     {
@@ -49,9 +50,6 @@ class AmlProfile
         $this->familyName = $familyName;
         $this->ssn = $ssn;
         $this->amlAddress = $amlAddress;
-
-        $this->validateSsn();
-        $this->validatePostcode();
     }
 
     /**
@@ -116,37 +114,6 @@ class AmlProfile
     public function setAmlAddress(AmlAddress $amlAddress)
     {
         $this->amlAddress = $amlAddress;
-    }
-
-    /**
-     * Check Ssn is not provided when country is not USA.
-     *
-     * @throws \Yoti\Exception\AmlException
-     */
-    public function validateSsn()
-    {
-        $countryCode = $this->amlAddress->getCountry()->getCode();
-        // Throw an error if ssn is provided and the country code is not USA
-        if(!empty($this->ssn) && strcasecmp($countryCode, self::USA_COUNTRY_CODE) !== 0)
-        {
-            throw new AmlException('SSN should only be provided for country ' . self::USA_COUNTRY_CODE);
-        }
-    }
-
-    /**
-     * Check postcode is not empty when country is USA.
-     *
-     * @throws \Yoti\Exception\AmlException
-     */
-    public function validatePostcode()
-    {
-        $postcode = $this->amlAddress->getPostcode();
-        $countryCode = $this->amlAddress->getCountry()->getCode();
-        // Throw an error if postcode is not provided and the country code is USA
-        if(empty($postcode) && strcasecmp($countryCode, self::USA_COUNTRY_CODE) === 0)
-        {
-            throw new AmlException('Postcode is required for country ' . self::USA_COUNTRY_CODE);
-        }
     }
 
     /**

@@ -4,11 +4,15 @@ namespace Yoti\Entity;
 class Country
 {
     /**
+     * Country code.
+     *
      * @var string
      */
     private $code;
 
     /**
+     * Country name.
+     *
      * @var null|string
      */
     private $name;
