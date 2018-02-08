@@ -225,11 +225,13 @@ class YotiClient
 
         $result = $restRequest->exec();
 
-        $this->checkResult($result);
-
-        // Get decoded response data
+        // Get response data array
         $responseArr = json_decode($result['response'], TRUE);
+        // Check if there is a json decode error
         $this->checkJsonError();
+
+        // Validate result
+        $this->validateResult($responseArr, $result['http_code']);
 
         // Set and return result
         return new AmlResult($responseArr);
@@ -238,30 +240,44 @@ class YotiClient
     /**
      * Handle request result.
      *
-     * @param array $result
+     * @param array $responseArr
+     * @param int $httpCode
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function checkResult(array $result)
+    public function validateResult(array $responseArr, $httpCode)
     {
-        $httpCode = (int) $result['http_code'];
+        $httpCode = (int) $httpCode;
 
-        if($httpCode === RestRequest::SUCCESSFUL_REQUEST)
+        if($httpCode === 200)
         {
             // The request is successful - nothing to do
             return;
         }
 
-        $response = json_decode($result['response']);
+        $errorMessage = $this->getErrorMessage($responseArr);
+        $errorCode = isset($responseArr['code']) ? $responseArr['code'] : 'Error';
 
         // Throw the error message that's included in the response
-        if($response && !empty($response->message))
+        if(!empty($errorMessage))
         {
-            throw new AmlException("{$response->code} - {$response->message}", $httpCode);
+            throw new AmlException("$errorCode - {$errorMessage}", $httpCode);
         }
 
         // Throw a general error message
-        throw new AmlException("Server responded with {$httpCode}", $httpCode);
+        throw new AmlException("{$errorCode} - Server responded with {$httpCode}", $httpCode);
+    }
+
+    /**
+     * Get error message from the response array.
+     *
+     * @param array $result
+     *
+     * @return null|string
+     */
+    public function getErrorMessage(array $result)
+    {
+        return isset($result['errors'][0]['message']) ? $result['errors'][0]['message'] : '';
     }
 
     /**
