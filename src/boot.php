@@ -30,3 +30,9 @@ require_once __DIR__ . '/Yoti/Entity/Selfie.php';
 require_once __DIR__ . '/Yoti/ActivityDetails.php';
 require_once __DIR__ . '/Yoti/YotiClient.php';
 require_once __DIR__ . '/Yoti/Helper/ActivityDetailsHelper.php';
+
+// Load Http classes
+require_once __DIR__ . '/Yoti/Http/AbstractRequest.php';
+require_once __DIR__ . '/Yoti/Http/Payload.php';
+require_once __DIR__ . '/Yoti/Http/RestRequest.php';
+require_once __DIR__ . '/Yoti/Http/SignedRequest.php';

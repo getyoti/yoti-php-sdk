@@ -3,6 +3,9 @@
 namespace Yoti;
 
 use compubapi_v1\EncryptedData;
+use Yoti\Http\Payload;
+use Yoti\Http\SignedRequest;
+use Yoti\Http\RestRequest;
 
 /**
  * Class YotiClient
@@ -200,47 +203,17 @@ class YotiClient
     }
 
     /**
-     * Return Yoti dashboard endpoint.
-     *
-     * @param string $endpoint
-     *
-     * @return string
-     */
-    private function getEndpointPath($endpoint)
-    {
-        // Prepare message to sign
-        $nonce = $this->generateNonce();
-        $timestamp = round(microtime(true) * 1000);
-        $path = "{$endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$this->_sdkId}";
-
-        return $path;
-    }
-
-    /**
-     * Sign the message.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    private function getSignedRequest($message)
-    {
-        openssl_sign($message, $signature, $this->_pem, OPENSSL_ALGO_SHA256);
-        $messageSignature = base64_encode($signature);
-
-        return $messageSignature;
-    }
-
-    /**
      * Decrypt and return receipt data.
      *
      * @param string $encryptedConnectToken
+     *
+     * @param string $httpMethod
      *
      * @return array
      *
      * @throws \Exception
      */
-    private function getReceipt($encryptedConnectToken)
+    private function getReceipt($encryptedConnectToken, $httpMethod = RestRequest::METHOD_GET)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -250,10 +223,19 @@ class YotiClient
         }
 
         // Get path for this endpoint
-        $path = $this->getEndpointPath("/profile/$token");
+        $path = "/profile/{$token}";
+
+        // This will throw an exception if an error occurs
+        $signedRequest = new SignedRequest(
+            new Payload(),
+            $path,
+            $this->_pem,
+            $this->_sdkId,
+            $httpMethod
+        );
 
         // Sign the request
-        $messageSignature = $this->getSignedRequest("GET&{$path}");
+        $messageSignature = $signedRequest->getSignedMessage();
         if (!$messageSignature)
         {
             throw new \Exception('Could not sign request.', 401);
@@ -265,9 +247,6 @@ class YotiClient
         {
             throw new \Exception('Could not retrieve key from PEM.', 401);
         }
-
-        // Build Url to hit
-        $url = $this->_connectApi . $path;
 
         // Prepare request headers
         $headers = [
@@ -281,17 +260,11 @@ class YotiClient
         // If !mockRequests then do the real thing
         if (!$this->_mockRequests)
         {
-            $ch = curl_init($url);
-            curl_setopt_array($ch, [
-                CURLOPT_HTTPHEADER => $headers,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_SSL_VERIFYPEER => 0,
-                CURLOPT_SSL_VERIFYHOST => 0,
-            ]);
-            $response = curl_exec($ch);
+            $request = new RestRequest($headers, $signedRequest->getApiRequestUrl($this->_connectApi));
+            $result = $request->exec();
 
-            // Check response code
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $response = $result['response'];
+            $httpCode = $result['http_code'];
 
             if ($httpCode !== 200)
             {
@@ -319,32 +292,6 @@ class YotiClient
         }
 
         return $json['receipt'];
-    }
-
-    /**
-     * @return string
-     */
-    private function generateNonce()
-    {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            // 32 bits for "time_low"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-
-            // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
-
-            // 16 bits for "time_hi_and_version",
-            // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
-
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-            // 8 bits for "clk_seq_low",
-            // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
-
-            // 48 bits for "node"
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-        );
     }
 
     /**
