@@ -23,7 +23,7 @@ How to retrieve a Yoti profile using the token
 How to manage users
 
 7) [AML Integration](#aml-integration) -
-Integrating with Yoti's AML service
+How to integrate with Yoti's AML (Anti Money Laundering) service
 
 8) [How to run the example](#how-to-run-the-example) -
 How to run the example
@@ -171,7 +171,7 @@ Allows your app to retrieve a user profile, given an encrypted token.
 
 ## AML Integration
 
-Yoti provides an AML check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com]('sdksupport@yoti.com') for more information.
+Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com](mailto:sdksupport@yoti.com) for more information.
 
 Yoti will provide a boolean result on the following checks:
 * PEP list - Verify against Politically Exposed Persons list

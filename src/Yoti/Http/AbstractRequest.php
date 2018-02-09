@@ -12,8 +12,7 @@ abstract class AbstractRequest
     /**
      * Methods that are sending payload.
      * You can add more method to this list separated by comma ','
-     * We are not using attribute array because this is used inside a static function
-     * and using constant array syntax will require PHP 5.6 or newer version
+     * We are using a const string instead of a const array to support PHP version older than 5.6
      */
     const METHODS_THAT_INCLUDE_PAYLOAD = 'POST,PUT,PATCH';
 

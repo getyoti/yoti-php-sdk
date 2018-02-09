@@ -184,7 +184,7 @@ class YotiClient
     }
 
     /**
-     * Perform Aml profile check.
+     * Perform AML profile check.
      *
      * @param \Yoti\Entity\AmlProfile $amlProfile
      *
@@ -197,7 +197,7 @@ class YotiClient
     {
         // Get payload data from amlProfile
         $amlPayload     = new Payload($amlProfile->getData());
-        // Aml check endpoint
+        // AML check endpoint
         $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
 
         // Initiate signedRequest
@@ -227,7 +227,7 @@ class YotiClient
 
         // Get response data array
         $responseArr = json_decode($result['response'], TRUE);
-        // Check if there is a json decode error
+        // Check if there is a JSON decode error
         $this->checkJsonError();
 
         // Validate result

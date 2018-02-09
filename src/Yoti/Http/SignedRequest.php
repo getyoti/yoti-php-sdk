@@ -4,7 +4,7 @@ namespace Yoti\Http;
 class SignedRequest
 {
     /**
-     * Http method.
+     * HTTP method.
      *
      * @var string
      */
@@ -18,7 +18,7 @@ class SignedRequest
     private $endpoint;
 
     /**
-     * SDK Id from dashboard.
+     * SDK ID from dashboard.
      *
      * @var string
      */
@@ -86,7 +86,7 @@ class SignedRequest
     }
 
     /**
-     * Get Api Url request.
+     * Get API URL request.
      *
      * @param string $apiUrl
      *
@@ -105,7 +105,7 @@ class SignedRequest
     }
 
     /**
-     * Validate Url.
+     * Validate URL.
      *
      * @param string $url
      *
@@ -117,7 +117,7 @@ class SignedRequest
     }
 
     /**
-     * Return Api full endpoint.
+     * Return API full endpoint.
      *
      * @return string
      */
@@ -127,7 +127,7 @@ class SignedRequest
     }
 
     /**
-     * Generate Api full endpoint.
+     * Generate API full endpoint.
      */
     public function generatePath()
     {
@@ -141,7 +141,7 @@ class SignedRequest
     }
 
     /**
-     * Check the endpoint is valid.
+     * Check if the endpoint is valid.
      *
      * @param string $endpoint
      *

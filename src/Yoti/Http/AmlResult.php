@@ -97,7 +97,7 @@ class AmlResult
     }
 
     /**
-     * Check all the attributes are included in the result.
+     * Check if all the attributes are included in the result.
      *
      * @param array $result
      *
