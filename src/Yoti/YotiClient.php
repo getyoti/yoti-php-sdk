@@ -490,7 +490,7 @@ class YotiClient
     }
 
     /**
-     * Validate and return pem content.
+     * Validate and return PEM content.
      *
      * @param string bool|$pem
      *
@@ -498,13 +498,13 @@ class YotiClient
      */
     public function processPem(&$pem)
     {
-        // Check pem passed
+        // Check PEM passed
         if(!$pem)
         {
             throw new \Exception('PEM file is required', 400);
         }
 
-        // Check that file exists if user passed pem as a local file path
+        // Check that file exists if user passed PEM as a local file path
         if(strpos($pem, 'file://') !== FALSE && !file_exists($pem))
         {
             throw new \Exception('PEM file was not found.', 400);
@@ -516,7 +516,7 @@ class YotiClient
             $pem = file_get_contents($pem);
         }
 
-        // Check key is valid
+        // Check if key is valid
         if(!openssl_get_privatekey($pem))
         {
             throw new \Exception('PEM key is invalid', 400);
@@ -524,7 +524,7 @@ class YotiClient
     }
 
     /**
-     * Check Sdk Id is provided.
+     * Check SDK ID is provided.
      *
      * @param string $sdkId
      *
@@ -532,7 +532,7 @@ class YotiClient
      */
     public function checkSdkId($sdkId)
     {
-        // Check sdk id passed
+        // Check SDK ID passed
         if(!$sdkId)
         {
             throw new \Exception('SDK ID is required', 400);

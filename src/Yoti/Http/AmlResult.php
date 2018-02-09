@@ -88,7 +88,7 @@ class AmlResult
     private function setAttributes()
     {
         $result = $this->rawResult;
-        // Check no attribute is missing from the result
+        // Check if no attribute is missing from the result
         AmlResult::checkAttributes($result);
 
         $this->onPepList = (bool) $result[self::ON_PEP_LIST_KEY];

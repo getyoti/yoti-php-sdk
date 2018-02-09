@@ -83,7 +83,7 @@ abstract class AbstractRequest
     public function setUrl($url)
     {
         if(empty($url)) {
-            throw new \Exception('Request Url cannot be empty', 400);
+            throw new \Exception('Request URL cannot be empty', 400);
         }
 
         $this->url = $url;
@@ -118,7 +118,7 @@ abstract class AbstractRequest
     }
 
     /**
-     * Check the provided http method is valid.
+     * Check if the provided HTTP method is valid.
      *
      * @param string $httpMethod
      *

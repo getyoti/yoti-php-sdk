@@ -10,25 +10,9 @@ class Country
      */
     private $code;
 
-    /**
-     * Country name.
-     *
-     * @var null|string
-     */
-    private $name;
-
-    public function __construct($code, $name = NULL)
+    public function __construct($code)
     {
         $this->code = $code;
-        $this->name = $name;
-    }
-
-    /**
-     * @param $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -37,14 +21,6 @@ class Country
     public function setCode($code)
     {
         $this->code = $code;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
