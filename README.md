@@ -22,13 +22,16 @@ How to retrieve a Yoti profile using the token
 6) [Handling users](#handling-users) -
 How to manage users
 
-7) [How to run the example](#how-to-run-the-example) -
+7) [AML Integration](#aml-integration) -
+How to integrate with Yoti's AML (Anti Money Laundering) service
+
+8) [How to run the example](#how-to-run-the-example) -
 How to run the example
 
-8) [API Coverage](#api-coverage) -
+9) [API Coverage](#api-coverage) -
 Attributes defined
 
-9) [Support](#support) -
+10) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
@@ -165,6 +168,58 @@ The set of attributes the user has configured for the transaction.
 ### YotiClient
 
 Allows your app to retrieve a user profile, given an encrypted token.
+
+## AML Integration
+
+Yoti provides an AML (Anti Money Laundering) check service to allow a deeper KYC process to prevent fraud. This is a chargeable service, so please contact [sdksupport@yoti.com](mailto:sdksupport@yoti.com) for more information.
+
+Yoti will provide a boolean result on the following checks:
+* PEP list - Verify against Politically Exposed Persons list
+* Fraud list - Verify against  US Social Security Administration Fraud (SSN Fraud) list
+* Watch list - Verify against watch lists from the Office of Foreign Assets Control
+
+To use this functionality you must ensure:
+* Your application is assigned to your Organisation in the Yoti Dashboard - please see [here]('https://www.yoti.com/developers/documentation') for further information.
+* Within your application please ensure that you have selected the 'given names' and 'family name' attributes from the data tab. This is the minimum requirement for the AML check.
+
+The AML check uses a simplified view of the User Profile.  You need only provide the following:
+* profile->givenNames
+* profile->familyName
+* Country of residence - you will need to collect this from the user yourself
+
+To check a US citizen, you must provide two more attributes in addition to the three above:
+* Social Security Number - you will need to collect this from the user yourself
+* Postcode/Zip code
+
+### Consent
+Performing an Aml check on a person *requires* their consent.
+**You must ensure you have user consent *before* using this service.**
+
+### Code Example
+
+Given a YotiClient initialised with your SDK ID and KeyPair (see [Client Initialisation](#client-initialisation)) performing an AML check is a straightforward case of providing basic profile data.
+
+```php
+<?php
+use Yoti\Entity\Country;
+use Yoti\Entity\AmlAddress;
+use Yoti\Entity\AmlProfile;
+
+// Address of the user profile to check
+$amlAddress = new AmlAddress(new Country('GBR'), 'E1 6DB');
+$amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+// Perform the check
+$amlResult = $client->performAmlCheck($amlProfile);
+
+// Result returned for this profile
+var_dump($amlresult->isOnPepList());
+var_dump($amlresult->isOnFraudList());
+var_dump($amlresult->isOnWatchList());
+
+// Or
+echo $amlResult;
+```
+ 
 
 ## How to Run the Example
 
