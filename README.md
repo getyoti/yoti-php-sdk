@@ -212,9 +212,9 @@ $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 $amlResult = $client->performAmlCheck($amlProfile);
 
 // Result returned for this profile
-var_dump($amlresult->isOnPepList());
-var_dump($amlresult->isOnFraudList());
-var_dump($amlresult->isOnWatchList());
+var_dump($amlResult->isOnPepList());
+var_dump($amlResult->isOnFraudList());
+var_dump($amlResult->isOnWatchList());
 
 // Or
 echo $amlResult;
