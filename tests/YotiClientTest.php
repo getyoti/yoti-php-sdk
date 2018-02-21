@@ -2,8 +2,8 @@
 use Yoti\YotiClient;
 
 
-define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
-define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
+defined('PEM_FILE') || define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
+defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
 define('YOTI_CONNECT_TOKEN', file_get_contents(__DIR__ . '/../src/sample-data/connect-token.txt'));
 define('INVALID_YOTI_CONNECT_TOKEN', 'sdfsdfsdasdajsopifajsd=');
 
@@ -47,6 +47,11 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     {
         $ad = $this->_yoti->getActivityDetails(YOTI_CONNECT_TOKEN);
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
+    }
+
+    public function testPerformAmlCheck()
+    {
+
     }
 
     /**
@@ -139,9 +144,12 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
     /**
      * Get private or protected property of a class.
      *
-     * @param 	string $className
-     * @param 	string $propertyName
-     * @return	ReflectionProperty
+     * @param $className
+     * @param $propertyName
+     *
+     * @return ReflectionProperty
+     *
+     * @throws ReflectionException
      */
     public function getPrivateProperty($className, $propertyName)
     {

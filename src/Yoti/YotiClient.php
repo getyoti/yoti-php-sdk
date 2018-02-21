@@ -310,8 +310,8 @@ class YotiClient
             self::AUTH_KEY_HEADER . ": {$authKey}",
             self::DIGEST_HEADER . ": {$signedMessage}",
             self::YOTI_SDK_HEADER . ": {$this->_sdkIdentifier}",
-            "Content-Type: application/json",
-            "Accept: application/json",
+            'Content-Type: application/json',
+            'Accept: application/json',
         ];
     }
 

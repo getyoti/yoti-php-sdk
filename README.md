@@ -192,7 +192,7 @@ To check a US citizen, you must provide two more attributes in addition to the t
 * Postcode/Zip code
 
 ### Consent
-Performing an Aml check on a person *requires* their consent.
+Performing an AML check on a person *requires* their consent.
 **You must ensure you have user consent *before* using this service.**
 
 ### Code Example
@@ -206,7 +206,7 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 
 // Address of the user profile to check
-$amlAddress = new AmlAddress(new Country('GBR'), 'E1 6DB');
+$amlAddress = new AmlAddress(new Country('GBR'));
 $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 // Perform the check
 $amlResult = $client->performAmlCheck($amlProfile);
