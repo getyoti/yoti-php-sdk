@@ -5,7 +5,6 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\Payload;
 
-
 class PayloadTest extends PHPUnit\Framework\TestCase
 {
     public $expectedJSON;

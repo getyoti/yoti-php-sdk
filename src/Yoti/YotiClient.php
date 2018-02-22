@@ -195,35 +195,44 @@ class YotiClient
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
-        // Get payload data from amlProfile
-        $amlPayload     = new Payload($amlProfile->getData());
-        // AML check endpoint
-        $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
+        // If !mockRequests then do the real thing
+        if(!$this->_mockRequests)
+        {
+            // Get payload data from amlProfile
+            $amlPayload     = new Payload($amlProfile->getData());
+            // AML check endpoint
+            $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
 
-        // Initiate signedRequest
-        $signedRequest  = new SignedRequest(
-            $amlPayload,
-            $amlCheckEndpoint,
-            $this->_pem,
-            $this->_sdkId,
-            RestRequest::METHOD_POST
-        );
+            // Initiate signedRequest
+            $signedRequest  = new SignedRequest(
+                $amlPayload,
+                $amlCheckEndpoint,
+                $this->_pem,
+                $this->_sdkId,
+                RestRequest::METHOD_POST
+            );
 
-        // Get signedMessage
-        $signedMessage = $signedRequest->getSignedMessage();
+            // Get signedMessage
+            $signedMessage = $signedRequest->getSignedMessage();
 
-        // Get request httpHeaders
-        $httpHeaders = $this->getRequestHeaders($signedMessage);
+            // Get request httpHeaders
+            $httpHeaders = $this->getRequestHeaders($signedMessage);
 
-        // Make request
-        $restRequest = new RestRequest(
-            $httpHeaders,
-            $signedRequest->getApiRequestUrl($this->_connectApi),
-            $amlPayload,
-            RestRequest::METHOD_POST
-        );
+            // Make request
+            $restRequest = new RestRequest(
+                $httpHeaders,
+                $signedRequest->getApiRequestUrl($this->_connectApi),
+                $amlPayload,
+                RestRequest::METHOD_POST
+            );
 
-        $result = $restRequest->exec();
+            $result = $restRequest->exec();
+        }
+        else {
+            // Sample AML result, don't make curl call instead spoof response from aml-check-result.json
+            $result['response'] = file_get_contents(__DIR__ . '/../sample-data/aml-check-result.json');
+            $result['http_code'] = 200;
+        }
 
         // Get response data array
         $responseArr = json_decode($result['response'], TRUE);

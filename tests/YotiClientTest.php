@@ -1,6 +1,10 @@
 <?php
-use Yoti\YotiClient;
 
+use Yoti\YotiClient;
+use Yoti\Entity\Country;
+use Yoti\Entity\AmlAddress;
+use Yoti\Entity\AmlProfile;
+use Yoti\Http\AmlResult;
 
 defined('PEM_FILE') || define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
 defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
@@ -49,9 +53,16 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
     }
 
+    /**
+     * Test performAmlCheck with a mock result
+     */
     public function testPerformAmlCheck()
     {
+        $amlAddress = new AmlAddress(new Country('GBR'));
+        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+        $result = $this->_yoti->performAmlCheck($amlProfile);
 
+        $this->assertInstanceOf(AmlResult::class, $result);
     }
 
     /**

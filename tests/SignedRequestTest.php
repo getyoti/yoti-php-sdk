@@ -1,14 +1,15 @@
 <?php
 
+use Yoti\YotiClient;
+use Yoti\Http\Payload;
 use Yoti\Http\SignedRequest;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
-use Yoti\Http\Payload;
 
 defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
-defined('AML_PRIVATE_KEY') || define('AML_PRIVATE_KEY', __DIR__ . '/../src/sample-data/aml-check-pkey.pem');
-defined('AML_PUBLIC_KEY') || define('AML_PUBLIC_KEY', __DIR__ . '/../src/sample-data/aml-check-pubkey.pem');
+defined('AML_PRIVATE_KEY') || define('AML_PRIVATE_KEY', __DIR__ . '/../src/sample-data/aml-check-private-key.pem');
+defined('AML_PUBLIC_KEY') || define('AML_PUBLIC_KEY', __DIR__ . '/../src/sample-data/aml-check-public-key.pem');
 
 class SignedRequestTest extends PHPUnit\Framework\TestCase
 {
@@ -26,7 +27,10 @@ class SignedRequestTest extends PHPUnit\Framework\TestCase
         $this->messagetoSign = 'POST&'.$this->signedRequest->getEndpointPath().'&'.$this->payload->getBase64Payload();
     }
 
-    public function testSignedMessage()
+    /**
+     * Test getSignedMessage by verifying the signed message.
+     */
+    public function testGetSignedMessage()
     {
         $signedMessage = $this->signedRequest->getSignedMessage();
 
@@ -35,6 +39,15 @@ class SignedRequestTest extends PHPUnit\Framework\TestCase
         $verify = openssl_verify($this->messagetoSign, base64_decode($signedMessage), $publicKey, OPENSSL_ALGO_SHA256);
 
         $this->assertEquals(1, $verify);
+    }
+
+    public function testGetApiRequestUrl()
+    {
+        $apiEndpoint = YotiClient::DEFAULT_CONNECT_API . '/aml-check';
+        $this->assertContains(
+            $apiEndpoint,
+            $this->signedRequest->getApiRequestUrl(YotiClient::DEFAULT_CONNECT_API)
+        );
     }
 
     public function getDummyPayload()
