@@ -2,7 +2,7 @@
 # AML check for USA (requires postcode and SSN)
 
 // Load dependent packages and env data
-require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
