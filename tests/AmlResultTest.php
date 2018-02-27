@@ -6,6 +6,9 @@ defined('AML_CHECK_RESULT_JSON') || define('AML_CHECK_RESULT_JSON', __DIR__ . '/
 
 class AmlResultTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Yoti\Http\AmlResult
+     */
     public $amlResult;
 
     public function setup()
