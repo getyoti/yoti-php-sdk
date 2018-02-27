@@ -26,5 +26,5 @@ var_dump($amlResult->isOnPepList());
 var_dump($amlResult->isOnFraudList());
 var_dump($amlResult->isOnWatchList());
 
-echo 'Full result '. PHP_EOL;
+echo 'Full result'. PHP_EOL;
 echo $amlResult;
