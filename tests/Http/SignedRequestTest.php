@@ -7,10 +7,6 @@ use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 
-defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
-defined('AML_PRIVATE_KEY') || define('AML_PRIVATE_KEY', __DIR__ . '/../src/sample-data/aml-check-private-key.pem');
-defined('AML_PUBLIC_KEY') || define('AML_PUBLIC_KEY', __DIR__ . '/../src/sample-data/aml-check-public-key.pem');
-
 class SignedRequestTest extends PHPUnit\Framework\TestCase
 {
     public $signedRequest;

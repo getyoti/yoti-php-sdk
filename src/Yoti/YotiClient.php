@@ -74,11 +74,6 @@ class YotiClient
     private $_receipt;
 
     /**
-     * @var bool
-     */
-    private $_mockRequests = FALSE;
-
-    /**
      * @var string
      */
     private $_sdkIdentifier;
@@ -121,16 +116,6 @@ class YotiClient
     public static function getLoginUrl($appId)
     {
         return self::CONNECT_BASE_URL . "/$appId";
-    }
-
-    /**
-     * Set to test environment so it won't make requests to actual API.
-     *
-     * @param bool $toggle
-     */
-    public function setMockRequests($toggle = TRUE)
-    {
-        $this->_mockRequests = $toggle;
     }
 
     /**
@@ -195,44 +180,21 @@ class YotiClient
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
-        // If !mockRequests then do the real thing
-        if(!$this->_mockRequests)
-        {
-            // Get payload data from amlProfile
-            $amlPayload     = new Payload($amlProfile->getData());
-            // AML check endpoint
-            $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
+        // Get payload data from amlProfile
+        $amlPayload     = new Payload($amlProfile->getData());
+        // AML check endpoint
+        $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
 
-            // Initiate signedRequest
-            $signedRequest  = new SignedRequest(
-                $amlPayload,
-                $amlCheckEndpoint,
-                $this->_pem,
-                $this->_sdkId,
-                RestRequest::METHOD_POST
-            );
+        // Initiate signedRequest
+        $signedRequest  = new SignedRequest(
+            $amlPayload,
+            $amlCheckEndpoint,
+            $this->_pem,
+            $this->_sdkId,
+            RestRequest::METHOD_POST
+        );
 
-            // Get signedMessage
-            $signedMessage = $signedRequest->getSignedMessage();
-
-            // Get request httpHeaders
-            $httpHeaders = $this->getRequestHeaders($signedMessage);
-
-            // Make request
-            $restRequest = new RestRequest(
-                $httpHeaders,
-                $signedRequest->getApiRequestUrl($this->_connectApi),
-                $amlPayload,
-                RestRequest::METHOD_POST
-            );
-
-            $result = $restRequest->exec();
-        }
-        else {
-            // Sample AML result, don't make curl call instead spoof response from aml-check-result.json
-            $result['response'] = file_get_contents(__DIR__ . '/../sample-data/aml-check-result.json');
-            $result['http_code'] = 200;
-        }
+        $result = $this->makeRequest($signedRequest, $amlPayload, RestRequest::METHOD_POST);
 
         // Get response data array
         $responseArr = json_decode($result['response'], TRUE);
@@ -244,6 +206,33 @@ class YotiClient
 
         // Set and return result
         return new AmlResult($responseArr);
+    }
+
+    /**
+     * Make REST request to Connect API.
+     *
+     * @param SignedRequest $signedRequest
+     * @param Payload $payload
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function makeRequest(SignedRequest $signedRequest, Payload $payload, $method = 'GET')
+    {
+        $signedMessage = $signedRequest->getSignedMessage();
+
+        // Get request httpHeaders
+        $httpHeaders = $this->getRequestHeaders($signedMessage);
+
+        $request = new RestRequest(
+            $httpHeaders,
+            $signedRequest->getApiRequestUrl($this->_connectApi),
+            $payload,
+            $method
+        );
+
+        // Make request
+        return $request->exec();
     }
 
     /**
@@ -358,36 +347,15 @@ class YotiClient
             $httpMethod
         );
 
-        // Sign the request
-        $messageSignature = $signedRequest->getSignedMessage();
+        $result = $this->makeRequest($signedRequest, $payload);
 
-        // Prepare request httpHeaders
-        $headers = $this->getRequestHeaders($messageSignature);
+        $response = $result['response'];
+        $httpCode = $result['http_code'];
 
-        // If !mockRequests then do the real thing
-        if (!$this->_mockRequests)
+        if ($httpCode !== 200)
         {
-            $request = new RestRequest(
-                $headers,
-                $signedRequest->getApiRequestUrl($this->_connectApi),
-                $payload
-            );
-
-            $result = $request->exec();
-
-            $response = $result['response'];
-            $httpCode = $result['http_code'];
-
-            if ($httpCode !== 200)
-            {
-                $httpCode = (int) $httpCode;
-                throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
-            }
-        }
-        else
-        {
-            // Sample receipt, don't make curl call instead spoof response from receipt.json
-            $response = file_get_contents(__DIR__ . '/../sample-data/receipt.json');
+            $httpCode = (int) $httpCode;
+            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
 
         // Get decoded response data

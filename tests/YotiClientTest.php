@@ -6,24 +6,32 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 
-defined('PEM_FILE') || define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
-defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
-defined('YOTI_CONNECT_TOKEN') || define('YOTI_CONNECT_TOKEN', file_get_contents(__DIR__ . '/../src/sample-data/connect-token.txt'));
-defined('INVALID_YOTI_CONNECT_TOKEN') || define('INVALID_YOTI_CONNECT_TOKEN', 'sdfsdfsdasdajsopifajsd=');
-
 class YotiClientTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var YotiClient
      */
-    private $_yoti;
+    private $yotiClient;
+
+    public $pem;
+
+    public $amlProfile;
+
+    public $amlResult = [];
 
     public function setUp()
     {
-        $this->_yoti = new YotiClient(SDK_ID, file_get_contents(PEM_FILE));
+        $amlAddress = new AmlAddress(new Country('GBR'));
+        $this->amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+        $this->pem = file_get_contents(PEM_FILE);
 
-        // Switch this off when using real endpoints
-        $this->_yoti->setMockRequests(true);
+        $this->amlResult['response'] = file_get_contents(AML_CHECK_RESULT_JSON);
+        $this->amlResult['http_code'] = 200;
+
+        $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
+            ->setConstructorArgs([SDK_ID, $this->pem])
+            ->setMethods(['makeRequest'])
+            ->getMock();
     }
 
     /**
@@ -49,7 +57,14 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
      */
     public function testGetActivityDetails()
     {
-        $ad = $this->_yoti->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $result['response'] = file_get_contents(RECEIPT_JSON);
+        $result['http_code'] = 200;
+
+        // Stub the method makeRequest to return the result we want
+        $this->yotiClient->method('makeRequest')
+            ->willreturn($result);
+        $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
+
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
     }
 
@@ -58,9 +73,10 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
      */
     public function testPerformAmlCheck()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
-        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        $result = $this->_yoti->performAmlCheck($amlProfile);
+        $this->yotiClient->method('makeRequest')
+            ->willReturn($this->amlResult);
+
+        $result = $this->yotiClient->performAmlCheck($this->amlProfile);
 
         $this->assertInstanceOf(AmlResult::class, $result);
     }
@@ -70,8 +86,10 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
      */
     public function testInvalidConnectToken()
     {
+        $yotiClient = new YotiClient(SDK_ID, file_get_contents(PEM_FILE));
+
         $this->expectException('Exception');
-        $this->_yoti->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
+        $yotiClient->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
     }
 
     /**
@@ -82,7 +100,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $this->expectException('Exception');
         $yotiClientObj = new YotiClient(
             SDK_ID,
-            file_get_contents(PEM_FILE),
+            $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             'WrongHeader'
         );
@@ -96,7 +114,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $expectedValue  = 'WordPress';
         $yotiClientObj  = new YotiClient(
             SDK_ID,
-            file_get_contents(PEM_FILE),
+            $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
@@ -112,7 +130,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $expectedValue  = 'Drupal';
         $yotiClientObj  = new YotiClient(
             SDK_ID,
-            file_get_contents(PEM_FILE),
+            $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
@@ -128,7 +146,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $expectedValue  = 'Joomla';
         $yotiClientObj  = new YotiClient(
             SDK_ID,
-            file_get_contents(PEM_FILE),
+            $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
@@ -144,7 +162,7 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
         $expectedValue  = 'PHP';
         $yotiClientObj  = new YotiClient(
             SDK_ID,
-            file_get_contents(PEM_FILE),
+            $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );

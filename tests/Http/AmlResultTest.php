@@ -2,8 +2,6 @@
 
 use Yoti\Http\AmlResult;
 
-defined('AML_CHECK_RESULT_JSON') || define('AML_CHECK_RESULT_JSON', __DIR__ . '/../src/sample-data/aml-check-result.json');
-
 class AmlResultTest extends PHPUnit\Framework\TestCase
 {
     /**

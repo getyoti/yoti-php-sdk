@@ -3,8 +3,6 @@
 use \Yoti\ActivityDetails;
 use \Yoti\Entity\Selfie;
 
-defined('DUMMY_SELFIE_FILE') || define('DUMMY_SELFIE_FILE', __DIR__ . '/../src/sample-data/dummy-avatar.png');
-
 class ActivityDetailsTest extends PHPUnit\Framework\TestCase
 {
     /**

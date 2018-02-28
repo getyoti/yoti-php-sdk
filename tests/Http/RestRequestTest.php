@@ -7,12 +7,8 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\Payload;
 use Yoti\Http\RestRequest;
 use Yoti\Http\SignedRequest;
-use Yoti\Http\AbstractRequest;
 
-defined('PEM_FILE') || define('PEM_FILE', __DIR__ . '/../src/sample-data/yw-access-security.pem');
-defined('SDK_ID') || define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
-
-class AbstractRequestTest extends PHPUnit\Framework\TestCase
+class RestRequestTest extends PHPUnit\Framework\TestCase
 {
     public $payload;
     public $signedRequest;
@@ -27,11 +23,12 @@ class AbstractRequestTest extends PHPUnit\Framework\TestCase
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
         $this->payload = new Payload($amlProfile->getData());
+        $pem = file_get_contents(PEM_FILE);
 
         $this->signedRequest = new SignedRequest(
             $this->payload,
             '/aml-check',
-            file_get_contents(PEM_FILE),
+            $pem,
             SDK_ID,
             $this->postMethod
         );
@@ -39,64 +36,22 @@ class AbstractRequestTest extends PHPUnit\Framework\TestCase
         $this->url = $this->signedRequest->getApiRequestUrl(YotiClient::DEFAULT_CONNECT_API);
         $this->headers = $this->getHeaders();
 
-        $this->request = $this->getMockForAbstractClass(
-            '\Yoti\Http\AbstractRequest',
-            // Constructor arguments
-            [
-                $this->headers,
-                $this->url,
-                $this->payload,
-                $this->postMethod
-            ],
-            'request'
-        );
-    }
-
-    public function testPostMethodCanSendPayload()
-    {
-        $this->assertTrue(AbstractRequest::canSendPayload($this->postMethod));
-    }
-
-    public function testGetMethodCannotSendPayload()
-    {
-        $this->assertFalse(AbstractRequest::canSendPayload('GET'));
-    }
-
-    public function testGetUrl()
-    {
-        $this->assertEquals($this->url, $this->request->getUrl());
-    }
-
-    public function testGetHttpMethod()
-    {
-        $this->assertEquals($this->postMethod, $this->request->getHttpMethod());
-    }
-
-    public function testGetPayload()
-    {
-        $this->assertEquals(
-            $this->payload->getPayloadJSON(),
-            $this->request->getPayload()->getPayloadJSON()
-        );
-    }
-
-    public function testInvalidHttpMethod()
-    {
-        $this->expectException('Exception');
-        $request = new RestRequest(
+        $this->request = new RestRequest(
             $this->headers,
             $this->url,
             $this->payload,
-            'InvalidMethod'
+            $this->postMethod
         );
     }
 
-    public function testGetHttpHeaders()
+    public function testMethodExecExists()
     {
-        $this->assertEquals(
-            json_encode($this->headers),
-            json_encode($this->request->getHttpHeaders())
-        );
+        $this->assertTrue(method_exists($this->request, 'exec'));
+    }
+
+    public function testMethodCanSendPayloadExists()
+    {
+        $this->assertTrue(method_exists($this->request, 'canSendPayload'));
     }
 
     public function getHeaders()
