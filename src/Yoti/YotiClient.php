@@ -352,11 +352,10 @@ class YotiClient
         $result = $this->makeRequest($signedRequest, $payload);
 
         $response = $result['response'];
-        $httpCode = $result['http_code'];
+        $httpCode = (int) $result['http_code'];
 
         if ($httpCode !== 200)
         {
-            $httpCode = (int) $httpCode;
             throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
 
