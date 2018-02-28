@@ -60,7 +60,7 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "1.0.*"
+    "yoti/yoti-php-sdk" : "1.1.*"
 }
 ```
 
