@@ -213,11 +213,13 @@ class YotiClient
      *
      * @param SignedRequest $signedRequest
      * @param Payload $payload
+     * @param string $httpMethod
      *
      * @return array
+     *
      * @throws \Exception
      */
-    protected function makeRequest(SignedRequest $signedRequest, Payload $payload, $method = 'GET')
+    protected function makeRequest(SignedRequest $signedRequest, Payload $payload, $httpMethod = 'GET')
     {
         $signedMessage = $signedRequest->getSignedMessage();
 
@@ -228,7 +230,7 @@ class YotiClient
             $httpHeaders,
             $signedRequest->getApiRequestUrl($this->_connectApi),
             $payload,
-            $method
+            $httpMethod
         );
 
         // Make request
