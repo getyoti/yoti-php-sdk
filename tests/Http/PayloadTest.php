@@ -1,11 +1,14 @@
 <?php
 
+namespace YotiTest\Http;
+
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\Payload;
+use YotiTest\TestCase;
 
-class PayloadTest extends PHPUnit\Framework\TestCase
+class PayloadTest extends TestCase
 {
     /**
      * @var string
@@ -18,7 +21,7 @@ class PayloadTest extends PHPUnit\Framework\TestCase
     public $base64Payload;
 
     /**
-     * @var Yoti\Http\Payload
+     * @var \Yoti\Http\Payload
      */
     public $payload;
 

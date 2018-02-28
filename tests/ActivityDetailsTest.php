@@ -1,9 +1,11 @@
 <?php
 
+namespace YotiTest;
+
 use \Yoti\ActivityDetails;
 use \Yoti\Entity\Selfie;
 
-class ActivityDetailsTest extends PHPUnit\Framework\TestCase
+class ActivityDetailsTest extends TestCase
 {
     /**
      * @var array

@@ -1,17 +1,19 @@
 <?php
 
+namespace YotiTest;
+
 use Yoti\YotiClient;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 
-class YotiClientTest extends PHPUnit\Framework\TestCase
+class YotiClientTest extends TestCase
 {
     /**
      * @var YotiClient
      */
-    private $yotiClient;
+    public $yotiClient;
 
     public $pem;
 
@@ -176,13 +178,13 @@ class YotiClientTest extends PHPUnit\Framework\TestCase
      * @param $className
      * @param $propertyName
      *
-     * @return ReflectionProperty
+     * @return \ReflectionProperty
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function getPrivateProperty($className, $propertyName)
     {
-        $reflector = new ReflectionClass($className);
+        $reflector = new \ReflectionClass($className);
         $property = $reflector->getProperty($propertyName);
         $property->setAccessible(TRUE);
 

@@ -1,11 +1,14 @@
 <?php
 
-use Yoti\Http\AmlResult;
+namespace YotiTest\Http;
 
-class AmlResultTest extends PHPUnit\Framework\TestCase
+use Yoti\Http\AmlResult;
+use YotiTest\TestCase;
+
+class AmlResultTest extends TestCase
 {
     /**
-     * @var Yoti\Http\AmlResult
+     * @var \Yoti\Http\AmlResult
      */
     public $amlResult;
 

@@ -1,13 +1,16 @@
 <?php
 
+namespace YotiTest\Http;
+
 use Yoti\YotiClient;
 use Yoti\Http\Payload;
 use Yoti\Http\SignedRequest;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
+use YotiTest\TestCase;
 
-class SignedRequestTest extends PHPUnit\Framework\TestCase
+class SignedRequestTest extends TestCase
 {
     public $signedRequest;
     public $payload;

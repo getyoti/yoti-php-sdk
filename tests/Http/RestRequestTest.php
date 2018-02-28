@@ -1,5 +1,7 @@
 <?php
 
+namespace YotiTest\Http;
+
 use Yoti\YotiClient;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
@@ -7,8 +9,9 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\Payload;
 use Yoti\Http\RestRequest;
 use Yoti\Http\SignedRequest;
+use YotiTest\TestCase;
 
-class RestRequestTest extends PHPUnit\Framework\TestCase
+class RestRequestTest extends TestCase
 {
     public $payload;
     public $signedRequest;

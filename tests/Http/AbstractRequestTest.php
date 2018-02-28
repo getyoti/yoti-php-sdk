@@ -1,5 +1,7 @@
 <?php
 
+namespace YotiTest\Http;
+
 use Yoti\YotiClient;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
@@ -8,8 +10,9 @@ use Yoti\Http\Payload;
 use Yoti\Http\RestRequest;
 use Yoti\Http\SignedRequest;
 use Yoti\Http\AbstractRequest;
+use YotiTest\TestCase;
 
-class AbstractRequestTest extends PHPUnit\Framework\TestCase
+class AbstractRequestTest extends TestCase
 {
     public $payload;
     public $signedRequest;
