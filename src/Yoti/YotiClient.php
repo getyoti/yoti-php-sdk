@@ -74,11 +74,6 @@ class YotiClient
     private $_receipt;
 
     /**
-     * @var bool
-     */
-    private $_mockRequests = FALSE;
-
-    /**
      * @var string
      */
     private $_sdkIdentifier;
@@ -121,16 +116,6 @@ class YotiClient
     public static function getLoginUrl($appId)
     {
         return self::CONNECT_BASE_URL . "/$appId";
-    }
-
-    /**
-     * Set to test environment so it won't make requests to actual API.
-     *
-     * @param bool $toggle
-     */
-    public function setMockRequests($toggle = TRUE)
-    {
-        $this->_mockRequests = $toggle;
     }
 
     /**
@@ -209,21 +194,7 @@ class YotiClient
             RestRequest::METHOD_POST
         );
 
-        // Get signedMessage
-        $signedMessage = $signedRequest->getSignedMessage();
-
-        // Get request httpHeaders
-        $httpHeaders = $this->getRequestHeaders($signedMessage);
-
-        // Make request
-        $restRequest = new RestRequest(
-            $httpHeaders,
-            $signedRequest->getApiRequestUrl($this->_connectApi),
-            $amlPayload,
-            RestRequest::METHOD_POST
-        );
-
-        $result = $restRequest->exec();
+        $result = $this->makeRequest($signedRequest, $amlPayload, RestRequest::METHOD_POST);
 
         // Get response data array
         $responseArr = json_decode($result['response'], TRUE);
@@ -235,6 +206,35 @@ class YotiClient
 
         // Set and return result
         return new AmlResult($responseArr);
+    }
+
+    /**
+     * Make REST request to Connect API.
+     *
+     * @param SignedRequest $signedRequest
+     * @param Payload $payload
+     * @param string $httpMethod
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function makeRequest(SignedRequest $signedRequest, Payload $payload, $httpMethod = 'GET')
+    {
+        $signedMessage = $signedRequest->getSignedMessage();
+
+        // Get request httpHeaders
+        $httpHeaders = $this->getRequestHeaders($signedMessage);
+
+        $request = new RestRequest(
+            $httpHeaders,
+            $signedRequest->getApiRequestUrl($this->_connectApi),
+            $payload,
+            $httpMethod
+        );
+
+        // Make request
+        return $request->exec();
     }
 
     /**
@@ -310,8 +310,8 @@ class YotiClient
             self::AUTH_KEY_HEADER . ": {$authKey}",
             self::DIGEST_HEADER . ": {$signedMessage}",
             self::YOTI_SDK_HEADER . ": {$this->_sdkIdentifier}",
-            "Content-Type: application/json",
-            "Accept: application/json",
+            'Content-Type: application/json',
+            'Accept: application/json',
         ];
     }
 
@@ -349,36 +349,14 @@ class YotiClient
             $httpMethod
         );
 
-        // Sign the request
-        $messageSignature = $signedRequest->getSignedMessage();
+        $result = $this->makeRequest($signedRequest, $payload);
 
-        // Prepare request httpHeaders
-        $headers = $this->getRequestHeaders($messageSignature);
+        $response = $result['response'];
+        $httpCode = (int) $result['http_code'];
 
-        // If !mockRequests then do the real thing
-        if (!$this->_mockRequests)
+        if ($httpCode !== 200)
         {
-            $request = new RestRequest(
-                $headers,
-                $signedRequest->getApiRequestUrl($this->_connectApi),
-                $payload
-            );
-
-            $result = $request->exec();
-
-            $response = $result['response'];
-            $httpCode = $result['http_code'];
-
-            if ($httpCode !== 200)
-            {
-                $httpCode = (int) $httpCode;
-                throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
-            }
-        }
-        else
-        {
-            // Sample receipt, don't make curl call instead spoof response from receipt.json
-            $response = file_get_contents(__DIR__ . '/../sample-data/receipt.json');
+            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
 
         // Get decoded response data

@@ -3,8 +3,9 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         bootstrap="bootstrap.php"
-         stopOnFailure="false">
+         bootstrap="tests/bootstrap.php"
+         stopOnFailure="false"
+         syntaxCheck="true">
     <testsuites>
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>

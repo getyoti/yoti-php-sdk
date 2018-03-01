@@ -1,11 +1,11 @@
 <?php
 
+namespace YotiTest;
+
 use \Yoti\ActivityDetails;
 use \Yoti\Entity\Selfie;
 
-define('DUMMY_SELFIE_FILE', __DIR__ . '/../src/sample-data/dummy-avatar.png');
-
-class ActivityDetailsTest extends PHPUnit\Framework\TestCase
+class ActivityDetailsTest extends TestCase
 {
     /**
      * @var array

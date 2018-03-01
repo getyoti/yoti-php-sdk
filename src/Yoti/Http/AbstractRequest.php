@@ -47,9 +47,8 @@ abstract class AbstractRequest
      */
     public function __construct(array $httpHeaders, $url, Payload $payload, $httpMethod = 'GET')
     {
-        $this->payload = $payload;
-
         $this->setUrl($url);
+        $this->setPayload($payload);
         $this->setHttpHeaders($httpHeaders);
         $this->setHttpMethod($httpMethod);
     }

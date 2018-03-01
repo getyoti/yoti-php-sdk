@@ -1,4 +1,6 @@
 .idea/
 /vendor
-example/.env
-example/selfie.jpeg
+
+examples/.env
+examples/selfie.jpeg
+examples/vendor

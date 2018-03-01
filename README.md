@@ -25,8 +25,7 @@ How to manage users
 7) [AML Integration](#aml-integration) -
 How to integrate with Yoti's AML (Anti Money Laundering) service
 
-8) [How to run the example](#how-to-run-the-example) -
-How to run the example
+8) [How to run the examples](#how-to-run-the-examples)
 
 9) [API Coverage](#api-coverage) -
 Attributes defined
@@ -60,7 +59,7 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "1.0.*"
+    "yoti/yoti-php-sdk" : "1.1.*"
 }
 ```
 
@@ -192,7 +191,7 @@ To check a US citizen, you must provide two more attributes in addition to the t
 * Postcode/Zip code
 
 ### Consent
-Performing an Aml check on a person *requires* their consent.
+Performing an AML check on a person *requires* their consent.
 **You must ensure you have user consent *before* using this service.**
 
 ### Code Example
@@ -206,7 +205,7 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 
 // Address of the user profile to check
-$amlAddress = new AmlAddress(new Country('GBR'), 'E1 6DB');
+$amlAddress = new AmlAddress(new Country('GBR'));
 $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 // Perform the check
 $amlResult = $client->performAmlCheck($amlProfile);
@@ -221,17 +220,28 @@ echo $amlResult;
 ```
  
 
-## How to Run the Example
+## How to Run the Examples
 
-The example can be found in the [example folder](https://github.com/getyoti/php/tree/master/example). The steps required for the setup are explained below.
+The examples can be found in the [examples folder](https://github.com/getyoti/php/tree/master/examples). The steps required for the setup are explained below.
 
+### Profile sharing
 * Create your application in the Yoti Dashboard (this requires having a Yoti account)
 * Point your Yoti application callback URL to `http://your-local-url.domain/profile.php`
-* Do the steps below inside the [example folder](https://github.com/getyoti/php/tree/master/example)
+* Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
 * Run the `composer update` command
 * Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
+
+### AML Check
+* Create your application in the Yoti Dashboard (this requires having a Yoti account)
+* Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
+* Copy `.env.dist` to `.env` and fill in the environment variables.
+* Run the `composer update` command
+* For AML check outside the USA:
+    * Run the script `php scripts/aml-check.php`
+* For AML check within the USA:
+    * Run the script `php scripts/aml-check-usa.php`
 
 ## API Coverage
 
