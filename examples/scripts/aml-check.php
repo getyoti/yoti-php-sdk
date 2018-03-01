@@ -9,8 +9,7 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\YotiClient;
 
-//$connectAPI = YotiClient::DEFAULT_CONNECT_API;
-$connectAPI = 'https://staging0.api.yoti.com:8443/api/v1';
+$connectAPI = YotiClient::DEFAULT_CONNECT_API;
 
 try {
   $amlAddress = new AmlAddress(new Country('GBR'));
