@@ -4,6 +4,7 @@ namespace Yoti;
 use attrpubapi_v1\Attribute;
 use attrpubapi_v1\AttributeList;
 use Yoti\Entity\Selfie;
+use Yoti\Helper\ActivityDetailsHelper;
 
 /**
  * Class ActivityDetails
@@ -251,4 +252,11 @@ class ActivityDetails
     {
         return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
     }
+
+    public function isAgeVerified()
+    {
+        $helper = new ActivityDetailsHelper($this);
+        return $helper->getAgeCondition()->isVerified();
+    }
+
 }

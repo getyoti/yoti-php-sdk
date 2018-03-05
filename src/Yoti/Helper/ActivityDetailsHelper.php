@@ -3,6 +3,7 @@ namespace Yoti\Helper;
 
 use Yoti\ActivityDetails;
 use Yoti\Entity\Selfie;
+use Yoti\Util\Age\Processor as AgeProcessor;
 
 /**
  * Provide helpers for ActivityDetails.
@@ -12,6 +13,16 @@ use Yoti\Entity\Selfie;
  */
 class ActivityDetailsHelper
 {
+    /**
+     * @var \Yoti\ActivityDetails
+     */
+    public $activityDetails;
+
+    public function __construct(ActivityDetails $activityDetails)
+    {
+        $this->activityDetails = $activityDetails;
+    }
+
     /**
      * Get image data in base64.
      *
@@ -34,5 +45,14 @@ class ActivityDetailsHelper
         }
 
         return NULL;
+    }
+
+    /**
+     * @return \Yoti\Util\Age\Condition
+     */
+    public function getAgeCondition()
+    {
+        $ageProcessor = new AgeProcessor($this->activityDetails->getProfileAttribute());
+        return $ageProcessor->getCondition();
     }
 }
