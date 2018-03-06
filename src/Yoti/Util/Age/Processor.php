@@ -50,6 +50,9 @@ class Processor
     }
 
     /**
+     * Age processor config
+     * Add more processor to this array if you want them applied as age filter
+     *
      * @return array
      */
     public function getProcessors()

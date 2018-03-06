@@ -21,11 +21,17 @@ class Condition
         return empty(!$this->result) ? (bool) $this->result : NULL;
     }
 
+    /**
+     * @param $result
+     */
     public function setResult($result)
     {
         $this->result = $result;
     }
 
+    /**
+     * @param $verifiedAge
+     */
     public function setVerifiedAge($verifiedAge)
     {
         $this->verifiedAge = $verifiedAge;
@@ -39,6 +45,11 @@ class Condition
         return $this->verifiedAge;
     }
 
+    /**
+     * Returns a string representing this object.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return "{'result': {$this->result}, 'verifiedAge': {$this->verifiedAge}}";

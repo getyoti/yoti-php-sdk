@@ -9,6 +9,8 @@ class AgeUnderOverProcessor extends AbstractAgeProcessor
     const AGE_PATTERN = '/^age_(under|over):\d+$/';
 
     /**
+     * Process profile data and extract age attribute and value.
+     *
      * @return array|null
      */
     public function process()
