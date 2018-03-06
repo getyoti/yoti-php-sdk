@@ -28,6 +28,8 @@ class Processor
         $ageData = ['result'=> '', 'verifiedAge'=> ''];
         $processors = $this->getProcessors();
 
+        // Process profile data by applying age processors defined in the config
+        // And extract the row containing age attribute and value e.g 'age_over:18'=>'true'
         $found = FALSE;
         while(!empty($processors) && !$found)
         {
