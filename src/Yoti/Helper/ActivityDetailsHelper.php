@@ -19,11 +19,6 @@ class ActivityDetailsHelper
     protected $activityDetails;
 
     /**
-     * @var AgeProcessor
-     */
-    protected $ageProcessor;
-
-    /**
      * @var \Yoti\Util\Age\Condition
      */
     public $ageCondition;
@@ -31,8 +26,8 @@ class ActivityDetailsHelper
     public function __construct(ActivityDetails $activityDetails)
     {
         $this->activityDetails = $activityDetails;
-        $this->ageProcessor = new AgeProcessor($this->activityDetails->getProfileAttribute());
-        $this->ageCondition = $this->ageProcessor->getCondition();
+        $ageProcessor = new AgeProcessor($this->activityDetails->getProfileAttribute());
+        $this->ageCondition = $ageProcessor->getCondition();
     }
 
     /**
