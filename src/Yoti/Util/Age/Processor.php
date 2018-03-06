@@ -20,28 +20,28 @@ class Processor
         return new Condition($ageData['result'], $ageData['verifiedAge']);
     }
 
+    /**
+     * @return array
+     */
     protected function getAgeData()
     {
-        $found = FALSE;
-        $ageData = ['result'=>'', 'verifiedAge'=>''];
-
+        $ageData = ['result'=> '', 'verifiedAge'=> ''];
         $processors = $this->getProcessors();
 
+        $found = FALSE;
         while(!empty($processors) && !$found)
         {
-            $processor = array_shift($processors);
+            $processorClass = array_shift($processors);
+            $parentClass = '\\Yoti\\Util\\Age\\AbstractAgeProcessor';
 
-            if(class_exists($processor))
+            if(class_exists($processorClass) && is_subclass_of($processorClass, $parentClass))
             {
-                $processorObj = new $processor($this->profileData);
-                if($processorObj instanceof AbstractAgeProcessor)
+                $processorObj = new $processorClass($this->profileData);
+                $data = $processorObj->process();
+                if($data)
                 {
-                    $data = $processorObj->process();
-                    if($data)
-                    {
-                        $ageData = $data;
-                        $found = TRUE;
-                    }
+                    $ageData = $data;
+                    $found = TRUE;
                 }
             }
         }
@@ -49,10 +49,13 @@ class Processor
         return $ageData;
     }
 
+    /**
+     * @return array
+     */
     public function getProcessors()
     {
         return [
-            'Yoti\Util\Age\AgeUnderOverProcessor::class'
+            '\\Yoti\\Util\\Age\\AgeUnderOverProcessor',
         ];
     }
 }

@@ -4,34 +4,38 @@ namespace Yoti\Util\Age;
 
 class AgeUnderOverProcessor extends AbstractAgeProcessor
 {
-    private $pattern = '/^age_(under|over):\d.*$/';
     const AGE_DELIMITER = ':';
 
+    const AGE_PATTERN = '/^age_(under|over):\d+$/';
+
+    /**
+     * @return array|null
+     */
     public function process()
     {
-        $found = FALSE;
-        $rawData = '';
-        $result = '';
+        $ageRow = $this->getAgeRow();
 
-        foreach($this->profileData as $key => $value)
-        {
-            if(preg_match($this->pattern, $key, $match))
-            {
-                $rawData = $match[0];
-                $result = $value;
-                $found = TRUE;
-
-                break;
-            }
-        }
-
-        if(!$found) {
+        if(!$ageRow) {
             return NULL;
         }
 
-        $validationArr = explode(self::AGE_DELIMITER, $rawData);
-        $verifiedAge = count($validationArr) === 2 ? $validationArr[1] : '';
+        $verifiedAge = $this->getVerifiedAge($ageRow['ageAttribute']);
 
-        return ['result' => $result, 'verifiedAge' => $verifiedAge];
+        return ['result' => $ageRow['result'], 'verifiedAge' => $verifiedAge];
+    }
+
+    public function getVerifiedAge($ageAttribute)
+    {
+        $verifiedAge = '';
+        $validationArr = explode(self::AGE_DELIMITER, $ageAttribute);
+
+        if(count($validationArr) === 2) {
+            list($attributePrefix, $age) = $validationArr;
+
+            $ageIndicator = strpos($attributePrefix, 'under') !== FALSE ? 'under' : 'over';
+            $verifiedAge = "{$ageIndicator} {$age}";
+        }
+
+        return $verifiedAge;
     }
 }

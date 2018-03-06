@@ -36,6 +36,11 @@ class ActivityDetails
     private $_profile = [];
 
     /**
+     * @var ActivityDetailsHelper
+     */
+    public $helper;
+
+    /**
      * ActivityDetails constructor.
      * @param array $attributes
      * @param $rememberMeId
@@ -49,6 +54,8 @@ class ActivityDetails
         {
             $this->setProfileAttribute($param, $value);
         }
+
+        $this->helper = new ActivityDetailsHelper($this);
     }
 
     /**
@@ -253,10 +260,19 @@ class ActivityDetails
         return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
     }
 
+    /**
+     * @return bool|null
+     */
     public function isAgeVerified()
     {
-        $helper = new ActivityDetailsHelper($this);
-        return $helper->getAgeCondition()->isVerified();
+        return $this->helper->ageCondition->isVerified();
     }
 
+    /**
+     * @return null|string
+     */
+    public function getVerifiedAge()
+    {
+        return $this->helper->ageCondition->getVerifiedAge();
+    }
 }

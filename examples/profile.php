@@ -17,7 +17,9 @@ try {
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
     // This key uses the  format: age_[over|under]:[1-999] and is dynamically
     // generated based on the dashboard attribute Age / Verify Condition
-    $ageVerified = $profile->getProfileAttribute('age_over:18');
+    $ageIsVerified = $profile->isAgeVerified() ? 'true' : '';
+    $verifiedAge = $profile->getVerifiedAge();
+    $verifiedAge = !empty($verifiedAge) ? '(' . $verifiedAge . ') :' : '';
     // Create selfie image file.
     file_put_contents('selfie.jpeg', $profile->getSelfie(), LOCK_EX);
 } catch(\Exception $e) {
@@ -57,7 +59,7 @@ try {
                 <dd><?php echo $profile->getDateOfBirth() ?></dd>
 
                 <dt>Age verified</dt>
-                <dd><?php echo $ageVerified ?></dd>
+                <dd><?php echo "{$verifiedAge} {$ageIsVerified}" ?></dd>
 
                 <dt>Address</dt>
                 <dd><?php echo $profile->getPostalAddress() ?></dd>

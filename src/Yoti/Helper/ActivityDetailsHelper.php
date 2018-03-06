@@ -16,11 +16,23 @@ class ActivityDetailsHelper
     /**
      * @var \Yoti\ActivityDetails
      */
-    public $activityDetails;
+    protected $activityDetails;
+
+    /**
+     * @var AgeProcessor
+     */
+    protected $ageProcessor;
+
+    /**
+     * @var \Yoti\Util\Age\Condition
+     */
+    public $ageCondition;
 
     public function __construct(ActivityDetails $activityDetails)
     {
         $this->activityDetails = $activityDetails;
+        $this->ageProcessor = new AgeProcessor($this->activityDetails->getProfileAttribute());
+        $this->ageCondition = $this->ageProcessor->getCondition();
     }
 
     /**
@@ -45,14 +57,5 @@ class ActivityDetailsHelper
         }
 
         return NULL;
-    }
-
-    /**
-     * @return \Yoti\Util\Age\Condition
-     */
-    public function getAgeCondition()
-    {
-        $ageProcessor = new AgeProcessor($this->activityDetails->getProfileAttribute());
-        return $ageProcessor->getCondition();
     }
 }
