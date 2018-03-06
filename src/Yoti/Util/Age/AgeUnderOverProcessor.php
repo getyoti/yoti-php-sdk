@@ -6,7 +6,7 @@ class AgeUnderOverProcessor extends AbstractAgeProcessor
 {
     const AGE_DELIMITER = ':';
 
-    const AGE_PATTERN = '/^age_(under|over):\d+$/';
+    const AGE_PATTERN = '/^age_(under|over):[1-9][0-9]*$/';
 
     /**
      * Process profile data and extract age attribute and value.
