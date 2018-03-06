@@ -18,7 +18,12 @@ class Condition
      */
     public function isVerified()
     {
-        return empty(!$this->result) ? (bool) $this->result : NULL;
+        if(!empty($this->result))
+        {
+            return $this->result === 'true';
+        }
+
+        return NULL;
     }
 
     /**
