@@ -131,6 +131,10 @@ $selfie             = $activityDetails->getSelfie();
 $emailAddress       = $activityDetails->getEmailAddress();
 
 $postalAddress      = $activityDetails->getPostalAddress();
+
+$ageVerified         = $activityDetails->isAgeVerified();
+
+$verifiedAge         = $activityDetails->getVerifiedAge();
 ```
 
 ## Handling Users
@@ -246,19 +250,20 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 ## API Coverage
 
 * Activity Details
-    * [X] User ID `user_id`
+    * [X] User ID `getUserId()`
     * [X] Profile
-        * [X] Photo `selfie`
-        * [X] Given Names `given_names`
-        * [X] Family Name `family_name`
-        * [X] Full Name `full_name`
-        * [X] Mobile Number `phone_number`
-        * [X] Email Address `email_address`
-        * [X] Age / Date of Birth `date_of_birth`
-        * [X] Age / Verify Condition `age_[over|under]:[1-999]`
-        * [X] Address `postal_address`
-        * [X] Gender `gender`
-        * [X] Nationality `nationality`
+        * [X] Photo `getSelfie()`
+        * [X] Given Names `getGivenNames()`
+        * [X] Family Name `getFamilyName()`
+        * [X] Full Name `getFullName()`
+        * [X] Mobile Number `getPhoneNumber()`
+        * [X] Email Address `getEmailAddress()`
+        * [X] Age / Date of Birth `getDateOfBirth()`
+        * [X] Age / Verify Condition `isAgeVerified()`
+        * [x] Age / Verified Age `getVerifiedAge()`
+        * [X] Address `getPostalAddress()`
+        * [X] Gender `getGender()`
+        * [X] Nationality `getNationality()`
 
 ## Support
 
