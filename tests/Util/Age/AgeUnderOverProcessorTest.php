@@ -41,6 +41,17 @@ class AgeUnderOverProcessorTest extends TestCase
         $this->assertEquals('{"result":"true","verifiedAge":"over 18"}', json_encode($ageData));
     }
 
+    public function testProcessWithAgeUnder()
+    {
+        $dummyProfile = $this->dummyProfile;
+        unset($dummyProfile['age_over:18']);
+        $dummyProfile['age_under:20'] = 'true';
+        $processor = new AgeUnderOverProcessor($dummyProfile);
+        $ageData = $processor->process();
+
+        $this->assertEquals('{"result":"true","verifiedAge":"under 20"}', json_encode($ageData));
+    }
+
     public function testGetAgeRow()
     {
         $ageRow = $this->processor->getAgeRow();
