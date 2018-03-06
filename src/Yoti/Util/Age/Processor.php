@@ -23,7 +23,7 @@ class Processor
     /**
      * @return array
      */
-    protected function getAgeData()
+    public function getAgeData()
     {
         $ageData = ['result'=> '', 'verifiedAge'=> ''];
         $processors = $this->getProcessors();
