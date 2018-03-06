@@ -19,7 +19,7 @@ try {
     // generated based on the dashboard attribute Age / Verify Condition
     $ageVerified = $profile->isAgeVerified() ? 'true' : '';
     $verifiedAge = $profile->getVerifiedAge();
-    $verifiedAge = !empty($verifiedAge) ? '(' . $verifiedAge . ') :' : '';
+    $verifiedAge = !empty($verifiedAge) ? "({$verifiedAge}) :" : '';
     // Create selfie image file.
     file_put_contents('selfie.jpeg', $profile->getSelfie(), LOCK_EX);
 } catch(\Exception $e) {
