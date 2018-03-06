@@ -26,7 +26,7 @@ class Processor
     public function getAgeData()
     {
         $ageData = ['result'=> '', 'verifiedAge'=> ''];
-        $processors = $this->getProcessors();
+        $processors = $this->getAgeProcessors();
 
         // Process profile data by applying age processors defined in the config
         // And extract the row containing age attribute and value e.g 'age_over:18'=>'true'
@@ -57,7 +57,7 @@ class Processor
      *
      * @return array
      */
-    public function getProcessors()
+    public function getAgeProcessors()
     {
         return [
             '\\Yoti\\Util\\Age\\AgeUnderOverProcessor',
