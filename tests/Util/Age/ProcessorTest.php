@@ -19,7 +19,7 @@ class ProcessorTest extends TestCase
             'family_name' => 'TestFamilyName',
             'given_names' => 'TestGivenName',
             'full_name'   => 'TestGivenName TestFamilyName',
-            'date_of_birth' => '11-07-2017',
+            'date_of_birth' => '01-01-1998',
             'age_over:18'=> 'true',
             'gender' => 'Male',
             'nationality' => 'British',

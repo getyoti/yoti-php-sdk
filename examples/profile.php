@@ -16,9 +16,12 @@ try {
     // Create a base 64 selfie URI to be embedded in an HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
     // Generated based on the dashboard attribute Age / Verify Condition
-    // This function returns boolean or NULLif the attribute is not set in the dashboard
-    $ageVerified = var_export($profile->isAgeVerified(), TRUE);
-    $ageVerified = NULL === $ageVerified ? '' : $ageVerified;
+    // This function returns a boolean or NULL if the attribute is not set in the dashboard
+    $ageVerified = $profile->isAgeVerified();
+    $ageCheck = 'N/A';
+    if(NULL !== $ageVerified) {
+        $ageCheck = $ageVerified ? 'yes' : 'no';
+    }
     $verifiedAge = $profile->getVerifiedAge();
     $verifiedAge = !empty($verifiedAge) ? "({$verifiedAge}) :" : '';
     // Create selfie image file.
@@ -60,7 +63,7 @@ try {
                 <dd><?php echo $profile->getDateOfBirth() ?></dd>
 
                 <dt>Age verified</dt>
-                <dd><?php echo "{$verifiedAge} {$ageVerified}" ?></dd>
+                <dd><?php echo "{$verifiedAge} {$ageCheck}" ?></dd>
 
                 <dt>Address</dt>
                 <dd><?php echo $profile->getPostalAddress() ?></dd>
