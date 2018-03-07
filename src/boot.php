@@ -35,33 +35,3 @@ spl_autoload_register(function($className) {
     }
     return false;
 });
-
-// Load Entities
-/*require_once __DIR__ . '/Yoti/Entity/Country.php';
-require_once __DIR__ . '/Yoti/Entity/AmlAddress.php';
-require_once __DIR__ . '/Yoti/Entity/AmlProfile.php';
-require_once __DIR__ . '/Yoti/Entity/Selfie.php';
-
-// Load Exceptions
-require_once __DIR__ . '/Yoti/Exception/AmlException.php';
-require_once __DIR__ . '/Yoti/Exception/ActivityDetailsException.php';
-
-// Load main classes
-require_once __DIR__ . '/Yoti/ActivityDetails.php';
-require_once __DIR__ . '/Yoti/YotiClient.php';
-
-// Load Helpers
-require_once __DIR__ . '/Yoti/Helper/ActivityDetailsHelper.php';
-
-// Load Http classes
-require_once __DIR__ . '/Yoti/Http/AbstractRequest.php';
-require_once __DIR__ . '/Yoti/Http/AmlResult.php';
-require_once __DIR__ . '/Yoti/Http/Payload.php';
-require_once __DIR__ . '/Yoti/Http/RestRequest.php';
-require_once __DIR__ . '/Yoti/Http/SignedRequest.php';
-
-// Load Util
-require_once __DIR__ . '/Yoti/Util/Age/AbstractAgeProcessor.php';
-require_once __DIR__ . '/Yoti/Util/Age/AgeUnderOverProcessor.php';
-require_once __DIR__ . '/Yoti/Util/Age/Condition.php';
-require_once __DIR__ . '/Yoti/Util/Age/Processor.php';*/
