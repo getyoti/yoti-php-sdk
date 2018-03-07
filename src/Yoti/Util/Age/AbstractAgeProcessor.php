@@ -4,6 +4,7 @@ namespace Yoti\Util\Age;
 
 abstract class AbstractAgeProcessor
 {
+    // You must define this pattern in the child class
     const AGE_PATTERN = '';
 
     public $profileData;
