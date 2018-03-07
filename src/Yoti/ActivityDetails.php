@@ -261,6 +261,9 @@ class ActivityDetails
     }
 
     /**
+     * Returns a boolean representing the attribute value
+     * Or null if the attribute is not set in the dashboard
+     *
      * @return bool|null
      */
     public function isAgeVerified()

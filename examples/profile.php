@@ -15,14 +15,10 @@ try {
     $profile = $yotiClient->getActivityDetails($token);
     // Create a base 64 selfie URI to be embedded in an HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($profile);
-    // This key uses the  format: age_[over|under]:[1-999] and is dynamically
-    // generated based on the dashboard attribute Age / Verify Condition
-    $ageVerified = $profile->isAgeVerified();
-    if(is_bool($ageVerified)) {
-        $ageVerified = $ageVerified ? 'true' : 'false';
-    } else {
-        $ageVerified = '';
-    }
+    // Generated based on the dashboard attribute Age / Verify Condition
+    // This function returns boolean or NULLif the attribute is not set in the dashboard
+    $ageVerified = var_export($profile->isAgeVerified(), TRUE);
+    $ageVerified = NULL === $ageVerified ? '' : $ageVerified;
     $verifiedAge = $profile->getVerifiedAge();
     $verifiedAge = !empty($verifiedAge) ? "({$verifiedAge}) :" : '';
     // Create selfie image file.
