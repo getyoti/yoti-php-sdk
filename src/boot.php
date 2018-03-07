@@ -49,3 +49,9 @@ require_once __DIR__ . '/Yoti/Http/AmlResult.php';
 require_once __DIR__ . '/Yoti/Http/Payload.php';
 require_once __DIR__ . '/Yoti/Http/RestRequest.php';
 require_once __DIR__ . '/Yoti/Http/SignedRequest.php';
+
+// Load Util
+require_once __DIR__ . '/Yoti/Util/Age/AbstractAgeProcessor.php';
+require_once __DIR__ . '/Yoti/Util/Age/AgeUnderOverProcessor.php';
+require_once __DIR__ . '/Yoti/Util/Age/Condition.php';
+require_once __DIR__ . '/Yoti/Util/Age/Processor.php';

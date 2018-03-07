@@ -4,6 +4,7 @@ namespace Yoti;
 use attrpubapi_v1\Attribute;
 use attrpubapi_v1\AttributeList;
 use Yoti\Entity\Selfie;
+use Yoti\Helper\ActivityDetailsHelper;
 
 /**
  * Class ActivityDetails
@@ -35,6 +36,11 @@ class ActivityDetails
     private $_profile = [];
 
     /**
+     * @var ActivityDetailsHelper
+     */
+    public $helper;
+
+    /**
      * ActivityDetails constructor.
      * @param array $attributes
      * @param $rememberMeId
@@ -48,6 +54,8 @@ class ActivityDetails
         {
             $this->setProfileAttribute($param, $value);
         }
+
+        $this->helper = new ActivityDetailsHelper($this);
     }
 
     /**
@@ -250,5 +258,24 @@ class ActivityDetails
     public function getPostalAddress()
     {
         return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+    }
+
+    /**
+     * Returns a boolean representing the attribute value
+     * Or null if the attribute is not set in the dashboard
+     *
+     * @return bool|null
+     */
+    public function isAgeVerified()
+    {
+        return $this->helper->ageCondition->isVerified();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getVerifiedAge()
+    {
+        return $this->helper->ageCondition->getVerifiedAge();
     }
 }
