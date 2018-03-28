@@ -264,7 +264,7 @@ class ActivityDetails
     }
 
     /**
-     * Get user structure postal address as a Json.
+     * Get user structure postal address as a JSON string.
      *
      * @return null|string
      */
