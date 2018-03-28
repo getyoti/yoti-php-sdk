@@ -87,7 +87,10 @@ When your application receives a token via the exposed endpoint (it will be assi
 
 ```php
 <?php
-$activityDetails = $client->getActivityDetails();
+// The token can be used only once
+// Reusing the same token will result to a 404 error
+$token = $_GET['token'];
+$activityDetails = $client->getActivityDetails($token);
 ```
 
 Before you inspect the user profile, you might want to check whether the user validation was successful.
@@ -95,7 +98,7 @@ This is done as follows:
 
 ```php
 <?php
-$activityDetails = $client->getActivityDetails();
+$activityDetails = $client->getActivityDetails($token);
 if ($client->getOutcome() !== \Yoti\YotiClient::OUTCOME_SUCCESS)
 {
     // handle unhappy path
@@ -108,7 +111,7 @@ We have exposed user profile attributes through getters. You will find in the ex
 
 ```php
 <?php
-$activityDetails    = $client->getActivityDetails();
+$activityDetails    = $client->getActivityDetails($token);
 
 $userId             = $activityDetails->getUserId();
 
@@ -146,7 +149,7 @@ Here is an example of how this works:
 
 ```php
 <?php
-$activityDetails = $client->getActivityDetails();
+$activityDetails = $client->getActivityDetails($token);
 if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
     $user = yourUserSearchFunction($activityDetails->getUserId());
     if ($user) {
