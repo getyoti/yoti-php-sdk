@@ -264,6 +264,16 @@ class ActivityDetails
     }
 
     /**
+     * Get user structure postal address as a Json.
+     *
+     * @return null|string
+     */
+    public function getStructurePostalAddress()
+    {
+        return $this->getProfileAttribute(self::ATTR_STRUCTURE_POSTAL_ADDRESS);
+    }
+
+    /**
      * Returns a boolean representing the attribute value
      * Or null if the attribute is not set in the dashboard
      *
