@@ -25,7 +25,7 @@ class ActivityDetails
     const ATTR_SELFIE = 'selfie';
     const ATTR_EMAIL_ADDRESS = 'email_address';
     const ATTR_POSTAL_ADDRESS = 'postal_address';
-    const ATTR_STRUCTURE_POSTAL_ADDRESS = 'structured_postal_address';
+    const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /**
      * @var string receipt identifier
@@ -264,13 +264,13 @@ class ActivityDetails
     }
 
     /**
-     * Get user structure postal address as a JSON string.
+     * Get user structured postal address as a JSON string.
      *
      * @return null|string
      */
-    public function getStructurePostalAddress()
+    public function getStructuredPostalAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_STRUCTURE_POSTAL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
 
     /**
