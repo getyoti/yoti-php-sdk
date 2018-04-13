@@ -27,10 +27,12 @@ How to integrate with Yoti's AML (Anti Money Laundering) service
 
 8) [How to run the examples](#how-to-run-the-examples)
 
-9) [API Coverage](#api-coverage) -
+9) [Running the tests](#running-the-tests)
+
+10) [API Coverage](#api-coverage) -
 Attributes defined
 
-10) [Support](#support) -
+11) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
@@ -47,8 +49,8 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Requirements
 
-* PHP 5.3
-* CURL PHP extension
+* PHP 5.5.19
+* CURL PHP extension (must support TLSv1.2)
 
 ## Enabling the SDK
 
@@ -198,6 +200,7 @@ To check a US citizen, you must provide two more attributes in addition to the t
 * Postcode/Zip code
 
 ### Consent
+
 Performing an AML check on a person *requires* their consent.
 **You must ensure you have user consent *before* using this service.**
 
@@ -232,6 +235,7 @@ echo $amlResult;
 The examples can be found in the [examples folder](https://github.com/getyoti/php/tree/master/examples). The steps required for the setup are explained below.
 
 ### Profile sharing
+
 * Create your application in the Yoti Dashboard (this requires having a Yoti account)
 * Point your Yoti application callback URL to `http://your-local-url.domain/profile.php`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
@@ -241,6 +245,7 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 * Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
 
 ### AML Check
+
 * Create your application in the Yoti Dashboard (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env` and fill in the environment variables.
@@ -250,23 +255,26 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 * For AML check within the USA:
     * Run the script `php scripts/aml-check-usa.php`
 
+## Running the tests
+
+Tests require `PHP 5.6` or above.
+
 ## API Coverage
 
 * Activity Details
     * [X] User ID `getUserId()`
-    * [X] Profile
-        * [X] Photo `getSelfie()`
-        * [X] Given Names `getGivenNames()`
-        * [X] Family Name `getFamilyName()`
-        * [X] Full Name `getFullName()`
-        * [X] Mobile Number `getPhoneNumber()`
-        * [X] Email Address `getEmailAddress()`
-        * [X] Age / Date of Birth `getDateOfBirth()`
-        * [X] Age / Verify Condition `isAgeVerified()`
-        * [x] Age / Verified Age `getVerifiedAge()`
-        * [X] Address `getPostalAddress()`
-        * [X] Gender `getGender()`
-        * [X] Nationality `getNationality()`
+    * [X] Photo `getSelfie()`
+    * [X] Given Names `getGivenNames()`
+    * [X] Family Name `getFamilyName()`
+    * [X] Full Name `getFullName()`
+    * [X] Mobile Number `getPhoneNumber()`
+    * [X] Email Address `getEmailAddress()`
+    * [X] Age / Date of Birth `getDateOfBirth()`
+    * [X] Age / Verify Condition `isAgeVerified()`
+    * [x] Age / Verified Age `getVerifiedAge()`
+    * [X] Address `getPostalAddress()`
+    * [X] Gender `getGender()`
+    * [X] Nationality `getNationality()`
 
 ## Support
 
