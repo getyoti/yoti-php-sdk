@@ -257,7 +257,7 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 
 ## Running the tests
 
-Tests require `PHP 5.6` or above.
+The version of PHPUnit we are using requires `PHP 5.6` or above.
 
 ## API Coverage
 

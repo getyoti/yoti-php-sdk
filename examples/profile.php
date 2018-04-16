@@ -42,7 +42,8 @@ try {
         <?php if (!empty($errorMsg)) : ?>
             <p><strong><?php echo $errorMsg ?></strong></p>
         <?php else: ?>
-            <h1>Yoti User Profile</h1>
+            <h2><a href="/">Home</a></h2>
+            <h2>Yoti User Profile</h2>
             <dl>
                 <dt>Given Name(s)</dt>
                 <dd><?php echo $profile->getGivenNames() ?></dd>

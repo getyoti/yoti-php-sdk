@@ -264,13 +264,14 @@ class ActivityDetails
     }
 
     /**
-     * Get user structured postal address as a JSON string.
+     * Get user structured postal address as an array.
      *
-     * @return null|string
+     * @return null|array
      */
     public function getStructuredPostalAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
+        $structuredPostalAddress = $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
+        return json_decode($structuredPostalAddress, true);
     }
 
     /**
