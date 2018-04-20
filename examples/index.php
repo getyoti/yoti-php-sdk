@@ -11,7 +11,7 @@ require_once __DIR__ . '/bootstrap.php';
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
 
-        <script src="https://sdk.yoti.com/clients/browser.2.0.1.js"></script>
+        <script src="https://sdk.yoti.com/clients/browser.2.1.0.js"></script>
     </head>
     <body>
         <h1>Your Site Information</h1>
