@@ -1,10 +1,14 @@
 <?php
 namespace Yoti;
 
-use attrpubapi_v1\Attribute;
-use attrpubapi_v1\AttributeList;
 use Yoti\Entity\Selfie;
+use Yoti\Entity\Profile;
+use Yoti\Entity\Attribute;
+use attrpubapi_v1\AttributeList;
 use Yoti\Helper\ActivityDetailsHelper;
+
+use Yoti\Util\Age\AgeUnderOverProcessor;
+use Yoti\Util\Profile\AnchorProcessor;
 
 /**
  * Class ActivityDetails
@@ -38,6 +42,11 @@ class ActivityDetails
     private $_profile = [];
 
     /**
+     * @var \Yoti\Entity\Profile
+     */
+    private $profile;
+
+    /**
      * @var ActivityDetailsHelper
      */
     public $helper;
@@ -58,6 +67,10 @@ class ActivityDetails
             $this->setProfileAttribute($param, $value);
         }
 
+        // Setting an empty profile here in case
+        // the constructor is called from self::constructFromAttributeList
+        $this->setProfile(new Profile([]));
+
         $this->helper = new ActivityDetailsHelper($this);
     }
 
@@ -71,11 +84,16 @@ class ActivityDetails
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
     {
-        $attrs = array();
+        // For ActivityDetails attributes
+        $attrs = [];
+        // For Profile attributes
+        $profileAttributes = [];
+
+        $anchorProcessor = new AnchorProcessor();
 
         foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
         {
-            if($item->getName() === 'selfie')
+            if ($item->getName() === 'selfie')
             {
                 $attrs[$item->getName()] = new Selfie(
                     $item->getValue()->getContents(),
@@ -85,9 +103,43 @@ class ActivityDetails
             else {
                 $attrs[$item->getName()] = $item->getValue()->getContents();
             }
+
+            $attributeAnchors = $anchorProcessor->process($item->getAnchorsList());
+
+            $attrName = $item->getName();
+            $attribute = new Attribute(
+                $attrName,
+                $item->getValue()->getContents(),
+                $attributeAnchors['sources'],
+                $attributeAnchors['verifiers']
+            );
+            $profileAttributes[$attrName] = $attribute;
+
+            // Add age verification attributes
+            if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName))
+            {
+                $isAgeVerifiedAttr = new Attribute(
+                    Attribute::IS_AGE_VERIFIED,
+                    NULL,
+                    $attributeAnchors['sources'],
+                    $attributeAnchors['verifiers']
+                );
+                $profileAttributes[Attribute::IS_AGE_VERIFIED] = $isAgeVerifiedAttr;
+
+                $verifiedAgeAttr = clone $isAgeVerifiedAttr;
+                $verifiedAgeAttr->setName(Attribute::VERIFIED_AGE);
+                $profileAttributes[Attribute::VERIFIED_AGE] = $verifiedAgeAttr;
+            }
         }
 
         $inst = new self($attrs, $rememberMeId);
+        // Add age verification attributes values if applicable
+        if (isset($profileAttributes[Attribute::IS_AGE_VERIFIED]))
+        {
+            $profileAttributes[Attribute::IS_AGE_VERIFIED]->setValue($inst->isAgeVerified());
+            $profileAttributes[Attribute::VERIFIED_AGE]->setValue($inst->getVerifiedAge());
+        }
+        $inst->setProfile(new Profile($profileAttributes));
 
         return $inst;
     }
@@ -120,6 +172,24 @@ class ActivityDetails
         }
 
         return $this->_profile;
+    }
+
+    /**
+     * @param Profile $profile
+     */
+    public function setProfile(Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * Get user profile object.
+     *
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
     }
 
     /**
