@@ -19,14 +19,12 @@ require_once __DIR__ . '/protobuf-php/protobuf/src/Collection.php';
 require_once __DIR__ . '/protobuf-php/protobuf/src/MessageCollection.php';
 require_once __DIR__ . '/protobuf-php/protobuf/src/StreamCollection.php';
 require_once __DIR__ . '/protobuf-php/protobuf/src/UnknownFieldSet.php';
+require_once __DIR__ . '/protobuf-php/protobuf/src/Extension/ExtensionFieldMap.php';
 
-require_once __DIR__ . '/attrpubapi_v1/Anchor.php';
-require_once __DIR__ . '/attrpubapi_v1/Attribute.php';
-require_once __DIR__ . '/attrpubapi_v1/AttributeList.php';
-require_once __DIR__ . '/attrpubapi_v1/ContentType.php';
-require_once __DIR__ . '/compubapi_v1/EncryptedData.php';
+// PHP Secure files
+require_once __DIR__ . '/phpseclib/bootstrap.php';
 
-// Autoload Yoti classes
+// Autoload Yoti classes and other dependencies
 spl_autoload_register(function($className) {
     $file = __DIR__ . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $className).'.php';
     if (file_exists($file)) {

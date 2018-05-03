@@ -4,6 +4,7 @@ namespace YotiTest;
 
 use \Yoti\ActivityDetails;
 use \Yoti\Entity\Selfie;
+use \Yoti\Entity\Profile;
 
 class ActivityDetailsTest extends TestCase
 {
@@ -15,7 +16,7 @@ class ActivityDetailsTest extends TestCase
     /**
      * @var ActivityDetails
      */
-    public $profile;
+    public $activityDetails;
 
     public $userId = 45555;
 
@@ -35,7 +36,7 @@ class ActivityDetailsTest extends TestCase
             'postal_address' => '130 Fenchurch Street London, EC3M 5DJ'
         ];
 
-        $this->profile = new ActivityDetails($this->dummyProfile, $this->userId);
+        $this->activityDetails = new ActivityDetails($this->dummyProfile, $this->userId);
     }
 
     /**
@@ -43,7 +44,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testActivityDetailsInstance()
     {
-        $this->assertInstanceOf(ActivityDetails::class, $this->profile);
+        $this->assertInstanceOf(ActivityDetails::class, $this->activityDetails);
     }
 
     /**
@@ -51,7 +52,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetUserId()
     {
-        $this->assertEquals($this->userId, $this->profile->getUserId());
+        $this->assertEquals($this->userId, $this->activityDetails->getUserId());
     }
 
     /**
@@ -59,7 +60,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetGivenNames()
     {
-        $this->assertEquals($this->dummyProfile['given_names'], $this->profile->getGivenNames());
+        $this->assertEquals($this->dummyProfile['given_names'], $this->activityDetails->getGivenNames());
     }
 
     /**
@@ -67,7 +68,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetFamilyName()
     {
-        $this->assertEquals($this->dummyProfile['family_name'], $this->profile->getFamilyName());
+        $this->assertEquals($this->dummyProfile['family_name'], $this->activityDetails->getFamilyName());
     }
 
     /**
@@ -75,7 +76,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetFullName()
     {
-        $this->assertEquals($this->dummyProfile['full_name'], $this->profile->getFullName());
+        $this->assertEquals($this->dummyProfile['full_name'], $this->activityDetails->getFullName());
     }
 
     /**
@@ -83,7 +84,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetDateOfBirth()
     {
-        $this->assertEquals($this->dummyProfile['date_of_birth'], $this->profile->getDateOfBirth());
+        $this->assertEquals($this->dummyProfile['date_of_birth'], $this->activityDetails->getDateOfBirth());
     }
 
     /**
@@ -91,7 +92,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testIsAgeVerified()
     {
-        $this->assertEquals($this->dummyProfile['age_over:18'], $this->profile->getProfileAttribute('age_over:18'));
+        $this->assertEquals($this->dummyProfile['age_over:18'], $this->activityDetails->getProfileAttribute('age_over:18'));
     }
 
     /**
@@ -99,7 +100,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetGender()
     {
-        $this->assertEquals($this->dummyProfile['gender'], $this->profile->getGender());
+        $this->assertEquals($this->dummyProfile['gender'], $this->activityDetails->getGender());
     }
 
     /**
@@ -107,7 +108,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetNationality()
     {
-        $this->assertEquals($this->dummyProfile['nationality'], $this->profile->getNationality());
+        $this->assertEquals($this->dummyProfile['nationality'], $this->activityDetails->getNationality());
     }
 
     /**
@@ -115,7 +116,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetPhoneNumber()
     {
-        $this->assertEquals($this->dummyProfile['phone_number'], $this->profile->getPhoneNumber());
+        $this->assertEquals($this->dummyProfile['phone_number'], $this->activityDetails->getPhoneNumber());
     }
 
     /**
@@ -123,7 +124,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetEmailAddress()
     {
-        $this->assertEquals($this->dummyProfile['email_address'], $this->profile->getEmailAddress());
+        $this->assertEquals($this->dummyProfile['email_address'], $this->activityDetails->getEmailAddress());
     }
 
     /**
@@ -131,7 +132,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetSelfie()
     {
-        $this->assertEquals($this->dummyProfile['selfie'], $this->profile->getSelfie());
+        $this->assertEquals($this->dummyProfile['selfie'], $this->activityDetails->getSelfie());
     }
 
     /**
@@ -139,6 +140,12 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetSelfieEntity()
     {
-        $this->assertInstanceOf(Selfie::class, $this->profile->getSelfieEntity());
+        $this->assertInstanceOf(Selfie::class, $this->activityDetails->getSelfieEntity());
+    }
+
+    public function testGetProfile()
+    {
+        $profile = $this->activityDetails->getProfile();
+        $this->assertInstanceOf(Profile::class, $profile);
     }
 }
