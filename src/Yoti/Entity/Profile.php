@@ -31,6 +31,11 @@ class Profile
 
     private $emptyAttribute;
 
+    /**
+     * Profile constructor.
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes)
     {
         foreach($attributes as $name => $attribute)
@@ -45,6 +50,9 @@ class Profile
         $this->emptyAttribute = new Attribute('');
     }
 
+    /**
+     * @param Attribute $fullName
+     */
     public function setFullName(Attribute $fullName)
     {
         if($fullName->getName() === Attribute::FULL_NAME)
@@ -53,11 +61,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getFullName()
     {
         return $this->getProfileAttribute($this->fullName);
     }
 
+    /**
+     * @param Attribute $familyName
+     */
     public function setFamilyName(Attribute $familyName)
     {
         if($familyName->getName() === Attribute::FAMILY_NAME)
@@ -66,11 +80,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getFamilyName()
     {
         return $this->getProfileAttribute($this->familyName);
     }
 
+    /**
+     * @param Attribute $givenNames
+     */
     public function setGivenNames(Attribute $givenNames)
     {
         if($givenNames->getName() === Attribute::GIVEN_NAMES)
@@ -79,11 +99,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getGivenNames()
     {
         return $this->getProfileAttribute($this->givenNames);
     }
 
+    /**
+     * @param Attribute $dateOfBirth
+     */
     public function setDateOfBirth(Attribute $dateOfBirth)
     {
         if($dateOfBirth->getName() === Attribute::DATE_OF_BIRTH)
@@ -92,11 +118,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getDateOfBirth()
     {
         return $this->getProfileAttribute($this->dateOfBirth);
     }
 
+    /**
+     * @param Attribute $gender
+     */
     public function setGender(Attribute $gender)
     {
         if($gender->getName() === Attribute::GENDER)
@@ -105,11 +137,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getGender()
     {
         return $this->getProfileAttribute($this->gender);
     }
 
+    /**
+     * @param Attribute $nationality
+     */
     public function setNationality(Attribute $nationality)
     {
         if($nationality->getName() === Attribute::NATIONALITY)
@@ -118,11 +156,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getNationality()
     {
         return $this->getProfileAttribute($this->nationality);
     }
 
+    /**
+     * @param Attribute $phoneNumber
+     */
     public function setPhoneNumber(Attribute $phoneNumber)
     {
         if($phoneNumber->getName() === Attribute::PHONE_NUMBER)
@@ -131,11 +175,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getPhoneNumber()
     {
         return $this->getProfileAttribute($this->phoneNumber);
     }
 
+    /**
+     * @param Attribute $selfie
+     */
     public function setSelfie(Attribute $selfie)
     {
         if($selfie->getName() === Attribute::SELFIE)
@@ -144,11 +194,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getSelfie()
     {
         return $this->getProfileAttribute($this->selfie);
     }
 
+    /**
+     * @param Attribute $emailAddress
+     */
     public function setEmailAddress(Attribute $emailAddress)
     {
         if($emailAddress->getName() === Attribute::EMAIL_ADDRESS)
@@ -157,11 +213,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getEmailAddress()
     {
         return $this->getProfileAttribute($this->emailAddress);
     }
 
+    /**
+     * @param Attribute $postalAddress
+     */
     public function setPostalAddress(Attribute $postalAddress)
     {
         if($postalAddress->getName() === Attribute::POSTAL_ADDRESS)
@@ -170,11 +232,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getPostalAddress()
     {
         return $this->getProfileAttribute($this->postalAddress);
     }
 
+    /**
+     * @param Attribute $structuredPostalAddress
+     */
     public function setStructuredPostalAddress(Attribute $structuredPostalAddress)
     {
         if ($structuredPostalAddress->getName() === Attribute::STRUCTURED_POSTAL_ADDRESS)
@@ -183,11 +251,17 @@ class Profile
         }
     }
 
+    /**
+     * @return null|array
+     */
     public function getStructuredPostalAddress()
     {
         return $this->structuredPostalAddress;
     }
 
+    /**
+     * @param Attribute $isAgeVerified
+     */
     public function setIsAgeVerified(Attribute $isAgeVerified)
     {
         if ($isAgeVerified->getName() === Attribute::IS_AGE_VERIFIED)
@@ -196,11 +270,17 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getIsAgeVerified()
     {
         return $this->getProfileAttribute($this->isAgeVerified);
     }
 
+    /**
+     * @param Attribute $verifiedAge
+     */
     public function setVerifiedAge(Attribute $verifiedAge)
     {
         if ($verifiedAge->getName() === Attribute::VERIFIED_AGE)
@@ -209,11 +289,19 @@ class Profile
         }
     }
 
+    /**
+     * @return Attribute
+     */
     public function getVerifiedAge()
     {
         return $this->getProfileAttribute($this->verifiedAge);
     }
 
+    /**
+     * @param $attributeName
+     *
+     * @return Attribute
+     */
     private function getProfileAttribute($attributeName)
     {
         return NULL !== $attributeName ? $attributeName : $this->emptyAttribute;
