@@ -88,36 +88,37 @@ class ActivityDetails
         $attrs = [];
         // For Profile attributes
         $profileAttributes = [];
-
         $anchorProcessor = new AnchorProcessor();
 
         foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
         {
-            if ($item->getName() === 'selfie')
-            {
-                $attrs[$item->getName()] = new Selfie(
+            $attrName = $item->getName();
+            if ($attrName === 'selfie') {
+                $attrs[$attrName] = new Selfie(
                     $item->getValue()->getContents(),
                     $item->getContentType()->name()
                 );
             }
             else {
-                $attrs[$item->getName()] = $item->getValue()->getContents();
+                $attrs[$attrName] = $item->getValue()->getContents();
             }
-
+            // Build attribute object for user profile
+            $attrValue = $item->getValue()->getContents();
+            // Convert structured_postal_address value to an Array
+            if ($attrName === 'structured_postal_address') {
+                $attrValue = json_decode($attrValue, TRUE);
+            }
             $attributeAnchors = $anchorProcessor->process($item->getAnchorsList());
-
-            $attrName = $item->getName();
             $attribute = new Attribute(
                 $attrName,
-                $item->getValue()->getContents(),
+                $attrValue,
                 $attributeAnchors['sources'],
                 $attributeAnchors['verifiers']
             );
-            $profileAttributes[$attrName] = $attribute;
 
-            // Add age verification attributes
-            if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName))
-            {
+            $profileAttributes[$attrName] = $attribute;
+            // Add 'is_age_verified' and 'verified_age' attributes
+            if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
                 $isAgeVerifiedAttr = new Attribute(
                     Attribute::IS_AGE_VERIFIED,
                     NULL,
@@ -133,9 +134,8 @@ class ActivityDetails
         }
 
         $inst = new self($attrs, $rememberMeId);
-        // Add age verification attributes values if applicable
-        if (isset($profileAttributes[Attribute::IS_AGE_VERIFIED]))
-        {
+        // Add 'is_age_verified' and 'verified_age' attributes values
+        if (isset($profileAttributes[Attribute::IS_AGE_VERIFIED])) {
             $profileAttributes[Attribute::IS_AGE_VERIFIED]->setValue($inst->isAgeVerified());
             $profileAttributes[Attribute::VERIFIED_AGE]->setValue($inst->getVerifiedAge());
         }
@@ -330,7 +330,18 @@ class ActivityDetails
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        if (NULL === $postalAddress) {
+            // Get it from structured_postal_address.formatted_address
+            $structuredPostalAddress = $this->getStructuredPostalAddress();
+            if (
+                is_array($structuredPostalAddress)
+                && isset($structuredPostalAddress['formatted_address'])
+            ) {
+                $postalAddress = $structuredPostalAddress['formatted_address'];
+            }
+        }
+        return $postalAddress;
     }
 
     /**
