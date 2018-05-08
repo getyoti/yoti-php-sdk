@@ -6,93 +6,56 @@ use YotiTest\TestCase;
 
 class AttributeTest extends TestCase
 {
+    const ATTR_NAME = 'full_name';
+
+    const ATTR_VALUE = 'Test FullName';
+
+    const ATTR_SOURCES = [
+        'PASSPORT'
+    ];
+
+    const ATTR_VERIFIERS = [
+        'YOTI_ADMIN'
+    ];
+
     /**
      * @var Attribute
      */
-    public $attribute;
-
-    /**
-     * @var string
-     */
-    public $attributeName;
-    /**
-     * @var string
-     */
-    public $attributeValue;
-    /**
-     * @var array
-     */
-    public $attributeSources;
-    /**
-     * @var array
-     */
-    public $attributeVerifiers;
+    public $dummyAttribute;
 
     public function setup()
     {
-        $this->attributeName = 'full_name';
-        $this->attributeValue = 'Test FullName';
-        $this->attributeSources = [
-            'PASSPORT'
-        ];
-        $this->attributeVerifiers = [
-            'YOTI_ADMIN'
-        ];
-
-        $this->attribute = new Attribute(
-            $this->attributeName,
-            $this->attributeValue,
-            $this->attributeSources,
-            $this->attributeVerifiers
+        $this->dummyAttribute = new Attribute(
+            self::ATTR_NAME,
+            self::ATTR_VALUE,
+            self::ATTR_SOURCES,
+            self::ATTR_VERIFIERS
         );
     }
 
-    public function testSetName()
+    public function testAttributeName()
     {
-        $attribute = clone $this->attribute;
-        $attributeName = 'Test My Name';
-        $attribute->setName($attributeName);
-        $this->assertEquals($attributeName, $attribute->getName());
+        $this->assertEquals(self::ATTR_NAME, $this->dummyAttribute->getName());
     }
 
-    public function testGetName()
+    public function testAttributeValue()
     {
-        $this->assertEquals($this->attributeName, $this->attribute->getName());
+        $this->assertEquals(self::ATTR_VALUE, $this->dummyAttribute->getValue());
     }
 
-    public function testGetValue()
+    public function testAttributeSources()
     {
-        $this->assertEquals($this->attributeValue, $this->attribute->getValue());
-    }
-
-    public function testSetSources()
-    {
-        $attribute = clone $this->attribute;
-        $attributeNewSources = [
-            'USER_PROVIDED',
-            'PASSPORT',
-        ];
-        $attribute->setSources($attributeNewSources);
-
         $this->assertEquals(
-            json_encode($attributeNewSources),
-            json_encode($attribute->getSources())
+            json_encode(self::ATTR_SOURCES),
+            json_encode($this->dummyAttribute->getSources())
         );
     }
 
-    public function testGetSources()
+    public function testAttributeVerifiers()
     {
         $this->assertEquals(
-            json_encode($this->attributeSources),
-            json_encode($this->attribute->getSources())
-        );
-    }
-
-    public function testGetVerifiers()
-    {
-        $this->assertEquals(
-            json_encode($this->attributeVerifiers),
-            json_encode($this->attribute->getVerifiers())
+            json_encode(self::ATTR_VERIFIERS),
+            json_encode($this->dummyAttribute->getVerifiers())
         );
     }
 }

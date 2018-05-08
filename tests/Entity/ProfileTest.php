@@ -39,9 +39,15 @@ class ProfileTest extends TestCase
         $this->profile = $activityDetails->getProfile();
     }
 
-    public function testGetFullNameValue()
+    public function testGetAttributeValue()
     {
         $phoneNumber = $this->profile->getPhoneNumber();
         $this->assertEquals($this->expectedPhoneNumber, $phoneNumber->getValue());
+    }
+
+    public function testGetAttributeName()
+    {
+        $phoneNumber = $this->profile->getPhoneNumber();
+        $this->assertEquals('phone_number', $phoneNumber->getName());
     }
 }
