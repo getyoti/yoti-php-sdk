@@ -3,33 +3,33 @@ namespace Yoti\Entity;
 
 class Profile
 {
-    private $familyName;
+    protected $familyName;
 
-    private $givenNames;
+    protected $givenNames;
 
-    private $fullName;
+    protected $fullName;
 
-    private $dateOfBirth;
+    protected $dateOfBirth;
 
-    private $isAgeVerified;
+    protected $isAgeVerified;
 
-    private $verifiedAge;
+    protected $verifiedAge;
 
-    private $gender;
+    protected $gender;
 
-    private $nationality;
+    protected $nationality;
 
-    private $phoneNumber;
+    protected $phoneNumber;
 
-    private $selfie;
+    protected $selfie;
 
-    private $emailAddress;
+    protected $emailAddress;
 
-    private $postalAddress;
+    protected $postalAddress;
 
-    private $structuredPostalAddress;
+    protected $structuredPostalAddress;
 
-    private $emptyAttribute;
+    protected $emptyAttribute;
 
     /**
      * Profile constructor.
