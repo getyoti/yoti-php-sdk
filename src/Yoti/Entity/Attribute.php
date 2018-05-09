@@ -7,7 +7,7 @@ class Attribute
     const GIVEN_NAMES = 'given_names';
     const FULL_NAME = 'full_name';
     const DATE_OF_BIRTH = 'date_of_birth';
-    const IS_AGE_VERIFIED = 'is_age_verified';
+    const AGE_CONDITION = 'age_condition';
     const VERIFIED_AGE = 'verified_age';
     const GENDER = 'gender';
     const NATIONALITY = 'nationality';

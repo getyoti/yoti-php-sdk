@@ -60,6 +60,11 @@ class AnchorProcessor
             }
         }
 
+        // Make the anchors values unique
+        array_walk($anchorsData, function (&$anchors, $type) {
+            $anchors = array_unique($anchors);
+        });
+
         return $anchorsData;
     }
 

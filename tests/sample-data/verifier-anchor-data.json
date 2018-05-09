@@ -1,3 +1,0 @@
-[
-  {"type":2,"constant":3,"content":[{"start":584,"headerlength":2,"type":16,"content":[{"start":586,"headerlength":2,"type":16,"content":[{"start":588,"headerlength":2,"type":6,"content":"2.5.29.15","length":5},{"start":593,"headerlength":2,"type":1,"content":1,"length":3},{"start":596,"headerlength":2,"type":4,"content":"\u0003\u0002\u0003\ufffd","length":6}],"length":16},{"start":602,"headerlength":2,"type":16,"content":[{"start":604,"headerlength":2,"type":6,"content":"1.3.6.1.4.1.47127.1.1.2","length":13},{"start":617,"headerlength":2,"type":4,"content":"YOTI_ADMIN","length":16}],"length":31}],"length":49}],"length":51,"start":582,"headerlength":2}
-]
