@@ -275,6 +275,13 @@ The version of PHPUnit we are using requires `PHP 5.6` or above.
     * [X] Address `getPostalAddress()`
     * [X] Gender `getGender()`
     * [X] Nationality `getNationality()`
+    * [X] profile `getProfile()`
+        * [X] Photo `getSelfie()->getValue()`
+        * [X] Photo Sources `getSelfie()->getSources()`
+        * [X] Photo Verifiers `getSelfie()->getVerifiers()`
+        * [X] Given Names `getGivenNames()->getValue()`
+        * [X] Given Names Sources `getGivenNames()->getSources()`
+        * [X] Given Names Verifiers `getGivenNames()->getVerifiers()`
 
 ## Support
 
