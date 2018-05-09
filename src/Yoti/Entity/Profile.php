@@ -11,7 +11,7 @@ class Profile
 
     protected $dateOfBirth;
 
-    protected $isAgeVerified;
+    protected $ageCondition;
 
     protected $verifiedAge;
 
@@ -260,22 +260,22 @@ class Profile
     }
 
     /**
-     * @param Attribute $isAgeVerified
+     * @param Attribute $ageCondition
      */
-    public function setIsAgeVerified(Attribute $isAgeVerified)
+    public function setAgeCondition(Attribute $ageCondition)
     {
-        if ($isAgeVerified->getName() === Attribute::IS_AGE_VERIFIED)
+        if ($ageCondition->getName() === Attribute::AGE_CONDITION)
         {
-            $this->isAgeVerified = $isAgeVerified;
+            $this->ageCondition = $ageCondition;
         }
     }
 
     /**
      * @return Attribute
      */
-    public function getIsAgeVerified()
+    public function getAgeCondition()
     {
-        return $this->getProfileAttribute($this->isAgeVerified);
+        return $this->getProfileAttribute($this->ageCondition);
     }
 
     /**

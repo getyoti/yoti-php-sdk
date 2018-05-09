@@ -2,50 +2,46 @@
 
 namespace YotiTest\Util\Profile;
 
-use phpseclib\File\ASN1;
-use phpseclib\File\X509;
 use YotiTest\TestCase;
 use Yoti\Util\Profile\AnchorProcessor;
 
 class AnchorProcessorTest extends TestCase
 {
-    public $ASN1;
-    public $X509;
-    public $anchors;
-    public $anchorTypes;
-    public $sourceAnchorData;
-    public $verifierAnchorData;
+    public $anchorProcessor;
 
     public function setup()
     {
-        $this->ASN1 = new ASN1();
-        $this->X509 = new X509();
-        $this->anchorTypes = AnchorProcessor::getAnchorTypes();
-        $this->sourceAnchorData = json_decode(file_get_contents(SOURCE_ANCHOR_DATA), TRUE);
-        $this->verifierAnchorData = json_decode(file_get_contents(VERIFIER_ANCHOR_DATA), TRUE);
+        $this->anchorProcessor = new AnchorProcessor();
     }
 
     public function testSourceAnchor()
     {
-        $value = [];
-        $anchorFound = '';
-        AnchorProcessor::anchorFound($this->sourceAnchorData, $this->anchorTypes['sources'], $value);
-        if(!empty($value) && preg_match('/[a-zA-Z]+/', $value[0], $match)) {
-            $anchorFound = $match[0];
-        }
-
-        $this->assertEquals('PASSPORT', $anchorFound);
+        $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
+        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]);
     }
 
     public function testVerifierAnchor()
     {
-        $value = [];
-        $anchorFound = '';
-        AnchorProcessor::anchorFound($this->verifierAnchorData, $this->anchorTypes['verifiers'], $value);
-        if(!empty($value)) {
-            $anchorFound = $value[0];
-        }
+        $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
+        $this->assertEquals('YOTI_ADMIN', $anchorsData['verifiers'][0]);
+    }
 
-        $this->assertEquals('YOTI_ADMIN', $anchorFound);
+    public function testAnchorValuesAreUnique()
+    {
+        $stream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
+        $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
+        $collection = new \Protobuf\MessageCollection([$anchor,$anchor]);
+        $anchorsData = $this->anchorProcessor->process($collection);
+        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]);
+    }
+
+    protected function parseFromBase64String($anchorString)
+    {
+        $stream = \Protobuf\Stream::fromString(base64_decode($anchorString));
+        $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
+        $collection = new \Protobuf\MessageCollection([$anchor]);
+        $anchorsData = $this->anchorProcessor->process($collection);
+
+        return $anchorsData;
     }
 }

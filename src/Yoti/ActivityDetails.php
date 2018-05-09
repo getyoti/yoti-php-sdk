@@ -119,24 +119,24 @@ class ActivityDetails
             $profileAttributes[$attrName] = $attribute;
             // Add 'is_age_verified' and 'verified_age' attributes
             if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
-                $isAgeVerifiedAttr = new Attribute(
-                    Attribute::IS_AGE_VERIFIED,
+                $ageConditionAttr = new Attribute(
+                    Attribute::AGE_CONDITION,
                     NULL,
                     $attributeAnchors['sources'],
                     $attributeAnchors['verifiers']
                 );
-                $profileAttributes[Attribute::IS_AGE_VERIFIED] = $isAgeVerifiedAttr;
+                $profileAttributes[Attribute::AGE_CONDITION] = $ageConditionAttr;
 
-                $verifiedAgeAttr = clone $isAgeVerifiedAttr;
+                $verifiedAgeAttr = clone $ageConditionAttr;
                 $verifiedAgeAttr->setName(Attribute::VERIFIED_AGE);
                 $profileAttributes[Attribute::VERIFIED_AGE] = $verifiedAgeAttr;
             }
         }
 
         $inst = new self($attrs, $rememberMeId);
-        // Add 'is_age_verified' and 'verified_age' attributes values
-        if (isset($profileAttributes[Attribute::IS_AGE_VERIFIED])) {
-            $profileAttributes[Attribute::IS_AGE_VERIFIED]->setValue($inst->isAgeVerified());
+        // Add 'age_condition' and 'verified_age' attributes values
+        if (isset($profileAttributes[Attribute::AGE_CONDITION])) {
+            $profileAttributes[Attribute::AGE_CONDITION]->setValue($inst->isAgeVerified());
             $profileAttributes[Attribute::VERIFIED_AGE]->setValue($inst->getVerifiedAge());
         }
         $inst->setProfile(new Profile($profileAttributes));
