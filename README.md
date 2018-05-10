@@ -61,7 +61,7 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "1.1.*"
+    "yoti/yoti-php-sdk" : "1.2.*"
 }
 ```
 
@@ -257,7 +257,13 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 
 ## Running the tests
 
-The version of PHPUnit we are using requires `PHP 5.6` or above.
+PHPUnit requires `PHP 5.6` or above.
+
+Run the following commands from the root folder:
+```console
+$ composer update
+$ ./vendor/bin/phpunit tests
+```
 
 ## API Coverage
 
