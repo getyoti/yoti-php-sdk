@@ -32,16 +32,41 @@ class AnchorProcessorTest extends TestCase
         $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
         $collection = new \Protobuf\MessageCollection([$anchor,$anchor]);
         $anchorsData = $this->anchorProcessor->process($collection);
-        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]);
+
+        $this->assertEquals(
+            json_encode(['PASSPORT']),
+            json_encode($anchorsData['sources'])
+        );
     }
 
-    protected function parseFromBase64String($anchorString)
+    public function testGettingTwoSourceAnchors()
+    {
+        $passportStream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
+        $passportAnchor = \attrpubapi_v1\Anchor::fromStream($passportStream);
+
+        $dlStream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
+        $dlAnchor = \attrpubapi_v1\Anchor::fromStream($dlStream);
+
+        $collection = new \Protobuf\MessageCollection([$passportAnchor, $dlAnchor]);
+        $anchorsData = $this->anchorProcessor->process($collection);
+        $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
+
+        $this->assertEquals(
+            json_encode($expectedAnchors),
+            json_encode($anchorsData['sources'])
+        );
+    }
+
+    /**
+     * @param $anchorString
+     * @return array $anchors
+     */
+    public function parseFromBase64String($anchorString)
     {
         $stream = \Protobuf\Stream::fromString(base64_decode($anchorString));
         $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
         $collection = new \Protobuf\MessageCollection([$anchor]);
-        $anchorsData = $this->anchorProcessor->process($collection);
 
-        return $anchorsData;
+        return $this->anchorProcessor->process($collection);
     }
 }
