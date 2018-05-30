@@ -4,6 +4,7 @@ namespace Yoti\Util\Profile;
 use Traversable;
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
+use Yoti\Entity\Anchor as YotiAnchor;
 
 class AnchorProcessor
 {
@@ -34,6 +35,7 @@ class AnchorProcessor
     {
         $anchorsData = ['sources'=>[], 'verifiers'=>[]];
         $anchorTypes = self::getAnchorTypes();
+        $addedAnchors = [];
 
         foreach ($anchorList as $anchor) {
             $certificateList = $anchor->getOriginServerCertsList();
@@ -54,16 +56,26 @@ class AnchorProcessor
                             $keyExists = isset($decodedValue[0]['content'][0]['content']);
                             $anchorValue = $keyExists ? $decodedValue[0]['content'][0]['content'] : '';
                         }
-                        $anchorsData[$type][] = $anchorValue;
+
+                        // Make the anchors values unique
+                        if (!in_array($anchorValue, $addedAnchors, TRUE)) {
+                            $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCertsList());
+                            $yotiAnchor = new YotiAnchor(
+                                $anchorValue,
+                                $anchor->getArtifactLink(),
+                                $anchor->getSubType(),
+                                $anchor->getSignature(),
+                                $anchor->getSignedTimeStamp(),
+                                $X509CertsList,
+                                ''
+                            );
+                            $anchorsData[$type][] = $yotiAnchor;
+                            $addedAnchors[] = $anchorValue;
+                        }
                     }
                 }
             }
         }
-
-        // Make the anchors values unique
-        array_walk($anchorsData, function (&$anchors, $type) {
-            $anchors = array_unique($anchors);
-        });
 
         return $anchorsData;
     }
@@ -109,6 +121,25 @@ class AnchorProcessor
             }
         }
         return FALSE;
+    }
+
+    public function convertCertsListToX509(Traversable $certificateList) {
+        $certsList = [];
+        foreach($certificateList as $certificate) {
+            $X509Cert = $this->convertCertsToX509($certificate);
+            if (NULL !== $X509Cert) {
+                $certsList[] = $this->convertCertsToX509($certificate);
+            }
+        }
+        return $certsList;
+    }
+
+    public function convertCertsToX509(\Protobuf\Stream $certificate) {
+        $contents = $certificate->getContents();
+        $X509Data = $this->X509->loadX509($contents);
+        $X509Obj = json_decode(json_encode($X509Data), FALSE);
+
+        return $X509Obj ? $X509Obj->tbsCertificate : NULL;
     }
 
     /**

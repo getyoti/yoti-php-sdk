@@ -10,13 +10,8 @@ class AttributeTest extends TestCase
 
     const ATTR_VALUE = 'Test FullName';
 
-    const ATTR_SOURCES = [
-        'PASSPORT'
-    ];
-
-    const ATTR_VERIFIERS = [
-        'YOTI_ADMIN'
-    ];
+    protected $attributeSources = ['PASSPORT'];
+    protected $attributeVerifiers = ['YOTI_ADMIN'];
 
     /**
      * @var Attribute
@@ -28,8 +23,8 @@ class AttributeTest extends TestCase
         $this->dummyAttribute = new Attribute(
             self::ATTR_NAME,
             self::ATTR_VALUE,
-            self::ATTR_SOURCES,
-            self::ATTR_VERIFIERS
+            $this->attributeSources,
+            $this->attributeVerifiers
         );
     }
 
@@ -46,7 +41,7 @@ class AttributeTest extends TestCase
     public function testAttributeSources()
     {
         $this->assertEquals(
-            json_encode(self::ATTR_SOURCES),
+            json_encode($this->attributeSources),
             json_encode($this->dummyAttribute->getSources())
         );
     }
@@ -54,7 +49,7 @@ class AttributeTest extends TestCase
     public function testAttributeVerifiers()
     {
         $this->assertEquals(
-            json_encode(self::ATTR_VERIFIERS),
+            json_encode($this->attributeVerifiers),
             json_encode($this->dummyAttribute->getVerifiers())
         );
     }

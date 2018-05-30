@@ -3,275 +3,108 @@ namespace Yoti\Entity;
 
 class Profile
 {
-    protected $familyName;
-
-    protected $givenNames;
-
-    protected $fullName;
-
-    protected $dateOfBirth;
-
-    protected $ageCondition;
-
-    protected $verifiedAge;
-
-    protected $gender;
-
-    protected $nationality;
-
-    protected $phoneNumber;
-
-    protected $selfie;
-
-    protected $emailAddress;
-
-    protected $postalAddress;
-
-    protected $structuredPostalAddress;
-
-    protected $emptyAttribute;
+    private $profileData;
 
     /**
      * Profile constructor.
      *
-     * @param array $attributes
+     * @param array $profileData
      */
-    public function __construct(array $attributes)
+    public function __construct(array $profileData)
     {
-        foreach($attributes as $name => $attribute)
-        {
-            $setter = 'set'.str_replace('_', '',ucwords($name, '_'));
-            if(is_a($attribute, Attribute::class) && method_exists($this, $setter))
-            {
-                $this->{$setter}($attribute);
-            }
-        }
-
-        $this->emptyAttribute = new Attribute('');
+        $this->profileData = $profileData;
     }
 
     /**
-     * @param Attribute $fullName
-     */
-    public function setFullName(Attribute $fullName)
-    {
-        if($fullName->getName() === Attribute::FULL_NAME)
-        {
-            $this->fullName = $fullName;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getFullName()
     {
-        return $this->getProfileAttribute($this->fullName);
+        return $this->getProfileAttribute(Attribute::FULL_NAME);
     }
 
     /**
-     * @param Attribute $familyName
-     */
-    public function setFamilyName(Attribute $familyName)
-    {
-        if($familyName->getName() === Attribute::FAMILY_NAME)
-        {
-            $this->familyName = $familyName;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getFamilyName()
     {
-        return $this->getProfileAttribute($this->familyName);
+        return $this->getProfileAttribute(Attribute::FAMILY_NAME);
     }
 
     /**
-     * @param Attribute $givenNames
-     */
-    public function setGivenNames(Attribute $givenNames)
-    {
-        if($givenNames->getName() === Attribute::GIVEN_NAMES)
-        {
-            $this->givenNames = $givenNames;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getGivenNames()
     {
-        return $this->getProfileAttribute($this->givenNames);
+        return $this->getProfileAttribute(Attribute::GIVEN_NAMES);
     }
 
     /**
-     * @param Attribute $dateOfBirth
-     */
-    public function setDateOfBirth(Attribute $dateOfBirth)
-    {
-        if($dateOfBirth->getName() === Attribute::DATE_OF_BIRTH)
-        {
-            $this->dateOfBirth = $dateOfBirth;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getDateOfBirth()
     {
-        return $this->getProfileAttribute($this->dateOfBirth);
+        return $this->getProfileAttribute(Attribute::DATE_OF_BIRTH);
     }
 
     /**
-     * @param Attribute $gender
-     */
-    public function setGender(Attribute $gender)
-    {
-        if($gender->getName() === Attribute::GENDER)
-        {
-            $this->gender = $gender;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getGender()
     {
-        return $this->getProfileAttribute($this->gender);
+        return $this->getProfileAttribute(Attribute::GENDER);
     }
 
     /**
-     * @param Attribute $nationality
-     */
-    public function setNationality(Attribute $nationality)
-    {
-        if($nationality->getName() === Attribute::NATIONALITY)
-        {
-            $this->nationality = $nationality;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getNationality()
     {
-        return $this->getProfileAttribute($this->nationality);
+        return $this->getProfileAttribute(Attribute::NATIONALITY);
     }
 
     /**
-     * @param Attribute $phoneNumber
-     */
-    public function setPhoneNumber(Attribute $phoneNumber)
-    {
-        if($phoneNumber->getName() === Attribute::PHONE_NUMBER)
-        {
-            $this->phoneNumber = $phoneNumber;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getPhoneNumber()
     {
-        return $this->getProfileAttribute($this->phoneNumber);
+        return $this->getProfileAttribute(Attribute::PHONE_NUMBER);
     }
 
     /**
-     * @param Attribute $selfie
-     */
-    public function setSelfie(Attribute $selfie)
-    {
-        if($selfie->getName() === Attribute::SELFIE)
-        {
-            $this->selfie = $selfie;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getSelfie()
     {
-        return $this->getProfileAttribute($this->selfie);
+        return $this->getProfileAttribute(Attribute::SELFIE);
     }
 
     /**
-     * @param Attribute $emailAddress
-     */
-    public function setEmailAddress(Attribute $emailAddress)
-    {
-        if($emailAddress->getName() === Attribute::EMAIL_ADDRESS)
-        {
-            $this->emailAddress = $emailAddress;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getEmailAddress()
     {
-        return $this->getProfileAttribute($this->emailAddress);
+        return $this->getProfileAttribute(Attribute::EMAIL_ADDRESS);
     }
 
     /**
-     * @param Attribute $postalAddress
-     */
-    public function setPostalAddress(Attribute $postalAddress)
-    {
-        if($postalAddress->getName() === Attribute::POSTAL_ADDRESS)
-        {
-            $this->postalAddress = $postalAddress;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute($this->postalAddress);
+        return $this->getProfileAttribute(Attribute::POSTAL_ADDRESS);
     }
 
     /**
-     * @param Attribute $structuredPostalAddress
-     */
-    public function setStructuredPostalAddress(Attribute $structuredPostalAddress)
-    {
-        if ($structuredPostalAddress->getName() === Attribute::STRUCTURED_POSTAL_ADDRESS)
-        {
-            $this->structuredPostalAddress = $structuredPostalAddress;
-        }
-    }
-
-    /**
-     * @return null|array
+     * @return null|Attribute
      */
     public function getStructuredPostalAddress()
     {
-        return $this->structuredPostalAddress;
+        return $this->getProfileAttribute(Attribute::STRUCTURED_POSTAL_ADDRESS);
     }
 
     /**
-     * @param Attribute $ageCondition
-     */
-    public function setAgeCondition(Attribute $ageCondition)
-    {
-        if ($ageCondition->getName() === Attribute::AGE_CONDITION)
-        {
-            $this->ageCondition = $ageCondition;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getAgeCondition()
     {
@@ -279,18 +112,7 @@ class Profile
     }
 
     /**
-     * @param Attribute $verifiedAge
-     */
-    public function setVerifiedAge(Attribute $verifiedAge)
-    {
-        if ($verifiedAge->getName() === Attribute::VERIFIED_AGE)
-        {
-            $this->verifiedAge = $verifiedAge;
-        }
-    }
-
-    /**
-     * @return Attribute
+     * @return null|Attribute
      */
     public function getVerifiedAge()
     {
@@ -298,12 +120,16 @@ class Profile
     }
 
     /**
-     * @param $attributeName
+     * @param $attributeName.
      *
-     * @return Attribute
+     * @return null|Attribute
      */
     private function getProfileAttribute($attributeName)
     {
-        return NULL !== $attributeName ? $attributeName : $this->emptyAttribute;
+        if (isset($this->profileData[$attributeName])) {
+            $attributeObj = $this->profileData[$attributeName];
+            return $attributeObj instanceof Attribute ? $attributeObj : NULL;
+        }
+        return NULL;
     }
 }
