@@ -126,15 +126,15 @@ class AnchorProcessor
     public function convertCertsListToX509(Traversable $certificateList) {
         $certsList = [];
         foreach($certificateList as $certificate) {
-            $X509Cert = $this->convertCertsToX509($certificate);
+            $X509Cert = $this->convertCertToX509($certificate);
             if (NULL !== $X509Cert) {
-                $certsList[] = $this->convertCertsToX509($certificate);
+                $certsList[] = $X509Cert;
             }
         }
         return $certsList;
     }
 
-    public function convertCertsToX509(\Protobuf\Stream $certificate) {
+    public function convertCertToX509(\Protobuf\Stream $certificate) {
         $contents = $certificate->getContents();
         $X509Data = $this->X509->loadX509($contents);
         $X509Obj = json_decode(json_encode($X509Data), FALSE);
