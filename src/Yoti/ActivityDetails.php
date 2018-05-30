@@ -67,7 +67,7 @@ class ActivityDetails
         }
 
         // Setting an empty profile here in case
-        // the constructor is called from self::constructFromAttributeList
+        // the constructor is called directly
         $this->setProfile(new Profile([]));
 
         $this->helper = new ActivityDetailsHelper($this);

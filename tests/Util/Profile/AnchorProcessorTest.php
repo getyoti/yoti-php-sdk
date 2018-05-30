@@ -17,13 +17,14 @@ class AnchorProcessorTest extends TestCase
     public function testSourceAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
-        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]);
+        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]->getValue());
     }
 
     public function testVerifierAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
-        $this->assertEquals('YOTI_ADMIN', $anchorsData['verifiers'][0]);
+        $anchorVerifiersObj = $anchorsData['verifiers'][0];
+        $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
     }
 
     public function testAnchorValuesAreUnique()
@@ -33,9 +34,14 @@ class AnchorProcessorTest extends TestCase
         $collection = new \Protobuf\MessageCollection([$anchor,$anchor]);
         $anchorsData = $this->anchorProcessor->process($collection);
 
+        $anchorSources = [];
+        foreach($anchorsData['sources'] as $anchorObj) {
+            $anchorSources[] = $anchorObj->getValue();
+        }
+
         $this->assertEquals(
             json_encode(['PASSPORT']),
-            json_encode($anchorsData['sources'])
+            json_encode($anchorSources)
         );
     }
 
@@ -49,11 +55,13 @@ class AnchorProcessorTest extends TestCase
 
         $collection = new \Protobuf\MessageCollection([$passportAnchor, $dlAnchor]);
         $anchorsData = $this->anchorProcessor->process($collection);
+        $anchorSource1 = $anchorsData['sources'][0]->getValue();
+        $anchorVSource2 = $anchorsData['sources'][1]->getValue();
         $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
 
         $this->assertEquals(
             json_encode($expectedAnchors),
-            json_encode($anchorsData['sources'])
+            json_encode([$anchorSource1, $anchorVSource2])
         );
     }
 
