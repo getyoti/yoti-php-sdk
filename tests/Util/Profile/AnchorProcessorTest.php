@@ -56,12 +56,12 @@ class AnchorProcessorTest extends TestCase
         $collection = new \Protobuf\MessageCollection([$passportAnchor, $dlAnchor]);
         $anchorsData = $this->anchorProcessor->process($collection);
         $anchorSource1 = $anchorsData['sources'][0]->getValue();
-        $anchorVSource2 = $anchorsData['sources'][1]->getValue();
+        $anchorSource2 = $anchorsData['sources'][1]->getValue();
         $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
 
         $this->assertEquals(
             json_encode($expectedAnchors),
-            json_encode([$anchorSource1, $anchorVSource2])
+            json_encode([$anchorSource1, $anchorSource2])
         );
     }
 

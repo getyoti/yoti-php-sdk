@@ -20,22 +20,22 @@ class Attribute
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $value;
+    protected $value;
 
     /**
      * @var array
      */
-    private $sources = [];
+    protected $sources;
 
     /**
      * @var array
      */
-    private $verifiers = [];
+    protected $verifiers;
 
     /**
      * Attribute constructor.
@@ -45,23 +45,12 @@ class Attribute
      * @param array $sources
      * @param array $verifiers
      */
-    public function __construct($name, $value = NULL, $sources = [], $verifiers = [])
+    public function __construct($name, $value = NULL, array $sources, array $verifiers)
     {
-        $this->setName($name);
-        $this->setValue($value);
-        $this->setSources($sources);
-        $this->setVerifiers($verifiers);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        if(!empty($name))
-        {
-            $this->name = $name;
-        }
+        $this->name = $name;
+        $this->value = $value;
+        $this->sources = $sources;
+        $this->verifiers = $verifiers;
     }
 
     /**
@@ -73,17 +62,6 @@ class Attribute
     }
 
     /**
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        if(!empty($value))
-        {
-            $this->value = $value;
-        }
-    }
-
-    /**
      * @return null|string
      */
     public function getValue()
@@ -92,33 +70,11 @@ class Attribute
     }
 
     /**
-     * @param array $sources
-     */
-    public function setSources(array $sources)
-    {
-        if(!empty($sources))
-        {
-            $this->sources = $sources;
-        }
-    }
-
-    /**
      * @return array
      */
     public function getSources()
     {
         return $this->sources;
-    }
-
-    /**
-     * @param array $verifiers
-     */
-    public function setVerifiers(array $verifiers)
-    {
-        if(!empty($verifiers))
-        {
-            $this->verifiers = $verifiers;
-        }
     }
 
     /**

@@ -62,7 +62,6 @@ class AnchorProcessor
                             $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCertsList());
                             $yotiAnchor = new YotiAnchor(
                                 $anchorValue,
-                                $anchor->getArtifactLink(),
                                 $anchor->getSubType(),
                                 $anchor->getSignature(),
                                 $anchor->getSignedTimeStamp(),
@@ -137,9 +136,7 @@ class AnchorProcessor
     public function convertCertToX509(\Protobuf\Stream $certificate) {
         $contents = $certificate->getContents();
         $X509Data = $this->X509->loadX509($contents);
-        $X509Obj = json_decode(json_encode($X509Data), FALSE);
-
-        return $X509Obj ? $X509Obj->tbsCertificate : NULL;
+        return json_decode(json_encode($X509Data), FALSE);
     }
 
     /**

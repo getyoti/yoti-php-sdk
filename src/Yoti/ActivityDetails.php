@@ -87,6 +87,7 @@ class ActivityDetails
         $attrs = [];
         // For Profile attributes
         $profileAttributes = [];
+        $ageConditionMetadata = [];
         $anchorProcessor = new AnchorProcessor();
 
         foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
@@ -118,25 +119,27 @@ class ActivityDetails
             $profileAttributes[$attrName] = $attribute;
             // Add 'is_age_verified' and 'verified_age' attributes
             if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
-                $ageConditionAttr = new Attribute(
-                    Attribute::AGE_CONDITION,
-                    NULL,
-                    $attributeAnchors['sources'],
-                    $attributeAnchors['verifiers']
-                );
-                $profileAttributes[Attribute::AGE_CONDITION] = $ageConditionAttr;
-
-                $verifiedAgeAttr = clone $ageConditionAttr;
-                $verifiedAgeAttr->setName(Attribute::VERIFIED_AGE);
-                $profileAttributes[Attribute::VERIFIED_AGE] = $verifiedAgeAttr;
+                $ageConditionMetadata['sources'] = $attributeAnchors['sources'];
+                $ageConditionMetadata['verifiers'] = $attributeAnchors['verifiers'];
             }
         }
 
         $inst = new self($attrs, $rememberMeId);
         // Add 'age_condition' and 'verified_age' attributes values
-        if (isset($profileAttributes[Attribute::AGE_CONDITION])) {
-            $profileAttributes[Attribute::AGE_CONDITION]->setValue($inst->isAgeVerified());
-            $profileAttributes[Attribute::VERIFIED_AGE]->setValue($inst->getVerifiedAge());
+        if (!empty($ageConditionMetadata)) {
+            $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
+                Attribute::AGE_CONDITION,
+                $inst->isAgeVerified(),
+                $ageConditionMetadata['sources'],
+                $ageConditionMetadata['verifiers']
+            );
+
+            $profileAttributes[Attribute::VERIFIED_AGE] = new Attribute(
+                Attribute::VERIFIED_AGE,
+                $inst->getVerifiedAge(),
+                $ageConditionMetadata['sources'],
+                $ageConditionMetadata['verifiers']
+            );
         }
         $inst->setProfile(new Profile($profileAttributes));
 
