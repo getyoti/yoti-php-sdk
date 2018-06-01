@@ -11,11 +11,6 @@ class Anchor
     protected $value;
 
     /**
-     * @var \Protobuf\Stream
-     */
-    protected $artifactLink;
-
-    /**
      * @var string
      */
     protected $subType;
@@ -42,15 +37,13 @@ class Anchor
 
     public function __construct(
         $value,
-        $artifactLink,
         $subType,
         $signature,
         $signedTimeStamp,
-        $originServerCerts,
+        array $originServerCerts,
         $associatedSource
     ) {
         $this->value = $value;
-        $this->artifactLink = $artifactLink;
         $this->subType = $subType;
         $this->signature = $signature;
         $this->signedTimeStamp = $signedTimeStamp;
@@ -60,10 +53,6 @@ class Anchor
 
     public function getValue() {
         return $this->value;
-    }
-
-    public function getArtifactLink() {
-        return $this->artifactLink;
     }
 
     public function getSubtype() {
