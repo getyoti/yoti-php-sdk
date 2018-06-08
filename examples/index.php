@@ -15,9 +15,7 @@ require_once __DIR__ . '/bootstrap.php';
     </head>
     <body>
         <h1>Your Site Information</h1>
-        <span data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
-            data-yoti-type="inline"
-            data-yoti-scenario-id="<?php echo getenv('YOTI_SCENARIO_ID') ?>">
+        <span data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>">
          Use Yoti
         </span>
 
