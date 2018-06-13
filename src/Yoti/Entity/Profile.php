@@ -108,7 +108,7 @@ class Profile
      */
     public function getAgeCondition()
     {
-        return $this->getProfileAttribute($this->ageCondition);
+        return $this->getProfileAttribute(Attribute::AGE_CONDITION);
     }
 
     /**
@@ -116,7 +116,7 @@ class Profile
      */
     public function getVerifiedAge()
     {
-        return $this->getProfileAttribute($this->verifiedAge);
+        return $this->getProfileAttribute(Attribute::VERIFIED_AGE);
     }
 
     /**

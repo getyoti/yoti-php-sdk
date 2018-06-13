@@ -35,7 +35,6 @@ class AnchorProcessor
     {
         $anchorsData = ['sources'=>[], 'verifiers'=>[]];
         $anchorTypes = self::getAnchorTypes();
-        $addedAnchors = [];
 
         foreach ($anchorList as $anchor) {
             $certificateList = $anchor->getOriginServerCertsList();
@@ -57,20 +56,15 @@ class AnchorProcessor
                             $anchorValue = $keyExists ? $decodedValue[0]['content'][0]['content'] : '';
                         }
 
-                        // Make the anchors values unique
-                        if (!in_array($anchorValue, $addedAnchors, TRUE)) {
-                            $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCertsList());
-                            $yotiAnchor = new YotiAnchor(
-                                $anchorValue,
-                                $anchor->getSubType(),
-                                $anchor->getSignature(),
-                                $anchor->getSignedTimeStamp(),
-                                $X509CertsList,
-                                ''
-                            );
-                            $anchorsData[$type][] = $yotiAnchor;
-                            $addedAnchors[] = $anchorValue;
-                        }
+                        $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCertsList());
+                        $anchorsData[$type][] = new YotiAnchor(
+                            $anchorValue,
+                            $anchor->getSubType(),
+                            $anchor->getSignature(),
+                            $anchor->getArtifactSignature(),
+                            $anchor->getSignedTimeStamp(),
+                            $X509CertsList
+                        );
                     }
                 }
             }
