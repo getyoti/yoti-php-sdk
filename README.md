@@ -192,7 +192,7 @@ $value = $givenNamesSources[0]->getValue(); // string
 $subType = $givenNamesSources[0]->getSubType(); // string
 $signature = $givenNamesSources[0]->getSignature(); // bytes
 $artifactSignature = $givenNamesSources[0]->getArtifactSignature(); // bytes
-$timeStamp = $givenNamesSources[0]->getTimeStamp(); // bytes
+$timeStamp = $givenNamesSources[0]->getTimeStamp(); // integer
 $signedTimeStamp = $givenNamesSources[0]->getSignedTimeStamp(); // bytes
 $originServerCerts = $givenNamesSources[0]->getOriginServerCerts(); // list of X509 certificates
 ```
