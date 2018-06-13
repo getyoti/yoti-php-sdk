@@ -27,24 +27,6 @@ class AnchorProcessorTest extends TestCase
         $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
     }
 
-    public function testAnchorValuesAreUnique()
-    {
-        $stream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
-        $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
-        $collection = new \Protobuf\MessageCollection([$anchor,$anchor]);
-        $anchorsData = $this->anchorProcessor->process($collection);
-
-        $anchorSources = [];
-        foreach($anchorsData['sources'] as $anchorObj) {
-            $anchorSources[] = $anchorObj->getValue();
-        }
-
-        $this->assertEquals(
-            json_encode(['PASSPORT']),
-            json_encode($anchorSources)
-        );
-    }
-
     public function testGettingTwoSourceAnchors()
     {
         $passportStream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));

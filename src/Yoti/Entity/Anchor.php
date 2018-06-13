@@ -20,58 +20,89 @@ class Anchor
      */
     protected $signature;
 
+    protected $artifactSignature;
+
     /**
      * @var \Protobuf\Stream
      */
     protected $signedTimeStamp;
 
     /**
+     * @var int
+     */
+    protected $timeStamp;
+
+    /**
      * @var array
      */
     protected $originServerCerts;
-
-    /**
-     * @var
-     */
-    protected $associatedSource;
 
     public function __construct(
         $value,
         $subType,
         $signature,
+        $artifactSignature,
         $signedTimeStamp,
-        array $originServerCerts,
-        $associatedSource
+        array $originServerCerts
     ) {
         $this->value = $value;
         $this->subType = $subType;
         $this->signature = $signature;
+        $this->artifactSignature = $artifactSignature;
         $this->signedTimeStamp = $signedTimeStamp;
         $this->originServerCerts = $originServerCerts;
-        $this->associatedSource = $associatedSource;
+
+        $config = new \Protobuf\Configuration();
+        $streamReader = $config->getStreamReader();
+        $this->timeStamp = $streamReader->readFixed32($this->signedTimeStamp);
     }
 
+    /**
+     * @return string
+     */
     public function getValue() {
         return $this->value;
     }
 
+    /**
+     * @return string
+     */
     public function getSubtype() {
         return $this->subType;
     }
 
+    /**
+     * @return \Protobuf\Stream
+     */
     public function getSignature() {
         return $this->signature;
     }
 
+    /**
+     * @return \Protobuf\Stream
+     */
+    public function getArtifactSignature() {
+        return $this->artifactSignature;
+    }
+
+    /**
+     * @return \Protobuf\Stream
+     */
     public function getSignedTimeStamp() {
         return $this->signedTimeStamp;
     }
 
-    public function getOriginServerCerts() {
-        return  $this->originServerCerts;
+    /**
+     * @return int
+     */
+    public function getTimeStamp() {
+        return $this->timeStamp;
     }
 
-    public function getAssociatedSource() {
-        return $this->associatedSource;
+    /**
+     * @return array of X509 certs
+     */
+    public function getOriginServerCerts() {
+        return  $this->originServerCerts;
     }
 }
