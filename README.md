@@ -139,7 +139,7 @@ $emailAddress       = $profile->getEmailAddress()->getValue();
 
 $postalAddress      = $profile->getPostalAddress()->getValue();
 
-$ageVerified        = $profile->isAgeVerified()->getValue();
+$ageVerified        = $profile->getAgeCondition()->getValue();
 
 $verifiedAge        = $profile->getVerifiedAge()->getValue();
 ```
