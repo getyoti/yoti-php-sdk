@@ -121,7 +121,7 @@ $profile            = $activityDetails->getProfile();
 
 $familyName         = $profile->getFamilyName()->getValue();
 
-$givenName          = $profile->getGivenNames()->getValue();
+$givenNames         = $profile->getGivenNames()->getValue();
 
 $fullName           = $profile->getFullName()->getValue();
 

@@ -179,7 +179,7 @@ class ActivityDetails
     /**
      * @param Profile $profile
      */
-    public function setProfile(Profile $profile)
+    protected function setProfile(Profile $profile)
     {
         $this->profile = $profile;
     }
@@ -219,6 +219,8 @@ class ActivityDetails
     /**
      * Get family name.
      *
+     * @deprecated since 1.2.0, Use profile::getFamilyName()
+     *
      * @return null|string
      */
     public function getFamilyName()
@@ -228,6 +230,8 @@ class ActivityDetails
 
     /**
      * Get given names.
+     *
+     * @deprecated since 1.2.0, Use profile::getGivenNames()
      *
      * @return null|string
      */
@@ -239,6 +243,8 @@ class ActivityDetails
     /**
      * Get full name.
      *
+     * @deprecated since 1.2.0, Use profile::getFullName()
+     *
      * @return null|string
      */
     public function getFullName()
@@ -248,6 +254,8 @@ class ActivityDetails
 
     /**
      * Get date of birth.
+     *
+     * @deprecated since 1.2.0, Use profile::getDateOfBirth()
      *
      * @return null|string
      */
@@ -259,6 +267,8 @@ class ActivityDetails
     /**
      * Get gender.
      *
+     * @deprecated since 1.2.0, Use profile::getGender()
+     *
      * @return null|string
      */
     public function getGender()
@@ -268,6 +278,8 @@ class ActivityDetails
 
     /**
      * Get user nationality.
+     *
+     * @deprecated since 1.2.0, Use profile::getNationality()
      *
      * @return null|string
      */
@@ -279,6 +291,8 @@ class ActivityDetails
     /**
      * Get user phone number.
      *
+     * @deprecated since 1.2.0, Use profile::getPhoneNumber()
+     *
      * @return null|string
      */
     public function getPhoneNumber()
@@ -288,6 +302,8 @@ class ActivityDetails
 
     /**
      * Get user selfie image data.
+     *
+     * @deprecated since 1.2.0, Use profile::getSelfie()
      *
      * @return null|string
      */
@@ -306,6 +322,8 @@ class ActivityDetails
     /**
      * Get selfie image object.
      *
+     * @deprecated since 1.2.0
+     *
      * @return null| \Yoti\Entity\Selfie $selfie
      */
     public function getSelfieEntity()
@@ -318,6 +336,8 @@ class ActivityDetails
     /**
      * Get user email address.
      *
+     * @deprecated since 1.2.0, Use profile::getEmailAddress()
+     *
      * @return null|string
      */
     public function getEmailAddress()
@@ -327,6 +347,8 @@ class ActivityDetails
 
     /**
      * Get user address.
+     *
+     * @deprecated since 1.2.0, Use profile::getPostalAddress()
      *
      * @return null|string
      */
@@ -349,6 +371,8 @@ class ActivityDetails
     /**
      * Get user structured postal address as an array.
      *
+     * @deprecated since 1.2.0, Use profile::getStructuredPostalAddress()
+     *
      * @return null|array
      */
     public function getStructuredPostalAddress()
@@ -361,6 +385,8 @@ class ActivityDetails
      * Returns a boolean representing the attribute value
      * Or null if the attribute is not set in the dashboard
      *
+     * @deprecated since 1.2.0, Use profile::getAgeCondition()
+     *
      * @return bool|null
      */
     public function isAgeVerified()
@@ -369,6 +395,8 @@ class ActivityDetails
     }
 
     /**
+     * @deprecated since 1.2.0, Use profile::getVerifiedAge()
+     *
      * @return null|string
      */
     public function getVerifiedAge()
