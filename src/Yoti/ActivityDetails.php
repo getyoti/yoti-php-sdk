@@ -219,7 +219,8 @@ class ActivityDetails
     /**
      * Get family name.
      *
-     * @deprecated since 1.2.0, Use profile::getFamilyName()
+     * @deprecated 1.2.0
+     *  Use profile::getFamilyName()
      *
      * @return null|string
      */
@@ -231,7 +232,8 @@ class ActivityDetails
     /**
      * Get given names.
      *
-     * @deprecated since 1.2.0, Use profile::getGivenNames()
+     * @deprecated 1.2.0
+     *  Use profile::getGivenNames()
      *
      * @return null|string
      */
@@ -243,7 +245,8 @@ class ActivityDetails
     /**
      * Get full name.
      *
-     * @deprecated since 1.2.0, Use profile::getFullName()
+     * @deprecated 1.2.0
+     *  Use profile::getFullName()
      *
      * @return null|string
      */
@@ -255,7 +258,8 @@ class ActivityDetails
     /**
      * Get date of birth.
      *
-     * @deprecated since 1.2.0, Use profile::getDateOfBirth()
+     * @deprecated 1.2.0
+     *  Use profile::getDateOfBirth()
      *
      * @return null|string
      */
@@ -267,7 +271,8 @@ class ActivityDetails
     /**
      * Get gender.
      *
-     * @deprecated since 1.2.0, Use profile::getGender()
+     * @deprecated 1.2.0
+     *  Use profile::getGender()
      *
      * @return null|string
      */
@@ -279,7 +284,8 @@ class ActivityDetails
     /**
      * Get user nationality.
      *
-     * @deprecated since 1.2.0, Use profile::getNationality()
+     * @deprecated 1.2.0
+     *  Use profile::getNationality()
      *
      * @return null|string
      */
@@ -291,7 +297,8 @@ class ActivityDetails
     /**
      * Get user phone number.
      *
-     * @deprecated since 1.2.0, Use profile::getPhoneNumber()
+     * @deprecated 1.2.0
+     *  Use profile::getPhoneNumber()
      *
      * @return null|string
      */
@@ -303,7 +310,8 @@ class ActivityDetails
     /**
      * Get user selfie image data.
      *
-     * @deprecated since 1.2.0, Use profile::getSelfie()
+     * @deprecated 1.2.0
+     *  Use profile::getSelfie()
      *
      * @return null|string
      */
@@ -322,7 +330,7 @@ class ActivityDetails
     /**
      * Get selfie image object.
      *
-     * @deprecated since 1.2.0
+     * @deprecated 1.2.0
      *
      * @return null| \Yoti\Entity\Selfie $selfie
      */
@@ -336,7 +344,8 @@ class ActivityDetails
     /**
      * Get user email address.
      *
-     * @deprecated since 1.2.0, Use profile::getEmailAddress()
+     * @deprecated 1.2.0
+     *  Use profile::getEmailAddress()
      *
      * @return null|string
      */
@@ -348,7 +357,8 @@ class ActivityDetails
     /**
      * Get user address.
      *
-     * @deprecated since 1.2.0, Use profile::getPostalAddress()
+     * @deprecated 1.2.0
+     *  Use profile::getPostalAddress()
      *
      * @return null|string
      */
@@ -371,7 +381,8 @@ class ActivityDetails
     /**
      * Get user structured postal address as an array.
      *
-     * @deprecated since 1.2.0, Use profile::getStructuredPostalAddress()
+     * @deprecated 1.2.0
+     *  Use profile::getStructuredPostalAddress()
      *
      * @return null|array
      */
@@ -385,7 +396,8 @@ class ActivityDetails
      * Returns a boolean representing the attribute value
      * Or null if the attribute is not set in the dashboard
      *
-     * @deprecated since 1.2.0, Use profile::getAgeCondition()
+     * @deprecated 1.2.0
+     *  Use profile::getAgeCondition()
      *
      * @return bool|null
      */
@@ -395,7 +407,8 @@ class ActivityDetails
     }
 
     /**
-     * @deprecated since 1.2.0, Use profile::getVerifiedAge()
+     * @deprecated 1.2.0
+     *  Use profile::getVerifiedAge()
      *
      * @return null|string
      */
