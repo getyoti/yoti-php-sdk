@@ -44,6 +44,8 @@ try {
     if ($selfie) {
         file_put_contents('selfie.jpeg', $selfie->getValue(), LOCK_EX);
     }
+
+    $anchorHeaderRowHTML = '<tr><th>S/V</th><th>Value</th><th>SubType</th></tr>';
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -82,11 +84,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($givenNames): ?>
@@ -115,11 +113,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($familyName) : ?>
@@ -148,11 +142,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($fullName) : ?>
@@ -181,11 +171,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($phoneNumber) : ?>
@@ -214,11 +200,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($emailAddress) : ?>
@@ -247,11 +229,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($dateOfBirth) : ?>
@@ -280,11 +258,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($ageCondition) : ?>
@@ -310,18 +284,14 @@ try {
                         <tr>
                             <th scope="row">Address</th>
                             <td>
-                                <address>
+                                <p class="col-12 col-md-4">
                                     <?php echo $address ? $address->getValue() : '' ?>
-                                </address>
+                                </p>
                             </td>
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($address) : ?>
@@ -350,11 +320,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($gender) : ?>
@@ -383,11 +349,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($nationality) : ?>
@@ -416,11 +378,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($selfie) : ?>
@@ -449,11 +407,7 @@ try {
                             <td>
                                 <table class="table">
                                     <thead  class="thead-light">
-                                        <tr>
-                                            <th>S/V</th>
-                                            <th>Value</th>
-                                            <th>SubType</th>
-                                        </tr>
+                                        <?php echo $anchorHeaderRowHTML ?>
                                     </thead>
                                     <tbody>
                                         <?php if ($selfie) : ?>
