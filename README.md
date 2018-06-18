@@ -191,9 +191,7 @@ You can also retrieve further properties from these respective anchors in the fo
 $value = $givenNamesSources[0]->getValue(); // string
 $subType = $givenNamesSources[0]->getSubType(); // string
 $signature = $givenNamesSources[0]->getSignature(); // bytes
-$artifactSignature = $givenNamesSources[0]->getArtifactSignature(); // bytes
-$timeStamp = $givenNamesSources[0]->getTimeStamp(); // integer
-$signedTimeStamp = $givenNamesSources[0]->getSignedTimeStamp(); // bytes
+$timeStamp = $givenNamesSources[0]->getSignedTimeStamp()->getTimeStamp(); // int
 $originServerCerts = $givenNamesSources[0]->getOriginServerCerts(); // list of X509 certificates
 ```
 

@@ -420,7 +420,7 @@ class YotiClient
     private function decryptConnectToken($encryptedConnectToken)
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
-        openssl_private_decrypt($tok, $token, $this->_pem, OPENSSL_PKCS1_OAEP_PADDING);
+        openssl_private_decrypt($tok, $token, $this->_pem);
 
         return $token;
     }
@@ -452,11 +452,7 @@ class YotiClient
     private function getAttributeList(EncryptedData $encryptedData, $wrappedReceiptKey)
     {
         // Unwrap key and get profile
-        openssl_private_decrypt(
-            base64_decode($wrappedReceiptKey),
-            $unwrappedKey, $this->_pem,
-            OPENSSL_PKCS1_OAEP_PADDING
-        );
+        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $this->_pem);
 
         // Decipher encrypted data with unwrapped key and IV
         $cipherText = openssl_decrypt(
