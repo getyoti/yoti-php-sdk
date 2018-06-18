@@ -90,25 +90,26 @@ class ActivityDetails
         $ageConditionMetadata = [];
         $anchorProcessor = new AnchorProcessor();
 
-        foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
+        foreach ($attributeList->getAttributes() as $item) /** @var Attribute $item */
         {
             $attrName = $item->getName();
             if ($attrName === 'selfie') {
                 $attrs[$attrName] = new Selfie(
-                    $item->getValue()->getContents(),
-                    $item->getContentType()->name()
+                    $item->getValue(),
+                    $item->getName()
                 );
             }
             else {
-                $attrs[$attrName] = $item->getValue()->getContents();
+                $attrs[$attrName] = $item->getValue();
             }
             // Build attribute object for user profile
-            $attrValue = $item->getValue()->getContents();
+            $attrValue = $item->getValue();
             // Convert structured_postal_address value to an Array
             if ($attrName === 'structured_postal_address') {
                 $attrValue = json_decode($attrValue, TRUE);
             }
-            $attributeAnchors = $anchorProcessor->process($item->getAnchorsList());
+
+            $attributeAnchors = $anchorProcessor->process($item->getAnchors());
             $attribute = new Attribute(
                 $attrName,
                 $attrValue,

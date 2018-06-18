@@ -420,7 +420,7 @@ class YotiClient
     private function decryptConnectToken($encryptedConnectToken)
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
-        openssl_private_decrypt($tok, $token, $this->_pem);
+        openssl_private_decrypt($tok, $token, $this->_pem, OPENSSL_PKCS1_OAEP_PADDING);
 
         return $token;
     }
@@ -435,7 +435,8 @@ class YotiClient
     private function getEncryptedData($profileContent)
     {
         // Get cipher_text and iv
-        $encryptedData = new EncryptedData(base64_decode($profileContent));
+        $encryptedData = new EncryptedData();
+        $encryptedData->mergeFromString(base64_decode($profileContent));
 
         return $encryptedData;
     }
@@ -451,7 +452,11 @@ class YotiClient
     private function getAttributeList(EncryptedData $encryptedData, $wrappedReceiptKey)
     {
         // Unwrap key and get profile
-        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $this->_pem);
+        openssl_private_decrypt(
+            base64_decode($wrappedReceiptKey),
+            $unwrappedKey, $this->_pem,
+            OPENSSL_PKCS1_OAEP_PADDING
+        );
 
         // Decipher encrypted data with unwrapped key and IV
         $cipherText = openssl_decrypt(
@@ -462,7 +467,8 @@ class YotiClient
             $encryptedData->getIv()
         );
 
-        $attributeList = new \attrpubapi_v1\AttributeList($cipherText);
+        $attributeList = new \attrpubapi_v1\AttributeList();
+        $attributeList->mergeFromString($cipherText);
 
         return $attributeList;
     }

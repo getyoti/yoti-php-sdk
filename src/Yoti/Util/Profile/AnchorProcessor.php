@@ -37,11 +37,10 @@ class AnchorProcessor
         $anchorTypes = self::getAnchorTypes();
 
         foreach ($anchorList as $anchor) {
-            $certificateList = $anchor->getOriginServerCertsList();
+            $certificateList = $anchor->getOriginServerCerts();
             foreach ($certificateList as $certificate) {
-                $contents = $certificate->getContents();
                 // Decode the content with ASN1
-                $BER = $this->X509->_extractBER($contents);
+                $BER = $this->X509->_extractBER($certificate);
                 $this->ASN1->loadOIDs($this->X509->oids);
                 $certificateContent = $this->ASN1->decodeBER($BER);
 
@@ -55,14 +54,16 @@ class AnchorProcessor
                             $keyExists = isset($decodedValue[0]['content'][0]['content']);
                             $anchorValue = $keyExists ? $decodedValue[0]['content'][0]['content'] : '';
                         }
+                        // Generate SignedTimeStamp object from bytes
+                        $signedTimeStamp = new \compubapi_v1\SignedTimestamp();
+                        $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
-                        $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCertsList());
+                        $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());
                         $anchorsData[$type][] = new YotiAnchor(
                             $anchorValue,
                             $anchor->getSubType(),
                             $anchor->getSignature(),
-                            $anchor->getArtifactSignature(),
-                            $anchor->getSignedTimeStamp(),
+                            $signedTimeStamp,
                             $X509CertsList
                         );
                     }
@@ -127,9 +128,8 @@ class AnchorProcessor
         return $certsList;
     }
 
-    public function convertCertToX509(\Protobuf\Stream $certificate) {
-        $contents = $certificate->getContents();
-        $X509Data = $this->X509->loadX509($contents);
+    public function convertCertToX509($certificate) {
+        $X509Data = $this->X509->loadX509($certificate);
         return json_decode(json_encode($X509Data), FALSE);
     }
 

@@ -1,4 +1,4 @@
-//syntax = "proto2";
+syntax = "proto3";
 
 package attrpubapi_v1;
 
@@ -27,26 +27,26 @@ enum ContentType {
 
 
 message Attribute {
-	optional string name = 1;
+	string name = 1;
 
-	optional bytes value = 2;
+	bytes value = 2;
 
-	optional ContentType content_type = 3;
+	ContentType content_type = 3;
 
 	repeated Anchor anchors = 4;
 }
 
 
 message Anchor {
-	optional bytes artifact_link = 1;
+	bytes artifact_link = 1;
 
 	repeated bytes origin_server_certs = 2;
 
-	optional bytes artifact_signature = 3;
+	bytes artifact_signature = 3;
 
-	optional string sub_type = 4;
+	string sub_type = 4;
 
-	optional bytes signature = 5;
+	bytes signature = 5;
 
-	optional bytes signed_time_stamp = 6;
+	bytes signed_time_stamp = 6;
 }

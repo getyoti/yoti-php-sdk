@@ -20,8 +20,6 @@ class Anchor
      */
     protected $signature;
 
-    protected $artifactSignature;
-
     /**
      * @var \Protobuf\Stream
      */
@@ -41,20 +39,14 @@ class Anchor
         $value,
         $subType,
         $signature,
-        $artifactSignature,
         $signedTimeStamp,
         array $originServerCerts
     ) {
         $this->value = $value;
         $this->subType = $subType;
         $this->signature = $signature;
-        $this->artifactSignature = $artifactSignature;
         $this->signedTimeStamp = $signedTimeStamp;
         $this->originServerCerts = $originServerCerts;
-
-        $config = new \Protobuf\Configuration();
-        $streamReader = $config->getStreamReader();
-        $this->timeStamp = $streamReader->readFixed32($this->signedTimeStamp);
     }
 
     /**
@@ -81,22 +73,8 @@ class Anchor
     /**
      * @return \Protobuf\Stream
      */
-    public function getArtifactSignature() {
-        return $this->artifactSignature;
-    }
-
-    /**
-     * @return \Protobuf\Stream
-     */
     public function getSignedTimeStamp() {
         return $this->signedTimeStamp;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTimeStamp() {
-        return $this->timeStamp;
     }
 
     /**
