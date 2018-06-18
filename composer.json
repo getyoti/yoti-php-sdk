@@ -42,6 +42,8 @@
       "compubapi_v1\\": "src/compubapi_v1",
       "Protobuf\\": "src/protobuf-php/protobuf/src",
       "phpseclib\\": "src/phpseclib/",
+      "Google\\": "src/Google",
+      "GPBMetadata\\": "src/GPBMetadata",
       "Yoti\\": "src/Yoti"
     }
   },
