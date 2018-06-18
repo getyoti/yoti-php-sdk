@@ -4,14 +4,12 @@
 
 namespace Compubapi_v1;
 
-use Google\Protobuf\Internal\GPBType;
-use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
  * Generated from protobuf message <code>compubapi_v1.EncryptedData</code>
  */
-class NewEncryptedData extends \Google\Protobuf\Internal\Message
+class EncryptedData extends \Google\Protobuf\Internal\Message
 {
     /**
      * the iv will be used in conjunction with the secret key
@@ -82,6 +80,7 @@ class NewEncryptedData extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, False);
         $this->cipher_text = $var;
+
         return $this;
     }
 
