@@ -40,10 +40,8 @@
     "psr-4": {
       "attrpubapi_v1\\": "src/attrpubapi_v1",
       "compubapi_v1\\": "src/compubapi_v1",
-      "Protobuf\\": "src/protobuf-php/protobuf/src",
-      "phpseclib\\": "src/phpseclib/",
-      "Google\\": "src/Google",
-      "GPBMetadata\\": "src/GPBMetadata",
+      "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
+      "GPBMetadata\\Google\\Protobuf\\": "src/protobuflib/GPBMetadata/Google/Protobuf",
       "Yoti\\": "src/Yoti"
     }
   },

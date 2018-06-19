@@ -1,7 +1,0 @@
-syntax = "proto2";
-
-package ProtobufTest.Protos;
-
-message Unrecognized {
-
-}

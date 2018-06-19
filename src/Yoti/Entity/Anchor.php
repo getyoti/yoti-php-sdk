@@ -16,19 +16,14 @@ class Anchor
     protected $subType;
 
     /**
-     * @var \Protobuf\Stream
+     * @var \Google\Protobuf\ bytes signature
      */
     protected $signature;
 
     /**
-     * @var \Protobuf\Stream
+     * @var \Compubapi_v1\SignedTimestamp
      */
     protected $signedTimeStamp;
-
-    /**
-     * @var int
-     */
-    protected $timeStamp;
 
     /**
      * @var array
@@ -64,14 +59,14 @@ class Anchor
     }
 
     /**
-     * @return \Protobuf\Stream
+     * @return \Google\Protobuf\ bytes signature
      */
     public function getSignature() {
         return $this->signature;
     }
 
     /**
-     * @return \Protobuf\Stream
+     * @return \Compubapi_v1\SignedTimestamp
      */
     public function getSignedTimeStamp() {
         return $this->signedTimeStamp;
