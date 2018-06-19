@@ -2,7 +2,7 @@
 
 namespace Yoti;
 
-use compubapi_v1\EncryptedData;
+use Compubapi_v1\EncryptedData;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
 use Yoti\Entity\AmlProfile;
@@ -430,7 +430,7 @@ class YotiClient
      *
      * @param $profileContent
      *
-     * @return \compubapi_v1\EncryptedData
+     * @return \Compubapi_v1\EncryptedData
      */
     private function getEncryptedData($profileContent)
     {
@@ -447,7 +447,7 @@ class YotiClient
      * @param EncryptedData $encryptedData
      * @param $wrappedReceiptKey
      *
-     * @return \attrpubapi_v1\AttributeList
+     * @return \Attrpubapi_v1\AttributeList
      */
     private function getAttributeList(EncryptedData $encryptedData, $wrappedReceiptKey)
     {
@@ -463,7 +463,7 @@ class YotiClient
             $encryptedData->getIv()
         );
 
-        $attributeList = new \attrpubapi_v1\AttributeList();
+        $attributeList = new \Attrpubapi_v1\AttributeList();
         $attributeList->mergeFromString($cipherText);
 
         return $attributeList;

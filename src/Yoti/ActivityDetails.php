@@ -4,7 +4,7 @@ namespace Yoti;
 use Yoti\Entity\Selfie;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
-use attrpubapi_v1\AttributeList;
+use Attrpubapi_v1\AttributeList;
 use Yoti\Helper\ActivityDetailsHelper;
 use Yoti\Util\Age\AgeUnderOverProcessor;
 use Yoti\Util\Profile\AnchorProcessor;

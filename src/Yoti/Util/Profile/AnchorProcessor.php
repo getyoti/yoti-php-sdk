@@ -55,7 +55,7 @@ class AnchorProcessor
                             $anchorValue = $keyExists ? $decodedValue[0]['content'][0]['content'] : '';
                         }
                         // Generate SignedTimeStamp object from bytes
-                        $signedTimeStamp = new \compubapi_v1\SignedTimestamp();
+                        $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
                         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
                         $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());

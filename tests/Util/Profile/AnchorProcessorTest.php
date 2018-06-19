@@ -4,6 +4,7 @@ namespace YotiTest\Util\Profile;
 
 use YotiTest\TestCase;
 use Yoti\Util\Profile\AnchorProcessor;
+use ArrayObject;
 
 class AnchorProcessorTest extends TestCase
 {
@@ -29,13 +30,13 @@ class AnchorProcessorTest extends TestCase
 
     public function testGettingTwoSourceAnchors()
     {
-        $passportStream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
-        $passportAnchor = \attrpubapi_v1\Anchor::fromStream($passportStream);
+        $passportAnchor = new \Attrpubapi_v1\Anchor();
+        $passportAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
 
-        $dlStream = \Protobuf\Stream::fromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
-        $dlAnchor = \attrpubapi_v1\Anchor::fromStream($dlStream);
+        $dlAnchor = new \Attrpubapi_v1\Anchor();
+        $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
 
-        $collection = new \Protobuf\MessageCollection([$passportAnchor, $dlAnchor]);
+        $collection = new ArrayObject([$passportAnchor, $dlAnchor]);
         $anchorsData = $this->anchorProcessor->process($collection);
         $anchorSource1 = $anchorsData['sources'][0]->getValue();
         $anchorSource2 = $anchorsData['sources'][1]->getValue();
@@ -53,9 +54,10 @@ class AnchorProcessorTest extends TestCase
      */
     public function parseFromBase64String($anchorString)
     {
-        $stream = \Protobuf\Stream::fromString(base64_decode($anchorString));
-        $anchor = \attrpubapi_v1\Anchor::fromStream($stream);
-        $collection = new \Protobuf\MessageCollection([$anchor]);
+        $anchor = new \Attrpubapi_v1\Anchor();
+        $anchor->mergeFromString(base64_decode($anchorString));
+
+        $collection = new ArrayObject([$anchor]);
 
         return $this->anchorProcessor->process($collection);
     }

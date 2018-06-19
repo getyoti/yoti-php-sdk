@@ -38,10 +38,11 @@
       "src/phpseclib/bootstrap.php"
     ],
     "psr-4": {
-      "attrpubapi_v1\\": "src/attrpubapi_v1",
-      "compubapi_v1\\": "src/compubapi_v1",
+      "Attrpubapi_v1\\": "src/attrpubapi_v1",
+      "Compubapi_v1\\": "src/compubapi_v1",
       "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
-      "GPBMetadata\\Google\\Protobuf\\": "src/protobuflib/GPBMetadata/Google/Protobuf",
+      "GPBMetadata\\": "src/protobuflib/GPBMetadata",
+      "phpseclib\\": "src/phpseclib/",
       "Yoti\\": "src/Yoti"
     }
   },
