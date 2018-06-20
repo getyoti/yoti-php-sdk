@@ -69,364 +69,352 @@ try {
                     <p><strong><?php echo $errorMsg ?></strong></p>
                 </div>
             <?php else: ?>
-                <table class="table table-sm table-bordered table-hover">
-                    <thead>
-                        <tr class="table-primary">
-                            <th scope="col">Name</th>
-                            <th scope="col">Value</th>
-                            <th scope="col">Anchors</th>
+                <table class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th rowspan="2" scope="col">Name</th>
+                            <th rowspan="2" scope="col">Value</th>
+                            <th colspan="3" width="33%" class="table-dark">
+                                <table class="table table-dark anchor-table">
+                                    <tr class="row no-gutters">
+                                        <td colspan="3" class="table-dark" align="center" width="100%">
+                                            Anchors
+                                        </td>
+                                    </tr>
+                                    <tr class="row no-gutters">
+                                        <th class="col-md-3">S/V</th>
+                                        <th class="col-md-6">Value</th>
+                                        <th class="col-md-3">Subtype</th>
+                                    </tr>
+                                </table>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">Given Name(s)</th>
-                            <td><?php echo $givenNames ? $givenNames->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($givenNames): ?>
+                    <?php if ($givenNames): ?>
+                            <tr>
+                                <th scope="row">Given Name(s)</th>
+                                <td><?php echo $givenNames->getValue() ?></td>
+                                <td colspan="3" width="33%">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($givenNames->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($givenNames->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Family Name</th>
-                            <td><?php echo $familyName ? $familyName->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($familyName) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($familyName) : ?>
+                            <tr>
+                                <th scope="row">Family Name</th>
+                                <td><?php echo $familyName->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($familyName->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($familyName->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Full Name</th>
-                            <td><?php echo $fullName ? $fullName->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($fullName) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($fullName) : ?>
+                            <tr>
+                                <th scope="row">Full Name</th>
+                                <td><?php echo $fullName->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($fullName->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($fullName->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Phone</th>
-                            <td><?php echo $phoneNumber ? $phoneNumber->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($phoneNumber) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($phoneNumber) : ?>
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td><?php echo $phoneNumber->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($phoneNumber->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($phoneNumber->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Email</th>
-                            <td><?php echo $emailAddress ? $emailAddress->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($emailAddress) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($emailAddress) : ?>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td><?php echo $emailAddress->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($emailAddress->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($emailAddress->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date Of Birth</th>
-                            <td><?php echo $dateOfBirth ? $dateOfBirth->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($dateOfBirth) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($dateOfBirth) : ?>
+                            <tr>
+                                <th scope="row">Date Of Birth</th>
+                                <td><?php echo $dateOfBirth->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($dateOfBirth->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($dateOfBirth->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Age verified</th>
-                            <td><?php echo "{$verifiedAge} {$ageCheck}" ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($ageCondition) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($ageCondition) : ?>
+                            <tr>
+                                <th scope="row">Age verified</th>
+                                <td><?php echo "{$verifiedAge} {$ageCheck}" ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($ageCondition->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($ageCondition->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Address</th>
-                            <td>
-                                <p class="col-12 col-md-4">
-                                    <?php echo $address ? $address->getValue() : '' ?>
-                                </p>
-                            </td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($address) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($address) : ?>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>
+                                    <p class="col-12 col-md-4">
+                                        <?php echo $address->getValue() ?>
+                                    </p>
+                                </td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($address->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($address->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Gender</th>
-                            <td><?php echo $gender ? $gender->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($gender) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($gender) : ?>
+                            <tr>
+                                <th scope="row">Gender</th>
+                                <td><?php echo $gender->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($gender->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($gender->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nationality</th>
-                            <td><?php echo $nationality ? $nationality->getValue() : '' ?></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($nationality) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($nationality) : ?>
+                            <tr>
+                                <th scope="row">Nationality</th>
+                                <td><?php echo $nationality->getValue() ?></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($nationality->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($nationality->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Selfie as base64 data</th>
-                            <td><img src="<?php echo $base64Selfie ?>" class="rounded" /></td>
-                            <td>
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($selfie) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php if ($selfie) : ?>
+                            <tr>
+                                <th scope="row">Selfie as base64 data</th>
+                                <td><img src="<?php echo $base64Selfie ?>" class="rounded" /></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($selfie->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($selfie->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Selfie as image file</th>
-                            <td><img src="./selfie.jpeg" class="rounded" /></td>
-                            <td>
-                                <table class="table">
-                                    <thead  class="thead-light">
-                                        <?php echo $anchorHeaderRowHTML ?>
-                                    </thead>
-                                    <tbody>
-                                        <?php if ($selfie) : ?>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Selfie as image file</th>
+                                <td><img src="./selfie.jpeg" class="rounded" /></td>
+                                <td colspan="3">
+                                    <table class="table">
+                                        <tbody>
                                             <?php foreach($selfie->getSources() as $source): ?>
-                                                <tr>
-                                                    <td>Source</td>
-                                                    <td><?php echo $source->getValue() ?></td>
-                                                    <td><?php echo $source->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Source</td>
+                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             <?php foreach($selfie->getVerifiers() as $verifier): ?>
-                                                <tr>
-                                                    <td>Verifier</td>
-                                                    <td><?php echo $verifier->getValue() ?></td>
-                                                    <td><?php echo $verifier->getSubType() ?></td>
+                                                <tr class="row no-gutters">
+                                                    <td class="col-md-3">Verifier</td>
+                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <tr>
+                            <td class="table-dark">Name</td>
+                            <td class="table-dark">Value</td>
+                            <td colspan="3" width="33%" class="table-dark">
+                                <table class="table table-dark anchor-table">
+                                    <tr class="row no-gutters">
+                                        <td class="col-md-3 table-dark">S/V</td>
+                                        <td class="col-md-6 table-dark">Value</td>
+                                        <td class="col-md-3 table-dark">Subtype</td>
+                                    </tr>
                                 </table>
                             </td>
                         </tr>

@@ -3,7 +3,10 @@ body {
     margin-top: 5%;
     margin-bottom: 10%;
 }
-
+table .anchor-table {
+    margin-bottom: 0;
+    background-color: #212529 !important;
+}
 tr td img {
     width: 100px;
 }
