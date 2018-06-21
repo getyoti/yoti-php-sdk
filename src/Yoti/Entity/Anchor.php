@@ -21,7 +21,7 @@ class Anchor
     protected $signature;
 
     /**
-     * @var \Compubapi_v1\SignedTimestamp
+     * @var \Yoti\Entity\SignedTimeStamp
      */
     protected $signedTimeStamp;
 
@@ -66,9 +66,10 @@ class Anchor
     }
 
     /**
-     * @return \Compubapi_v1\SignedTimestamp
+     * @return SignedTimeStamp
      */
-    public function getSignedTimeStamp() {
+    public function getSignedTimeStamp()
+    {
         return $this->signedTimeStamp;
     }
 
