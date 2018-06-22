@@ -2,6 +2,7 @@
 
 namespace Yoti\Entity;
 
+use Yoti\Entity\SignedTimeStamp;
 
 class Anchor
 {
@@ -16,11 +17,6 @@ class Anchor
     protected $subType;
 
     /**
-     * @var \Google\Protobuf\ bytes signature
-     */
-    protected $signature;
-
-    /**
      * @var \Yoti\Entity\SignedTimeStamp
      */
     protected $signedTimeStamp;
@@ -33,13 +29,11 @@ class Anchor
     public function __construct(
         $value,
         $subType,
-        $signature,
-        $signedTimeStamp,
+        SignedTimeStamp $signedTimeStamp,
         array $originServerCerts
     ) {
         $this->value = $value;
         $this->subType = $subType;
-        $this->signature = $signature;
         $this->signedTimeStamp = $signedTimeStamp;
         $this->originServerCerts = $originServerCerts;
     }
@@ -59,14 +53,7 @@ class Anchor
     }
 
     /**
-     * @return \Google\Protobuf\ bytes signature
-     */
-    public function getSignature() {
-        return $this->signature;
-    }
-
-    /**
-     * @return SignedTimeStamp
+     * @return \Yoti\Entity\SignedTimeStamp
      */
     public function getSignedTimeStamp()
     {

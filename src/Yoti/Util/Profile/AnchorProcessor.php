@@ -58,16 +58,19 @@ class AnchorProcessor
                         $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
                         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
+                        $timeInSeconds = round($signedTimeStamp->getTimestamp()/1000000);
+                        $dateTime = new \DateTime();
+                        $dateTime->setTimestamp($timeInSeconds);
+
                         $yotiSignedTimeStamp = new \Yoti\Entity\SignedTimeStamp(
-                            $signedTimeStamp->getTimestamp(),
-                            $signedTimeStamp->getVersion()
+                            $signedTimeStamp->getVersion(),
+                            $dateTime
                         );
 
                         $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());
                         $anchorsData[$type][] = new YotiAnchor(
                             $anchorValue,
                             $anchor->getSubType(),
-                            $anchor->getSignature(),
                             $yotiSignedTimeStamp,
                             $X509CertsList
                         );

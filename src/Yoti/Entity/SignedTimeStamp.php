@@ -1,7 +1,5 @@
 <?php
-
 namespace Yoti\Entity;
-
 
 class SignedTimeStamp
 {
@@ -13,24 +11,37 @@ class SignedTimeStamp
     private $version;
 
     /**
-     * Timestamp is the time the anchor was issued. It is in UTC,
-     * as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
+     * PHP DateTime object.
      *
-     * @var int
+     * @var \DateTime
      */
-    private $value;
+    private $timestamp;
 
-    public function __construct($value, $version)
+    /**
+     * SignedTimeStamp constructor.
+     *
+     * @param $version
+     * @param \DateTime $timestamp
+     */
+    public function __construct($version, \DateTime $timestamp)
     {
-        $this->value = $value;
         $this->version = $version;
+        $this->timestamp = $timestamp;
     }
 
-    public function getValue()
+    /**
+     * Return PHP DateTime object.
+     *
+     * @return \DateTime
+     */
+    public function getTimestamp()
     {
-        return $this->value;
+        return $this->timestamp;
     }
 
+    /**
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;

@@ -15,18 +15,18 @@ try {
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 
-    $givenNames   = $profile->getGivenNames();
-    $familyName   = $profile->getFamilyName();
-    $fullName     = $profile->getFullName();
-    $phoneNumber  = $profile->getPhoneNumber();
-    $emailAddress = $profile->getEmailAddress();
-    $dateOfBirth  = $profile->getDateOfBirth();
-    $ageCondition = $profile->getAgeCondition();
-    $verifiedAge  = $profile->getVerifiedAge();
-    $address      = $profile->getPostalAddress();
-    $gender       = $profile->getGender();
-    $nationality  = $profile->getNationality();
-    $selfie       = $profile->getSelfie();
+    $givenNames     = $profile->getGivenNames();
+    $familyName     = $profile->getFamilyName();
+    $fullName       = $profile->getFullName();
+    $phoneNumber    = $profile->getPhoneNumber();
+    $emailAddress   = $profile->getEmailAddress();
+    $dateOfBirth    = $profile->getDateOfBirth();
+    $ageCondition   = $profile->getAgeCondition();
+    $verifiedAge    = $profile->getVerifiedAge();
+    $postalAddress  = $profile->getPostalAddress();
+    $gender         = $profile->getGender();
+    $nationality    = $profile->getNationality();
+    $selfie         = $profile->getSelfie();
 
     // Create a base 64 selfie URI to be embedded in an HTML document
     $base64Selfie = ActivityDetailsHelper::getBase64Selfie($activityDetails);
@@ -44,8 +44,6 @@ try {
     if ($selfie) {
         file_put_contents('selfie.jpeg', $selfie->getValue(), LOCK_EX);
     }
-
-    $anchorHeaderRowHTML = '<tr><th>S/V</th><th>Value</th><th>SubType</th></tr>';
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
 }
@@ -273,25 +271,25 @@ try {
                                 </td>
                             </tr>
                         <?php endif; ?>
-                        <?php if ($address) : ?>
+                        <?php if ($postalAddress) : ?>
                             <tr>
                                 <th scope="row">Address</th>
                                 <td>
                                     <p class="col-12 col-md-4">
-                                        <?php echo $address->getValue() ?>
+                                        <?php echo $postalAddress->getValue() ?>
                                     </p>
                                 </td>
                                 <td colspan="3">
                                     <table class="table">
                                         <tbody>
-                                            <?php foreach($address->getSources() as $source): ?>
+                                            <?php foreach($postalAddress->getSources() as $source): ?>
                                                 <tr class="row no-gutters">
                                                     <td class="col-md-3">Source</td>
                                                     <td class="col-md-6"><?php echo $source->getValue() ?></td>
                                                     <td class="col-md-3"><?php echo $source->getSubType() ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                            <?php foreach($address->getVerifiers() as $verifier): ?>
+                                            <?php foreach($postalAddress->getVerifiers() as $verifier): ?>
                                                 <tr class="row no-gutters">
                                                     <td class="col-md-3">Verifier</td>
                                                     <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
