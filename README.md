@@ -61,7 +61,7 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "1.1.*"
+    "yoti/yoti-php-sdk" : "1.2.*"
 }
 ```
 
@@ -117,29 +117,31 @@ $activityDetails    = $client->getActivityDetails($token);
 
 $userId             = $activityDetails->getUserId();
 
-$familyName         = $activityDetails->getFamilyName();
+$profile            = $activityDetails->getProfile();
 
-$givenName          = $activityDetails->getGivenNames();
+$familyName         = $profile->getFamilyName()->getValue();
 
-$fullName           = $activityDetails->getFullName();
+$givenNames         = $profile->getGivenNames()->getValue();
 
-$dateOfBirth        = $activityDetails->getDateOfBirth();
+$fullName           = $profile->getFullName()->getValue();
 
-$gender             = $activityDetails->getGender();
+$dateOfBirth        = $profile->getDateOfBirth()->getValue();
 
-$nationality        = $activityDetails->getNationality();
+$gender             = $profile->getGender()->getValue();
 
-$phoneNumber        = $activityDetails->getPhoneNumber();
+$nationality        = $profile->getNationality()->getValue();
 
-$selfie             = $activityDetails->getSelfie();
+$phoneNumber        = $profile->getPhoneNumber()->getValue();
 
-$emailAddress       = $activityDetails->getEmailAddress();
+$selfie             = $profile->getSelfie()->getValue();
 
-$postalAddress      = $activityDetails->getPostalAddress();
+$emailAddress       = $profile->getEmailAddress()->getValue();
 
-$ageVerified         = $activityDetails->isAgeVerified();
+$postalAddress      = $profile->getPostalAddress()->getValue();
 
-$verifiedAge         = $activityDetails->getVerifiedAge();
+$ageVerified        = $profile->getAgeCondition()->getValue();
+
+$verifiedAge        = $profile->getVerifiedAge()->getValue();
 ```
 
 ## Handling Users
@@ -152,12 +154,16 @@ Here is an example of how this works:
 ```php
 <?php
 $activityDetails = $client->getActivityDetails($token);
+$profile = $activityDetails->getProfile();
+
 if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
     $user = yourUserSearchFunction($activityDetails->getUserId());
     if ($user) {
         // handle login
     } else {
         // handle registration
+        $givenNames = $profile->getGivenNames()->getValue();
+        $familyName = $profile->getFamilyName()->getValue();
     }
 } else {
     // handle unhappy path
@@ -167,11 +173,26 @@ if ($client->getOutcome() == \Yoti\YotiClient::OUTCOME_SUCCESS) {
 Where `yourUserSearchMethod` is a piece of logic in your app that is supposed to find a user, given a userId.
 No matter if the user is a new or an existing one, Yoti will always provide her/his profile, so you don't necessarily need to store it.
 
-The `ActivityDetails` class provides a set of methods to retrieve different user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
+The `profile` object provides a set of attributes corresponding to user attributes. Whether the attributes are present or not depends on the settings you have applied to your app on Yoti Dashboard.
 
-### ActivityDetails
+You can retrieve the sources and verifiers for each attribute as follows:
 
-The set of attributes the user has configured for the transaction.
+```php
+<?php 
+$givenNamesSources = $profile->getGivenNames()->getSources(); // list or array of anchors
+$givenNamesVerifiers = $profile->getGivenNames()->getVerifiers(); // list or array of anchors
+```
+
+You can also retrieve further properties from these respective anchors in the following way:
+
+```php
+<?php
+// Retrieving properties of the first anchor
+$value = $givenNamesSources[0]->getValue(); // string
+$subType = $givenNamesSources[0]->getSubType(); // string
+$timeStamp = $givenNamesSources[0]->getSignedTimeStamp()->getTimestamp(); // DateTime object
+$originServerCerts = $givenNamesSources[0]->getOriginServerCerts(); // list of X509 certificates
+```
 
 ### YotiClient
 
@@ -257,12 +278,19 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 
 ## Running the tests
 
-The version of PHPUnit we are using requires `PHP 5.6` or above.
+PHPUnit requires `PHP 5.6` or above.
+
+Run the following commands from the root folder:
+```console
+$ composer update
+$ ./vendor/bin/phpunit tests
+```
 
 ## API Coverage
 
 * Activity Details
     * [X] User ID `getUserId()`
+    * [X] profile `getProfile()`
     * [X] Photo `getSelfie()`
     * [X] Given Names `getGivenNames()`
     * [X] Family Name `getFamilyName()`

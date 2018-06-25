@@ -1,10 +1,13 @@
 <?php
 namespace Yoti;
 
-use attrpubapi_v1\Attribute;
-use attrpubapi_v1\AttributeList;
 use Yoti\Entity\Selfie;
+use Yoti\Entity\Profile;
+use Yoti\Entity\Attribute;
+use Attrpubapi_v1\AttributeList;
 use Yoti\Helper\ActivityDetailsHelper;
+use Yoti\Util\Age\AgeUnderOverProcessor;
+use Yoti\Util\Profile\AnchorProcessor;
 
 /**
  * Class ActivityDetails
@@ -38,6 +41,11 @@ class ActivityDetails
     private $_profile = [];
 
     /**
+     * @var \Yoti\Entity\Profile
+     */
+    private $profile;
+
+    /**
      * @var ActivityDetailsHelper
      */
     public $helper;
@@ -58,6 +66,10 @@ class ActivityDetails
             $this->setProfileAttribute($param, $value);
         }
 
+        // Setting an empty profile here in case
+        // the constructor is called directly
+        $this->setProfile(new Profile([]));
+
         $this->helper = new ActivityDetailsHelper($this);
     }
 
@@ -71,23 +83,66 @@ class ActivityDetails
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
     {
-        $attrs = array();
+        // For ActivityDetails attributes
+        $attrs = [];
+        // For Profile attributes
+        $profileAttributes = [];
+        $ageConditionMetadata = [];
+        $anchorProcessor = new AnchorProcessor();
 
-        foreach ($attributeList->getAttributesList() as $item) /** @var Attribute $item */
+        foreach ($attributeList->getAttributes() as $item) /** @var Attribute $item */
         {
-            if($item->getName() === 'selfie')
-            {
-                $attrs[$item->getName()] = new Selfie(
-                    $item->getValue()->getContents(),
-                    $item->getContentType()->name()
+            $attrName = $item->getName();
+            if ($attrName === 'selfie') {
+                $attrs[$attrName] = new Selfie(
+                    $item->getValue(),
+                    $item->getName()
                 );
             }
             else {
-                $attrs[$item->getName()] = $item->getValue()->getContents();
+                $attrs[$attrName] = $item->getValue();
+            }
+            // Build attribute object for user profile
+            $attrValue = $item->getValue();
+            // Convert structured_postal_address value to an Array
+            if ($attrName === 'structured_postal_address') {
+                $attrValue = json_decode($attrValue, TRUE);
+            }
+
+            $attributeAnchors = $anchorProcessor->process($item->getAnchors());
+            $attribute = new Attribute(
+                $attrName,
+                $attrValue,
+                $attributeAnchors['sources'],
+                $attributeAnchors['verifiers']
+            );
+
+            $profileAttributes[$attrName] = $attribute;
+            // Add 'is_age_verified' and 'verified_age' attributes
+            if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
+                $ageConditionMetadata['sources'] = $attributeAnchors['sources'];
+                $ageConditionMetadata['verifiers'] = $attributeAnchors['verifiers'];
             }
         }
 
         $inst = new self($attrs, $rememberMeId);
+        // Add 'age_condition' and 'verified_age' attributes values
+        if (!empty($ageConditionMetadata)) {
+            $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
+                Attribute::AGE_CONDITION,
+                $inst->isAgeVerified(),
+                $ageConditionMetadata['sources'],
+                $ageConditionMetadata['verifiers']
+            );
+
+            $profileAttributes[Attribute::VERIFIED_AGE] = new Attribute(
+                Attribute::VERIFIED_AGE,
+                $inst->getVerifiedAge(),
+                $ageConditionMetadata['sources'],
+                $ageConditionMetadata['verifiers']
+            );
+        }
+        $inst->setProfile(new Profile($profileAttributes));
 
         return $inst;
     }
@@ -123,6 +178,24 @@ class ActivityDetails
     }
 
     /**
+     * @param Profile $profile
+     */
+    protected function setProfile(Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * Get user profile object.
+     *
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
      * Check if attribute exists.
      *
      * @param string $param
@@ -147,6 +220,9 @@ class ActivityDetails
     /**
      * Get family name.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getFamilyName()
+     *
      * @return null|string
      */
     public function getFamilyName()
@@ -156,6 +232,9 @@ class ActivityDetails
 
     /**
      * Get given names.
+     *
+     * @deprecated 1.2.0
+     *  Use profile::getGivenNames()
      *
      * @return null|string
      */
@@ -167,6 +246,9 @@ class ActivityDetails
     /**
      * Get full name.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getFullName()
+     *
      * @return null|string
      */
     public function getFullName()
@@ -176,6 +258,9 @@ class ActivityDetails
 
     /**
      * Get date of birth.
+     *
+     * @deprecated 1.2.0
+     *  Use profile::getDateOfBirth()
      *
      * @return null|string
      */
@@ -187,6 +272,9 @@ class ActivityDetails
     /**
      * Get gender.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getGender()
+     *
      * @return null|string
      */
     public function getGender()
@@ -196,6 +284,9 @@ class ActivityDetails
 
     /**
      * Get user nationality.
+     *
+     * @deprecated 1.2.0
+     *  Use profile::getNationality()
      *
      * @return null|string
      */
@@ -207,6 +298,9 @@ class ActivityDetails
     /**
      * Get user phone number.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getPhoneNumber()
+     *
      * @return null|string
      */
     public function getPhoneNumber()
@@ -216,6 +310,9 @@ class ActivityDetails
 
     /**
      * Get user selfie image data.
+     *
+     * @deprecated 1.2.0
+     *  Use profile::getSelfie()
      *
      * @return null|string
      */
@@ -234,6 +331,8 @@ class ActivityDetails
     /**
      * Get selfie image object.
      *
+     * @deprecated 1.2.0
+     *
      * @return null| \Yoti\Entity\Selfie $selfie
      */
     public function getSelfieEntity()
@@ -246,6 +345,9 @@ class ActivityDetails
     /**
      * Get user email address.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getEmailAddress()
+     *
      * @return null|string
      */
     public function getEmailAddress()
@@ -256,15 +358,32 @@ class ActivityDetails
     /**
      * Get user address.
      *
+     * @deprecated 1.2.0
+     *  Use profile::getPostalAddress()
+     *
      * @return null|string
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        if (NULL === $postalAddress) {
+            // Get it from structured_postal_address.formatted_address
+            $structuredPostalAddress = $this->getStructuredPostalAddress();
+            if (
+                is_array($structuredPostalAddress)
+                && isset($structuredPostalAddress['formatted_address'])
+            ) {
+                $postalAddress = $structuredPostalAddress['formatted_address'];
+            }
+        }
+        return $postalAddress;
     }
 
     /**
      * Get user structured postal address as an array.
+     *
+     * @deprecated 1.2.0
+     *  Use profile::getStructuredPostalAddress()
      *
      * @return null|array
      */
@@ -278,6 +397,9 @@ class ActivityDetails
      * Returns a boolean representing the attribute value
      * Or null if the attribute is not set in the dashboard
      *
+     * @deprecated 1.2.0
+     *  Use profile::getAgeCondition()
+     *
      * @return bool|null
      */
     public function isAgeVerified()
@@ -286,6 +408,9 @@ class ActivityDetails
     }
 
     /**
+     * @deprecated 1.2.0
+     *  Use profile::getVerifiedAge()
+     *
      * @return null|string
      */
     public function getVerifiedAge()

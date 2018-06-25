@@ -1,4 +1,4 @@
-//syntax = "proto2";
+syntax = "proto3";
 
 package attrpubapi_v1;
 
@@ -11,9 +11,9 @@ option java_outer_classname = "AttrProto";
 // AttributeAndId is a simple container for holding an attribute's value
 // alongside its ID.
 message AttributeAndId {
-	optional Attribute attribute = 1;
+	Attribute attribute = 1;
 
-	optional bytes attribute_id = 2;
+	bytes attribute_id = 2;
 }
 
 

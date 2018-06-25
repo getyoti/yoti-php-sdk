@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package compubapi_v1;
+
+option java_package = "com.yoti.compubapi_v1";
+option java_outer_classname = "SignedTimestampProto";
+
+// SignedTimestamp is a timestamp associated with a message that has a
+// cryptographic signature proving that it was issued by the correct authority.
+message SignedTimestamp {
+	// Version indicates how the digests within this object are calculated.
+	int32 version = 1;
+
+	// Timestamp is the time this SignedTimestamp was issued. It is in UTC,
+	// as µseconds elapsed since the epoch (µs from 1970-01-01T00:00:00Z).
+	uint64 timestamp = 2;
+
+	// MessageDigest is the digest of the message this timestamp is
+	// associated with. The first step in verifying the timestamp is
+	// ensuring the MessageDigest matches the original message data.
+	//
+	// For version 1 objects, the message digest algorithm is SHA-512/224.
+	bytes message_digest = 3;
+
+	// ChainDigest is the digest of the previous SignedTimestamp message
+	// in the chain. The second step in verifying the timestamp is walking
+	// back over the chain and checking each SignedTimestamp's ChainDigest
+	// field. The SignedTimestamp at the beginning of the chain has this
+	// field set to a specific, publish value.
+	//
+	// For version 1 objects, the chain digest algorithm is HMAC-SHA-512/224,
+	// with the secret being equal to the MessageDigest field.
+	bytes chain_digest = 4;
+
+	// ChainDigestSkip1 is only populated once every 500 nodes. It is the
+	// ChainDigest value of the timestamp 500 nodes previously.
+	bytes chain_digest_skip1 = 5;
+
+	// ChainDigestSkip2 is only populated once every 250000 nodes (or once
+	// every 500 nodes that have ChainDigestSkip1 populated). It is the
+	// ChainDigest value of the timestamp 250000 nodes previously.
+	bytes chain_digest_skip2 = 6;
+}
