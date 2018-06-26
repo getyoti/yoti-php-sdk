@@ -257,8 +257,9 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 
 ### Profile sharing
 
-* Create your application in the Yoti Dashboard (this requires having a Yoti account)
-* Point your Yoti application callback URL to `http://your-local-url.domain/profile.php`
+* Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
+  * Set the application domain of you app to `localhost:8000`
+  * Set the scenario callback URL to `/profile.php`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
@@ -267,7 +268,7 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 
 ### AML Check
 
-* Create your application in the Yoti Dashboard (this requires having a Yoti account)
+* Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env` and fill in the environment variables.
 * Run the `composer update` command
