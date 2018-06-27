@@ -1,0 +1,22 @@
+web:
+    build: .
+    ports:
+        - "8080:80"
+        - "8081:443"
+    volumes:
+      - ./:/usr/share/nginx/html
+    links:
+        - php
+        - composer
+php:
+    image: php:7-fpm-alpine
+    volumes:
+      - ./:/usr/share/nginx/html
+
+composer:
+  restart: 'no'
+  image: composer/composer:php7
+  volumes:
+    - ./:/usr/share/nginx/html
+  working_dir: /usr/share/nginx/html
+  command: update

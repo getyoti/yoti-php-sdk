@@ -258,7 +258,7 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 ### Profile sharing
 
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
-  * Set the application domain of you app to `localhost:8000`
+  * Set the application domain of your app to `localhost:8000`
   * Set the scenario callback URL to `/profile.php`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env`
