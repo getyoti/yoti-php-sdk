@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "713eafbd21df6124d600ee73e8f55a3d",
+    "hash": "7a6c48264e6454ff581a7f0189792926",
+    "content-hash": "2a81e6ba4478b78c3d08f434b9ed3156",
     "packages": [
         {
             "name": "symfony/dotenv",
@@ -61,7 +62,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2017-04-27T07:47:28+00:00"
+            "time": "2017-04-27 07:47:28"
         },
         {
             "name": "yoti/yoti-php-sdk",
@@ -69,12 +70,14 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40"
+
+                "reference": "29db58b86c4d8abddc97f10d7ce5934f07b97100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f347e8f3241a90c386a0215b03b377f78332fa40",
-                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/29db58b86c4d8abddc97f10d7ce5934f07b97100",
+                "reference": "29db58b86c4d8abddc97f10d7ce5934f07b97100",
+
                 "shasum": ""
             },
             "require": {
@@ -124,7 +127,7 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-01-18T10:26:14+00:00"
+            "time": "2018-06-25 09:59:44"
         }
     ],
     "packages-dev": [],

@@ -258,25 +258,60 @@ The examples can be found in the [examples folder](https://github.com/getyoti/ph
 ### Profile sharing
 
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
-  * Set the application domain of your app to `localhost:8000`
+  * Set the application domain of your app to `localhost:4000`
   * Set the scenario callback URL to `/profile.php`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
-* Run the `composer update` command
-* Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
+
+Please choose one of the steps below to continue.
+
+#### 1. Running with Docker (supports https)
+
+* With Docker, the .pem file should reside within the same location where Docker is run from. So make sure you put the .pem file inside the `keys` folder within the [examples folder](https://github.com/getyoti/php/tree/master/examples).
+* Update the YOTI_KEY_FILE_PATH environment variable in the`.env` file as follow `./keys/your-application-pem-file.pem`
+* Run the `docker-compose up -d` command and navigate to [https://localhost:4002](https://localhost:4002)
+* Run the `docker-compose stop` command to stop the containers.
+
+#### 2. With PHP built-in web server (supports http only)
+
+* Run the following commands:
+
+```console
+$ composer update
+$ php -S localhost:4000
+```
+* Navigate to [http://localhost:4000](http://localhost:4000)
 
 ### AML Check
 
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Copy `.env.dist` to `.env` and fill in the environment variables.
+
+Please follow one of the steps below to complete the process:
+    
+#### 1. Running with Docker
+
+* With Docker, the .pem file should reside within the same location where Docker is run from. So make sure you put the .pem file inside the `keys` folder within the [examples folder](https://github.com/getyoti/php/tree/master/examples).
+* Update the YOTI_KEY_FILE_PATH environment variable in the`.env` file as follow `./keys/your-pem-file-name.pem`
+* Run the following commands:
+
+```console
+$ docker exec -it {container_name} bash
+$ cd /usr/share/nginx/html/examples
+$ php scripts/aml-check-usa.php // for AML check within the USA
+$ php scripts/aml-check.php // for AML check outside the USA
+```    
+
+#### 2. With PHP built-in web server
+
 * Run the `composer update` command
 * For AML check outside the USA:
     * Run the script `php scripts/aml-check.php`
 * For AML check within the USA:
     * Run the script `php scripts/aml-check-usa.php`
-
+    
 ## Running the tests
 
 PHPUnit requires `PHP 5.6` or above.

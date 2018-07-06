@@ -1,20 +1,19 @@
 web:
     build: .
     ports:
-        - "8080:80"
-        - "8081:443"
+        - "4000:80"
+        - "4002:443"
     volumes:
       - ./:/usr/share/nginx/html
     links:
         - php
-        - composer
+        #- composer
 php:
     image: php:7-fpm-alpine
     volumes:
       - ./:/usr/share/nginx/html
 
 composer:
-  restart: 'no'
   image: composer/composer:php7
   volumes:
     - ./:/usr/share/nginx/html
