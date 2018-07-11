@@ -71,13 +71,12 @@
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
 
-                "reference": "29db58b86c4d8abddc97f10d7ce5934f07b97100"
+                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/29db58b86c4d8abddc97f10d7ce5934f07b97100",
-                "reference": "29db58b86c4d8abddc97f10d7ce5934f07b97100",
-
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/59890106c25a19025e1e0914b56e2c38aa979fc5",
+                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5",
                 "shasum": ""
             },
             "require": {

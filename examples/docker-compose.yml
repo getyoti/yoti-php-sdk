@@ -1,21 +1,22 @@
-web:
-    build: .
-    ports:
-        - "4000:80"
-        - "4002:443"
-    volumes:
-      - ./:/usr/share/nginx/html
-    links:
-        - php
-        #- composer
-php:
-    image: php:7-fpm-alpine
-    volumes:
-      - ./:/usr/share/nginx/html
+version: '3'
 
-composer:
-  image: composer/composer:php7
-  volumes:
-    - ./:/usr/share/nginx/html
-  working_dir: /usr/share/nginx/html
-  command: update
+services:
+  web:
+      build: .
+      ports:
+          - "4002:443"
+      volumes:
+        - ./:/usr/share/nginx/html
+      links:
+          - php
+  php:
+      image: php:7-fpm-alpine
+      volumes:
+        - ./:/usr/share/nginx/html
+
+  composer:
+    image: composer/composer:php7
+    volumes:
+      - ./:/usr/share/nginx/html
+    working_dir: /usr/share/nginx/html
+    command: update
