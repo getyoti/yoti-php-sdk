@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "713eafbd21df6124d600ee73e8f55a3d",
+    "content-hash": "2a81e6ba4478b78c3d08f434b9ed3156",
     "packages": [
         {
             "name": "symfony/dotenv",
@@ -65,30 +65,36 @@
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "1.0.8",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40"
+                "reference": "a5d0a9cbd1bcf7ad452d44f670d18967581bea76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f347e8f3241a90c386a0215b03b377f78332fa40",
-                "reference": "f347e8f3241a90c386a0215b03b377f78332fa40",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/a5d0a9cbd1bcf7ad452d44f670d18967581bea76",
+                "reference": "a5d0a9cbd1bcf7ad452d44f670d18967581bea76",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
+                "php": ">=5.5.19"
             },
             "require-dev": {
+                "php": ">=5.6.0",
                 "phpunit/phpunit": "5.7.*"
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "src/phpseclib/bootstrap.php"
+                ],
                 "psr-4": {
-                    "attrpubapi_v1\\": "src/attrpubapi_v1",
-                    "compubapi_v1\\": "src/compubapi_v1",
-                    "Protobuf\\": "src/protobuf-php/protobuf/src",
+                    "Attrpubapi_v1\\": "src/attrpubapi_v1",
+                    "Compubapi_v1\\": "src/compubapi_v1",
+                    "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
+                    "GPBMetadata\\": "src/protobuflib/GPBMetadata",
+                    "phpseclib\\": "src/phpseclib/",
                     "Yoti\\": "src/Yoti"
                 }
             },
@@ -124,7 +130,7 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-01-18T10:26:14+00:00"
+            "time": "2018-06-25T09:59:44+00:00"
         }
     ],
     "packages-dev": [],
