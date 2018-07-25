@@ -40,9 +40,11 @@ try {
     $verifiedAgeValue = $verifiedAge ? $verifiedAge->getValue() : NULL;
     $verifiedAge = NULL !== $verifiedAgeValue ? "({$verifiedAgeValue}) :" : '';
 
+    $selfieFileName = 'selfie.jpeg';
+
     // Create selfie image file.
-    if ($selfie) {
-        file_put_contents('selfie.jpeg', $selfie->getValue(), LOCK_EX);
+    if ($selfie && is_writable(__DIR__)) {
+        file_put_contents($selfieFileName, $selfie->getValue(), LOCK_EX);
     }
 } catch(\Exception $e) {
     $errorMsg = "Error - {$e->getMessage()}";
@@ -378,30 +380,32 @@ try {
                                     </table>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row">Selfie as image file</th>
-                                <td><img src="./selfie.jpeg" class="rounded" /></td>
-                                <td colspan="3">
-                                    <table class="table">
-                                        <tbody>
-                                            <?php foreach($selfie->getSources() as $source): ?>
-                                                <tr class="row no-gutters">
-                                                    <td class="col-md-3">Source</td>
-                                                    <td class="col-md-6"><?php echo $source->getValue() ?></td>
-                                                    <td class="col-md-3"><?php echo $source->getSubType() ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                            <?php foreach($selfie->getVerifiers() as $verifier): ?>
-                                                <tr class="row no-gutters">
-                                                    <td class="col-md-3">Verifier</td>
-                                                    <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
-                                                    <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
+                            <?php if (file_exists($selfieFileName)) : ?>
+                                <tr>
+                                    <th scope="row">Selfie as image file</th>
+                                    <td><img src="./<?php echo $selfieFileName ?>" class="rounded" /></td>
+                                    <td colspan="3">
+                                        <table class="table">
+                                            <tbody>
+                                                <?php foreach($selfie->getSources() as $source): ?>
+                                                    <tr class="row no-gutters">
+                                                        <td class="col-md-3">Source</td>
+                                                        <td class="col-md-6"><?php echo $source->getValue() ?></td>
+                                                        <td class="col-md-3"><?php echo $source->getSubType() ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                <?php foreach($selfie->getVerifiers() as $verifier): ?>
+                                                    <tr class="row no-gutters">
+                                                        <td class="col-md-3">Verifier</td>
+                                                        <td class="col-md-6"><?php echo $verifier->getValue() ?></td>
+                                                        <td class="col-md-3"><?php echo $verifier->getSubType() ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         <?php endif; ?>
                         <tr>
                             <td class="table-dark">Name</td>

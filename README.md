@@ -250,33 +250,41 @@ var_dump($amlResult->isOnWatchList());
 echo $amlResult;
 ```
  
-
 ## How to Run the Examples
 
 The examples can be found in the [examples folder](https://github.com/getyoti/php/tree/master/examples). The steps required for the setup are explained below.
 
+Please note all our examples work with [Docker](https://docs.docker.com/).
+
 ### Profile sharing
 
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
-  * Set the application domain of your app to `localhost:8000`
+  * Set the application domain of your app to `localhost:4002`
   * Set the scenario callback URL to `/profile.php`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
+* Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
 * Copy `.env.dist` to `.env`
-* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`, and `YOTI_KEY_FILE_PATH`
-* Run the `composer update` command
-* Run the `php -S localhost:8000` command and navigate to [http://localhost:8000](http://localhost:8000)
+* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+  * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
+* Run the `docker-compose up -d` command and navigate to [https://localhost:4002](https://localhost:4002)
+* Run the `docker-compose stop` command to stop the containers.
 
 ### AML Check
 
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
-* Copy `.env.dist` to `.env` and fill in the environment variables.
-* Run the `composer update` command
-* For AML check outside the USA:
-    * Run the script `php scripts/aml-check.php`
-* For AML check within the USA:
-    * Run the script `php scripts/aml-check-usa.php`
+* Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
+* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+  * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
+* Run the following commands:
 
+```console
+$ docker exec -it {container_name} bash
+$ cd /usr/share/nginx/html/examples
+$ php scripts/aml-check-usa.php // for AML check within the USA
+$ php scripts/aml-check.php // for AML check outside the USA
+```    
+    
 ## Running the tests
 
 PHPUnit requires `PHP 5.6` or above.
@@ -291,7 +299,6 @@ $ ./vendor/bin/phpunit tests
 
 * Activity Details
     * [X] User ID `getUserId()`
-    * [X] profile `getProfile()`
     * [X] Photo `getSelfie()`
     * [X] Given Names `getGivenNames()`
     * [X] Family Name `getFamilyName()`
@@ -304,6 +311,9 @@ $ ./vendor/bin/phpunit tests
     * [X] Address `getPostalAddress()`
     * [X] Gender `getGender()`
     * [X] Nationality `getNationality()`
+    * [X] profile `getProfile()`
+      * [X] Given Names `getGivenNames()->getValue()`
+      * [X] Family Name `getFamilyName()->getValue()`
 
 ## Support
 
