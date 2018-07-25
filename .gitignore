@@ -4,3 +4,5 @@
 examples/.env
 examples/selfie.jpeg
 examples/vendor
+examples/*.pem
+examples/keys/*.pem
