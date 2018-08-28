@@ -124,7 +124,7 @@ class Profile
      *
      * @return null|Attribute
      */
-    private function getProfileAttribute($attributeName)
+    public function getProfileAttribute($attributeName)
     {
         if (isset($this->profileData[$attributeName])) {
             $attributeObj = $this->profileData[$attributeName];

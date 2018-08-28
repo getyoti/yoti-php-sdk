@@ -56,6 +56,7 @@ try {
     ];
 
     $fullName = $profile->getFullName();
+    $selfie = $profile->getSelfie();
     $selfieFileName = 'selfie.jpeg';
 
     // Create selfie image file.
