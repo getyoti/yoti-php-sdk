@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "7a6c48264e6454ff581a7f0189792926",
     "content-hash": "2a81e6ba4478b78c3d08f434b9ed3156",
     "packages": [
         {
@@ -69,12 +70,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "a5d0a9cbd1bcf7ad452d44f670d18967581bea76"
+                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/a5d0a9cbd1bcf7ad452d44f670d18967581bea76",
-                "reference": "a5d0a9cbd1bcf7ad452d44f670d18967581bea76",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/59890106c25a19025e1e0914b56e2c38aa979fc5",
+                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5",
                 "shasum": ""
             },
             "require": {
@@ -130,7 +131,7 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-06-25T09:59:44+00:00"
+            "time": "2018-06-25 09:59:44"
         }
     ],
     "packages-dev": [],

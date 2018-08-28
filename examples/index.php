@@ -4,29 +4,74 @@
 require_once __DIR__ . '/bootstrap.php';
 ?>
 <!DOCTYPE html>
-<html>
+<html class="yoti-html">
     <head>
         <meta charset="utf-8">
-        <title>Your Site</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Yoti client example</title>
+        <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    </head>
+    <body class="yoti-body">
+        <main>
+            <section class="yoti-top-section">
+                <div class="yoti-logo-section">
+                    <a href="https://www.yoti.com" target="_blank">
+                        <img class="yoti-logo-image" src="assets/images/logo.png" srcset="assets/images/logo@2x.png 2x" alt="Yoti"/>
+                    </a>
+                </div>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+                <h1 class="yoti-top-header">Business Name now uses Yoti</h1>
+
+                <div class="yoti-sdk-integration-section">
+                    <button data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
+                            data-yoti-type="inline"
+                            data-yoti-scenario-id="<?php echo getenv('YOTI_SCENARIO_ID') ?>">
+                        Use Yoti
+                    </button>
+                </div>
+
+                <div class="yoti-login-or-separator">or</div>
+
+                <div class="yoti-login-dialog">
+                    <h2 class="yoti-login-dialog-header">Login with your email:</h2>
+
+                    <input class="yoti-input" type="text" placeholder="Name"/>
+
+                    <input class="yoti-input" type="text" placeholder="Email address"/>
+
+                    <div class="yoti-login-actions">
+                        <span class="yoti-login-forgot-button">forgot password?</span>
+
+                        <button class="yoti-login-button">login</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="yoti-sponsor-app-section">
+                <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
+
+                <div class="yoti-store-buttons-section">
+                    <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&mt=8" class="yoti-app-button-link">
+                        <img
+                                src="assets/images/app-store-badge.png"
+                                srcset="assets/images/app-store-badge@2x.png 2x"
+                                alt="Download on the App Store"/>
+                    </a>
+
+                    <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
+                        <img
+                                src="assets/images/google-play-badge.png"
+                                srcset="assets/images/google-play-badge@2x.png 2x"
+                                alt="Yoti" alt="get it on Google Play"/>
+                    </a>
+                </div>
+            </section>
+        </main>
 
         <script src="https://sdk.yoti.com/clients/browser.2.1.0.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Your Site Information</h2>
-            <span data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
-                  data-yoti-type="inline"
-                  data-yoti-scenario-id="<?php echo getenv('YOTI_SCENARIO_ID') ?>">
-             Use Yoti
-            </span>
-
-            <!-- Initiate Yoti button -->
-            <script>
-                _ybg.init()
-            </script>
-        </div>
+        <script>
+          _ybg.init()
+        </script>
     </body>
 </html>
