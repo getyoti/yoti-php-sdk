@@ -150,7 +150,7 @@ try {
                                    <?php foreach($item['obj']->getVerifiers() as $verifier) : ?>
                                        <div class="yoti-attribute-anchors -s-v">Verifier</div>
                                        <div class="yoti-attribute-anchors -value"><?php echo $verifier->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php $verifier->getSubType() ?></div>
+                                       <div class="yoti-attribute-anchors -subtype"><?php echo $verifier->getSubType() ?></div>
                                    <?php endforeach; ?>
 
                                </div>
