@@ -15,6 +15,7 @@ class Attribute
     const SELFIE = 'selfie';
     const EMAIL_ADDRESS = 'email_address';
     const POSTAL_ADDRESS = 'postal_address';
+    const DOCUMENT_DETAILS = "document_details";
     const STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /**

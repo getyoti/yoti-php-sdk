@@ -8,6 +8,8 @@ use Attrpubapi_v1\AttributeList;
 use Yoti\Helper\ActivityDetailsHelper;
 use Yoti\Util\Age\AgeUnderOverProcessor;
 use Yoti\Util\Profile\AnchorProcessor;
+use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Exception\AttributeException;
 
 /**
  * Class ActivityDetails
@@ -80,6 +82,7 @@ class ActivityDetails
      * @param int $rememberMeId
      *
      * @return \Yoti\ActivityDetails
+     * @throws AttributeException
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
     {
@@ -103,12 +106,10 @@ class ActivityDetails
                 $attrs[$attrName] = $item->getValue();
             }
             // Build attribute object for user profile
-            $attrValue = $item->getValue();
-            // Convert structured_postal_address value to an Array
-            if ($attrName === 'structured_postal_address') {
-                $attrValue = json_decode($attrValue, TRUE);
-            }
-
+            $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
+                $item->getValue(),
+                $item->getName()
+            );
             $attributeAnchors = $anchorProcessor->process($item->getAnchors());
             $attribute = new Attribute(
                 $attrName,

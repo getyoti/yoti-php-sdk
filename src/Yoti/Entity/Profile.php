@@ -119,6 +119,12 @@ class Profile
         return $this->getProfileAttribute(Attribute::VERIFIED_AGE);
     }
 
+
+    public function getDocumentDetails()
+    {
+        return $this->getProfileAttribute(Attribute::DOCUMENT_DETAILS);
+    }
+
     /**
      * @param $attributeName.
      *
