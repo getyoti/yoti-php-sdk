@@ -10,7 +10,6 @@ use Yoti\Http\SignedRequest;
 use Yoti\Http\RestRequest;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ActivityDetailsException;
-use Yoti\Exception\AttributeException;
 
 /**
  * Class YotiClient
@@ -132,9 +131,8 @@ class YotiClient
      *
      * @param string $encryptedConnectToken
      *
-     * @return \Yoti\ActivityDetails
+     * @return ActivityDetails
      *
-     * @throws AttributeException
      * @throws ActivityDetailsException
      */
     public function getActivityDetails($encryptedConnectToken = NULL)
