@@ -4,12 +4,12 @@ namespace Yoti;
 use Yoti\Entity\Selfie;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
+use Attrpubapi_v1\Attribute as ProtobufAttribute;
 use Attrpubapi_v1\AttributeList;
 use Yoti\Helper\ActivityDetailsHelper;
 use Yoti\Util\Age\AgeUnderOverProcessor;
 use Yoti\Util\Profile\AnchorProcessor;
 use Yoti\Util\Profile\AttributeConverter;
-use Yoti\Exception\AttributeException;
 
 /**
  * Class ActivityDetails
@@ -79,10 +79,9 @@ class ActivityDetails
      * Construct model from attributelist.
      *
      * @param AttributeList $attributeList
-     * @param int $rememberMeId
+     * @param string $rememberMeId
      *
-     * @return \Yoti\ActivityDetails
-     * @throws AttributeException
+     * @return ActivityDetails
      */
     public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
     {
@@ -93,7 +92,7 @@ class ActivityDetails
         $ageConditionMetadata = [];
         $anchorProcessor = new AnchorProcessor();
 
-        foreach ($attributeList->getAttributes() as $item) /** @var Attribute $item */
+        foreach ($attributeList->getAttributes() as $item) /** @var ProtobufAttribute $item */
         {
             $attrName = $item->getName();
             if ($attrName === 'selfie') {
@@ -105,28 +104,19 @@ class ActivityDetails
             else {
                 $attrs[$attrName] = $item->getValue();
             }
-            // Build attribute object for user profile
-            $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
-                $item->getValue(),
-                $item->getName()
-            );
-            $attributeAnchors = $anchorProcessor->process($item->getAnchors());
-            $attribute = new Attribute(
-                $attrName,
-                $attrValue,
-                $attributeAnchors['sources'],
-                $attributeAnchors['verifiers']
-            );
 
-            $profileAttributes[$attrName] = $attribute;
+            // Build attribute object for user profile
+            $attributeAnchors = $anchorProcessor->process($item->getAnchors());
+            $yotiAttribute = self::createYotiAttribute($item, $attributeAnchors, $attrName);
+            $profileAttributes[$attrName] = $yotiAttribute;
             // Add 'is_age_verified' and 'verified_age' attributes
-            if (preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
+            if (NULL !==  $yotiAttribute && preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
                 $ageConditionMetadata['sources'] = $attributeAnchors['sources'];
                 $ageConditionMetadata['verifiers'] = $attributeAnchors['verifiers'];
             }
         }
 
-        $inst = new self($attrs, $rememberMeId);
+        $inst = new self($attrs, $rememberMeId); /** @var ActivityDetails $inst */
         // Add 'age_condition' and 'verified_age' attributes values
         if (!empty($ageConditionMetadata)) {
             $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
@@ -146,6 +136,34 @@ class ActivityDetails
         $inst->setProfile(new Profile($profileAttributes));
 
         return $inst;
+    }
+
+    /**
+     * @param ProtobufAttribute $protobufAttribute
+     * @param array $attributeAnchors
+     * @param $attrName
+     *
+     * @return null|Attribute
+     */
+    private static function createYotiAttribute(ProtobufAttribute $protobufAttribute, array $attributeAnchors, $attrName)
+    {
+        try {
+            $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
+                $protobufAttribute->getValue(),
+                $protobufAttribute->getName()
+            );
+            $yotiAttribute = new Attribute(
+                $attrName,
+                $attrValue,
+                $attributeAnchors['sources'],
+                $attributeAnchors['verifiers']
+            );
+        } catch (\Exception $e) {
+            $yotiAttribute = NULL;
+            trigger_error($e->getMessage(), E_USER_WARNING);
+        }
+
+        return $yotiAttribute;
     }
 
     /**

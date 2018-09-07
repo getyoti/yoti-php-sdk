@@ -17,44 +17,74 @@ class DocumentDetailsTest extends TestCase
         $this->dummyDocumentDetails = new DocumentDetails($dummyValue);
     }
 
-    public function testGetType()
+    public function testShouldParseOneOptionalAttribute()
     {
-        $this->assertEquals('PASSPORT', $this->dummyDocumentDetails->getType());
+        $document = new DocumentDetails('PASSPORT GBR 01234567 2020-01-01');
+        $this->assertEquals('PASSPORT', $document->getType());
+        $this->assertEquals('GBR', $document->getIssuingCountry());
+        $this->assertEquals('01234567', $document->getDocumentNumber());
+        $this->assertEquals('2020-01-01', $document->getExpirationDate()->format('Y-m-d'));
     }
 
-    public function testGetIssuingCountry()
+    public function testShouldParseTwoOptionalAttributes()
     {
-        $this->assertEquals('GBR', $this->dummyDocumentDetails->getIssuingCountry());
+        $document = new DocumentDetails('DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA');
+        $this->assertEquals('DRIVING_LICENCE', $document->getType());
+        $this->assertEquals('GBR', $document->getIssuingCountry());
+        $this->assertEquals('1234abc', $document->getDocumentNumber());
+        $this->assertEquals('2016-05-01', $document->getExpirationDate()->format('Y-m-d'));
+        $this->assertEquals('DVLA', $document->getIssuingAuthority());
     }
 
-    public function testGetDocumentNumber()
+    public function testShouldThrowExceptionWhenValueIsEmpty()
     {
-        $this->assertEquals('01234567', $this->dummyDocumentDetails->getDocumentNumber());
+        $this->expectException('Yoti\Exception\AttributeException');
+        $document = new DocumentDetails('');
     }
 
-    public function testGetExpirationDate()
+    public function testShouldThrowExceptionForInvalidCountry()
     {
-        $this->assertEquals('2020-01-01', $this->dummyDocumentDetails->getExpirationDate()->format('Y-m-d'));
+        $this->expectException('Yoti\Exception\AttributeException');
+        $document = new DocumentDetails('PASSPORT 13 1234abc 2016-05-01');
     }
 
-    public function testGetIssuingAuthority()
+    public function testShouldThrowExceptionForInvalidNumber()
     {
-        $this->assertEmpty($this->dummyDocumentDetails->getIssuingAuthority());
+        $this->expectException('Yoti\Exception\AttributeException');
+        $document = new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
     }
 
-    public function testExpirationDateAsUnderscore()
+    public function testWhenExpirationDateIsMissing()
     {
-        $documentDetails = new DocumentDetails('PASS_CARD GBR 22719564893 - CITIZENCARD');
-        $this->assertNull($documentDetails->getExpirationDate());
+        $document = new DocumentDetails('PASS_CARD GBR 22719564893 - CITIZENCARD');
+        $this->assertEquals('PASS_CARD', $document->getType());
+        $this->assertEquals('GBR', $document->getIssuingCountry());
+        $this->assertEquals('22719564893', $document->getDocumentNumber());
+        $this->assertNull($document->getExpirationDate());
+        $this->assertEquals('CITIZENCARD', $document->getIssuingAuthority());
     }
 
     public function testWhenTheValueIsLessThanThreeWords()
     {
+        $this->expectException('Yoti\Exception\AttributeException');
         $documentDetails = new DocumentDetails('PASS_CARD GBR');
-        $this->assertNull($documentDetails->getType());
-        $this->assertNull($documentDetails->getIssuingCountry());
-        $this->assertNull($documentDetails->getDocumentNumber());
-        $this->assertNull($documentDetails->getExpirationDate());
-        $this->assertNull($documentDetails->getIssuingAuthority());
+    }
+
+    public function testShouldThrowExceptionForInvalidDate()
+    {
+        $this->expectException('Yoti\Exception\AttributeException');
+        $document = new DocumentDetails('PASSPORT GBR 1234abc X016-05-01');
+    }
+
+    public function testShouldIgnoreTheSixthOptionalAttribute()
+    {
+        $value = 'DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA someThirdAttribute';
+        $document = new DocumentDetails($value);
+
+        $this->assertEquals('DRIVING_LICENCE', $document->getType());
+        $this->assertEquals('GBR', $document->getIssuingCountry());
+        $this->assertEquals('1234abc', $document->getDocumentNumber());
+        $this->assertEquals('2016-05-01', $document->getExpirationDate()->format('Y-m-d'));
+        $this->assertEquals('DVLA', $document->getIssuingAuthority());
     }
 }

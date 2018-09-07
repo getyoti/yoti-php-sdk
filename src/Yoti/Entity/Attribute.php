@@ -24,7 +24,7 @@ class Attribute
     protected $name;
 
     /**
-     * @var string
+     * @var mixed
      */
     protected $value;
 
@@ -42,11 +42,11 @@ class Attribute
      * Attribute constructor.
      *
      * @param string $name
-     * @param null|string $value
+     * @param mixed $value
      * @param array $sources
      * @param array $verifiers
      */
-    public function __construct($name, $value = NULL, array $sources, array $verifiers)
+    public function __construct($name, $value, array $sources, array $verifiers)
     {
         $this->name = $name;
         $this->value = $value;

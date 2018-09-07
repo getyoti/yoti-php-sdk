@@ -1,13 +1,10 @@
 <?php
 namespace Yoti\Entity;
 
+use Yoti\Exception\AttributeException;
+
 class DocumentDetails
 {
-    const DOCUMENT_TYPE_PASSPORT = "PASSPORT";
-    const DOCUMENT_TYPE_DRIVING_LICENCE = "DRIVING_LICENCE";
-    const DOCUMENT_TYPE_AADHAAR = "AADHAAR";
-    const DOCUMENT_TYPE_PASS_CARD = "PASS_CARD";
-
     /**
      * The values of the Document Details are in the format and order as defined in this pattern
      * e.g PASS_CARD GBR 22719564893 - CITIZENCARD, the last two are optionals
@@ -45,12 +42,15 @@ class DocumentDetails
     private $issuingAuthority;
 
     /**
-     * @var array
+     * DocumentDetails constructor.
+     *
+     * @param $value
+     *
+     * @throws AttributeException
      */
-    private $parsedValues = [];
-
     public function __construct($value)
     {
+        $this->validateValue($value);
         $this->parseFromValue($value);
     }
 
@@ -106,54 +106,73 @@ class DocumentDetails
 
     /**
      * @param $value
+     * @throws AttributeException
      */
     private function parseFromValue($value)
     {
-        if (!$this->isValidFormat($value)) {
-            return;
-        }
-
-        $this->parsedValues = explode(' ', $value);
-        $this->setType();
-        $this->setIssuingCountry();
-        $this->setDocumentNumber();
-        $this->setExpirationDate();
-        $this->setIssuingAuthority();
+        $parsedValues = explode(' ', $value);
+        $this->setType($parsedValues);
+        $this->setIssuingCountry($parsedValues);
+        $this->setDocumentNumber($parsedValues);
+        $this->setExpirationDate($parsedValues);
+        $this->setIssuingAuthority($parsedValues);
     }
 
-    private function setType()
+    private function setType(array $parsedValues)
     {
-        $this->type = $this->parsedValues[self::TYPE_INDEX];
+        $this->type = $parsedValues[self::TYPE_INDEX];
     }
 
-    private function setIssuingCountry()
+    private function setIssuingCountry(array $parsedValues)
     {
-        $this->issuingCountry = $this->parsedValues[self::COUNTRY_INDEX];
+        $this->issuingCountry = $parsedValues[self::COUNTRY_INDEX];
     }
 
-    private function setDocumentNumber()
+    private function setDocumentNumber(array $parsedValues)
     {
-        $this->documentNumber = $this->parsedValues[self::NUMBER_INDEX];
+        $this->documentNumber = $parsedValues[self::NUMBER_INDEX];
     }
 
-    private function setExpirationDate()
+    /**
+     * Set expirationDate to DateTime object or NULL if the value is '-'
+     *
+     * @param array $parsedValues
+     *
+     * @throws AttributeException
+     */
+    private function setExpirationDate(array $parsedValues)
     {
         $expirationDate = NULL;
-        if (isset($this->parsedValues[self::EXPIRATION_INDEX])) {
-            $dateStr = $this->parsedValues[self::EXPIRATION_INDEX];
-            $expirationDate = \DateTime::createFromFormat('Y-m-d', $dateStr);
+        if (isset($parsedValues[self::EXPIRATION_INDEX])) {
+            $dateStr = $parsedValues[self::EXPIRATION_INDEX];
+
+            if ($dateStr !== '-') {
+                $expirationDate = \DateTime::createFromFormat('Y-m-d', $dateStr);
+
+                if (!$expirationDate) {
+                    throw new AttributeException('Invalid Date provided');
+                }
+            }
         }
-        $this->expirationDate = $expirationDate?: NULL;
+
+        $this->expirationDate = $expirationDate;
     }
 
-    private function setIssuingAuthority()
+    private function setIssuingAuthority(array $parsedValues)
     {
-        $value = isset($this->parsedValues[self::AUTHORITY_INDEX])? $this->parsedValues[self::AUTHORITY_INDEX] : NULL;
+        $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : NULL;
         $this->issuingAuthority = $value;
     }
 
-    private function isValidFormat($value)
+    /**
+     * @param $value
+     *
+     * @throws AttributeException
+     */
+    private function validateValue($value)
     {
-        return preg_match(self::VALIDATION_PATTERN, $value);
+        if (!preg_match(self::VALIDATION_PATTERN, $value)) {
+            throw new AttributeException('Invalid value for DocumentDetails');
+        }
     }
 }
