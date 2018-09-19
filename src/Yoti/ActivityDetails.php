@@ -3,6 +3,7 @@ namespace Yoti;
 
 use Yoti\Entity\Selfie;
 use Yoti\Entity\Profile;
+use Yoti\Entity\Receipt;
 use Yoti\Entity\Attribute;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
 use Attrpubapi_v1\AttributeList;
@@ -41,12 +42,12 @@ class ActivityDetails
     /**
      * @var array
      */
-    private $_profile = [];
+    private $oldProfileData = [];
 
     /**
      * @var \Yoti\Entity\Profile
      */
-    private $profile;
+    private $userProfile;
 
     /**
      * @var ApplicationProfile
@@ -54,9 +55,24 @@ class ActivityDetails
     private $applicationProfile;
 
     /**
-     * @var ActivityDetailsHelper
+     * @var Receipt
      */
-    public $helper;
+    private $receipt;
+
+    /**
+     * @var string
+     */
+    private $pem;
+
+    /**
+     * @var \Yoti\Util\Age\Condition
+     */
+    private $ageCondition;
+
+    /**
+     * @var AnchorProcessor
+     */
+    private $anchorProcessor;
 
     /**
      * ActivityDetails constructor.
@@ -64,43 +80,60 @@ class ActivityDetails
      * @param array $attributes
      * @param $rememberMeId
      */
-    public function __construct(array $attributes, $rememberMeId)
+    public function __construct(Receipt $receipt, $pem)
     {
-        $this->_rememberMeId = $rememberMeId;
+        $this->receipt = $receipt;
+        $this->pem = $pem;
+        $this->anchorProcessor = new AnchorProcessor();
+        // Set default value of ageCondition
+        $this->ageCondition = new \Yoti\Util\Age\Condition([]);
 
-        // Populate user profile attributes
-        foreach ($attributes as $param => $value)
-        {
-            $this->setProfileAttribute($param, $value);
-        }
-
-        // Setting an empty profile here in case
-        // the constructor is called directly
-        $this->setProfile(new Profile([]));
-
-        $this->helper = new ActivityDetailsHelper($this);
+        $this->setRememberMeId();
+        $this->setProfile();
+        $this->setApplicationProfile();
     }
 
-    /**
-     * Construct model from attributelist.
-     *
-     * @param AttributeList $attributeList
-     * @param string $rememberMeId
-     *
-     * @return ActivityDetails
-     */
-    public static function constructFromAttributeList(AttributeList $attributeList, $rememberMeId)
+    private function setRememberMeId()
+    {
+        $this->_rememberMeId = $this->receipt->getRememberMeId();
+    }
+
+    private function setProfile()
+    {
+        $protobufAttrList = $this->receipt->parseFromAttribute(
+            Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
+            $this->pem
+        );
+        $this->userProfile = new Profile($this->getUserProfileAttributes($protobufAttrList));
+    }
+
+    private function setApplicationProfile()
+    {
+        $protobufAttrList = $this->receipt->parseFromAttribute(
+            Receipt::ATTR_PROFILE_CONTENT,
+            $this->pem
+        );
+        $this->applicationProfile = new ApplicationProfile(
+            $this->getApplicationProfileAttributes($protobufAttrList)
+        );
+    }
+
+    private function getUserProfileAttributes(AttributeList $attributeList)
     {
         // For ActivityDetails attributes
         $attrs = [];
         // For Profile attributes
         $profileAttributes = [];
         $ageConditionMetadata = [];
-        $anchorProcessor = new AnchorProcessor();
 
         foreach ($attributeList->getAttributes() as $item) /** @var ProtobufAttribute $item */
         {
             $attrName = $item->getName();
+
+            if (empty($attrName)) {
+                continue;
+            }
+
             if ($attrName === 'selfie') {
                 $attrs[$attrName] = new Selfie(
                     $item->getValue(),
@@ -112,8 +145,8 @@ class ActivityDetails
             }
 
             // Build attribute object for user profile
-            $attributeAnchors = $anchorProcessor->process($item->getAnchors());
-            $yotiAttribute = self::createYotiAttribute($item, $attributeAnchors, $attrName);
+            $attributeAnchors = $this->anchorProcessor->process($item->getAnchors());
+            $yotiAttribute = AttributeConverter::convertToYotiAttribute($item, $attributeAnchors, $attrName);
             $profileAttributes[$attrName] = $yotiAttribute;
             // Add 'is_age_verified' and 'verified_age' attributes
             if (NULL !==  $yotiAttribute && preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
@@ -122,45 +155,51 @@ class ActivityDetails
             }
         }
 
-        $inst = new self($attrs, $rememberMeId); /** @var ActivityDetails $inst */
         // Add 'age_condition' and 'verified_age' attributes values
         if (!empty($ageConditionMetadata)) {
+            $ageProcessor = new \Yoti\Util\Age\Processor($attrs);
+            $this->ageCondition = $ageProcessor->getCondition();
+
             $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
                 Attribute::AGE_CONDITION,
-                $inst->isAgeVerified(),
+                $this->ageCondition->isVerified(),
                 $ageConditionMetadata['sources'],
                 $ageConditionMetadata['verifiers']
             );
 
             $profileAttributes[Attribute::VERIFIED_AGE] = new Attribute(
                 Attribute::VERIFIED_AGE,
-                $inst->getVerifiedAge(),
+                $this->ageCondition->getVerifiedAge(),
                 $ageConditionMetadata['sources'],
                 $ageConditionMetadata['verifiers']
             );
         }
-        $inst->setProfile(new Profile($profileAttributes));
 
-        return $inst;
+        // Set user profile attributes for the old profile
+        $this->oldProfileData = $attrs;
+
+        return $profileAttributes;
     }
 
-    public function createApplicationProfile(AttributeList $attributeList)
+    /**
+     * @param AttributeList $attributeList
+     *
+     * @return array
+     */
+    private function getApplicationProfileAttributes(AttributeList $attributeList)
     {
         $profileAttributes = [];
-        $anchorProcessor = new AnchorProcessor();
 
         foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
             $attrName = $attr->getName();
-            $attrValue = AttributeConverter::convertValueBasedOnAttributeName($attr);
-            $attributeAnchors = $anchorProcessor->process($attr->getAnchors());
-            $profileAttributes[$attr->getName()] = new Attribute(
-                $attrName,
-                $attrValue,
-                $attributeAnchors['sources'],
-                $attributeAnchors['verifiers']
+            $attributeAnchors = $this->anchorProcessor->process($attr->getAnchors());
+            $profileAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute(
+                $attr,
+                $attributeAnchors,
+                $attrName
             );
         }
-        $this->applicationProfile = new ApplicationProfile($profileAttributes);
+        return $profileAttributes;
     }
 
     /**
@@ -172,31 +211,6 @@ class ActivityDetails
     }
 
     /**
-     * @param ProtobufAttribute $protobufAttribute
-     * @param array $attributeAnchors
-     * @param $attrName
-     *
-     * @return null|Attribute
-     */
-    private static function createYotiAttribute(ProtobufAttribute $protobufAttribute, array $attributeAnchors, $attrName)
-    {
-        try {
-            $attrValue = AttributeConverter::convertValueBasedOnAttributeName($protobufAttribute);
-            $yotiAttribute = new Attribute(
-                $attrName,
-                $attrValue,
-                $attributeAnchors['sources'],
-                $attributeAnchors['verifiers']
-            );
-        } catch (\Exception $e) {
-            $yotiAttribute = NULL;
-            trigger_error($e->getMessage(), E_USER_WARNING);
-        }
-
-        return $yotiAttribute;
-    }
-
-    /**
      * Set a user profile attribute.
      *
      * @param $param
@@ -205,7 +219,7 @@ class ActivityDetails
     protected function setProfileAttribute($param, $value)
     {
         if (!empty($param)) {
-            $this->_profile[$param] = $value;
+            $this->oldProfileData[$param] = $value;
         }
     }
 
@@ -220,18 +234,10 @@ class ActivityDetails
     {
         if ($param)
         {
-            return $this->hasProfileAttribute($param) ? $this->_profile[$param] : null;
+            return $this->hasProfileAttribute($param) ? $this->oldProfileData[$param] : null;
         }
 
-        return $this->_profile;
-    }
-
-    /**
-     * @param Profile $profile
-     */
-    protected function setProfile(Profile $profile)
-    {
-        $this->profile = $profile;
+        return $this->oldProfileData;
     }
 
     /**
@@ -241,7 +247,7 @@ class ActivityDetails
      */
     public function getProfile()
     {
-        return $this->profile;
+        return $this->userProfile;
     }
 
     /**
@@ -253,7 +259,7 @@ class ActivityDetails
      */
     public function hasProfileAttribute($param)
     {
-        return array_key_exists($param, $this->_profile);
+        return array_key_exists($param, $this->oldProfileData);
     }
 
     /**
@@ -453,7 +459,7 @@ class ActivityDetails
      */
     public function isAgeVerified()
     {
-        return $this->helper->ageCondition->isVerified();
+        return $this->ageCondition->isVerified();
     }
 
     /**
@@ -464,6 +470,6 @@ class ActivityDetails
      */
     public function getVerifiedAge()
     {
-        return $this->helper->ageCondition->getVerifiedAge();
+        return $this->ageCondition->getVerifiedAge();
     }
 }

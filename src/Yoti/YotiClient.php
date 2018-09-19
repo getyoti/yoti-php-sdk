@@ -2,13 +2,14 @@
 
 namespace Yoti;
 
-use Compubapi_v1\EncryptedData;
+use Yoti\Entity\Receipt;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\SignedRequest;
 use Yoti\Http\RestRequest;
 use Yoti\Exception\AmlException;
+use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
 
 /**
@@ -69,7 +70,7 @@ class YotiClient
     private $_pem;
 
     /**
-     * @var array
+     * @var Receipt
      */
     private $_receipt;
 
@@ -123,17 +124,18 @@ class YotiClient
      */
     public function getOutcome()
     {
-        return array_key_exists('sharing_outcome', $this->_receipt) ? $this->_receipt['sharing_outcome'] : NULL;
+        return $this->_receipt->getSharingOutcome();
     }
 
     /**
      * Return Yoti user profile.
      *
-     * @param string $encryptedConnectToken
+     * @param null|string $encryptedConnectToken
      *
      * @return ActivityDetails
      *
      * @throws ActivityDetailsException
+     * @throws Exception\ReceiptException
      */
     public function getActivityDetails($encryptedConnectToken = NULL)
     {
@@ -143,32 +145,14 @@ class YotiClient
         }
 
         $this->_receipt = $this->getReceipt($encryptedConnectToken);
-        $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
 
-        // Check response was success
+        // Check response was successful
         if($this->getOutcome() !== self::OUTCOME_SUCCESS)
         {
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
-        // Set remember me Id
-        $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : NULL;
-
-        // If no profile return empty ActivityDetails object
-        if(empty($this->_receipt['other_party_profile_content']))
-        {
-            return new ActivityDetails([], $rememberMeId);
-        }
-
-        // Decrypt attribute list
-        $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
-
-        // Get ActivityDetails
-        $activityDetailsInst = ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
-
-        $activityDetailsInst->createApplicationProfile($this->getApplicationProfileAttributes());
-
-        return $activityDetailsInst;
+        return new ActivityDetails($this->_receipt, $this->_pem);
     }
 
     /**
@@ -322,13 +306,12 @@ class YotiClient
      * Decrypt and return receipt data.
      *
      * @param string $encryptedConnectToken
-     *
      * @param string $httpMethod
      *
-     * @return array
+     * @return Receipt
      *
-     * @throws \Yoti\Exception\ActivityDetailsException
-     * @throws \Exception
+     * @throws ActivityDetailsException
+     * @throws Exception\ReceiptException
      */
     private function getReceipt($encryptedConnectToken, $httpMethod = RestRequest::METHOD_GET)
     {
@@ -354,25 +337,57 @@ class YotiClient
 
         $result = $this->makeRequest($signedRequest, $payload);
 
-        $response = $result['response'];
-        $httpCode = (int) $result['http_code'];
+        $responseArr = $this->processResult($result);
+        $this->checkForReceipt($responseArr);
 
+        return new Receipt($responseArr['receipt']);
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return mixed
+     *
+     * @throws ActivityDetailsException
+     */
+    private function processResult(array $result)
+    {
+        $this->checkResponseStatus($result['http_code']);
+
+        // Get decoded response data
+        $responseArr = json_decode($result['response'], TRUE);
+
+        $this->checkJsonError();
+
+        return $responseArr;
+    }
+
+    /**
+     * @param array $response
+     *
+     * @throws ActivityDetailsException
+     */
+    private function checkForReceipt(array $responseArr)
+    {
+        // Check receipt is in response
+        if(!array_key_exists('receipt', $responseArr))
+        {
+            throw new ReceiptException('Receipt not found in response', 502);
+        }
+    }
+
+    /**
+     * @param $httpCode
+     *
+     * @throws ActivityDetailsException
+     */
+    private function checkResponseStatus($httpCode)
+    {
+        $httpCode = (int) $httpCode;
         if ($httpCode !== 200)
         {
             throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
-
-        // Get decoded response data
-        $json = json_decode($response, TRUE);
-        $this->checkJsonError();
-
-        // Check receipt is in response
-        if(!array_key_exists('receipt', $json))
-        {
-            throw new ActivityDetailsException('Receipt not found in response', 502);
-        }
-
-        return $json['receipt'];
     }
 
     /**
@@ -380,7 +395,7 @@ class YotiClient
      *
      * @throws \Exception
      */
-    public function checkJsonError()
+    private function checkJsonError()
     {
         if(json_last_error() !== JSON_ERROR_NONE)
         {
@@ -429,50 +444,6 @@ class YotiClient
     }
 
     /**
-     * Return encrypted profile data.
-     *
-     * @param $profileContent
-     *
-     * @return \Compubapi_v1\EncryptedData
-     */
-    private function getEncryptedData($profileContent)
-    {
-        // Get cipher_text and iv
-        $encryptedData = new EncryptedData();
-        $encryptedData->mergeFromString(base64_decode($profileContent));
-
-        return $encryptedData;
-    }
-
-    /**
-     * Return Yoti user profile attributes.
-     *
-     * @param EncryptedData $encryptedData
-     * @param $wrappedReceiptKey
-     *
-     * @return \Attrpubapi_v1\AttributeList
-     */
-    private function getAttributeList(EncryptedData $encryptedData, $wrappedReceiptKey)
-    {
-        // Unwrap key and get profile
-        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $this->_pem);
-
-        // Decipher encrypted data with unwrapped key and IV
-        $cipherText = openssl_decrypt(
-            $encryptedData->getCipherText(),
-            'aes-256-cbc',
-            $unwrappedKey,
-            OPENSSL_RAW_DATA,
-            $encryptedData->getIv()
-        );
-
-        $attributeList = new \Attrpubapi_v1\AttributeList();
-        $attributeList->mergeFromString($cipherText);
-
-        return $attributeList;
-    }
-
-    /**
      * Validate and return PEM content.
      *
      * @param string bool|$pem
@@ -504,21 +475,6 @@ class YotiClient
         {
             throw new \Exception('PEM key is invalid', 400);
         }
-    }
-
-    private function getApplicationProfileAttributes()
-    {
-        if (!isset($this->_receipt['profile_content']) || !isset($this->_receipt['wrapped_receipt_key'])) {
-            return [];
-        }
-
-        $encryptedData = $this->getEncryptedData($this->_receipt['profile_content']);
-        $attributes = $this->getAttributeList(
-            $encryptedData,
-            $this->_receipt['wrapped_receipt_key']
-        );
-
-        return $attributes;
     }
 
     /**
