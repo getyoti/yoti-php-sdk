@@ -163,8 +163,12 @@ class YotiClient
         // Decrypt attribute list
         $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
 
-        // Get user profile
-        return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
+        // Get ActivityDetails
+        $activityDetailsInst = ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
+
+        $activityDetailsInst->createApplicationProfile($this->getApplicationProfileAttributes());
+
+        return $activityDetailsInst;
     }
 
     /**
@@ -500,6 +504,21 @@ class YotiClient
         {
             throw new \Exception('PEM key is invalid', 400);
         }
+    }
+
+    private function getApplicationProfileAttributes()
+    {
+        if (!isset($this->_receipt['profile_content']) || !isset($this->_receipt['wrapped_receipt_key'])) {
+            return [];
+        }
+
+        $encryptedData = $this->getEncryptedData($this->_receipt['profile_content']);
+        $attributes = $this->getAttributeList(
+            $encryptedData,
+            $this->_receipt['wrapped_receipt_key']
+        );
+
+        return $attributes;
     }
 
     /**

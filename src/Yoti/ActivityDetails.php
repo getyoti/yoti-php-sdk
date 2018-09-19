@@ -10,6 +10,7 @@ use Yoti\Helper\ActivityDetailsHelper;
 use Yoti\Util\Age\AgeUnderOverProcessor;
 use Yoti\Util\Profile\AnchorProcessor;
 use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Entity\ApplicationProfile;
 
 /**
  * Class ActivityDetails
@@ -46,6 +47,11 @@ class ActivityDetails
      * @var \Yoti\Entity\Profile
      */
     private $profile;
+
+    /**
+     * @var ApplicationProfile
+     */
+    private $applicationProfile;
 
     /**
      * @var ActivityDetailsHelper
@@ -138,6 +144,33 @@ class ActivityDetails
         return $inst;
     }
 
+    public function createApplicationProfile(AttributeList $attributeList)
+    {
+        $profileAttributes = [];
+        $anchorProcessor = new AnchorProcessor();
+
+        foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
+            $attrName = $attr->getName();
+            $attrValue = AttributeConverter::convertValueBasedOnAttributeName($attr);
+            $attributeAnchors = $anchorProcessor->process($attr->getAnchors());
+            $profileAttributes[$attr->getName()] = new Attribute(
+                $attrName,
+                $attrValue,
+                $attributeAnchors['sources'],
+                $attributeAnchors['verifiers']
+            );
+        }
+        $this->applicationProfile = new ApplicationProfile($profileAttributes);
+    }
+
+    /**
+     * @return ApplicationProfile
+     */
+    public function getApplicationProfile()
+    {
+        return $this->applicationProfile;
+    }
+
     /**
      * @param ProtobufAttribute $protobufAttribute
      * @param array $attributeAnchors
@@ -148,10 +181,7 @@ class ActivityDetails
     private static function createYotiAttribute(ProtobufAttribute $protobufAttribute, array $attributeAnchors, $attrName)
     {
         try {
-            $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
-                $protobufAttribute->getValue(),
-                $protobufAttribute->getName()
-            );
+            $attrValue = AttributeConverter::convertValueBasedOnAttributeName($protobufAttribute);
             $yotiAttribute = new Attribute(
                 $attrName,
                 $attrValue,
