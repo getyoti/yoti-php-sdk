@@ -1,20 +1,8 @@
 <?php
 namespace Yoti\Entity;
 
-class Profile
+class Profile extends BaseProfile
 {
-    private $profileData;
-
-    /**
-     * Profile constructor.
-     *
-     * @param array $profileData
-     */
-    public function __construct(array $profileData)
-    {
-        $this->profileData = $profileData;
-    }
-
     /**
      * @return null|Attribute
      */
@@ -123,19 +111,5 @@ class Profile
     public function getDocumentDetails()
     {
         return $this->getProfileAttribute(Attribute::DOCUMENT_DETAILS);
-    }
-
-    /**
-     * @param $attributeName.
-     *
-     * @return null|Attribute
-     */
-    public function getProfileAttribute($attributeName)
-    {
-        if (isset($this->profileData[$attributeName])) {
-            $attributeObj = $this->profileData[$attributeName];
-            return $attributeObj instanceof Attribute ? $attributeObj : NULL;
-        }
-        return NULL;
     }
 }

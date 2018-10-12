@@ -45,6 +45,11 @@ class Receipt
         return $this->getAttribute(self::ATTR_REMEMBER_ME_ID);
     }
 
+    public function getParentRememberMeId()
+    {
+        return $this->getAttribute(self::ATTR_PARENT_REMEMBER_ME_ID);
+    }
+
     public function getSharingOutcome()
     {
         return $this->getAttribute(self::ATTR_SHARING_OUT_COME);
