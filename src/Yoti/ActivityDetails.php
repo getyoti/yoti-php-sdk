@@ -7,7 +7,6 @@ use Yoti\Entity\Receipt;
 use Yoti\Entity\Attribute;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
 use Attrpubapi_v1\AttributeList;
-use Yoti\Helper\ActivityDetailsHelper;
 use Yoti\Util\Age\AgeUnderOverProcessor;
 use Yoti\Util\Profile\AnchorProcessor;
 use Yoti\Util\Profile\AttributeConverter;
@@ -37,7 +36,7 @@ class ActivityDetails
     /**
      * @var string receipt identifier
      */
-    private $_rememberMeId;
+    private $rememberMeId;
 
     /**
      * @var array
@@ -95,7 +94,7 @@ class ActivityDetails
 
     private function setRememberMeId()
     {
-        $this->_rememberMeId = $this->receipt->getRememberMeId();
+        $this->rememberMeId = $this->receipt->getRememberMeId();
     }
 
     private function setProfile()
@@ -104,44 +103,40 @@ class ActivityDetails
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pem
         );
-        $this->userProfile = new Profile($this->getUserProfileAttributes($protobufAttrList));
+        $this->userProfile = new Profile($this->processUserProfileAttributes($protobufAttrList));
     }
 
     private function setApplicationProfile()
     {
-        $protobufAttrList = $this->receipt->parseFromAttribute(
+        $protobufAttributes = $this->receipt->parseFromAttribute(
             Receipt::ATTR_PROFILE_CONTENT,
             $this->pem
         );
         $this->applicationProfile = new ApplicationProfile(
-            $this->getApplicationProfileAttributes($protobufAttrList)
+            $this->processApplicationProfileAttributes($protobufAttributes)
         );
     }
 
-    private function getUserProfileAttributes(AttributeList $attributeList)
+    private function processUserProfileAttributes(AttributeList $attributeList)
     {
         // For ActivityDetails attributes
-        $attrs = [];
+        $attrsMap = [];
         // For Profile attributes
         $profileAttributes = [];
-        $ageConditionMetadata = [];
+        $ageVerificationAnchors = [];
 
         foreach ($attributeList->getAttributes() as $item) /** @var ProtobufAttribute $item */
         {
             $attrName = $item->getName();
 
-            if (empty($attrName)) {
-                continue;
-            }
-
             if ($attrName === 'selfie') {
-                $attrs[$attrName] = new Selfie(
+                $attrsMap[$attrName] = new Selfie(
                     $item->getValue(),
                     $item->getName()
                 );
             }
             else {
-                $attrs[$attrName] = $item->getValue();
+                $attrsMap[$attrName] = $item->getValue();
             }
 
             // Build attribute object for user profile
@@ -150,35 +145,40 @@ class ActivityDetails
             $profileAttributes[$attrName] = $yotiAttribute;
             // Add 'is_age_verified' and 'verified_age' attributes
             if (NULL !==  $yotiAttribute && preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
-                $ageConditionMetadata['sources'] = $attributeAnchors['sources'];
-                $ageConditionMetadata['verifiers'] = $attributeAnchors['verifiers'];
+                $ageVerificationAnchors = $attributeAnchors;
             }
         }
 
         // Add 'age_condition' and 'verified_age' attributes values
-        if (!empty($ageConditionMetadata)) {
-            $ageProcessor = new \Yoti\Util\Age\Processor($attrs);
+        $this->addAgeVerificationAttributes($profileAttributes, $ageVerificationAnchors, $attrsMap);
+
+        // Set user profile attributes for the old profile
+        $this->oldProfileData = $attrsMap;
+
+        return $profileAttributes;
+    }
+
+    private function addAgeVerificationAttributes(array &$profileAttributes, $ageVerificationAnchors, array $attrsMap)
+    {
+        // Add 'age_condition' and 'verified_age' attributes values
+        if (!empty($ageVerificationAnchors)) {
+            $ageProcessor = new \Yoti\Util\Age\Processor($attrsMap);
             $this->ageCondition = $ageProcessor->getCondition();
 
             $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
                 Attribute::AGE_CONDITION,
                 $this->ageCondition->isVerified(),
-                $ageConditionMetadata['sources'],
-                $ageConditionMetadata['verifiers']
+                $ageVerificationAnchors['sources'],
+                $ageVerificationAnchors['verifiers']
             );
 
             $profileAttributes[Attribute::VERIFIED_AGE] = new Attribute(
                 Attribute::VERIFIED_AGE,
                 $this->ageCondition->getVerifiedAge(),
-                $ageConditionMetadata['sources'],
-                $ageConditionMetadata['verifiers']
+                $ageVerificationAnchors['sources'],
+                $ageVerificationAnchors['verifiers']
             );
         }
-
-        // Set user profile attributes for the old profile
-        $this->oldProfileData = $attrs;
-
-        return $profileAttributes;
     }
 
     /**
@@ -186,7 +186,7 @@ class ActivityDetails
      *
      * @return array
      */
-    private function getApplicationProfileAttributes(AttributeList $attributeList)
+    private function processApplicationProfileAttributes(AttributeList $attributeList)
     {
         $profileAttributes = [];
 
@@ -269,7 +269,7 @@ class ActivityDetails
      */
     public function getUserId()
     {
-        return $this->_rememberMeId;
+        return $this->rememberMeId;
     }
 
     /**
