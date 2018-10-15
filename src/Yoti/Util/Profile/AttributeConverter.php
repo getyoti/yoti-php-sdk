@@ -7,6 +7,7 @@ use Yoti\Entity\Image;
 use Yoti\Entity\ApplicationProfile;
 use Compubapi_v1\EncryptedData;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
+use Attrpubapi_v1\AttributeList;
 use Yoti\Exception\AttributeException;
 
 class AttributeConverter
@@ -24,7 +25,7 @@ class AttributeConverter
         $attrName = $attribute->getName();
 
         if (empty($value)) {
-            throw new AttributeException('Attribute value cannot be NULL');
+            throw new AttributeException("{$attrName} Attribute value is NULL");
         }
 
         switch($attrName)
@@ -116,9 +117,28 @@ class AttributeConverter
             );
         } catch (\Exception $e) {
             $yotiAttribute = NULL;
-            trigger_error($e->getMessage(), E_USER_WARNING);
         }
 
         return $yotiAttribute;
+    }
+
+    public static function convertToYotiAttributesMap(AttributeList $attributeList)
+    {
+        $yotiAttributes = [];
+        $anchorProcessor = new AnchorProcessor();
+
+        foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
+            $attrName = $attr->getName();
+            if (NULL === $attrName) {
+                continue;
+            }
+            $attributeAnchors = $anchorProcessor->process($attr->getAnchors());
+            $yotiAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute(
+                $attr,
+                $attributeAnchors,
+                $attrName
+            );
+        }
+        return $yotiAttributes;
     }
 }

@@ -3,40 +3,40 @@
 namespace YotiTest;
 
 use \Yoti\ActivityDetails;
+use Yoti\Entity\Attribute;
 use \Yoti\Entity\Selfie;
 use \Yoti\Entity\Profile;
+use Yoti\Entity\Receipt;
+use Yoti\Entity\ApplicationProfile;
 
 class ActivityDetailsTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    public $dummyProfile = [];
-
     /**
      * @var ActivityDetails
      */
     public $activityDetails;
 
-    public $userId = 45555;
+    /**
+     * @var Profile
+     */
+    public $profile;
+
+    /**
+     * @var ApplicationProfile
+     */
+    public $applicationProfile;
+
+    public $userId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
 
     public function setUp()
     {
-        $this->dummyProfile = [
-            'family_name' => 'TestFamilyName',
-            'given_names' => 'TestGivenName',
-            'full_name'   => 'TestGivenName TestFamilyName',
-            'date_of_birth' => '11-07-2017',
-            'age_over:18'=> 'false',
-            'gender' => 'Male',
-            'nationality' => 'British',
-            'phone_number' => '07856836932',
-            'selfie' => new Selfie(file_get_contents(DUMMY_SELFIE_FILE), 'jpeg'),
-            'email_address' => 'test_email@yoti.com',
-            'postal_address' => '130 Fenchurch Street London, EC3M 5DJ'
-        ];
+        $pem = file_get_contents(PEM_FILE);
+        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $receipt = new Receipt($receiptArr['receipt']);
 
-        $this->activityDetails = new ActivityDetails($this->dummyProfile, $this->userId);
+        $this->activityDetails = new ActivityDetails($receipt, $pem);
+        $this->profile = $this->activityDetails->getProfile();
+        $this->applicationProfile = $this->activityDetails->getApplicationProfile();
     }
 
     /**
@@ -58,9 +58,17 @@ class ActivityDetailsTest extends TestCase
     /**
      * Test getting Given Names
      */
-    public function testGetGivenNames()
+    public function testGetProfile()
     {
-        $this->assertEquals($this->dummyProfile['given_names'], $this->activityDetails->getGivenNames());
+        $this->assertInstanceOf(Profile::class, $this->activityDetails->getProfile());
+    }
+
+    public function testGetApplicationProfile()
+    {
+        $this->assertInstanceOf(
+            ApplicationProfile::class,
+            $this->activityDetails->getApplicationProfile()
+        );
     }
 
     /**
@@ -68,7 +76,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetFamilyName()
     {
-        $this->assertEquals($this->dummyProfile['family_name'], $this->activityDetails->getFamilyName());
+        $this->assertNull($this->profile->getFamilyName());
     }
 
     /**
@@ -76,7 +84,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetFullName()
     {
-        $this->assertEquals($this->dummyProfile['full_name'], $this->activityDetails->getFullName());
+        $this->assertNull($this->profile->getFullName());
     }
 
     /**
@@ -84,31 +92,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetDateOfBirth()
     {
-        $this->assertEquals($this->dummyProfile['date_of_birth'], $this->activityDetails->getDateOfBirth());
-    }
-
-    /**
-     * Test age over 18.
-     */
-    public function testIsAgeVerified()
-    {
-        $this->assertEquals($this->dummyProfile['age_over:18'], $this->activityDetails->getProfileAttribute('age_over:18'));
-    }
-
-    /**
-     * Test Getting Gender
-     */
-    public function testGetGender()
-    {
-        $this->assertEquals($this->dummyProfile['gender'], $this->activityDetails->getGender());
-    }
-
-    /**
-     * Test getting Nationality
-     */
-    public function testGetNationality()
-    {
-        $this->assertEquals($this->dummyProfile['nationality'], $this->activityDetails->getNationality());
+        $this->assertNull($this->profile->getDateOfBirth());
     }
 
     /**
@@ -116,7 +100,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetPhoneNumber()
     {
-        $this->assertEquals($this->dummyProfile['phone_number'], $this->activityDetails->getPhoneNumber());
+        $this->assertEquals('+447474747474', $this->profile->getPhoneNumber()->getValue());
     }
 
     /**
@@ -124,7 +108,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetEmailAddress()
     {
-        $this->assertEquals($this->dummyProfile['email_address'], $this->activityDetails->getEmailAddress());
+        $this->assertNull($this->profile->getEmailAddress());
     }
 
     /**
@@ -132,20 +116,14 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetSelfie()
     {
-        $this->assertEquals($this->dummyProfile['selfie'], $this->activityDetails->getSelfie());
+        $this->assertInstanceOf(Attribute::class, $this->profile->getSelfie());
     }
 
     /**
-     * Test getting selfie object
+     * Test getting Selfie object
      */
     public function testGetSelfieEntity()
     {
         $this->assertInstanceOf(Selfie::class, $this->activityDetails->getSelfieEntity());
-    }
-
-    public function testGetProfile()
-    {
-        $profile = $this->activityDetails->getProfile();
-        $this->assertInstanceOf(Profile::class, $profile);
     }
 }
