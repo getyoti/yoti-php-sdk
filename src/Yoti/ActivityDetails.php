@@ -99,7 +99,7 @@ class ActivityDetails
 
     private function setProfile()
     {
-        $protobufAttrList = $this->receipt->parseFromAttribute(
+        $protobufAttrList = $this->receipt->parseAttribute(
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pem
         );
@@ -108,12 +108,12 @@ class ActivityDetails
 
     private function setApplicationProfile()
     {
-        $protobufAttributes = $this->receipt->parseFromAttribute(
+        $protobufAttributesList = $this->receipt->parseAttribute(
             Receipt::ATTR_PROFILE_CONTENT,
             $this->pem
         );
         $this->applicationProfile = new ApplicationProfile(
-            $this->processApplicationProfileAttributes($protobufAttributes)
+            AttributeConverter::convertToYotiAttributesMap($protobufAttributesList)
         );
     }
 
@@ -179,27 +179,6 @@ class ActivityDetails
                 $ageVerificationAnchors['verifiers']
             );
         }
-    }
-
-    /**
-     * @param AttributeList $attributeList
-     *
-     * @return array
-     */
-    private function processApplicationProfileAttributes(AttributeList $attributeList)
-    {
-        $profileAttributes = [];
-
-        foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
-            $attrName = $attr->getName();
-            $attributeAnchors = $this->anchorProcessor->process($attr->getAnchors());
-            $profileAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute(
-                $attr,
-                $attributeAnchors,
-                $attrName
-            );
-        }
-        return $profileAttributes;
     }
 
     /**

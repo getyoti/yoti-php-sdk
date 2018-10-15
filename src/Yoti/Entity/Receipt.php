@@ -93,7 +93,15 @@ class Receipt
         return NULL;
     }
 
-    public function parseFromAttribute($attributeName, $pem)
+    /**
+     * Return list of ProtobufAttributes.
+     *
+     * @param $attributeName
+     * @param $pem
+     *
+     * @return \Attrpubapi_v1\AttributeList
+     */
+    public function parseAttribute($attributeName, $pem)
     {
         $data = $this->getAttribute($attributeName);
         $encryptedData = AttributeConverter::getEncryptedData($data);
