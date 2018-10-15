@@ -92,19 +92,14 @@ class YotiClient
     public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
     {
         $this->checkRequiredModules();
-
         $this->checkSdkId($sdkId);
-
         $this->processPem($pem);
-
-        // Validate and set X-Yoti-SDK header value
-        if($this->isValidSdkIdentifier($sdkIdentifier)) {
-            $this->_sdkIdentifier = $sdkIdentifier;
-        }
+        $this->validateSdkIdentifier($sdkIdentifier);
 
         $this->_sdkId = $sdkId;
         $this->_pem = $pem;
         $this->_connectApi = $connectApi;
+        $this->_sdkIdentifier = $sdkIdentifier;
     }
 
     /**
@@ -232,7 +227,7 @@ class YotiClient
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function validateResult(array $responseArr, $httpCode)
+    private function validateResult(array $responseArr, $httpCode)
     {
         $httpCode = (int) $httpCode;
 
@@ -262,7 +257,7 @@ class YotiClient
      *
      * @return null|string
      */
-    public function getErrorMessage(array $result)
+    private function getErrorMessage(array $result)
     {
         return isset($result['errors'][0]['message']) ? $result['errors'][0]['message'] : '';
     }
@@ -450,7 +445,7 @@ class YotiClient
      *
      * @throws \Exception
      */
-    public function processPem(&$pem)
+    private function processPem(&$pem)
     {
         // Check PEM passed
         if(!$pem)
@@ -484,7 +479,7 @@ class YotiClient
      *
      * @throws \Exception
      */
-    public function checkSdkId($sdkId)
+    private function checkSdkId($sdkId)
     {
         // Check SDK ID passed
         if(!$sdkId)
@@ -498,7 +493,7 @@ class YotiClient
      *
      * @throws \Exception
      */
-    public function checkRequiredModules()
+    private function checkRequiredModules()
     {
         $requiredModules = ['curl', 'json'];
         foreach($requiredModules as $mod)
@@ -513,18 +508,14 @@ class YotiClient
     /**
      * Validate SDK identifier.
      *
-     * @param $providedHeader
-     *
-     * @return bool
+     * @param $sdkIdentifier
      *
      * @throws \Exception
      */
-    private function isValidSdkIdentifier($providedHeader)
+    private function validateSdkIdentifier($sdkIdentifier)
     {
-        if(in_array($providedHeader, $this->acceptedSDKIdentifiers, TRUE)) {
-            return TRUE;
+        if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, TRUE)) {
+            throw new \Exception("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
         }
-
-        throw new \Exception("Wrong Yoti SDK header value provided: {$providedHeader}", 406);
     }
 }

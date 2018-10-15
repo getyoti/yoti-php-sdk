@@ -4,10 +4,10 @@ namespace Yoti\Util\Profile;
 use Yoti\Entity\Attribute;
 use Yoti\Entity\DocumentDetails;
 use Yoti\Entity\Image;
+use Yoti\Entity\Profile;
 use Yoti\Entity\ApplicationProfile;
 use Compubapi_v1\EncryptedData;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
-use Attrpubapi_v1\AttributeList;
 use Yoti\Exception\AttributeException;
 
 class AttributeConverter
@@ -30,9 +30,9 @@ class AttributeConverter
 
         switch($attrName)
         {
-            case Attribute::DOCUMENT_DETAILS:
+            case Profile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
-            case Attribute::STRUCTURED_POSTAL_ADDRESS:
+            case Profile::ATTR_STRUCTURED_POSTAL_ADDRESS:
                 // Convert structured_postal_address value to an Array
                 return json_encode($value, true);
             case ApplicationProfile::ATTR_APPLICATION_LOGO:
@@ -78,36 +78,21 @@ class AttributeConverter
         return $encryptedData;
     }
 
-    public static function convertToAttributesList($encryptedData, $wrappedReceiptKey, $pem)
-    {
-        // Unwrap key and get profile
-        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $pem);
-
-        // Decipher encrypted data with unwrapped key and IV
-        $cipherText = openssl_decrypt(
-            $encryptedData->getCipherText(),
-            'aes-256-cbc',
-            $unwrappedKey,
-            OPENSSL_RAW_DATA,
-            $encryptedData->getIv()
-        );
-
-        $attributeList = new \Attrpubapi_v1\AttributeList();
-        $attributeList->mergeFromString($cipherText);
-
-        return $attributeList;
-    }
-
     /**
+     * Return a Yoti Attribute.
+     *
      * @param ProtobufAttribute $protobufAttribute
-     * @param array $attributeAnchors
-     * @param $attrName
      *
      * @return null|Attribute
      */
-    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute, array $attributeAnchors, $attrName)
+    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute)
     {
         try {
+            $anchorsProcessor = new AnchorProcessor();
+            $attributeAnchors = $anchorsProcessor->process(
+                $protobufAttribute->getAnchors()
+            );
+            $attrName = $protobufAttribute->getName();
             $attrValue = AttributeConverter::convertValueBasedOnAttributeName($protobufAttribute);
             $yotiAttribute = new Attribute(
                 $attrName,
@@ -120,25 +105,5 @@ class AttributeConverter
         }
 
         return $yotiAttribute;
-    }
-
-    public static function convertToYotiAttributesMap(AttributeList $attributeList)
-    {
-        $yotiAttributes = [];
-        $anchorProcessor = new AnchorProcessor();
-
-        foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
-            $attrName = $attr->getName();
-            if (NULL === $attrName) {
-                continue;
-            }
-            $attributeAnchors = $anchorProcessor->process($attr->getAnchors());
-            $yotiAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute(
-                $attr,
-                $attributeAnchors,
-                $attrName
-            );
-        }
-        return $yotiAttributes;
     }
 }

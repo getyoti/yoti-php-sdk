@@ -3,21 +3,6 @@ namespace Yoti\Entity;
 
 class Attribute
 {
-    const FAMILY_NAME = 'family_name';
-    const GIVEN_NAMES = 'given_names';
-    const FULL_NAME = 'full_name';
-    const DATE_OF_BIRTH = 'date_of_birth';
-    const AGE_CONDITION = 'age_condition';
-    const VERIFIED_AGE = 'verified_age';
-    const GENDER = 'gender';
-    const NATIONALITY = 'nationality';
-    const PHONE_NUMBER = 'phone_number';
-    const SELFIE = 'selfie';
-    const EMAIL_ADDRESS = 'email_address';
-    const POSTAL_ADDRESS = 'postal_address';
-    const DOCUMENT_DETAILS = "document_details";
-    const STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
-
     /**
      * @var string
      */

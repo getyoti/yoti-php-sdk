@@ -8,9 +8,9 @@ use Yoti\Entity\Attribute;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
 use Attrpubapi_v1\AttributeList;
 use Yoti\Util\Age\AgeUnderOverProcessor;
-use Yoti\Util\Profile\AnchorProcessor;
-use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Util\Profile\AttributeListConverter;
 
 /**
  * Class ActivityDetails
@@ -20,19 +20,6 @@ use Yoti\Entity\ApplicationProfile;
  */
 class ActivityDetails
 {
-    const ATTR_FAMILY_NAME = 'family_name';
-    const ATTR_GIVEN_NAMES = 'given_names';
-    const ATTR_FULL_NAME = 'full_name';
-    const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_AGE_VERIFIED = 'age_verified';
-    const ATTR_GENDER = 'gender';
-    const ATTR_NATIONALITY = 'nationality';
-    const ATTR_PHONE_NUMBER = 'phone_number';
-    const ATTR_SELFIE = 'selfie';
-    const ATTR_EMAIL_ADDRESS = 'email_address';
-    const ATTR_POSTAL_ADDRESS = 'postal_address';
-    const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
-
     /**
      * @var string receipt identifier
      */
@@ -69,11 +56,6 @@ class ActivityDetails
     private $ageCondition;
 
     /**
-     * @var AnchorProcessor
-     */
-    private $anchorProcessor;
-
-    /**
      * ActivityDetails constructor.
      *
      * @param array $attributes
@@ -83,7 +65,6 @@ class ActivityDetails
     {
         $this->receipt = $receipt;
         $this->pem = $pem;
-        $this->anchorProcessor = new AnchorProcessor();
         // Set default value of ageCondition
         $this->ageCondition = new \Yoti\Util\Age\Condition([]);
 
@@ -113,7 +94,7 @@ class ActivityDetails
             $this->pem
         );
         $this->applicationProfile = new ApplicationProfile(
-            AttributeConverter::convertToYotiAttributesMap($protobufAttributesList)
+            AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList)
         );
     }
 
@@ -123,7 +104,8 @@ class ActivityDetails
         $attrsMap = [];
         // For Profile attributes
         $profileAttributes = [];
-        $ageVerificationAnchors = [];
+        // Yoti attribute for the age condition
+        $ageAttribute = NULL;
 
         foreach ($attributeList->getAttributes() as $item) /** @var ProtobufAttribute $item */
         {
@@ -140,17 +122,16 @@ class ActivityDetails
             }
 
             // Build attribute object for user profile
-            $attributeAnchors = $this->anchorProcessor->process($item->getAnchors());
-            $yotiAttribute = AttributeConverter::convertToYotiAttribute($item, $attributeAnchors, $attrName);
+            $yotiAttribute = AttributeConverter::convertToYotiAttribute($item);
             $profileAttributes[$attrName] = $yotiAttribute;
             // Add 'is_age_verified' and 'verified_age' attributes
             if (NULL !==  $yotiAttribute && preg_match(AgeUnderOverProcessor::AGE_PATTERN, $attrName)) {
-                $ageVerificationAnchors = $attributeAnchors;
+                $ageAttribute = $yotiAttribute;
             }
         }
 
         // Add 'age_condition' and 'verified_age' attributes values
-        $this->addAgeVerificationAttributes($profileAttributes, $ageVerificationAnchors, $attrsMap);
+        $this->addAgeVerificationAttributes($profileAttributes, $ageAttribute, $attrsMap);
 
         // Set user profile attributes for the old profile
         $this->oldProfileData = $attrsMap;
@@ -158,25 +139,32 @@ class ActivityDetails
         return $profileAttributes;
     }
 
-    private function addAgeVerificationAttributes(array &$profileAttributes, $ageVerificationAnchors, array $attrsMap)
+    /**
+     * @param array $profileAttributes
+     * @param Attribute $ageAttribute
+     * @param array $attrsMap
+     */
+    private function addAgeVerificationAttributes(array &$profileAttributes, $ageAttribute, array $attrsMap)
     {
         // Add 'age_condition' and 'verified_age' attributes values
-        if (!empty($ageVerificationAnchors)) {
+        if (NULL !== $ageAttribute) {
             $ageProcessor = new \Yoti\Util\Age\Processor($attrsMap);
             $this->ageCondition = $ageProcessor->getCondition();
+            $sources = $ageAttribute->getSources();
+            $verifiers = $ageAttribute->getVerifiers();
 
-            $profileAttributes[Attribute::AGE_CONDITION] = new Attribute(
-                Attribute::AGE_CONDITION,
+            $profileAttributes[Profile::ATTR_AGE_CONDITION] = new Attribute(
+                Profile::ATTR_AGE_CONDITION,
                 $this->ageCondition->isVerified(),
-                $ageVerificationAnchors['sources'],
-                $ageVerificationAnchors['verifiers']
+                $sources,
+                $verifiers
             );
 
-            $profileAttributes[Attribute::VERIFIED_AGE] = new Attribute(
-                Attribute::VERIFIED_AGE,
+            $profileAttributes[Profile::ATTR_VERIFIED_AGE] = new Attribute(
+                Profile::ATTR_VERIFIED_AGE,
                 $this->ageCondition->getVerifiedAge(),
-                $ageVerificationAnchors['sources'],
-                $ageVerificationAnchors['verifiers']
+                $sources,
+                $verifiers
             );
         }
     }
@@ -187,19 +175,6 @@ class ActivityDetails
     public function getApplicationProfile()
     {
         return $this->applicationProfile;
-    }
-
-    /**
-     * Set a user profile attribute.
-     *
-     * @param $param
-     * @param $value
-     */
-    protected function setProfileAttribute($param, $value)
-    {
-        if (!empty($param)) {
-            $this->oldProfileData[$param] = $value;
-        }
     }
 
     /**
@@ -261,7 +236,7 @@ class ActivityDetails
      */
     public function getFamilyName()
     {
-        return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
+        return $this->getProfileAttribute(Profile::ATTR_FAMILY_NAME);
     }
 
     /**
@@ -274,7 +249,7 @@ class ActivityDetails
      */
     public function getGivenNames()
     {
-        return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
+        return $this->getProfileAttribute(Profile::ATTR_GIVEN_NAMES);
     }
 
     /**
@@ -287,7 +262,7 @@ class ActivityDetails
      */
     public function getFullName()
     {
-        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
+        return $this->getProfileAttribute(Profile::ATTR_FULL_NAME);
     }
 
     /**
@@ -300,7 +275,7 @@ class ActivityDetails
      */
     public function getDateOfBirth()
     {
-        return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
+        return $this->getProfileAttribute(Profile::ATTR_DATE_OF_BIRTH);
     }
 
     /**
@@ -313,7 +288,7 @@ class ActivityDetails
      */
     public function getGender()
     {
-        return $this->getProfileAttribute(self::ATTR_GENDER);
+        return $this->getProfileAttribute(Profile::ATTR_GENDER);
     }
 
     /**
@@ -326,7 +301,7 @@ class ActivityDetails
      */
     public function getNationality()
     {
-        return $this->getProfileAttribute(self::ATTR_NATIONALITY);
+        return $this->getProfileAttribute(Profile::ATTR_NATIONALITY);
     }
 
     /**
@@ -339,7 +314,7 @@ class ActivityDetails
      */
     public function getPhoneNumber()
     {
-        return $this->getProfileAttribute(self::ATTR_PHONE_NUMBER);
+        return $this->getProfileAttribute(Profile::ATTR_PHONE_NUMBER);
     }
 
     /**
@@ -352,7 +327,7 @@ class ActivityDetails
      */
     public function getSelfie()
     {
-        $selfie = $this->getProfileAttribute(self::ATTR_SELFIE);
+        $selfie = $this->getProfileAttribute(Profile::ATTR_SELFIE);
 
         if($selfie instanceof Selfie)
         {
@@ -371,7 +346,7 @@ class ActivityDetails
      */
     public function getSelfieEntity()
     {
-        $selfieObj = $this->getProfileAttribute(self::ATTR_SELFIE);
+        $selfieObj = $this->getProfileAttribute(Profile::ATTR_SELFIE);
         // Returns selfie entity or null
         return ($selfieObj instanceof Selfie) ? $selfieObj : NULL;
     }
@@ -386,7 +361,7 @@ class ActivityDetails
      */
     public function getEmailAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_EMAIL_ADDRESS);
+        return $this->getProfileAttribute(Profile::ATTR_EMAIL_ADDRESS);
     }
 
     /**
@@ -399,7 +374,7 @@ class ActivityDetails
      */
     public function getPostalAddress()
     {
-        $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        $postalAddress = $this->getProfileAttribute(Profile::ATTR_POSTAL_ADDRESS);
         if (NULL === $postalAddress) {
             // Get it from structured_postal_address.formatted_address
             $structuredPostalAddress = $this->getStructuredPostalAddress();
@@ -423,7 +398,7 @@ class ActivityDetails
      */
     public function getStructuredPostalAddress()
     {
-        $structuredPostalAddress = $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
+        $structuredPostalAddress = $this->getProfileAttribute(Profile::ATTR_STRUCTURED_POSTAL_ADDRESS);
         return json_decode($structuredPostalAddress, true);
     }
 

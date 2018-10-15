@@ -3,12 +3,27 @@ namespace Yoti\Entity;
 
 class Profile extends BaseProfile
 {
+    const ATTR_FAMILY_NAME = 'family_name';
+    const ATTR_GIVEN_NAMES = 'given_names';
+    const ATTR_FULL_NAME = 'full_name';
+    const ATTR_DATE_OF_BIRTH = 'date_of_birth';
+    const ATTR_AGE_CONDITION = 'age_condition';
+    const ATTR_VERIFIED_AGE = 'verified_age';
+    const ATTR_GENDER = 'gender';
+    const ATTR_NATIONALITY = 'nationality';
+    const ATTR_PHONE_NUMBER = 'phone_number';
+    const ATTR_SELFIE = 'selfie';
+    const ATTR_EMAIL_ADDRESS = 'email_address';
+    const ATTR_POSTAL_ADDRESS = 'postal_address';
+    const ATTR_DOCUMENT_DETAILS = "document_details";
+    const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
+
     /**
      * @return null|Attribute
      */
     public function getFullName()
     {
-        return $this->getProfileAttribute(Attribute::FULL_NAME);
+        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
     }
 
     /**
@@ -16,7 +31,7 @@ class Profile extends BaseProfile
      */
     public function getFamilyName()
     {
-        return $this->getProfileAttribute(Attribute::FAMILY_NAME);
+        return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
     }
 
     /**
@@ -24,7 +39,7 @@ class Profile extends BaseProfile
      */
     public function getGivenNames()
     {
-        return $this->getProfileAttribute(Attribute::GIVEN_NAMES);
+        return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
     }
 
     /**
@@ -32,7 +47,7 @@ class Profile extends BaseProfile
      */
     public function getDateOfBirth()
     {
-        return $this->getProfileAttribute(Attribute::DATE_OF_BIRTH);
+        return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
     }
 
     /**
@@ -40,7 +55,7 @@ class Profile extends BaseProfile
      */
     public function getGender()
     {
-        return $this->getProfileAttribute(Attribute::GENDER);
+        return $this->getProfileAttribute(self::ATTR_GENDER);
     }
 
     /**
@@ -48,7 +63,7 @@ class Profile extends BaseProfile
      */
     public function getNationality()
     {
-        return $this->getProfileAttribute(Attribute::NATIONALITY);
+        return $this->getProfileAttribute(self::ATTR_NATIONALITY);
     }
 
     /**
@@ -56,7 +71,7 @@ class Profile extends BaseProfile
      */
     public function getPhoneNumber()
     {
-        return $this->getProfileAttribute(Attribute::PHONE_NUMBER);
+        return $this->getProfileAttribute(self::ATTR_PHONE_NUMBER);
     }
 
     /**
@@ -64,7 +79,7 @@ class Profile extends BaseProfile
      */
     public function getSelfie()
     {
-        return $this->getProfileAttribute(Attribute::SELFIE);
+        return $this->getProfileAttribute(self::ATTR_SELFIE);
     }
 
     /**
@@ -72,7 +87,7 @@ class Profile extends BaseProfile
      */
     public function getEmailAddress()
     {
-        return $this->getProfileAttribute(Attribute::EMAIL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_EMAIL_ADDRESS);
     }
 
     /**
@@ -80,7 +95,7 @@ class Profile extends BaseProfile
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute(Attribute::POSTAL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
     }
 
     /**
@@ -88,7 +103,7 @@ class Profile extends BaseProfile
      */
     public function getStructuredPostalAddress()
     {
-        return $this->getProfileAttribute(Attribute::STRUCTURED_POSTAL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
 
     /**
@@ -96,7 +111,7 @@ class Profile extends BaseProfile
      */
     public function getAgeCondition()
     {
-        return $this->getProfileAttribute(Attribute::AGE_CONDITION);
+        return $this->getProfileAttribute(self::ATTR_AGE_CONDITION);
     }
 
     /**
@@ -104,11 +119,11 @@ class Profile extends BaseProfile
      */
     public function getVerifiedAge()
     {
-        return $this->getProfileAttribute(Attribute::VERIFIED_AGE);
+        return $this->getProfileAttribute(self::ATTR_VERIFIED_AGE);
     }
 
     public function getDocumentDetails()
     {
-        return $this->getProfileAttribute(Attribute::DOCUMENT_DETAILS);
+        return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
     }
 }

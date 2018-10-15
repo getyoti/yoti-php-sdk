@@ -2,7 +2,6 @@
 
 namespace Yoti\Entity;
 
-
 class BaseProfile
 {
     protected $profileData;

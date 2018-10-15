@@ -5,7 +5,7 @@ use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
 use Yoti\Entity\ApplicationProfile;
-use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Util\Profile\AttributeListConverter;
 
 class ReceiptTest extends TestCase
 {
@@ -60,7 +60,7 @@ class ReceiptTest extends TestCase
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pem
         );
-        $yotiAttributesList = AttributeConverter::convertToYotiAttributesMap(
+        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
             $protobufAttributesList
         );
         $profile = new Profile($yotiAttributesList);
@@ -73,7 +73,7 @@ class ReceiptTest extends TestCase
             Receipt::ATTR_PROFILE_CONTENT,
             $this->pem
         );
-        $yotiAttributesList = AttributeConverter::convertToYotiAttributesMap(
+        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
             $protobufAttributesList
         );
         $applicationProfile = new ApplicationProfile($yotiAttributesList);

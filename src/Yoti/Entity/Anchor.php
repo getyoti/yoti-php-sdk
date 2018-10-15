@@ -2,8 +2,6 @@
 
 namespace Yoti\Entity;
 
-use Yoti\Entity\SignedTimeStamp;
-
 class Anchor
 {
     /**
