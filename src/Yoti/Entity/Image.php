@@ -24,8 +24,8 @@ class Image
 
     public function __construct($content, $type)
     {
-        $this->content = $content;
-        $this->type = strtolower($type);
+        $this->setType($type);
+        $this->setContent($content);
     }
 
     /**
@@ -33,7 +33,7 @@ class Image
      *
      * @param string $content
      */
-    public function setContent($content)
+    private function setContent($content)
     {
         if(!empty($content)) {
             $this->content = $content;
@@ -45,10 +45,10 @@ class Image
      *
      * @param string $type
      */
-    public function setType($type)
+    private function setType($type)
     {
         if(!empty($type)) {
-            $this->type = $type;
+            $this->type = strtolower($type);
         }
     }
 

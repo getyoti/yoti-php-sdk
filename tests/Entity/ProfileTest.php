@@ -33,7 +33,7 @@ class ProfileTest extends TestCase
 
         // Stub the method makeRequest to return the result we want
         $this->yotiClient->method('makeRequest')
-            ->willreturn($result);
+            ->willReturn($result);
 
         $activityDetails = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
         $this->profile = $activityDetails->getProfile();

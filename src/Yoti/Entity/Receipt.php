@@ -2,8 +2,9 @@
 
 namespace Yoti\Entity;
 
-use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Exception\ReceiptException;
+use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Util\Profile\AttributeListConverter;
 
 class Receipt
 {
@@ -75,16 +76,6 @@ class Receipt
         return $this->getAttribute(self::ATTR_TIMESTAMP);
     }
 
-    /**
-     * @throws ReceiptException
-     */
-    private function validateReceipt(array $receiptData)
-    {
-        if (!isset($receiptData[self::ATTR_WRAPPED_RECEIPT_KEY])) {
-            throw new ReceiptException('Wrapped Receipt key attr is missing');
-        }
-    }
-
     public function getAttribute($attributeName)
     {
         if (!empty($attributeName) && isset($this->receiptData[$attributeName])) {
@@ -94,7 +85,7 @@ class Receipt
     }
 
     /**
-     * Return list of ProtobufAttributes.
+     * Return Protobuf Attributes List.
      *
      * @param $attributeName
      * @param $pem
@@ -106,10 +97,22 @@ class Receipt
         $data = $this->getAttribute($attributeName);
         $encryptedData = AttributeConverter::getEncryptedData($data);
 
-        return AttributeConverter::convertToAttributesList(
+        return AttributeListConverter::decryptData(
             $encryptedData,
             $this->getWrappedReceiptKey(),
             $pem
         );
+    }
+
+    /**
+     * Check Wrapped_receipt_key exists and is not NULL.
+     *
+     * @throws ReceiptException
+     */
+    private function validateReceipt(array $receiptData)
+    {
+        if (!isset($receiptData[self::ATTR_WRAPPED_RECEIPT_KEY])) {
+            throw new ReceiptException('Wrapped Receipt key attr is missing');
+        }
     }
 }
