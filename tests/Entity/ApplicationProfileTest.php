@@ -59,8 +59,8 @@ class ApplicationProfileTest extends TestCase
     public function testGetApplicationLogoImageType()
     {
         $this->assertEquals(
-            'png',
-            $this->dummyProfile->getApplicationLogo()->getValue()->getType()
+            'image/png',
+            $this->dummyProfile->getApplicationLogo()->getValue()->getMimeType()
         );
     }
 }

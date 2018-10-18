@@ -112,9 +112,10 @@ class ActivityDetails
             $attrName = $item->getName();
 
             if ($attrName === 'selfie') {
+                $imageExtension = AttributeConverter::imageTypeToExtension($item->getContentType());
                 $attrsMap[$attrName] = new Selfie(
                     $item->getValue(),
-                    $item->getName()
+                    $imageExtension
                 );
             }
             else {
