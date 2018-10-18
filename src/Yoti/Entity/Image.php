@@ -1,6 +1,8 @@
 <?php
 namespace Yoti\Entity;
 
+use Yoti\Exception\AttributeException;
+
 /**
  * Image entity class.
  *
@@ -9,51 +11,56 @@ namespace Yoti\Entity;
 class Image
 {
     /**
-     * Selfie image data.
+     * Image data.
      *
      * @var string
      */
     private $content;
 
     /**
-     * Selfie image type.
-     *
      * @var string
      */
-    private $type;
-
-    public function __construct($content, $type)
-    {
-        $this->setType($type);
-        $this->setContent($content);
-    }
+    private $mimeType;
 
     /**
-     * Set selfie image data.
+     * Map image extension to the type enum which is an integer.
+     *
+     * @var array
+     */
+    private $imageTypeMap = [
+        'jpeg' => IMAGETYPE_JPEG,
+        'png' => IMAGETYPE_PNG,
+    ];
+
+    /**
+     * Image constructor.
      *
      * @param string $content
+     * @param string $imageExtension
      */
-    private function setContent($content)
+    public function __construct($content, $imageExtension)
     {
-        if(!empty($content)) {
-            $this->content = $content;
-        }
+        $this->content = $content;
+        $this->mimeType = $this->imageTypeToMimeType(strtolower($imageExtension));
     }
 
     /**
-     * Set selfie image type.
+     * @param $imageExtension
      *
-     * @param string $type
+     * @return string
+     *
+     * @throws AttributeException
      */
-    private function setType($type)
+    private function imageTypeToMimeType($imageExtension)
     {
-        if(!empty($type)) {
-            $this->type = strtolower($type);
-        }
+       $this->validateImageExtension($imageExtension);
+       $imageTypeEnum = $this->imageTypeMap[$imageExtension];
+
+       return image_type_to_mime_type($imageTypeEnum);
     }
 
     /**
-     * Returns selfie image data.
+     * Returns Image data.
      *
      * @return string
      */
@@ -63,17 +70,36 @@ class Image
     }
 
     /**
-     * Returns selfie image type.
-     *
      * @return string
      */
-    public function getType()
+    public function getMimeType()
     {
-        return $this->type;
+        return $this->mimeType;
     }
 
     /**
-     * Return selfie data.
+     * @return null|string
+     */
+    public function getBase64Content()
+    {
+        $data = base64_encode($this->content);
+        return "data:{$this->mimeType};base64,{$data}";
+    }
+
+    /**
+     * @param $imageExtension
+     *
+     * @throws AttributeException
+     */
+    private function validateImageExtension($imageExtension)
+    {
+        if (!isset($this->imageTypeMap[$imageExtension])) {
+            throw new AttributeException("Image extension {$imageExtension} not supported");
+        }
+    }
+
+    /**
+     * Return Image data.
      *
      * @return string
      */

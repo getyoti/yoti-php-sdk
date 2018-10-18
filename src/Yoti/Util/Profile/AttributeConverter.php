@@ -32,18 +32,29 @@ class AttributeConverter
         {
             case Profile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
+
             case Profile::ATTR_STRUCTURED_POSTAL_ADDRESS:
                 // Convert structured_postal_address value to an Array
                 return json_encode($value, true);
+
+            case Profile::ATTR_SELFIE:
             case ApplicationProfile::ATTR_APPLICATION_LOGO:
-                $format = self::getImageFormat($attribute->getContentType());
-                return new Image($value, $format);
+                $imageExtension = self::imageTypeToExtension($attribute->getContentType());
+                return new Image($value, $imageExtension);
+
             default:
                 return $value;
         }
     }
 
-    public static function getImageFormat($type)
+    /**
+     * Convert Protobuf Image type to an image extension.
+     *
+     * @param int $type
+     *
+     * @return string
+     */
+    public static function imageTypeToExtension($type)
     {
         $type = (int)$type;
 
@@ -52,11 +63,13 @@ class AttributeConverter
             case 2:
                 $format = 'JPEG';
                 break;
+
             case 4:
                 $format = 'PNG';
                 break;
+
             default:
-                $format = 'PNG';
+                $format = 'UNSUPPORTED';
 
         }
         return $format;
