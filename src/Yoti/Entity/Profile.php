@@ -126,4 +126,14 @@ class Profile extends BaseProfile
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
     }
+
+    /**
+     * Return all the derived attributes from the DOB e.g 'Age Over', 'Age Under'
+     *
+     * @return array
+     */
+    public function getAgeVerifications()
+    {
+        return $this->profileData['age_verifications'];
+    }
 }

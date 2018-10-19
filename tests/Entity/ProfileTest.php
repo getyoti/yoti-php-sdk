@@ -3,6 +3,8 @@
 namespace YotiTest\Entity;
 
 use YotiTest\TestCase;
+use Yoti\Entity\Attribute;
+use Yoti\Util\Age\Processor;
 
 class ProfileTest extends TestCase
 {
@@ -49,5 +51,27 @@ class ProfileTest extends TestCase
     {
         $phoneNumber = $this->profile->getPhoneNumber();
         $this->assertEquals('phone_number', $phoneNumber->getName());
+    }
+
+    public function testGetAgeVerifications()
+    {
+        $profileData = [
+            'age_over:18' => new Attribute('age_over:18', 'true', [], []),
+            'age_under:18' => new Attribute('age_under:18', 'false', [], []),
+        ];
+        $processor = new Processor($profileData);
+        $resultArr = $processor->findAgeVerifications();
+        $ageOver18 = $resultArr['age_over:18'];
+        $ageUnder18 = $resultArr['age_under:18'];
+
+        $this->assertTrue($ageOver18->getResult());
+        $this->assertEquals(18, $ageOver18->getAge());
+        $this->assertEquals('age_over', $ageOver18->getChecktype());
+        $this->assertInstanceOf(Attribute::class, $ageOver18->getAttribute());
+
+        $this->assertFalse($ageUnder18->getResult());
+        $this->assertEquals(18, $ageUnder18->getAge());
+        $this->assertEquals('age_under', $ageUnder18->getChecktype());
+        $this->assertInstanceOf(Attribute::class, $ageUnder18->getAttribute());
     }
 }
