@@ -8,6 +8,7 @@ use Yoti\Entity\Attribute;
 use Attrpubapi_v1\Attribute as ProtobufAttribute;
 use Attrpubapi_v1\AttributeList;
 use Yoti\Util\Age\AgeUnderOverProcessor;
+use Yoti\Util\Age\Processor;
 use Yoti\Entity\ApplicationProfile;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;
@@ -132,7 +133,8 @@ class ActivityDetails
         }
 
         // Add 'age_condition' and 'verified_age' attributes values
-        $this->addAgeVerificationAttributes($profileAttributes, $ageAttribute, $attrsMap);
+        //$this->addAgeVerificationAttributes($profileAttributes, $ageAttribute, $attrsMap);
+        $this->findAgeVerifications($profileAttributes);
 
         // Set user profile attributes for the old profile
         $this->oldProfileData = $attrsMap;
@@ -167,6 +169,15 @@ class ActivityDetails
                 $sources,
                 $verifiers
             );
+        }
+    }
+
+    private function findAgeVerifications(array &$profileAttributes)
+    {
+        $processor = new Processor($profileAttributes);
+        if ($ageDerivations = $processor->findAgeVerifications())
+        {
+            $profileAttributes['age_verifications'] = $ageDerivations;
         }
     }
 

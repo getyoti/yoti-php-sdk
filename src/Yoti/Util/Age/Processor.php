@@ -2,6 +2,9 @@
 
 namespace Yoti\Util\Age;
 
+use Yoti\Entity\AgeVerification;
+use Yoti\Entity\Attribute;
+
 class Processor
 {
     private $profileData;
@@ -15,6 +18,12 @@ class Processor
      * @return Condition
      */
     public function getCondition()
+    {
+        $ageData = $this->getAgeData();
+        return new Condition($ageData['result'], $ageData['verifiedAge']);
+    }
+
+    public function getAgeVerification()
     {
         $ageData = $this->getAgeData();
         return new Condition($ageData['result'], $ageData['verifiedAge']);
@@ -49,6 +58,28 @@ class Processor
         }
 
         return $ageData;
+    }
+
+    public function findAgeVerifications()
+    {
+        $ageVerificationsArr = [];
+        foreach($this->profileData as $attrName => $attributeObj)
+        {
+            foreach($this->getAgeProcessors() as $processorClass)
+            {
+                $procesorObj = new $processorClass($attributeObj);
+                if ($result = $procesorObj->parseAttribute()) {
+                    $ageVerificationsArr[$attrName] = new AgeVerification(
+                        $attributeObj,
+                        $result['checkType'],
+                        $result['age'],
+                        $result['result']
+                    );
+                }
+            }
+        }
+
+        return $ageVerificationsArr;
     }
 
     /**

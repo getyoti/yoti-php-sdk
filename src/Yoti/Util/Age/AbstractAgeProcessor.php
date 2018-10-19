@@ -2,6 +2,8 @@
 
 namespace Yoti\Util\Age;
 
+use Yoti\Entity\Attribute;
+
 abstract class AbstractAgeProcessor
 {
     // You must define this pattern in the child class
@@ -9,9 +11,11 @@ abstract class AbstractAgeProcessor
 
     public $profileData;
 
-    public function __construct(array $profileData)
+    private $attribute;
+
+    public function __construct(Attribute $attribute)
     {
-        $this->profileData = $profileData;
+        $this->attribute = $attribute;
     }
 
     /**
@@ -37,5 +41,19 @@ abstract class AbstractAgeProcessor
         return $resultArr;
     }
 
+    public function applyFilter()
+    {
+        if (preg_match(static::AGE_PATTERN, $this->attribute->getName(), $match))
+        {
+            return [
+                'row_attribute' => $match[0],
+                'result' => $this->attribute->getValue(),
+                ];
+        }
+        return FALSE;
+    }
+
     abstract public function process();
+
+    abstract public function parseAttribute();
 }

@@ -2,6 +2,8 @@
 
 namespace Yoti\Util\Age;
 
+use Yoti\Entity\Attribute;
+
 class AgeUnderOverProcessor extends AbstractAgeProcessor
 {
     const AGE_DELIMITER = ':';
@@ -24,6 +26,21 @@ class AgeUnderOverProcessor extends AbstractAgeProcessor
         $verifiedAge = $this->getVerifiedAge($ageRow['ageAttribute']);
 
         return ['result' => $ageRow['result'], 'verifiedAge' => $verifiedAge];
+    }
+
+    public function parseAttribute()
+    {
+        if ($searchResult = $this->applyFilter())
+        {
+            $ageCheckArr = explode(':', $searchResult['row_attribute']);
+            $resultArr = [
+                'checkType' => $ageCheckArr[0],
+                'age' => (int) $ageCheckArr[1],
+                'result' => $searchResult['result'] === 'true' ? true : false,
+            ];
+            return $resultArr;
+        }
+        return FALSE;
     }
 
     public function getVerifiedAge($ageAttribute)
