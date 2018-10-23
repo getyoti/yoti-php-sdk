@@ -40,8 +40,8 @@ class BaseAgeProcessor implements AgeProcessorInterface
     }
 
     /**
-     * This method could be overridden by the child class.
-     * Depending on the parsing process adn complexity.
+     * This method could be overridden by a child class.
+     * Depending on the parsing process and complexity.
      *
      * @param Attribute $attribute
      *
@@ -50,12 +50,14 @@ class BaseAgeProcessor implements AgeProcessorInterface
     protected function extractAgeVerificationData(Attribute $attribute)
     {
         $ageCheckArr = explode(static::AGE_DELIMITER, $attribute->getName());
-        $resultArr = [
-            'checkType' => $ageCheckArr[0],
-            'age' => (int) $ageCheckArr[1],
-            'result' => $attribute->getValue() === 'true' ? true : false,
-        ];
-        return $resultArr;
+        if (count($ageCheckArr) > 1) {
+            return [
+                'checkType' => $ageCheckArr[0],
+                'age' => (int) $ageCheckArr[1],
+                'result' => $attribute->getValue() === 'true' ? true : false,
+            ];
+        }
+        return NULL;
     }
 
     /**

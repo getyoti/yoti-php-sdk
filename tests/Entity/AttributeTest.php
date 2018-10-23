@@ -1,13 +1,12 @@
 <?php
 namespace YotiTest\Entity;
 
-use Yoti\Entity\Attribute;
 use YotiTest\TestCase;
+use Yoti\Entity\Profile;
+use Yoti\Entity\Attribute;
 
 class AttributeTest extends TestCase
 {
-    const ATTR_NAME = 'full_name';
-
     const ATTR_VALUE = 'Test FullName';
 
     protected $attributeSources = ['PASSPORT'];
@@ -21,7 +20,7 @@ class AttributeTest extends TestCase
     public function setup()
     {
         $this->dummyAttribute = new Attribute(
-            self::ATTR_NAME,
+            Profile::ATTR_FULL_NAME,
             self::ATTR_VALUE,
             $this->attributeSources,
             $this->attributeVerifiers
@@ -30,7 +29,7 @@ class AttributeTest extends TestCase
 
     public function testAttributeName()
     {
-        $this->assertEquals(self::ATTR_NAME, $this->dummyAttribute->getName());
+        $this->assertEquals(Profile::ATTR_FULL_NAME, $this->dummyAttribute->getName());
     }
 
     public function testAttributeValue()
