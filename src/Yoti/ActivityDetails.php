@@ -90,7 +90,7 @@ class ActivityDetails
     private function processUserProfileAttributes(AttributeList $protobufAttributesList)
     {
         $attributesMap = AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList);
-        $this->addAgeVerifications($attributesMap);
+        $this->appendAgeVerifications($attributesMap);
 
         return $attributesMap;
     }
@@ -100,10 +100,10 @@ class ActivityDetails
      *
      * @param array $attributesMap
      */
-    private function addAgeVerifications(array &$attributesMap)
+    private function appendAgeVerifications(array &$attributesMap)
     {
         $ageProcessor = new AgeProcessor($attributesMap);
-        if ($ageVerifications = $ageProcessor->findAgeVerifications())
+        if ($ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap())
         {
             $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
         }

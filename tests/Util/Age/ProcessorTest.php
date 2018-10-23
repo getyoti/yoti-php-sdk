@@ -18,7 +18,7 @@ class ProcessorTest extends TestCase
     {
         $ageAttribute = new Attribute('age_under:18', 'true', [], []);
         $ageProcessor = new Processor(['age_under:18'=> $ageAttribute]);
-        $ageVerifications = $ageProcessor->findAgeVerifications();
+        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
         $ageUnder18 = $ageVerifications['age_under:18'];
 
         $this->assertInstanceOf(AgeVerification::class, $ageUnder18);
@@ -36,7 +36,7 @@ class ProcessorTest extends TestCase
             'age_breaker:50'=> new Attribute('age_breaker:50', 'true', [], []),
         ];
         $ageProcessor = new Processor($profileData);
-        $ageVerifications = $ageProcessor->findAgeVerifications();
+        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
 
         $this->assertArrayHasKey('age_under:18', $ageVerifications);
         $this->assertInstanceOf(AgeVerification::class, $ageVerifications['age_under:18']);

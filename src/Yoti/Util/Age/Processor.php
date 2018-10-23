@@ -31,7 +31,7 @@ class Processor
      *      ...
      * ]
      */
-    public function findAgeVerifications()
+    public function getAgeVerificationsFromAttrsMap()
     {
         $ageVerificationsArr = [];
 

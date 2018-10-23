@@ -74,7 +74,7 @@ class ProfileTest extends TestCase
             'age_under:18' => new Attribute('age_under:18', 'false', [], []),
         ];
         $processor = new Processor($profileData);
-        $resultArr = $processor->findAgeVerifications();
+        $resultArr = $processor->getAgeVerificationsFromAttrsMap();
         $ageOver18 = $resultArr['age_over:18'];
         $ageUnder18 = $resultArr['age_under:18'];
 

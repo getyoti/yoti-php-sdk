@@ -2,11 +2,11 @@
 
 namespace YotiTest;
 
-use \Yoti\ActivityDetails;
+use Yoti\ActivityDetails;
 use Yoti\Entity\Attribute;
-use \Yoti\Entity\Selfie;
-use \Yoti\Entity\Profile;
+use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
+use Yoti\Entity\Image;
 use Yoti\Entity\ApplicationProfile;
 
 class ActivityDetailsTest extends TestCase
@@ -117,5 +117,6 @@ class ActivityDetailsTest extends TestCase
     public function testGetSelfie()
     {
         $this->assertInstanceOf(Attribute::class, $this->profile->getSelfie());
+        $this->assertInstanceOf(Image::class, $this->profile->getSelfie()->getValue());
     }
 }

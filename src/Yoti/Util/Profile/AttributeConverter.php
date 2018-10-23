@@ -42,6 +42,14 @@ class AttributeConverter
         }
     }
 
+    /**
+     * @param $value
+     * @param $contentType
+     *
+     * @return \DateTime|Image
+     *
+     * @throws AttributeException
+     */
     public static function convertValueBasedOnContentType($value, $contentType)
     {
         if (empty($value)) {
