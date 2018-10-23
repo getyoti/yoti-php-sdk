@@ -150,6 +150,9 @@ class Profile extends BaseProfile
             ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : NULL;
     }
 
+    /**
+     * @return null|Attribute
+     */
     private function getFormattedAddress()
     {
         $postalAddress = NULL;
@@ -162,7 +165,7 @@ class Profile extends BaseProfile
                 is_array($valueArr)
                 && isset($valueArr['formatted_address'])
             ) {
-                $postalAddressValue = $structuredPostalAddress['formatted_address'];
+                $postalAddressValue = $valueArr['formatted_address'];
 
                 $postalAddress = new Attribute(
                     self::ATTR_POSTAL_ADDRESS,

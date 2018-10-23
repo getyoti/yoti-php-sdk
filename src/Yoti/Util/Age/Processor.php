@@ -34,6 +34,7 @@ class Processor
     public function findAgeVerifications()
     {
         $ageVerificationsArr = [];
+
         foreach($this->profileAttributesMap as $attrName => $attributeObj)
         {
             foreach($this->getAgeProcessors() as $processorClass)
