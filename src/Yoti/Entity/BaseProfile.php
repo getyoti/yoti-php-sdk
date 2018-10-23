@@ -32,6 +32,9 @@ class BaseProfile
 
     public function getAttributes()
     {
-        return $this->profileData;
+        $attributesMap = $this->profileData;
+        // Remove age_verifications
+        unset($attributesMap[Profile::ATTR_AGE_VERIFICATIONS]);
+        return $attributesMap;
     }
 }

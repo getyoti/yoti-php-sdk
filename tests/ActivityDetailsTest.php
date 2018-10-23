@@ -118,12 +118,4 @@ class ActivityDetailsTest extends TestCase
     {
         $this->assertInstanceOf(Attribute::class, $this->profile->getSelfie());
     }
-
-    /**
-     * Test getting Selfie object
-     */
-    public function testGetSelfieEntity()
-    {
-        $this->assertInstanceOf(Selfie::class, $this->activityDetails->getSelfieEntity());
-    }
 }
