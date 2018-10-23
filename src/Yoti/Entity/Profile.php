@@ -7,8 +7,7 @@ class Profile extends BaseProfile
     const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_AGE_CONDITION = 'age_condition';
-    const ATTR_VERIFIED_AGE = 'verified_age';
+    const ATTR_AGE_VERIFICATIONS = 'age_verifications';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
     const ATTR_PHONE_NUMBER = 'phone_number';
@@ -91,11 +90,18 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Return postal_address or structured_postal_address.formatted_address.
+     *
      * @return null|Attribute
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        if (NULL === $postalAddress) {
+            // Get it from structured_postal_address.formatted_address
+            $postalAddress = $this->getFormattedAddress();
+        }
+        return $postalAddress;
     }
 
     /**
@@ -128,12 +134,44 @@ class Profile extends BaseProfile
     }
 
     /**
-     * Return all the derived attributes from the DOB e.g 'Age Over', 'Age Under'
+     * Return all derived attributes from the DOB e.g 'Age Over', 'Age Under'
+     * As a list of AgeVerification
      *
      * @return array
+     * e.g [
+     *      'age_under:18' => new AgeVerification(...),
+     *      'age_over:50' => new AgeVerification(...),
+     *      ...
+     * ]
      */
     public function getAgeVerifications()
     {
-        return $this->profileData['age_verifications'];
+        return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
+            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : NULL;
+    }
+
+    private function getFormattedAddress()
+    {
+        $postalAddress = NULL;
+        // Get it from structured_postal_address.formatted_address
+        $structuredPostalAddress = $this->getStructuredPostalAddress();
+        if (NULL !== $structuredPostalAddress)
+        {
+            $valueArr = $structuredPostalAddress->getValue();
+            if (
+                is_array($valueArr)
+                && isset($valueArr['formatted_address'])
+            ) {
+                $postalAddressValue = $structuredPostalAddress['formatted_address'];
+
+                $postalAddress = new Attribute(
+                    self::ATTR_POSTAL_ADDRESS,
+                    $postalAddressValue,
+                    $structuredPostalAddress->getSources(),
+                    $structuredPostalAddress->getVerifiers()
+                );
+            }
+        }
+        return $postalAddress;
     }
 }

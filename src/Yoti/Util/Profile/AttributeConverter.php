@@ -35,7 +35,7 @@ class AttributeConverter
 
             case Profile::ATTR_STRUCTURED_POSTAL_ADDRESS:
                 // Convert structured_postal_address value to an Array
-                return json_encode($value, true);
+                return json_decode($value, true);
 
             default:
                 return $value;
