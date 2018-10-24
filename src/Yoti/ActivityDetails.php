@@ -103,7 +103,8 @@ class ActivityDetails
     private function appendAgeVerifications(array &$attributesMap)
     {
         $ageProcessor = new AgeProcessor($attributesMap);
-        if ($ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap())
+        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
+        if (!empty($ageVerifications))
         {
             $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
         }
