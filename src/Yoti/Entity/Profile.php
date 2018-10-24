@@ -112,22 +112,6 @@ class Profile extends BaseProfile
         return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
 
-    /**
-     * @return null|Attribute
-     */
-    public function getAgeCondition()
-    {
-        return $this->getProfileAttribute(self::ATTR_AGE_CONDITION);
-    }
-
-    /**
-     * @return null|Attribute
-     */
-    public function getVerifiedAge()
-    {
-        return $this->getProfileAttribute(self::ATTR_VERIFIED_AGE);
-    }
-
     public function getDocumentDetails()
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
