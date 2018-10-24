@@ -129,11 +129,11 @@ class ActivityDetails
     }
 
     /**
-     * Get user id.
+     * Get rememberMeId.
      *
      * @return string
      */
-    public function getUserId()
+    public function getRememberMeId()
     {
         return $this->rememberMeId;
     }
