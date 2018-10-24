@@ -26,7 +26,7 @@ class ActivityDetailsTest extends TestCase
      */
     public $applicationProfile;
 
-    public $userId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
+    public $rememberMeId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
 
     public function setUp()
     {
@@ -48,11 +48,11 @@ class ActivityDetailsTest extends TestCase
     }
 
     /**
-     * Test getting UserID
+     * Test getting RememberMeId
      */
-    public function testGetUserId()
+    public function testGetRememberMeId()
     {
-        $this->assertEquals($this->userId, $this->activityDetails->getUserId());
+        $this->assertEquals($this->rememberMeId, $this->activityDetails->getRememberMeId());
     }
 
     /**
