@@ -14,7 +14,7 @@ class ProcessorTest extends TestCase
      */
     public $ageProcessor;
 
-    public function testGetFindAgeVerifications()
+    public function testGetAgeVerificationsFromAttrsMap()
     {
         $ageAttribute = new Attribute('age_under:18', 'true', [], []);
         $ageProcessor = new Processor(['age_under:18'=> $ageAttribute]);

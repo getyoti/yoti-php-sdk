@@ -3,9 +3,10 @@
 namespace YotiTest\Entity;
 
 use YotiTest\TestCase;
-use Yoti\Entity\Attribute;
 use Yoti\Entity\Profile;
+use Yoti\Entity\Attribute;
 use Yoti\Util\Age\Processor;
+use Yoti\Entity\AgeVerification;
 
 class ProfileTest extends TestCase
 {
@@ -115,5 +116,42 @@ class ProfileTest extends TestCase
             json_encode($this->dummyStructuredPostalAddress),
             json_encode($profile->getStructuredPostalAddress()->getValue())
         );
+    }
+
+    /**
+     * Should not return age_verifications in the array
+     */
+    public function testGetAttributes()
+    {
+        $prolieData = [
+            Profile::ATTR_FAMILY_NAME => new Attribute(
+                Profile::ATTR_FAMILY_NAME,
+                'Family Name Test',
+                [],
+                []
+            ),
+            Profile::ATTR_GIVEN_NAMES => new Attribute(
+                Profile::ATTR_GIVEN_NAMES,
+                'Given Name TEST',
+                [],
+                []
+            ),
+            Profile::ATTR_AGE_VERIFICATIONS => [
+                'age_under:18' => new AgeVerification(
+                    new Attribute(
+                        'age_under:18',
+                        'false',
+                        [],
+                        []
+                    ),
+                    'age_under',
+                    18,
+                    false
+                ),
+            ]
+        ];
+        $profile = new Profile($prolieData);
+
+        $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
     }
 }

@@ -20,4 +20,19 @@ class AgeOverProcessorTest extends TestCase
         $ageData = $this->processor->process();
         $this->assertEquals('{"checkType":"age_over","age":18,"result":true}', json_encode($ageData));
     }
+
+    public function testForAgeOver20ShouldReturnTrue()
+    {
+        $ageAttribute = new Attribute('age_over:20', 'true', [], []);
+        $processor = new AgeOverProcessor($ageAttribute);
+        $result = $processor->process();
+        $this->assertEquals('{"checkType":"age_over","age":20,"result":true}', json_encode($result));
+    }
+
+    public function testWhenThereIsNotAgeOverShouldReturnNull()
+    {
+        $ageAttribute = new Attribute('age_under:20', 'false', [], []);
+        $processor = new AgeOverProcessor($ageAttribute);
+        $this->assertNull($processor->process());
+    }
 }
