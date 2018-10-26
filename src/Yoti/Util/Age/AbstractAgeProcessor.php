@@ -3,14 +3,12 @@
 namespace Yoti\Util\Age;
 
 use Yoti\Entity\Attribute;
+use Yoti\Entity\AgeVerification;
 
-class BaseAgeProcessor implements AgeProcessorInterface
+abstract class AbstractAgeProcessor
 {
-    // You must define this value in the child class
-    const AGE_DELIMITER = '';
-
-    // You must define this pattern in the child class
-    const AGE_RULE_PATTERN = '';
+    // You could re-define this value in the child class
+    const AGE_DELIMITER = ':';
 
     /**
      * @var Attribute
@@ -18,7 +16,7 @@ class BaseAgeProcessor implements AgeProcessorInterface
     protected $attribute;
 
     /**
-     * BaseAgeProcessor constructor.
+     * AbstractAgeProcessor constructor.
      *
      * @param Attribute $attribute
      */
@@ -36,7 +34,7 @@ class BaseAgeProcessor implements AgeProcessorInterface
      */
     protected function isDerivedAttribute(Attribute $attribute)
     {
-        return preg_match(static::AGE_RULE_PATTERN, $attribute->getName()) ? true : false;
+        return preg_match($this->getAgePattern(), $attribute->getName()) ? true : false;
     }
 
     /**
@@ -45,17 +43,22 @@ class BaseAgeProcessor implements AgeProcessorInterface
      *
      * @param Attribute $attribute
      *
-     * @return array
+     * @return null|AgeVerification
      */
-    protected function extractAgeVerificationData(Attribute $attribute)
+    protected function createAgeVerification(Attribute $attribute)
     {
         $ageCheckArr = explode(static::AGE_DELIMITER, $attribute->getName());
         if (count($ageCheckArr) > 1) {
-            return [
-                'checkType' => $ageCheckArr[0],
-                'age' => (int) $ageCheckArr[1],
-                'result' => $attribute->getValue() === 'true' ? true : false,
-            ];
+            $result = $attribute->getValue() === 'true' ? true : false;
+            $checkType = $ageCheckArr[0];
+            $age = (int) $ageCheckArr[1];
+
+            return new AgeVerification(
+                $attribute,
+                $checkType,
+                $age,
+                $result
+            );
         }
         return NULL;
     }
@@ -63,15 +66,21 @@ class BaseAgeProcessor implements AgeProcessorInterface
     /**
      * Process derived attribute.
      *
-     * @return array|null
+     * @return AgeVerification|null
      */
     public function process()
     {
-        $resultArr = NULL;
         if ($this->isDerivedAttribute($this->attribute))
         {
-            $resultArr = $this->extractAgeVerificationData($this->attribute);
+            return $this->createAgeVerification($this->attribute);
         }
-        return $resultArr;
+        return NULL;
     }
+
+    /**
+     * Return Age rule pattern as a regex.
+     *
+     * @return string
+     */
+    public abstract function getAgePattern();
 }
