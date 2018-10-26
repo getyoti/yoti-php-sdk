@@ -5,7 +5,6 @@ namespace YotiTest\Entity;
 use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
-use Yoti\Util\Age\Processor;
 use Yoti\Entity\AgeVerification;
 
 class ProfileTest extends TestCase
@@ -68,28 +67,6 @@ class ProfileTest extends TestCase
         $this->assertEquals('phone_number', $phoneNumber->getName());
     }
 
-    public function testGetAgeVerifications()
-    {
-        $profileData = [
-            'age_over:18' => new Attribute('age_over:18', 'true', [], []),
-            'age_under:18' => new Attribute('age_under:18', 'false', [], []),
-        ];
-        $processor = new Processor($profileData);
-        $resultArr = $processor->getAgeVerificationsFromAttrsMap();
-        $ageOver18 = $resultArr['age_over:18'];
-        $ageUnder18 = $resultArr['age_under:18'];
-
-        $this->assertTrue($ageOver18->getResult());
-        $this->assertEquals(18, $ageOver18->getAge());
-        $this->assertEquals('age_over', $ageOver18->getChecktype());
-        $this->assertInstanceOf(Attribute::class, $ageOver18->getAttribute());
-
-        $this->assertFalse($ageUnder18->getResult());
-        $this->assertEquals(18, $ageUnder18->getAge());
-        $this->assertEquals('age_under', $ageUnder18->getChecktype());
-        $this->assertInstanceOf(Attribute::class, $ageUnder18->getAttribute());
-    }
-
     public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
     {
         $structuredPostalAddress = new Attribute(
@@ -98,7 +75,7 @@ class ProfileTest extends TestCase
             [],
             []
         );
-        $prolieData = [
+        $profileData = [
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS => $structuredPostalAddress,
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
@@ -107,7 +84,7 @@ class ProfileTest extends TestCase
                 []
             ),
         ];
-        $profile = new Profile($prolieData);
+        $profile = new Profile($profileData);
         $expectedPostalAddress = '15a North Street CARSHALTON SM5 2HW UK';
 
         $this->assertEquals('Given Name TEST', $profile->getGivenNames()->getValue());
@@ -123,19 +100,39 @@ class ProfileTest extends TestCase
      */
     public function testGetAttributes()
     {
-        $prolieData = [
-            Profile::ATTR_FAMILY_NAME => new Attribute(
-                Profile::ATTR_FAMILY_NAME,
-                'Family Name Test',
-                [],
-                []
-            ),
-            Profile::ATTR_GIVEN_NAMES => new Attribute(
-                Profile::ATTR_GIVEN_NAMES,
-                'Given Name TEST',
-                [],
-                []
-            ),
+        $profileData = $this->getDummyProfileDataWithAgeVerifications();
+        $profile = new Profile($profileData);
+
+        $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
+    }
+
+    public function testFindAgeOverVerification()
+    {
+        $profileData = $this->getDummyProfileDataWithAgeVerifications();
+        $profile = new Profile($profileData);
+        $ageOver35 = $profile->findAgeOverVerification(35);
+
+        $this->assertInstanceOf(AgeVerification::class, $ageOver35);
+        $this->assertEquals('age_over', $ageOver35->getCheckType());
+        $this->assertEquals(35, $ageOver35->getAge());
+        $this->assertTrue($ageOver35->getResult());
+    }
+
+    public function testFindAgeUnderVerification()
+    {
+        $profileData = $this->getDummyProfileDataWithAgeVerifications();
+        $profile = new Profile($profileData);
+        $ageUnder18 = $profile->findAgeUnderVerification(18);
+
+        $this->assertInstanceOf(AgeVerification::class, $ageUnder18);
+        $this->assertEquals('age_under', $ageUnder18->getCheckType());
+        $this->assertEquals(18, $ageUnder18->getAge());
+        $this->assertFalse($ageUnder18->getResult());
+    }
+
+    public function getDummyProfileDataWithAgeVerifications()
+    {
+        $profileData = [
             Profile::ATTR_AGE_VERIFICATIONS => [
                 'age_under:18' => new AgeVerification(
                     new Attribute(
@@ -148,10 +145,31 @@ class ProfileTest extends TestCase
                     18,
                     false
                 ),
-            ]
+                'age_over:35' => new AgeVerification(
+                    new Attribute(
+                        'age_over:35',
+                        'true',
+                        [],
+                        []
+                    ),
+                    'age_over',
+                    35,
+                    true
+                ),
+            ],
+            Profile::ATTR_GIVEN_NAMES => new Attribute(
+                Profile::ATTR_GIVEN_NAMES,
+                'TEST GIVEN NAMES',
+                [],
+                []
+            ),
+            Profile::ATTR_FAMILY_NAME => new Attribute(
+                Profile::ATTR_FAMILY_NAME,
+                'TEST FAMILY NAME',
+                [],
+                []
+            ),
         ];
-        $profile = new Profile($prolieData);
-
-        $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
+        return $profileData;
     }
 }

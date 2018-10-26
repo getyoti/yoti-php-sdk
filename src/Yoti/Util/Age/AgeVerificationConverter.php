@@ -2,9 +2,7 @@
 
 namespace Yoti\Util\Age;
 
-use Yoti\Entity\AgeVerification;
-
-class Processor
+class AgeVerificationConverter
 {
     /**
      * @var array
@@ -22,9 +20,9 @@ class Processor
     }
 
     /**
-     * return list of age verifications.
+     * Return list of age verification.
      *
-     * @return array of ageVerification
+     * @return array of AgeVerification
      * e.g [
      *      'age_under:18' => new AgeVerification(...),
      *      'age_over:50' => new AgeVerification(...),
@@ -37,27 +35,22 @@ class Processor
 
         foreach($this->profileAttributesMap as $attrName => $attributeObj)
         {
-            foreach($this->getAgeProcessors() as $processorClass)
+            foreach($this->getAgeProcessors() as $ageProcessorClass)
             {
-                $ageProcessorInterface = '\\Yoti\\Util\\Age\\AgeProcessorInterface';
+                $abstractAgeProcessorClass = '\\Yoti\\Util\\Age\\AbstractAgeProcessor';
                 if (
                     NULL !== $attrName
-                    && is_subclass_of($processorClass, $ageProcessorInterface)
+                    && is_subclass_of($ageProcessorClass, $abstractAgeProcessorClass)
                 )
                 {
                     /**
-                     * @var AgeProcessorInterface $processorObj
+                     * @var \Yoti\Util\Age\AbstractAgeProcessor $ageProcessorObj
                      */
-                    $processorObj = new $processorClass($attributeObj);
+                    $ageProcessorObj = new $ageProcessorClass($attributeObj);
 
-                    if ($result = $processorObj->process())
+                    if ($ageVerification = $ageProcessorObj->process())
                     {
-                        $ageVerificationsArr[$attrName] = new AgeVerification(
-                            $attributeObj,
-                            $result['checkType'],
-                            $result['age'],
-                            $result['result']
-                        );
+                        $ageVerificationsArr[$attrName] = $ageVerification;
                     }
                 }
             }
@@ -75,8 +68,8 @@ class Processor
     private function getAgeProcessors()
     {
         return [
-            '\\Yoti\\Util\\Age\\AgeUnderProcessor',
-            '\\Yoti\\Util\\Age\\AgeOverProcessor',
+            '\\Yoti\\Util\\Age\\AgeUnderVerificationProcessor',
+            '\\Yoti\\Util\\Age\\AgeOverVerificationProcessor',
         ];
     }
 }

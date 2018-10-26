@@ -3,6 +3,9 @@ namespace Yoti\Entity;
 
 class Profile extends BaseProfile
 {
+    const AGE_OVER_FORMAT = 'age_over:%d';
+    const AGE_UNDER_FORMAT = 'age_under:%d';
+
     const ATTR_FAMILY_NAME = 'family_name';
     const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FULL_NAME = 'full_name';
@@ -132,6 +135,45 @@ class Profile extends BaseProfile
     {
         return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
             ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : NULL;
+    }
+
+    /**
+     * Return AgeVerification for age_over:xx.
+     *
+     * @param int $age
+     *
+     * @return null|AgeVerification
+     */
+    public function findAgeOverVerification($age)
+    {
+        $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, (int) $age);
+        return $this->getAgeVerificationByAttribute($ageOverAttr);
+    }
+
+    /**
+     * Return AgeVerification for age_under:xx.
+     *
+     * @param int $age
+     *
+     * @return null|AgeVerification
+     */
+    public function findAgeUnderVerification($age)
+    {
+        $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, (int) $age);
+        return $this->getAgeVerificationByAttribute($ageUnderAttr);
+    }
+
+    /**
+     * Return AgeVerification.
+     *
+     * @param string $ageAttr
+     *
+     * @return mixed|null
+     */
+    private function getAgeVerificationByAttribute($ageAttr)
+    {
+        $ageVerifications = $this->getAgeVerifications();
+        return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : NULL;
     }
 
     /**

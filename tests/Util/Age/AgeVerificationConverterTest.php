@@ -2,23 +2,19 @@
 
 namespace YotiTest\Util\Age;
 
-use Yoti\Entity\AgeVerification;
 use YotiTest\TestCase;
+use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
-use Yoti\Util\Age\Processor;
+use Yoti\Entity\AgeVerification;
+use Yoti\Util\Age\AgeVerificationConverter;
 
-class ProcessorTest extends TestCase
+class AgeVerificationConverterTest extends TestCase
 {
-    /**
-     * @var \Yoti\Util\Age\Processor
-     */
-    public $ageProcessor;
-
     public function testGetAgeVerificationsFromAttrsMap()
     {
         $ageAttribute = new Attribute('age_under:18', 'true', [], []);
-        $ageProcessor = new Processor(['age_under:18'=> $ageAttribute]);
-        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
+        $ageVerificationConverter = new AgeVerificationConverter(['age_under:18'=> $ageAttribute]);
+        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
         $ageUnder18 = $ageVerifications['age_under:18'];
 
         $this->assertInstanceOf(AgeVerification::class, $ageUnder18);
@@ -35,8 +31,8 @@ class ProcessorTest extends TestCase
             'age_over:50'=> new Attribute('age_over:50', 'true', [], []),
             'age_breaker:50'=> new Attribute('age_breaker:50', 'true', [], []),
         ];
-        $ageProcessor = new Processor($profileData);
-        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
+        $ageVerificationConverter = new AgeVerificationConverter($profileData);
+        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
 
         $this->assertArrayHasKey('age_under:18', $ageVerifications);
         $this->assertInstanceOf(AgeVerification::class, $ageVerifications['age_under:18']);
@@ -51,5 +47,27 @@ class ProcessorTest extends TestCase
         $this->assertTrue($ageVerifications['age_over:50']->getResult());
 
         $this->assertArrayNotHasKey('age_breaker:50', $ageVerifications);
+    }
+
+    public function testShouldReturnEmptyAgeVerifications()
+    {
+        $profileData = [
+            Profile::ATTR_GIVEN_NAMES => new Attribute(
+                Profile::ATTR_GIVEN_NAMES,
+                'TEST GIVEN NAMES',
+                [],
+                []
+            ),
+            Profile::ATTR_FAMILY_NAME => new Attribute(
+                Profile::ATTR_FAMILY_NAME,
+                'TEST FAMILY NAME',
+                [],
+                []
+            ),
+            'age_breaker:50'=> new Attribute('age_breaker:50', 'true', [], []),
+        ];
+        $ageVerificationConverter = new AgeVerificationConverter($profileData);
+        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
+        $this->assertEmpty($ageVerifications);
     }
 }

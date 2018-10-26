@@ -4,8 +4,8 @@ namespace Yoti;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
 use Attrpubapi_v1\AttributeList;
-use Yoti\Util\Age\Processor as AgeProcessor;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Util\Age\AgeVerificationConverter;
 use Yoti\Util\Profile\AttributeListConverter;
 
 /**
@@ -20,11 +20,6 @@ class ActivityDetails
      * @var string receipt identifier
      */
     private $rememberMeId;
-
-    /**
-     * @var array
-     */
-    private $oldProfileData = [];
 
     /**
      * @var \Yoti\Entity\Profile
@@ -102,12 +97,9 @@ class ActivityDetails
      */
     private function appendAgeVerifications(array &$attributesMap)
     {
-        $ageProcessor = new AgeProcessor($attributesMap);
-        $ageVerifications = $ageProcessor->getAgeVerificationsFromAttrsMap();
-        if (!empty($ageVerifications))
-        {
-            $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
-        }
+        $ageVerificationConverter = new AgeVerificationConverter($attributesMap);
+        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
+        $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
     }
 
     /**
