@@ -119,4 +119,16 @@ class ActivityDetailsTest extends TestCase
         $this->assertInstanceOf(Attribute::class, $this->profile->getSelfie());
         $this->assertInstanceOf(Image::class, $this->profile->getSelfie()->getValue());
     }
+
+    public function testGetTimestamp()
+    {
+        $timestamp = $this->activityDetails->getTimestamp();
+        $this->assertEquals('19-07-2016 08:55:38', $timestamp->format('d-m-Y H:i:s'));
+    }
+
+    public function testGetReceipt()
+    {
+        $receiptId = '9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl';
+        $this->assertEquals($receiptId, $this->activityDetails->getReceiptId());
+    }
 }
