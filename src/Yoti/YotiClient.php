@@ -70,11 +70,6 @@ class YotiClient
     private $_pem;
 
     /**
-     * @var Receipt
-     */
-    private $_receipt;
-
-    /**
      * @var string
      */
     private $_sdkIdentifier;
@@ -115,14 +110,6 @@ class YotiClient
     }
 
     /**
-     * @return string|null
-     */
-    public function getOutcome()
-    {
-        return $this->_receipt->getSharingOutcome();
-    }
-
-    /**
      * Return Yoti user profile.
      *
      * @param null|string $encryptedConnectToken
@@ -139,15 +126,15 @@ class YotiClient
             $encryptedConnectToken = $_GET['token'];
         }
 
-        $this->_receipt = $this->getReceipt($encryptedConnectToken);
+        $receipt = $this->getReceipt($encryptedConnectToken);
 
         // Check response was successful
-        if($this->getOutcome() !== self::OUTCOME_SUCCESS)
+        if($receipt->getSharingOutcome() !== self::OUTCOME_SUCCESS)
         {
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
-        return new ActivityDetails($this->_receipt, $this->_pem);
+        return new ActivityDetails($receipt, $this->_pem);
     }
 
     /**

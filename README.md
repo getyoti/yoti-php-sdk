@@ -301,6 +301,8 @@ $ ./vendor/bin/phpunit tests
 
 * Activity Details
     * [X] RememberMe ID `getRememberMeId()`
+    * [X] Receipt ID `getReceiptId()`
+    * [X] Timestamp `getTimestamp()` // DateTime Object
     * [X] Application Profile `getApplicationProfile()`
     * [X] Profile `getProfile()`
       * [X] Photo `getSelfie()->getValue()` // Yoti\Entity\Image Object
