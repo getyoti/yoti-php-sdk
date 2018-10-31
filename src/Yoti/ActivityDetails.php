@@ -73,12 +73,10 @@ class ActivityDetails
     {
         try {
             $timestamp = $this->receipt->getTimestamp();
-            $this->timestamp = AttributeConverter::convertValueBasedOnContentType(
-                $timestamp,
-                AttributeConverter::CONTENT_TYPE_DATE
-            );
+            $this->timestamp = AttributeConverter::convertTimestampToDate($timestamp);
         } catch(\Exception $e) {
             $this->timestamp = NULL;
+            error_log("Warning: {$e->getMessage()}", 0);
         }
     }
 
