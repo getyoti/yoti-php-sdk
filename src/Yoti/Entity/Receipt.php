@@ -97,7 +97,7 @@ class Receipt
         $data = $this->getAttribute($attributeName);
         $encryptedData = AttributeConverter::getEncryptedData($data);
 
-        return AttributeListConverter::decryptData(
+        return AttributeListConverter::convertToProtobufAttributeList(
             $encryptedData,
             $this->getWrappedReceiptKey(),
             $pem
