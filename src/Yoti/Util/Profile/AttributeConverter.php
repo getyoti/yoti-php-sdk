@@ -22,11 +22,9 @@ class AttributeConverter
      *
      * @throws \Yoti\Exception\AttributeException
      */
-    public static function convertValueBasedOnAttributeName($value, $attrName)
+    private static function convertValueBasedOnAttributeName($value, $attrName)
     {
-        if (empty($value)) {
-            throw new AttributeException("{$attrName} Attribute value is NULL");
-        }
+       self::validateValue($value, $attrName);
 
         switch($attrName)
         {
@@ -50,11 +48,13 @@ class AttributeConverter
      *
      * @throws AttributeException
      */
-    public static function convertValueBasedOnContentType($value, $contentType)
+    private static function convertValueBasedOnContentType(ProtobufAttribute $protobufAttribute)
     {
-        if (empty($value)) {
-            throw new AttributeException("Attribute value is NULL");
-        }
+        $value = $protobufAttribute->getValue();
+        $contentType = $protobufAttribute->getContentType();
+        $attrName = $protobufAttribute->getName();
+
+        self::validateValue($value, $attrName);
 
         switch($contentType)
         {
@@ -65,9 +65,7 @@ class AttributeConverter
                 break;
 
             case self::CONTENT_TYPE_DATE:
-                $dateTime = new \DateTime();
-                $dateTime->setTimestamp(strtotime($value));
-                $value = $dateTime;
+                $value = self::convertTimestampToDate($value);
                 break;
         }
 
@@ -81,7 +79,7 @@ class AttributeConverter
      *
      * @return string
      */
-    public static function imageTypeToExtension($type)
+    private static function imageTypeToExtension($type)
     {
         $type = (int)$type;
 
@@ -97,7 +95,6 @@ class AttributeConverter
 
             default:
                 $format = 'UNSUPPORTED';
-
         }
         return $format;
     }
@@ -134,8 +131,7 @@ class AttributeConverter
             );
             $attrName = $protobufAttribute->getName();
             $attrValue = AttributeConverter::convertValueBasedOnContentType(
-                $protobufAttribute->getValue(),
-                $protobufAttribute->getContentType()
+                $protobufAttribute
             );
             $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
                 $attrValue,
@@ -149,8 +145,32 @@ class AttributeConverter
             );
         } catch (\Exception $e) {
             $yotiAttribute = NULL;
+            error_log($e->getMessage(), 0);
         }
 
         return $yotiAttribute;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return \DateTime
+     */
+    public static function convertTimestampToDate($value)
+    {
+        return (new \DateTime())->setTimestamp(strtotime($value));
+    }
+
+    /**
+     * @param string $value
+     * @param string $attrName
+     *
+     * @throws AttributeException
+     */
+    private static function validateValue($value, $attrName)
+    {
+        if (empty($value)) {
+            throw new AttributeException("Warning: {$attrName} value is NULL");
+        }
     }
 }
