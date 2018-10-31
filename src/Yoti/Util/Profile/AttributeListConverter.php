@@ -37,7 +37,28 @@ class AttributeListConverter
      *
      * @return AttributeList
      */
-    public static function decryptData($encryptedData, $wrappedReceiptKey, $pem)
+    public static function convertToProtobufAttributeList($encryptedData, $wrappedReceiptKey, $pem)
+    {
+        $decryptedCipherText = self::decryptCipherText(
+            $encryptedData, $wrappedReceiptKey, $pem
+        );
+
+        $attributeList = new \Attrpubapi_v1\AttributeList();
+        $attributeList->mergeFromString($decryptedCipherText);
+
+        return $attributeList;
+    }
+
+    /**
+     * Return decrypted cipher text.
+     *
+     * @param $encryptedData
+     * @param $wrappedReceiptKey
+     * @param $pem
+     *
+     * @return string
+     */
+    private static function decryptCipherText($encryptedData, $wrappedReceiptKey, $pem)
     {
         // Unwrap key and get profile
         openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $pem);
@@ -51,9 +72,6 @@ class AttributeListConverter
             $encryptedData->getIv()
         );
 
-        $attributeList = new \Attrpubapi_v1\AttributeList();
-        $attributeList->mergeFromString($cipherText);
-
-        return $attributeList;
+        return $cipherText;
     }
 }

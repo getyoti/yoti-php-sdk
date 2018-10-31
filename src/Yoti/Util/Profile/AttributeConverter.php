@@ -11,6 +11,7 @@ use Yoti\Exception\AttributeException;
 
 class AttributeConverter
 {
+    const CONTENT_TYPE_JSON = 5;
     const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_JPEG = 2;
     const CONTENT_TYPE_DATE = 3;
@@ -24,16 +25,12 @@ class AttributeConverter
      */
     private static function convertValueBasedOnAttributeName($value, $attrName)
     {
-       self::validateValue($value, $attrName);
+       self::validateInput($value, $attrName);
 
         switch($attrName)
         {
             case Profile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
-
-            case Profile::ATTR_STRUCTURED_POSTAL_ADDRESS:
-                // Convert structured_postal_address value to an Array
-                return json_decode($value, true);
 
             default:
                 return $value;
@@ -54,7 +51,7 @@ class AttributeConverter
         $contentType = $protobufAttribute->getContentType();
         $attrName = $protobufAttribute->getName();
 
-        self::validateValue($value, $attrName);
+        self::validateInput($value, $attrName);
 
         switch($contentType)
         {
@@ -62,6 +59,11 @@ class AttributeConverter
             case self::CONTENT_TYPE_PNG:
                 $imageExtension = self::imageTypeToExtension($contentType);
                 $value = new Image($value, $imageExtension);
+                break;
+
+            case self::CONTENT_TYPE_JSON:
+                // Convert JSON string to an array
+                $value = json_decode($value, true);
                 break;
 
             case self::CONTENT_TYPE_DATE:
@@ -167,7 +169,7 @@ class AttributeConverter
      *
      * @throws AttributeException
      */
-    private static function validateValue($value, $attrName)
+    private static function validateInput($value, $attrName)
     {
         if (empty($value)) {
             throw new AttributeException("Warning: {$attrName} value is NULL");
