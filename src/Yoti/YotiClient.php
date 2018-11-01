@@ -3,11 +3,12 @@
 namespace Yoti;
 
 use Yoti\Entity\Receipt;
+use Yoti\Exception\RequestException;
+use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
 use Yoti\Entity\AmlProfile;
-use Yoti\Http\SignedRequest;
-use Yoti\Http\RestRequest;
+use Yoti\Http\Request;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
@@ -75,6 +76,11 @@ class YotiClient
     private $_sdkIdentifier;
 
     /**
+     * @var Request
+     */
+    private $_request;
+
+    /**
      * YotiClient constructor.
      *
      * @param string $sdkId SDK Id from dashboard (not to be mistaken for App ID)
@@ -95,6 +101,8 @@ class YotiClient
         $this->_pem = $pem;
         $this->_connectApi = $connectApi;
         $this->_sdkIdentifier = $sdkIdentifier;
+
+        $this->setRequest();
     }
 
     /**
@@ -140,12 +148,12 @@ class YotiClient
     /**
      * Perform AML profile check.
      *
-     * @param \Yoti\Entity\AmlProfile $amlProfile
+     * @param AmlProfile $amlProfile
      *
-     * @return \Yoti\Http\AmlResult
+     * @return AmlResult
      *
-     * @throws \Yoti\Exception\AmlException
-     * @throws \Exception
+     * @throws AmlException
+     * @throws RequestException
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
@@ -154,16 +162,7 @@ class YotiClient
         // AML check endpoint
         $amlCheckEndpoint = self::AML_CHECK_ENDPOINT;
 
-        // Initiate signedRequest
-        $signedRequest  = new SignedRequest(
-            $amlPayload,
-            $amlCheckEndpoint,
-            $this->_pem,
-            $this->_sdkId,
-            RestRequest::METHOD_POST
-        );
-
-        $result = $this->makeRequest($signedRequest, $amlPayload, RestRequest::METHOD_POST);
+        $result = $this->makeRequest($amlPayload, $amlCheckEndpoint, Request::METHOD_POST);
 
         // Get response data array
         $responseArr = json_decode($result['response'], TRUE);
@@ -180,30 +179,30 @@ class YotiClient
     /**
      * Make REST request to Connect API.
      *
-     * @param SignedRequest $signedRequest
+     * @param string $endpoint
      * @param Payload $payload
      * @param string $httpMethod
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws RequestException
      */
-    protected function makeRequest(SignedRequest $signedRequest, Payload $payload, $httpMethod = 'GET')
+    protected function makeRequest(Payload $payload, $endpoint, $httpMethod = 'GET')
     {
-        $signedMessage = $signedRequest->getSignedMessage();
+        return $this->_request->makeRequest($payload, $endpoint, $httpMethod);
+    }
 
-        // Get request httpHeaders
-        $httpHeaders = $this->getRequestHeaders($signedMessage);
-
-        $request = new RestRequest(
-            $httpHeaders,
-            $signedRequest->getApiRequestUrl($this->_connectApi),
-            $payload,
-            $httpMethod
+    /**
+     * @throws RequestException
+     */
+    private function setRequest()
+    {
+        $this->_request = new \Yoti\Http\Request(
+            $this->_connectApi,
+            $this->_pem,
+            $this->_sdkId,
+            $this->_sdkIdentifier
         );
-
-        // Make request
-        return $request->exec();
     }
 
     /**
@@ -212,7 +211,7 @@ class YotiClient
      * @param array $responseArr
      * @param int $httpCode
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws AmlException
      */
     private function validateResult(array $responseArr, $httpCode)
     {
@@ -250,41 +249,6 @@ class YotiClient
     }
 
     /**
-     * Get request httpHeaders.
-     *
-     * @param $signedMessage
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    private function getRequestHeaders($signedMessage)
-    {
-        $authKey = $this->getAuthKeyFromPem();
-
-        // Check auth key
-        if(!$authKey)
-        {
-            throw new \Exception('Could not retrieve key from PEM.', 401);
-        }
-
-        // Check signed message
-        if(!$signedMessage)
-        {
-            throw new \Exception('Could not sign request.', 401);
-        }
-
-        // Prepare request httpHeaders
-        return [
-            self::AUTH_KEY_HEADER . ": {$authKey}",
-            self::DIGEST_HEADER . ": {$signedMessage}",
-            self::YOTI_SDK_HEADER . ": {$this->_sdkIdentifier}",
-            'Content-Type: application/json',
-            'Accept: application/json',
-        ];
-    }
-
-    /**
      * Decrypt and return receipt data.
      *
      * @param string $encryptedConnectToken
@@ -293,9 +257,10 @@ class YotiClient
      * @return Receipt
      *
      * @throws ActivityDetailsException
-     * @throws Exception\ReceiptException
+     * @throws ReceiptException
+     * @throws RequestException
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = RestRequest::METHOD_GET)
+    private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -305,19 +270,9 @@ class YotiClient
         }
 
         // Get path for this endpoint
-        $path = "/profile/{$token}";
+        $endpoint = "/profile/{$token}";
         $payload = new Payload();
-
-        // This will throw an exception if an error occurs
-        $signedRequest = new SignedRequest(
-            $payload,
-            $path,
-            $this->_pem,
-            $this->_sdkId,
-            $httpMethod
-        );
-
-        $result = $this->makeRequest($signedRequest, $payload);
+        $result = $this->makeRequest($payload, $endpoint, $httpMethod);
 
         $responseArr = $this->processResult($result);
         $this->checkForReceipt($responseArr);
@@ -375,39 +330,14 @@ class YotiClient
     /**
      * Check if any error occurs during JSON decode.
      *
-     * @throws \Exception
+     * @throws YotiClientException
      */
     private function checkJsonError()
     {
         if(json_last_error() !== JSON_ERROR_NONE)
         {
-            throw new \Exception('JSON response was invalid', 502);
+            throw new YotiClientException('JSON response was invalid', 502);
         }
-    }
-
-    /**
-     * @return null|string
-     */
-    private function getAuthKeyFromPem()
-    {
-        $details = openssl_pkey_get_details(openssl_pkey_get_private($this->_pem));
-        if(!array_key_exists('key', $details))
-        {
-            return NULL;
-        }
-
-        // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
-        $key = trim($details['key']);
-        // Support line break on *nix systems, OS, older OS, and Microsoft
-        $_key = preg_split('/\r\n|\r|\n/', $key);
-        if(strpos($key, 'BEGIN') !== FALSE)
-        {
-            array_shift($_key);
-            array_pop($_key);
-        }
-        $key = implode('', $_key);
-
-        return $key;
     }
 
     /**
@@ -430,20 +360,20 @@ class YotiClient
      *
      * @param string bool|$pem
      *
-     * @throws \Exception
+     * @throws YotiClientException
      */
     private function processPem(&$pem)
     {
         // Check PEM passed
         if(!$pem)
         {
-            throw new \Exception('PEM file is required', 400);
+            throw new YotiClientException('PEM file is required', 400);
         }
 
         // Check that file exists if user passed PEM as a local file path
         if(strpos($pem, 'file://') !== FALSE && !file_exists($pem))
         {
-            throw new \Exception('PEM file was not found.', 400);
+            throw new YotiClientException('PEM file was not found.', 400);
         }
 
         // If file exists grab the content
@@ -455,7 +385,7 @@ class YotiClient
         // Check if key is valid
         if(!openssl_get_privatekey($pem))
         {
-            throw new \Exception('PEM key is invalid', 400);
+            throw new YotiClientException('PEM key is invalid', 400);
         }
     }
 
@@ -464,21 +394,21 @@ class YotiClient
      *
      * @param string $sdkId
      *
-     * @throws \Exception
+     * @throws YotiClientException
      */
     private function checkSdkId($sdkId)
     {
         // Check SDK ID passed
         if(!$sdkId)
         {
-            throw new \Exception('SDK ID is required', 400);
+            throw new YotiClientException('SDK ID is required', 400);
         }
     }
 
     /**
      * Check PHP required modules.
      *
-     * @throws \Exception
+     * @throws YotiClientException
      */
     private function checkRequiredModules()
     {
@@ -487,7 +417,7 @@ class YotiClient
         {
             if(!extension_loaded($mod))
             {
-                throw new \Exception("PHP module '$mod' not installed", 501);
+                throw new YotiClientException("PHP module '$mod' not installed", 501);
             }
         }
     }
@@ -497,12 +427,12 @@ class YotiClient
      *
      * @param $sdkIdentifier
      *
-     * @throws \Exception
+     * @throws YotiClientException
      */
     private function validateSdkIdentifier($sdkIdentifier)
     {
         if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, TRUE)) {
-            throw new \Exception("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
+            throw new YotiClientException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
         }
     }
 }
