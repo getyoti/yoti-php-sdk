@@ -10,6 +10,8 @@ class RequestSigner
     const END_POINT_PATH_KEY = 'end_point_path';
 
     /**
+     * Return request signed data.
+     *
      * @param Request $request
      * @param string $endpoint
      * @param string $httpMethod
@@ -18,29 +20,35 @@ class RequestSigner
      *
      * @throws RequestException
      */
-    public static function signRequest(Request $request, $endpoint, $httpMethod)
+    public static function signRequest(Request $request, Payload $payload, $endpoint, $httpMethod)
     {
-        $fullEndPointPath = self::generateFullEndPointPath($endpoint, $request->getSDKId());
+        $endPointPath = self::generateEndPointPath($endpoint, $request->getSDKId());
 
-        $endpointRequest = "{$httpMethod}&$fullEndPointPath";
-        if(RestRequest::canSendPayload($httpMethod))
+        $messageToSign = "{$httpMethod}&$endPointPath";
+        if(Request::canSendPayload($httpMethod))
         {
-            $endpointRequest .= "&{$request->getPayload()->getBase64Payload()}";
+            $messageToSign .= "&{$payload->getBase64Payload()}";
         }
 
-        openssl_sign($endpointRequest, $signedMessage, $request->getPem(), OPENSSL_ALGO_SHA256);
+        openssl_sign($messageToSign, $signedMessage, $request->getPem(), OPENSSL_ALGO_SHA256);
 
         self::validateSignedMessage($signedMessage);
 
-        $signedMessage = base64_encode($signedMessage);
+        $base64SignedMessage = base64_encode($signedMessage);
 
         return [
-            self::SIGNED_MESSAGE_KEY => $signedMessage,
-            self::END_POINT_PATH_KEY => $fullEndPointPath
+            self::SIGNED_MESSAGE_KEY => $base64SignedMessage,
+            self::END_POINT_PATH_KEY => $endPointPath
         ];
     }
 
-    private static function generateFullEndPointPath($endpoint, $sdkId)
+    /**
+     * @param string $endpoint
+     * @param string $sdkId
+     *
+     * @return string
+     */
+    private static function generateEndPointPath($endpoint, $sdkId)
     {
         // Prepare message to sign
         $nonce = self::generateNonce();
