@@ -35,11 +35,6 @@ class YotiClient
     // Dashboard login
     const DASHBOARD_URL = 'https://www.yoti.com/dashboard';
 
-    // Connect request httpHeader keys
-    const AUTH_KEY_HEADER = 'X-Yoti-Auth-Key';
-    const DIGEST_HEADER = 'X-Yoti-Auth-Digest';
-    const YOTI_SDK_HEADER = 'X-Yoti-SDK';
-
     // Aml check endpoint
     const AML_CHECK_ENDPOINT = '/aml-check';
 
@@ -83,12 +78,13 @@ class YotiClient
     /**
      * YotiClient constructor.
      *
-     * @param string $sdkId SDK Id from dashboard (not to be mistaken for App ID)
-     * @param string $pem can be passed in as contents of pem file or file://<file> format or actual path
+     * @param string $sdkId
+     * @param string $pem
      * @param string $connectApi
      * @param string $sdkIdentifier
      *
-     * @throws \Exception
+     * @throws RequestException
+     * @throws YotiClientException
      */
     public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
     {
@@ -178,6 +174,7 @@ class YotiClient
 
     /**
      * Make REST request to Connect API.
+     * This method allows to stub the request call in test mode.
      *
      * @param string $endpoint
      * @param Payload $payload
@@ -187,7 +184,7 @@ class YotiClient
      *
      * @throws RequestException
      */
-    protected function makeRequest(Payload $payload, $endpoint, $httpMethod = 'GET')
+    protected function makeRequest(Payload $payload, $endpoint, $httpMethod)
     {
         return $this->_request->makeRequest($payload, $endpoint, $httpMethod);
     }
@@ -269,10 +266,9 @@ class YotiClient
             throw new ActivityDetailsException('Could not decrypt connect token.', 401);
         }
 
-        // Get path for this endpoint
+        // Request endpoint
         $endpoint = "/profile/{$token}";
-        $payload = new Payload();
-        $result = $this->makeRequest($payload, $endpoint, $httpMethod);
+        $result = $this->makeRequest(new Payload(), $endpoint, $httpMethod);
 
         $responseArr = $this->processResult($result);
         $this->checkForReceipt($responseArr);
