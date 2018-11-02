@@ -142,26 +142,28 @@ class YotiClient
             $encryptedConnectToken = $_GET['token'];
         }
 
-        $this->_receipt = $this->getReceipt($encryptedConnectToken);
-        $encryptedData = $this->getEncryptedData($this->_receipt['other_party_profile_content']);
+        // Setting the class attribute $_receipt for people using the getOutCome method
+        $this->_receipt = $receipt = $this->getReceipt($encryptedConnectToken);
 
+        $sharingOutcome = array_key_exists('sharing_outcome', $receipt) ? $receipt['sharing_outcome'] : NULL;
         // Check response was success
-        if($this->getOutcome() !== self::OUTCOME_SUCCESS)
+        if ($sharingOutcome !== self::OUTCOME_SUCCESS)
         {
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
         // Set remember me Id
-        $rememberMeId = array_key_exists('remember_me_id', $this->_receipt) ? $this->_receipt['remember_me_id'] : NULL;
+        $rememberMeId = array_key_exists('remember_me_id', $receipt) ? $receipt['remember_me_id'] : NULL;
 
         // If no profile return empty ActivityDetails object
-        if(empty($this->_receipt['other_party_profile_content']))
+        if(empty($receipt['other_party_profile_content']))
         {
             return new ActivityDetails([], $rememberMeId);
         }
 
+        $encryptedData = $this->getEncryptedData($receipt['other_party_profile_content']);
         // Decrypt attribute list
-        $attributeList = $this->getAttributeList($encryptedData, $this->_receipt['wrapped_receipt_key']);
+        $attributeList = $this->getAttributeList($encryptedData, $receipt['wrapped_receipt_key']);
 
         // Get user profile
         return ActivityDetails::constructFromAttributeList($attributeList, $rememberMeId);
