@@ -15,7 +15,7 @@ class Request
 
     /**
      * Methods that can send payloads.
-     * You can add more method to this list separated by comma ','
+     * You can add more methods to this list, separated by a comma ','
      * We are using a const string, instead of a const array, to support PHP versions older than 5.6
      */
     const METHODS_THAT_INCLUDE_PAYLOAD = 'POST,PUT,PATCH';
