@@ -172,6 +172,24 @@ class YotiClientTest extends TestCase
         $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
     }
 
+    public function testRequestHeadersShouldIncludeSDKVersion()
+    {
+        $yotiClientObj  = new YotiClient(
+            SDK_ID,
+            $this->pem,
+            YotiClient::DEFAULT_CONNECT_API,
+            'PHP'
+        );
+        $requestHeaders = $this->invokeMethod(
+            $yotiClientObj,
+            'getRequestHeaders',
+            ['fakeSignedMessage']
+        );
+        $headersStr = implode(',', $requestHeaders);
+        $includeVersion = strpos($headersStr, YotiClient::YOTI_SDK_VERSION);
+        $this->assertNotFalse($includeVersion);
+    }
+
     /**
      * Get private or protected property of a class.
      *
@@ -189,5 +207,22 @@ class YotiClientTest extends TestCase
         $property->setAccessible(TRUE);
 
         return $property;
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object    Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
     }
 }
