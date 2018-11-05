@@ -8,6 +8,7 @@ use Yoti\Http\AmlResult;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\SignedRequest;
 use Yoti\Http\RestRequest;
+use Yoti\Util\Config;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ActivityDetailsException;
 
@@ -37,6 +38,7 @@ class YotiClient
     const AUTH_KEY_HEADER = 'X-Yoti-Auth-Key';
     const DIGEST_HEADER = 'X-Yoti-Auth-Digest';
     const YOTI_SDK_HEADER = 'X-Yoti-SDK';
+    const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
 
     // Aml check endpoint
     const AML_CHECK_ENDPOINT = '/aml-check';
@@ -306,14 +308,20 @@ class YotiClient
             throw new \Exception('Could not sign request.', 401);
         }
 
-        // Prepare request httpHeaders
-        return [
+        // Prepare request HTTP Headers
+        $requestHeaders = [
             self::AUTH_KEY_HEADER . ": {$authKey}",
             self::DIGEST_HEADER . ": {$signedMessage}",
             self::YOTI_SDK_HEADER . ": {$this->_sdkIdentifier}",
             'Content-Type: application/json',
             'Accept: application/json',
         ];
+
+        if ($version = Config::getInstance()->get('version')) {
+            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$version}";
+        }
+
+        return $requestHeaders;
     }
 
     /**
