@@ -16,7 +16,7 @@ class Request
     /**
      * Methods that can send payloads.
      * You can add more method to this list separated by comma ','
-     * We are using a const string instead of a const array to support PHP version older than 5.6
+     * We are using a const string, instead of a const array, to support PHP versions older than 5.6
      */
     const METHODS_THAT_INCLUDE_PAYLOAD = 'POST,PUT,PATCH';
 
@@ -211,6 +211,8 @@ class Request
      * @param string $httpMethod
      *
      * @return array
+     *
+     * @throws RequestException
      */
     protected function executeRequest(Payload $payload, array $httpHeaders, $requestUrl, $httpMethod)
     {
@@ -239,6 +241,11 @@ class Request
         $result['response'] = curl_exec($ch);
         // Set response code
         $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        // Check if any related Curl error occurred.
+        if (curl_error($ch)) {
+            throw new RequestException(curl_error($ch));
+        }
 
         // Close the session
         curl_close($ch);
