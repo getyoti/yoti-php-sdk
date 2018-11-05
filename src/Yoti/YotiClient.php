@@ -38,6 +38,9 @@ class YotiClient
     // Aml check endpoint
     const AML_CHECK_ENDPOINT = '/aml-check';
 
+    // Profile sharing endpoint
+    const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
+
     /**
      * Accepted HTTP header values for X-Yoti-SDK header.
      *
@@ -267,7 +270,7 @@ class YotiClient
         }
 
         // Request endpoint
-        $endpoint = "/profile/{$token}";
+        $endpoint = sprintf(self::PROFILE_REQUEST_ENDPOINT, $token);
         $result = $this->makeRequest(new Payload(), $endpoint, $httpMethod);
 
         $responseArr = $this->processResult($result);
