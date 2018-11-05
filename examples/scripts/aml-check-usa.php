@@ -9,12 +9,12 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\YotiClient;
 
-$postCode = '012345';
+$zipCode = '12345';
 $ssn = '170206773';
-$connectAPI = YotiClient::DEFAULT_CONNECT_API;
 
 try {
-    $amlAddress = new AmlAddress(new Country('USA'), $postCode);
+    $connectAPI = getenv('YOTI_CONNECT_API') ?: YotiClient::DEFAULT_CONNECT_API;
+    $amlAddress = new AmlAddress(new Country('USA'), $zipCode);
     $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress, $ssn);
     $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'), $connectAPI);
     $amlResult = $yotiClient->performAmlCheck($amlProfile);
