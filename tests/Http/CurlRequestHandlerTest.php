@@ -3,7 +3,7 @@
 namespace YotiTest\Http;
 
 use Yoti\YotiClient;
-use Yoti\Http\Request;
+use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\RequestSigner;
 use YotiTest\TestCase;
 use Yoti\Http\Payload;
@@ -11,13 +11,13 @@ use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 
-class RequestTest extends TestCase
+class CurlRequestHandlerTest extends TestCase
 {
     public $pem;
     /**
-     * @var Request
+     * @var CurlRequestHandler
      */
-    public $request;
+    public $requestHandler;
     /**
      * @var Payload
      */
@@ -25,7 +25,7 @@ class RequestTest extends TestCase
 
     public $requestSigner;
 
-    public $postMethod = Request::METHOD_POST;
+    public $postMethod = CurlRequestHandler::METHOD_POST;
 
     public function setup()
     {
@@ -33,17 +33,17 @@ class RequestTest extends TestCase
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
         $this->payload = new Payload($amlProfile->getData());
-        $this->postMethod = Request::METHOD_POST;
+        $this->postMethod = CurlRequestHandler::METHOD_POST;
 
         $this->pem = file_get_contents(PEM_FILE);
 
         $this->requestSigner = new RequestSigner(
-            $this->request,
+            $this->requestHandler,
             $endpoint,
             'POST'
         );
 
-        $this->request = new Request(
+        $this->requestHandler = new CurlRequestHandler(
             YotiClient::DEFAULT_CONNECT_API,
             $this->pem,
             SDK_ID,
@@ -51,64 +51,43 @@ class RequestTest extends TestCase
         );
     }
 
-    public function testPostMethodCanSendPayload()
-    {
-        $canSendPayload = $this->invokeMethod(
-            $this->request,
-            'canSendPayload',
-            ['POST']
-        );
-
-        $this->assertTrue($canSendPayload);
-    }
-
-    public function testGetMethodCannotSendPayload()
-    {
-        $canSendPayload = $this->invokeMethod(
-            $this->request,
-            'canSendPayload',
-            ['GET']
-        );
-        $this->assertFalse($canSendPayload);
-    }
-
     public function testGetPem()
     {
-        $this->assertEquals($this->pem, $this->request->getPem());
+        $this->assertEquals($this->pem, $this->requestHandler->getPem());
     }
 
     public function testGetSdkId()
     {
-        $this->assertEquals(SDK_ID, $this->request->getSdkId());
+        $this->assertEquals(SDK_ID, $this->requestHandler->getSdkId());
     }
 
     public function testInvalidHttpMethod()
     {
         $this->expectException('\Yoti\Exception\RequestException');
-        $this->request->makeRequest(
-            $this->payload,
+        $this->requestHandler->sendRequest(
             '/aml-check',
-            'InvalidHttpMethod'
+            'InvalidHttpMethod',
+            $this->payload
         );
     }
 
-    public function testMakeRequestExists()
+    public function testSendRequestExists()
     {
-        $this->assertTrue(method_exists($this->request, 'makeRequest'));
+        $this->assertTrue(method_exists($this->requestHandler, 'sendRequest'));
     }
 
-    public function testGetHttpHeaders()
+    public function testGenerateRequestHeaders()
     {
         $signedData = RequestSigner::signRequest(
-            $this->request,
-            $this->payload,
+            $this->requestHandler,
             '/aml-check',
-            'POST'
+            'POST',
+            $this->payload
         );
         $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
         $requestHeaders = $this->invokeMethod(
-            $this->request,
-            'getRequestHeaders',
+            $this->requestHandler,
+            'generateRequestHeaders',
             [$signedMessage]
         );
 
@@ -123,9 +102,9 @@ class RequestTest extends TestCase
         $authKey = $this->getAuthKey();
 
         $headers = [
-            Request::YOTI_AUTH_HEADER_KEY . ": {$authKey}",
-            Request::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
-            Request::YOTI_SDK_IDENTIFIER_KEY . ": PHP",
+            CurlRequestHandler::YOTI_AUTH_HEADER_KEY . ": {$authKey}",
+            CurlRequestHandler::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
+            CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": PHP",
             'Content-Type: application/json',
             'Accept: application/json',
         ];

@@ -3,7 +3,7 @@
 namespace YotiTest\Http;
 
 use YotiTest\TestCase;
-use Yoti\Http\Request;
+use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\Payload;
 use Yoti\YotiClient;
 use Yoti\Entity\Country;
@@ -18,7 +18,7 @@ class RequestSignerTest extends TestCase
      */
     public $payload;
     /**
-     * @var Request
+     * @var CurlRequestHandler
      */
     public $request;
     public $messageToSign;
@@ -28,7 +28,7 @@ class RequestSignerTest extends TestCase
         $pem = $this->getDummyPrivateKey();
         $this->payload = $this->getDummyPayload();
 
-        $this->request = new Request(
+        $this->request = new CurlRequestHandler(
             YotiClient::DEFAULT_CONNECT_API,
             $pem ,
             SDK_ID,
@@ -43,9 +43,9 @@ class RequestSignerTest extends TestCase
     {
         $signedData = RequestSigner::signRequest(
             $this->request,
-            $this->payload,
             '/aml-check',
-            'POST'
+            'POST',
+            $this->payload
         );
         $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
         $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];

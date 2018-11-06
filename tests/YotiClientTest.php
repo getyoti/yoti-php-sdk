@@ -32,7 +32,7 @@ class YotiClientTest extends TestCase
 
         $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
             ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['makeRequest'])
+            ->setMethods(['sendRequest'])
             ->getMock();
     }
 
@@ -63,7 +63,7 @@ class YotiClientTest extends TestCase
         $result['http_code'] = 200;
 
         // Stub the method makeRequest to return the result we want
-        $this->yotiClient->method('makeRequest')
+        $this->yotiClient->method('sendRequest')
             ->willreturn($result);
         $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
@@ -75,7 +75,7 @@ class YotiClientTest extends TestCase
      */
     public function testPerformAmlCheck()
     {
-        $this->yotiClient->method('makeRequest')
+        $this->yotiClient->method('sendRequest')
             ->willReturn($this->amlResult);
 
         $result = $this->yotiClient->performAmlCheck($this->amlProfile);
@@ -120,8 +120,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -136,8 +135,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -152,8 +150,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -168,26 +165,6 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
-    }
-
-    /**
-     * Get private or protected property of a class.
-     *
-     * @param $className
-     * @param $propertyName
-     *
-     * @return \ReflectionProperty
-     *
-     * @throws \ReflectionException
-     */
-    public function getPrivateProperty($className, $propertyName)
-    {
-        $reflector = new \ReflectionClass($className);
-        $property = $reflector->getProperty($propertyName);
-        $property->setAccessible(TRUE);
-
-        return $property;
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 }
