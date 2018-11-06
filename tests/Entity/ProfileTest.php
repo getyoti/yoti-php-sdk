@@ -44,11 +44,11 @@ class ProfileTest extends TestCase
 
         $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
             ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['makeRequest'])
+            ->setMethods(['sendRequest'])
             ->getMock();
 
         // Stub the method makeRequest to return the result we want
-        $this->yotiClient->method('makeRequest')
+        $this->yotiClient->method('sendRequest')
             ->willReturn($result);
 
         $activityDetails = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);

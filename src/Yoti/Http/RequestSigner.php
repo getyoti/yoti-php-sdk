@@ -12,25 +12,25 @@ class RequestSigner
     /**
      * Return request signed data.
      *
-     * @param Request $request
+     * @param AbstractRequestHandler $requestHandler
      * @param string $endpoint
      * @param string $httpMethod
+     * @param Payload|NULL $payload
      *
      * @return array
      *
      * @throws RequestException
      */
-    public static function signRequest(Request $request, Payload $payload, $endpoint, $httpMethod)
+    public static function signRequest(AbstractRequestHandler $requestHandler, $endpoint, $httpMethod, Payload $payload = NULL)
     {
-        $endPointPath = self::generateEndPointPath($endpoint, $request->getSDKId());
+        $endPointPath = self::generateEndPointPath($endpoint, $requestHandler->getSDKId());
 
         $messageToSign = "{$httpMethod}&$endPointPath";
-        if(Request::canSendPayload($httpMethod))
-        {
+        if ($payload instanceof Payload) {
             $messageToSign .= "&{$payload->getBase64Payload()}";
         }
 
-        openssl_sign($messageToSign, $signedMessage, $request->getPem(), OPENSSL_ALGO_SHA256);
+        openssl_sign($messageToSign, $signedMessage, $requestHandler->getPem(), OPENSSL_ALGO_SHA256);
 
         self::validateSignedMessage($signedMessage);
 
@@ -65,8 +65,7 @@ class RequestSigner
     private static function validateSignedMessage($signedMessage)
     {
         // Check signed message
-        if(!$signedMessage)
-        {
+        if(!$signedMessage) {
             throw new RequestException('Could not sign request.', 401);
         }
     }
