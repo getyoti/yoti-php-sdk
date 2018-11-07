@@ -12,7 +12,6 @@ class Config
     {
         static $instance = NULL;
         if ($instance === NULL) {
-            // Late static binding (PHP 5.3+)
             $instance = new self();
         }
         return $instance;

@@ -14,7 +14,7 @@ class ConfigTest extends TestCase
 
     public function testGetSDKVersion()
     {
-        $sdkVerision = Config::getInstance()->get('version');
-        $this->assertNotNull($sdkVerision);
+        $sdkVersion = Config::getInstance()->get('version');
+        $this->assertNotNull($sdkVersion);
     }
 }
