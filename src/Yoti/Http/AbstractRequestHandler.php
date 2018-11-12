@@ -2,6 +2,7 @@
 
 namespace Yoti\Http;
 
+use Yoti\Util\Config;
 use Yoti\Exception\RequestException;
 
 abstract class AbstractRequestHandler
@@ -17,6 +18,7 @@ abstract class AbstractRequestHandler
     const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
     const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
     const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
+    const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
 
     /**
      * @var string
@@ -109,13 +111,18 @@ abstract class AbstractRequestHandler
     private function generateRequestHeaders($signedMessage)
     {
         // Prepare request Http Headers
-        return [
+        $requestHeaders = [
             CurlRequestHandler::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
             CurlRequestHandler::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
             CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
             'Content-Type: application/json',
             'Accept: application/json',
         ];
+
+        if ($version = Config::getInstance()->get('version')) {
+            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$version}";
+        }
+        return $requestHeaders;
     }
 
     /**

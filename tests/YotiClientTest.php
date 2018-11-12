@@ -64,7 +64,7 @@ class YotiClientTest extends TestCase
 
         // Stub the method makeRequest to return the result we want
         $this->yotiClient->method('sendRequest')
-            ->willreturn($result);
+            ->willReturn($result);
         $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
@@ -165,6 +165,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
+
         $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 }
