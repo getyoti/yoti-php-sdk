@@ -4,10 +4,14 @@ namespace Yoti\Util\Profile;
 use Traversable;
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
+use Attrpubapi_v1\Anchor;
 use Yoti\Entity\Anchor as YotiAnchor;
 
 class AnchorProcessor
 {
+    const SOURCES_OID = '1.3.6.1.4.1.47127.1.1.1';
+    const VERIFIERS_OID = '1.3.6.1.4.1.47127.1.1.2';
+
     /**
      * @var ASN1
      */
@@ -34,43 +38,37 @@ class AnchorProcessor
     public function process(Traversable $anchorList)
     {
         $anchorsData = ['sources'=>[], 'verifiers'=>[]];
+        $newAnchorsData = [];
+
         $anchorTypes = self::getAnchorTypes();
 
         foreach ($anchorList as $anchor) {
             $certificateList = $anchor->getOriginServerCerts();
+            // Create SignedTimeStamp object from bytes
+            $yotiSignedTimeStamp = $this->createYotiSignedTimestamp($anchor);
+            $anchorSubType = $anchor->getSubType();
+            $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());
+
             foreach ($certificateList as $certificate) {
                 // Decode the content with ASN1
-                $BER = $this->X509->_extractBER($certificate);
-                $this->ASN1->loadOIDs($this->X509->oids);
-                $certificateContent = $this->ASN1->decodeBER($BER);
+                //$BER = $this->X509->_extractBER($certificate);
 
-                foreach ($anchorTypes as $type => $oid) {
-                    $searchResult = [];
-                    if (self::anchorFound($certificateContent, $oid, $searchResult)) {
-                        // The value could be encoded - so decode it with ASN1
-                        $anchorValue = $searchResult[0];
-                        $decodedValue = $this->ASN1->decodeBER($anchorValue);
-                        if (is_array($decodedValue)) {
-                            $keyExists = isset($decodedValue[0]['content'][0]['content']);
-                            $anchorValue = $keyExists ? $decodedValue[0]['content'][0]['content'] : '';
-                        }
-                        // Generate SignedTimeStamp object from bytes
-                        $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
-                        $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
+               // $this->ASN1->loadOIDs($this->X509->oids);
+                //$certificateContent = $this->ASN1->decodeBER($BER);
 
-                        $timeInSeconds = round($signedTimeStamp->getTimestamp()/1000000);
-                        $dateTime = new \DateTime();
-                        $dateTime->setTimestamp($timeInSeconds);
+                $certObj = $this->convertCertToX509($certificate);
+                $certExt = $certObj->tbsCertificate->extensions;
+                if (count($certExt) > 1) {
+                    $extId = $certExt[1]->extnId;
+                    $extEncodedValue = $certExt[1]->extnValue;
 
-                        $yotiSignedTimeStamp = new \Yoti\Entity\SignedTimeStamp(
-                            $signedTimeStamp->getVersion(),
-                            $dateTime
-                        );
-
-                        $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());
-                        $anchorsData[$type][] = new YotiAnchor(
+                    $valBER = $this->X509->_extractBER($extEncodedValue);
+                    $decodedValArr = $this->ASN1->decodeBER($valBER);
+                    if (isset($decodedValArr[0]['content'][0]['content'])) {
+                        $anchorValue = $decodedValArr[0]['content'][0]['content'];
+                        $newAnchorsData[$extId][] = new YotiAnchor(
                             $anchorValue,
-                            $anchor->getSubType(),
+                            $anchorSubType,
                             $yotiSignedTimeStamp,
                             $X509CertsList
                         );
@@ -79,7 +77,36 @@ class AnchorProcessor
             }
         }
 
+        if (isset($newAnchorsData[self::SOURCES_OID])) {
+            $anchorsData['sources'] = $newAnchorsData[self::SOURCES_OID];
+        }
+
+        if (isset($newAnchorsData[self::VERIFIERS_OID])) {
+            $anchorsData['verifiers'] = $newAnchorsData[self::VERIFIERS_OID];
+        }
         return $anchorsData;
+    }
+
+    /**
+     * @param Attrpubapi_v1\Anchor $anchor
+     *
+     * @return \Yoti\Entity\SignedTimeStamp
+     */
+    private function createYotiSignedTimestamp(Anchor $anchor)
+    {
+        $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
+        $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
+
+        $timeInSeconds = round($signedTimeStamp->getTimestamp()/1000000);
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($timeInSeconds);
+
+        $yotiSignedTimeStamp = new \Yoti\Entity\SignedTimeStamp(
+            $signedTimeStamp->getVersion(),
+            $dateTime
+        );
+
+        return $yotiSignedTimeStamp;
     }
 
     /**

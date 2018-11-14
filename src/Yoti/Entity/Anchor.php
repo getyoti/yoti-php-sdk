@@ -4,6 +4,9 @@ namespace Yoti\Entity;
 
 class Anchor
 {
+    const TYPE_SOURCES_OID = '1.3.6.1.4.1.47127.1.1.1';
+    const TYPE_VERIFIERS_OID = '1.3.6.1.4.1.47127.1.1.2';
+
     /**
      * @var string
      */
@@ -39,14 +42,16 @@ class Anchor
     /**
      * @return string
      */
-    public function getValue() {
+    public function getValue()
+    {
         return $this->value;
     }
 
     /**
      * @return string
      */
-    public function getSubtype() {
+    public function getSubtype()
+    {
         return $this->subType;
     }
 

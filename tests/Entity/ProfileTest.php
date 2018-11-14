@@ -72,7 +72,6 @@ class ProfileTest extends TestCase
         $structuredPostalAddress = new Attribute(
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $this->dummyStructuredPostalAddress,
-            [],
             []
         );
         $profileData = [
@@ -80,7 +79,6 @@ class ProfileTest extends TestCase
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'Given Name TEST',
-                [],
                 []
             ),
         ];
@@ -138,7 +136,6 @@ class ProfileTest extends TestCase
                     new Attribute(
                         'age_under:18',
                         'false',
-                        [],
                         []
                     ),
                     'age_under',
@@ -149,7 +146,6 @@ class ProfileTest extends TestCase
                     new Attribute(
                         'age_over:35',
                         'true',
-                        [],
                         []
                     ),
                     'age_over',
@@ -160,13 +156,11 @@ class ProfileTest extends TestCase
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'TEST GIVEN NAMES',
-                [],
                 []
             ),
             Profile::ATTR_FAMILY_NAME => new Attribute(
                 Profile::ATTR_FAMILY_NAME,
                 'TEST FAMILY NAME',
-                [],
                 []
             ),
         ];

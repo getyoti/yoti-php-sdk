@@ -12,7 +12,7 @@ class AgeVerificationConverterTest extends TestCase
 {
     public function testGetAgeVerificationsFromAttrsMap()
     {
-        $ageAttribute = new Attribute('age_under:18', 'true', [], []);
+        $ageAttribute = new Attribute('age_under:18', 'true', []);
         $ageVerificationConverter = new AgeVerificationConverter(['age_under:18'=> $ageAttribute]);
         $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
         $ageUnder18 = $ageVerifications['age_under:18'];
@@ -27,9 +27,9 @@ class AgeVerificationConverterTest extends TestCase
     public function testMultipleAgeDerivations()
     {
         $profileData = [
-            'age_under:18'=> new Attribute('age_under:18', 'false', [], []),
-            'age_over:50'=> new Attribute('age_over:50', 'true', [], []),
-            'age_breaker:50'=> new Attribute('age_breaker:50', 'true', [], []),
+            'age_under:18'=> new Attribute('age_under:18', 'false', []),
+            'age_over:50'=> new Attribute('age_over:50', 'true', []),
+            'age_breaker:50'=> new Attribute('age_breaker:50', 'true', []),
         ];
         $ageVerificationConverter = new AgeVerificationConverter($profileData);
         $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
@@ -55,16 +55,14 @@ class AgeVerificationConverterTest extends TestCase
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'TEST GIVEN NAMES',
-                [],
                 []
             ),
             Profile::ATTR_FAMILY_NAME => new Attribute(
                 Profile::ATTR_FAMILY_NAME,
                 'TEST FAMILY NAME',
-                [],
                 []
             ),
-            'age_breaker:50'=> new Attribute('age_breaker:50', 'true', [], []),
+            'age_breaker:50'=> new Attribute('age_breaker:50', 'true', []),
         ];
         $ageVerificationConverter = new AgeVerificationConverter($profileData);
         $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();

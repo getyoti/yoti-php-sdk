@@ -1,9 +1,11 @@
 <?php
 namespace YotiTest\Entity;
 
+use Yoti\Util\Profile\AnchorProcessor;
 use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
+use Yoti\Entity\Anchor as YotiAnchor;
 
 class AttributeTest extends TestCase
 {
@@ -22,8 +24,10 @@ class AttributeTest extends TestCase
         $this->dummyAttribute = new Attribute(
             Profile::ATTR_FULL_NAME,
             self::ATTR_VALUE,
-            $this->attributeSources,
-            $this->attributeVerifiers
+            [
+                YotiAnchor::TYPE_SOURCES_OID => $this->attributeSources,
+                YotiAnchor::TYPE_VERIFIERS_OID => $this->attributeVerifiers
+            ]
         );
     }
 

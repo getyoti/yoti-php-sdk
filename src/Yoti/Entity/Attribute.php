@@ -1,27 +1,34 @@
 <?php
 namespace Yoti\Entity;
 
+use Yoti\Util\Profile\AnchorProcessor;
+
 class Attribute
 {
     /**
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var mixed
      */
-    protected $value;
+    private $value;
 
     /**
      * @var array
      */
-    protected $sources;
+    private $sources;
 
     /**
      * @var array
      */
-    protected $verifiers;
+    private $verifiers;
+
+    /**
+     * @var array
+     */
+    private $anchors;
 
     /**
      * Attribute constructor.
@@ -31,12 +38,14 @@ class Attribute
      * @param array $sources
      * @param array $verifiers
      */
-    public function __construct($name, $value, array $sources, array $verifiers)
+    public function __construct($name, $value, array $anchors = NULL)
     {
         $this->name = $name;
         $this->value = $value;
-        $this->sources = $sources;
-        $this->verifiers = $verifiers;
+        $this->anchors = $anchors;
+
+        $this->setSources();
+        $this->setVerifiers();
     }
 
     /**
@@ -69,5 +78,25 @@ class Attribute
     public function getVerifiers()
     {
         return $this->verifiers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAnchors()
+    {
+        return $this->anchors;
+    }
+
+    private function setSources()
+    {
+        $this->sources = isset($this->anchors[Anchor::TYPE_SOURCES_OID]) ?
+            $this->anchors[Anchor::TYPE_SOURCES_OID] : [];
+    }
+
+    private function setVerifiers()
+    {
+        $this->verifiers = isset($this->anchors[Anchor::TYPE_VERIFIERS_OID]) ?
+            $this->anchors[Anchor::TYPE_VERIFIERS_OID] : [];
     }
 }
