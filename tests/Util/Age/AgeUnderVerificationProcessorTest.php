@@ -10,7 +10,7 @@ class AgeUnderVerificationProcessorTest extends TestCase
 {
     public function testProcessWithAgeUnder()
     {
-        $ageAttribute = new Attribute('age_under:18', 'false', [], []);
+        $ageAttribute = new Attribute('age_under:18', 'false', []);
         $ageUnderVerificationProcessor = new AgeUnderVerificationProcessor($ageAttribute);
         $ageVerificationObj = $ageUnderVerificationProcessor->process();
         $this->assertInstanceOf(AgeVerification::class, $ageVerificationObj);
@@ -21,7 +21,7 @@ class AgeUnderVerificationProcessorTest extends TestCase
 
     public function testForAgeUnder20ShouldReturnTrue()
     {
-        $ageAttribute = new Attribute('age_under:20', 'true', [], []);
+        $ageAttribute = new Attribute('age_under:20', 'true', []);
         $ageUnderVerificationProcessor = new AgeUnderVerificationProcessor($ageAttribute);
         $ageVerificationObj = $ageUnderVerificationProcessor->process();
         $this->assertInstanceOf(AgeVerification::class, $ageVerificationObj);
@@ -32,7 +32,7 @@ class AgeUnderVerificationProcessorTest extends TestCase
 
     public function testWhenThereIsNotAgeUnderShouldReturnNull()
     {
-        $ageAttribute = new Attribute('age_over:20', 'false', [], []);
+        $ageAttribute = new Attribute('age_over:20', 'false', []);
         $ageUnderVerificationProcessor = new AgeUnderVerificationProcessor($ageAttribute);
         $this->assertNull($ageUnderVerificationProcessor->process());
     }

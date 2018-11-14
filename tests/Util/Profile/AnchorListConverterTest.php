@@ -2,29 +2,23 @@
 
 namespace YotiTest\Util\Profile;
 
-use YotiTest\TestCase;
-use Yoti\Util\Profile\AnchorProcessor;
 use ArrayObject;
+use Yoti\Entity\Anchor;
+use YotiTest\TestCase;
+use Yoti\Util\Profile\AnchorListConverter;
 
-class AnchorProcessorTest extends TestCase
+class AnchorListConverterTest extends TestCase
 {
-    public $anchorProcessor;
-
-    public function setup()
-    {
-        $this->anchorProcessor = new AnchorProcessor();
-    }
-
     public function testSourceAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
-        $this->assertEquals('PASSPORT', $anchorsData['sources'][0]->getValue());
+        $this->assertEquals('PASSPORT', $anchorsData[Anchor::TYPE_SOURCES_OID][0]->getValue());
     }
 
     public function testVerifierAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
-        $anchorVerifiersObj = $anchorsData['verifiers'][0];
+        $anchorVerifiersObj = $anchorsData[Anchor::TYPE_VERIFIERS_OID][0];
         $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
     }
 
@@ -37,9 +31,9 @@ class AnchorProcessorTest extends TestCase
         $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
 
         $collection = new ArrayObject([$passportAnchor, $dlAnchor]);
-        $anchorsData = $this->anchorProcessor->process($collection);
-        $anchorSource1 = $anchorsData['sources'][0]->getValue();
-        $anchorSource2 = $anchorsData['sources'][1]->getValue();
+        $anchorsData = AnchorListConverter::convert($collection);
+        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCES_OID][0]->getValue();
+        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCES_OID][1]->getValue();
         $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
 
         $this->assertEquals(
@@ -59,6 +53,6 @@ class AnchorProcessorTest extends TestCase
 
         $collection = new ArrayObject([$anchor]);
 
-        return $this->anchorProcessor->process($collection);
+        return AnchorListConverter::convert($collection);
     }
 }

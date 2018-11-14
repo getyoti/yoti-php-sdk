@@ -16,10 +16,10 @@ class ApplicationProfileTest extends TestCase
     public function setup()
     {
         $dummyData = [
-            'application_name' => new Attribute('application_name','Test PHP SDK',[],[]),
-            'application_url' => new Attribute('application_url', 'https://localhost', [], []),
-            'application_receipt_bgcolor' => new Attribute('application_receipt_bgcolor', '#F5F5F5', [], []),
-            'application_logo' => new Attribute('application_logo', new Image('dummyImageData','png'), [], []),
+            'application_name' => new Attribute('application_name','Test PHP SDK',[]),
+            'application_url' => new Attribute('application_url', 'https://localhost', []),
+            'application_receipt_bgcolor' => new Attribute('application_receipt_bgcolor', '#F5F5F5', []),
+            'application_logo' => new Attribute('application_logo', new Image('dummyImageData','png'), []),
         ];
         $this->dummyProfile = new ApplicationProfile($dummyData);
     }
