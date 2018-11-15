@@ -9,20 +9,20 @@ use Yoti\Util\Profile\AnchorListConverter;
 
 class AnchorListConverterTest extends TestCase
 {
-    public function testSourceAnchor()
+    public function testConvertingSourceAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
-        $this->assertEquals('PASSPORT', $anchorsData[Anchor::TYPE_SOURCES_OID][0]->getValue());
+        $this->assertEquals('PASSPORT', $anchorsData[Anchor::TYPE_SOURCE_OID][0]->getValue());
     }
 
-    public function testVerifierAnchor()
+    public function testConvertingVerifierAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
-        $anchorVerifiersObj = $anchorsData[Anchor::TYPE_VERIFIERS_OID][0];
+        $anchorVerifiersObj = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
         $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
     }
 
-    public function testGettingTwoSourceAnchors()
+    public function testConvertingTwoSources()
     {
         $passportAnchor = new \Attrpubapi_v1\Anchor();
         $passportAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
@@ -32,8 +32,8 @@ class AnchorListConverterTest extends TestCase
 
         $collection = new ArrayObject([$passportAnchor, $dlAnchor]);
         $anchorsData = AnchorListConverter::convert($collection);
-        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCES_OID][0]->getValue();
-        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCES_OID][1]->getValue();
+        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCE_OID][0]->getValue();
+        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCE_OID][1]->getValue();
         $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
 
         $this->assertEquals(
@@ -43,7 +43,8 @@ class AnchorListConverterTest extends TestCase
     }
 
     /**
-     * @param $anchorString
+     * @param string $anchorString
+     *
      * @return array $anchors
      */
     public function parseFromBase64String($anchorString)

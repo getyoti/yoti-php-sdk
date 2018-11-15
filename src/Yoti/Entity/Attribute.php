@@ -1,8 +1,6 @@
 <?php
 namespace Yoti\Entity;
 
-use Yoti\Util\Profile\AnchorProcessor;
-
 class Attribute
 {
     /**
@@ -34,18 +32,18 @@ class Attribute
      * Attribute constructor.
      *
      * @param string $name
-     * @param mixed $value
-     * @param array $sources
-     * @param array $verifiers
+     * @param string $value
+     *
+     * @param array $anchorsMap
      */
-    public function __construct($name, $value, array $anchors = NULL)
+    public function __construct($name, $value, array $anchorsMap)
     {
         $this->name = $name;
         $this->value = $value;
-        $this->anchors = $anchors;
 
-        $this->setSources();
-        $this->setVerifiers();
+        $this->setSources($anchorsMap);
+        $this->setVerifiers($anchorsMap);
+        $this->setAnchors($anchorsMap);
     }
 
     /**
@@ -81,6 +79,13 @@ class Attribute
     }
 
     /**
+     * Return an array of anchors e.g
+     * [
+     *  new Anchor(),
+     *  new Anchor(),
+     *  ...
+     * ]
+     *
      * @return array
      */
     public function getAnchors()
@@ -88,15 +93,38 @@ class Attribute
         return $this->anchors;
     }
 
-    private function setSources()
+    private function setSources(array $anchorsMap)
     {
-        $this->sources = isset($this->anchors[Anchor::TYPE_SOURCES_OID]) ?
-            $this->anchors[Anchor::TYPE_SOURCES_OID] : [];
+        $this->sources = $this->getAnchorType(
+            $anchorsMap,
+            Anchor::TYPE_SOURCE_OID
+        );
     }
 
-    private function setVerifiers()
+    private function setVerifiers(array $anchorsMap)
     {
-        $this->verifiers = isset($this->anchors[Anchor::TYPE_VERIFIERS_OID]) ?
-            $this->anchors[Anchor::TYPE_VERIFIERS_OID] : [];
+        $this->verifiers = $this->getAnchorType(
+            $anchorsMap,
+            Anchor::TYPE_VERIFIER_OID
+        );
+    }
+
+    private function setAnchors(array $anchorsMap)
+    {
+        // Remove Oids from the anchorsMap
+        $anchors = [];
+        array_walk($anchorsMap, function($val) use(&$anchors) {
+            $anchors = array_merge($anchors, array_values($val));
+        });
+        $this->anchors = $anchors;
+    }
+
+    /**
+     * @param string $anchorType
+     * @return array
+     */
+    private function getAnchorType($anchorsMap, $anchorType)
+    {
+        return isset($anchorsMap[$anchorType]) ? $anchorsMap[$anchorType] : [];
     }
 }

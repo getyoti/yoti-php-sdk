@@ -9,13 +9,11 @@ class AnchorListConverter
     public static function convert(Traversable $anchorList)
     {
         $yotiAnchorsMap = [];
-        $anchorConverter = new AnchorConverter();
 
-        foreach ($anchorList as $anchor) {
-            $anchorConverter->convertToYotiAnchors(
-                $anchor,
-                $yotiAnchorsMap
-            );
+        foreach ($anchorList as $protobufAnchor) {
+            if ($parsedAnchor = AnchorConverter::convert($protobufAnchor)) {
+                $yotiAnchorsMap[$parsedAnchor['oid']][] = $parsedAnchor['yoti_anchor'];
+            }
         }
         return $yotiAnchorsMap;
     }

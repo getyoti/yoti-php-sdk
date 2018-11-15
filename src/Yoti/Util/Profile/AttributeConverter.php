@@ -127,7 +127,7 @@ class AttributeConverter
     public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute)
     {
         try {
-            $yotiAnchors = AnchorListConverter::convert(
+            $yotiAnchorsMap = AnchorListConverter::convert(
                 $protobufAttribute->getAnchors()
             );
             $attrName = $protobufAttribute->getName();
@@ -141,7 +141,7 @@ class AttributeConverter
             $yotiAttribute = new Attribute(
                 $attrName,
                 $attrValue,
-                $yotiAnchors
+                $yotiAnchorsMap
             );
         } catch (\Exception $e) {
             $yotiAttribute = NULL;

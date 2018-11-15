@@ -10,55 +10,81 @@ use Yoti\Entity\Anchor as YotiAnchor;
 
 class AnchorConverter
 {
-    public function __construct()
-    {
-        $this->ASN1 = new ASN1();
-        $this->X509 = new X509();
-    }
-
     /**
-     * Convert Protobuf Anchors to a map of Yoti Anchors
-     * And merge the result into the reference array
+     * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
      *
      * @param Anchor $anchor
-     * @param $yotiAnchorsMap
+     *
+     * @return array|null
      */
-    public function convertToYotiAnchors(Anchor $anchor, &$yotiAnchorsMap)
+    public static function convert(Anchor $protobufAnchor)
     {
-        $anchorSubType = $anchor->getSubType();
-        $certificateList = $anchor->getOriginServerCerts();
-        $yotiSignedTimeStamp = $this->createYotiSignedTimestamp($anchor);
-        $X509CertsList = $this->convertCertsListToX509($anchor->getOriginServerCerts());
+        $anchorMap = NULL;
+        $ASN1 = new ASN1();
+        $X509 = new X509();
+        $anchorSubType = $protobufAnchor->getSubType();
+        $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
+        $X509CertsList = self::convertCertsListToX509($X509, $protobufAnchor->getOriginServerCerts());
 
-        foreach ($certificateList as $certificate) {
-            $certObj = $this->convertCertToX509($certificate);
-            $certExtArr = $certObj->tbsCertificate->extensions;
+        foreach ($X509CertsList as $certX509Obj) {
+            $certExtArr = $certX509Obj->tbsCertificate->extensions;
 
             if (count($certExtArr) > 1) {
-                $extId = $certExtArr[1]->extnId;
+                $oid = $certExtArr[1]->extnId;
+                $anchorType = self::getAnchorTypeByOid($oid);
                 $extEncodedValue = $certExtArr[1]->extnValue;
 
-                if ($decodedAnchorValue = $this->decodeAnchorValue($extEncodedValue)) {
-                    $yotiAnchorsMap[$extId][] = new YotiAnchor(
+                if ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue)) {
+                    $yotiAnchor = self::createYotiAnchor(
                         $decodedAnchorValue,
+                        $anchorType,
                         $anchorSubType,
                         $yotiSignedTimeStamp,
                         $X509CertsList
                     );
+                    $anchorMap = [
+                        'oid' => $oid,
+                        'yoti_anchor' => $yotiAnchor
+                    ];
+                    // We are only looking for one YotiAnchor from protobufAnchor
+                    break;
                 }
             }
         }
+        return $anchorMap;
     }
 
     /**
-     * @param string $extEncodedValue
+     * @param string $value
+     * @param string $type
+     * @param string $subType
+     * @param \Yoti\Entity\SignedTimestamp $signedTimestamp
+     * @param array $X509CertsList
      *
-     * @return null
+     * @return YotiAnchor
      */
-    private function decodeAnchorValue($extEncodedValue)
+    private static function createYotiAnchor($value, $type, $subType, $signedTimestamp, $X509CertsList)
     {
-        $encodedBER = $this->X509->_extractBER($extEncodedValue);
-        $decodedValArr = $this->ASN1->decodeBER($encodedBER);
+        return  new YotiAnchor(
+            $value,
+            $type,
+            $subType,
+            $signedTimestamp,
+            $X509CertsList
+        );
+    }
+
+    /**
+     * @param ASN1 $ASN1
+     * @param X509 $X509
+     * @param $extEncodedValue
+     *
+     * @return null|string
+     */
+    private static function decodeAnchorValue(ASN1 $ASN1, X509 $X509, $extEncodedValue)
+    {
+        $encodedBER = $X509->_extractBER($extEncodedValue);
+        $decodedValArr = $ASN1->decodeBER($encodedBER);
         if (isset($decodedValArr[0]['content'][0]['content'])) {
             return $decodedValArr[0]['content'][0]['content'];
         }
@@ -70,14 +96,19 @@ class AnchorConverter
      *
      * @return \Yoti\Entity\SignedTimeStamp
      */
-    private function createYotiSignedTimestamp(Anchor $anchor)
+    private static function convertToYotiSignedTimestamp(Anchor $anchor)
     {
         $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
-        $timeInSeconds = round($signedTimeStamp->getTimestamp()/1000000);
-        $dateTime = new \DateTime();
-        $dateTime->setTimestamp($timeInSeconds);
+        $timestamp = $signedTimeStamp->getTimestamp()/1000000;
+        $timeIncMicroSeconds = number_format($timestamp, 6, '.', '');
+        // Format DateTime to include microseconds and timezone
+        $dateTime = \DateTime::createFromFormat(
+            'U.u',
+            $timeIncMicroSeconds,
+            new \DateTimeZone('UTC')
+        );
 
         $yotiSignedTimeStamp = new \Yoti\Entity\SignedTimeStamp(
             $signedTimeStamp->getVersion(),
@@ -88,14 +119,15 @@ class AnchorConverter
     }
 
     /**
+     * @param X509 $X509
      * @param Traversable $certificateList
      *
      * @return array
      */
-    private function convertCertsListToX509(Traversable $certificateList) {
+    private static function convertCertsListToX509(X509 $X509, Traversable $certificateList) {
         $certsList = [];
         foreach($certificateList as $certificate) {
-            if ($X509CertObj = $this->convertCertToX509($certificate)) {
+            if ($X509CertObj = self::convertCertToX509($X509, $certificate)) {
                 $certsList[] = $X509CertObj;
             }
         }
@@ -105,12 +137,35 @@ class AnchorConverter
     /**
      * Return X509 Cert Object.
      *
-     * @param string $certificate
+     * @param X509 $X509
+     * @param $certificate
      *
-     * @return mixed
+     * @return \stdClass
      */
-    private function convertCertToX509($certificate) {
-        $X509Data = $this->X509->loadX509($certificate);
+    private static function convertCertToX509(X509 $X509, $certificate) {
+        $X509Data = $X509->loadX509($certificate);
         return json_decode(json_encode($X509Data), FALSE);
+    }
+
+    /**
+     * @param string $oid
+     *
+     * @return string
+     */
+    private static function getAnchorTypeByOid($oid)
+    {
+        $anchorTypesMap = self::getAnchorTypesMap();
+        return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : 'Unknown';
+    }
+
+    /**
+     * @return array
+     */
+    private static function getAnchorTypesMap()
+    {
+        return [
+            YotiAnchor::TYPE_SOURCE_OID => YotiAnchor::TYPE_SOURCE_NAME,
+            YotiAnchor::TYPE_VERIFIER_OID => YotiAnchor::TYPE_VERIFIER_NAME,
+        ];
     }
 }
