@@ -4,36 +4,45 @@ namespace Yoti\Entity;
 
 class Anchor
 {
-    const TYPE_SOURCES_OID = '1.3.6.1.4.1.47127.1.1.1';
-    const TYPE_VERIFIERS_OID = '1.3.6.1.4.1.47127.1.1.2';
+    const TYPE_SOURCE_NAME = 'Source';
+    const TYPE_VERIFIER_NAME = 'Verifier';
+    const TYPE_SOURCE_OID = '1.3.6.1.4.1.47127.1.1.1';
+    const TYPE_VERIFIER_OID = '1.3.6.1.4.1.47127.1.1.2';
 
     /**
      * @var string
      */
-    protected $value;
+    private $value;
 
     /**
      * @var string
      */
-    protected $subType;
+    private $type;
+
+    /**
+     * @var string
+     */
+    private $subType;
 
     /**
      * @var \Yoti\Entity\SignedTimeStamp
      */
-    protected $signedTimeStamp;
+    private $signedTimeStamp;
 
     /**
      * @var array
      */
-    protected $originServerCerts;
+    private $originServerCerts;
 
     public function __construct(
         $value,
+        $type,
         $subType,
         SignedTimeStamp $signedTimeStamp,
         array $originServerCerts
     ) {
         $this->value = $value;
+        $this->type = $type;
         $this->subType = $subType;
         $this->signedTimeStamp = $signedTimeStamp;
         $this->originServerCerts = $originServerCerts;
@@ -45,6 +54,14 @@ class Anchor
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
