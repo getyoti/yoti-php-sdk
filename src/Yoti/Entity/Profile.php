@@ -134,7 +134,7 @@ class Profile extends BaseProfile
     public function getAgeVerifications()
     {
         return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
-            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : NULL;
+            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : [];
     }
 
     /**
