@@ -16,6 +16,8 @@ try {
     );
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
+    $ageVerifications = $profile->getAgeVerifications();
+    $ageVerification = current($ageVerifications);
 
     $profileAttributes = [
         [
@@ -44,6 +46,11 @@ try {
             'icon' => 'yoti-icon-calendar',
         ],
         [
+            'name' => 'Age Verification',
+            'obj' => $ageVerification,
+            'icon' => 'yoti-icon-calendar',
+        ],
+        [
             'name' => 'Address',
             'obj' => $profile->getPostalAddress(),
             'icon' => 'yoti-icon-address',
@@ -66,7 +73,7 @@ try {
 
     // Create selfie image file.
     if ($selfie && is_writable(__DIR__)) {
-        file_put_contents($selfieFileName, $selfie->getValue(), LOCK_EX);
+        file_put_contents($selfieFileName, $selfie->getValue()->getContent(), LOCK_EX);
     }
 } catch(\Exception $e) {
     header('Location: /error.php?msg='.$e->getMessage());
@@ -78,9 +85,8 @@ try {
    <head>
        <meta charset="utf-8">
        <title>Yoti client example</title>
-
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
        <link rel="stylesheet" type="text/css" href="assets/css/profile.css">
+       <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
    </head>
    <body class="yoti-body">
        <main class="yoti-profile-layout">
@@ -139,23 +145,36 @@ try {
                                </div>
 
                                <div class="yoti-attribute-value">
-                                   <div class="yoti-attribute-value-text"><?php echo $item['obj']->getValue() ?></div>
+                                   <?php
+                                        $name = $item['name'];
+                                        $attributeObj = $item['obj'];
+                                        switch($name) {
+                                            case 'Date of birth':
+                                                $value = $item['obj']->getValue()->format('d-m-Y');
+                                                break;
+                                            case 'Age Verification':
+                                                $attributeObj = $item['obj']->getAttribute();
+                                                $result = $ageVerification->getResult() ? 'Yes' : 'No';
+                                                $value = $ageVerification->getChecktype() . ':' . $ageVerification->getAge()
+                                                    . ' ' . $result;
+                                                break;
+                                            default:
+                                                $value = $item['obj']->getValue();
+                                        }
+
+                                        $anchors = $attributeObj->getAnchors();
+                                   ?>
+                                   <div class="yoti-attribute-value-text"><?php echo $value; ?></div>
                                </div>
                                <div class="yoti-attribute-anchors-layout">
                                    <div class="yoti-attribute-anchors-head -s-v">S / V</div>
                                    <div class="yoti-attribute-anchors-head -value">Value</div>
                                    <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
 
-                                   <?php foreach($item['obj']->getSources() as $source) : ?>
-                                       <div class="yoti-attribute-anchors -s-v">Source</div>
-                                       <div class="yoti-attribute-anchors -value"><?php echo $source->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php echo $source->getSubType() ?></div>
-                                   <?php endforeach; ?>
-
-                                   <?php foreach($item['obj']->getVerifiers() as $verifier) : ?>
-                                       <div class="yoti-attribute-anchors -s-v">Verifier</div>
-                                       <div class="yoti-attribute-anchors -value"><?php echo $verifier->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php echo $verifier->getSubType() ?></div>
+                                   <?php foreach($anchors as $anchor) : ?>
+                                       <div class="yoti-attribute-anchors -s-v"><?php echo $anchor->getType(); ?></div>
+                                       <div class="yoti-attribute-anchors -value"><?php echo $anchor->getValue() ?></div>
+                                       <div class="yoti-attribute-anchors -subtype"><?php echo $anchor->getSubType() ?></div>
                                    <?php endforeach; ?>
 
                                </div>
