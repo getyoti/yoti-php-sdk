@@ -21,7 +21,7 @@ require_once __DIR__ . '/bootstrap.php';
                     </a>
                 </div>
 
-                <h1 class="yoti-top-header">Business Name now uses Yoti</h1>
+                <h1 class="yoti-top-header">We now accept Yoti</h1>
 
                 <div class="yoti-sdk-integration-section">
                     <button data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
@@ -69,7 +69,7 @@ require_once __DIR__ . '/bootstrap.php';
             </section>
         </main>
 
-        <script src="https://sdk.yoti.com/clients/browser.2.1.0.js"></script>
+        <script src="https://sdk.yoti.com/clients/browser.2.2.0.js"></script>
         <script>
           _ybg.init()
         </script>
