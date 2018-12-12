@@ -1,6 +1,6 @@
 <?php
 
-// Make sure you run composer update inside the example folder before trying this example out
+// Make sure you run composer update inside the sandbox folder
 require_once __DIR__ .'/vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
