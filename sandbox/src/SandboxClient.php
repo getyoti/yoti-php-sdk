@@ -8,7 +8,7 @@ use YotiSandbox\Http\RequestBuilder;
 
 class SandboxClient
 {
-    const TOKEN_REQUEST_ENDPOINT_FORMAT = "/app/%s/tokens";
+    const TOKEN_REQUEST_ENDPOINT_FORMAT = "/apps/%s/tokens";
     const DEFAULT_SANDBOX_API_URL = "https://api.yoti.com/sandbox/v1";
 
     /**
@@ -40,13 +40,13 @@ class SandboxClient
     public function __construct($sdkId, $pem, $sandboxApi = self::DEFAULT_SANDBOX_API_URL, $sdkIdentifier = 'PHP')
     {
         $this->sdkId = $sdkId;
+        $pem = $this->includePemWrapper($pem);
         $this->requestHandler = new CurlRequestHandler(
             $sandboxApi,
             $pem,
             $sdkId,
             $sdkIdentifier
         );
-
         $this->yotiClient = new YotiClient($sdkId, $pem);
     }
 
@@ -96,12 +96,27 @@ class SandboxClient
      */
     protected function sendRequest(RequestBuilder $requestBuilder, $endpoint, $httpMethod)
     {
+        $payload = $requestBuilder->getRequest()->getPayload();
+
         $resultArr = $this->requestHandler->sendRequest(
             $endpoint,
             $httpMethod,
-            $requestBuilder->getRequest()->getPayload()
+            $payload
         );
 
         return $resultArr;
     }
+
+    private function includePemWrapper($pem)
+    {
+        if (strpos($pem, 'PRIVATE') === false) {
+$pem = <<<EOF
+-----BEGIN RSA PRIVATE KEY-----
+{$pem}
+-----END RSA PRIVATE KEY-----
+EOF;
+        }
+        return $pem;
+    }
+
 }

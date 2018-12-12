@@ -1,10 +1,5 @@
 {
   "description": "Sandbox for yoti-php-sdk",
-  "autoload": {
-    "psr-4": {
-      "YotiSandbox\\": "src"
-    }
-  },
   "repositories": [
     {
       "type": "git",
@@ -14,5 +9,10 @@
   "require": {
     "yoti/yoti-php-sdk": "dev-development",
     "symfony/dotenv": "3.3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "YotiSandbox\\": "src"
+    }
   }
 }

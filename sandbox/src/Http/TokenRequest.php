@@ -19,7 +19,7 @@ class TokenRequest
     public function __construct($rememberMeId, array $sandboxAttrs)
     {
         $this->rememberMeId = $rememberMeId;
-        $this->sandboxAttributes['profile_attributes'] = $sandboxAttrs;
+        $this->sandboxAttributes = $sandboxAttrs;
     }
 
     public function getRememberMeId()
@@ -36,7 +36,7 @@ class TokenRequest
     {
         $payloadData = [
             'remember_me_id' => $this->rememberMeId,
-            $this->sandboxAttributes
+            'profile_attributes' => $this->sandboxAttributes,
         ];
         return new Payload($payloadData);
     }
