@@ -17,7 +17,7 @@ class TokenRequestTest extends TestCase
      */
     public $sandboxAttrs;
 
-    public function setup()
+    public function setUp()
     {
         $dummyAttrs = [
             'name' => Profile::ATTR_FAMILY_NAME,

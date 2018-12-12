@@ -6,7 +6,14 @@ use Yoti\Http\Payload;
 
 class TokenRequest
 {
+    /**
+     * @var string
+     */
     private $rememberMeId;
+
+    /**
+     * @var array
+     */
     private $sandboxAttributes;
 
     public function __construct($rememberMeId, array $sandboxAttrs)

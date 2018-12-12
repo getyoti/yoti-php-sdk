@@ -4,9 +4,24 @@ namespace YotiSandbox\Entity;
 
 class SandboxAnchor
 {
+    /**
+     * @var string
+     */
     private $type;
+
+    /**
+     * @var string
+     */
     private $value;
+
+    /**
+     * @var string
+     */
     private $subtype;
+
+    /**
+     * @var int
+     */
     private $timestamp;
 
     public function __construct($type, $value, $subType, $timestamp)
