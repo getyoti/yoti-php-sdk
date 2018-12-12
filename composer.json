@@ -43,7 +43,8 @@
       "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
       "GPBMetadata\\": "src/protobuflib/GPBMetadata",
       "phpseclib\\": "src/phpseclib/",
-      "Yoti\\": "src/Yoti"
+      "Yoti\\": "src/Yoti",
+      "YotiSandbox\\": "sandbox/src"
     }
   },
   "require-dev": {
@@ -52,7 +53,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "YotiTest\\": "tests/"
+      "YotiTest\\": "tests/",
+      "SandboxTest\\": "sandbox/tests/"
     }
   }
 }
