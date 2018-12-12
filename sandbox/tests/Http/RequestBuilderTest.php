@@ -11,16 +11,17 @@ class RequestBuilderTest extends TestCase
      * @var RequestBuilder
      */
     public $requestBuilder;
+
     /**
      * @var TokenRequest
      */
     public $tokenRequest;
 
-    public function setup()
+    public function setUp()
     {
         $requestBuilder = new RequestBuilder();
-        $requestBuilder->includeRememberMeId('fake_remember_me_id');
-        $requestBuilder->includeFamilyName('Fake FamilyName');
+        $requestBuilder->setRememberMeId('fake_remember_me_id');
+        $requestBuilder->setFamilyName('Fake FamilyName');
         $this->requestBuilder = $requestBuilder;
     }
 

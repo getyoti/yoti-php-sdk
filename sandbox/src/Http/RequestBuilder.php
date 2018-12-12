@@ -21,12 +21,12 @@ class RequestBuilder
     /**
      * @param string $value
      */
-    public function includeRememberMeId($value)
+    public function setRememberMeId($value)
     {
         $this->rememberMeId = $value;
     }
 
-    public function includeFullName($value, $optional = 'false', array $anchors = [])
+    public function setFullName($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_FULL_NAME,
@@ -37,7 +37,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeFamilyName($value, $optional = 'false', array $anchors = [])
+    public function setFamilyName($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_FAMILY_NAME,
@@ -48,7 +48,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeGivenNames($value, $optional = 'false', array $anchors = [])
+    public function setGivenNames($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_GIVEN_NAMES,
@@ -59,7 +59,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeDateOfBirth($value, $optional = 'false', array $anchors = [])
+    public function setDateOfBirth($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_DATE_OF_BIRTH,
@@ -70,7 +70,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeGender($value, $optional = 'false', array $anchors = [])
+    public function setGender($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_GENDER,
@@ -81,7 +81,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeNationality($value, $optional = 'false', array $anchors = [])
+    public function setNationality($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_NATIONALITY,
@@ -92,7 +92,7 @@ class RequestBuilder
         ));
     }
 
-    public function includePhoneNumber($value, $optional = 'false', array $anchors = [])
+    public function setPhoneNumber($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_PHONE_NUMBER,
@@ -103,13 +103,13 @@ class RequestBuilder
         ));
     }
 
-    public function includeSelfie($value, $optional = 'false', array $anchors = [])
+    public function setSelfie($value, $optional = 'false', array $anchors = [])
     {
         $base64Selfie = base64_encode($value);
-        $this->includeBase64Selfie($base64Selfie, $optional, $anchors);
+        $this->setBase64Selfie($base64Selfie, $optional, $anchors);
     }
 
-    public function includeBase64Selfie($value, $optional = 'true', array $anchors = [])
+    public function setBase64Selfie($value, $optional = 'true', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_SELFIE,
@@ -120,7 +120,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeEmailAddress($value, $optional = 'false', array $anchors = [])
+    public function setEmailAddress($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_EMAIL_ADDRESS,
@@ -131,7 +131,7 @@ class RequestBuilder
         ));
     }
 
-    public function includePostalAddress($value, $optional = 'false', array $anchors = [])
+    public function setPostalAddress($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_POSTAL_ADDRESS,
@@ -142,7 +142,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeStructuredPostalAddress($value, $optional = 'false', array $anchors = [])
+    public function setStructuredPostalAddress($value, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
@@ -153,7 +153,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeDocumentDetails($value, $optional = 'true', array $anchors = [])
+    public function setDocumentDetails($value, $optional = 'true', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_DOCUMENT_DETAILS,
@@ -164,7 +164,7 @@ class RequestBuilder
         ));
     }
 
-    public function includeAgeVerification(\DateTime $dateObj, $derivation, array $anchors = [])
+    public function setAgeVerification(\DateTime $dateObj, $derivation, array $anchors = [])
     {
         $this->addAttribute(new SandboxAgeVerification(
             $dateObj,

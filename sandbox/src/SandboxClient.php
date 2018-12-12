@@ -2,12 +2,13 @@
 namespace YotiSandbox;
 
 use Yoti\YotiClient;
-use Yoti\Http\CurlRequestHandler;
 use YotiSandbox\Http\Response;
+use Yoti\Http\CurlRequestHandler;
 use YotiSandbox\Http\RequestBuilder;
 
 class SandboxClient
 {
+    const TOKEN_REQUEST_ENDPOINT_FORMAT = "/app/%s/tokens";
     const DEFAULT_SANDBOX_API_URL = "https://api.yoti.com/sandbox/v1";
 
     /**
@@ -20,6 +21,9 @@ class SandboxClient
      */
     private $requestHandler;
 
+    /**
+     * @var YotiClient
+     */
     private $yotiClient;
 
     /**
@@ -27,17 +31,17 @@ class SandboxClient
      *
      * @param string $sdkId
      * @param string $pem
-     * @param string $connectApi
+     * @param string $sandboxApi
      * @param string $sdkIdentifier
      *
      * @throws \Yoti\Exception\RequestException
      * @throws \Yoti\Exception\YotiClientException
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_SANDBOX_API_URL, $sdkIdentifier = 'PHP')
+    public function __construct($sdkId, $pem, $sandboxApi = self::DEFAULT_SANDBOX_API_URL, $sdkIdentifier = 'PHP')
     {
         $this->sdkId = $sdkId;
         $this->requestHandler = new CurlRequestHandler(
-            $connectApi,
+            $sandboxApi,
             $pem,
             $sdkId,
             $sdkIdentifier
@@ -47,6 +51,8 @@ class SandboxClient
     }
 
     /**
+     * Return shared ActivityDetails.
+     *
      * @param string $token
      *
      * @return \Yoti\ActivityDetails
@@ -60,25 +66,42 @@ class SandboxClient
     }
 
     /**
-     * @param string $httpMethod
      * @param RequestBuilder $requestBuilder
+     *
+     * @param string $httpMethod
      *
      * @return string
      *
-     * @throws \Yoti\Exception\RequestException
      * @throws Exception\ResponseException
+     * @throws \Yoti\Exception\RequestException
      */
-    public function getTokenFromSandbox($httpMethod, RequestBuilder $requestBuilder)
+    public function getToken(RequestBuilder $requestBuilder, $httpMethod)
     {
         // Request endpoint
-        $endpoint = "/app/{$this->sdkId}/tokens";
+        $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
+        $resultArr = $this->sendRequest($requestBuilder, $endpoint, $httpMethod);
 
+        return (new Response($resultArr))->getToken();
+    }
+
+    /**
+     * @param RequestBuilder $requestBuilder
+     *
+     * @param string $endpoint
+     * @param string $httpMethod
+     *
+     * @return array
+     *
+     * @throws \Yoti\Exception\RequestException
+     */
+    protected function sendRequest(RequestBuilder $requestBuilder, $endpoint, $httpMethod)
+    {
         $resultArr = $this->requestHandler->sendRequest(
             $endpoint,
             $httpMethod,
-            $requestBuilder->getPayload()
+            $requestBuilder->getRequest()->getPayload()
         );
 
-        return (new Response($resultArr))->getToken();
+        return $resultArr;
     }
 }

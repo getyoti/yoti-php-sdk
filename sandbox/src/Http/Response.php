@@ -20,7 +20,7 @@ class Response
      */
     public function __construct(array $result)
     {
-        $responseArr = $this->processResult($result);
+        $responseArr = $this->processData($result);
         $this->token = $responseArr['token'];
     }
 
@@ -39,12 +39,12 @@ class Response
      *
      * @throws ResponseException
      */
-    private function processResult(array $result)
+    private function processData(array $result)
     {
         $this->checkResponseStatus($result['http_code']);
 
         // Get decoded response data
-        $responseArr = json_decode($result['response'], TRUE);
+        $responseArr = $result['response'];
 
         $this->checkJsonError();
 
