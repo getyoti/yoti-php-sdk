@@ -18,7 +18,7 @@ class SandboxAgeVerificationTest extends TestCase
         $dateTime = (new \DateTime())->setTimestamp(1171502725);
         $this->ageVerification = new SandboxAgeVerification(
             $dateTime,
-            'age_under'
+            'age_under:18'
         );
     }
 
@@ -37,7 +37,7 @@ class SandboxAgeVerificationTest extends TestCase
 
     public function testGetDerivation()
     {
-        $this->assertEquals('age_under', $this->ageVerification->getDerivation());
+        $this->assertEquals('age_under:18', $this->ageVerification->getDerivation());
     }
 
     public function testGetOptional()
@@ -51,5 +51,19 @@ class SandboxAgeVerificationTest extends TestCase
             json_encode([]),
             json_encode($this->ageVerification->getAnchors())
         );
+    }
+
+    public function testGetAgeOver()
+    {
+        $ageVerification = clone $this->ageVerification;
+        $ageVerification->setAgeOver(20);
+        $this->assertEquals('age_over:20', $ageVerification->getDerivation());
+    }
+
+    public function testAgeUnder()
+    {
+        $ageVerification = clone $this->ageVerification;
+        $ageVerification->setAgeUnder(18);
+        $this->assertEquals('age_under:18', $ageVerification->getDerivation());
     }
 }

@@ -3,11 +3,11 @@ namespace YotiSandbox\Entity;
 
 class SandboxAttribute
 {
-    private $name;
-    private $value;
-    private $derivation;
-    private $optional;
-    private $anchors;
+    protected $name;
+    protected $value;
+    protected $derivation;
+    protected $optional;
+    protected $anchors;
 
     public function __construct($name, $value, $derivation = '', $optional = 'false', array $anchors = [])
     {
