@@ -8,7 +8,12 @@ $token = isset($_GET['token']) ? $_GET['token'] : '';
 $profileAttributes = [];
 
 try {
-    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
+    $yotiConnectApi = getenv('YOTI_CONNECT_API') ?: Yoti\YotiClient::DEFAULT_CONNECT_API;
+    $yotiClient = new Yoti\YotiClient(
+        getenv('YOTI_SDK_ID'),
+        getenv('YOTI_KEY_FILE_PATH'),
+        $yotiConnectApi
+    );
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 
