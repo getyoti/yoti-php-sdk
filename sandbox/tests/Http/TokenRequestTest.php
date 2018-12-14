@@ -34,7 +34,7 @@ class TokenRequestTest extends TestCase
 
     public function testGetSandboxAttributes()
     {
-        $expectedAttrs['profile_attributes'] = $this->sandboxAttrs;
+        $expectedAttrs= $this->sandboxAttrs;
         $this->assertEquals(
             json_encode($expectedAttrs),
             json_encode($this->tokenRequest->getSandboxAttributes())
