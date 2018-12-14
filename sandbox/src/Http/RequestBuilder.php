@@ -2,9 +2,9 @@
 namespace YotiSandbox\Http;
 
 use Yoti\Entity\Profile;
-use YotiSandbox\Entity\SandboxAgeVerification;
 use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
+use YotiSandbox\Entity\SandboxAgeVerification;
 
 class RequestBuilder
 {
@@ -59,11 +59,11 @@ class RequestBuilder
         ));
     }
 
-    public function setDateOfBirth($value, $optional = 'false', array $anchors = [])
+    public function setDateOfBirth(\DateTime $dateTime, $optional = 'false', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_DATE_OF_BIRTH,
-            $value,
+            $dateTime->format('d-m-Y'),
             '',
             $optional,
             $anchors
@@ -164,13 +164,9 @@ class RequestBuilder
         ));
     }
 
-    public function setAgeVerification(\DateTime $dateObj, $derivation, array $anchors = [])
+    public function setAgeVerification(SandboxAgeVerification $ageVerification)
     {
-        $this->addAttribute(new SandboxAgeVerification(
-            $dateObj,
-            $derivation,
-            $anchors
-        ));
+        $this->addAttribute($ageVerification);
     }
 
     private function addAttribute(SandboxAttribute $attribute)
@@ -202,6 +198,17 @@ class RequestBuilder
         return $anchorsList;
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @param string $derivation
+     *  Empty value means there is no derivation for this attribute
+     * @param string $optional
+     *  'false' value means this attribute is required
+     * @param array $anchors
+     *
+     * @return SandboxAttribute
+     */
     private function createAttribute($name, $value, $derivation, $optional, array $anchors)
     {
         return new SandboxAttribute($name, $value, $derivation, $optional, $anchors);
@@ -210,7 +217,7 @@ class RequestBuilder
     /**
      * @return TokenRequest
      */
-    public function getRequest()
+    public function createRequest()
     {
         return new TokenRequest($this->rememberMeId, $this->sandboxAttributes);
     }

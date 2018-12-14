@@ -5,11 +5,11 @@ use Yoti\YotiClient;
 use YotiSandbox\Http\Response;
 use Yoti\Http\CurlRequestHandler;
 use YotiSandbox\Http\RequestBuilder;
+use YotiSandbox\Http\SandboxPathManager;
 
 class SandboxClient
 {
     const TOKEN_REQUEST_ENDPOINT_FORMAT = "/apps/%s/tokens";
-    const DEFAULT_SANDBOX_API_URL = "https://api.yoti.com/sandbox/v1";
 
     /**
      * @var string
@@ -31,23 +31,23 @@ class SandboxClient
      *
      * @param string $sdkId
      * @param string $pem
-     * @param string $sandboxApi
+     * @param SandboxPathManager $sandboxPathManager
      * @param string $sdkIdentifier
      *
      * @throws \Yoti\Exception\RequestException
      * @throws \Yoti\Exception\YotiClientException
      */
-    public function __construct($sdkId, $pem, $sandboxApi = self::DEFAULT_SANDBOX_API_URL, $sdkIdentifier = 'PHP')
+    public function __construct($sdkId, $pem, SandboxPathManager $sandboxPathManager, $sdkIdentifier = 'PHP')
     {
         $this->sdkId = $sdkId;
         $pem = $this->includePemWrapper($pem);
         $this->requestHandler = new CurlRequestHandler(
-            $sandboxApi,
+            $sandboxPathManager->getTokenApiPath(),
             $pem,
             $sdkId,
             $sdkIdentifier
         );
-        $this->yotiClient = new YotiClient($sdkId, $pem);
+        $this->yotiClient = new YotiClient($sdkId, $pem, $sandboxPathManager->getProfileApiPath());
     }
 
     /**
@@ -96,7 +96,7 @@ class SandboxClient
      */
     protected function sendRequest(RequestBuilder $requestBuilder, $endpoint, $httpMethod)
     {
-        $payload = $requestBuilder->getRequest()->getPayload();
+        $payload = $requestBuilder->createRequest()->getPayload();
 
         $resultArr = $this->requestHandler->sendRequest(
             $endpoint,
@@ -118,5 +118,4 @@ EOF;
         }
         return $pem;
     }
-
 }

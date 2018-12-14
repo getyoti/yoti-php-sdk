@@ -27,21 +27,20 @@ class RequestBuilderTest extends TestCase
 
     public function testGetRequest()
     {
-        $tokenRequest = $this->requestBuilder->getRequest();
+        $tokenRequest = $this->requestBuilder->createRequest();
         $this->assertInstanceOf(TokenRequest::class, $tokenRequest);
     }
 
     public function testGetRememberMeId()
     {
-        $tokenRequest = $this->requestBuilder->getRequest();
+        $tokenRequest = $this->requestBuilder->createRequest();
         $this->assertEquals('fake_remember_me_id', $tokenRequest->getRememberMeId());
     }
 
     public function testShouldReturnFamilyNameAttr()
     {
-        $tokenRequest = $this->requestBuilder->getRequest();
+        $tokenRequest = $this->requestBuilder->createRequest();
         $sandboxAttributes = $tokenRequest->getSandboxAttributes();
-        $attrs = $sandboxAttributes['profile_attributes'];
-        $this->assertEquals($attrs[0]['name'], 'family_name');
+        $this->assertEquals($sandboxAttributes[0]['name'], 'family_name');
     }
 }
