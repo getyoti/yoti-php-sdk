@@ -9,7 +9,7 @@ class SandboxAgeVerification extends SandboxAttribute
     const AGE_OVER_FORMAT = 'age_over:%d';
     const AGE_UNDER_FORMAT = 'age_under:%d';
 
-    public function __construct(\DateTime $dateObj, $derivation, array $anchors = [])
+    public function __construct(\DateTime $dateObj, $derivation = '', array $anchors = [])
     {
         parent::__construct(
             Profile::ATTR_DATE_OF_BIRTH,
