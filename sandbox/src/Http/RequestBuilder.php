@@ -5,6 +5,7 @@ use Yoti\Entity\Profile;
 use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxAgeVerification;
+use YotiSandbox\Entity\SandboxDocumentDetails;
 
 class RequestBuilder
 {
@@ -165,11 +166,11 @@ class RequestBuilder
         return $this;
     }
 
-    public function setDocumentDetails($value, $optional = 'true', array $anchors = [])
+    public function setDocumentDetails(SandboxDocumentDetails $documentDetails, $optional = 'true', array $anchors = [])
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_DOCUMENT_DETAILS,
-            $value,
+            $documentDetails->getValue(),
             '',
             $optional,
             $anchors
