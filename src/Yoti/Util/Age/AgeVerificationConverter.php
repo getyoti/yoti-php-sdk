@@ -40,6 +40,7 @@ class AgeVerificationConverter
                 $abstractAgeProcessorClass = '\\Yoti\\Util\\Age\\AbstractAgeProcessor';
                 if (
                     NULL !== $attrName
+                    && NULL !== $attributeObj
                     && is_subclass_of($ageProcessorClass, $abstractAgeProcessorClass)
                 )
                 {
