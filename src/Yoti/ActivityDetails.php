@@ -23,6 +23,11 @@ class ActivityDetails
     private $rememberMeId;
 
     /**
+     * @var string parent receipt identifier
+     */
+    private $parentRememberMeId;
+
+    /**
      * @var \Yoti\Entity\Profile
      */
     private $userProfile;
@@ -67,6 +72,11 @@ class ActivityDetails
     private function setRememberMeId()
     {
         $this->rememberMeId = $this->receipt->getRememberMeId();
+    }
+
+    private function setParentRememberMeId()
+    {
+        $this->parentRememberMeId = $this->receipt->getParentRememberMeId();
     }
 
     private function setTimestamp()
@@ -157,10 +167,20 @@ class ActivityDetails
     /**
      * Get rememberMeId.
      *
-     * @return string
+     * @return null|string
      */
     public function getRememberMeId()
     {
         return $this->rememberMeId;
+    }
+
+    /**
+     * Get Parent Remember Me Id.
+     *
+     * @return null|string
+     */
+    public function getParentRememberMeId()
+    {
+        return $this->parentRememberMeId;
     }
 }
