@@ -24,6 +24,7 @@ class RequestBuilder
     public function setRememberMeId($value)
     {
         $this->rememberMeId = $value;
+        return $this;
     }
 
     public function setFullName($value, $optional = 'false', array $anchors = [])
@@ -35,6 +36,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setFamilyName($value, $optional = 'false', array $anchors = [])
@@ -46,6 +48,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setGivenNames($value, $optional = 'false', array $anchors = [])
@@ -57,6 +60,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setDateOfBirth(\DateTime $dateTime, $optional = 'false', array $anchors = [])
@@ -68,6 +72,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setGender($value, $optional = 'false', array $anchors = [])
@@ -79,6 +84,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setNationality($value, $optional = 'false', array $anchors = [])
@@ -90,6 +96,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setPhoneNumber($value, $optional = 'false', array $anchors = [])
@@ -101,12 +108,13 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setSelfie($value, $optional = 'false', array $anchors = [])
     {
         $base64Selfie = base64_encode($value);
-        $this->setBase64Selfie($base64Selfie, $optional, $anchors);
+        return $this->setBase64Selfie($base64Selfie, $optional, $anchors);
     }
 
     public function setBase64Selfie($value, $optional = 'true', array $anchors = [])
@@ -118,6 +126,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setEmailAddress($value, $optional = 'false', array $anchors = [])
@@ -129,6 +138,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setPostalAddress($value, $optional = 'false', array $anchors = [])
@@ -140,6 +150,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setStructuredPostalAddress($value, $optional = 'false', array $anchors = [])
@@ -151,6 +162,7 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setDocumentDetails($value, $optional = 'true', array $anchors = [])
@@ -162,11 +174,13 @@ class RequestBuilder
             $optional,
             $anchors
         ));
+        return $this;
     }
 
     public function setAgeVerification(SandboxAgeVerification $ageVerification)
     {
         $this->addAttribute($ageVerification);
+        return $this;
     }
 
     private function addAttribute(SandboxAttribute $attribute)
