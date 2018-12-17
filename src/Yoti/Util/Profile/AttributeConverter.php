@@ -64,6 +64,9 @@ class AttributeConverter
             case self::CONTENT_TYPE_JSON:
                 // Convert JSON string to an array
                 $value = json_decode($value, true);
+                if (json_last_error()) {
+                    throw new AttributeException("Error converting attr {$attrName} to a JSON Object");
+                }
                 break;
 
             case self::CONTENT_TYPE_DATE:

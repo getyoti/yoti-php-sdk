@@ -8,7 +8,7 @@ class SandboxDocumentDetails extends DocumentDetails
 {
     public function getValue()
     {
-        $value = $this->getType() . ' ' . $this->getIssuingAuthority() . ' ' . $this->getDocumentNumber() . ' ';
+        $value = $this->getType() . ' ' . $this->getIssuingCountry() . ' ' . $this->getDocumentNumber() . ' ';
 
         $expirationDate = $this->getExpirationDate();
         $value .= (NULL !== $expirationDate) ? $expirationDate->format('d-m-Y') : '-';
