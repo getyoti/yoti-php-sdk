@@ -55,6 +55,11 @@ class ActivityDetailsTest extends TestCase
         $this->assertEquals($this->rememberMeId, $this->activityDetails->getRememberMeId());
     }
 
+    public function testGetParentRememberMeIdExists()
+    {
+        $this->assertTrue(method_exists($this->activityDetails, 'getParentRememberMeId'));
+    }
+
     /**
      * Test getting Given Names
      */
