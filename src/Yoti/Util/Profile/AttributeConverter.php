@@ -5,8 +5,8 @@ use Yoti\Entity\Attribute;
 use Yoti\Entity\DocumentDetails;
 use Yoti\Entity\Image;
 use Yoti\Entity\Profile;
-use Compubapi_v1\EncryptedData;
-use Attrpubapi_v1\Attribute as ProtobufAttribute;
+use Compubapi\EncryptedData;
+use Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Exception\AttributeException;
 
 class AttributeConverter

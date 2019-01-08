@@ -90,7 +90,7 @@ class Receipt
      * @param $attributeName
      * @param $pem
      *
-     * @return \Attrpubapi_v1\AttributeList
+     * @return \Attrpubapi\AttributeList
      */
     public function parseAttribute($attributeName, $pem)
     {

@@ -24,10 +24,10 @@ class AnchorListConverterTest extends TestCase
 
     public function testConvertingTwoSources()
     {
-        $passportAnchor = new \Attrpubapi_v1\Anchor();
+        $passportAnchor = new \Attrpubapi\Anchor();
         $passportAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
 
-        $dlAnchor = new \Attrpubapi_v1\Anchor();
+        $dlAnchor = new \Attrpubapi\Anchor();
         $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
 
         $collection = new ArrayObject([$passportAnchor, $dlAnchor]);
@@ -49,7 +49,7 @@ class AnchorListConverterTest extends TestCase
      */
     public function parseFromBase64String($anchorString)
     {
-        $anchor = new \Attrpubapi_v1\Anchor();
+        $anchor = new \Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
 
         $collection = new ArrayObject([$anchor]);

@@ -5,7 +5,7 @@ namespace Yoti\Util\Profile;
 use Traversable;
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
-use Attrpubapi_v1\Anchor;
+use Attrpubapi\Anchor;
 use Yoti\Entity\Anchor as YotiAnchor;
 
 class AnchorConverter
@@ -92,13 +92,13 @@ class AnchorConverter
     }
 
     /**
-     * @param \Attrpubapi_v1\Anchor $anchor
+     * @param \Attrpubapi\Anchor $anchor
      *
      * @return \Yoti\Entity\SignedTimeStamp
      */
     private static function convertToYotiSignedTimestamp(Anchor $anchor)
     {
-        $signedTimeStamp = new \Compubapi_v1\SignedTimestamp();
+        $signedTimeStamp = new \Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
         $timestamp = $signedTimeStamp->getTimestamp()/1000000;
