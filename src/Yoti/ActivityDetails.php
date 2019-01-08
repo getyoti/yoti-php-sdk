@@ -3,7 +3,7 @@ namespace Yoti;
 
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
-use Attrpubapi_v1\AttributeList;
+use Attrpubapi\AttributeList;
 use Yoti\Entity\ApplicationProfile;
 use Yoti\Util\Age\AgeVerificationConverter;
 use Yoti\Util\Profile\AttributeConverter;
@@ -66,6 +66,7 @@ class ActivityDetails
         $this->setProfile();
         $this->setTimestamp();
         $this->setRememberMeId();
+        $this->setParentRememberMeId();
         $this->setApplicationProfile();
     }
 

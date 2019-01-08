@@ -86,7 +86,7 @@ class AttributeTest extends TestCase
 
     public function convertToProtobufAnchor($anchorString)
     {
-        $anchor = new \Attrpubapi_v1\Anchor();
+        $anchor = new \Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
         return $anchor;
     }

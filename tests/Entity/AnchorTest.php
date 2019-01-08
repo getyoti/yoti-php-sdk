@@ -17,7 +17,7 @@ class AnchorTest extends TestCase
 
     public function testYotiAnchorEndpoints()
     {
-        $dlAnchor = new \Attrpubapi_v1\Anchor();
+        $dlAnchor = new \Attrpubapi\Anchor();
         $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
         $collection = new ArrayObject([$dlAnchor]);
         $anchorList = AnchorListConverter::convert($collection);

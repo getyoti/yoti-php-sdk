@@ -2,8 +2,8 @@
 
 namespace Yoti\Util\Profile;
 
-use Attrpubapi_v1\AttributeList;
-use Attrpubapi_v1\Attribute as ProtobufAttribute;
+use Attrpubapi\AttributeList;
+use Attrpubapi\Attribute as ProtobufAttribute;
 
 class AttributeListConverter
 {
@@ -43,7 +43,7 @@ class AttributeListConverter
             $encryptedData, $wrappedReceiptKey, $pem
         );
 
-        $attributeList = new \Attrpubapi_v1\AttributeList();
+        $attributeList = new \Attrpubapi\AttributeList();
         $attributeList->mergeFromString($decryptedCipherText);
 
         return $attributeList;
