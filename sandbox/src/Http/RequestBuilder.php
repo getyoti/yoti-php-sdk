@@ -198,16 +198,17 @@ class RequestBuilder
     private function formatAnchors(array $anchors)
     {
         $anchorsList = [];
+        $tsMultiplier = 1000000;
         foreach ($anchors as $anchor) {
             /** @var SandboxAnchor $anchor */
             if (!($anchor instanceof SandboxAnchor)) {
                 continue;
             }
             $anchorsList[] = [
-                'type' => $anchor->getType(),
+                'type' => strtoupper($anchor->getType()),
                 'value' => $anchor->getValue(),
                 'sub_type' => $anchor->getSubtype(),
-                'timestamp' => $anchor->getTimestamp()
+                'timestamp' => (int) $anchor->getTimestamp() * $tsMultiplier
             ];
         }
         return $anchorsList;
