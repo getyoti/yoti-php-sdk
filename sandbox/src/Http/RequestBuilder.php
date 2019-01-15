@@ -178,13 +178,25 @@ class RequestBuilder
         return $this;
     }
 
+    public function setDocumentDetailsWithString($value, $optional = 'true', array $anchors = [])
+    {
+        $this->addAttribute($this->createAttribute(
+            Profile::ATTR_DOCUMENT_DETAILS,
+            $value,
+            '',
+            $optional,
+            $anchors
+        ));
+        return $this;
+    }
+
     public function setAgeVerification(SandboxAgeVerification $ageVerification)
     {
         $this->addAttribute($ageVerification);
         return $this;
     }
 
-    private function addAttribute(SandboxAttribute $attribute)
+    public function addAttribute(SandboxAttribute $attribute)
     {
         $this->sandboxAttributes[] = [
             'name' => $attribute->getName(),
@@ -193,6 +205,7 @@ class RequestBuilder
             'optional' => $attribute->getOptional(),
             'anchors' => $this->formatAnchors($attribute->getAnchors())
         ];
+        return $this;
     }
 
     private function formatAnchors(array $anchors)
