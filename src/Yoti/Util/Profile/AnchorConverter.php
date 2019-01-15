@@ -25,29 +25,38 @@ class AnchorConverter
         $anchorSubType = $protobufAnchor->getSubType();
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
         $X509CertsList = self::convertCertsListToX509($X509, $protobufAnchor->getOriginServerCerts());
+        $anchorTypesMap = self::getAnchorTypesMap();
 
         foreach ($X509CertsList as $certX509Obj) {
             $certExtArr = $certX509Obj->tbsCertificate->extensions;
 
-            if (count($certExtArr) > 1) {
-                $oid = $certExtArr[1]->extnId;
-                $anchorType = self::getAnchorTypeByOid($oid);
-                $extEncodedValue = $certExtArr[1]->extnValue;
+            foreach($anchorTypesMap as $oid => $anchorType)
+            {
+                foreach($certExtArr as $extObj) {
+                    $extRaw = (array) $extObj;
+                    $oidFound = array_search($oid, $extRaw, TRUE);
+                    if ($oidFound !== FALSE) {
+                        $extEncodedValue = $extRaw['extnValue'];
 
-                if ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue)) {
-                    $yotiAnchor = self::createYotiAnchor(
-                        $decodedAnchorValue,
-                        $anchorType,
-                        $anchorSubType,
-                        $yotiSignedTimeStamp,
-                        $X509CertsList
-                    );
-                    $anchorMap = [
-                        'oid' => $oid,
-                        'yoti_anchor' => $yotiAnchor
-                    ];
-                    // We are only looking for one YotiAnchor from protobufAnchor
-                    break;
+                        if (
+                            is_string($extEncodedValue)
+                            && ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue))
+                        ) {
+                            $yotiAnchor = self::createYotiAnchor(
+                                $decodedAnchorValue,
+                                $anchorType,
+                                $anchorSubType,
+                                $yotiSignedTimeStamp,
+                                $X509CertsList
+                            );
+                            $anchorMap = [
+                                'oid' => $oid,
+                                'yoti_anchor' => $yotiAnchor
+                            ];
+                            // We are only looking for one YotiAnchor from protobufAnchor
+                            break;
+                        }
+                    }
                 }
             }
         }
