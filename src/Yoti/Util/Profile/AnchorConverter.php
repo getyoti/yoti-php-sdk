@@ -28,20 +28,16 @@ class AnchorConverter
         $anchorTypesMap = self::getAnchorTypesMap();
 
         foreach ($X509CertsList as $certX509Obj) {
-            $certExtArr = $certX509Obj->tbsCertificate->extensions;
+            $certExtsArr = $certX509Obj->tbsCertificate->extensions;
 
-            foreach($anchorTypesMap as $oid => $anchorType)
-            {
-                foreach($certExtArr as $extObj) {
-                    $extRaw = (array) $extObj;
-                    $oidFound = array_search($oid, $extRaw, TRUE);
-                    if ($oidFound !== FALSE) {
-                        $extEncodedValue = $extRaw['extnValue'];
+            foreach($anchorTypesMap as $oid => $anchorType) {
+                foreach($certExtsArr as $extObj) {
+                    $extArr = (array) $extObj;
+                    $oidFound = array_search($oid, $extArr, TRUE);
+                    if ($oidFound !== FALSE && is_string($extArr['extnValue'])) {
+                        $extEncodedValue = $extArr['extnValue'];
 
-                        if (
-                            is_string($extEncodedValue)
-                            && ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue))
-                        ) {
+                        if ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue)) {
                             $yotiAnchor = self::createYotiAnchor(
                                 $decodedAnchorValue,
                                 $anchorType,
@@ -54,7 +50,7 @@ class AnchorConverter
                                 'yoti_anchor' => $yotiAnchor
                             ];
                             // We are only looking for one YotiAnchor from protobufAnchor
-                            break;
+                            return $anchorMap;
                         }
                     }
                 }
