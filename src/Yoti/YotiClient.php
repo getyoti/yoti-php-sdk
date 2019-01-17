@@ -219,7 +219,11 @@ class YotiClient
      */
     private function getErrorMessage(array $result)
     {
-        return isset($result['errors'][0]['message']) ? $result['errors'][0]['message'] : '';
+        $errorMessage = '';
+        if (isset($result['errors'][0]['property']) && isset($result['errors'][0]['message'])) {
+            $errorMessage = $result['errors'][0]['property'] . ': ' . $result['errors'][0]['message'];
+        }
+        return $errorMessage;
     }
 
     /**
