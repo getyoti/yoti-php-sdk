@@ -9,9 +9,10 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\YotiClient;
 
-$connectAPI = YotiClient::DEFAULT_CONNECT_API;
 
 try {
+  $connectAPI = getenv('YOTI_CONNECT_API') ?: YotiClient::DEFAULT_CONNECT_API;
+
   $amlAddress = new AmlAddress(new Country('GBR'));
   $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
   $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'), $connectAPI);

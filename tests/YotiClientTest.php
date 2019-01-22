@@ -32,7 +32,7 @@ class YotiClientTest extends TestCase
 
         $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
             ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['makeRequest'])
+            ->setMethods(['sendRequest'])
             ->getMock();
     }
 
@@ -63,8 +63,8 @@ class YotiClientTest extends TestCase
         $result['http_code'] = 200;
 
         // Stub the method makeRequest to return the result we want
-        $this->yotiClient->method('makeRequest')
-            ->willreturn($result);
+        $this->yotiClient->method('sendRequest')
+            ->willReturn($result);
         $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
@@ -75,7 +75,7 @@ class YotiClientTest extends TestCase
      */
     public function testPerformAmlCheck()
     {
-        $this->yotiClient->method('makeRequest')
+        $this->yotiClient->method('sendRequest')
             ->willReturn($this->amlResult);
 
         $result = $this->yotiClient->performAmlCheck($this->amlProfile);
@@ -120,8 +120,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -136,8 +135,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -152,8 +150,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 
     /**
@@ -168,61 +165,7 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API,
             $expectedValue
         );
-        $property       = $this->getPrivateProperty('Yoti\YotiClient', '_sdkIdentifier');
-        $this->assertEquals($property->getValue($yotiClientObj), $expectedValue);
-    }
 
-    public function testRequestHeadersShouldIncludeSDKVersion()
-    {
-        $yotiClientObj  = new YotiClient(
-            SDK_ID,
-            $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            'PHP'
-        );
-        $requestHeaders = $this->invokeMethod(
-            $yotiClientObj,
-            'getRequestHeaders',
-            ['fakeSignedMessage']
-        );
-        $headersStr = implode(',', $requestHeaders);
-        $includeVersion = strpos($headersStr, YotiClient::YOTI_SDK_VERSION);
-        $this->assertNotFalse($includeVersion);
-    }
-
-    /**
-     * Get private or protected property of a class.
-     *
-     * @param $className
-     * @param $propertyName
-     *
-     * @return \ReflectionProperty
-     *
-     * @throws \ReflectionException
-     */
-    public function getPrivateProperty($className, $propertyName)
-    {
-        $reflector = new \ReflectionClass($className);
-        $property = $reflector->getProperty($propertyName);
-        $property->setAccessible(TRUE);
-
-        return $property;
-    }
-
-    /**
-     * Call protected/private method of a class.
-     *
-     * @param object &$object    Instantiated object that we will run method on.
-     * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
-     *
-     * @return mixed Method return.
-     */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
+        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
     }
 }

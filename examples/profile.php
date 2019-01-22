@@ -1,81 +1,13 @@
 <?php
-
-// Load dependent packages and env data
-require_once __DIR__ . '/bootstrap.php';
-
-// Get the token
-$token = isset($_GET['token']) ? $_GET['token'] : '';
-$profileAttributes = [];
-
-try {
-    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
-    $activityDetails = $yotiClient->getActivityDetails($token);
-    $profile = $activityDetails->getProfile();
-
-    $profileAttributes = [
-        [
-            'name' => 'Given names',
-            'obj' => $profile->getGivenNames(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Family names',
-            'obj' => $profile->getFamilyName(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Mobile number',
-            'obj' => $profile->getPhoneNumber(),
-            'icon' => 'yoti-icon-phone',
-        ],
-        [
-            'name' => 'Email address',
-            'obj' => $profile->getEmailAddress(),
-            'icon' => 'yoti-icon-email',
-        ],
-        [
-            'name' => 'Date of birth',
-            'obj' => $profile->getDateOfBirth(),
-            'icon' => 'yoti-icon-calendar',
-        ],
-        [
-            'name' => 'Address',
-            'obj' => $profile->getPostalAddress(),
-            'icon' => 'yoti-icon-address',
-        ],
-        [
-            'name' => 'Gender',
-            'obj' => $profile->getGender(),
-            'icon' => 'yoti-icon-gender',
-        ],
-        [
-            'name' => 'Nationality',
-            'obj' => $profile->getNationality(),
-            'icon' => 'yoti-icon-nationality',
-        ]
-    ];
-
-    $fullName = $profile->getFullName();
-    $selfie = $profile->getSelfie();
-    $selfieFileName = 'selfie.jpeg';
-
-    // Create selfie image file.
-    if ($selfie && is_writable(__DIR__)) {
-        file_put_contents($selfieFileName, $selfie->getValue(), LOCK_EX);
-    }
-} catch(\Exception $e) {
-    header('Location: /error.php?msg='.$e->getMessage());
-    exit;
-}
+require_once __DIR__ . '/profile.inc.php';
 ?>
 <!DOCTYPE html>
 <html class="yoti-html">
    <head>
        <meta charset="utf-8">
        <title>Yoti client example</title>
-
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
        <link rel="stylesheet" type="text/css" href="assets/css/profile.css">
+       <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
    </head>
    <body class="yoti-body">
        <main class="yoti-profile-layout">
@@ -90,14 +22,14 @@ try {
 
                <div class="yoti-profile-picture-section">
                    <?php if ($profile->getSelfie()) : ?>
-                   <div class="yoti-profile-picture-area">
-                       <img src="./<?php echo $selfieFileName ?>" class="yoti-profile-picture-image" alt="Yoti" />
-                       <i class="yoti-profile-picture-verified-icon"></i>
-                   </div>
+                       <div class="yoti-profile-picture-area">
+                           <img src="./<?php echo $selfieFileName ?>" class="yoti-profile-picture-image" alt="Yoti" />
+                           <i class="yoti-profile-picture-verified-icon"></i>
+                       </div>
                    <?php endif; ?>
 
                    <div class="yoti-profile-name">
-                       <?php echo $fullName? $fullName->getValue() : '' ?>
+                       <?php echo $fullName ? $fullName->getValue() : '' ?>
                    </div>
                </div>
            </section>
@@ -134,23 +66,33 @@ try {
                                </div>
 
                                <div class="yoti-attribute-value">
-                                   <div class="yoti-attribute-value-text"><?php echo $item['obj']->getValue() ?></div>
+                                   <?php
+                                        $name = $item['name'];
+                                        $attributeObj = $item['obj'];
+                                        if ($name === 'Date of birth') {
+                                            $value = $item['obj']->getValue()->format('d-m-Y');
+                                        }
+                                        elseif ($name === 'Age Verification') {
+                                            // Because AgeVerification::class has a different structure
+                                            $attributeObj = $item['obj']->getAttribute();
+                                            $value = $ageVerificationStr;
+                                        }
+                                        else {
+                                            $value = $item['obj']->getValue();
+                                        }
+                                        $anchors = $attributeObj->getAnchors();
+                                   ?>
+                                   <div class="yoti-attribute-value-text"><?php echo $value; ?></div>
                                </div>
                                <div class="yoti-attribute-anchors-layout">
                                    <div class="yoti-attribute-anchors-head -s-v">S / V</div>
                                    <div class="yoti-attribute-anchors-head -value">Value</div>
                                    <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
 
-                                   <?php foreach($item['obj']->getSources() as $source) : ?>
-                                       <div class="yoti-attribute-anchors -s-v">Source</div>
-                                       <div class="yoti-attribute-anchors -value"><?php echo $source->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php echo $source->getSubType() ?></div>
-                                   <?php endforeach; ?>
-
-                                   <?php foreach($item['obj']->getVerifiers() as $verifier) : ?>
-                                       <div class="yoti-attribute-anchors -s-v">Verifier</div>
-                                       <div class="yoti-attribute-anchors -value"><?php echo $verifier->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php echo $verifier->getSubType() ?></div>
+                                   <?php foreach($anchors as $anchor) : ?>
+                                       <div class="yoti-attribute-anchors -s-v"><?php echo $anchor->getType() ?></div>
+                                       <div class="yoti-attribute-anchors -value"><?php echo $anchor->getValue() ?></div>
+                                       <div class="yoti-attribute-anchors -subtype"><?php echo $anchor->getSubType() ?></div>
                                    <?php endforeach; ?>
 
                                </div>

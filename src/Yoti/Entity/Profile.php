@@ -1,26 +1,31 @@
 <?php
 namespace Yoti\Entity;
 
-class Profile
+class Profile extends BaseProfile
 {
-    private $profileData;
+    const AGE_OVER_FORMAT = 'age_over:%d';
+    const AGE_UNDER_FORMAT = 'age_under:%d';
 
-    /**
-     * Profile constructor.
-     *
-     * @param array $profileData
-     */
-    public function __construct(array $profileData)
-    {
-        $this->profileData = $profileData;
-    }
+    const ATTR_FAMILY_NAME = 'family_name';
+    const ATTR_GIVEN_NAMES = 'given_names';
+    const ATTR_FULL_NAME = 'full_name';
+    const ATTR_DATE_OF_BIRTH = 'date_of_birth';
+    const ATTR_AGE_VERIFICATIONS = 'age_verifications';
+    const ATTR_GENDER = 'gender';
+    const ATTR_NATIONALITY = 'nationality';
+    const ATTR_PHONE_NUMBER = 'phone_number';
+    const ATTR_SELFIE = 'selfie';
+    const ATTR_EMAIL_ADDRESS = 'email_address';
+    const ATTR_POSTAL_ADDRESS = 'postal_address';
+    const ATTR_DOCUMENT_DETAILS = "document_details";
+    const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /**
      * @return null|Attribute
      */
     public function getFullName()
     {
-        return $this->getProfileAttribute(Attribute::FULL_NAME);
+        return $this->getProfileAttribute(self::ATTR_FULL_NAME);
     }
 
     /**
@@ -28,7 +33,7 @@ class Profile
      */
     public function getFamilyName()
     {
-        return $this->getProfileAttribute(Attribute::FAMILY_NAME);
+        return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
     }
 
     /**
@@ -36,7 +41,7 @@ class Profile
      */
     public function getGivenNames()
     {
-        return $this->getProfileAttribute(Attribute::GIVEN_NAMES);
+        return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
     }
 
     /**
@@ -44,7 +49,7 @@ class Profile
      */
     public function getDateOfBirth()
     {
-        return $this->getProfileAttribute(Attribute::DATE_OF_BIRTH);
+        return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
     }
 
     /**
@@ -52,7 +57,7 @@ class Profile
      */
     public function getGender()
     {
-        return $this->getProfileAttribute(Attribute::GENDER);
+        return $this->getProfileAttribute(self::ATTR_GENDER);
     }
 
     /**
@@ -60,7 +65,7 @@ class Profile
      */
     public function getNationality()
     {
-        return $this->getProfileAttribute(Attribute::NATIONALITY);
+        return $this->getProfileAttribute(self::ATTR_NATIONALITY);
     }
 
     /**
@@ -68,7 +73,7 @@ class Profile
      */
     public function getPhoneNumber()
     {
-        return $this->getProfileAttribute(Attribute::PHONE_NUMBER);
+        return $this->getProfileAttribute(self::ATTR_PHONE_NUMBER);
     }
 
     /**
@@ -76,7 +81,7 @@ class Profile
      */
     public function getSelfie()
     {
-        return $this->getProfileAttribute(Attribute::SELFIE);
+        return $this->getProfileAttribute(self::ATTR_SELFIE);
     }
 
     /**
@@ -84,15 +89,22 @@ class Profile
      */
     public function getEmailAddress()
     {
-        return $this->getProfileAttribute(Attribute::EMAIL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_EMAIL_ADDRESS);
     }
 
     /**
+     * Return postal_address or structured_postal_address.formatted_address.
+     *
      * @return null|Attribute
      */
     public function getPostalAddress()
     {
-        return $this->getProfileAttribute(Attribute::POSTAL_ADDRESS);
+        $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
+        if (NULL === $postalAddress) {
+            // Get it from structured_postal_address.formatted_address
+            $postalAddress = $this->getFormattedAddress();
+        }
+        return $postalAddress;
     }
 
     /**
@@ -100,42 +112,95 @@ class Profile
      */
     public function getStructuredPostalAddress()
     {
-        return $this->getProfileAttribute(Attribute::STRUCTURED_POSTAL_ADDRESS);
+        return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
-
-    /**
-     * @return null|Attribute
-     */
-    public function getAgeCondition()
-    {
-        return $this->getProfileAttribute(Attribute::AGE_CONDITION);
-    }
-
-    /**
-     * @return null|Attribute
-     */
-    public function getVerifiedAge()
-    {
-        return $this->getProfileAttribute(Attribute::VERIFIED_AGE);
-    }
-
 
     public function getDocumentDetails()
     {
-        return $this->getProfileAttribute(Attribute::DOCUMENT_DETAILS);
+        return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
     }
 
     /**
-     * @param $attributeName.
+     * Return all derived attributes from the DOB e.g 'Age Over', 'Age Under'
+     * As a list of AgeVerification
      *
+     * @return array
+     * e.g [
+     *      'age_under:18' => new AgeVerification(...),
+     *      'age_over:50' => new AgeVerification(...),
+     *      ...
+     * ]
+     */
+    public function getAgeVerifications()
+    {
+        return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
+            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : [];
+    }
+
+    /**
+     * Return AgeVerification for age_over:xx.
+     *
+     * @param int $age
+     *
+     * @return null|AgeVerification
+     */
+    public function findAgeOverVerification($age)
+    {
+        $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, (int) $age);
+        return $this->getAgeVerificationByAttribute($ageOverAttr);
+    }
+
+    /**
+     * Return AgeVerification for age_under:xx.
+     *
+     * @param int $age
+     *
+     * @return null|AgeVerification
+     */
+    public function findAgeUnderVerification($age)
+    {
+        $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, (int) $age);
+        return $this->getAgeVerificationByAttribute($ageUnderAttr);
+    }
+
+    /**
+     * Return AgeVerification.
+     *
+     * @param string $ageAttr
+     *
+     * @return mixed|null
+     */
+    private function getAgeVerificationByAttribute($ageAttr)
+    {
+        $ageVerifications = $this->getAgeVerifications();
+        return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : NULL;
+    }
+
+    /**
      * @return null|Attribute
      */
-    public function getProfileAttribute($attributeName)
+    private function getFormattedAddress()
     {
-        if (isset($this->profileData[$attributeName])) {
-            $attributeObj = $this->profileData[$attributeName];
-            return $attributeObj instanceof Attribute ? $attributeObj : NULL;
+        $postalAddress = NULL;
+        // Get it from structured_postal_address.formatted_address
+        $structuredPostalAddress = $this->getStructuredPostalAddress();
+        if (NULL !== $structuredPostalAddress)
+        {
+            $valueArr = $structuredPostalAddress->getValue();
+            if (
+                is_array($valueArr)
+                && isset($valueArr['formatted_address'])
+            ) {
+                $postalAddressValue = $valueArr['formatted_address'];
+
+                $postalAddress = new Attribute(
+                    self::ATTR_POSTAL_ADDRESS,
+                    $postalAddressValue,
+                    $structuredPostalAddress->getSources(),
+                    $structuredPostalAddress->getVerifiers()
+                );
+            }
         }
-        return NULL;
+        return $postalAddress;
     }
 }

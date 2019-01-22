@@ -3,55 +3,47 @@ namespace Yoti\Entity;
 
 class Attribute
 {
-    const FAMILY_NAME = 'family_name';
-    const GIVEN_NAMES = 'given_names';
-    const FULL_NAME = 'full_name';
-    const DATE_OF_BIRTH = 'date_of_birth';
-    const AGE_CONDITION = 'age_condition';
-    const VERIFIED_AGE = 'verified_age';
-    const GENDER = 'gender';
-    const NATIONALITY = 'nationality';
-    const PHONE_NUMBER = 'phone_number';
-    const SELFIE = 'selfie';
-    const EMAIL_ADDRESS = 'email_address';
-    const POSTAL_ADDRESS = 'postal_address';
-    const DOCUMENT_DETAILS = "document_details";
-    const STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
-
     /**
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var mixed
      */
-    protected $value;
+    private $value;
 
     /**
      * @var array
      */
-    protected $sources;
+    private $sources;
 
     /**
      * @var array
      */
-    protected $verifiers;
+    private $verifiers;
+
+    /**
+     * @var array
+     */
+    private $anchors;
 
     /**
      * Attribute constructor.
      *
      * @param string $name
-     * @param mixed $value
-     * @param array $sources
-     * @param array $verifiers
+     * @param string $value
+     *
+     * @param array $anchorsMap
      */
-    public function __construct($name, $value, array $sources, array $verifiers)
+    public function __construct($name, $value, array $anchorsMap)
     {
         $this->name = $name;
         $this->value = $value;
-        $this->sources = $sources;
-        $this->verifiers = $verifiers;
+
+        $this->setSources($anchorsMap);
+        $this->setVerifiers($anchorsMap);
+        $this->setAnchors($anchorsMap);
     }
 
     /**
@@ -84,5 +76,55 @@ class Attribute
     public function getVerifiers()
     {
         return $this->verifiers;
+    }
+
+    /**
+     * Return an array of anchors e.g
+     * [
+     *  new Anchor(),
+     *  new Anchor(),
+     *  ...
+     * ]
+     *
+     * @return array
+     */
+    public function getAnchors()
+    {
+        return $this->anchors;
+    }
+
+    private function setSources(array $anchorsMap)
+    {
+        $this->sources = $this->getAnchorType(
+            $anchorsMap,
+            Anchor::TYPE_SOURCE_OID
+        );
+    }
+
+    private function setVerifiers(array $anchorsMap)
+    {
+        $this->verifiers = $this->getAnchorType(
+            $anchorsMap,
+            Anchor::TYPE_VERIFIER_OID
+        );
+    }
+
+    private function setAnchors(array $anchorsMap)
+    {
+        // Remove Oids from the anchorsMap
+        $anchors = [];
+        array_walk($anchorsMap, function($val) use(&$anchors) {
+            $anchors = array_merge($anchors, array_values($val));
+        });
+        $this->anchors = $anchors;
+    }
+
+    /**
+     * @param string $anchorType
+     * @return array
+     */
+    private function getAnchorType($anchorsMap, $anchorType)
+    {
+        return isset($anchorsMap[$anchorType]) ? $anchorsMap[$anchorType] : [];
     }
 }

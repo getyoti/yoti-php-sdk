@@ -38,12 +38,13 @@
       "src/phpseclib/bootstrap.php"
     ],
     "psr-4": {
-      "Attrpubapi_v1\\": "src/Attrpubapi_v1",
-      "Compubapi_v1\\": "src/Compubapi_v1",
+      "Attrpubapi\\": "src/Attrpubapi",
+      "Compubapi\\": "src/Compubapi",
       "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
       "GPBMetadata\\": "src/protobuflib/GPBMetadata",
       "phpseclib\\": "src/phpseclib/",
-      "Yoti\\": "src/Yoti"
+      "Yoti\\": "src/Yoti",
+      "YotiSandbox\\": "sandbox/src"
     }
   },
   "require-dev": {
@@ -52,7 +53,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "YotiTest\\": "tests/"
+      "YotiTest\\": "tests/",
+      "SandboxTest\\": "sandbox/tests/"
     }
   }
 }

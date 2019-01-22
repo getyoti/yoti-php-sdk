@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit colors="true"
          convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
          bootstrap="tests/bootstrap.php"
          stopOnFailure="false"
          syntaxCheck="true">
