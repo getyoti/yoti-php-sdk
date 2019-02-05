@@ -76,45 +76,4 @@ class AttributeConverterTest extends TestCase
         $this->assertNull($attr);
     }
 
-    /**
-     * @covers ::convertValueBasedOnContentType
-     * @covers ::validateInput
-     */
-    public function testConvertValueBasedOnContentTypeValidation() {
-        $this->expectException(AttributeException::class);
-        $this->expectExceptionMessage('Warning: test_attr value is NULL');
-        $this->invokeStaticMethod(
-            AttributeConverter::class,
-            'convertValueBasedOnContentType',
-            [$this->getMockForProtobufAttribute('test_attr', '')]
-        );
-    }
-
-    /**
-     * @covers ::convertValueBasedOnAttributeName
-     * @covers ::validateInput
-     */
-    public function testConvertValueBasedOnAttributeNameValidation() {
-        $this->expectException(AttributeException::class);
-        $this->expectExceptionMessage('Warning: test_attr value is NULL');
-        $this->invokeStaticMethod(
-            AttributeConverter::class,
-            'convertValueBasedOnAttributeName',
-            ['', 'test_attr']
-        );
-    }
-
-    /**
-     * @covers ::validateInput
-     */
-    public function testValidateInput() {
-        $this->expectException(AttributeException::class);
-        $this->expectExceptionMessage('Warning: test_attr value is NULL');
-        $this->invokeStaticMethod(
-            AttributeConverter::class,
-            'validateInput',
-            ['', 'test_attr']
-        );
-    }
-
 }
