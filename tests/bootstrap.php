@@ -4,11 +4,6 @@
  */
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Prevent log messages surfacing when error_log hasn't been configured.
-if (!ini_get('error_log')) {
-    ini_set('error_log', '/dev/null');
-}
-
 define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
 define('RECEIPT_JSON', __DIR__ . '/sample-data/receipt.json');
 define('INVALID_YOTI_CONNECT_TOKEN', 'sdfsdfsdasdajsopifajsd=');
