@@ -17,7 +17,8 @@ class AttributeConverterTest extends TestCase
     /**
      * Mocks \Attrpubapi\Attribute with provided name and value.
      */
-    private function getMockForProtobufAttribute($name, $value) {
+    private function getMockForProtobufAttribute($name, $value)
+    {
         // Setup protobuf mock.
         $protobufAttribute = $this->getMockBuilder(\Attrpubapi\Attribute::class)
             ->disableOriginalConstructor()
@@ -62,7 +63,8 @@ class AttributeConverterTest extends TestCase
     /**
      * @covers ::convertToYotiAttribute
      */
-    public function testConvertToYotiAttribute() {
+    public function testConvertToYotiAttribute()
+    {
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', 'my_value'));
         $this->assertEquals('test_attr', $attr->getName());
         $this->assertEquals('my_value', $attr->getValue());
@@ -71,9 +73,9 @@ class AttributeConverterTest extends TestCase
     /**
      * @covers ::convertToYotiAttribute
      */
-    public function testConvertToYotiAttributeNullValue() {
+    public function testConvertToYotiAttributeNullValue()
+    {
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', ''));
         $this->assertNull($attr);
     }
-
 }
