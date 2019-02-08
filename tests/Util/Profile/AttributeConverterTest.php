@@ -7,7 +7,6 @@ use Yoti\Entity\Image;
 use Yoti\Entity\Receipt;
 use Yoti\ActivityDetails;
 use Yoti\Util\Profile\AttributeConverter;
-use Yoti\Exception\AttributeException;
 
 /**
  * @coversDefaultClass \Yoti\Util\Profile\AttributeConverter
