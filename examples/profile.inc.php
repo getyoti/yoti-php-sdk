@@ -7,8 +7,14 @@ require_once __DIR__ . '/bootstrap.php';
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 $profileAttributes = [];
 
+// Allow Connect API to be configured.
+$connect_api = Yoti\YotiClient::DEFAULT_CONNECT_API;
+if (!empty(getenv('YOTI_CONNECT_API'))) {
+    $connect_api = getenv('YOTI_CONNECT_API');
+}
+
 try {
-    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
+    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'), $connect_api);
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 

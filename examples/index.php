@@ -71,7 +71,13 @@ require_once __DIR__ . '/bootstrap.php';
 
         <script src="https://sdk.yoti.com/clients/browser.2.2.0.js"></script>
         <script>
-          _ybg.init()
+            <?php if (getenv('YOTI_QR_URL')) { ?>
+            _ybg.config.qr = "<?php echo getenv('YOTI_QR_URL'); ?>";
+            <?php } ?>
+            <?php if (getenv('YOTI_CONNECT_URL')) { ?>
+            _ybg.config.service = "<?php echo getenv('YOTI_CONNECT_URL'); ?>";
+            <?php } ?>
+            _ybg.init();
         </script>
     </body>
 </html>

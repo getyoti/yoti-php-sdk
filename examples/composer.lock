@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "7a6c48264e6454ff581a7f0189792926",
-    "content-hash": "2a81e6ba4478b78c3d08f434b9ed3156",
+    "content-hash": "5da8436cec4125630cc7875a14bcad6c",
     "packages": [
         {
             "name": "symfony/dotenv",
@@ -62,20 +61,20 @@
                 "env",
                 "environment"
             ],
-            "time": "2017-04-27 07:47:28"
+            "time": "2017-04-27T07:47:28+00:00"
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "1.2.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5"
+                "reference": "b214dc5d69216265ba06c9820f85890bb334d61d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/59890106c25a19025e1e0914b56e2c38aa979fc5",
-                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/b214dc5d69216265ba06c9820f85890bb334d61d",
+                "reference": "b214dc5d69216265ba06c9820f85890bb334d61d",
                 "shasum": ""
             },
             "require": {
@@ -91,12 +90,13 @@
                     "src/phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "Attrpubapi_v1\\": "src/attrpubapi_v1",
-                    "Compubapi_v1\\": "src/compubapi_v1",
+                    "Attrpubapi\\": "src/Attrpubapi",
+                    "Compubapi\\": "src/Compubapi",
                     "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
                     "GPBMetadata\\": "src/protobuflib/GPBMetadata",
                     "phpseclib\\": "src/phpseclib/",
-                    "Yoti\\": "src/Yoti"
+                    "Yoti\\": "src/Yoti",
+                    "YotiSandbox\\": "sandbox/src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -131,7 +131,7 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-06-25 09:59:44"
+            "time": "2019-01-22T16:04:34+00:00"
         }
     ],
     "packages-dev": [],
