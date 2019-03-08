@@ -56,6 +56,17 @@ class ReceiptTest extends TestCase
     }
 
     /**
+     * @covers ::getRememberMeId
+     */
+    public function testGetRememberMeIdNotPresent()
+    {
+        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        unset($receiptArr['receipt']['remember_me_id']);
+        $receipt = new Receipt($receiptArr['receipt']);
+        $this->assertNull($receipt->getRememberMeId());
+    }
+
+    /**
      * @covers ::getSharingOutcome
      */
     public function testGetSharingOutcome()
