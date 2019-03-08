@@ -9,12 +9,15 @@ use Yoti\Entity\Attribute;
 use YotiTest\Util\Profile\TestAnchors;
 use Yoti\Util\Profile\AnchorListConverter;
 
+/**
+ * @coversDefaultClass \Yoti\Entity\Attribute
+ */
 class AttributeTest extends TestCase
 {
     const ATTR_VALUE = 'Test FullName';
 
     /**
-     * @var Attribute
+     * @var \Yoti\Entity\Attribute
      */
     public $dummyAttribute;
 
@@ -33,16 +36,25 @@ class AttributeTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getName
+     */
     public function testAttributeName()
     {
         $this->assertEquals(Profile::ATTR_FULL_NAME, $this->dummyAttribute->getName());
     }
 
+    /**
+     * @covers ::getValue
+     */
     public function testAttributeValue()
     {
         $this->assertEquals(self::ATTR_VALUE, $this->dummyAttribute->getValue());
     }
 
+    /**
+     * @covers ::getSources
+     */
     public function testGetSources()
     {
         $sources = $this->dummyAttribute->getSources();
@@ -59,6 +71,9 @@ class AttributeTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getVerifiers
+     */
     public function testVerifiers()
     {
         $verifiers = $this->dummyAttribute->getVerifiers();
@@ -72,6 +87,9 @@ class AttributeTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getAnchors
+     */
     public function testGetAnchors()
     {
         $anchors = $this->dummyAttribute->getAnchors();
@@ -84,6 +102,12 @@ class AttributeTest extends TestCase
         $this->assertEquals('YOTI_ADMIN', $anchors[2]->getValue());
     }
 
+    /**
+     * Convert anchor string to Protobuf Anchor
+     *
+     * @param string $anchorString
+     * @return \Attrpubapi\Anchor
+     */
     public function convertToProtobufAnchor($anchorString)
     {
         $anchor = new \Attrpubapi\Anchor();

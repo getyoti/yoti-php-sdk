@@ -6,8 +6,17 @@ use Yoti\Entity\Attribute;
 use Yoti\Entity\AgeVerification;
 use Yoti\Util\Age\AgeOverVerificationProcessor;
 
+/**
+ * @coversDefaultClass \Yoti\Util\Age\AgeOverVerificationProcessor
+ */
 class AgeOverVerificationProcessorTest extends TestCase
 {
+    /**
+     * @covers ::process
+     * @covers \Yoti\Entity\AgeVerification::getResult
+     * @covers \Yoti\Entity\AgeVerification::getCheckType
+     * @covers \Yoti\Entity\AgeVerification::getAge
+     */
     public function testProcessWithAgeOver()
     {
         $ageAttribute = new Attribute('age_over:18', 'true', []);
@@ -19,6 +28,12 @@ class AgeOverVerificationProcessorTest extends TestCase
         $this->assertEquals(18, $ageVerificationObj->getAge());
     }
 
+    /**
+     * @covers ::process
+     * @covers \Yoti\Entity\AgeVerification::getResult
+     * @covers \Yoti\Entity\AgeVerification::getCheckType
+     * @covers \Yoti\Entity\AgeVerification::getAge
+     */
     public function testForAgeOver20ShouldReturnTrue()
     {
         $ageAttribute = new Attribute('age_over:20', 'true', []);
@@ -30,6 +45,9 @@ class AgeOverVerificationProcessorTest extends TestCase
         $this->assertEquals(20, $ageVerificationObj->getAge());
     }
 
+    /**
+     * @covers ::process
+     */
     public function testWhenThereIsNotAgeOverShouldReturnNull()
     {
         $ageAttribute = new Attribute('age_under:20', 'false', []);
