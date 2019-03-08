@@ -11,17 +11,20 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\RequestSigner;
 
+/**
+ * @coversDefaultClass \Yoti\Http\RequestSigner
+ */
 class RequestSignerTest extends TestCase
 {
     /**
-     * @var Payload
+     * @var \Yoti\Http\Payload
      */
     public $payload;
+
     /**
-     * @var CurlRequestHandler
+     * @var \Yoti\Http\CurlRequestHandler
      */
     public $request;
-    public $messageToSign;
 
     public function setup()
     {
@@ -37,7 +40,7 @@ class RequestSignerTest extends TestCase
     }
 
     /**
-     * Test verifying a signed message.
+     * @covers ::signRequest
      */
     public function testShouldVerifySignedMessage()
     {
@@ -58,6 +61,11 @@ class RequestSignerTest extends TestCase
         $this->assertEquals(1, $verify);
     }
 
+    /**
+     * Dummy request payload
+     *
+     * @return \Yoti\Http\Payload
+     */
     public function getDummyPayload()
     {
         $amlAddress = new AmlAddress(new Country('GBR'));
@@ -65,11 +73,21 @@ class RequestSignerTest extends TestCase
         return new Payload($amlProfile->getData());
     }
 
+    /**
+     * Dummy private key
+     *
+     * @return string
+     */
     public function getDummyPrivateKey()
     {
         return file_get_contents(AML_PRIVATE_KEY);
     }
 
+    /**
+     * Dummy public key
+     *
+     * @return string
+     */
     public function getDummyPublicKey()
     {
         return file_get_contents(AML_PUBLIC_KEY);

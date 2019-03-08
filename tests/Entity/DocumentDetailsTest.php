@@ -4,6 +4,9 @@ namespace YotiTest\Entity;
 use Yoti\Entity\DocumentDetails;
 use YotiTest\TestCase;
 
+/**
+ * @coversDefaultClass \Yoti\Entity\DocumentDetails
+ */
 class DocumentDetailsTest extends TestCase
 {
     /**
@@ -17,6 +20,12 @@ class DocumentDetailsTest extends TestCase
         $this->dummyDocumentDetails = new DocumentDetails($dummyValue);
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::getIssuingCountry
+     * @covers ::getDocumentNumber
+     * @covers ::getExpirationDate
+     */
     public function testShouldParseOneOptionalAttribute()
     {
         $document = new DocumentDetails('PASSPORT GBR 01234567 2020-01-01');
@@ -26,6 +35,13 @@ class DocumentDetailsTest extends TestCase
         $this->assertEquals('2020-01-01', $document->getExpirationDate()->format('Y-m-d'));
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::getIssuingCountry
+     * @covers ::getDocumentNumber
+     * @covers ::getExpirationDate
+     * @covers ::getIssuingAuthority
+     */
     public function testShouldParseTwoOptionalAttributes()
     {
         $document = new DocumentDetails('DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA');
@@ -36,24 +52,40 @@ class DocumentDetailsTest extends TestCase
         $this->assertEquals('DVLA', $document->getIssuingAuthority());
     }
 
+    /**
+     * @covers ::__construct
+     */
     public function testShouldThrowExceptionWhenValueIsEmpty()
     {
         $this->expectException('Yoti\Exception\AttributeException');
         $document = new DocumentDetails('');
     }
 
+    /**
+     * @covers ::__construct
+     */
     public function testShouldThrowExceptionForInvalidCountry()
     {
         $this->expectException('Yoti\Exception\AttributeException');
         $document = new DocumentDetails('PASSPORT 13 1234abc 2016-05-01');
     }
 
+    /**
+     * @covers ::__construct
+     */
     public function testShouldThrowExceptionForInvalidNumber()
     {
         $this->expectException('Yoti\Exception\AttributeException');
         $document = new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::getIssuingCountry
+     * @covers ::getDocumentNumber
+     * @covers ::getExpirationDate
+     * @covers ::getIssuingAuthority
+     */
     public function testWhenExpirationDateIsMissing()
     {
         $document = new DocumentDetails('PASS_CARD GBR 22719564893 - CITIZENCARD');
@@ -64,18 +96,31 @@ class DocumentDetailsTest extends TestCase
         $this->assertEquals('CITIZENCARD', $document->getIssuingAuthority());
     }
 
+    /**
+     * @covers ::__construct
+     */
     public function testWhenTheValueIsLessThanThreeWords()
     {
         $this->expectException('Yoti\Exception\AttributeException');
         $documentDetails = new DocumentDetails('PASS_CARD GBR');
     }
 
+    /**
+     * @covers ::__construct
+     */
     public function testShouldThrowExceptionForInvalidDate()
     {
         $this->expectException('Yoti\Exception\AttributeException');
         $document = new DocumentDetails('PASSPORT GBR 1234abc X016-05-01');
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::getIssuingCountry
+     * @covers ::getDocumentNumber
+     * @covers ::getExpirationDate
+     * @covers ::getIssuingAuthority
+     */
     public function testShouldIgnoreTheSixthOptionalAttribute()
     {
         $value = 'DRIVING_LICENCE GBR 1234abc 2016-05-01 DVLA someThirdAttribute';

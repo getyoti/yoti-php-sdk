@@ -7,14 +7,23 @@ use Yoti\Entity\Anchor;
 use YotiTest\TestCase;
 use Yoti\Util\Profile\AnchorListConverter;
 
+/**
+ * @coversDefaultClass \Yoti\Util\Profile\AnchorListConverter
+ */
 class AnchorListConverterTest extends TestCase
 {
+    /**
+     * @covers ::convert
+     */
     public function testConvertingSourceAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
         $this->assertEquals('PASSPORT', $anchorsData[Anchor::TYPE_SOURCE_OID][0]->getValue());
     }
 
+    /**
+     * @covers ::convert
+     */
     public function testConvertingVerifierAnchor()
     {
         $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
@@ -22,6 +31,9 @@ class AnchorListConverterTest extends TestCase
         $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
     }
 
+    /**
+     * @covers ::convert
+     */
     public function testConvertingTwoSources()
     {
         $passportAnchor = new \Attrpubapi\Anchor();

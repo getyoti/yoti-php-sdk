@@ -6,6 +6,9 @@ use Yoti\Entity\Image;
 use YotiTest\TestCase;
 use Yoti\Entity\ApplicationProfile;
 
+/**
+ * @coversDefaultClass \Yoti\Entity\ApplicationProfile
+ */
 class ApplicationProfileTest extends TestCase
 {
     /**
@@ -24,6 +27,9 @@ class ApplicationProfileTest extends TestCase
         $this->dummyProfile = new ApplicationProfile($dummyData);
     }
 
+    /**
+     * @covers ::getApplicationName
+     */
     public function testGetApplicationName()
     {
         $this->assertEquals(
@@ -32,6 +38,9 @@ class ApplicationProfileTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getApplicationUrl
+     */
     public function testGetApplicationUrl()
     {
         $this->assertEquals(
@@ -40,6 +49,9 @@ class ApplicationProfileTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getApplicationReceiptBgColor
+     */
     public function testGetApplicationReceiptBgColor()
     {
         $this->assertEquals(
@@ -48,6 +60,10 @@ class ApplicationProfileTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getApplicationLogo
+     * @covers \Yoti\Entity\Image::getContent
+     */
     public function testGetApplicationLogoImageData()
     {
         $this->assertEquals(
@@ -56,6 +72,10 @@ class ApplicationProfileTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getApplicationLogo
+     * @covers \Yoti\Entity\Image::getMimeType
+     */
     public function testGetApplicationLogoImageType()
     {
         $this->assertEquals(
