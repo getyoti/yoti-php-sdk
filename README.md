@@ -300,7 +300,8 @@ $ ./vendor/bin/phpunit tests
 ## API Coverage
 
 * Activity Details
-    * [X] RememberMe ID `getRememberMeId()`
+    * [X] Remember Me ID `getRememberMeId()`
+    * [X] Parent Remember Me ID `getParentRememberMeId()`
     * [X] Receipt ID `getReceiptId()`
     * [X] Timestamp `getTimestamp()` // DateTime Object
     * [X] Application Profile `getApplicationProfile()`

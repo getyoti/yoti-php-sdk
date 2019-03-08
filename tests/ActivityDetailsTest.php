@@ -29,11 +29,6 @@ class ActivityDetailsTest extends TestCase
      */
     public $applicationProfile;
 
-    /**
-     * @var string Remember Me ID
-     */
-    public $rememberMeId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
-
     public function setUp()
     {
         $pem = file_get_contents(PEM_FILE);
@@ -58,7 +53,8 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetRememberMeId()
     {
-        $this->assertEquals($this->rememberMeId, $this->activityDetails->getRememberMeId());
+        $rememberMeId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
+        $this->assertEquals($rememberMeId, $this->activityDetails->getRememberMeId());
     }
 
     /**
@@ -66,7 +62,8 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetParentRememberMeIdExists()
     {
-        $this->assertTrue(method_exists($this->activityDetails, 'getParentRememberMeId'));
+        $parentRememberMeId = 'f5RjVQMyoKOvO/hkv43Ik+t6d6mGfP2tdrNijH4k4qafTG0FSNUgQIvd2Z3Nx1j8';
+        $this->assertEquals($parentRememberMeId, $this->activityDetails->getParentRememberMeId());
     }
 
     /**
