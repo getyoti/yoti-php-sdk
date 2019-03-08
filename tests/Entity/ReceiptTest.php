@@ -18,6 +18,11 @@ class ReceiptTest extends TestCase
     public $pem;
 
     /**
+     * @var array Receipt array.
+     */
+    private $receiptArr;
+
+    /**
      * @var Receipt
      */
     public $receipt;
@@ -25,8 +30,8 @@ class ReceiptTest extends TestCase
     public function setup()
     {
         $this->pem = file_get_contents(PEM_FILE);
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
-        $this->receipt = new Receipt($receiptArr['receipt']);
+        $this->receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true)['receipt'];
+        $this->receipt = new Receipt($this->receiptArr);
     }
 
     /**
@@ -60,10 +65,19 @@ class ReceiptTest extends TestCase
      */
     public function testGetRememberMeIdNotPresent()
     {
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
-        unset($receiptArr['receipt']['remember_me_id']);
-        $receipt = new Receipt($receiptArr['receipt']);
+        unset($this->receiptArr['remember_me_id']);
+        $receipt = new Receipt($this->receiptArr);
         $this->assertNull($receipt->getRememberMeId());
+    }
+
+    /**
+     * @covers ::getRememberMeId
+     */
+    public function testGetRememberMeIdEmpty()
+    {
+        $this->receiptArr['remember_me_id'] = '';
+        $receipt = new Receipt($this->receiptArr);
+        $this->assertEquals('', $receipt->getRememberMeId());
     }
 
     /**
