@@ -8,6 +8,9 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\Payload;
 use YotiTest\TestCase;
 
+/**
+ * @coversDefaultClass \Yoti\Http\Payload
+ */
 class PayloadTest extends TestCase
 {
     /**
@@ -38,6 +41,8 @@ class PayloadTest extends TestCase
 
     /**
      * Test getting Payload data as a JSON string.
+     *
+     * @covers ::getPayloadJSON
      */
     public function testGetPayloadJSON()
     {
@@ -46,17 +51,26 @@ class PayloadTest extends TestCase
 
     /**
      * Test getting Payload data as a Base64 string.
+     *
+     * @covers ::getBase64Payload
      */
     public function testGetBase64Payload()
     {
         $this->assertEquals($this->base64Payload, $this->payload->getBase64Payload());
     }
 
+    /**
+     * @covers ::getRawData
+     */
     public function testGetRawData()
     {
         $this->assertEquals($this->payloadJSON, json_encode($this->payload->getRawData()));
     }
 
+    /**
+     * @covers ::__construct
+     * @covers ::getPayloadJSON
+     */
     public function testPassingAStringAsPayloadData()
     {
         $payloadData = 'payloadDataAsAString';

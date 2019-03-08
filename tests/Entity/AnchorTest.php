@@ -8,13 +8,25 @@ use YotiTest\TestCase;
 use YotiTest\Util\Profile\TestAnchors;
 use Yoti\Util\Profile\AnchorListConverter;
 
+/**
+ * @coversDefaultClass \Yoti\Entity\Anchor
+ */
 class AnchorTest extends TestCase
 {
+    /**
+     * Check Anchor class exists.
+     */
     public function testAnchorClassExists()
     {
         $this->assertTrue(class_exists(Anchor::class));
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::getValue
+     * @covers ::getSignedTimeStamp
+     * @covers ::getOriginServerCerts
+     */
     public function testYotiAnchorEndpoints()
     {
         $dlAnchor = new \Attrpubapi\Anchor();

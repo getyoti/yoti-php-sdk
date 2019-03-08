@@ -8,8 +8,14 @@ use Yoti\Entity\Attribute;
 use Yoti\Entity\AgeVerification;
 use Yoti\Util\Age\AgeVerificationConverter;
 
+/**
+ * @coversDefaultClass \Yoti\Util\Age\AgeVerificationConverter
+ */
 class AgeVerificationConverterTest extends TestCase
 {
+    /**
+     * @covers ::getAgeVerificationsFromAttrsMap
+     */
     public function testGetAgeVerificationsFromAttrsMap()
     {
         $ageAttribute = new Attribute('age_under:18', 'true', []);
@@ -24,6 +30,9 @@ class AgeVerificationConverterTest extends TestCase
         $this->assertInstanceOf(Attribute::class, $ageUnder18->getAttribute());
     }
 
+    /**
+     * @covers ::getAgeVerificationsFromAttrsMap
+     */
     public function testMultipleAgeDerivations()
     {
         $profileData = [
@@ -49,6 +58,9 @@ class AgeVerificationConverterTest extends TestCase
         $this->assertArrayNotHasKey('age_breaker:50', $ageVerifications);
     }
 
+    /**
+     * @covers ::getAgeVerificationsFromAttrsMap
+     */
     public function testShouldReturnEmptyAgeVerifications()
     {
         $profileData = [

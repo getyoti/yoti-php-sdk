@@ -12,21 +12,30 @@ use Yoti\Http\RequestSigner;
 use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\AbstractRequestHandler;
 
+/**
+ * @coversDefaultClass \Yoti\Http\CurlRequestHandler
+ */
 class CurlRequestHandlerTest extends TestCase
 {
+    /**
+     * @var string Pem file contents
+     */
     public $pem;
+
     /**
      * @var CurlRequestHandler
      */
     public $requestHandler;
+
     /**
-     * @var Payload
+     * @var \Yoti\Http\Payload
      */
     public $payload;
 
+    /**
+     * @var Yoti\Http\RequestSigner
+     */
     public $requestSigner;
-
-    public $postMethod = CurlRequestHandler::METHOD_POST;
 
     public function setup()
     {
@@ -34,8 +43,6 @@ class CurlRequestHandlerTest extends TestCase
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
         $this->payload = new Payload($amlProfile->getData());
-        $this->postMethod = CurlRequestHandler::METHOD_POST;
-
         $this->pem = file_get_contents(PEM_FILE);
 
         $this->requestSigner = new RequestSigner(
@@ -52,16 +59,25 @@ class CurlRequestHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getPem
+     */
     public function testGetPem()
     {
         $this->assertEquals($this->pem, $this->requestHandler->getPem());
     }
 
+    /**
+     * @covers ::getSdkId
+     */
     public function testGetSdkId()
     {
         $this->assertEquals(SDK_ID, $this->requestHandler->getSdkId());
     }
 
+    /**
+     * @covers ::sendRequest
+     */
     public function testInvalidHttpMethod()
     {
         $this->expectException('\Yoti\Exception\RequestException');
@@ -72,11 +88,17 @@ class CurlRequestHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::sendRequest
+     */
     public function testClassIsInstanceOfAbstractRequestHandler()
     {
         $this->assertInstanceOf(AbstractRequestHandler::class, $this->requestHandler);
     }
 
+    /**
+     * @covers ::sendRequest
+     */
     public function testSendRequest()
     {
         $expectedResult['response'] = file_get_contents(RECEIPT_JSON);

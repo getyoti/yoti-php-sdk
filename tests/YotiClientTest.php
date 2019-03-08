@@ -8,6 +8,9 @@ use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 
+/**
+ * @coversDefaultClass \Yoti\YotiClient
+ */
 class YotiClientTest extends TestCase
 {
     /**
@@ -15,10 +18,19 @@ class YotiClientTest extends TestCase
      */
     public $yotiClient;
 
+    /**
+     * @var string Pem file contents
+     */
     public $pem;
 
+    /**
+     * @var \Yoti\Entity\AmlProfile
+     */
     public $amlProfile;
 
+    /**
+     * @var array Aml Result
+     */
     public $amlResult = [];
 
     public function setUp()
@@ -38,6 +50,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test the use of pem file
+     *
+     * @covers ::__construct
      */
     public function testCanUsePemFile()
     {
@@ -47,6 +61,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test passing invalid pem file path
+     *
+     * @covers ::__construct
      */
     public function testInvalidPem()
     {
@@ -55,7 +71,7 @@ class YotiClientTest extends TestCase
     }
 
     /**
-     * Test getting activity details
+     * @covers ::getActivityDetails
      */
     public function testGetActivityDetails()
     {
@@ -71,7 +87,7 @@ class YotiClientTest extends TestCase
     }
 
     /**
-     * Test performAmlCheck with a mock result
+     * @covers ::performAmlCheck
      */
     public function testPerformAmlCheck()
     {
@@ -85,6 +101,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test invalid Token
+     *
+     * @covers ::getActivityDetails
      */
     public function testInvalidConnectToken()
     {
@@ -96,6 +114,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test invalid http header value for X-Yoti-SDK
+     *
+     * @covers ::__construct
      */
     public function testInvalidSdkIdentifier()
     {
@@ -110,6 +130,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test X-Yoti-SDK http header value for Wordpress
+     *
+     * @covers ::__construct
      */
     public function testCanUseWordPressAsSdkIdentifier()
     {
@@ -125,6 +147,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test X-Yoti-SDK http header value for Drupal
+     *
+     * @covers ::__construct
      */
     public function testCanUseDrupalAsSdkIdentifier()
     {
@@ -140,6 +164,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test X-Yoti-SDK http header value for Joomla
+     *
+     * @covers ::__construct
      */
     public function testCanUseJoomlaAsSdkIdentifier()
     {
@@ -155,6 +181,8 @@ class YotiClientTest extends TestCase
 
     /**
      * Test X-Yoti-SDK http header value for PHP
+     *
+     * @covers ::__construct
      */
     public function testCanUsePHPAsSdkIdentifier()
     {
