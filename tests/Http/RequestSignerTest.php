@@ -33,7 +33,7 @@ class RequestSignerTest extends TestCase
 
         $this->request = new CurlRequestHandler(
             YotiClient::DEFAULT_CONNECT_API,
-            $pem ,
+            $pem,
             SDK_ID,
             'PHP'
         );
