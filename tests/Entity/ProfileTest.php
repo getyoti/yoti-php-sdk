@@ -7,21 +7,29 @@ use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
 use Yoti\Entity\AgeVerification;
 
+/**
+ * @coversDefaultClass \Yoti\Entity\Profile
+ */
 class ProfileTest extends TestCase
 {
     /**
      * @var \Yoti\Entity\Profile
      */
     public $profile;
+
     /**
      * @var \Yoti\YotiClient
      */
     public $yotiClient;
+
     /**
      * @var string
      */
     public $expectedPhoneNumber;
 
+    /**
+     * @var Array Structured Postal Address
+     */
     public $dummyStructuredPostalAddress;
 
     public function setup()
@@ -55,18 +63,34 @@ class ProfileTest extends TestCase
         $this->profile = $activityDetails->getProfile();
     }
 
+    /**
+     * @covers \Yoti\Entity\Attribute::getValue
+     * @covers ::getPhoneNumber
+     * @covers ::getProfileAttribute
+     */
     public function testGetAttributeValue()
     {
         $phoneNumber = $this->profile->getPhoneNumber();
+        $this->assertInstanceOf(Attribute::class, $phoneNumber);
         $this->assertEquals($this->expectedPhoneNumber, $phoneNumber->getValue());
     }
 
+    /**
+     * @covers \Yoti\Entity\Attribute::getName
+     * @covers ::getPhoneNumber
+     * @covers ::getProfileAttribute
+     */
     public function testGetAttributeName()
     {
         $phoneNumber = $this->profile->getPhoneNumber();
+        $this->assertInstanceOf(Attribute::class, $phoneNumber);
         $this->assertEquals('phone_number', $phoneNumber->getName());
     }
 
+    /**
+     * @covers ::getPostalAddress
+     * @covers ::getStructuredPostalAddress
+     */
     public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
     {
         $structuredPostalAddress = new Attribute(
@@ -95,18 +119,26 @@ class ProfileTest extends TestCase
 
     /**
      * Should not return age_verifications in the array
+     *
+     * @covers ::getAttributes
+     * @dataProvider getDummyProfileDataWithAgeVerifications
      */
-    public function testGetAttributes()
+    public function testGetAttributes($profileData)
     {
-        $profileData = $this->getDummyProfileDataWithAgeVerifications();
         $profile = new Profile($profileData);
 
         $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
     }
 
-    public function testFindAgeOverVerification()
+    /**
+     * @covers ::findAgeOverVerification
+     * @covers \Yoti\Entity\AgeVerification::getCheckType
+     * @covers \Yoti\Entity\AgeVerification::getAge
+     * @covers \Yoti\Entity\AgeVerification::getResult
+     * @dataProvider getDummyProfileDataWithAgeVerifications
+     */
+    public function testFindAgeOverVerification($profileData)
     {
-        $profileData = $this->getDummyProfileDataWithAgeVerifications();
         $profile = new Profile($profileData);
         $ageOver35 = $profile->findAgeOverVerification(35);
 
@@ -116,9 +148,15 @@ class ProfileTest extends TestCase
         $this->assertTrue($ageOver35->getResult());
     }
 
-    public function testFindAgeUnderVerification()
+    /**
+     * @covers ::findAgeUnderVerification
+     * @covers \Yoti\Entity\AgeVerification::getCheckType
+     * @covers \Yoti\Entity\AgeVerification::getAge
+     * @covers \Yoti\Entity\AgeVerification::getResult
+     * @dataProvider getDummyProfileDataWithAgeVerifications
+     */
+    public function testFindAgeUnderVerification($profileData)
     {
-        $profileData = $this->getDummyProfileDataWithAgeVerifications();
         $profile = new Profile($profileData);
         $ageUnder18 = $profile->findAgeUnderVerification(18);
 
@@ -128,6 +166,9 @@ class ProfileTest extends TestCase
         $this->assertFalse($ageUnder18->getResult());
     }
 
+    /**
+     * Profile data provider with age verifications.
+     */
     public function getDummyProfileDataWithAgeVerifications()
     {
         $profileData = [
@@ -164,6 +205,6 @@ class ProfileTest extends TestCase
                 []
             ),
         ];
-        return $profileData;
+        return [[$profileData]];
     }
 }
