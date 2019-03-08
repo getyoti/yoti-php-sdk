@@ -31,13 +31,32 @@ class ActivityDetailsTest extends TestCase
 
     public function setUp()
     {
-        $pem = file_get_contents(PEM_FILE);
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
-        $receipt = new Receipt($receiptArr['receipt']);
-
-        $this->activityDetails = new ActivityDetails($receipt, $pem);
+        $this->activityDetails = new ActivityDetails(
+            new Receipt($this->getReceiptArray()),
+            $this->getPem()
+        );
         $this->profile = $this->activityDetails->getProfile();
         $this->applicationProfile = $this->activityDetails->getApplicationProfile();
+    }
+
+    /**
+     * Get pem file contents.
+     *
+     * @return string
+     */
+    private function getPem()
+    {
+        return file_get_contents(PEM_FILE);
+    }
+
+    /**
+     * Get test receipt.
+     *
+     * @return array
+     */
+    private function getReceiptArray()
+    {
+        return json_decode(file_get_contents(RECEIPT_JSON), true)['receipt'];
     }
 
     /**
@@ -55,6 +74,34 @@ class ActivityDetailsTest extends TestCase
     {
         $rememberMeId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
         $this->assertEquals($rememberMeId, $this->activityDetails->getRememberMeId());
+    }
+
+    /**
+     * @covers ::getRememberMeId
+     */
+    public function testGetRememberMeIdNotPresent()
+    {
+        // Remove Remember Me ID from test receipt.
+        $receiptArr = $this->getReceiptArray();
+        unset($receiptArr['remember_me_id']);
+        $receipt = new Receipt($receiptArr);
+
+        $activityDetails = new ActivityDetails($receipt, $this->getPem());
+        $this->assertNull($activityDetails->getRememberMeId());
+    }
+
+    /**
+     * @covers ::getRememberMeId
+     */
+    public function testGetRememberMeIdEmpty()
+    {
+        // Set Remember Me ID to empty string.
+        $receiptArr = $this->getReceiptArray();
+        $receiptArr['remember_me_id'] = '';
+        $receipt = new Receipt($receiptArr);
+
+        $activityDetails = new ActivityDetails($receipt, $this->getPem());
+        $this->assertEquals('', $activityDetails->getRememberMeId());
     }
 
     /**
