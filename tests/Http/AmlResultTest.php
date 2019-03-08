@@ -17,7 +17,7 @@ class AmlResultTest extends TestCase
 
     public function setup()
     {
-        $resultArr = json_decode(file_get_contents(AML_CHECK_RESULT_JSON), TRUE);
+        $resultArr = json_decode(file_get_contents(AML_CHECK_RESULT_JSON), true);
         $this->amlResult = new AmlResult($resultArr);
     }
 
