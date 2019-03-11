@@ -174,7 +174,7 @@ class ActivityDetailsTest extends TestCase
     }
 
     /**
-     * ::getTimestamp
+     * @covers ::getTimestamp
      */
     public function testGetTimestamp()
     {
@@ -183,7 +183,7 @@ class ActivityDetailsTest extends TestCase
     }
 
     /**
-     * ::getReceiptId
+     * @covers ::getReceiptId
      */
     public function testGetReceipt()
     {
