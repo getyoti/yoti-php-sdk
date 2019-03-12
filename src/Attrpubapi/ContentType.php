@@ -33,5 +33,13 @@ class ContentType
      * Generated from protobuf enum <code>JSON = 5;</code>
      */
     const JSON = 5;
+    /**
+     * Generated from protobuf enum <code>MULTI_VALUE = 6;</code>
+     */
+    const MULTI_VALUE = 6;
+    /**
+     * Generated from protobuf enum <code>INT = 7;</code>
+     */
+    const INT = 7;
 }
 
