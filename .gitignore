@@ -6,3 +6,5 @@ examples/selfie.jpeg
 examples/vendor
 examples/*.pem
 examples/keys/*.pem
+
+.DS_Store
