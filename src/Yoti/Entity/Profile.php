@@ -18,6 +18,7 @@ class Profile extends BaseProfile
     const ATTR_EMAIL_ADDRESS = 'email_address';
     const ATTR_POSTAL_ADDRESS = 'postal_address';
     const ATTR_DOCUMENT_DETAILS = "document_details";
+    const ATTR_DOCUMENT_IMAGES = 'document_images';
     const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /**
@@ -100,7 +101,7 @@ class Profile extends BaseProfile
     public function getPostalAddress()
     {
         $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
-        if (NULL === $postalAddress) {
+        if (null === $postalAddress) {
             // Get it from structured_postal_address.formatted_address
             $postalAddress = $this->getFormattedAddress();
         }
@@ -118,6 +119,16 @@ class Profile extends BaseProfile
     public function getDocumentDetails()
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
+    }
+
+    /**
+     * Return a list of document images.
+     *
+     * @return array
+     */
+    public function getDocumentImages()
+    {
+        return $this->getProfileAttribute(self::ATTR_DOCUMENT_IMAGES);
     }
 
     /**
@@ -173,7 +184,7 @@ class Profile extends BaseProfile
     private function getAgeVerificationByAttribute($ageAttr)
     {
         $ageVerifications = $this->getAgeVerifications();
-        return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : NULL;
+        return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : null;
     }
 
     /**
@@ -181,14 +192,12 @@ class Profile extends BaseProfile
      */
     private function getFormattedAddress()
     {
-        $postalAddress = NULL;
+        $postalAddress = null;
         // Get it from structured_postal_address.formatted_address
         $structuredPostalAddress = $this->getStructuredPostalAddress();
-        if (NULL !== $structuredPostalAddress)
-        {
+        if (null !== $structuredPostalAddress) {
             $valueArr = $structuredPostalAddress->getValue();
-            if (
-                is_array($valueArr)
+            if (is_array($valueArr)
                 && isset($valueArr['formatted_address'])
             ) {
                 $postalAddressValue = $valueArr['formatted_address'];
