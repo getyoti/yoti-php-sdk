@@ -8,6 +8,7 @@ use Yoti\Entity\Profile;
 use Compubapi\EncryptedData;
 use Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Exception\AttributeException;
+use Yoti\Entity\MultiValue;
 
 class AttributeConverter
 {
@@ -15,6 +16,7 @@ class AttributeConverter
     const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_JPEG = 2;
     const CONTENT_TYPE_DATE = 3;
+    const CONTENT_TYPE_MULTI_VALUE = 6;
 
     /**
      * @param ProtobufAttribute $attribute
@@ -25,12 +27,19 @@ class AttributeConverter
      */
     private static function convertValueBasedOnAttributeName($value, $attrName)
     {
-       self::validateInput($value, $attrName);
+        self::validateInput($value);
 
-        switch($attrName)
-        {
+        switch ($attrName) {
             case Profile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
+
+            case Profile::ATTR_DOCUMENT_IMAGES:
+                if (!($value instanceof MultiValue)) {
+                    return null;
+                }
+                return $value
+                  ->filterInstance(Image::class)
+                  ->getArrayCopy();
 
             default:
                 return $value;
@@ -45,16 +54,11 @@ class AttributeConverter
      *
      * @throws AttributeException
      */
-    private static function convertValueBasedOnContentType(ProtobufAttribute $protobufAttribute)
+    private static function convertValueBasedOnContentType($value, $contentType)
     {
-        $value = $protobufAttribute->getValue();
-        $contentType = $protobufAttribute->getContentType();
-        $attrName = $protobufAttribute->getName();
+        self::validateInput($value);
 
-        self::validateInput($value, $attrName);
-
-        switch($contentType)
-        {
+        switch ($contentType) {
             case self::CONTENT_TYPE_JPEG:
             case self::CONTENT_TYPE_PNG:
                 $imageExtension = self::imageTypeToExtension($contentType);
@@ -65,16 +69,48 @@ class AttributeConverter
                 // Convert JSON string to an array
                 $value = json_decode($value, true);
                 if (json_last_error()) {
-                    throw new AttributeException("Error converting attr {$attrName} to a JSON Object");
+                    throw new AttributeException("Error converting attr to a JSON Object");
                 }
                 break;
 
             case self::CONTENT_TYPE_DATE:
                 $value = self::convertTimestampToDate($value);
                 break;
+
+            case self::CONTENT_TYPE_MULTI_VALUE:
+                $value = self::convertMultiValue($value);
+                break;
         }
 
         return $value;
+    }
+
+    /**
+     * Convert attribute value to MultiValue.
+     *
+     * @param string $value
+     * @return MultiValue
+     */
+    private function convertMultiValue($value)
+    {
+        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue->mergeFromString($value);
+        $items = [];
+        foreach ($protoMultiValue->getValues() as $protoValue) {
+            $item = null;
+            try {
+                $item = self::convertValueBasedOnContentType(
+                    $protoValue->getData(),
+                    $protoValue->getContentType()
+                );
+            } catch (AttributeException $e) {
+                error_log($e->getMessage() . " (MultiValue Value ContentType: {$protoValue->getContentType()})", 0);
+            } catch (\Exception $e) {
+                error_log($e->getMessage(), 0);
+            }
+            $items[] = $item;
+        }
+        return new MultiValue($items);
     }
 
     /**
@@ -88,8 +124,7 @@ class AttributeConverter
     {
         $type = (int)$type;
 
-        switch($type)
-        {
+        switch ($type) {
             case 2:
                 $format = 'JPEG';
                 break;
@@ -129,14 +164,17 @@ class AttributeConverter
      */
     public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute)
     {
+        $yotiAttribute = null;
+
         try {
             $yotiAnchorsMap = AnchorListConverter::convert(
                 $protobufAttribute->getAnchors()
             );
-            $attrName = $protobufAttribute->getName();
             $attrValue = AttributeConverter::convertValueBasedOnContentType(
-                $protobufAttribute
+                $protobufAttribute->getValue(),
+                $protobufAttribute->getContentType()
             );
+            $attrName = $protobufAttribute->getName();
             $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
                 $attrValue,
                 $attrName
@@ -146,8 +184,9 @@ class AttributeConverter
                 $attrValue,
                 $yotiAnchorsMap
             );
+        } catch (AttributeException $e) {
+            error_log($e->getMessage() . " (Attribute: {$protobufAttribute->getName()})", 0);
         } catch (\Exception $e) {
-            $yotiAttribute = NULL;
             error_log($e->getMessage(), 0);
         }
 
@@ -166,14 +205,13 @@ class AttributeConverter
 
     /**
      * @param string $value
-     * @param string $attrName
      *
      * @throws AttributeException
      */
-    private static function validateInput($value, $attrName)
+    private static function validateInput($value)
     {
         if (empty($value)) {
-            throw new AttributeException("Warning: {$attrName} value is NULL");
+            throw new AttributeException("Warning: Value is NULL");
         }
     }
 }
