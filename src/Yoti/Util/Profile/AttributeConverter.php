@@ -91,7 +91,7 @@ class AttributeConverter
      * @param string $value
      * @return MultiValue
      */
-    private function convertMultiValue($value)
+    private static function convertMultiValue($value)
     {
         $protoMultiValue = new \Attrpubapi\MultiValue();
         $protoMultiValue->mergeFromString($value);
