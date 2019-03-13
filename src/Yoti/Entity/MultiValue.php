@@ -93,7 +93,6 @@ class MultiValue extends \ArrayObject
         return $this->filter(function ($item) use ($type) {
             return $item instanceof $type;
         });
-        return $this;
     }
 
     /**
@@ -108,7 +107,6 @@ class MultiValue extends \ArrayObject
         return $this->filter(function ($item) use ($type) {
             return gettype($item) === $type;
         });
-        return $this;
     }
 
     /**
