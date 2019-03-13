@@ -7,6 +7,7 @@ use Yoti\Entity\Image;
 use Yoti\Entity\Receipt;
 use Yoti\ActivityDetails;
 use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Entity\MultiValue;
 
 /**
  * @coversDefaultClass \Yoti\Util\Profile\AttributeConverter
@@ -14,9 +15,17 @@ use Yoti\Util\Profile\AttributeConverter;
 class AttributeConverterTest extends TestCase
 {
     /**
+     * Content Types.
+     */
+    const CONTENT_TYPE_STRING = 0;
+    const CONTENT_TYPE_PNG = 4;
+    const CONTENT_TYPE_JPEG = 2;
+    const CONTENT_TYPE_MULTI_VALUE = 6;
+
+    /**
      * Mocks \Attrpubapi\Attribute with provided name and value.
      */
-    private function getMockForProtobufAttribute($name, $value)
+    private function getMockForProtobufAttribute($name, $value, $contentType = self::CONTENT_TYPE_STRING)
     {
         // Setup protobuf mock.
         $protobufAttribute = $this->getMockBuilder(\Attrpubapi\Attribute::class)
@@ -31,6 +40,9 @@ class AttributeConverterTest extends TestCase
         $protobufAttribute
             ->method('getValue')
             ->willReturn($value);
+        $protobufAttribute
+            ->method('getContentType')
+            ->willReturn($contentType);
 
         return $protobufAttribute;
     }
@@ -76,5 +88,163 @@ class AttributeConverterTest extends TestCase
     {
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', ''));
         $this->assertNull($attr);
+    }
+
+    /**
+     * Check that `document_images` attribute is an array of 2 images.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertToYotiAttributeDocumentImages()
+    {
+        $protobufAttribute = new \Attrpubapi\Attribute();
+        $protobufAttribute->mergeFromString(base64_decode(MULTI_VALUE_ATTRIBUTE));
+
+        $multiValue = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $this->assertEquals(2, count($multiValue->getValue()));
+        $this->assertTrue(is_array($multiValue->getValue()));
+
+        foreach ($multiValue->getValue() as $image) {
+            $this->assertInstanceOf(Image::class, $image);
+            $this->assertEquals('image/jpeg', $image->getMimeType());
+            $this->assertNotEmpty($image->getContent());
+            $this->assertNotEmpty($image->getBase64Content());
+        }
+    }
+
+    /**
+     * Check that `document_images` attribute has non-image values filtered out.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertToYotiAttributeDocumentImagesFiltered()
+    {
+        // Create top-level MultiValue.
+        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue->setValues($this->createTestMultiValueItems());
+
+        // Create mock Attribute that will return MultiValue as the value.
+        $protobufAttribute = $this->getMockForProtobufAttribute(
+            'document_images',
+            $protoMultiValue->serializeToString(),
+            self::CONTENT_TYPE_MULTI_VALUE
+        );
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $multiValue = $attr->getValue();
+
+        $this->assertEquals(2, count($multiValue));
+        $this->assertTrue(is_array($multiValue));
+
+        $this->assertInstanceOf(Image::class, $multiValue[0]);
+        $this->assertEquals('image/jpeg', $multiValue[0]->getMimeType());
+        $this->assertNotEmpty($multiValue[0]->getContent());
+
+        $this->assertInstanceOf(Image::class, $multiValue[1]);
+        $this->assertEquals('image/png', $multiValue[1]->getMimeType());
+        $this->assertNotEmpty($multiValue[1]->getContent());
+    }
+
+    /**
+     * Check that MultiValue object is returned for MultiValue attributes by default.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertToYotiAttributeMultiValue()
+    {
+        // Get MultiValue values.
+        $values = $this->createTestMultiValueItems();
+
+        // Add a nested MultiValue.
+        $values[] = $this->createTestNestedMultiValueItem();
+
+        // Create top-level MultiValue.
+        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue->setValues($values);
+
+        // Create mock Attribute that will return MultiValue as the value.
+        $protobufAttribute = $this->getMockForProtobufAttribute(
+            'test_attr',
+            $protoMultiValue->serializeToString(),
+            self::CONTENT_TYPE_MULTI_VALUE
+        );
+
+        // Convert the attribute.
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $multiValue = $attr->getValue();
+
+        // Check top-level items.
+        $this->assertEquals(4, count($multiValue));
+        $this->assertInstanceOf(MultiValue::class, $multiValue);
+
+        $this->assertInstanceOf(Image::class, $multiValue[0]);
+        $this->assertEquals('image/jpeg', $multiValue[0]->getMimeType());
+        $this->assertNotEmpty($multiValue[0]->getContent());
+
+        $this->assertInstanceOf(Image::class, $multiValue[1]);
+        $this->assertEquals('image/png', $multiValue[1]->getMimeType());
+        $this->assertNotEmpty($multiValue[1]->getContent());
+
+        $this->assertEquals('test string', $multiValue[2]);
+
+        $this->assertInstanceOf(MultiValue::class, $multiValue[3]);
+
+        // Check nested items.
+        $this->assertEquals(3, count($multiValue[3]));
+        $this->assertInstanceOf(MultiValue::class, $multiValue[3]);
+
+        $this->assertInstanceOf(Image::class, $multiValue[3][0]);
+        $this->assertEquals('image/jpeg', $multiValue[3][0]->getMimeType());
+        $this->assertNotEmpty($multiValue[3][0]->getContent());
+
+        $this->assertInstanceOf(Image::class, $multiValue[3][1]);
+        $this->assertEquals('image/png', $multiValue[3][1]->getMimeType());
+        $this->assertNotEmpty($multiValue[3][1]->getContent());
+
+        $this->assertEquals('test string', $multiValue[3][2]);
+    }
+
+    /**
+     * Creates a nested MultiValue Value.
+     *
+     * @return \Attrpubapi\MultiValue\Value
+     */
+    private function createTestNestedMultiValueItem()
+    {
+        $multiValue = new \Attrpubapi\MultiValue();
+        $multiValue->setValues($this->createTestMultiValueItems());
+        $multiValueValue = new \Attrpubapi\MultiValue\Value();
+        $multiValueValue->setData($multiValue->serializeToString());
+        $multiValueValue->setContentType(self::CONTENT_TYPE_MULTI_VALUE);
+        return $multiValueValue;
+    }
+
+    /**
+     * Created an array of MultiValue image items.
+     *
+     * @return \Attrpubapi\MultiValue\Value[]
+     */
+    private function createTestMultiValueItems()
+    {
+        $values = [];
+
+        // Add images.
+        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+        $protoMultiValueValue->setData('image 1');
+        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_JPEG);
+        $values[] = $protoMultiValueValue;
+
+        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+        $protoMultiValueValue->setData('image 2');
+        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_PNG);
+        $values[] = $protoMultiValueValue;
+
+        // Add string.
+        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+        $protoMultiValueValue->setData('test string');
+        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_STRING);
+        $values[] = $protoMultiValueValue;
+
+        return $values;
     }
 }
