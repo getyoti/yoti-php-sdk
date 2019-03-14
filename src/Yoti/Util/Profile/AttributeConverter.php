@@ -12,10 +12,12 @@ use Yoti\Entity\MultiValue;
 
 class AttributeConverter
 {
-    const CONTENT_TYPE_JSON = 5;
-    const CONTENT_TYPE_PNG = 4;
+    const CONTENT_TYPE_UNDEFINED = 0;
+    const CONTENT_TYPE_STRING = 1;
     const CONTENT_TYPE_JPEG = 2;
     const CONTENT_TYPE_DATE = 3;
+    const CONTENT_TYPE_PNG = 4;
+    const CONTENT_TYPE_JSON = 5;
     const CONTENT_TYPE_MULTI_VALUE = 6;
 
     /**
@@ -62,7 +64,7 @@ class AttributeConverter
             case self::CONTENT_TYPE_JPEG:
             case self::CONTENT_TYPE_PNG:
                 $imageExtension = self::imageTypeToExtension($contentType);
-                $value = new Image($value, $imageExtension);
+                return new Image($value, $imageExtension);
                 break;
 
             case self::CONTENT_TYPE_JSON:
@@ -71,18 +73,24 @@ class AttributeConverter
                 if (json_last_error()) {
                     throw new AttributeException("Error converting attr to a JSON Object");
                 }
+                return $value;
                 break;
 
             case self::CONTENT_TYPE_DATE:
-                $value = self::convertTimestampToDate($value);
+                return self::convertTimestampToDate($value);
                 break;
 
             case self::CONTENT_TYPE_MULTI_VALUE:
-                $value = self::convertMultiValue($value);
+                return self::convertMultiValue($value);
                 break;
-        }
 
-        return $value;
+            case self::CONTENT_TYPE_UNDEFINED:
+                throw new AttributeException("Content Type is undefined");
+
+            case self::CONTENT_TYPE_STRING:
+            default:
+                return $value;
+        }
     }
 
     /**
