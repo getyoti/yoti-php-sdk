@@ -174,7 +174,7 @@ class AttributeConverterTest extends TestCase
         $multiValue = $attr->getValue();
 
         // Check top-level items.
-        $this->assertEquals(4, count($multiValue));
+        $this->assertEquals(count($values), count($multiValue));
         $this->assertInstanceOf(MultiValue::class, $multiValue);
 
         $this->assertInstanceOf(Image::class, $multiValue[0]);
@@ -187,21 +187,22 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('test string', $multiValue[2]);
 
-        $this->assertInstanceOf(MultiValue::class, $multiValue[3]);
+        $this->assertNull($multiValue[3]);
+
+        $this->assertInstanceOf(MultiValue::class, $multiValue[4]);
 
         // Check nested items.
-        $this->assertEquals(3, count($multiValue[3]));
-        $this->assertInstanceOf(MultiValue::class, $multiValue[3]);
+        $this->assertEquals(4, count($multiValue[4]));
 
-        $this->assertInstanceOf(Image::class, $multiValue[3][0]);
-        $this->assertEquals('image/jpeg', $multiValue[3][0]->getMimeType());
-        $this->assertNotEmpty($multiValue[3][0]->getContent());
+        $this->assertInstanceOf(Image::class, $multiValue[4][0]);
+        $this->assertEquals('image/jpeg', $multiValue[4][0]->getMimeType());
+        $this->assertNotEmpty($multiValue[4][0]->getContent());
 
-        $this->assertInstanceOf(Image::class, $multiValue[3][1]);
-        $this->assertEquals('image/png', $multiValue[3][1]->getMimeType());
-        $this->assertNotEmpty($multiValue[3][1]->getContent());
+        $this->assertInstanceOf(Image::class, $multiValue[4][1]);
+        $this->assertEquals('image/png', $multiValue[4][1]->getMimeType());
+        $this->assertNotEmpty($multiValue[4][1]->getContent());
 
-        $this->assertEquals('test string', $multiValue[3][2]);
+        $this->assertEquals('test string', $multiValue[4][2]);
     }
 
     /**
@@ -226,24 +227,21 @@ class AttributeConverterTest extends TestCase
      */
     private function createTestMultiValueItems()
     {
+        $createValues = [
+            ['image 1', self::CONTENT_TYPE_JPEG],
+            ['image 2', self::CONTENT_TYPE_PNG],
+            ['test string', self::CONTENT_TYPE_STRING],
+            ['', self::CONTENT_TYPE_STRING],
+        ];
+
         $values = [];
 
-        // Add images.
-        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
-        $protoMultiValueValue->setData('image 1');
-        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_JPEG);
-        $values[] = $protoMultiValueValue;
-
-        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
-        $protoMultiValueValue->setData('image 2');
-        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_PNG);
-        $values[] = $protoMultiValueValue;
-
-        // Add string.
-        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
-        $protoMultiValueValue->setData('test string');
-        $protoMultiValueValue->setContentType(self::CONTENT_TYPE_STRING);
-        $values[] = $protoMultiValueValue;
+        foreach ($createValues as $createValue) {
+            $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+            $protoMultiValueValue->setData($createValue[0]);
+            $protoMultiValueValue->setContentType($createValue[1]);
+            $values[] = $protoMultiValueValue;
+        }
 
         return $values;
     }
