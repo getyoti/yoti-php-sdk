@@ -18,8 +18,8 @@ class AttributeConverterTest extends TestCase
      * Content Types.
      */
     const CONTENT_TYPE_STRING = 1;
-    const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_JPEG = 2;
+    const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_MULTI_VALUE = 6;
 
     /**
