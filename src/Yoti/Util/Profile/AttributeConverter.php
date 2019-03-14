@@ -65,7 +65,6 @@ class AttributeConverter
             case self::CONTENT_TYPE_PNG:
                 $imageExtension = self::imageTypeToExtension($contentType);
                 return new Image($value, $imageExtension);
-                break;
 
             case self::CONTENT_TYPE_JSON:
                 // Convert JSON string to an array
@@ -74,15 +73,12 @@ class AttributeConverter
                     throw new AttributeException("Error converting attr to a JSON Object");
                 }
                 return $value;
-                break;
 
             case self::CONTENT_TYPE_DATE:
                 return self::convertTimestampToDate($value);
-                break;
 
             case self::CONTENT_TYPE_MULTI_VALUE:
                 return self::convertMultiValue($value);
-                break;
 
             case self::CONTENT_TYPE_UNDEFINED:
                 throw new AttributeException("Content Type is undefined");
