@@ -207,4 +207,20 @@ class ProfileTest extends TestCase
         ];
         return [[$profileData]];
     }
+
+    /**
+     * @covers ::getDocumentImages
+     */
+    public function testGetDocumentImages()
+    {
+        $mockAttr = $this->getMockBuilder(\Yoti\Entity\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $profileData = [
+            'document_images' => $mockAttr,
+        ];
+        $profile = new Profile($profileData);
+        $this->assertSame($profileData['document_images'], $profile->getDocumentImages());
+    }
 }
