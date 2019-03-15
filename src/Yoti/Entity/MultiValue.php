@@ -26,7 +26,7 @@ class MultiValue extends \ArrayObject
     public function __construct($items)
     {
         $this->originalItems = array_values($items);
-        parent::__construct($items);
+        parent::__construct($this->originalItems);
     }
 
     /**
