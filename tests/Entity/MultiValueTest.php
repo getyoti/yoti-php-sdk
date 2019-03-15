@@ -170,4 +170,138 @@ class MultiValueTest extends TestCase
         $this->assertCount(3, $this->multiValue[6]);
         $this->assertInstanceOf(Image::class, $this->multiValue[6][2]);
     }
+
+    /**
+     * @covers ::immutable
+     * @covers ::filter
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to filter immutable array
+     */
+    public function testImmutableFilter()
+    {
+        $this->multiValue->immutable()->filter(function ($item) {
+            return $item instanceof MultiValue;
+        });
+    }
+
+    /**
+     * @covers ::immutable
+     * @covers ::filterType
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to filter immutable array
+     */
+    public function testImmutableFilterType()
+    {
+        $this->multiValue->immutable()->filterType('string');
+    }
+
+    /**
+     * @covers ::immutable
+     * @covers ::filterInstance
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to filter immutable array
+     */
+    public function testImmutableFilterInstance()
+    {
+        $this->multiValue->immutable()->filterInstance(Image::class);
+    }
+
+    /**
+     * @covers ::immutable
+     * @covers ::resetFilters
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to reset filters on immutable array
+     */
+    public function testImmutableResetFilters()
+    {
+        // Apply image filter.
+        $this->multiValue
+            ->filterInstance(Image::class);
+        $this->assertCount(2, $this->multiValue);
+
+        // Reset filters.
+        $this->multiValue->resetFilters();
+        $this->assertCount(8, $this->multiValue);
+
+        // Make immutable.
+        $this->multiValue->immutable();
+
+        // Filters cannot be reset.
+        $this->multiValue->resetFilters();
+    }
+
+    /**
+     * @covers ::append
+     * @covers ::immutable
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to append to immutable array
+     */
+    public function testImmutableAppend()
+    {
+        $this->multiValue->append('allowed');
+        $this->assertEquals('allowed', $this->multiValue[8]);
+
+        $this->multiValue->immutable()->append('not allowed');
+    }
+
+    /**
+     * @covers ::exchangeArray
+     * @covers ::immutable
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to change immutable array
+     */
+    public function testImmutableExchangeArray()
+    {
+        $this->multiValue->exchangeArray([]);
+        $this->assertEquals([], $this->multiValue->getArrayCopy());
+
+        $this->multiValue->immutable()->exchangeArray([]);
+    }
+    /**
+     * @covers ::offsetSet
+     * @covers ::immutable
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to add to immutable array
+     */
+    public function testImmutableOffsetSet()
+    {
+        $this->multiValue[0] = 'allowed';
+        $this->assertEquals('allowed', $this->multiValue[0]);
+
+        $this->multiValue->immutable()[0] = 'not allowed';
+    }
+
+    /**
+     * @covers ::offsetUnset
+     * @covers ::immutable
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to remove from immutable array
+     */
+    public function testImmutableOffsetUnset()
+    {
+        unset($this->multiValue[0]);
+        $this->assertFalse(isset($this->multiValue[0]));
+
+        unset($this->multiValue->immutable()[0]);
+    }
+
+    /**
+     * @covers ::offsetUnset
+     * @covers ::immutable
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Attempting to remove from immutable array
+     */
+    public function testImmutableOffsetUnsetNested()
+    {
+        unset($this->multiValue->immutable()[6][0]);
+    }
 }
