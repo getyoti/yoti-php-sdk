@@ -104,12 +104,23 @@ class AttributeConverterTest extends TestCase
         $this->assertEquals(2, count($multiValue->getValue()));
         $this->assertTrue(is_array($multiValue->getValue()));
 
-        foreach ($multiValue->getValue() as $image) {
-            $this->assertInstanceOf(Image::class, $image);
-            $this->assertEquals('image/jpeg', $image->getMimeType());
-            $this->assertNotEmpty($image->getContent());
-            $this->assertNotEmpty($image->getBase64Content());
-        }
+        $this->assertIsExpectedImage($multiValue->getValue()[0], 'image/jpeg', 'vWgD//2Q==');
+        $this->assertIsExpectedImage($multiValue->getValue()[1], 'image/jpeg', '38TVEH/9k=');
+    }
+
+    /**
+     * Asserts that provided image is expected.
+     *
+     * @param \Yoti\Entity\Image $image
+     * @param string $mimeType
+     * @param string $base64last10
+     */
+    private function assertIsExpectedImage($image, $mimeType, $base64last10)
+    {
+        $this->assertInstanceOf(Image::class, $image);
+        $this->assertEquals($mimeType, $image->getMimeType());
+        $this->assertNotEmpty($image->getContent());
+        $this->assertEquals(substr($image->getBase64Content(), -10), $base64last10);
     }
 
     /**
