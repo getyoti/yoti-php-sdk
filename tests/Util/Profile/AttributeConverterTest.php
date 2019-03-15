@@ -100,12 +100,12 @@ class AttributeConverterTest extends TestCase
         $protobufAttribute = new \Attrpubapi\Attribute();
         $protobufAttribute->mergeFromString(base64_decode(MULTI_VALUE_ATTRIBUTE));
 
-        $multiValue = AttributeConverter::convertToYotiAttribute($protobufAttribute);
-        $this->assertEquals(2, count($multiValue->getValue()));
-        $this->assertTrue(is_array($multiValue->getValue()));
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $this->assertEquals(2, count($attr->getValue()));
+        $this->assertInstanceOf(MultiValue::class, $attr->getValue());
 
-        $this->assertIsExpectedImage($multiValue->getValue()[0], 'image/jpeg', 'vWgD//2Q==');
-        $this->assertIsExpectedImage($multiValue->getValue()[1], 'image/jpeg', '38TVEH/9k=');
+        $this->assertIsExpectedImage($attr->getValue()[0], 'image/jpeg', 'vWgD//2Q==');
+        $this->assertIsExpectedImage($attr->getValue()[1], 'image/jpeg', '38TVEH/9k=');
     }
 
     /**
@@ -145,7 +145,7 @@ class AttributeConverterTest extends TestCase
         $multiValue = $attr->getValue();
 
         $this->assertEquals(2, count($multiValue));
-        $this->assertTrue(is_array($multiValue));
+        $this->assertInstanceOf(MultiValue::class, $multiValue);
 
         $this->assertInstanceOf(Image::class, $multiValue[0]);
         $this->assertEquals('image/jpeg', $multiValue[0]->getMimeType());

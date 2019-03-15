@@ -41,7 +41,7 @@ class AttributeConverter
                 }
                 return $value
                   ->filterInstance(Image::class)
-                  ->getArrayCopy();
+                  ->immutable();
 
             default:
                 return $value;
