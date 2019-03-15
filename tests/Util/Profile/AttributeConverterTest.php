@@ -101,7 +101,7 @@ class AttributeConverterTest extends TestCase
         $protobufAttribute->mergeFromString(base64_decode(MULTI_VALUE_ATTRIBUTE));
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
-        $this->assertEquals(2, count($attr->getValue()));
+        $this->assertCount(2, $attr->getValue());
         $this->assertInstanceOf(MultiValue::class, $attr->getValue());
 
         $this->assertIsExpectedImage($attr->getValue()[0], 'image/jpeg', 'vWgD//2Q==');
@@ -132,7 +132,7 @@ class AttributeConverterTest extends TestCase
     {
         // Create top-level MultiValue.
         $protoMultiValue = new \Attrpubapi\MultiValue();
-        $protoMultiValue->setValues($this->createTestMultiValueItems());
+        $protoMultiValue->setValues($this->createMultiValueValues());
 
         // Create mock Attribute that will return MultiValue as the value.
         $protobufAttribute = $this->getMockForProtobufAttribute(
@@ -144,7 +144,7 @@ class AttributeConverterTest extends TestCase
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
         $multiValue = $attr->getValue();
 
-        $this->assertEquals(2, count($multiValue));
+        $this->assertCount(2, $multiValue);
         $this->assertInstanceOf(MultiValue::class, $multiValue);
 
         $this->assertInstanceOf(Image::class, $multiValue[0]);
@@ -164,10 +164,10 @@ class AttributeConverterTest extends TestCase
     public function testConvertToYotiAttributeMultiValue()
     {
         // Get MultiValue values.
-        $values = $this->createTestMultiValueItems();
+        $values = $this->createMultiValueValues();
 
         // Add a nested MultiValue.
-        $values[] = $this->createTestNestedMultiValueItem();
+        $values[] = $this->createNestedMultiValueValue();
 
         // Create top-level MultiValue.
         $protoMultiValue = new \Attrpubapi\MultiValue();
@@ -185,7 +185,7 @@ class AttributeConverterTest extends TestCase
         $multiValue = $attr->getValue();
 
         // Check top-level items.
-        $this->assertEquals(count($values), count($multiValue));
+        $this->assertCount(5, $multiValue);
         $this->assertInstanceOf(MultiValue::class, $multiValue);
 
         $this->assertInstanceOf(Image::class, $multiValue[0]);
@@ -198,12 +198,10 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('test string', $multiValue[2]);
 
-        $this->assertNull($multiValue[3]);
-
         $this->assertInstanceOf(MultiValue::class, $multiValue[4]);
 
         // Check nested items.
-        $this->assertEquals(4, count($multiValue[4]));
+        $this->assertCount(4, $multiValue[4]);
 
         $this->assertInstanceOf(Image::class, $multiValue[4][0]);
         $this->assertEquals('image/jpeg', $multiValue[4][0]->getMimeType());
@@ -221,14 +219,12 @@ class AttributeConverterTest extends TestCase
      *
      * @return \Attrpubapi\MultiValue\Value
      */
-    private function createTestNestedMultiValueItem()
+    private function createNestedMultiValueValue()
     {
         $multiValue = new \Attrpubapi\MultiValue();
-        $multiValue->setValues($this->createTestMultiValueItems());
-        $multiValueValue = new \Attrpubapi\MultiValue\Value();
-        $multiValueValue->setData($multiValue->serializeToString());
-        $multiValueValue->setContentType(self::CONTENT_TYPE_MULTI_VALUE);
-        return $multiValueValue;
+        $multiValue->setValues($this->createMultiValueValues());
+
+        return $this->createMultiValueValue($multiValue->serializeToString(), self::CONTENT_TYPE_MULTI_VALUE);
     }
 
     /**
@@ -236,7 +232,7 @@ class AttributeConverterTest extends TestCase
      *
      * @return \Attrpubapi\MultiValue\Value[]
      */
-    private function createTestMultiValueItems()
+    private function createMultiValueValues()
     {
         $createValues = [
             ['image 1', self::CONTENT_TYPE_JPEG],
@@ -245,15 +241,28 @@ class AttributeConverterTest extends TestCase
             ['', self::CONTENT_TYPE_STRING],
         ];
 
-        $values = [];
+        $items = [];
 
         foreach ($createValues as $createValue) {
-            $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
-            $protoMultiValueValue->setData($createValue[0]);
-            $protoMultiValueValue->setContentType($createValue[1]);
-            $values[] = $protoMultiValueValue;
+            $items[] = $this->createMultiValueValue($createValue[0], $createValue[1]);
         }
 
-        return $values;
+        return $items;
+    }
+
+    /**
+     * Create MultiValue Value.
+     *
+     * @param string $data
+     * @param int $contentType
+     *
+     * @return \Attrpubapi\MultiValue\Value
+     */
+    private function createMultiValueValue($data, $contentType)
+    {
+        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+        $protoMultiValueValue->setData($data);
+        $protoMultiValueValue->setContentType($contentType);
+        return $protoMultiValueValue;
     }
 }
