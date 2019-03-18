@@ -8,6 +8,7 @@ use Yoti\Entity\Receipt;
 use Yoti\ActivityDetails;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Entity\MultiValue;
+use Yoti\Entity\Attribute;
 
 /**
  * @coversDefaultClass \Yoti\Util\Profile\AttributeConverter
@@ -19,7 +20,9 @@ class AttributeConverterTest extends TestCase
      */
     const CONTENT_TYPE_STRING = 1;
     const CONTENT_TYPE_JPEG = 2;
+    const CONTENT_TYPE_DATE = 3;
     const CONTENT_TYPE_PNG = 4;
+    const CONTENT_TYPE_BYTES = 5;
     const CONTENT_TYPE_MULTI_VALUE = 6;
 
     /**
@@ -84,10 +87,30 @@ class AttributeConverterTest extends TestCase
     /**
      * @covers ::convertToYotiAttribute
      */
-    public function testConvertToYotiAttributeNullValue()
+    public function testConvertToYotiAttributeEmptyStringValue()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', ''));
-        $this->assertNull($attr);
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            '',
+            self::CONTENT_TYPE_STRING
+        ));
+        $this->assertEquals('test_attr', $attr->getName());
+        $this->assertEquals('', $attr->getValue());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertToYotiAttributeEmptyNonStringValue()
+    {
+        foreach ($this->getNonStringContentTypes() as $contentType) {
+            $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+                'test_attr',
+                '',
+                $contentType
+            ));
+            $this->assertNull($attr);
+        }
     }
 
     /**
@@ -215,11 +238,41 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * Check that empty MultiValue Values result in no attribute being returned.
+     * Check that empty non-string MultiValue Values result in no attribute being returned.
      *
      * @covers ::convertToYotiAttribute
      */
-    public function testEmptyAttributeMultiValueValue()
+    public function testEmptyNonStringAttributeMultiValueValue()
+    {
+        foreach ($this->getNonStringContentTypes() as $contentType) {
+            // Get MultiValue values.
+            $values = $this->createMultiValueValues();
+
+            // Add an empty MultiValue.
+            $values[] = $this->createMultiValueValue('', $contentType);
+
+            // Create top-level MultiValue.
+            $protoMultiValue = new \Attrpubapi\MultiValue();
+            $protoMultiValue->setValues($values);
+
+            // Create mock Attribute that will return MultiValue as the value.
+            $protobufAttribute = $this->getMockForProtobufAttribute(
+                'test_attr',
+                $protoMultiValue->serializeToString(),
+                self::CONTENT_TYPE_MULTI_VALUE
+            );
+
+            $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+            $this->assertNull($attr);
+        }
+    }
+
+    /**
+     * Check that empty string MultiValue Values are allowed.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testEmptyStringAttributeMultiValueValue()
     {
          // Get MultiValue values.
          $values = $this->createMultiValueValues();
@@ -239,7 +292,8 @@ class AttributeConverterTest extends TestCase
          );
 
          $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
-         $this->assertNull($attr);
+         $this->assertInstanceOf(Attribute::class, $attr);
+         $this->assertEquals('', $attr->getValue()[3]);
     }
 
     /**
@@ -291,5 +345,21 @@ class AttributeConverterTest extends TestCase
         $protoMultiValueValue->setData($data);
         $protoMultiValueValue->setContentType($contentType);
         return $protoMultiValueValue;
+    }
+
+    /**
+     * List of non-string content types.
+     *
+     * @return array
+     */
+    private function getNonStringContentTypes()
+    {
+        return [
+            self::CONTENT_TYPE_JPEG,
+            self::CONTENT_TYPE_DATE,
+            self::CONTENT_TYPE_PNG,
+            self::CONTENT_TYPE_BYTES,
+            self::CONTENT_TYPE_MULTI_VALUE,
+        ];
     }
 }
