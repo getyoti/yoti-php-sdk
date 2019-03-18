@@ -29,8 +29,6 @@ class AttributeConverter
      */
     private static function convertValueBasedOnAttributeName($value, $attrName)
     {
-        self::validateInput($value);
-
         switch ($attrName) {
             case Profile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
@@ -58,7 +56,7 @@ class AttributeConverter
      */
     private static function convertValueBasedOnContentType($value, $contentType)
     {
-        self::validateInput($value);
+        self::validateInput($value, $contentType);
 
         switch ($contentType) {
             case self::CONTENT_TYPE_JPEG:
@@ -201,12 +199,13 @@ class AttributeConverter
 
     /**
      * @param string $value
+     * @param int $value
      *
      * @throws AttributeException
      */
-    private static function validateInput($value)
+    private static function validateInput($value, $contentType)
     {
-        if (empty($value)) {
+        if (empty($value) && ($contentType !== self::CONTENT_TYPE_STRING)) {
             throw new AttributeException("Warning: Value is NULL");
         }
     }
