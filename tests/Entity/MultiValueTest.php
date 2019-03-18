@@ -34,12 +34,12 @@ class MultiValueTest extends TestCase
     }
 
     /**
-     * @covers ::filterInstance
+     * @covers ::allowInstance
      */
     public function testMultiValueFilterArrayAccess()
     {
         // Allow images
-        $this->multiValue->filterInstance(Image::class);
+        $this->multiValue->allowInstance(Image::class);
 
         $this->assertCount(2, $this->multiValue);
         $this->assertInstanceOf(Image::class, $this->multiValue[0]);
@@ -48,7 +48,7 @@ class MultiValueTest extends TestCase
         $this->assertEquals('image/png', $this->multiValue[1]->getMimeType());
 
         // Allow MultiValue.
-        $this->multiValue->filterInstance(MultiValue::class);
+        $this->multiValue->allowInstance(MultiValue::class);
 
         $this->assertCount(3, $this->multiValue);
         $this->assertInstanceOf(MultiValue::class, $this->multiValue[2]);
@@ -59,12 +59,12 @@ class MultiValueTest extends TestCase
     }
 
     /**
-     * @covers ::filterInstance
+     * @covers ::allowInstance
      */
     public function testMultiValueFilterIterator()
     {
         // Allow images
-        $this->multiValue->filterInstance(Image::class);
+        $this->multiValue->allowInstance(Image::class);
 
         foreach ($this->multiValue as $item) {
             $this->assertInstanceOf(Image::class, $item);
@@ -73,14 +73,13 @@ class MultiValueTest extends TestCase
 
     /**
      * @covers ::filterType
-     * @covers ::filterInstance
+     * @covers ::allowInstance
      */
     public function testMultiValueFilterMultipleTypes()
     {
-        // Allow images and strings;
         $this->multiValue
-            ->filterInstance(Image::class)
-            ->filterType('string');
+            ->allowInstance(Image::class)
+            ->allowType('string');
 
         $this->assertCount(5, $this->multiValue);
         $this->assertEquals('string 1', $this->multiValue[0]);
@@ -96,12 +95,12 @@ class MultiValueTest extends TestCase
      */
     public function testMultiValueCustomFilters()
     {
-        // Allow images
+        // Custom filter to allow images.
         $this->multiValue->filter(function ($item) {
             return $item instanceof Image;
         });
 
-        // Allow strings
+        // Custom filter to allow strings.
         $this->multiValue->filter(function ($item) {
             return gettype($item) === 'string';
         });
@@ -113,62 +112,6 @@ class MultiValueTest extends TestCase
         $this->assertEquals('image/jpeg', $this->multiValue[2]->getMimeType());
         $this->assertInstanceOf(Image::class, $this->multiValue[3]);
         $this->assertEquals('image/png', $this->multiValue[3]->getMimeType());
-
-        // Filter long strings.
-        $this->multiValue->resetFilters();
-        $this->multiValue->filter(function ($item) {
-            return gettype($item) === 'string' && strlen($item) > 8;
-        });
-        $this->assertCount(1, $this->multiValue);
-        $this->assertEquals('longer string 5', $this->multiValue[0]);
-    }
-
-    /**
-     * @covers ::resetFilters
-     */
-    public function testMultiValueResetFilters()
-    {
-        $this->assertCount(8, $this->multiValue);
-
-        // Allow images
-        $this->multiValue->filter(function ($item) {
-            return $item instanceof Image;
-        });
-
-        // Allow strings
-        $this->multiValue->filter(function ($item) {
-            return gettype($item) === 'string';
-        });
-
-        $this->assertCount(5, $this->multiValue);
-
-        // Reset filters.
-        $this->multiValue->resetFilters();
-        $this->assertCount(8, $this->multiValue);
-
-        // Allow MultiValue.
-        $this->multiValue->filter(function ($item) {
-            return $item instanceof MultiValue;
-        });
-
-        // Allow images
-        $this->multiValue->filter(function ($item) {
-            return $item instanceof Image;
-        });
-
-        $this->assertInstanceOf(MultiValue::class, $this->multiValue[2]);
-        $this->assertCount(1, $this->multiValue[2]);
-
-        // Check nested image.
-        $this->assertCount(1, $this->multiValue[2]);
-        $this->assertInstanceOf(Image::class, $this->multiValue[2][0]);
-
-        // Reset filters.
-        $this->multiValue->resetFilters();
-
-        // Check nested image.
-        $this->assertCount(3, $this->multiValue[6]);
-        $this->assertInstanceOf(Image::class, $this->multiValue[6][2]);
     }
 
     /**
@@ -187,51 +130,26 @@ class MultiValueTest extends TestCase
 
     /**
      * @covers ::immutable
-     * @covers ::filterType
+     * @covers ::allowType
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to filter immutable array
      */
-    public function testImmutableFilterType()
+    public function testImmutableAllowType()
     {
-        $this->multiValue->immutable()->filterType('string');
+        $this->multiValue->immutable()->allowType('string');
     }
 
     /**
      * @covers ::immutable
-     * @covers ::filterInstance
+     * @covers ::allowInstance
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to filter immutable array
      */
-    public function testImmutableFilterInstance()
+    public function testImmutableAllowInstance()
     {
-        $this->multiValue->immutable()->filterInstance(Image::class);
-    }
-
-    /**
-     * @covers ::immutable
-     * @covers ::resetFilters
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Attempting to reset filters on immutable array
-     */
-    public function testImmutableResetFilters()
-    {
-        // Apply image filter.
-        $this->multiValue
-            ->filterInstance(Image::class);
-        $this->assertCount(2, $this->multiValue);
-
-        // Reset filters.
-        $this->multiValue->resetFilters();
-        $this->assertCount(8, $this->multiValue);
-
-        // Make immutable.
-        $this->multiValue->immutable();
-
-        // Filters cannot be reset.
-        $this->multiValue->resetFilters();
+        $this->multiValue->immutable()->allowInstance(Image::class);
     }
 
     /**
