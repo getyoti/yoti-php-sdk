@@ -40,7 +40,7 @@ class AttributeConverter
                     return null;
                 }
                 return $value
-                  ->filterInstance(Image::class)
+                  ->allowInstance(Image::class)
                   ->immutable();
 
             default:
@@ -101,18 +101,10 @@ class AttributeConverter
         $protoMultiValue->mergeFromString($value);
         $items = [];
         foreach ($protoMultiValue->getValues() as $protoValue) {
-            $item = null;
-            try {
-                $item = self::convertValueBasedOnContentType(
-                    $protoValue->getData(),
-                    $protoValue->getContentType()
-                );
-            } catch (AttributeException $e) {
-                error_log($e->getMessage() . " (MultiValue Value ContentType: {$protoValue->getContentType()})", 0);
-            } catch (\Exception $e) {
-                error_log($e->getMessage(), 0);
-            }
-            $items[] = $item;
+            $items[] = self::convertValueBasedOnContentType(
+                $protoValue->getData(),
+                $protoValue->getContentType()
+            );
         }
         return new MultiValue($items);
     }

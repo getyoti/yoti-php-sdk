@@ -185,7 +185,7 @@ class AttributeConverterTest extends TestCase
         $multiValue = $attr->getValue();
 
         // Check top-level items.
-        $this->assertCount(5, $multiValue);
+        $this->assertCount(4, $multiValue);
         $this->assertInstanceOf(MultiValue::class, $multiValue);
 
         $this->assertInstanceOf(Image::class, $multiValue[0]);
@@ -198,20 +198,48 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('test string', $multiValue[2]);
 
-        $this->assertInstanceOf(MultiValue::class, $multiValue[4]);
+        $this->assertInstanceOf(MultiValue::class, $multiValue[3]);
 
         // Check nested items.
-        $this->assertCount(4, $multiValue[4]);
+        $this->assertCount(3, $multiValue[3]);
 
-        $this->assertInstanceOf(Image::class, $multiValue[4][0]);
-        $this->assertEquals('image/jpeg', $multiValue[4][0]->getMimeType());
-        $this->assertNotEmpty($multiValue[4][0]->getContent());
+        $this->assertInstanceOf(Image::class, $multiValue[3][0]);
+        $this->assertEquals('image/jpeg', $multiValue[3][0]->getMimeType());
+        $this->assertNotEmpty($multiValue[3][0]->getContent());
 
-        $this->assertInstanceOf(Image::class, $multiValue[4][1]);
-        $this->assertEquals('image/png', $multiValue[4][1]->getMimeType());
-        $this->assertNotEmpty($multiValue[4][1]->getContent());
+        $this->assertInstanceOf(Image::class, $multiValue[3][1]);
+        $this->assertEquals('image/png', $multiValue[3][1]->getMimeType());
+        $this->assertNotEmpty($multiValue[3][1]->getContent());
 
-        $this->assertEquals('test string', $multiValue[4][2]);
+        $this->assertEquals('test string', $multiValue[3][2]);
+    }
+
+    /**
+     * Check that empty MultiValue Values result in no attribute being returned.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testEmptyAttributeMultiValueValue()
+    {
+         // Get MultiValue values.
+         $values = $this->createMultiValueValues();
+
+         // Add an empty MultiValue.
+         $values[] = $this->createMultiValueValue('', self::CONTENT_TYPE_STRING);
+
+         // Create top-level MultiValue.
+         $protoMultiValue = new \Attrpubapi\MultiValue();
+         $protoMultiValue->setValues($values);
+
+         // Create mock Attribute that will return MultiValue as the value.
+         $protobufAttribute = $this->getMockForProtobufAttribute(
+             'test_attr',
+             $protoMultiValue->serializeToString(),
+             self::CONTENT_TYPE_MULTI_VALUE
+         );
+
+         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+         $this->assertNull($attr);
     }
 
     /**
@@ -238,7 +266,6 @@ class AttributeConverterTest extends TestCase
             ['image 1', self::CONTENT_TYPE_JPEG],
             ['image 2', self::CONTENT_TYPE_PNG],
             ['test string', self::CONTENT_TYPE_STRING],
-            ['', self::CONTENT_TYPE_STRING],
         ];
 
         $items = [];
