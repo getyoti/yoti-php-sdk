@@ -68,7 +68,6 @@ class MultiValue extends \ArrayObject
         // Filter nested items.
         foreach ($this->getArrayCopy() as $item) {
             if ($item instanceof MultiValue) {
-                $item->resetFilters();
                 foreach ($this->filters as $callback) {
                     $item->filter($callback);
                 }
@@ -99,7 +98,7 @@ class MultiValue extends \ArrayObject
      *
      * @return MultiValue
      */
-    public function filterInstance($type)
+    public function allowInstance($type)
     {
         return $this->filter(function ($item) use ($type) {
             return $item instanceof $type;
@@ -113,26 +112,12 @@ class MultiValue extends \ArrayObject
      *
      * @return MultiValue
      */
-    public function filterType($type)
+    public function allowType($type)
     {
         return $this->filter(function ($item) use ($type) {
             return gettype($item) === $type;
         });
     }
-
-    /**
-     * Resets items to original values.
-     *
-     * @return MultiValue
-     */
-    public function resetFilters()
-    {
-        $this->assertMutable('Attempting to reset filters on immutable array');
-        $this->filters = [];
-        $this->applyFilters();
-        return $this;
-    }
-
 
     /**
      * Make this MultiValue Immutable.
