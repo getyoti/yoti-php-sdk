@@ -19,6 +19,7 @@ class AttributeConverter
     const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_JSON = 5;
     const CONTENT_TYPE_MULTI_VALUE = 6;
+    const CONTENT_TYPE_INT = 7;
 
     /**
      * @param ProtobufAttribute $attribute
@@ -56,7 +57,7 @@ class AttributeConverter
      */
     private static function convertValueBasedOnContentType($value, $contentType)
     {
-        if (empty($value) && ($contentType !== self::CONTENT_TYPE_STRING)) {
+        if (strlen($value) === 0 && ($contentType !== self::CONTENT_TYPE_STRING)) {
             throw new AttributeException("Warning: Value is NULL");
         }
 
@@ -82,6 +83,9 @@ class AttributeConverter
 
             case self::CONTENT_TYPE_UNDEFINED:
                 throw new AttributeException("Content Type is undefined");
+
+            case self::CONTENT_TYPE_INT:
+                return (int) $value;
 
             case self::CONTENT_TYPE_STRING:
             default:
