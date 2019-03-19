@@ -60,7 +60,14 @@ class MultiValue extends \ArrayObject
         if (count($this->filters) > 0) {
             $filtered_array = array_filter(
                 $this->getArrayCopy(),
-                [$this, 'filterItem']
+                function ($item) {
+                    foreach ($this->filters as $callback) {
+                        if (call_user_func($callback, $item) === true) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
             );
             $this->exchangeArray(array_values($filtered_array));
         }
@@ -73,22 +80,6 @@ class MultiValue extends \ArrayObject
                 }
             }
         }
-    }
-
-    /**
-     * Callback for array_filter().
-     *
-     * @param mixed $item
-     * @return boolean
-     */
-    private function filterItem($item)
-    {
-        foreach ($this->filters as $callback) {
-            if (call_user_func($callback, $item) === true) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
