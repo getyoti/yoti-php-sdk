@@ -24,6 +24,7 @@ class AttributeConverterTest extends TestCase
     const CONTENT_TYPE_PNG = 4;
     const CONTENT_TYPE_BYTES = 5;
     const CONTENT_TYPE_MULTI_VALUE = 6;
+    const CONTENT_TYPE_INT = 7;
 
     /**
      * Mocks \Attrpubapi\Attribute with provided name and value.
@@ -100,17 +101,40 @@ class AttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertToYotiAttribute
+     *
+     * @dataProvider nonStringContentTypesDataProvider
      */
-    public function testConvertToYotiAttributeEmptyNonStringValue()
+    public function testConvertToYotiAttributeEmptyNonStringValue($contentType)
     {
-        foreach ($this->getNonStringContentTypes() as $contentType) {
-            $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
-                'test_attr',
-                '',
-                $contentType
-            ));
-            $this->assertNull($attr);
-        }
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            '',
+            $contentType
+        ));
+        $this->assertNull($attr);
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     *
+     * @dataProvider validIntegerDataProvider
+     */
+    public function testConvertToYotiAttributeIntegerValue($int)
+    {
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            $int,
+            self::CONTENT_TYPE_INT
+        ));
+        $this->assertSame($int, $attr->getValue());
+    }
+
+    /**
+     * Provides list of valid integers.
+     */
+    public function validIntegerDataProvider()
+    {
+        return [[0], [1], [123], [-1], [-10]];
     }
 
     /**
@@ -259,30 +283,30 @@ class AttributeConverterTest extends TestCase
      * Check that empty non-string MultiValue Values result in no attribute being returned.
      *
      * @covers ::convertToYotiAttribute
+     *
+     * @dataProvider nonStringContentTypesDataProvider
      */
-    public function testEmptyNonStringAttributeMultiValueValue()
+    public function testEmptyNonStringAttributeMultiValueValue($contentType)
     {
-        foreach ($this->getNonStringContentTypes() as $contentType) {
-            // Get MultiValue values.
-            $values = $this->createMultiValueValues();
+        // Get MultiValue values.
+        $values = $this->createMultiValueValues();
 
-            // Add an empty MultiValue.
-            $values[] = $this->createMultiValueValue('', $contentType);
+        // Add an empty MultiValue.
+        $values[] = $this->createMultiValueValue('', $contentType);
 
-            // Create top-level MultiValue.
-            $protoMultiValue = new \Attrpubapi\MultiValue();
-            $protoMultiValue->setValues($values);
+        // Create top-level MultiValue.
+        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue->setValues($values);
 
-            // Create mock Attribute that will return MultiValue as the value.
-            $protobufAttribute = $this->getMockForProtobufAttribute(
-                'test_attr',
-                $protoMultiValue->serializeToString(),
-                self::CONTENT_TYPE_MULTI_VALUE
-            );
+        // Create mock Attribute that will return MultiValue as the value.
+        $protobufAttribute = $this->getMockForProtobufAttribute(
+            'test_attr',
+            $protoMultiValue->serializeToString(),
+            self::CONTENT_TYPE_MULTI_VALUE
+        );
 
-            $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
-            $this->assertNull($attr);
-        }
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $this->assertNull($attr);
     }
 
     /**
@@ -366,18 +390,17 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * List of non-string content types.
-     *
-     * @return array
+     * Provides non-string content types.
      */
-    private function getNonStringContentTypes()
+    public function nonStringContentTypesDataProvider()
     {
         return [
-            self::CONTENT_TYPE_JPEG,
-            self::CONTENT_TYPE_DATE,
-            self::CONTENT_TYPE_PNG,
-            self::CONTENT_TYPE_BYTES,
-            self::CONTENT_TYPE_MULTI_VALUE,
+            [ self::CONTENT_TYPE_JPEG ],
+            [ self::CONTENT_TYPE_DATE ],
+            [ self::CONTENT_TYPE_PNG ],
+            [ self::CONTENT_TYPE_BYTES ],
+            [ self::CONTENT_TYPE_MULTI_VALUE ],
+            [ self::CONTENT_TYPE_INT ],
         ];
     }
 }
