@@ -56,7 +56,9 @@ class AttributeConverter
      */
     private static function convertValueBasedOnContentType($value, $contentType)
     {
-        self::validateInput($value, $contentType);
+        if (empty($value) && ($contentType !== self::CONTENT_TYPE_STRING)) {
+            throw new AttributeException("Warning: Value is NULL");
+        }
 
         switch ($contentType) {
             case self::CONTENT_TYPE_JPEG:
@@ -195,18 +197,5 @@ class AttributeConverter
     public static function convertTimestampToDate($value)
     {
         return (new \DateTime())->setTimestamp(strtotime($value));
-    }
-
-    /**
-     * @param string $value
-     * @param int $value
-     *
-     * @throws AttributeException
-     */
-    private static function validateInput($value, $contentType)
-    {
-        if (empty($value) && ($contentType !== self::CONTENT_TYPE_STRING)) {
-            throw new AttributeException("Warning: Value is NULL");
-        }
     }
 }
