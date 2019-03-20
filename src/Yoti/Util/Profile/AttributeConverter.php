@@ -35,7 +35,7 @@ class AttributeConverter
 
             case Profile::ATTR_DOCUMENT_IMAGES:
                 if (!($value instanceof MultiValue)) {
-                    return null;
+                    throw new AttributeException('Document Images could not be decoded');
                 }
                 return $value
                   ->allowInstance(Image::class)

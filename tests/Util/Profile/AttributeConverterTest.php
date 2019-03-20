@@ -180,6 +180,24 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
+     * Check that `document_images` is null when not converted to a MultiValue object.
+     *
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertToYotiAttributeDocumentImagesInvalid()
+    {
+        // Create mock Attribute that will return MultiValue as the value.
+        $protobufAttribute = $this->getMockForProtobufAttribute(
+            'document_images',
+            'invalid value',
+            self::CONTENT_TYPE_STRING
+        );
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $this->assertNull($attr);
+    }
+
+    /**
      * Check that MultiValue object is returned for MultiValue attributes by default.
      *
      * @covers ::convertToYotiAttribute
