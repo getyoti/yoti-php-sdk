@@ -53,10 +53,10 @@ class Image
      */
     private function imageTypeToMimeType($imageExtension)
     {
-       $this->validateImageExtension($imageExtension);
-       $imageTypeEnum = $this->imageTypeMap[$imageExtension];
+        $this->validateImageExtension($imageExtension);
+        $imageTypeEnum = $this->imageTypeMap[$imageExtension];
 
-       return image_type_to_mime_type($imageTypeEnum);
+        return image_type_to_mime_type($imageTypeEnum);
     }
 
     /**

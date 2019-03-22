@@ -10,8 +10,8 @@ class Config
 
     public static function getInstance()
     {
-        static $instance = NULL;
-        if ($instance === NULL) {
+        static $instance = null;
+        if ($instance === null) {
             $instance = new self();
         }
         return $instance;
@@ -37,7 +37,7 @@ class Config
 
     public function get($param)
     {
-        return isset($this->config[$param]) ? $this->config[$param] : NULL;
+        return isset($this->config[$param]) ? $this->config[$param] : null;
     }
 
     private function getConfigFile()
@@ -45,15 +45,21 @@ class Config
         return __DIR__ . '/../../../' . self::CONFIG_FILE_NAME;
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Make sleep magic method private, so nobody can serialize instance.
      */
-    private function __sleep() {}
+    private function __sleep()
+    {
+    }
 
     /**
      * Make wakeup magic method private, so nobody can unserialize instance.
      */
-    private function __wakeup() {}
+    private function __wakeup()
+    {
+    }
 }

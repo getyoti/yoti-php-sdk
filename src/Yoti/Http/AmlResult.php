@@ -114,9 +114,8 @@ class AmlResult
         $missingAttr = array_diff($expectedAttributes, $providedAttributes);
 
         // Throw an error if any expected attribute is missing.
-        if(!empty($missingAttr))
-        {
-            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr) , 106);
+        if (!empty($missingAttr)) {
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr), 106);
         }
     }
 

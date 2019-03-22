@@ -74,7 +74,7 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function sendRequest($endpoint, $httpMethod, Payload $payload = NULL)
+    public function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
         self::validateHttpMethod($httpMethod);
 
@@ -134,14 +134,14 @@ abstract class AbstractRequestHandler
     {
         $details = openssl_pkey_get_details(openssl_pkey_get_private($this->pem));
         if (!array_key_exists('key', $details)) {
-            return NULL;
+            return null;
         }
 
         // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
         $KeyStr = trim($details['key']);
         // Support line break on *nix systems, OS, older OS, and Microsoft
         $keyArr = preg_split('/\r\n|\r|\n/', $KeyStr);
-        if (strpos($KeyStr, 'BEGIN') !== FALSE) {
+        if (strpos($KeyStr, 'BEGIN') !== false) {
             array_shift($keyArr);
             array_pop($keyArr);
         }
@@ -186,7 +186,7 @@ abstract class AbstractRequestHandler
             self::METHOD_DELETE,
         ];
 
-        return in_array($httpMethod, $allowedMethods, TRUE);
+        return in_array($httpMethod, $allowedMethods, true);
     }
 
     /**
@@ -201,5 +201,5 @@ abstract class AbstractRequestHandler
      *
      * @throws \Yoti\Exception\RequestException
      */
-    protected abstract function executeRequest(array $httpHeaders, $requestUrl, $httpMethod, $payload);
+    abstract protected function executeRequest(array $httpHeaders, $requestUrl, $httpMethod, $payload);
 }

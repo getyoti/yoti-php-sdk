@@ -113,7 +113,7 @@ class YotiClient
      * @throws ActivityDetailsException
      * @throws Exception\ReceiptException
      */
-    public function getActivityDetails($encryptedConnectToken = NULL)
+    public function getActivityDetails($encryptedConnectToken = null)
     {
         if (!$encryptedConnectToken && array_key_exists('token', $_GET)) {
             $encryptedConnectToken = $_GET['token'];
@@ -151,7 +151,7 @@ class YotiClient
         );
 
         // Get response data array
-        $responseArr = json_decode($result['response'], TRUE);
+        $responseArr = json_decode($result['response'], true);
         // Check if there is a JSON decode error
         $this->checkJsonError();
 
@@ -174,7 +174,7 @@ class YotiClient
      *
      * @throws RequestException
      */
-    protected function sendRequest($endpoint, $httpMethod, Payload $payload = NULL)
+    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
         return $this->requestHandler->sendRequest($endpoint, $httpMethod, $payload);
     }
@@ -191,8 +191,7 @@ class YotiClient
     {
         $httpCode = (int) $httpCode;
 
-        if($httpCode === 200)
-        {
+        if ($httpCode === 200) {
             // The request is successful - nothing to do
             return;
         }
@@ -201,8 +200,7 @@ class YotiClient
         $errorCode = isset($responseArr['code']) ? $responseArr['code'] : 'Error';
 
         // Throw the error message that's included in the response
-        if(!empty($errorMessage))
-        {
+        if (!empty($errorMessage)) {
             throw new AmlException("$errorCode - {$errorMessage}", $httpCode);
         }
 
@@ -239,12 +237,11 @@ class YotiClient
      * @throws ReceiptException
      * @throws RequestException
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = CurlRequestHandler::METHOD_GET, $payload = NULL)
+    private function getReceipt($encryptedConnectToken, $httpMethod = CurlRequestHandler::METHOD_GET, $payload = null)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
-        if (!$token)
-        {
+        if (!$token) {
             throw new ActivityDetailsException('Could not decrypt connect token.', 401);
         }
 
@@ -270,7 +267,7 @@ class YotiClient
         $this->checkResponseStatus($result['http_code']);
 
         // Get decoded response data
-        $responseArr = json_decode($result['response'], TRUE);
+        $responseArr = json_decode($result['response'], true);
 
         $this->checkJsonError();
 
@@ -285,8 +282,7 @@ class YotiClient
     private function checkForReceipt(array $responseArr)
     {
         // Check receipt is in response
-        if(!array_key_exists('receipt', $responseArr))
-        {
+        if (!array_key_exists('receipt', $responseArr)) {
             throw new ReceiptException('Receipt not found in response', 502);
         }
     }
@@ -299,8 +295,7 @@ class YotiClient
     private function checkResponseStatus($httpCode)
     {
         $httpCode = (int) $httpCode;
-        if ($httpCode !== 200)
-        {
+        if ($httpCode !== 200) {
             throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
     }
@@ -312,8 +307,7 @@ class YotiClient
      */
     private function checkJsonError()
     {
-        if(json_last_error() !== JSON_ERROR_NONE)
-        {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             throw new YotiClientException('JSON response was invalid', 502);
         }
     }
@@ -343,26 +337,22 @@ class YotiClient
     private function extractPemContent(&$pem)
     {
         // Check PEM passed
-        if(!$pem)
-        {
+        if (!$pem) {
             throw new YotiClientException('PEM file is required', 400);
         }
 
         // Check that file exists if user passed PEM as a local file path
-        if(strpos($pem, 'file://') !== FALSE && !file_exists($pem))
-        {
+        if (strpos($pem, 'file://') !== false && !file_exists($pem)) {
             throw new YotiClientException('PEM file was not found.', 400);
         }
 
         // If file exists grab the content
-        if(file_exists($pem))
-        {
+        if (file_exists($pem)) {
             $pem = file_get_contents($pem);
         }
 
         // Check if key is valid
-        if(!openssl_get_privatekey($pem))
-        {
+        if (!openssl_get_privatekey($pem)) {
             throw new YotiClientException('PEM key content is invalid', 400);
         }
     }
@@ -377,8 +367,7 @@ class YotiClient
     private function checkSdkId($sdkId)
     {
         // Check SDK ID passed
-        if(!$sdkId)
-        {
+        if (!$sdkId) {
             throw new YotiClientException('SDK ID is required', 400);
         }
     }
@@ -391,10 +380,8 @@ class YotiClient
     private function checkRequiredModules()
     {
         $requiredModules = ['curl', 'json'];
-        foreach($requiredModules as $mod)
-        {
-            if(!extension_loaded($mod))
-            {
+        foreach ($requiredModules as $mod) {
+            if (!extension_loaded($mod)) {
                 throw new YotiClientException("PHP module '$mod' not installed", 501);
             }
         }
@@ -409,7 +396,7 @@ class YotiClient
      */
     private function validateSdkIdentifier($sdkIdentifier)
     {
-        if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, TRUE)) {
+        if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, true)) {
             throw new YotiClientException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
         }
     }

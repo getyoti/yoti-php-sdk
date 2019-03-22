@@ -18,9 +18,9 @@ class AttributeListConverter
     {
         $yotiAttributes = [];
 
-        foreach($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
+        foreach ($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
             $attrName = $attr->getName();
-            if (NULL === $attrName) {
+            if (null === $attrName) {
                 continue;
             }
             $yotiAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute($attr);
@@ -40,7 +40,9 @@ class AttributeListConverter
     public static function convertToProtobufAttributeList($encryptedData, $wrappedReceiptKey, $pem)
     {
         $decryptedCipherText = self::decryptCipherText(
-            $encryptedData, $wrappedReceiptKey, $pem
+            $encryptedData,
+            $wrappedReceiptKey,
+            $pem
         );
 
         $attributeList = new \Attrpubapi\AttributeList();

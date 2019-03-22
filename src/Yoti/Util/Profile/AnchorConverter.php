@@ -19,7 +19,7 @@ class AnchorConverter
      */
     public static function convert(Anchor $protobufAnchor)
     {
-        $anchorMap = NULL;
+        $anchorMap = null;
         $ASN1 = new ASN1();
         $X509 = new X509();
         $anchorSubType = $protobufAnchor->getSubType();
@@ -30,11 +30,11 @@ class AnchorConverter
         foreach ($X509CertsList as $certX509Obj) {
             $certExtsArr = $certX509Obj->tbsCertificate->extensions;
 
-            foreach($anchorTypesMap as $oid => $anchorType) {
-                foreach($certExtsArr as $extObj) {
+            foreach ($anchorTypesMap as $oid => $anchorType) {
+                foreach ($certExtsArr as $extObj) {
                     $extArr = (array) $extObj;
-                    $oidFound = array_search($oid, $extArr, TRUE);
-                    if ($oidFound !== FALSE && is_string($extArr['extnValue'])) {
+                    $oidFound = array_search($oid, $extArr, true);
+                    if ($oidFound !== false && is_string($extArr['extnValue'])) {
                         $extEncodedValue = $extArr['extnValue'];
 
                         if ($decodedAnchorValue = self::decodeAnchorValue($ASN1, $X509, $extEncodedValue)) {
@@ -93,7 +93,7 @@ class AnchorConverter
         if (isset($decodedValArr[0]['content'][0]['content'])) {
             return $decodedValArr[0]['content'][0]['content'];
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -129,9 +129,10 @@ class AnchorConverter
      *
      * @return array
      */
-    private static function convertCertsListToX509(X509 $X509, Traversable $certificateList) {
+    private static function convertCertsListToX509(X509 $X509, Traversable $certificateList)
+    {
         $certsList = [];
-        foreach($certificateList as $certificate) {
+        foreach ($certificateList as $certificate) {
             if ($X509CertObj = self::convertCertToX509($X509, $certificate)) {
                 $certsList[] = $X509CertObj;
             }
@@ -147,9 +148,10 @@ class AnchorConverter
      *
      * @return \stdClass
      */
-    private static function convertCertToX509(X509 $X509, $certificate) {
+    private static function convertCertToX509(X509 $X509, $certificate)
+    {
         $X509Data = $X509->loadX509($certificate);
-        return json_decode(json_encode($X509Data), FALSE);
+        return json_decode(json_encode($X509Data), false);
     }
 
     /**

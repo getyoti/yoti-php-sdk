@@ -83,7 +83,8 @@ class Anchor
     /**
      * @return array of X509 certs
      */
-    public function getOriginServerCerts() {
+    public function getOriginServerCerts()
+    {
         return  $this->originServerCerts;
     }
 }

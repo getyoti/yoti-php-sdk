@@ -25,8 +25,8 @@ class CurlRequestHandler extends AbstractRequestHandler
         $ch = curl_init($requestUrl);
         curl_setopt_array($ch, [
             CURLOPT_HTTPHEADER => $httpHeaders,
-            CURLOPT_RETURNTRANSFER => TRUE,
-            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => 0,
         ]);
 
