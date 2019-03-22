@@ -25,9 +25,9 @@ class BaseProfile
     {
         if (isset($this->profileData[$attributeName])) {
             $attributeObj = $this->profileData[$attributeName];
-            return $attributeObj instanceof Attribute ? $attributeObj : NULL;
+            return $attributeObj instanceof Attribute ? $attributeObj : null;
         }
-        return NULL;
+        return null;
     }
 
     public function getAttributes()

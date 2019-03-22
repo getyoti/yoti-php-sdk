@@ -81,7 +81,7 @@ class Receipt
         if (!empty($attributeName) && isset($this->receiptData[$attributeName])) {
             return $this->receiptData[$attributeName];
         }
-        return NULL;
+        return null;
     }
 
     /**

@@ -60,7 +60,7 @@ abstract class AbstractAgeProcessor
                 $result
             );
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -70,11 +70,10 @@ abstract class AbstractAgeProcessor
      */
     public function process()
     {
-        if ($this->isDerivedAttribute($this->attribute))
-        {
+        if ($this->isDerivedAttribute($this->attribute)) {
             return $this->createAgeVerification($this->attribute);
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -82,5 +81,5 @@ abstract class AbstractAgeProcessor
      *
      * @return string
      */
-    public abstract function getAgePattern();
+    abstract public function getAgePattern();
 }

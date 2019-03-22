@@ -33,24 +33,19 @@ class AgeVerificationConverter
     {
         $ageVerificationsArr = [];
 
-        foreach($this->profileAttributesMap as $attrName => $attributeObj)
-        {
-            foreach($this->getAgeProcessors() as $ageProcessorClass)
-            {
+        foreach ($this->profileAttributesMap as $attrName => $attributeObj) {
+            foreach ($this->getAgeProcessors() as $ageProcessorClass) {
                 $abstractAgeProcessorClass = '\\Yoti\\Util\\Age\\AbstractAgeProcessor';
-                if (
-                    NULL !== $attrName
-                    && NULL !== $attributeObj
+                if (null !== $attrName
+                    && null !== $attributeObj
                     && is_subclass_of($ageProcessorClass, $abstractAgeProcessorClass)
-                )
-                {
+                ) {
                     /**
                      * @var \Yoti\Util\Age\AbstractAgeProcessor $ageProcessorObj
                      */
                     $ageProcessorObj = new $ageProcessorClass($attributeObj);
 
-                    if ($ageVerification = $ageProcessorObj->process())
-                    {
+                    if ($ageVerification = $ageProcessorObj->process()) {
                         $ageVerificationsArr[$attrName] = $ageVerification;
                     }
                 }

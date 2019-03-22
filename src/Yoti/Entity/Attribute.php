@@ -113,7 +113,7 @@ class Attribute
     {
         // Remove Oids from the anchorsMap
         $anchors = [];
-        array_walk($anchorsMap, function($val) use(&$anchors) {
+        array_walk($anchorsMap, function ($val) use (&$anchors) {
             $anchors = array_merge($anchors, array_values($val));
         });
         $this->anchors = $anchors;
