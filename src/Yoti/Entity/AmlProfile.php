@@ -44,7 +44,7 @@ class AmlProfile
      * @param \Yoti\Entity\AmlAddress $amlAddress
      * @param null|string $ssn
      */
-    public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = NULL)
+    public function __construct($givenNames, $familyName, AmlAddress $amlAddress, $ssn = null)
     {
         $this->givenNames = $givenNames;
         $this->familyName = $familyName;

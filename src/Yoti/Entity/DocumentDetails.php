@@ -142,7 +142,7 @@ class DocumentDetails
      */
     private function setExpirationDate(array $parsedValues)
     {
-        $expirationDate = NULL;
+        $expirationDate = null;
         if (isset($parsedValues[self::EXPIRATION_INDEX])) {
             $dateStr = $parsedValues[self::EXPIRATION_INDEX];
 
@@ -160,7 +160,7 @@ class DocumentDetails
 
     private function setIssuingAuthority(array $parsedValues)
     {
-        $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : NULL;
+        $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : null;
         $this->issuingAuthority = $value;
     }
 
