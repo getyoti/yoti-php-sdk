@@ -5,8 +5,10 @@ php:
     - 7.2
     - 7.3
 
-before_script:
+before_install:
     - echo 'error_log=/dev/null' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+install:
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction --prefer-source --dev
 
