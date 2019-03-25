@@ -8,9 +8,8 @@ php:
 before_script:
     - echo 'error_log=/dev/null' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - travis_retry composer self-update
-    - travis_retry composer update --no-interaction --prefer-source --dev
+    - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
     - vendor/bin/phpunit
     - vendor/bin/phpcs --standard=psr2 ./src/Yoti
-
