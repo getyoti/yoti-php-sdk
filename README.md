@@ -1,6 +1,6 @@
 # Yoti PHP SDK
 
-[![Build Status](https://travis-ci.org/getyoti/yoti-php-sdk.svg?branch=master)](https://travis-ci.org/getyoti/yoti-php-sdk)
+[![Build Status](https://travis-ci.com/getyoti/yoti-php-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-php-sdk)
 
 Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly integrate your PHP back-end with Yoti, so that your users can share their identity details with your application in a secure and trusted way.
 
