@@ -5,6 +5,9 @@ php:
     - 7.2
     - 7.3
 
+git:
+  depth: 1
+
 before_install:
     - echo 'error_log=/dev/null' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
