@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="Yoti">
+  <rule ref="PSR2"/>
+  <file>src/Yoti</file>
+  <file>tests</file>
+</ruleset>

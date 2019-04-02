@@ -17,4 +17,4 @@ install:
 
 script:
     - vendor/bin/phpunit
-    - vendor/bin/phpcs --standard=psr2 ./src/Yoti
+    - vendor/bin/phpcs

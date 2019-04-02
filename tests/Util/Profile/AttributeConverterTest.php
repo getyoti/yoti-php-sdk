@@ -18,6 +18,7 @@ class AttributeConverterTest extends TestCase
     /**
      * Content Types.
      */
+    const CONTENT_TYPE_UNDEFINED = 0;
     const CONTENT_TYPE_STRING = 1;
     const CONTENT_TYPE_JPEG = 2;
     const CONTENT_TYPE_DATE = 3;
@@ -83,6 +84,30 @@ class AttributeConverterTest extends TestCase
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', 'my_value'));
         $this->assertEquals('test_attr', $attr->getName());
         $this->assertEquals('my_value', $attr->getValue());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertUndefinedContentType()
+    {
+        $attr = AttributeConverter::convertToYotiAttribute(
+            $this->getMockForProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
+        );
+        $this->assertEquals('undefined_attr', $attr->getName());
+        $this->assertEquals('undefined_value', $attr->getValue());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testConvertUnknownContentType()
+    {
+        $attr = AttributeConverter::convertToYotiAttribute(
+            $this->getMockForProtobufAttribute('unknown_attr', 'unknown_value', 100)
+        );
+        $this->assertEquals('unknown_attr', $attr->getName());
+        $this->assertEquals('unknown_value', $attr->getValue());
     }
 
     /**
