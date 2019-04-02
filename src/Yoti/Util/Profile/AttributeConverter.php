@@ -81,14 +81,14 @@ class AttributeConverter
             case self::CONTENT_TYPE_MULTI_VALUE:
                 return self::convertMultiValue($value);
 
-            case self::CONTENT_TYPE_UNDEFINED:
-                throw new AttributeException("Content Type is undefined");
-
             case self::CONTENT_TYPE_INT:
                 return (int) $value;
 
             case self::CONTENT_TYPE_STRING:
+                return $value;
+
             default:
+                error_log("Unknown Content Type '{$contentType}', parsing as a String", 0);
                 return $value;
         }
     }
