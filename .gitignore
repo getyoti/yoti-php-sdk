@@ -8,4 +8,6 @@ examples/vendor
 examples/*.pem
 examples/keys/*.pem
 
+logs
+
 .DS_Store

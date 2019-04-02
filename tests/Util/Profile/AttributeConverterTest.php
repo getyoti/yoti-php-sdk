@@ -91,11 +91,15 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertUndefinedContentType()
     {
+        $this->captureLogs();
+
         $attr = AttributeConverter::convertToYotiAttribute(
             $this->getMockForProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
         );
         $this->assertEquals('undefined_attr', $attr->getName());
         $this->assertEquals('undefined_value', $attr->getValue());
+
+        $this->assertLogContains("Unknown Content Type '0', parsing as a String");
     }
 
     /**
@@ -103,11 +107,15 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertUnknownContentType()
     {
+        $this->captureLogs();
+
         $attr = AttributeConverter::convertToYotiAttribute(
             $this->getMockForProtobufAttribute('unknown_attr', 'unknown_value', 100)
         );
         $this->assertEquals('unknown_attr', $attr->getName());
         $this->assertEquals('unknown_value', $attr->getValue());
+
+        $this->assertLogContains("Unknown Content Type '100', parsing as a String");
     }
 
     /**
@@ -235,6 +243,8 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeDocumentImagesInvalid()
     {
+        $this->captureLogs();
+
         // Create mock Attribute that will return MultiValue as the value.
         $protobufAttribute = $this->getMockForProtobufAttribute(
             'document_images',
@@ -244,6 +254,8 @@ class AttributeConverterTest extends TestCase
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
         $this->assertNull($attr);
+
+        $this->assertLogContains('Document Images could not be decoded (Attribute: document_images)');
     }
 
     /**
