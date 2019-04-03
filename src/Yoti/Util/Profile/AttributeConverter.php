@@ -9,6 +9,7 @@ use Compubapi\EncryptedData;
 use Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Exception\AttributeException;
 use Yoti\Entity\MultiValue;
+use Yoti\Entity\ApplicationProfile;
 
 class AttributeConverter
 {
@@ -166,6 +167,12 @@ class AttributeConverter
     {
         $yotiAttribute = null;
 
+        // Application Logo can be empty, return NULL when this occurs.
+        if ($protobufAttribute->getName() == ApplicationProfile::ATTR_APPLICATION_LOGO &&
+          empty($protobufAttribute->getValue())) {
+            return $yotiAttribute;
+        }
+
         try {
             $yotiAnchorsMap = AnchorListConverter::convert(
                 $protobufAttribute->getAnchors()
@@ -185,7 +192,7 @@ class AttributeConverter
                 $yotiAnchorsMap
             );
         } catch (AttributeException $e) {
-            error_log($e->getMessage() . " (Attribute: {$protobufAttribute->getName()})", 0);
+            error_log("{$e->getMessage()} (Attribute: {$protobufAttribute->getName()})", 0);
         } catch (\Exception $e) {
             error_log($e->getMessage(), 0);
         }

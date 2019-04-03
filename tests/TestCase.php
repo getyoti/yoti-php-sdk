@@ -18,9 +18,11 @@ class TestCase extends PHPUnit_Framework_TestCase
     /**
      * Capture log output so that it can be inspected.
      */
-    protected function captureLogs()
+    protected function captureExpectedLogs()
     {
-        mkdir('./logs');
+        if (!is_dir('./logs')) {
+            mkdir('./logs');
+        }
         ini_set('error_log', './logs/' . uniqid('error_', true) . '.log');
     }
 
