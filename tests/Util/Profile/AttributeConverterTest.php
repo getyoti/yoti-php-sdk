@@ -91,7 +91,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertUndefinedContentType()
     {
-        $this->captureLogs();
+        $this->captureExpectedLogs();
 
         $attr = AttributeConverter::convertToYotiAttribute(
             $this->getMockForProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
@@ -107,7 +107,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertUnknownContentType()
     {
-        $this->captureLogs();
+        $this->captureExpectedLogs();
 
         $attr = AttributeConverter::convertToYotiAttribute(
             $this->getMockForProtobufAttribute('unknown_attr', 'unknown_value', 100)
@@ -139,12 +139,16 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeEmptyNonStringValue($contentType)
     {
+        $this->captureExpectedLogs();
+
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
             'test_attr',
             '',
             $contentType
         ));
+
         $this->assertNull($attr);
+        $this->assertLogContains('Warning: Value is NULL (Attribute: test_attr)');
     }
 
     /**
@@ -243,7 +247,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeDocumentImagesInvalid()
     {
-        $this->captureLogs();
+        $this->captureExpectedLogs();
 
         // Create mock Attribute that will return MultiValue as the value.
         $protobufAttribute = $this->getMockForProtobufAttribute(
@@ -325,6 +329,8 @@ class AttributeConverterTest extends TestCase
      */
     public function testEmptyNonStringAttributeMultiValueValue($contentType)
     {
+        $this->captureExpectedLogs();
+
         // Get MultiValue values.
         $values = $this->createMultiValueValues();
 
@@ -344,6 +350,7 @@ class AttributeConverterTest extends TestCase
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
         $this->assertNull($attr);
+        $this->assertLogContains('Warning: Value is NULL (Attribute: test_attr)');
     }
 
     /**
