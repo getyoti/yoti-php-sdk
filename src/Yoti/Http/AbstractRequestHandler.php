@@ -120,7 +120,7 @@ abstract class AbstractRequestHandler
         ];
 
         if ($version = Config::getInstance()->get('version')) {
-            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$version}";
+            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$version}";
         }
         return $requestHeaders;
     }
