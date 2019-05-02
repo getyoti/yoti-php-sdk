@@ -49,25 +49,64 @@ class YotiClientTest extends TestCase
     }
 
     /**
-     * Test the use of pem file
+     * Test the use of pem file path
      *
      * @covers ::__construct
      */
     public function testCanUsePemFile()
+    {
+        $yotiClientObj = new YotiClient(SDK_ID, PEM_FILE);
+        $this->assertInstanceOf(\Yoti\YotiClient::class, $yotiClientObj);
+    }
+
+    /**
+     * Test the use of pem file path with file:// stream wrapper
+     *
+     * @covers ::__construct
+     */
+    public function testCanUsePemFileStreamWrapper()
     {
         $yotiClientObj = new YotiClient(SDK_ID, 'file://' . PEM_FILE);
         $this->assertInstanceOf(\Yoti\YotiClient::class, $yotiClientObj);
     }
 
     /**
-     * Test passing invalid pem file path
+     * Test passing invalid pem file path with file:// stream wrapper
      *
      * @covers ::__construct
+     *
+     * @expectedException \Yoti\Exception\YotiClientException
+     * @expectedExceptionMessage PEM file was not found
      */
-    public function testInvalidPem()
+    public function testInvalidPemFileStreamWrapperPath()
     {
-        $this->expectException('Exception');
-        $yotiClientObj = new YotiClient(SDK_ID, 'file://blahblah.pem');
+        new YotiClient(SDK_ID, 'file://invalid_file_path.pem');
+    }
+
+    /**
+     * Test passing pem file with invalid contents
+     *
+     * @covers ::__construct
+     *
+     * @expectedException \Yoti\Exception\YotiClientException
+     * @expectedExceptionMessage PEM file path or content is invalid
+     */
+    public function testInvalidPemFileContents()
+    {
+        new YotiClient(SDK_ID, INVALID_PEM_FILE);
+    }
+
+    /**
+     * Test passing invalid pem string
+     *
+     * @covers ::__construct
+     *
+     * @expectedException \Yoti\Exception\YotiClientException
+     * @expectedExceptionMessage PEM file path or content is invalid
+     */
+    public function testInvalidPemString()
+    {
+        new YotiClient(SDK_ID, 'invalid_pem_string');
     }
 
     /**
@@ -120,7 +159,7 @@ class YotiClientTest extends TestCase
     public function testInvalidSdkIdentifier()
     {
         $this->expectException('Exception');
-        $yotiClientObj = new YotiClient(
+        new YotiClient(
             SDK_ID,
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
