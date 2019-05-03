@@ -145,7 +145,7 @@ class YotiClientTest extends TestCase
      */
     public function testInvalidConnectToken()
     {
-        $yotiClient = new YotiClient(SDK_ID, file_get_contents(PEM_FILE));
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
 
         $this->expectException('Exception');
         $yotiClient->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
