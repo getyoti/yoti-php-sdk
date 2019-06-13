@@ -1,6 +1,9 @@
 <?php
 namespace Yoti\Entity;
 
+/**
+ * Profile of a human user with convenience methods to access well-known attributes.
+ */
 class Profile extends BaseProfile
 {
     const AGE_OVER_FORMAT = 'age_over:%d';
