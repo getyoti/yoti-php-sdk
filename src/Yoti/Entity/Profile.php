@@ -22,6 +22,8 @@ class Profile extends BaseProfile
     const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /**
+     * The full name attribute.
+     *
      * @return null|Attribute
      */
     public function getFullName()
@@ -30,6 +32,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Corresponds to primary name in passport, and surname in English.
+     *
      * @return null|Attribute
      */
     public function getFamilyName()
@@ -38,6 +42,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Corresponds to secondary names in passport, and first/middle names in English.
+     *
      * @return null|Attribute
      */
     public function getGivenNames()
@@ -46,6 +52,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Date of birth.
+     *
      * @return null|Attribute
      */
     public function getDateOfBirth()
@@ -54,6 +62,9 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Corresponds to the gender in the passport; will be one of the strings
+     * "MALE", "FEMALE", "TRANSGENDER" or "OTHER".
+     *
      * @return null|Attribute
      */
     public function getGender()
@@ -62,6 +73,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Corresponds to the nationality in the passport.
+     *
      * @return null|Attribute
      */
     public function getNationality()
@@ -70,6 +83,9 @@ class Profile extends BaseProfile
     }
 
     /**
+     * The user's phone number, as verified at registration time. This will be a number with + for
+     * international prefix and no spaces, e.g. "+447777123456".
+     *
      * @return null|Attribute
      */
     public function getPhoneNumber()
@@ -78,6 +94,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * Photograph of user, encoded as a JPEG image.
+     *
      * @return null|Attribute
      */
     public function getSelfie()
@@ -86,6 +104,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * The user's verified email address.
+     *
      * @return null|Attribute
      */
     public function getEmailAddress()
@@ -94,7 +114,7 @@ class Profile extends BaseProfile
     }
 
     /**
-     * Return postal_address or structured_postal_address.formatted_address.
+     * The user's postal address as a string.
      *
      * @return null|Attribute
      */
@@ -109,6 +129,8 @@ class Profile extends BaseProfile
     }
 
     /**
+     * The user's structured postal address as a JSON.
+     *
      * @return null|Attribute
      */
     public function getStructuredPostalAddress()
@@ -116,6 +138,11 @@ class Profile extends BaseProfile
         return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
 
+    /**
+     * Document details.
+     *
+     * @return null|Attribute
+     */
     public function getDocumentDetails()
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
