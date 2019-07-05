@@ -307,6 +307,10 @@ $ ./vendor/bin/phpunit tests
     * [X] Receipt ID `getReceiptId()`
     * [X] Timestamp `getTimestamp()` // DateTime Object
     * [X] Application Profile `getApplicationProfile()`
+      * [X] Name `getApplicationName()->getValue()`
+      * [X] Url `getApplicationUrl()->getValue()`
+      * [X] Logo `getApplicationLogo()->getValue()`
+      * [X] Receipt Bg Color `getApplicationReceiptBgColor()->getValue()`
     * [X] Profile `getProfile()`
       * [X] Photo `getSelfie()->getValue()` // Yoti\Entity\Image Object
         * [X] Image Data `getContent()`
@@ -328,9 +332,11 @@ $ ./vendor/bin/phpunit tests
         * [X] Result `getResult()` // boolean
         * [X] Attribute `getAttribute()` // Yoti\Entity\Attribute Object  
       * [X] Address `getPostalAddress()->getValue()`
+      * [X] Structured Postal Address `getStructuredPostalAddress()->getValue()`
       * [X] Gender `getGender()->getValue()`
-      * [X] Nationality `getNationality()->getValue()`      
-                       
+      * [X] Nationality `getNationality()->getValue()`
+      * [X] Document Details `getDocumentDetails()->getValue()`
+
 
 ## Support
 
