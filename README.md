@@ -337,7 +337,6 @@ $ ./vendor/bin/phpunit tests
       * [X] Nationality `getNationality()->getValue()`
       * [X] Document Details `getDocumentDetails()->getValue()`
 
-
 ## Support
 
 For any questions or support please email [sdksupport@yoti.com](mailto:sdksupport@yoti.com).
