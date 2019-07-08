@@ -17,7 +17,7 @@ services:
         - ../:/usr/share/nginx/html/sdk
 
   composer:
-    image: composer/composer:php7
+    image: composer
     volumes:
       - ./:/usr/share/nginx/html
       - ../:/usr/share/nginx/html/sdk
