@@ -17,6 +17,6 @@ services:
   composer:
     image: composer/composer:php7
     volumes:
-      - ./:/usr/share/nginx/html
-    working_dir: /usr/share/nginx/html
+      - ../:/usr/share/nginx/html
+    working_dir: /usr/share/nginx/html/examples
     command: update

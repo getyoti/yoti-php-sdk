@@ -1,7 +1,28 @@
 {
   "description": "testing yoti-php-sdk",
   "require": {
-    "yoti/yoti-php-sdk": "2.0.*",
+    "yoti/yoti-php-sdk": "*",
     "symfony/dotenv": "3.3.0"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./sdk",
+      "options": {
+        "symlink": false
+      }
+    }
+  ],
+  "scripts": {
+    "copy-sdk-src": [
+      "rm -rf ./vendor/yoti && rm -rf ./sdk && mkdir ./sdk",
+      "cd .. && cp -R `ls -A | grep -v \"examples\"` ./examples/sdk && cd -"
+    ],
+    "pre-install-cmd": [
+      "@copy-sdk-src"
+    ],
+    "pre-update-cmd": [
+      "@copy-sdk-src"
+    ]
   }
 }
