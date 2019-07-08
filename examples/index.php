@@ -50,16 +50,16 @@ require_once __DIR__ . '/bootstrap.php';
                 <div class="yoti-store-buttons-section">
                     <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&mt=8" class="yoti-app-button-link">
                         <img
-                                src="assets/images/app-store-badge.png"
-                                srcset="assets/images/app-store-badge@2x.png 2x"
-                                alt="Download on the App Store"/>
+                            src="assets/images/app-store-badge.png"
+                            srcset="assets/images/app-store-badge@2x.png 2x"
+                            alt="Download on the App Store"/>
                     </a>
 
                     <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
                         <img
-                                src="assets/images/google-play-badge.png"
-                                srcset="assets/images/google-play-badge@2x.png 2x"
-                                alt="Yoti" alt="get it on Google Play"/>
+                            src="assets/images/google-play-badge.png"
+                            srcset="assets/images/google-play-badge@2x.png 2x"
+                            alt="Yoti" alt="get it on Google Play"/>
                     </a>
                 </div>
             </section>
@@ -69,11 +69,11 @@ require_once __DIR__ . '/bootstrap.php';
         <script>
         window.Yoti.Share.init({
             "elements": [{
-            "domId": "yoti-share-button",
-            "scenarioId": "<?php echo htmlspecialchars(getenv('YOTI_SCENARIO_ID')); ?>",
-            "button": {
-                "label": "Use Yoti"
-            }
+                "domId": "yoti-share-button",
+                "scenarioId": "<?php echo htmlspecialchars(getenv('YOTI_SCENARIO_ID')); ?>",
+                "button": {
+                    "label": "Use Yoti"
+                }
             }]
         });
         </script>
