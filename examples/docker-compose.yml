@@ -7,16 +7,19 @@ services:
           - "4002:443"
       volumes:
         - ./:/usr/share/nginx/html
+        - ../:/usr/share/nginx/html/sdk
       links:
           - php
   php:
       image: php:7-fpm-alpine
       volumes:
         - ./:/usr/share/nginx/html
+        - ../:/usr/share/nginx/html/sdk
 
   composer:
     image: composer/composer:php7
     volumes:
-      - ../:/usr/share/nginx/html
-    working_dir: /usr/share/nginx/html/examples
+      - ./:/usr/share/nginx/html
+      - ../:/usr/share/nginx/html/sdk
+    working_dir: /usr/share/nginx/html
     command: update

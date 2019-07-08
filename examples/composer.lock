@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "94a001b9d98ffc4b6beff32e0dda1111",
-    "content-hash": "b8f224efd69950044762c5964da6c2e8",
+    "content-hash": "6d3c6ad12dcf3985d92f08636162dbac",
     "packages": [
         {
             "name": "symfony/dotenv",
@@ -62,16 +61,21 @@
                 "env",
                 "environment"
             ],
-            "time": "2017-04-27 07:47:28"
+            "time": "2017-04-27T07:47:28+00:00"
         },
         {
             "name": "yoti/yoti-php-sdk",
             "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getyoti/yoti-php-sdk.git",
+                "reference": "f3c770c1df2cbba3dc76a1f329938c379191ad7a"
+            },
             "dist": {
-                "type": "path",
-                "url": "./sdk",
-                "reference": "b4b37289c655efc1b618202aae2f438b507f0a04",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f3c770c1df2cbba3dc76a1f329938c379191ad7a",
+                "reference": "f3c770c1df2cbba3dc76a1f329938c379191ad7a",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.5.19"
@@ -96,21 +100,11 @@
                     "YotiSandbox\\": "sandbox/src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "YotiTest\\": "tests/",
-                    "SandboxTest\\": "sandbox/tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
-                {
-                    "name": "Moussa Sidibe",
-                    "email": "moussa.sidibe@yoti.com",
-                    "role": "Developer"
-                },
                 {
                     "name": "Simon Tong",
                     "email": "simon.tong@yoti.com",
@@ -125,6 +119,11 @@
                     "name": "Quirino Zagarese",
                     "email": "quirino.zagarese@yoti.com",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "Moussa Sidibe",
+                    "email": "moussa.sidibe@yoti.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
@@ -133,9 +132,7 @@
                 "sdk",
                 "yoti"
             ],
-            "transport-options": {
-                "symlink": false
-            }
+            "time": "2019-04-24T16:02:26+00:00"
         }
     ],
     "packages-dev": [],
