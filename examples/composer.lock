@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7a6c48264e6454ff581a7f0189792926",
-    "content-hash": "2a81e6ba4478b78c3d08f434b9ed3156",
+    "hash": "94a001b9d98ffc4b6beff32e0dda1111",
+    "content-hash": "b8f224efd69950044762c5964da6c2e8",
     "packages": [
         {
             "name": "symfony/dotenv",
@@ -66,24 +66,20 @@
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5"
-            },
+            "version": "2.2.0",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/59890106c25a19025e1e0914b56e2c38aa979fc5",
-                "reference": "59890106c25a19025e1e0914b56e2c38aa979fc5",
-                "shasum": ""
+                "type": "path",
+                "url": "./sdk",
+                "reference": "b4b37289c655efc1b618202aae2f438b507f0a04",
+                "shasum": null
             },
             "require": {
                 "php": ">=5.5.19"
             },
             "require-dev": {
                 "php": ">=5.6.0",
-                "phpunit/phpunit": "5.7.*"
+                "phpunit/phpunit": "5.7.*",
+                "squizlabs/php_codesniffer": "3.*"
             },
             "type": "library",
             "autoload": {
@@ -91,19 +87,30 @@
                     "src/phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "Attrpubapi_v1\\": "src/attrpubapi_v1",
-                    "Compubapi_v1\\": "src/compubapi_v1",
+                    "Attrpubapi\\": "src/Attrpubapi",
+                    "Compubapi\\": "src/Compubapi",
                     "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
                     "GPBMetadata\\": "src/protobuflib/GPBMetadata",
                     "phpseclib\\": "src/phpseclib/",
-                    "Yoti\\": "src/Yoti"
+                    "Yoti\\": "src/Yoti",
+                    "YotiSandbox\\": "sandbox/src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "YotiTest\\": "tests/",
+                    "SandboxTest\\": "sandbox/tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "authors": [
+                {
+                    "name": "Moussa Sidibe",
+                    "email": "moussa.sidibe@yoti.com",
+                    "role": "Developer"
+                },
                 {
                     "name": "Simon Tong",
                     "email": "simon.tong@yoti.com",
@@ -118,11 +125,6 @@
                     "name": "Quirino Zagarese",
                     "email": "quirino.zagarese@yoti.com",
                     "role": "Maintainer"
-                },
-                {
-                    "name": "Moussa Sidibe",
-                    "email": "moussa.sidibe@yoti.com",
-                    "role": "Developer"
                 }
             ],
             "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
@@ -131,7 +133,9 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2018-06-25 09:59:44"
+            "transport-options": {
+                "symlink": false
+            }
         }
     ],
     "packages-dev": [],

@@ -24,11 +24,7 @@ require_once __DIR__ . '/bootstrap.php';
                 <h1 class="yoti-top-header">We now accept Yoti</h1>
 
                 <div class="yoti-sdk-integration-section">
-                    <button data-yoti-application-id="<?php echo getenv('YOTI_APP_ID') ?>"
-                            data-yoti-type="inline"
-                            data-yoti-scenario-id="<?php echo getenv('YOTI_SCENARIO_ID') ?>">
-                        Use Yoti
-                    </button>
+                    <div id="yoti-share-button"></div>
                 </div>
 
                 <div class="yoti-login-or-separator">or</div>
@@ -69,9 +65,17 @@ require_once __DIR__ . '/bootstrap.php';
             </section>
         </main>
 
-        <script src="https://sdk.yoti.com/clients/browser.2.2.0.js"></script>
+        <script src="https://www.yoti.com/share/client/"></script>
         <script>
-          _ybg.init()
+        window.Yoti.Share.init({
+            "elements": [{
+            "domId": "yoti-share-button",
+            "scenarioId": "<?php echo htmlspecialchars(getenv('YOTI_SCENARIO_ID')); ?>",
+            "button": {
+                "label": "Use Yoti"
+            }
+            }]
+        });
         </script>
     </body>
 </html>
