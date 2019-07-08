@@ -61,6 +61,11 @@ try {
             'name' => 'Nationality',
             'obj' => $profile->getNationality(),
             'icon' => 'yoti-icon-nationality',
+        ],
+        [
+            'name' => 'Structured Postal Address',
+            'obj' => $profile->getStructuredPostalAddress(),
+            'icon' => 'yoti-icon-profile',
         ]
     ];
 

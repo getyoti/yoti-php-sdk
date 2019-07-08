@@ -35,61 +35,73 @@ require_once __DIR__ . '/profile.inc.php';
            </section>
 
            <section class="yoti-attributes-section">
-               <a href="/">
-                   <img class="yoti-company-logo" src="assets/images/company-logo.jpg" alt="company logo">
-               </a>
+                <a href="/">
+                    <img class="yoti-company-logo" src="assets/images/company-logo.jpg" alt="company logo">
+                </a>
 
-               <div class="yoti-attribute-list-header">
-                   <div class="yoti-attribute-list-header-attribute">Attribute</div>
-                   <div class="yoti-attribute-list-header-value">Value</div>
-                   <div>Anchors</div>
-               </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Attribute</div>
+                    <div class="yoti-attribute-list-header-value">Value</div>
+                    <div>Anchors</div>
+                </div>
 
-               <div class="yoti-attribute-list-subheader">
-                   <div class="yoti-attribute-list-subhead-layout">
-                       <div>S / V</div>
-                       <div>Value</div>
-                       <div>Sub type</div>
-                   </div>
-               </div>
+                <div class="yoti-attribute-list-subheader">
+                    <div class="yoti-attribute-list-subhead-layout">
+                        <div>S / V</div>
+                        <div>Value</div>
+                        <div>Sub type</div>
+                    </div>
+                </div>
 
-               <div class="yoti-attribute-list">
+                <div class="yoti-attribute-list">
 
-                   <?php foreach($profileAttributes as $item): ?>
-                       <?php if ($item['obj']) : ?>
-                           <div class="yoti-attribute-list-item">
-                               <div class="yoti-attribute-name">
-                                   <div class="yoti-attribute-name-cell">
-                                       <i class="<?php echo $item['icon'] ?>"></i>
-                                       <span class="yoti-attribute-name-cell-text"><?php echo  $item['name'] ?></span>
-                                   </div>
-                               </div>
+                    <?php foreach($profileAttributes as $item): ?>
+                        <?php if ($item['obj']) : ?>
+                            <div class="yoti-attribute-list-item">
+                                <div class="yoti-attribute-name">
+                                    <div class="yoti-attribute-name-cell">
+                                        <i class="<?php echo $item['icon'] ?>"></i>
+                                        <span class="yoti-attribute-name-cell-text"><?php echo htmlspecialchars($item['name']) ?></span>
+                                    </div>
+                                </div>
 
-                               <div class="yoti-attribute-value">
+                                <div class="yoti-attribute-value">
+                                   <div class="yoti-attribute-value-text">
                                    <?php
-                                        $name = $item['name'];
-                                        $attributeObj = $item['obj'];
-                                        if ($name === 'Date of birth') {
-                                            $value = $item['obj']->getValue()->format('d-m-Y');
-                                        }
-                                        elseif ($name === 'Age Verification') {
+                                   $attributeObj = $item['obj'];
+                                   switch ($item['name']) {
+                                        case 'Date of birth';
+                                            echo htmlspecialchars($item['obj']->getValue()->format('d-m-Y'));
+                                            break;
+                                        case 'Age Verification':
                                             // Because AgeVerification::class has a different structure
                                             $attributeObj = $item['obj']->getAttribute();
-                                            $value = $ageVerificationStr;
-                                        }
-                                        else {
-                                            $value = $item['obj']->getValue();
-                                        }
-                                        $anchors = $attributeObj->getAnchors();
+                                            echo htmlspecialchars($ageVerificationStr);
+                                            break;
+                                        case 'Structured Postal Address':
+                                            ?>
+                                            <table>
+                                                <?php foreach ($item['obj']->getValue() as $key => $value): ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($key); ?></td>
+                                                        <td><?php echo htmlspecialchars($value); ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </table>
+                                            <?php
+                                            break;
+                                        default:
+                                            echo htmlspecialchars($item['obj']->getValue());
+                                   }
                                    ?>
-                                   <div class="yoti-attribute-value-text"><?php echo $value; ?></div>
+                                   </div>
                                </div>
                                <div class="yoti-attribute-anchors-layout">
                                    <div class="yoti-attribute-anchors-head -s-v">S / V</div>
                                    <div class="yoti-attribute-anchors-head -value">Value</div>
                                    <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
 
-                                   <?php foreach($anchors as $anchor) : ?>
+                                   <?php foreach($attributeObj->getAnchors() as $anchor) : ?>
                                        <div class="yoti-attribute-anchors -s-v"><?php echo $anchor->getType() ?></div>
                                        <div class="yoti-attribute-anchors -value"><?php echo $anchor->getValue() ?></div>
                                        <div class="yoti-attribute-anchors -subtype"><?php echo $anchor->getSubType() ?></div>

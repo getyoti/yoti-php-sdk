@@ -44,6 +44,11 @@
     margin: 30px 0;
 }
 
+#yoti-share-button {
+    width: 130px;
+    height: 45px;
+}
+
 .yoti-login-or-separator {
     text-transform: uppercase;
     font-family: Roboto;

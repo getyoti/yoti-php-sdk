@@ -308,6 +308,20 @@
     margin-left: 12px;
 }
 
+.yoti-attribute-value-text table {
+    font-size: 14px;
+    border-spacing: 0;
+}
+
+.yoti-attribute-value-text table td:first-child {
+    font-weight: bold;
+}
+
+.yoti-attribute-value-text table td {
+    border-bottom: 1px solid #f7f8f9;
+    padding: 5px;
+}
+
 .yoti-attribute-value {
     grid-column: 2 / 3;
 
