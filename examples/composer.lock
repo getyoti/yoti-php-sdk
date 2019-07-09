@@ -66,11 +66,6 @@
         {
             "name": "yoti/yoti-php-sdk",
             "version": "2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/getyoti/yoti-php-sdk.git",
-                "reference": "f3c770c1df2cbba3dc76a1f329938c379191ad7a"
-            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f3c770c1df2cbba3dc76a1f329938c379191ad7a",
