@@ -102,9 +102,9 @@ require_once __DIR__ . '/profile.inc.php';
                                    <div class="yoti-attribute-anchors-head -subtype">Sub type</div>
 
                                    <?php foreach($attributeObj->getAnchors() as $anchor) : ?>
-                                       <div class="yoti-attribute-anchors -s-v"><?php echo $anchor->getType() ?></div>
-                                       <div class="yoti-attribute-anchors -value"><?php echo $anchor->getValue() ?></div>
-                                       <div class="yoti-attribute-anchors -subtype"><?php echo $anchor->getSubType() ?></div>
+                                       <div class="yoti-attribute-anchors -s-v"><?php echo htmlspecialchars($anchor->getType()); ?></div>
+                                       <div class="yoti-attribute-anchors -value"><?php echo htmlspecialchars($anchor->getValue()); ?></div>
+                                       <div class="yoti-attribute-anchors -subtype"><?php echo htmlspecialchars($anchor->getSubType()); ?></div>
                                    <?php endforeach; ?>
 
                                </div>
