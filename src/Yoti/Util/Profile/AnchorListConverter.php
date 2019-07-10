@@ -11,7 +11,7 @@ class AnchorListConverter
         $yotiAnchorsMap = [];
 
         foreach ($anchorList as $protobufAnchor) {
-            if ($parsedAnchors = AnchorConverter::convertAnchors($protobufAnchor)) {
+            if ($parsedAnchors = AnchorConverter::convertAnchor($protobufAnchor)) {
                 $yotiAnchorsMap = array_merge_recursive($yotiAnchorsMap, $parsedAnchors);
             }
         }

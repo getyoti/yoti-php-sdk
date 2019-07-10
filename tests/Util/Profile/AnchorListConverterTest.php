@@ -15,43 +15,42 @@ class AnchorListConverterTest extends TestCase
     /**
      * @covers ::convert
      */
-    public function testConvertingSourceAnchor()
-    {
-        $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
-        $this->assertEquals('PASSPORT', $anchorsData[Anchor::TYPE_SOURCE_OID][0]->getValue());
-    }
-
-    /**
-     * @covers ::convert
-     */
-    public function testConvertingVerifierAnchor()
-    {
-        $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
-        $anchorVerifiersObj = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
-        $this->assertEquals('YOTI_ADMIN', $anchorVerifiersObj->getValue());
-    }
-
-    /**
-     * @covers ::convert
-     */
     public function testConvertingTwoSources()
     {
-        $passportAnchor = new \Attrpubapi\Anchor();
-        $passportAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
+        $anchorsData = AnchorListConverter::convert(new ArrayObject([
+            $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR),
+            $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
+        ]));
 
-        $dlAnchor = new \Attrpubapi\Anchor();
-        $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
+        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
+        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCE_OID][1];
 
-        $collection = new ArrayObject([$passportAnchor, $dlAnchor]);
-        $anchorsData = AnchorListConverter::convert($collection);
-        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCE_OID][0]->getValue();
-        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCE_OID][1]->getValue();
-        $expectedAnchors = ['PASSPORT', 'DRIVING_LICENCE'];
+        $this->assertEquals('PASSPORT', $anchorSource1->getValue());
+        $this->assertEquals('DRIVING_LICENCE', $anchorSource2->getValue());
+    }
 
-        $this->assertEquals(
-            json_encode($expectedAnchors),
-            json_encode([$anchorSource1, $anchorSource2])
-        );
+    /**
+     * @covers ::convert
+     */
+    public function testConvertingAnyAnchor()
+    {
+        $anchorsData = AnchorListConverter::convert(new ArrayObject([
+            $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
+            $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
+            $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR),
+        ]));
+
+        $anchorSource = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
+        $this->assertEquals('Source', $anchorSource->getType());
+        $this->assertEquals('DRIVING_LICENCE', $anchorSource->getValue());
+
+        $anchorVerifier = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
+        $this->assertEquals('Verifier', $anchorVerifier->getType());
+        $this->assertEquals('YOTI_ADMIN', $anchorVerifier->getValue());
+
+        $anchorUnknown = $anchorsData[Anchor::TYPE_UNKNOWN_NAME][0];
+        $this->assertEquals('UNKNOWN', $anchorUnknown->getType());
+        $this->assertEquals('', $anchorUnknown->getValue());
     }
 
     /**
@@ -59,13 +58,10 @@ class AnchorListConverterTest extends TestCase
      *
      * @return array $anchors
      */
-    public function parseFromBase64String($anchorString)
+    private function parseFromBase64String($anchorString)
     {
         $anchor = new \Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
-
-        $collection = new ArrayObject([$anchor]);
-
-        return AnchorListConverter::convert($collection);
+        return $anchor;
     }
 }
