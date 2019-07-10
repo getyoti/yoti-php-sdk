@@ -11,10 +11,11 @@ class AnchorListConverter
         $yotiAnchorsMap = [];
 
         foreach ($anchorList as $protobufAnchor) {
-            if ($parsedAnchor = AnchorConverter::convert($protobufAnchor)) {
-                $yotiAnchorsMap[$parsedAnchor['oid']][] = $parsedAnchor['yoti_anchor'];
+            if ($parsedAnchors = AnchorConverter::convertAnchors($protobufAnchor)) {
+                $yotiAnchorsMap = array_merge_recursive($yotiAnchorsMap, $parsedAnchors);
             }
         }
+
         return $yotiAnchorsMap;
     }
 }
