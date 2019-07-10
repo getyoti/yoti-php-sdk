@@ -7,7 +7,6 @@ use phpseclib\File\ASN1;
 use phpseclib\File\X509;
 use Attrpubapi\Anchor;
 use Yoti\Entity\Anchor as YotiAnchor;
-use phpseclib\Math\BigInteger;
 
 class AnchorConverter
 {
