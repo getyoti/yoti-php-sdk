@@ -93,13 +93,19 @@ class AttributeTest extends TestCase
     public function testGetAnchors()
     {
         $anchors = $this->dummyAttribute->getAnchors();
-        $this->assertEquals(3, count($anchors));
-        $this->assertEquals(YotiAnchor::TYPE_SOURCE_NAME, $anchors[0]->getType());
-        $this->assertEquals('DRIVING_LICENCE', $anchors[0]->getValue());
-        $this->assertEquals(YotiAnchor::TYPE_SOURCE_NAME, $anchors[1]->getType());
-        $this->assertEquals('PASSPORT', $anchors[1]->getValue());
-        $this->assertEquals(YotiAnchor::TYPE_VERIFIER_NAME, $anchors[2]->getType());
-        $this->assertEquals('YOTI_ADMIN', $anchors[2]->getValue());
+        $this->assertEquals(6, count($anchors));
+        $this->assertEquals(YotiAnchor::TYPE_UNKNOWN_NAME, $anchors[0]->getType());
+        $this->assertEquals('', $anchors[0]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_UNKNOWN_NAME, $anchors[1]->getType());
+        $this->assertEquals('', $anchors[1]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_UNKNOWN_NAME, $anchors[2]->getType());
+        $this->assertEquals('', $anchors[2]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_SOURCE_NAME, $anchors[3]->getType());
+        $this->assertEquals('DRIVING_LICENCE', $anchors[3]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_SOURCE_NAME, $anchors[4]->getType());
+        $this->assertEquals('PASSPORT', $anchors[4]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_VERIFIER_NAME, $anchors[5]->getType());
+        $this->assertEquals('YOTI_ADMIN', $anchors[5]->getValue());
     }
 
     /**
