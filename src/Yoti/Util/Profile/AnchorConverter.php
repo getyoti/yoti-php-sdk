@@ -48,15 +48,15 @@ class AnchorConverter
         return $anchorMap;
     }
 
-     /**
-      * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
-      *
-      * @deprecated no longer in use.
-      *
-      * @param Anchor $anchor
-      *
-      * @return array|null
-      */
+    /**
+     * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
+     *
+     * @deprecated no longer in use.
+     *
+     * @param Anchor $anchor
+     *
+     * @return array|null
+     */
     public static function convert(Anchor $protobufAnchor)
     {
         $extensions = self::convertAnchor($protobufAnchor);
