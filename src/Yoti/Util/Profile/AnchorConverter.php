@@ -161,10 +161,14 @@ class AnchorConverter
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
         $decodedX509Data = json_decode(json_encode($X509Data), false);
+
+        // Ensure serial number is cast to string.
+        // @see \phpseclib\Math\BigInteger::__toString()
         $decodedX509Data
             ->tbsCertificate
             ->serialNumber
             ->value = (string) $X509Data['tbsCertificate']['serialNumber'];
+
         return $decodedX509Data;
     }
 
