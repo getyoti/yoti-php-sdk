@@ -7,6 +7,7 @@ use phpseclib\File\ASN1;
 use phpseclib\File\X509;
 use Attrpubapi\Anchor;
 use Yoti\Entity\Anchor as YotiAnchor;
+use phpseclib\Math\BigInteger;
 
 class AnchorConverter
 {
@@ -160,7 +161,12 @@ class AnchorConverter
     {
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
-        return json_decode(json_encode($X509Data), false);
+        $decodedX509Data = json_decode(json_encode($X509Data), false);
+        $decodedX509Data
+            ->tbsCertificate
+            ->serialNumber
+            ->value = (string) $X509Data['tbsCertificate']['serialNumber'];
+        return $decodedX509Data;
     }
 
     /**
