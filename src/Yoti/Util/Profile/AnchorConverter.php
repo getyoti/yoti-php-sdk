@@ -17,7 +17,7 @@ class AnchorConverter
      *
      * @return array map of oid => YotiAnchor[]
      */
-    public static function convertAnchors(Anchor $protobufAnchor)
+    public static function convertAnchor(Anchor $protobufAnchor)
     {
         $anchorMap = [];
         $anchorSubType = $protobufAnchor->getSubType();
@@ -58,7 +58,7 @@ class AnchorConverter
       */
     public static function convert(Anchor $protobufAnchor)
     {
-        $extensions = self::convertAnchors($protobufAnchor);
+        $extensions = self::convertAnchor($protobufAnchor);
         foreach (array_keys(self::getAnchorTypesMap()) as $oid) {
             if (isset($extensions[$oid][0])) {
                 return [
@@ -172,7 +172,8 @@ class AnchorConverter
      */
     private static function getAnchorTypeByOid($oid)
     {
-        return self::getAnchorTypesMap()[$oid] ?: YotiAnchor::TYPE_UNKNOWN_NAME;
+        $anchorTypesMap = self::getAnchorTypesMap();
+        return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : YotiAnchor::TYPE_UNKNOWN_NAME;
     }
 
     /**
@@ -184,7 +185,8 @@ class AnchorConverter
      */
     private static function getAnchorTypeKey($type)
     {
-        return array_flip(self::getAnchorTypesMap())[$type] ?: YotiAnchor::TYPE_UNKNOWN_NAME;
+        $anchorTypesMap = array_flip(self::getAnchorTypesMap());
+        return !empty($anchorTypesMap[$type]) ? $anchorTypesMap[$type] : YotiAnchor::TYPE_UNKNOWN_NAME;
     }
 
     /**
