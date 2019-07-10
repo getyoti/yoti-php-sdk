@@ -102,7 +102,7 @@ class AnchorConverterTest extends TestCase
     private function assertSerialNumber($anchor, $serial_number)
     {
         $cert = $anchor->getOriginServerCerts()[0];
-        $this->assertEquals($serial_number, $cert->tbsCertificate->serialNumber->value);
+        $this->assertSame($serial_number, $cert->tbsCertificate->serialNumber->value);
     }
 
     /**
