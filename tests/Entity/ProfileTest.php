@@ -97,6 +97,7 @@ class ProfileTest extends TestCase
     public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
     {
         $anchorsMap = AnchorListConverter::convert(new \ArrayObject([
+            $this->parseAnchor(TestAnchors::UNKNOWN_ANCHOR),
             $this->parseAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
             $this->parseAnchor(TestAnchors::SOURCE_DL_ANCHOR),
         ]));
