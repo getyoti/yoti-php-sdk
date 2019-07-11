@@ -6,6 +6,9 @@ use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Attribute;
 use Yoti\Entity\AgeVerification;
+use Yoti\Entity\Anchor;
+use Yoti\Util\Profile\AnchorListConverter;
+use YotiTest\Util\Profile\TestAnchors;
 
 /**
  * @coversDefaultClass \Yoti\Entity\Profile
@@ -15,22 +18,22 @@ class ProfileTest extends TestCase
     /**
      * @var \Yoti\Entity\Profile
      */
-    public $profile;
+    private $profile;
 
     /**
      * @var \Yoti\YotiClient
      */
-    public $yotiClient;
+    private $yotiClient;
 
     /**
      * @var string
      */
-    public $expectedPhoneNumber;
+    private $expectedPhoneNumber;
 
     /**
      * @var Array Structured Postal Address
      */
-    public $dummyStructuredPostalAddress;
+    private $dummyStructuredPostalAddress;
 
     public function setup()
     {
@@ -93,28 +96,43 @@ class ProfileTest extends TestCase
      */
     public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
     {
+        $anchorsMap = AnchorListConverter::convert(new \ArrayObject([
+            $this->parseAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
+            $this->parseAnchor(TestAnchors::UNKNOWN_ANCHOR),
+            $this->parseAnchor(TestAnchors::SOURCE_DL_ANCHOR),
+        ]));
+
         $structuredPostalAddress = new Attribute(
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $this->dummyStructuredPostalAddress,
-            []
+            $anchorsMap
         );
-        $profileData = [
+
+        $profile = new Profile([
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS => $structuredPostalAddress,
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'Given Name TEST',
                 []
             ),
-        ];
-        $profile = new Profile($profileData);
-        $expectedPostalAddress = '15a North Street CARSHALTON SM5 2HW UK';
-
+        ]);
         $this->assertEquals('Given Name TEST', $profile->getGivenNames()->getValue());
-        $this->assertEquals($expectedPostalAddress, $profile->getPostalAddress()->getValue());
         $this->assertEquals(
             json_encode($this->dummyStructuredPostalAddress),
             json_encode($profile->getStructuredPostalAddress()->getValue())
         );
+
+        $postalAddress = $profile->getPostalAddress();
+
+        $this->assertEquals('15a North Street CARSHALTON SM5 2HW UK', $postalAddress->getValue());
+        $this->assertEquals($anchorsMap[Anchor::TYPE_SOURCE_OID], $postalAddress->getSources());
+        $this->assertEquals($anchorsMap[Anchor::TYPE_VERIFIER_OID], $postalAddress->getVerifiers());
+
+        $anchors = [];
+        array_walk($anchorsMap, function ($val) use (&$anchors) {
+            $anchors = array_merge($anchors, array_values($val));
+        });
+        $this->assertEquals($anchors, $postalAddress->getAnchors());
     }
 
     /**
@@ -222,5 +240,17 @@ class ProfileTest extends TestCase
         ];
         $profile = new Profile($profileData);
         $this->assertSame($profileData['document_images'], $profile->getDocumentImages());
+    }
+
+    /**
+     * @param string $anchorString
+     *
+     * @return array $anchors
+     */
+    private function parseAnchor($anchorString)
+    {
+        $anchor = new \Attrpubapi\Anchor();
+        $anchor->mergeFromString(base64_decode($anchorString));
+        return $anchor;
     }
 }

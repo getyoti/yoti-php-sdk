@@ -235,11 +235,27 @@ class Profile extends BaseProfile
                 $postalAddress = new Attribute(
                     self::ATTR_POSTAL_ADDRESS,
                     $postalAddressValue,
-                    $structuredPostalAddress->getSources(),
-                    $structuredPostalAddress->getVerifiers()
+                    $this->getAttributeAnchorMap($structuredPostalAddress)
                 );
             }
         }
         return $postalAddress;
+    }
+
+    /**
+     * Get anchor map for provided anchor.
+     *
+     * @param Attribute $attribute
+     * @return array attribute map
+     */
+    private function getAttributeAnchorMap(Attribute $attribute)
+    {
+        return [
+            Anchor::TYPE_UNKNOWN_NAME => array_filter($attribute->getAnchors(), function ($anchor) {
+                return $anchor->getType() == Anchor::TYPE_UNKNOWN_NAME;
+            }),
+            Anchor::TYPE_VERIFIER_OID => $attribute->getVerifiers(),
+            Anchor::TYPE_SOURCE_OID => $attribute->getSources(),
+        ];
     }
 }
