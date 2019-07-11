@@ -157,7 +157,6 @@ class AnchorConverter
         return [
             YotiAnchor::TYPE_SOURCE_OID => YotiAnchor::TYPE_SOURCE_NAME,
             YotiAnchor::TYPE_VERIFIER_OID => YotiAnchor::TYPE_VERIFIER_NAME,
-            YotiAnchor::TYPE_UNKNOWN_NAME => YotiAnchor::TYPE_UNKNOWN_NAME,
         ];
     }
 }
