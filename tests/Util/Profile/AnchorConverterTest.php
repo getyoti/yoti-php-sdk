@@ -12,7 +12,7 @@ use Yoti\Util\Profile\AnchorConverter;
 class AnchorConverterTest extends TestCase
 {
     /**
-     * @covers ::convertAnchor
+     * @covers ::convert
      */
     public function testConvertingSourceAnchor()
     {
@@ -31,7 +31,7 @@ class AnchorConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertAnchor
+     * @covers ::convert
      */
     public function testConvertingVerifierAnchor()
     {
@@ -52,13 +52,20 @@ class AnchorConverterTest extends TestCase
     /**
      * @covers ::convert
      */
-    public function testConvert()
+    public function testConvertingUnknownAnchor()
     {
-        $anchor = new \Attrpubapi\Anchor();
-        $anchor->mergeFromString(base64_decode(TestAnchors::SOURCE_PP_ANCHOR));
-        $anchorMap = AnchorConverter::convert($anchor);
-        $this->assertEquals(Anchor::TYPE_SOURCE_OID, $anchorMap['oid']);
-        $this->assertEquals('PASSPORT', $anchorMap['yoti_anchor']->getValue());
+        $anchor = $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR);
+
+        $this->assertEquals('UNKNOWN', $anchor->getType());
+        $this->assertEquals('TEST UNKNOWN SUB TYPE', $anchor->getSubtype());
+        $this->assertEquals(
+            '2018-04-12 13:14:32.835537',
+            $anchor->getSignedTimestamp()->getTimestamp()->format('Y-m-d H:i:s.u')
+        );
+        $this->assertEquals('', $anchor->getValue());
+
+        $this->assertSerialNumber($anchor, '277870515583559162487099305254898397834');
+        $this->assertIssuer($anchor, 'id-at-commonName', 'passport-registration-server');
     }
 
     /**

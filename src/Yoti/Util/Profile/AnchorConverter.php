@@ -23,50 +23,34 @@ class AnchorConverter
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
         $X509CertsList = self::convertCertsListToX509($protobufAnchor->getOriginServerCerts());
 
-        $anchorValue = '';
-        $oid = YotiAnchor::TYPE_UNKNOWN_NAME;
-
         foreach ($X509CertsList as $certX509Obj) {
             foreach ($certX509Obj->tbsCertificate->extensions as $extObj) {
                 $anchorType = self::getAnchorTypeByOid($extObj->extnId);
                 if ($anchorType !== YotiAnchor::TYPE_UNKNOWN_NAME) {
-                    $anchorValue = self::decodeAnchorValue($extObj->extnValue);
-                    $oid = $extObj->extnId;
-                    break;
+                    return [
+                        'oid' => $extObj->extnId,
+                        'yoti_anchor' => new YotiAnchor(
+                            self::decodeAnchorValue($extObj->extnValue),
+                            $anchorType,
+                            $anchorSubType,
+                            $yotiSignedTimeStamp,
+                            $X509CertsList
+                        ),
+                    ];
                 }
             }
         }
 
         return [
-            'oid' => $oid,
-            'yoti_anchor' => self::createYotiAnchor(
-                $anchorValue,
+            'oid' => YotiAnchor::TYPE_UNKNOWN_NAME,
+            'yoti_anchor' => new YotiAnchor(
+                '',
                 $anchorType,
                 $anchorSubType,
                 $yotiSignedTimeStamp,
                 $X509CertsList
             ),
         ];
-    }
-
-    /**
-     * @param string $value
-     * @param string $type
-     * @param string $subType
-     * @param \Yoti\Entity\SignedTimestamp $signedTimestamp
-     * @param array $X509CertsList
-     *
-     * @return YotiAnchor
-     */
-    private static function createYotiAnchor($value, $type, $subType, $signedTimestamp, $X509CertsList)
-    {
-        return  new YotiAnchor(
-            $value,
-            $type,
-            $subType,
-            $signedTimestamp,
-            $X509CertsList
-        );
     }
 
     /**
@@ -163,19 +147,6 @@ class AnchorConverter
     {
         $anchorTypesMap = self::getAnchorTypesMap();
         return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : YotiAnchor::TYPE_UNKNOWN_NAME;
-    }
-
-    /**
-     * Get anchor type key by type.
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    private static function getAnchorTypeKey($type)
-    {
-        $anchorTypesMap = array_flip(self::getAnchorTypesMap());
-        return !empty($anchorTypesMap[$type]) ? $anchorTypesMap[$type] : YotiAnchor::TYPE_UNKNOWN_NAME;
     }
 
     /**
