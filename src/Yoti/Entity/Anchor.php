@@ -18,7 +18,6 @@ class Anchor
     const TYPE_UNKNOWN_NAME = 'UNKNOWN';
     const TYPE_SOURCE_OID = '1.3.6.1.4.1.47127.1.1.1';
     const TYPE_VERIFIER_OID = '1.3.6.1.4.1.47127.1.1.2';
-    const TYPE_UNKNOWN_OID = '';
 
     /**
      * @var string
