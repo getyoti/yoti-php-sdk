@@ -45,7 +45,7 @@ class AnchorConverter
             'oid' => YotiAnchor::TYPE_UNKNOWN_NAME,
             'yoti_anchor' => new YotiAnchor(
                 '',
-                $anchorType,
+                YotiAnchor::TYPE_UNKNOWN_NAME,
                 $anchorSubType,
                 $yotiSignedTimeStamp,
                 $X509CertsList
