@@ -26,6 +26,7 @@ class AttributeTest extends TestCase
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::SOURCE_DL_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::SOURCE_PP_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
+        $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::UNKNOWN_ANCHOR);
         $collection = new ArrayObject($protobufAnchors);
         $yotiAnchorsMap = AnchorListConverter::convert($collection);
 
@@ -99,6 +100,8 @@ class AttributeTest extends TestCase
         $this->assertEquals('PASSPORT', $anchors[1]->getValue());
         $this->assertEquals(YotiAnchor::TYPE_VERIFIER_NAME, $anchors[2]->getType());
         $this->assertEquals('YOTI_ADMIN', $anchors[2]->getValue());
+        $this->assertEquals(YotiAnchor::TYPE_UNKNOWN_NAME, $anchors[3]->getType());
+        $this->assertEquals('', $anchors[3]->getValue());
     }
 
     /**
