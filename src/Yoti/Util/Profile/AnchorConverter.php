@@ -29,8 +29,9 @@ class AnchorConverter
 
             foreach ($certExtsArr as $extObj) {
                 $anchorType = self::getAnchorTypeByOid($extObj->extnId);
-                $anchorValue = '';
-                if ($anchorType !== YotiAnchor::TYPE_UNKNOWN_NAME) {
+                if ($anchorType === YotiAnchor::TYPE_UNKNOWN_NAME) {
+                    $anchorValue = '';
+                } else {
                     $anchorValue = self::decodeAnchorValue($extObj->extnValue);
                 }
                 $yotiAnchor = self::createYotiAnchor(
@@ -206,7 +207,7 @@ class AnchorConverter
         return [
             YotiAnchor::TYPE_SOURCE_OID => YotiAnchor::TYPE_SOURCE_NAME,
             YotiAnchor::TYPE_VERIFIER_OID => YotiAnchor::TYPE_VERIFIER_NAME,
-            YotiAnchor::TYPE_UNKNOWN_OID => YotiAnchor::TYPE_UNKNOWN_NAME,
+            YotiAnchor::TYPE_UNKNOWN_NAME => YotiAnchor::TYPE_UNKNOWN_NAME,
         ];
     }
 }
