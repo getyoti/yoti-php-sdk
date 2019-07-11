@@ -37,7 +37,6 @@ class AnchorListConverterTest extends TestCase
         $anchorsData = AnchorListConverter::convert(new ArrayObject([
             $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
             $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
-            $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR),
         ]));
 
         $anchorSource = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
@@ -47,10 +46,6 @@ class AnchorListConverterTest extends TestCase
         $anchorVerifier = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
         $this->assertEquals('Verifier', $anchorVerifier->getType());
         $this->assertEquals('YOTI_ADMIN', $anchorVerifier->getValue());
-
-        $anchorUnknown = $anchorsData[Anchor::TYPE_UNKNOWN_NAME][0];
-        $this->assertEquals('UNKNOWN', $anchorUnknown->getType());
-        $this->assertEquals('', $anchorUnknown->getValue());
     }
 
     /**
