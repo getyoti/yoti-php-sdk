@@ -11,11 +11,11 @@ use Yoti\Entity\Anchor as YotiAnchor;
 class AnchorConverter
 {
     /**
-     * Convert Protobuf Anchor to a map of oid -> Yoti Anchors
+     * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
      *
      * @param Anchor $anchor
      *
-     * @return array map of oid => YotiAnchor
+     * @return array
      */
     public static function convert(Anchor $protobufAnchor)
     {
