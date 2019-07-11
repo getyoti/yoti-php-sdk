@@ -16,8 +16,7 @@ class AnchorConverterTest extends TestCase
      */
     public function testConvertingSourceAnchor()
     {
-        $anchorsData = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
-        $anchor = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
+        $anchor = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
 
         $this->assertEquals('Source', $anchor->getType());
         $this->assertEquals('OCR', $anchor->getSubtype());
@@ -36,8 +35,7 @@ class AnchorConverterTest extends TestCase
      */
     public function testConvertingVerifierAnchor()
     {
-        $anchorsData = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
-        $anchor = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
+        $anchor = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
 
         $this->assertEquals('Verifier', $anchor->getType());
         $this->assertEquals('', $anchor->getSubtype());
@@ -48,26 +46,6 @@ class AnchorConverterTest extends TestCase
         $this->assertEquals('YOTI_ADMIN', $anchor->getValue());
 
         $this->assertSerialNumber($anchor, '256616937783084706710155170893983549581');
-        $this->assertIssuer($anchor, 'id-at-commonName', 'driving-licence-registration-server');
-    }
-
-    /**
-     * @covers ::convertAnchor
-     */
-    public function testConvertingUnknownAnchor()
-    {
-        $anchorsData = $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR);
-        $anchor = $anchorsData[Anchor::TYPE_UNKNOWN_NAME][0];
-
-        $this->assertEquals('UNKNOWN', $anchor->getType());
-        $this->assertEquals('', $anchor->getSubtype());
-        $this->assertEquals(
-            '2018-04-11 12:13:03.923537',
-            $anchor->getSignedTimestamp()->getTimestamp()->format('Y-m-d H:i:s.u')
-        );
-        $this->assertEquals('', $anchor->getValue());
-
-        $this->assertSerialNumber($anchor, '46131813624213904216516051554755262812');
         $this->assertIssuer($anchor, 'id-at-commonName', 'driving-licence-registration-server');
     }
 
@@ -86,13 +64,13 @@ class AnchorConverterTest extends TestCase
     /**
      * @param string $anchorString
      *
-     * @return array $anchors
+     * @return Anchor
      */
     private function parseFromBase64String($anchorString)
     {
         $anchor = new \Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
-        return AnchorConverter::convertAnchor($anchor);
+        return AnchorConverter::convert($anchor)['yoti_anchor'];
     }
 
     /**

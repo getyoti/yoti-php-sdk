@@ -15,59 +15,38 @@ class AnchorConverter
      *
      * @param Anchor $anchor
      *
-     * @return array map of oid => YotiAnchor[]
+     * @return array map of oid => YotiAnchor
      */
-    public static function convertAnchor(Anchor $protobufAnchor)
+    public static function convert(Anchor $protobufAnchor)
     {
-        $anchorMap = [];
         $anchorSubType = $protobufAnchor->getSubType();
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
         $X509CertsList = self::convertCertsListToX509($protobufAnchor->getOriginServerCerts());
 
+        $anchorValue = '';
+        $oid = YotiAnchor::TYPE_UNKNOWN_NAME;
+
         foreach ($X509CertsList as $certX509Obj) {
-            $certExtsArr = $certX509Obj->tbsCertificate->extensions;
-
-            foreach ($certExtsArr as $extObj) {
+            foreach ($certX509Obj->tbsCertificate->extensions as $extObj) {
                 $anchorType = self::getAnchorTypeByOid($extObj->extnId);
-                if ($anchorType === YotiAnchor::TYPE_UNKNOWN_NAME) {
-                    $anchorValue = '';
-                } else {
+                if ($anchorType !== YotiAnchor::TYPE_UNKNOWN_NAME) {
                     $anchorValue = self::decodeAnchorValue($extObj->extnValue);
+                    $oid = $extObj->extnId;
+                    break;
                 }
-                $yotiAnchor = self::createYotiAnchor(
-                    $anchorValue,
-                    $anchorType,
-                    $anchorSubType,
-                    $yotiSignedTimeStamp,
-                    $X509CertsList
-                );
-                $mapKey = self::getAnchorTypeKey($anchorType);
-                $anchorMap[$mapKey][] = $yotiAnchor;
             }
         }
-        return $anchorMap;
-    }
 
-    /**
-     * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
-     *
-     * @deprecated no longer in use.
-     *
-     * @param Anchor $anchor
-     *
-     * @return array|null
-     */
-    public static function convert(Anchor $protobufAnchor)
-    {
-        $extensions = self::convertAnchor($protobufAnchor);
-        foreach (array_keys(self::getAnchorTypesMap()) as $oid) {
-            if (isset($extensions[$oid][0])) {
-                return [
-                    'oid' => $oid,
-                    'yoti_anchor' => $extensions[$oid][0],
-                ];
-            }
-        }
+        return [
+            'oid' => $oid,
+            'yoti_anchor' => self::createYotiAnchor(
+                $anchorValue,
+                $anchorType,
+                $anchorSubType,
+                $yotiSignedTimeStamp,
+                $X509CertsList
+            ),
+        ];
     }
 
     /**
