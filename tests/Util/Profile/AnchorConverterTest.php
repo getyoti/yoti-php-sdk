@@ -59,13 +59,13 @@ class AnchorConverterTest extends TestCase
         $this->assertEquals('UNKNOWN', $anchor->getType());
         $this->assertEquals('TEST UNKNOWN SUB TYPE', $anchor->getSubtype());
         $this->assertEquals(
-            '2018-04-12 13:14:32.835537',
+            '2019-03-05 10:45:11.840037',
             $anchor->getSignedTimestamp()->getTimestamp()->format('Y-m-d H:i:s.u')
         );
         $this->assertEquals('', $anchor->getValue());
 
-        $this->assertSerialNumber($anchor, '277870515583559162487099305254898397834');
-        $this->assertIssuer($anchor, 'id-at-commonName', 'passport-registration-server');
+        $this->assertSerialNumber($anchor, '228164395157066285041920465780950248577');
+        $this->assertIssuer($anchor, 'id-at-commonName', 'document-registration-server');
     }
 
     /**
