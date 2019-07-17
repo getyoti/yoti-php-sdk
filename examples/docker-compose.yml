@@ -7,19 +7,16 @@ services:
           - "4002:443"
       volumes:
         - ./:/usr/share/nginx/html
-        - ../:/usr/share/nginx/html/sdk
       links:
           - php
   php:
       image: php:7-fpm-alpine
       volumes:
         - ./:/usr/share/nginx/html
-        - ../:/usr/share/nginx/html/sdk
 
   composer:
     image: composer
     volumes:
-      - ./:/usr/share/nginx/html
-      - ../:/usr/share/nginx/html/sdk
-    working_dir: /usr/share/nginx/html
+      - ../:/usr/share/yoti-php-sdk
+    working_dir: /usr/share/yoti-php-sdk/examples
     command: update
