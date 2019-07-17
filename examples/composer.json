@@ -12,5 +12,10 @@
         "symlink": true
       }
     }
-  ]
+  ],
+  "scripts": {
+    "pre-install-cmd": "@copy-sdk",
+    "pre-update-cmd": "@copy-sdk",
+    "copy-sdk": "rm -fr ./sdk && mkdir ./sdk && cd ../ && cp -r `ls -A | grep -v 'examples'` ./examples/sdk/ && cd -"
+  }
 }

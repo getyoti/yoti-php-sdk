@@ -67,10 +67,9 @@
             "name": "yoti/yoti-php-sdk",
             "version": "2.2.0",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/getyoti/yoti-php-sdk/zipball/f3c770c1df2cbba3dc76a1f329938c379191ad7a",
-                "reference": "f3c770c1df2cbba3dc76a1f329938c379191ad7a",
-                "shasum": ""
+                "type": "path",
+                "url": "./sdk",
+                "reference": "549162d0d6f3c0e2b1c328f9128fb28c715da103"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -95,11 +94,21 @@
                     "YotiSandbox\\": "sandbox/src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "YotiTest\\": "tests/",
+                    "SandboxTest\\": "sandbox/tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "authors": [
+                {
+                    "name": "Moussa Sidibe",
+                    "email": "moussa.sidibe@yoti.com",
+                    "role": "Developer"
+                },
                 {
                     "name": "Simon Tong",
                     "email": "simon.tong@yoti.com",
@@ -114,11 +123,6 @@
                     "name": "Quirino Zagarese",
                     "email": "quirino.zagarese@yoti.com",
                     "role": "Maintainer"
-                },
-                {
-                    "name": "Moussa Sidibe",
-                    "email": "moussa.sidibe@yoti.com",
-                    "role": "Developer"
                 }
             ],
             "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
@@ -127,7 +131,9 @@
                 "sdk",
                 "yoti"
             ],
-            "time": "2019-04-24T16:02:26+00:00"
+            "transport-options": {
+                "symlink": true
+            }
         }
     ],
     "packages-dev": [],
