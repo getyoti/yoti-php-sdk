@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "5aeddc2be04fa11af2b7cc3564a9f2bad9d524d8"
+                "reference": "f103e2d2d587797d7e8484fcc9d74664677858c7"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -102,28 +102,6 @@
             },
             "license": [
                 "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Moussa Sidibe",
-                    "email": "moussa.sidibe@yoti.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Simon Tong",
-                    "email": "simon.tong@yoti.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Omari Rodney",
-                    "email": "omari.rodney@yoti.com",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Quirino Zagarese",
-                    "email": "quirino.zagarese@yoti.com",
-                    "role": "Maintainer"
-                }
             ],
             "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
             "homepage": "https://yoti.com",
