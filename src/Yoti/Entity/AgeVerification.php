@@ -32,7 +32,7 @@ class AgeVerification
     }
 
     /**
-     * The type of age check performed, as specified on dashboard.
+     * The type of age check performed, as specified on Yoti Hub.
      * Currently this might be 'age_over' or 'age_under'.
      *
      * @return string $checkType
@@ -43,7 +43,7 @@ class AgeVerification
     }
 
     /**
-     * The age that was that checked, as specified on dashboard.
+     * The age that was that checked, as specified on Yoti Hub.
      *
      * @return int $age
      */
