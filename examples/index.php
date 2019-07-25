@@ -70,6 +70,7 @@ require_once __DIR__ . '/bootstrap.php';
         window.Yoti.Share.init({
             "elements": [{
                 "domId": "yoti-share-button",
+                "clientSdkId": "<?php echo htmlspecialchars(getenv('YOTI_SDK_ID')); ?>",
                 "scenarioId": "<?php echo htmlspecialchars(getenv('YOTI_SCENARIO_ID')); ?>",
                 "button": {
                     "label": "Use Yoti"
