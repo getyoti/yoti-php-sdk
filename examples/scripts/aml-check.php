@@ -15,7 +15,7 @@ try {
 
   $amlAddress = new AmlAddress(new Country('GBR'));
   $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-  $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'), $connectAPI);
+  $yotiClient = new YotiClient(getenv('YOTI_CLIENT_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'), $connectAPI);
   $amlResult = $yotiClient->performAmlCheck($amlProfile);
 } catch(\Exception $e) {
   die("Error - {$e->getMessage()}");

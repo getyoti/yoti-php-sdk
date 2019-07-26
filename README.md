@@ -268,7 +268,7 @@ Please note all our examples work with [Docker](https://docs.docker.com/).
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
 * Copy `.env.dist` to `.env`
-* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_CLIENT_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
 * Run the `docker-compose up -d` command and navigate to [https://localhost:4002](https://localhost:4002)
 * Run the `docker-compose stop` command to stop the containers.
@@ -278,7 +278,7 @@ Please note all our examples work with [Docker](https://docs.docker.com/).
 * Create your application in the [Yoti Dashboard](https://www.yoti.com/dashboard/applications) (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
-* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_CLIENT_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
 * Run the following commands:
 
