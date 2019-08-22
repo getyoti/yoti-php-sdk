@@ -8,4 +8,4 @@ RUN rm -rf /usr/share/nginx/html/index.html \
     && chown -R www-data:www-data /usr/share/nginx/html
 
 RUN apt-get update \
-    && apt-get install php7.0 php7.0-curl -y
+    && apt-get install php7.0 php-curl -y

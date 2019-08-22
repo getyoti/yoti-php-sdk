@@ -9,6 +9,7 @@ use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\CurlRequestHandler;
+use Yoti\Http\RequestBuilder;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
@@ -59,9 +60,19 @@ class YotiClient
     private $pemContent;
 
     /**
-     * @var CurlRequestHandler
+     * @var string
      */
-    private $requestHandler;
+    private $sdkId;
+
+    /**
+     * @var string
+     */
+    private $connectApi;
+
+    /**
+     * @var string
+     */
+    private $sdkIdentifier;
 
     /**
      * YotiClient constructor.
@@ -85,12 +96,9 @@ class YotiClient
         $this->checkSdkId($sdkId);
         $this->validateSdkIdentifier($sdkIdentifier);
 
-        $this->requestHandler = new \Yoti\Http\CurlRequestHandler(
-            $connectApi,
-            $this->pemContent,
-            $sdkId,
-            $sdkIdentifier
-        );
+        $this->sdkId = $sdkId;
+        $this->connectApi = $connectApi;
+        $this->sdkIdentifier = $sdkIdentifier;
     }
 
     /**
@@ -144,7 +152,7 @@ class YotiClient
     public function performAmlCheck(AmlProfile $amlProfile)
     {
         // Get payload data from amlProfile
-        $amlPayload     = new Payload($amlProfile->getData());
+        $amlPayload = new Payload($amlProfile->getData());
 
         $result = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,
@@ -178,7 +186,13 @@ class YotiClient
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        return $this->requestHandler->sendRequest($endpoint, $httpMethod, $payload);
+        return (new RequestBuilder)
+            ->withPemString($this->pemContent)
+            ->withQueryParams(['appId' => $this->sdkId])
+            ->withPath($endpoint)
+            ->withPayload($payload)
+            ->build()
+            ->sendRequest($httpMethod);
     }
 
     /**

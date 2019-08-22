@@ -55,7 +55,7 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function __construct($connectApiUrl, $pem, $sdkId, $sdkIdentifier)
+    public function __construct($connectApiUrl, $pem, $sdkId = null, $sdkIdentifier = 'PHP')
     {
         $this->pem = $pem;
         $this->sdkId = $sdkId;
@@ -69,16 +69,17 @@ abstract class AbstractRequestHandler
      * @param string $endpoint
      * @param string $httpMethod
      * @param Payload|NULL $payload
+     * @param array queryParams
      *
      * @return array
      *
      * @throws RequestException
      */
-    public function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    public function sendRequest($endpoint, $httpMethod, Payload $payload = null, array $queryParams = [])
     {
         self::validateHttpMethod($httpMethod);
 
-        $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload);
+        $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload, $queryParams);
         $requestHeaders = $this->generateRequestHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
         $requestUrl = $this->connectApiUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
 
@@ -86,7 +87,7 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSdkId()
     {
