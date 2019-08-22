@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "f103e2d2d587797d7e8484fcc9d74664677858c7"
+                "reference": "20e206becf8c5f873381991c9e36471b5daeb8c2"
             },
             "require": {
                 "php": ">=5.5.19"

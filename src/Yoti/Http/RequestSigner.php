@@ -16,6 +16,7 @@ class RequestSigner
      * @param string $endpoint
      * @param string $httpMethod
      * @param Payload|NULL $payload
+     * @param array $queryParams
      *
      * @return array
      *
@@ -25,9 +26,10 @@ class RequestSigner
         AbstractRequestHandler $requestHandler,
         $endpoint,
         $httpMethod,
-        Payload $payload = null
+        Payload $payload = null,
+        array $queryParams = []
     ) {
-        $endPointPath = self::generateEndPointPath($endpoint, $requestHandler->getSDKId());
+        $endPointPath = self::generateEndPointPath($endpoint, $queryParams, $requestHandler->getSDKId());
 
         $messageToSign = "{$httpMethod}&$endPointPath";
         if ($payload instanceof Payload) {
@@ -48,17 +50,28 @@ class RequestSigner
 
     /**
      * @param string $endpoint
+     * @param array $queryParams
      * @param string $sdkId
      *
      * @return string
      */
-    private static function generateEndPointPath($endpoint, $sdkId)
+    private static function generateEndPointPath($endpoint, array $queryParams = [], $sdkId = null)
     {
-        // Prepare message to sign
-        $nonce = self::generateNonce();
-        $timestamp = round(microtime(true) * 1000);
+        // Include `appId` query param if SDK ID has been provided.
+        if (!is_null($sdkId)) {
+            $queryParams['appId'] = $sdkId;
+        }
 
-        return "{$endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$sdkId}";
+        // Prepare message to sign.
+        return $endpoint . '?' . http_build_query(
+            array_merge(
+                $queryParams,
+                [
+                    'nonce' => self::generateNonce(),
+                    'timestamp' => round(microtime(true) * 1000),
+                ]
+            )
+        );
     }
 
     /**
