@@ -3,14 +3,13 @@
 namespace Yoti\Http;
 
 use Yoti\Http\CurlRequestHandler;
-use Yoti\YotiClient;
 
 class RequestBuilder
 {
     /**
      * @var string
      */
-    private $baseUrl = YotiClient::DEFAULT_CONNECT_API;
+    private $baseUrl;
 
     /**
      * @var string
@@ -18,24 +17,9 @@ class RequestBuilder
     private $pemString;
 
     /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var array
-     */
-    private $queryParams = [];
-
-    /**
-     * @var Payload
-     */
-    private $payload = null;
-
-    /**
      * @var string SDK Identifier
      */
-    private $sdkIdentifier;
+    private $sdkIdentifier = null;
 
     /**
      * @param string $baseUrl
@@ -60,41 +44,6 @@ class RequestBuilder
     }
 
     /**
-     * @param string $queryParams
-     *
-     * @return RequestBuilder
-     */
-    public function withQueryParams(array $queryParams)
-    {
-        $this->queryParams = $queryParams;
-        return $this;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return RequestBuilder
-     */
-    public function withPath($path)
-    {
-        $this->path = $path;
-        return $this;
-    }
-
-    /**
-     * @param Payload $payload
-     *
-     * @return RequestBuilder
-     */
-    public function withPayload(Payload $payload = null)
-    {
-        $this->payload = $payload;
-        return $this;
-    }
-
-    /**
-     * Undocumented function
-     *
      * @param string $sdkIdentifier
      *
      * @return RequestBuilder
@@ -106,20 +55,15 @@ class RequestBuilder
     }
 
     /**
-     * @return Yoti\Http\Request
+     * @return Yoti\Http\AbstractRequestHandler
      */
     public function build()
     {
-        return new Request(
-            new CurlRequestHandler(
-                $this->baseUrl,
-                $this->pemString,
-                null,
-                $this->sdkIdentifier
-            ),
-            $this->path,
-            $this->queryParams,
-            $this->payload
+        return new CurlRequestHandler(
+            $this->baseUrl,
+            $this->pemString,
+            null,
+            $this->sdkIdentifier
         );
     }
 }

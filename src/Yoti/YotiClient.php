@@ -60,19 +60,9 @@ class YotiClient
     private $pemContent;
 
     /**
-     * @var string
+     * @var \Yoti\Http\AbstractRequestHandler
      */
-    private $sdkId;
-
-    /**
-     * @var string
-     */
-    private $connectApi;
-
-    /**
-     * @var string
-     */
-    private $sdkIdentifier;
+    private $requestHandler;
 
     /**
      * YotiClient constructor.
@@ -96,9 +86,11 @@ class YotiClient
         $this->checkSdkId($sdkId);
         $this->validateSdkIdentifier($sdkIdentifier);
 
-        $this->sdkId = $sdkId;
-        $this->connectApi = $connectApi;
-        $this->sdkIdentifier = $sdkIdentifier;
+        $this->requestHandler = (new RequestBuilder)
+            ->withBaseUrl($connectApi)
+            ->withPemString($this->pemContent)
+            ->withSdkIdentifier($sdkIdentifier)
+            ->build();
     }
 
     /**
@@ -186,13 +178,12 @@ class YotiClient
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        return (new RequestBuilder)
-            ->withPemString($this->pemContent)
-            ->withQueryParams(['appId' => $this->sdkId])
-            ->withPath($endpoint)
-            ->withPayload($payload)
-            ->build()
-            ->sendRequest($httpMethod);
+        return $this->requestHandler->sendRequest(
+            $endpoint,
+            $httpMethod,
+            $payload,
+            ['appId' => $this->sdkId]
+        );
     }
 
     /**

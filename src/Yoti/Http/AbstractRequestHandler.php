@@ -55,7 +55,7 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function __construct($connectApiUrl, $pem, $sdkId = null, $sdkIdentifier = 'PHP')
+    public function __construct($connectApiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
     {
         $this->pem = $pem;
         $this->sdkId = $sdkId;
@@ -75,8 +75,12 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function sendRequest($endpoint, $httpMethod, Payload $payload = null, array $queryParams = [])
-    {
+    public function sendRequest(
+        $endpoint,
+        $httpMethod,
+        Payload $payload = null,
+        array $queryParams = []
+    ) {
         self::validateHttpMethod($httpMethod);
 
         $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload, $queryParams);
@@ -87,6 +91,39 @@ abstract class AbstractRequestHandler
     }
 
     /**
+     * Performs GET request.
+     *
+     * @param string $endpoint
+     * @param array queryParams
+     *
+     * @return array
+     *
+     * @throws RequestException
+     */
+    public function get($endpoint, array $queryParams = [])
+    {
+        return $this->sendRequest($endpoint, self::METHOD_GET, null, $queryParams);
+    }
+
+    /**
+     * Performs POST request.
+     *
+     * @param string $endpoint
+     * @param Payload|NULL $payload
+     * @param array queryParams
+     *
+     * @return array
+     *
+     * @throws RequestException
+     */
+    public function post($endpoint, Payload $payload = null, array $queryParams = [])
+    {
+        return $this->sendRequest($endpoint, self::METHOD_POST, $payload, $queryParams);
+    }
+
+    /**
+     * @deprecated will be removed in version 3 - SDK ID is now added as a query param.
+     *
      * @return string|null
      */
     public function getSdkId()
@@ -115,14 +152,19 @@ abstract class AbstractRequestHandler
         $requestHeaders = [
             CurlRequestHandler::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
             CurlRequestHandler::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
-            CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
             'Content-Type: application/json',
             'Accept: application/json',
         ];
 
-        if ($version = Config::getInstance()->get('version')) {
-            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$version}";
+        // Include SDK identifier and version if provided.
+        if (!is_null($this->sdkIdentifier)) {
+            $requestHeaders[] = CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}";
+
+            if ($version = Config::getInstance()->get('version')) {
+                $requestHeaders[] =  self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$version}";
+            }
         }
+
         return $requestHeaders;
     }
 
