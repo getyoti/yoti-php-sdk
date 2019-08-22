@@ -29,7 +29,13 @@ class RequestSigner
         Payload $payload = null,
         array $queryParams = []
     ) {
-        $endPointPath = self::generateEndPointPath($endpoint, $queryParams, $requestHandler->getSDKId());
+        // Include `appId` query param if SDK ID has been provided to request handler.
+        // @deprecated AbstractRequestHandler::getSDKId() will be removed in version 3.
+        if (!is_null($requestHandler->getSDKId())) {
+            $queryParams['appId'] = $requestHandler->getSDKId();
+        }
+
+        $endPointPath = self::generateEndPointPath($endpoint, $queryParams);
 
         $messageToSign = "{$httpMethod}&$endPointPath";
         if ($payload instanceof Payload) {
@@ -51,17 +57,11 @@ class RequestSigner
     /**
      * @param string $endpoint
      * @param array $queryParams
-     * @param string $sdkId
      *
      * @return string
      */
-    private static function generateEndPointPath($endpoint, array $queryParams = [], $sdkId = null)
+    private static function generateEndPointPath($endpoint, array $queryParams = [])
     {
-        // Include `appId` query param if SDK ID has been provided.
-        if (!is_null($sdkId)) {
-            $queryParams['appId'] = $sdkId;
-        }
-
         // Prepare message to sign.
         return $endpoint . '?' . http_build_query(
             array_merge(
