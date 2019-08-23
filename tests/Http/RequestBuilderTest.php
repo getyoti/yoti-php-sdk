@@ -18,7 +18,7 @@ class RequestBuilderTest extends TestCase
     const BASE_URL = 'http://www.example.com/api/v1';
 
     /**
-     * @var Yoti\Util\PemFile
+     * @var \Yoti\Util\PemFile
      */
     private $pemFile;
 
@@ -44,9 +44,41 @@ class RequestBuilderTest extends TestCase
         $requestHandler = (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
           ->withPemFile($this->pemFile)
+          ->withSdkIdentifier('PHP')
+          ->withSdkVersion('1.2.3')
           ->build();
 
         $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+    }
+
+    /**
+     * @covers ::build
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: Invalid SDK
+     */
+    public function testBuildWithInvalidSdkIdentifier()
+    {
+        (new RequestBuilder)
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFile($this->pemFile)
+          ->withSdkIdentifier('Invalid SDK')
+          ->build();
+    }
+
+    /**
+     * @covers ::build
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Yoti SDK version must be a string
+     */
+    public function testBuildWithInvalidSdkVersion()
+    {
+        (new RequestBuilder)
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFile($this->pemFile)
+          ->withSdkVersion(array('Invalid SDK Version'))
+          ->build();
     }
 
     /**

@@ -275,12 +275,12 @@ abstract class AbstractRequestHandler
     private function validateSdkIdentifier($sdkIdentifier)
     {
         if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
+            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}");
         }
     }
 
     /**
-     * Validate Integration version.
+     * Validate SDK version.
      *
      * @param $sdkVersion
      *
@@ -289,7 +289,7 @@ abstract class AbstractRequestHandler
     private function validateSdkVersion($sdkVersion)
     {
         if (!is_string($sdkVersion)) {
-            throw new RequestException("Wrong Yoti SDK version provided: {$sdkVersion}", 406);
+            throw new RequestException("Yoti SDK version must be a string");
         }
     }
 
