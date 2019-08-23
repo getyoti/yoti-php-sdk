@@ -80,7 +80,7 @@ abstract class AbstractRequestHandler
     {
         $this->pem = $pem;
         $this->sdkId = $sdkId;
-        $this->apiUrl = $apiUrl;
+        $this->apiUrl = rtrim($apiUrl, '/');
 
         if (isset($sdkIdentifier)) {
             $this->validateSdkIdentifier($sdkIdentifier);
@@ -116,6 +116,9 @@ abstract class AbstractRequestHandler
         array $queryParams = []
     ) {
         self::validateHttpMethod($httpMethod);
+
+        // Ensure endpoint always has a single leading slash.
+        $endpoint = '/' . ltrim($endpoint, '/');
 
         $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload, $queryParams);
         $requestHeaders = $this->generateRequestHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);

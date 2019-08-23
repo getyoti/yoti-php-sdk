@@ -2,7 +2,9 @@
 
 namespace Yoti\Http;
 
+use Yoti\Exception\RequestException;
 use Yoti\Http\CurlRequestHandler;
+use Yoti\Util\PemFile;
 
 class RequestBuilder
 {
@@ -12,9 +14,9 @@ class RequestBuilder
     private $baseUrl;
 
     /**
-     * @var string
+     * @var Yoti\Util\PemFile
      */
-    private $pemString;
+    private $pemFile;
 
     /**
      * @var string
@@ -38,13 +40,35 @@ class RequestBuilder
     }
 
     /**
-     * @param string $pemString
+     * @param PemFile $pemFile
      *
      * @return RequestBuilder
      */
-    public function withPemString($pemString)
+    public function withPemFile(PemFile $pemFile)
     {
-        $this->pemString = $pemString;
+        $this->pemFile = $pemFile;
+        return $this;
+    }
+
+    /**
+     * @param string $pemFile
+     *
+     * @return RequestBuilder
+     */
+    public function withPemFilePath($filePath)
+    {
+        $this->pemFile = PemFile::fromFilePath($filePath);
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return RequestBuilder
+     */
+    public function withPemString($content)
+    {
+        $this->pemFile = new PemFile($content);
         return $this;
     }
 
@@ -75,9 +99,17 @@ class RequestBuilder
      */
     public function build()
     {
+        if (empty($this->baseUrl)) {
+            throw new RequestException('Base URL must be provided to ' . __CLASS__);
+        }
+
+        if (!$this->pemFile instanceof PemFile) {
+            throw new RequestException('Pem file must be provided to ' . __CLASS__);
+        }
+
         return new CurlRequestHandler(
             $this->baseUrl,
-            $this->pemString,
+            (string) $this->pemFile,
             null,
             $this->sdkIdentifier,
             $this->sdkVersion
