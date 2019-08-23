@@ -43,18 +43,6 @@ class YotiClient
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
 
     /**
-     * Accepted HTTP header values for X-Yoti-SDK header.
-     *
-     * @var array
-     */
-    private $acceptedSDKIdentifiers = [
-        'PHP',
-        'WordPress',
-        'Drupal',
-        'Joomla',
-    ];
-
-    /**
      * @var string
      */
     private $pemContent;
@@ -75,21 +63,28 @@ class YotiClient
      *   Connect API address
      * @param string $sdkIdentifier (optional)
      *   SDK or Plugin identifier
+     * @param string $sdkVersion (optional)
+     *   SDK or Plugin version
      *
      * @throws RequestException
      * @throws YotiClientException
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
-    {
+    public function __construct(
+        $sdkId,
+        $pem,
+        $connectApi = self::DEFAULT_CONNECT_API,
+        $sdkIdentifier = null,
+        $sdkVersion = null
+    ) {
         $this->checkRequiredModules();
         $this->extractPemContent($pem);
         $this->checkSdkId($sdkId);
-        $this->validateSdkIdentifier($sdkIdentifier);
 
         $this->requestHandler = (new RequestBuilder)
             ->withBaseUrl($connectApi)
             ->withPemString($this->pemContent)
             ->withSdkIdentifier($sdkIdentifier)
+            ->withSdkVersion($sdkVersion)
             ->build();
     }
 
@@ -394,20 +389,6 @@ class YotiClient
             if (!extension_loaded($mod)) {
                 throw new YotiClientException("PHP module '$mod' not installed", 501);
             }
-        }
-    }
-
-    /**
-     * Validate SDK identifier.
-     *
-     * @param $sdkIdentifier
-     *
-     * @throws YotiClientException
-     */
-    private function validateSdkIdentifier($sdkIdentifier)
-    {
-        if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, true)) {
-            throw new YotiClientException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
         }
     }
 }

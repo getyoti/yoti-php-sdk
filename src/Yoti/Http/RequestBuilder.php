@@ -17,9 +17,14 @@ class RequestBuilder
     private $pemString;
 
     /**
-     * @var string SDK Identifier
+     * @var string
      */
     private $sdkIdentifier = null;
+
+    /**
+     * @var string
+     */
+    private $sdkVersion = null;
 
     /**
      * @param string $baseUrl
@@ -55,6 +60,17 @@ class RequestBuilder
     }
 
     /**
+     * @param string $sdkVersion
+     *
+     * @return RequestBuilder
+     */
+    public function withSdkVersion($sdkVersion)
+    {
+        $this->sdkVersion = $sdkVersion;
+        return $this;
+    }
+
+    /**
      * @return Yoti\Http\AbstractRequestHandler
      */
     public function build()
@@ -63,7 +79,8 @@ class RequestBuilder
             $this->baseUrl,
             $this->pemString,
             null,
-            $this->sdkIdentifier
+            $this->sdkIdentifier,
+            $this->sdkVersion
         );
     }
 }
