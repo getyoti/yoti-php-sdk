@@ -57,8 +57,7 @@ class RequestBuilder
      */
     public function withPemFilePath($filePath)
     {
-        $this->pemFile = PemFile::fromFilePath($filePath);
-        return $this;
+        return $this->withPemFile(PemFile::fromFilePath($filePath));
     }
 
     /**
@@ -68,8 +67,7 @@ class RequestBuilder
      */
     public function withPemString($content)
     {
-        $this->pemFile = new PemFile($content);
-        return $this;
+        return $this->withPemFile(PemFile::fromString($content));
     }
 
     /**

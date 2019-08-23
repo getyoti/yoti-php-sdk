@@ -34,7 +34,7 @@ class PemFile
      *
      * @param string $content
      *
-     * @return Yoti\Util\PemFile
+     * @return PemFile
      */
     public static function fromString($content)
     {
@@ -46,11 +46,10 @@ class PemFile
      *
      * @param string $filePath
      *
-     * @return Yoti\Util\PemFile
+     * @return PemFile
      */
     public static function fromFilePath($filePath)
     {
-        // Assert file exists if user passed PEM file path using file:// stream wrapper.
         if (!is_file($filePath)) {
             throw new PemFileException('PEM file was not found.');
         }

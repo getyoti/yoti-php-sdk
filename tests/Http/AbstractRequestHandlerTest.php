@@ -17,18 +17,53 @@ class AbstractRequestHandlerTest extends TestCase
      */
     public function testHeaders()
     {
-        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
-          ->setConstructorArgs(['/', file_get_contents(PEM_FILE), SDK_ID, 'PHP'])
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID,
+        ]);
+
+        $version = Config::getInstance()->get('version');
+
+        return $this->assertCorrectHeaders($requestHandler, [
+          "X-Yoti-SDK-Version: PHP-{$version}",
+          'X-Yoti-SDK: PHP',
+        ]);
+    }
+
+    /**
+     * @covers ::sendRequest
+     * @covers ::executeRequest
+     */
+    public function testCustomSdkHeaders()
+    {
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID,
+          'WordPress',
+          '1.2.3'
+        ]);
+
+        $this->assertCorrectHeaders($requestHandler, [
+          "X-Yoti-SDK-Version: WordPress-1.2.3",
+          'X-Yoti-SDK: WordPress',
+        ]);
+    }
+
+    /**
+     * Create mock for abstract request handler.
+     *
+     * @param array $constructorArgs
+     *
+     * @return \Yoti\Http\AbstractRequestHandler
+     */
+    private function createRequestHandler($constructorArgs)
+    {
+        return $this->getMockBuilder(AbstractRequestHandler::class)
+          ->setConstructorArgs($constructorArgs)
           ->setMethods(['executeRequest'])
           ->getMockForAbstractClass();
-
-        $requestHandler->expects($this->exactly(1))
-          ->method('executeRequest')
-          ->with($this->callback(function ($headers) {
-            return $this->assertCorrectHeaders($headers);
-          }));
-
-        $requestHandler->sendRequest('/', 'GET');
     }
 
     /**
@@ -37,14 +72,30 @@ class AbstractRequestHandlerTest extends TestCase
      * @param array $headers
      * @return bool
      */
-    private function assertCorrectHeaders($headers)
+    private function assertCorrectHeaders($requestHandler, $expectedHeaders)
     {
-        $version = Config::getInstance()->get('version');
-        $this->assertContains("X-Yoti-SDK-Version: PHP-{$version}", $headers);
-        $this->assertContains('X-Yoti-SDK: PHP', $headers);
-        $this->assertContains('Content-Type: application/json', $headers);
-        $this->assertContains('Accept: application/json', $headers);
+        $requestHandler->expects($this->exactly(1))
+          ->method('executeRequest')
+          ->with($this->callback(function ($headers) use ($expectedHeaders) {
+            foreach ($expectedHeaders as $expectedHeader) {
+                $this->assertContainsHeader($expectedHeader, $headers);
+            }
+            $this->assertContainsHeader('Content-Type: application/json', $headers);
+            $this->assertContainsHeader('Accept: application/json', $headers);
+            return true;
+          }));
 
-        return true;
+        $requestHandler->sendRequest('/', 'GET');
+    }
+
+    /**
+     * Assert headers array contains provided expected header.
+     *
+     * @param string $expectedHeader
+     * @param array $headers
+     */
+    private function assertContainsHeader($expectedHeader, $headers)
+    {
+        parent::assertContains($expectedHeader, $headers, print_r($headers, true));
     }
 }

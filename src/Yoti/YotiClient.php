@@ -125,7 +125,7 @@ class YotiClient
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
-        return new ActivityDetails($receipt, (string) $this->pemFile);
+        return new ActivityDetails($receipt, $this->pemFile);
     }
 
     /**
