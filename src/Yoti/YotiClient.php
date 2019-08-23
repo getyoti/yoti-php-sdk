@@ -13,6 +13,8 @@ use Yoti\Http\RequestBuilder;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
+use Yoti\Exception\PemFileException;
+use Yoti\Util\PemFile;
 
 /**
  * Class YotiClient
@@ -43,9 +45,9 @@ class YotiClient
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
 
     /**
-     * @var string
+     * @var \Yoti\Util\PemFile
      */
-    private $pemContent;
+    private $pemFile;
 
     /**
      * @var \Yoti\Http\AbstractRequestHandler
@@ -82,7 +84,7 @@ class YotiClient
 
         $this->requestHandler = (new RequestBuilder)
             ->withBaseUrl($connectApi)
-            ->withPemString($this->pemContent)
+            ->withPemFile($this->pemFile)
             ->withSdkIdentifier($sdkIdentifier)
             ->withSdkVersion($sdkVersion)
             ->build();
@@ -123,7 +125,7 @@ class YotiClient
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
-        return new ActivityDetails($receipt, $this->pemContent);
+        return new ActivityDetails($receipt, (string) $this->pemFile);
     }
 
     /**
@@ -324,13 +326,15 @@ class YotiClient
     private function decryptConnectToken($encryptedConnectToken)
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
-        openssl_private_decrypt($tok, $token, $this->pemContent);
+        openssl_private_decrypt($tok, $token, (string) $this->pemFile);
 
         return $token;
     }
 
     /**
      * Validate and set PEM file content.
+     *
+     * @deprecated this will be replaced by \Yoti\Util\PemFile in version 3.
      *
      * @param string $pem
      *   PEM file path or string
@@ -349,17 +353,15 @@ class YotiClient
             throw new YotiClientException('PEM file was not found.', 400);
         }
 
-        // If file exists grab the content
-        if (is_file($pem)) {
-            $pem = file_get_contents($pem);
-        }
-
-        // Check if key is valid
-        if (!openssl_get_privatekey($pem)) {
+        try {
+            if (is_file($pem)) {
+                $this->pemFile = PemFile::fromFilePath($pem);
+            } else {
+                $this->pemFile = PemFile::fromString($pem);
+            }
+        } catch (PemFileException $e) {
             throw new YotiClientException('PEM file path or content is invalid', 400);
         }
-
-        $this->pemContent = $pem;
     }
 
     /**
