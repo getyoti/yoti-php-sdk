@@ -20,6 +20,9 @@ abstract class AbstractRequestHandler
     const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
     const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
 
+    // Default SDK Identifier.
+    const YOTI_SDK_IDENTIFIER = 'PHP';
+
     /**
      * @var string
      */
@@ -33,7 +36,7 @@ abstract class AbstractRequestHandler
     /**
      * @var string
      */
-    private $connectApiUrl;
+    private $apiUrl;
 
     /**
      * @var string
@@ -43,24 +46,55 @@ abstract class AbstractRequestHandler
     /**
      * @var string
      */
+    private $sdkVersion;
+
+    /**
+     * @var string
+     */
     private $authKey;
+
+    /**
+     * Accepted HTTP header values for X-Yoti-SDK-Integration header.
+     *
+     * @var array
+     */
+    private $acceptedsdkIdentifiers = [
+        'PHP',
+        'WordPress',
+        'Drupal',
+        'Joomla',
+    ];
 
     /**
      * AbstractRequestHandler constructor.
      *
-     * @param string $connectApiUrl
+     * @param string $apiUrl
      * @param string $pem
      * @param string $sdkId
      * @param string $sdkIdentifier
+     * @param string $sdkVersion
      *
      * @throws RequestException
      */
-    public function __construct($connectApiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
+    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null, $sdkVersion = null)
     {
         $this->pem = $pem;
         $this->sdkId = $sdkId;
-        $this->connectApiUrl = $connectApiUrl;
-        $this->sdkIdentifier = $sdkIdentifier;
+        $this->apiUrl = $apiUrl;
+
+        if (isset($sdkIdentifier)) {
+            $this->validateSdkIdentifier($sdkIdentifier);
+            $this->sdkIdentifier = $sdkIdentifier;
+        } else {
+            $this->sdkIdentifier = self::YOTI_SDK_IDENTIFIER;
+        }
+
+        if (isset($sdkVersion)) {
+            $this->validateSdkVersion($sdkVersion);
+            $this->sdkVersion = $sdkVersion;
+        } elseif ($version = Config::getInstance()->get('version')) {
+            $this->sdkVersion = $version;
+        }
 
         $this->authKey = $this->extractAuthKeyFromPemContent();
     }
@@ -85,7 +119,7 @@ abstract class AbstractRequestHandler
 
         $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload, $queryParams);
         $requestHeaders = $this->generateRequestHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
-        $requestUrl = $this->connectApiUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
+        $requestUrl = $this->apiUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
 
         return $this->executeRequest($requestHeaders, $requestUrl, $httpMethod, $payload);
     }
@@ -150,19 +184,16 @@ abstract class AbstractRequestHandler
     {
         // Prepare request Http Headers
         $requestHeaders = [
-            CurlRequestHandler::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
-            CurlRequestHandler::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
+            self::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
+            self::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
             'Content-Type: application/json',
             'Accept: application/json',
         ];
 
-        // Include SDK identifier and version if provided.
-        if (!is_null($this->sdkIdentifier)) {
-            $requestHeaders[] = CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}";
+        $requestHeaders[] = self::YOTI_SDK_IDENTIFIER_KEY . ": " . $this->sdkIdentifier;
 
-            if ($version = Config::getInstance()->get('version')) {
-                $requestHeaders[] =  self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$version}";
-            }
+        if (isset($this->sdkVersion)) {
+            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$this->sdkVersion}";
         }
 
         return $requestHeaders;
@@ -230,6 +261,34 @@ abstract class AbstractRequestHandler
         ];
 
         return in_array($httpMethod, $allowedMethods, true);
+    }
+
+    /**
+     * Validate SDK identifier.
+     *
+     * @param $sdkIdentifier
+     *
+     * @throws YotiClientException
+     */
+    private function validateSdkIdentifier($sdkIdentifier)
+    {
+        if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
+            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
+        }
+    }
+
+    /**
+     * Validate Integration version.
+     *
+     * @param $sdkVersion
+     *
+     * @throws YotiClientException
+     */
+    private function validateSdkVersion($sdkVersion)
+    {
+        if (!is_string($sdkVersion)) {
+            throw new RequestException("Wrong Yoti SDK version provided: {$sdkVersion}", 406);
+        }
     }
 
     /**
