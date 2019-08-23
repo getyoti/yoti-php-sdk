@@ -189,11 +189,10 @@ abstract class AbstractRequestHandler
         $requestHeaders = [
             self::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
             self::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
+            self::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
             'Content-Type: application/json',
             'Accept: application/json',
         ];
-
-        $requestHeaders[] = self::YOTI_SDK_IDENTIFIER_KEY . ": " . $this->sdkIdentifier;
 
         if (isset($this->sdkVersion)) {
             $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$this->sdkVersion}";
