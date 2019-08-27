@@ -131,7 +131,7 @@ class AbstractRequestHandlerTest extends TestCase
             foreach ($expectedHeaders as $expectedHeader) {
                 $this->assertContainsHeader($expectedHeader, $headers);
             }
-            $authKey = PemFile::fromFilePath(PEM_FILE)->getAuthKey();
+            $authKey = PEM_AUTH_KEY;
             $this->assertContainsHeader("X-Yoti-Auth-Key: {$authKey}", $headers);
             $this->assertContainsHeader('Content-Type: application/json', $headers);
             $this->assertContainsHeader('Accept: application/json', $headers);
