@@ -5,6 +5,7 @@ namespace YotiTest\Http;
 use Yoti\Http\AbstractRequestHandler;
 use YotiTest\TestCase;
 use Yoti\Util\Config;
+use Yoti\Util\PemFile;
 
 /**
  * @coversDefaultClass \Yoti\Http\AbstractRequestHandler
@@ -80,6 +81,8 @@ class AbstractRequestHandlerTest extends TestCase
             foreach ($expectedHeaders as $expectedHeader) {
                 $this->assertContainsHeader($expectedHeader, $headers);
             }
+            $authKey = PemFile::fromFilePath(PEM_FILE)->getAuthKey();
+            $this->assertContainsHeader("X-Yoti-Auth-Key: {$authKey}", $headers);
             $this->assertContainsHeader('Content-Type: application/json', $headers);
             $this->assertContainsHeader('Accept: application/json', $headers);
             return true;
