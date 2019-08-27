@@ -67,29 +67,20 @@ abstract class AbstractRequestHandler
      * @param string $apiUrl
      * @param string $pem
      * @param string $sdkId
-     * @param string $sdkIdentifier
-     * @param string $sdkVersion
+     * @param string $sdkIdentifier - deprecated - use ::setSdkIdentifier() instead.
      *
      * @throws RequestException
      */
-    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null, $sdkVersion = null)
+    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
     {
         $this->pemFile = PemFile::fromString($pem);
         $this->sdkId = $sdkId;
         $this->apiUrl = rtrim($apiUrl, '/');
 
         if (isset($sdkIdentifier)) {
-            $this->validateSdkIdentifier($sdkIdentifier);
-            $this->sdkIdentifier = $sdkIdentifier;
+            $this->setSdkIdentifier($sdkIdentifier);
         } else {
             $this->sdkIdentifier = self::YOTI_SDK_IDENTIFIER;
-        }
-
-        if (isset($sdkVersion)) {
-            $this->validateSdkVersion($sdkVersion);
-            $this->sdkVersion = $sdkVersion;
-        } elseif ($version = Config::getInstance()->get('version')) {
-            $this->sdkVersion = $version;
         }
     }
 
@@ -171,6 +162,42 @@ abstract class AbstractRequestHandler
     }
 
     /**
+     * Set SDK identifier.
+     *
+     * Allows plugins to declare their identifier.
+     *
+     * @param string $sdkIdentifier
+     *   SDK or Plugin identifier
+     *
+     * @throws RequestException
+     */
+    public function setSdkIdentifier($sdkIdentifier)
+    {
+        if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
+            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}");
+        }
+        $this->sdkIdentifier = $sdkIdentifier;
+    }
+
+    /**
+     * Set SDK version.
+     *
+     * Allows plugins to declare their version.
+     *
+     * @param string $sdkVersion
+     *   SDK or Plugin version
+     *
+     * @throws RequestException
+     */
+    public function setSdkVersion($sdkVersion)
+    {
+        if (!is_string($sdkVersion)) {
+            throw new RequestException("Yoti SDK version must be a string");
+        }
+        $this->sdkVersion = $sdkVersion;
+    }
+
+    /**
      * Return the request headers including the signed message.
      *
      * @param string $signedMessage
@@ -187,6 +214,10 @@ abstract class AbstractRequestHandler
             'Content-Type: application/json',
             'Accept: application/json',
         ];
+
+        if (is_null($this->sdkVersion) && ($configVersion = Config::getInstance()->get('version'))) {
+            $this->sdkVersion = $configVersion;
+        }
 
         if (isset($this->sdkVersion)) {
             $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$this->sdkVersion}";
@@ -227,34 +258,6 @@ abstract class AbstractRequestHandler
         ];
 
         return in_array($httpMethod, $allowedMethods, true);
-    }
-
-    /**
-     * Validate SDK identifier.
-     *
-     * @param $sdkIdentifier
-     *
-     * @throws YotiClientException
-     */
-    private function validateSdkIdentifier($sdkIdentifier)
-    {
-        if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}");
-        }
-    }
-
-    /**
-     * Validate SDK version.
-     *
-     * @param $sdkVersion
-     *
-     * @throws YotiClientException
-     */
-    private function validateSdkVersion($sdkVersion)
-    {
-        if (!is_string($sdkVersion)) {
-            throw new RequestException("Yoti SDK version must be a string");
-        }
     }
 
     /**

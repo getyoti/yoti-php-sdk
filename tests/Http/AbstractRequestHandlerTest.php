@@ -36,20 +36,70 @@ class AbstractRequestHandlerTest extends TestCase
      * @covers ::sendRequest
      * @covers ::executeRequest
      */
-    public function testCustomSdkHeaders()
+    public function testCustomSdkIdentifierConstructor()
     {
         $requestHandler = $this->createRequestHandler([
           '/',
           file_get_contents(PEM_FILE),
           SDK_ID,
-          'WordPress',
-          '1.2.3'
+          'Drupal'
         ]);
+
+        $this->assertCorrectHeaders($requestHandler, [
+          "X-Yoti-SDK-Version: Drupal-2.2.1",
+          'X-Yoti-SDK: Drupal',
+        ]);
+    }
+
+    /**
+     * @covers ::sendRequest
+     * @covers ::executeRequest
+     */
+    public function testCustomSdkHeaders()
+    {
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID
+        ]);
+
+        $requestHandler->setSdkIdentifier('WordPress');
+        $requestHandler->setSdkVersion('1.2.3');
 
         $this->assertCorrectHeaders($requestHandler, [
           "X-Yoti-SDK-Version: WordPress-1.2.3",
           'X-Yoti-SDK: WordPress',
         ]);
+    }
+
+    /**
+     * @covers ::setSdkIdentifier
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: Invalid
+     */
+    public function testInvalidSdkIdentifier()
+    {
+        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
+          ->disableOriginalConstructor()
+          ->getMockForAbstractClass();
+
+        $requestHandler->setSdkIdentifier('Invalid');
+    }
+
+    /**
+     * @covers ::setSdkVersion
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Yoti SDK version must be a string
+     */
+    public function testInvalidSdkVersion()
+    {
+        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
+          ->disableOriginalConstructor()
+          ->getMockForAbstractClass();
+
+        $requestHandler->setSdkVersion(['invalid version']);
     }
 
     /**

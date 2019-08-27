@@ -155,10 +155,12 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::__construct
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: WrongHeader
      */
-    public function testInvalidSdkIdentifier()
+    public function testInvalidSdkIdentifierConstructor()
     {
-        $this->expectException('Exception');
         new YotiClient(
             SDK_ID,
             $this->pem,
@@ -168,71 +170,72 @@ class YotiClientTest extends TestCase
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Wordpress
+     * Test invalid http header value for X-Yoti-SDK
      *
-     * @covers ::__construct
+     * @covers ::setSdkIdentifier
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: WrongHeader
      */
-    public function testCanUseWordPressAsSdkIdentifier()
+    public function testInvalidSdkIdentifier()
     {
-        $expectedValue  = 'WordPress';
-        $yotiClientObj  = new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
+            YotiClient::DEFAULT_CONNECT_API
         );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $yotiClient->setSdkIdentifier('WrongHeader');
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Drupal
+     * Test invalid http header value for X-Yoti-SDK-Version
      *
-     * @covers ::__construct
+     * @covers ::setSdkVersion
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Yoti SDK version must be a string
      */
-    public function testCanUseDrupalAsSdkIdentifier()
+    public function testInvalidSdkVersion()
     {
-        $expectedValue  = 'Drupal';
-        $yotiClientObj  = new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
+            YotiClient::DEFAULT_CONNECT_API
         );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $yotiClient->setSdkVersion(['WrongVersion']);
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Joomla
+     * Test X-Yoti-SDK http header value for each allowed identifer.
      *
      * @covers ::__construct
+     * @covers ::setSdkIdentifier
+     *
+     * @dataProvider allowedIdentifierDataProvider
      */
-    public function testCanUseJoomlaAsSdkIdentifier()
+    public function testCanUseAllowedSdkIdentifier($identifier)
     {
-        $expectedValue  = 'Joomla';
-        $yotiClientObj  = new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
+            $identifier
         );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $yotiClient->setSdkIdentifier($identifier);
+        $this->assertInstanceOf(YotiClient::class, $yotiClient);
     }
 
     /**
-     * Test X-Yoti-SDK http header value for PHP
+     * Data provider to check allowed SDK identifiers.
      *
-     * @covers ::__construct
+     * @return array
      */
-    public function testCanUsePHPAsSdkIdentifier()
-    {
-        $expectedValue  = 'PHP';
-        $yotiClientObj  = new YotiClient(
-            SDK_ID,
-            $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
-        );
-
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+    public function allowedIdentifierDataProvider() {
+        return [
+            ['PHP'],
+            ['WordPress'],
+            ['Joomla'],
+            ['Drupal'],
+        ];
     }
 }
