@@ -96,4 +96,15 @@ class PemFileTest extends TestCase
     {
         PemFile::fromString('invalid_pem_string');
     }
+
+    /**
+     * Test pem auth key
+     *
+     * @covers ::getAuthKey
+     */
+    public function testPemFileAuthKey()
+    {
+        $pemFile = new PemFile($this->pemContent);
+        $this->assertEquals($pemFile->getAuthKey(), PEM_AUTH_KEY);
+    }
 }
