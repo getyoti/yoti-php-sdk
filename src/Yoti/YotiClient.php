@@ -64,9 +64,7 @@ class YotiClient
      * @param string $connectApi (optional)
      *   Connect API address
      * @param string $sdkIdentifier (optional)
-     *   SDK or Plugin identifier
-     * @param string $sdkVersion (optional)
-     *   SDK or Plugin version
+     *   SDK or Plugin identifier - deprecated - use ::setSdkIdentifier() instead.
      *
      * @throws RequestException
      * @throws YotiClientException
@@ -75,8 +73,7 @@ class YotiClient
         $sdkId,
         $pem,
         $connectApi = self::DEFAULT_CONNECT_API,
-        $sdkIdentifier = null,
-        $sdkVersion = null
+        $sdkIdentifier = null
     ) {
         $this->checkRequiredModules();
         $this->extractPemContent($pem);
@@ -86,7 +83,6 @@ class YotiClient
             ->withBaseUrl($connectApi)
             ->withPemFile($this->pemFile)
             ->withSdkIdentifier($sdkIdentifier)
-            ->withSdkVersion($sdkVersion)
             ->build();
     }
 
@@ -159,6 +155,32 @@ class YotiClient
 
         // Set and return result
         return new AmlResult($responseArr);
+    }
+
+    /**
+     * Set SDK identifier.
+     *
+     * Allows plugins to declare their identifier.
+     *
+     * @param string $sdkIdentifier
+     *   SDK or Plugin identifier
+     */
+    public function setSdkIdentifier($sdkIdentifier)
+    {
+        $this->requestHandler->setSdkIdentifier($sdkIdentifier);
+    }
+
+    /**
+     * Set SDK version.
+     *
+     * Allows plugins to declare their version.
+     *
+     * @param string $sdkVersion
+     *   SDK or Plugin version
+     */
+    public function setSdkVersion($sdkVersion)
+    {
+        $this->requestHandler->setSdkVersion($sdkVersion);
     }
 
     /**

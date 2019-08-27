@@ -105,12 +105,20 @@ class RequestBuilder
             throw new RequestException('Pem file must be provided to ' . __CLASS__);
         }
 
-        return new CurlRequestHandler(
+        $requestHandler = new CurlRequestHandler(
             $this->baseUrl,
             (string) $this->pemFile,
-            null,
-            $this->sdkIdentifier,
-            $this->sdkVersion
+            null
         );
+
+        if (isset($this->sdkIdentifier)) {
+            $requestHandler->setSdkIdentifier($this->sdkIdentifier);
+        }
+
+        if (isset($this->sdkVersion)) {
+            $requestHandler->setSdkVersion($this->sdkVersion);
+        }
+
+        return $requestHandler;
     }
 }
