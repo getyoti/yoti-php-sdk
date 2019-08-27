@@ -230,7 +230,8 @@ class YotiClientTest extends TestCase
      *
      * @return array
      */
-    public function allowedIdentifierDataProvider() {
+    public function allowedIdentifierDataProvider()
+    {
         return [
             ['PHP'],
             ['WordPress'],
