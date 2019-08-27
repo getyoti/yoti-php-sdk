@@ -50,6 +50,11 @@ class YotiClient
     private $pemFile;
 
     /**
+     * @var string
+     */
+    private $sdkId;
+
+    /**
      * @var \Yoti\Http\AbstractRequestHandler
      */
     private $requestHandler;
@@ -77,7 +82,7 @@ class YotiClient
     ) {
         $this->checkRequiredModules();
         $this->extractPemContent($pem);
-        $this->checkSdkId($sdkId);
+        $this->setSdkId($sdkId);
 
         $this->requestHandler = (new RequestBuilder)
             ->withBaseUrl($connectApi)
@@ -387,18 +392,19 @@ class YotiClient
     }
 
     /**
-     * Check SDK ID is provided.
+     * Validate and set SDK ID.
      *
      * @param string $sdkId
      *
      * @throws YotiClientException
      */
-    private function checkSdkId($sdkId)
+    private function setSdkId($sdkId)
     {
         // Check SDK ID passed
         if (!$sdkId) {
             throw new YotiClientException('SDK ID is required', 400);
         }
+        $this->sdkId = $sdkId;
     }
 
     /**
