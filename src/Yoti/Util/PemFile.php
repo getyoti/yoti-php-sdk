@@ -58,6 +58,38 @@ class PemFile
     }
 
     /**
+     * Extracts the auth key from the pem file contents.
+     *
+     * @return string|null
+     *
+     * @throws PemFileException
+     */
+    public function getAuthKey()
+    {
+        $details = openssl_pkey_get_details(openssl_pkey_get_private($this->content));
+        if (!array_key_exists('key', $details)) {
+            return null;
+        }
+
+        // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
+        $KeyStr = trim($details['key']);
+        // Support line break on *nix systems, OS, older OS, and Microsoft
+        $keyArr = preg_split('/\r\n|\r|\n/', $KeyStr);
+        if (strpos($KeyStr, 'BEGIN') !== false) {
+            array_shift($keyArr);
+            array_pop($keyArr);
+        }
+        $authKey = implode('', $keyArr);
+
+        // Check auth key is not empty
+        if (empty($authKey)) {
+            throw new PemFileException('Could not retrieve Auth key from PEM content.');
+        }
+
+        return $authKey;
+    }
+
+    /**
      * @return string
      */
     public function __toString()

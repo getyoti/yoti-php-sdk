@@ -3,6 +3,7 @@
 namespace Yoti\Http;
 
 use Yoti\Util\Config;
+use Yoti\Util\PemFile;
 use Yoti\Exception\RequestException;
 
 abstract class AbstractRequestHandler
@@ -24,9 +25,9 @@ abstract class AbstractRequestHandler
     const YOTI_SDK_IDENTIFIER = 'PHP';
 
     /**
-     * @var string
+     * @var \Yoti\Util\PemFile
      */
-    private $pem;
+    private $pemFile;
 
     /**
      * @var string
@@ -47,11 +48,6 @@ abstract class AbstractRequestHandler
      * @var string
      */
     private $sdkVersion;
-
-    /**
-     * @var string
-     */
-    private $authKey;
 
     /**
      * Accepted HTTP header values for X-Yoti-SDK-Integration header.
@@ -78,7 +74,7 @@ abstract class AbstractRequestHandler
      */
     public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null, $sdkVersion = null)
     {
-        $this->pem = $pem;
+        $this->pemFile = PemFile::fromString($pem);
         $this->sdkId = $sdkId;
         $this->apiUrl = rtrim($apiUrl, '/');
 
@@ -95,8 +91,6 @@ abstract class AbstractRequestHandler
         } elseif ($version = Config::getInstance()->get('version')) {
             $this->sdkVersion = $version;
         }
-
-        $this->authKey = $this->extractAuthKeyFromPemContent();
     }
 
     /**
@@ -173,7 +167,7 @@ abstract class AbstractRequestHandler
      */
     public function getPem()
     {
-        return $this->pem;
+        return (string) $this->pemFile;
     }
 
     /**
@@ -187,7 +181,7 @@ abstract class AbstractRequestHandler
     {
         // Prepare request Http Headers
         $requestHeaders = [
-            self::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
+            self::YOTI_AUTH_HEADER_KEY . ": {$this->pemFile->getAuthKey()}",
             self::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
             self::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
             'Content-Type: application/json',
@@ -199,36 +193,6 @@ abstract class AbstractRequestHandler
         }
 
         return $requestHeaders;
-    }
-
-    /**
-     * @return string
-     *
-     * @throws RequestException
-     */
-    private function extractAuthKeyFromPemContent()
-    {
-        $details = openssl_pkey_get_details(openssl_pkey_get_private($this->pem));
-        if (!array_key_exists('key', $details)) {
-            return null;
-        }
-
-        // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
-        $KeyStr = trim($details['key']);
-        // Support line break on *nix systems, OS, older OS, and Microsoft
-        $keyArr = preg_split('/\r\n|\r|\n/', $KeyStr);
-        if (strpos($KeyStr, 'BEGIN') !== false) {
-            array_shift($keyArr);
-            array_pop($keyArr);
-        }
-        $authKey = implode('', $keyArr);
-
-        // Check auth key is not empty
-        if (empty($authKey)) {
-            throw new RequestException('Could not retrieve Auth key from PEM content.', 401);
-        }
-
-        return $authKey;
     }
 
     /**
