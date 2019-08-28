@@ -144,7 +144,9 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * @deprecated will be removed in version 3 - SDK ID is now added as a query param.
+     * @deprecated will be removed in version 3
+     *
+     * SDK ID is now added as a query param in sendRequest().
      *
      * @return string|null
      */
@@ -174,7 +176,11 @@ abstract class AbstractRequestHandler
     public function setSdkIdentifier($sdkIdentifier)
     {
         if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new RequestException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}");
+            throw new RequestException(sprintf(
+                "'%s' is not in the list of accepted identifiers: %s",
+                $sdkIdentifier,
+                implode(', ', $this->acceptedsdkIdentifiers)
+            ));
         }
         $this->sdkIdentifier = $sdkIdentifier;
     }
