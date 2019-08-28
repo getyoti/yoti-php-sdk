@@ -146,7 +146,7 @@ abstract class AbstractRequestHandler
     /**
      * @deprecated will be removed in version 3
      *
-     * SDK ID is now added as a query param in sendRequest().
+     * SDK ID is now added as a query param in \Yoti\YotiClient::sendRequest()
      *
      * @return string|null
      */
