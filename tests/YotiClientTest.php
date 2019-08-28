@@ -157,7 +157,7 @@ class YotiClientTest extends TestCase
      * @covers ::__construct
      *
      * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: WrongHeader
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifierConstructor()
     {
@@ -165,7 +165,7 @@ class YotiClientTest extends TestCase
             SDK_ID,
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
-            'WrongHeader'
+            'Invalid'
         );
     }
 
@@ -175,7 +175,7 @@ class YotiClientTest extends TestCase
      * @covers ::setSdkIdentifier
      *
      * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: WrongHeader
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifier()
     {
@@ -184,7 +184,7 @@ class YotiClientTest extends TestCase
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API
         );
-        $yotiClient->setSdkIdentifier('WrongHeader');
+        $yotiClient->setSdkIdentifier('Invalid');
     }
 
     /**

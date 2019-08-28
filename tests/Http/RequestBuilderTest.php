@@ -55,14 +55,14 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      *
      * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: Invalid SDK
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testBuildWithInvalidSdkIdentifier()
     {
         (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
           ->withPemFile($this->pemFile)
-          ->withSdkIdentifier('Invalid SDK')
+          ->withSdkIdentifier('Invalid')
           ->build();
     }
 

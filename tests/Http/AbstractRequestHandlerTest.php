@@ -76,7 +76,7 @@ class AbstractRequestHandlerTest extends TestCase
      * @covers ::setSdkIdentifier
      *
      * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Wrong Yoti SDK identifier provided: Invalid
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifier()
     {
