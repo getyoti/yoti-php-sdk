@@ -3,9 +3,9 @@
 namespace YotiTest\Http;
 
 use Yoti\Http\AbstractRequestHandler;
+use Yoti\Http\Payload;
 use YotiTest\TestCase;
 use Yoti\Util\Config;
-use Yoti\Util\PemFile;
 
 /**
  * @coversDefaultClass \Yoti\Http\AbstractRequestHandler
@@ -115,6 +115,70 @@ class AbstractRequestHandlerTest extends TestCase
           ->setConstructorArgs($constructorArgs)
           ->setMethods(['executeRequest'])
           ->getMockForAbstractClass();
+    }
+
+    /**
+     * Create mock request handler to observe sendRequest method.
+     *
+     * @param string $expectedPath
+     * @param string $expectedMethod
+     * @param array $expectedQueryParams
+     * @param \Yoti\Http\Payload $expectedPayload
+     *
+     * @return \Yoti\Http\AbstractRequestHandler
+     */
+    private function createSendRequestObserver($expectedPath, $expectedMethod, $expectedQueryParams, $expectedPayload)
+    {
+        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
+          ->disableOriginalConstructor()
+          ->setMethods(['sendRequest'])
+          ->getMockForAbstractClass();
+
+        $requestHandler->expects($this->exactly(1))
+          ->method('sendRequest')
+          ->with($expectedPath, $expectedMethod, $expectedPayload, $expectedQueryParams);
+
+        return $requestHandler;
+    }
+
+    /**
+     * @covers ::get
+     */
+    public function testGet()
+    {
+        $expectedPath = '/some-path';
+        $expectedPayload = null;
+        $expectedMethod = 'GET';
+        $expectedQueryParams = ['key' => 'value'];
+
+        $requestHandler = $this->createSendRequestObserver(
+            $expectedPath,
+            $expectedMethod,
+            $expectedQueryParams,
+            $expectedPayload
+        );
+
+        $requestHandler->get($expectedPath, $expectedQueryParams);
+    }
+
+    /**
+     * @covers ::post
+     */
+    public function testPost()
+    {
+        $expectedPath = '/some-path';
+        $expectedPayload = new Payload('');
+        $expectedMethod = 'POST';
+        $expectedQueryParams = ['key' => 'value'];
+
+        $requestHandler = $this->createSendRequestObserver(
+            $expectedPath,
+            $expectedMethod,
+            $expectedQueryParams,
+            $expectedPayload
+        );
+
+        $requestHandler->post($expectedPath, $expectedPayload, $expectedQueryParams);
     }
 
     /**
