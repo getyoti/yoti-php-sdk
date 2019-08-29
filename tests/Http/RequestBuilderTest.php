@@ -5,7 +5,6 @@ namespace YotiTest\Http;
 use YotiTest\TestCase;
 use Yoti\Http\AbstractRequestHandler;
 use Yoti\Http\RequestBuilder;
-use Yoti\Util\PemFile;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -18,32 +17,13 @@ class RequestBuilderTest extends TestCase
     const BASE_URL = 'http://www.example.com/api/v1';
 
     /**
-     * @var \Yoti\Util\PemFile
-     */
-    private $pemFile;
-
-    /**
-     * Setup tests.
-     */
-    public function setup()
-    {
-        $this->pemFile = $this->getMockBuilder(PemFile::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__toString'])
-            ->getMock();
-
-        $this->pemFile->method('__toString')
-            ->willReturn(file_get_contents(PEM_FILE));
-    }
-
-    /**
      * @covers ::build
      */
     public function testBuild()
     {
         $requestHandler = (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
-          ->withPemFile($this->pemFile)
+          ->withPemFilePath(PEM_FILE)
           ->withSdkIdentifier('PHP')
           ->withSdkVersion('1.2.3')
           ->build();
@@ -53,6 +33,7 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withSdkIdentifier
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
@@ -61,13 +42,14 @@ class RequestBuilderTest extends TestCase
     {
         (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
-          ->withPemFile($this->pemFile)
+          ->withPemFilePath(PEM_FILE)
           ->withSdkIdentifier('Invalid')
           ->build();
     }
 
     /**
      * @covers ::build
+     * @covers ::withSdkVersion
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage Yoti SDK version must be a string
@@ -76,13 +58,14 @@ class RequestBuilderTest extends TestCase
     {
         (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
-          ->withPemFile($this->pemFile)
+          ->withPemFilePath(PEM_FILE)
           ->withSdkVersion(array('Invalid SDK Version'))
           ->build();
     }
 
     /**
      * @covers ::build
+     * @covers ::withPemFilePath
      */
     public function testBuildWithPemFromFilePath()
     {
@@ -96,8 +79,9 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withPemString
      */
-    public function testBuildWithPemFromString()
+    public function testBuildWithPemString()
     {
         $requestHandler = (new RequestBuilder)
           ->withBaseUrl(self::BASE_URL)
@@ -116,7 +100,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithoutBaseUrl()
     {
         (new RequestBuilder)
-          ->withPemFile($this->pemFile)
+          ->withPemFilePath(PEM_FILE)
           ->build();
     }
 

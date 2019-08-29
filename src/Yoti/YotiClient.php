@@ -86,7 +86,7 @@ class YotiClient
 
         $this->requestHandler = (new RequestBuilder)
             ->withBaseUrl($connectApi)
-            ->withPemFile($this->pemFile)
+            ->withPemString((string) $this->pemFile)
             ->withSdkIdentifier($sdkIdentifier)
             ->build();
     }

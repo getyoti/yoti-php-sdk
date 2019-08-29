@@ -44,7 +44,7 @@ class RequestBuilder
      *
      * @return RequestBuilder
      */
-    public function withPemFile(PemFile $pemFile)
+    private function withPemFile(PemFile $pemFile)
     {
         $this->pemFile = $pemFile;
         return $this;
