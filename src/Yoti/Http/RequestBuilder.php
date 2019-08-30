@@ -29,6 +29,11 @@ class RequestBuilder
     private $sdkVersion = null;
 
     /**
+     * @var array
+     */
+    private $headers = [];
+
+    /**
      * @param string $baseUrl
      *
      * @return RequestBuilder
@@ -93,7 +98,21 @@ class RequestBuilder
     }
 
     /**
-     * @return Yoti\Http\AbstractRequestHandler
+     * @param string $name
+     * @param string $value
+     *
+     * @return RequestBuilder
+     */
+    public function withHeader($name, $value)
+    {
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * @return AbstractRequestHandler
+     *
+     * @throws RequestException
      */
     public function build()
     {
@@ -118,6 +137,8 @@ class RequestBuilder
         if (isset($this->sdkVersion)) {
             $requestHandler->setSdkVersion($this->sdkVersion);
         }
+
+        $requestHandler->setHeaders($this->headers);
 
         return $requestHandler;
     }

@@ -54,6 +54,8 @@ class AbstractRequestHandlerTest extends TestCase
     /**
      * @covers ::sendRequest
      * @covers ::executeRequest
+     * @covers ::setSdkIdentifier
+     * @covers ::setSdkVersion
      */
     public function testCustomSdkHeaders()
     {
@@ -69,6 +71,49 @@ class AbstractRequestHandlerTest extends TestCase
         $this->assertCorrectHeaders($requestHandler, [
           "X-Yoti-SDK-Version: WordPress-1.2.3",
           'X-Yoti-SDK: WordPress',
+        ]);
+    }
+
+    /**
+     * @covers ::sendRequest
+     * @covers ::executeRequest
+     * @covers ::setHeaders
+     */
+    public function testSetHeaders()
+    {
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID
+        ]);
+
+        $requestHandler->setHeaders([
+          'Custom' => 'value 1',
+          'Custom-2' => 'value 2',
+        ]);
+
+        $this->assertCorrectHeaders($requestHandler, [
+          "Custom: value 1",
+          'Custom-2: value 2',
+        ]);
+    }
+
+    /**
+     * @covers ::sendRequest
+     * @covers ::executeRequest
+     * @covers ::setHeaders
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Header value for 'Custom' must be a string
+     */
+    public function testSetHeadersInvalidValue()
+    {
+        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
+          ->disableOriginalConstructor()
+          ->getMockForAbstractClass();
+
+        $requestHandler->setHeaders([
+          'Custom' => array('invalid value'),
         ]);
     }
 
