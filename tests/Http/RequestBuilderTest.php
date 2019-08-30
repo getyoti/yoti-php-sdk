@@ -21,7 +21,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuild()
     {
-        $requestHandler = (new RequestBuilder)
+        $requestHandler = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withSdkIdentifier('PHP')
@@ -40,7 +40,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithInvalidSdkIdentifier()
     {
-        (new RequestBuilder)
+        (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withSdkIdentifier('Invalid')
@@ -56,7 +56,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithInvalidSdkVersion()
     {
-        (new RequestBuilder)
+        (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withSdkVersion(array('Invalid SDK Version'))
@@ -69,7 +69,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithPemFromFilePath()
     {
-        $requestHandler = (new RequestBuilder)
+        $requestHandler = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->build();
@@ -83,12 +83,44 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithPemString()
     {
-        $requestHandler = (new RequestBuilder)
+        $requestHandler = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemString(file_get_contents(PEM_FILE))
           ->build();
 
         $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withHeader
+     */
+    public function testBuildWithHeader()
+    {
+        $requestHandler = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withHeader('Custom', 'custom header value')
+          ->withHeader('Custom-2', 'a second custom header value')
+          ->build();
+
+        $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withHeader
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Header value for 'Custom' must be a string
+     */
+    public function testWithHeaderInvalidValue()
+    {
+        (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withHeader('Custom', ['invalid value'])
+          ->build();
     }
 
     /**
@@ -99,7 +131,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithoutBaseUrl()
     {
-        (new RequestBuilder)
+        (new RequestBuilder())
           ->withPemFilePath(PEM_FILE)
           ->build();
     }
@@ -112,7 +144,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithoutPem()
     {
-        (new RequestBuilder)
+        (new RequestBuilder())
             ->withBaseUrl(self::BASE_URL)
             ->build();
     }

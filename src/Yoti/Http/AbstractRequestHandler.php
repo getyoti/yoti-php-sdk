@@ -50,6 +50,11 @@ abstract class AbstractRequestHandler
     private $sdkVersion;
 
     /**
+     * @var array
+     */
+    private $headers = [];
+
+    /**
      * Accepted HTTP header values for X-Yoti-SDK-Integration header.
      *
      * @var array
@@ -186,6 +191,24 @@ abstract class AbstractRequestHandler
     }
 
     /**
+     * Set custom headers.
+     *
+     * @param string[] $headers
+     *   Associative array of header names and values
+     *
+     * @throws RequestException
+     */
+    public function setHeaders($headers)
+    {
+        foreach ($headers as $name => $value) {
+            if (!is_string($value)) {
+                throw new RequestException("Header value for '{$name}' must be a string");
+            }
+        }
+        $this->headers = $headers;
+    }
+
+    /**
      * Set SDK version.
      *
      * Allows plugins to declare their version.
@@ -213,23 +236,32 @@ abstract class AbstractRequestHandler
     private function generateRequestHeaders($signedMessage)
     {
         // Prepare request Http Headers
-        $requestHeaders = [
-            self::YOTI_AUTH_HEADER_KEY . ": {$this->pemFile->getAuthKey()}",
-            self::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
-            self::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
-            'Content-Type: application/json',
-            'Accept: application/json',
-        ];
+        $requestHeaders = array_merge(
+            $this->headers,
+            [
+                self::YOTI_AUTH_HEADER_KEY => $this->pemFile->getAuthKey(),
+                self::YOTI_DIGEST_HEADER_KEY => $signedMessage,
+                self::YOTI_SDK_IDENTIFIER_KEY => $this->sdkIdentifier,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ]
+        );
 
         if (is_null($this->sdkVersion) && ($configVersion = Config::getInstance()->get('version'))) {
             $this->sdkVersion = $configVersion;
         }
 
         if (isset($this->sdkVersion)) {
-            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$this->sdkVersion}";
+            $requestHeaders[self::YOTI_SDK_VERSION] =  "{$this->sdkIdentifier}-{$this->sdkVersion}";
         }
 
-        return $requestHeaders;
+        return array_map(
+            function ($name, $value) {
+                return "{$name}: {$value}";
+            },
+            array_keys($requestHeaders),
+            array_values($requestHeaders)
+        );
     }
 
     /**

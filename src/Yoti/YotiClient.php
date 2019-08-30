@@ -84,7 +84,7 @@ class YotiClient
         $this->extractPemContent($pem);
         $this->setSdkId($sdkId);
 
-        $this->requestHandler = (new RequestBuilder)
+        $this->requestHandler = (new RequestBuilder())
             ->withBaseUrl($connectApi)
             ->withPemString((string) $this->pemFile)
             ->withSdkIdentifier($sdkIdentifier)
