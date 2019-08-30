@@ -80,7 +80,7 @@ class AnchorConverter
         $signedTimeStamp = new \Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
-        $timestamp = $signedTimeStamp->getTimestamp()/1000000;
+        $timestamp = $signedTimeStamp->getTimestamp() / 1000000;
         $timeIncMicroSeconds = number_format($timestamp, 6, '.', '');
         // Format DateTime to include microseconds and timezone
         $dateTime = \DateTime::createFromFormat(
