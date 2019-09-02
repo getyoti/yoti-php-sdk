@@ -9,6 +9,9 @@ examples/*.pem
 examples/keys/*.pem
 examples/sdk
 
+.phpcs.xml
+phpcs.xml
+
 logs
 
 .DS_Store

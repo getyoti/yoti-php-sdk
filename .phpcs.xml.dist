@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="Yoti">
+  <rule ref="PSR12">
+    <!--
+    Windows users that have enabled `core.autocrlf` in their git configuration
+    can disable the `Generic.Files.LineEndings` rule by copying this file to
+    `.phpcs.xml` and adding an exclusion as follows:
+
+    <exclude name="Generic.Files.LineEndings"/>
+
+    Note: This sniff will always be included on Travis CI.
+    -->
+  </rule>
+  <file>src/Yoti</file>
+  <file>tests</file>
+</ruleset>
