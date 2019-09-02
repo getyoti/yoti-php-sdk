@@ -43,7 +43,7 @@
     "test": "vendor/bin/phpunit",
     "lint": [
       "vendor/bin/phpcs",
-      "vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no"
+      "vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
     ],
     "post-install-cmd": "cghooks add --ignore-lock",
     "post-update-cmd": "cghooks update"
