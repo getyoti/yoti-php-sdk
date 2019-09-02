@@ -6,3 +6,6 @@
 /.gitignore export-ignore
 /README.md export-ignore
 /login_flow.png export-ignore
+
+# Auto detect text files and perform LF normalization
+* text=auto
