@@ -50,7 +50,7 @@
   },
   "extra": {
     "hooks": {
-        "pre-commit": [
+        "commit": [
           "composer test",
           "composer lint"
         ]
