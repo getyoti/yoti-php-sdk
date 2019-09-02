@@ -3,7 +3,6 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
-use Yoti\Http\CurlRequestHandler;
 use Yoti\Util\PemFile;
 
 class RequestBuilder

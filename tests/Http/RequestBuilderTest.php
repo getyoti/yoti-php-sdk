@@ -59,7 +59,7 @@ class RequestBuilderTest extends TestCase
         (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
-          ->withSdkVersion(array('Invalid SDK Version'))
+          ->withSdkVersion(['Invalid SDK Version'])
           ->build();
     }
 

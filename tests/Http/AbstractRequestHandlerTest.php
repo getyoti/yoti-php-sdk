@@ -113,7 +113,7 @@ class AbstractRequestHandlerTest extends TestCase
           ->getMockForAbstractClass();
 
         $requestHandler->setHeaders([
-          'Custom' => array('invalid value'),
+          'Custom' => ['invalid value'],
         ]);
     }
 
