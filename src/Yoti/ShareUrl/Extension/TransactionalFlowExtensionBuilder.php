@@ -23,7 +23,7 @@ class TransactionalFlowExtensionBuilder
      * Allows you to provide a non-null object representing the content to be submitted
      * in the TRANSACTIONAL_FLOW extension.
      *
-     * @param mixed content
+     * @param mixed $content
      */
     public function withContent($content)
     {

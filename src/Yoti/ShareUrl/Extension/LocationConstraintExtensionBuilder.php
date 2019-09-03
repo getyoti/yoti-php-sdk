@@ -37,7 +37,7 @@ class LocationConstraintExtensionBuilder
     /**
      * Allows you to specify the Latitude of the user's expected location
      *
-     * @param float latitude
+     * @param float $latitude
      *
      * @return LocationConstraintExtensionBuilder
      */
@@ -50,7 +50,7 @@ class LocationConstraintExtensionBuilder
     /**
      * Allows you to specify the Longitude of the user's expected location
      *
-     * @param float longitude
+     * @param float $longitude
      *
      * @return LocationConstraintExtensionBuilder
      */
@@ -66,7 +66,7 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param float radius
+     * @param float $radius
      *   The allowable distance, in metres, from the given lat/long location
      *
      * @return LocationConstraintExtensionBuilder
@@ -83,7 +83,7 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param float maxUncertainty
+     * @param float $maxUncertainty
      *   Maximum allowed measurement uncertainty, in metres
      *
      * @return LocationConstraintExtensionBuilder
