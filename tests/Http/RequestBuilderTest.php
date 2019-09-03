@@ -3,7 +3,7 @@
 namespace YotiTest\Http;
 
 use YotiTest\TestCase;
-use Yoti\Http\AbstractRequestHandler;
+use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
 
 /**
@@ -21,14 +21,25 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuild()
     {
-        $requestHandler = (new RequestBuilder())
+        $request = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
+          ->withMethod('POST')
+          ->withEndpoint('/some-endpoint')
           ->withSdkIdentifier('PHP')
           ->withSdkVersion('1.2.3')
           ->build();
 
-        $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+        $this->assertInstanceOf(Request::class, $request);
+
+        $expectedEndpointPattern = '~' . preg_quote(self::BASE_URL, '~') . '/some-endpoint.*?nonce=.*?&timestamp=.*?~';
+
+        $this->assertRegExp($expectedEndpointPattern, $request->getUrl());
+        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
+        $this->assertEquals('PHP-1.2.3', $request->getHeaders()['X-Yoti-SDK-Version']);
+        $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
+        $this->assertEquals('application/json', $request->getHeaders()['Accept']);
     }
 
     /**
@@ -69,12 +80,13 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithPemFromFilePath()
     {
-        $requestHandler = (new RequestBuilder())
+        $request = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
+          ->withMethod('GET')
           ->build();
 
-        $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+        $this->assertInstanceOf(Request::class, $request);
     }
 
     /**
@@ -83,12 +95,13 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithPemString()
     {
-        $requestHandler = (new RequestBuilder())
+        $request = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemString(file_get_contents(PEM_FILE))
+          ->withMethod('GET')
           ->build();
 
-        $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+        $this->assertInstanceOf(Request::class, $request);
     }
 
     /**
@@ -97,14 +110,17 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithHeader()
     {
-        $requestHandler = (new RequestBuilder())
+        $request = (new RequestBuilder())
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withHeader('Custom', 'custom header value')
           ->withHeader('Custom-2', 'a second custom header value')
+          ->withMethod('GET')
           ->build();
 
-        $this->assertInstanceOf(AbstractRequestHandler::class, $requestHandler);
+        $this->assertInstanceOf(Request::class, $request);
+        $this->assertEquals('custom header value', $request->getHeaders()['Custom']);
+        $this->assertEquals('a second custom header value', $request->getHeaders()['Custom-2']);
     }
 
     /**
@@ -120,6 +136,7 @@ class RequestBuilderTest extends TestCase
           ->withBaseUrl(self::BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withHeader('Custom', ['invalid value'])
+          ->withMethod('GET')
           ->build();
     }
 

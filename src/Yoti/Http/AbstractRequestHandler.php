@@ -311,4 +311,15 @@ abstract class AbstractRequestHandler
      * @throws \Yoti\Exception\RequestException
      */
     abstract protected function executeRequest(array $httpHeaders, $requestUrl, $httpMethod, $payload);
+
+    /**
+     * Execute Request against the API.
+     *
+     * @param Request $request
+     *
+     * @return array
+     *
+     * @throws \Yoti\Exception\RequestException
+     */
+    abstract protected function execute(Request $request);
 }

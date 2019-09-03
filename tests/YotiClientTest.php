@@ -161,12 +161,14 @@ class YotiClientTest extends TestCase
      */
     public function testInvalidSdkIdentifierConstructor()
     {
-        new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
             'Invalid'
         );
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
     }
 
     /**
@@ -185,6 +187,9 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API
         );
         $yotiClient->setSdkIdentifier('Invalid');
+
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
     }
 
     /**
@@ -203,6 +208,9 @@ class YotiClientTest extends TestCase
             YotiClient::DEFAULT_CONNECT_API
         );
         $yotiClient->setSdkVersion(['WrongVersion']);
+
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
     }
 
     /**

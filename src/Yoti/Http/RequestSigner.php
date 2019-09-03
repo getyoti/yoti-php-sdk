@@ -54,6 +54,32 @@ class RequestSigner
         ];
     }
 
+    public static function sign(
+        $pem,
+        $endpoint,
+        $httpMethod,
+        Payload $payload = null,
+        array $queryParams = []
+    ) {
+        $endPointPath = self::generateEndPointPath($endpoint, $queryParams);
+
+        $messageToSign = "{$httpMethod}&$endPointPath";
+        if ($payload instanceof Payload) {
+            $messageToSign .= "&{$payload->getBase64Payload()}";
+        }
+
+        openssl_sign($messageToSign, $signedMessage, $pem, OPENSSL_ALGO_SHA256);
+
+        self::validateSignedMessage($signedMessage);
+
+        $base64SignedMessage = base64_encode($signedMessage);
+
+        return [
+            self::SIGNED_MESSAGE_KEY => $base64SignedMessage,
+            self::END_POINT_PATH_KEY => $endPointPath
+        ];
+    }
+
     /**
      * @param string $endpoint
      * @param array $queryParams
