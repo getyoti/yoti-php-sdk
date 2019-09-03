@@ -55,9 +55,19 @@ class YotiClient
     private $sdkId;
 
     /**
-     * @var \Yoti\Http\AbstractRequestHandler
+     * @var string
      */
-    private $requestHandler;
+    private $connectApi;
+
+    /**
+     * @var string
+     */
+    private $sdkIdentifier;
+
+    /**
+     * @var string
+     */
+    private $sdkVersion;
 
     /**
      * YotiClient constructor.
@@ -84,11 +94,11 @@ class YotiClient
         $this->extractPemContent($pem);
         $this->setSdkId($sdkId);
 
-        $this->requestHandler = (new RequestBuilder())
-            ->withBaseUrl($connectApi)
-            ->withPemString((string) $this->pemFile)
-            ->withSdkIdentifier($sdkIdentifier)
-            ->build();
+        $this->connectApi = $connectApi;
+
+        if (isset($sdkIdentifier)) {
+            $this->sdkIdentifier = $sdkIdentifier;
+        }
     }
 
     /**
@@ -172,7 +182,7 @@ class YotiClient
      */
     public function setSdkIdentifier($sdkIdentifier)
     {
-        $this->requestHandler->setSdkIdentifier($sdkIdentifier);
+        $this->sdkIdentifier = $sdkIdentifier;
     }
 
     /**
@@ -185,7 +195,7 @@ class YotiClient
      */
     public function setSdkVersion($sdkVersion)
     {
-        $this->requestHandler->setSdkVersion($sdkVersion);
+        $this->sdkVersion = $sdkVersion;
     }
 
     /**
@@ -202,12 +212,30 @@ class YotiClient
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        return $this->requestHandler->sendRequest(
-            $endpoint,
-            $httpMethod,
-            $payload,
-            ['appId' => $this->sdkId]
+        $requestBuilder = (new RequestBuilder())
+            ->withBaseUrl($this->connectApi)
+            ->withEndpoint($endpoint)
+            ->withMethod($httpMethod)
+            ->withPemString((string) $this->pemFile)
+            ->withQueryParam('appId', $this->sdkId)
+            ->withPayload($payload);
+
+        if (isset($this->sdkIdentifier)) {
+            $requestBuilder->withSdkIdentifier($this->sdkIdentifier);
+        }
+
+        if (isset($this->sdkVersion)) {
+            $requestBuilder->withSdkVersion($this->sdkVersion);
+        }
+
+        $request = $requestBuilder->build();
+
+        $requestHandler = new CurlRequestHandler(
+            $this->connectApi,
+            (string) $this->pemFile
         );
+
+        return $requestHandler->execute($request);
     }
 
     /**
