@@ -39,6 +39,11 @@ class Request
     private $headers;
 
     /**
+     * @var \Yoti\Http\AbstractRequesthandler
+     */
+    private $handler;
+
+    /**
      * AbstractRequestHandler constructor.
      *
      * @param string $apiUrl
@@ -48,8 +53,13 @@ class Request
      *
      * @throws RequestException
      */
-    public function __construct($method, $url, $queryParams = [], Payload $payload = null, $headers = [])
-    {
+    public function __construct(
+        $method,
+        $url,
+        $queryParams = [],
+        Payload $payload = null,
+        $headers = []
+    ) {
         $this->validateHttpMethod($method);
         $this->validateHeaders($headers);
         $this->method = $method;
@@ -100,6 +110,38 @@ class Request
     }
 
     /**
+     * @param \Yoti\Http\AbstractRequesthandler $handler
+     *
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function setHandler(AbstractRequesthandler $handler)
+    {
+        $this->handler = $handler;
+    }
+
+    /**
+     * @return \Yoti\Http\RequestBuilder
+     */
+    private function getHandler()
+    {
+        if (is_null($this->handler)) {
+            // Use Curl handler by default.
+            $this->handler = new CurlRequestHandler();
+        }
+        return $this->handler;
+    }
+
+    /**
+     * Execute the request.
+     *
+     * @return array
+     */
+    public function execute()
+    {
+        $this->getHandler()->execute($this);
+    }
+
+    /**
      * Set custom headers.
      *
      * @param string[] $headers
@@ -125,6 +167,9 @@ class Request
      */
     private static function validateHttpMethod($httpMethod)
     {
+        if (empty($httpMethod)) {
+            throw new RequestException("HTTP Method must be specified");
+        }
         if (!self::methodIsAllowed($httpMethod)) {
             throw new RequestException("Unsupported HTTP Method {$httpMethod}", 400);
         }

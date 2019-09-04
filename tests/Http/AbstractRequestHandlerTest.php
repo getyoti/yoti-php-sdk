@@ -6,12 +6,18 @@ use Yoti\Http\AbstractRequestHandler;
 use Yoti\Http\Payload;
 use YotiTest\TestCase;
 use Yoti\Util\Config;
+use Yoti\Http\Request;
 
 /**
  * @coversDefaultClass \Yoti\Http\AbstractRequestHandler
  */
 class AbstractRequestHandlerTest extends TestCase
 {
+    /**
+     * Test Base URL.
+     */
+    const BASE_URL = 'http://www.example.com/api/v1';
+
     /**
      * @covers ::sendRequest
      * @covers ::executeRequest
@@ -26,10 +32,15 @@ class AbstractRequestHandlerTest extends TestCase
 
         $version = Config::getInstance()->get('version');
 
-        return $this->assertCorrectHeaders($requestHandler, [
+        $this->expectCorrectHeaders($requestHandler, [
           "X-Yoti-SDK-Version: PHP-{$version}",
           'X-Yoti-SDK: PHP',
+          'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
+          'Content-Type: application/json',
+          'Accept: application/json',
         ]);
+
+        $requestHandler->sendRequest('/', 'GET');
     }
 
     /**
@@ -45,33 +56,15 @@ class AbstractRequestHandlerTest extends TestCase
           'Drupal'
         ]);
 
-        $this->assertCorrectHeaders($requestHandler, [
+        $this->expectCorrectHeaders($requestHandler, [
           "X-Yoti-SDK-Version: Drupal-2.2.1",
           'X-Yoti-SDK: Drupal',
-        ]);
-    }
-
-    /**
-     * @covers ::sendRequest
-     * @covers ::executeRequest
-     * @covers ::setSdkIdentifier
-     * @covers ::setSdkVersion
-     */
-    public function testCustomSdkHeaders()
-    {
-        $requestHandler = $this->createRequestHandler([
-          '/',
-          file_get_contents(PEM_FILE),
-          SDK_ID
+          'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
+          'Content-Type: application/json',
+          'Accept: application/json',
         ]);
 
-        $requestHandler->setSdkIdentifier('WordPress');
-        $requestHandler->setSdkVersion('1.2.3');
-
-        $this->assertCorrectHeaders($requestHandler, [
-          "X-Yoti-SDK-Version: WordPress-1.2.3",
-          'X-Yoti-SDK: WordPress',
-        ]);
+        $requestHandler->sendRequest('/', 'GET');
     }
 
     /**
@@ -81,40 +74,29 @@ class AbstractRequestHandlerTest extends TestCase
      */
     public function testSetHeaders()
     {
+        $request = $this->getMockBuilder(Request::class)
+          ->disableOriginalConstructor()
+          ->setMethods(['getHeaders'])
+          ->getMock();
+
+        $request->method('getHeaders')
+          ->willReturn([
+            'Custom' => 'value 1',
+            'Custom-2' => 'value 2',
+          ]);
+
         $requestHandler = $this->createRequestHandler([
           '/',
           file_get_contents(PEM_FILE),
-          SDK_ID
+          SDK_ID,
         ]);
 
-        $requestHandler->setHeaders([
-          'Custom' => 'value 1',
-          'Custom-2' => 'value 2',
-        ]);
-
-        $this->assertCorrectHeaders($requestHandler, [
+        $this->expectCorrectHeaders($requestHandler, [
           "Custom: value 1",
           'Custom-2: value 2',
         ]);
-    }
 
-    /**
-     * @covers ::sendRequest
-     * @covers ::executeRequest
-     * @covers ::setHeaders
-     *
-     * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Header value for 'Custom' must be a string
-     */
-    public function testSetHeadersInvalidValue()
-    {
-        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
-          ->disableOriginalConstructor()
-          ->getMockForAbstractClass();
-
-        $requestHandler->setHeaders([
-          'Custom' => ['invalid value'],
-        ]);
+        $requestHandler->execute($request);
     }
 
     /**
@@ -125,26 +107,14 @@ class AbstractRequestHandlerTest extends TestCase
      */
     public function testInvalidSdkIdentifier()
     {
-        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
-          ->disableOriginalConstructor()
-          ->getMockForAbstractClass();
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID,
+          'Invalid'
+        ]);
 
-        $requestHandler->setSdkIdentifier('Invalid');
-    }
-
-    /**
-     * @covers ::setSdkVersion
-     *
-     * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Yoti SDK version must be a string
-     */
-    public function testInvalidSdkVersion()
-    {
-        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
-          ->disableOriginalConstructor()
-          ->getMockForAbstractClass();
-
-        $requestHandler->setSdkVersion(['invalid version']);
+        $requestHandler->sendRequest('/', 'GET');
     }
 
     /**
@@ -163,67 +133,56 @@ class AbstractRequestHandlerTest extends TestCase
     }
 
     /**
-     * Create mock request handler to observe sendRequest method.
-     *
-     * @param string $expectedPath
-     * @param string $expectedMethod
-     * @param array $expectedQueryParams
-     * @param \Yoti\Http\Payload $expectedPayload
-     *
-     * @return \Yoti\Http\AbstractRequestHandler
+     * @covers ::sendRequest
      */
-    private function createSendRequestObserver($expectedPath, $expectedMethod, $expectedQueryParams, $expectedPayload)
+    public function testExecute()
     {
-        $requestHandler = $this->getMockBuilder(AbstractRequestHandler::class)
+        $expectedUrl = self::BASE_URL;
+        $expectedPayload = $this->createMock(Payload::class);
+        $expectedMethod = 'GET';
+
+        // Process associative array of headers into array of strings
+        // formatted `Some-Header: some-value` as executeRequest() expects.
+        $expectedHeaders = [
+          'Custom' => 'value 1',
+          'Custom-2' => 'value 2',
+        ];
+        $expectedHeaderArray = [];
+        foreach ($expectedHeaders as $name => $value) {
+            $expectedHeaderArray[] = "{$name}: {$value}";
+        }
+
+        $request = $this->getMockBuilder(Request::class)
           ->disableOriginalConstructor()
-          ->setMethods(['sendRequest'])
-          ->getMockForAbstractClass();
+          ->setMethods([
+            'getHeaders',
+            'getUrl',
+            'getMethod',
+            'getPayload',
+          ])
+          ->getMock();
+
+        $request->method('getUrl')->willReturn($expectedUrl);
+        $request->method('getMethod')->willReturn($expectedMethod);
+        $request->method('getPayload')->willReturn($expectedPayload);
+        $request->method('getHeaders')->willReturn($expectedHeaders);
+
+        $requestHandler = $this->createRequestHandler([
+          '/',
+          file_get_contents(PEM_FILE),
+          SDK_ID,
+        ]);
 
         $requestHandler->expects($this->exactly(1))
-          ->method('sendRequest')
-          ->with($expectedPath, $expectedMethod, $expectedPayload, $expectedQueryParams);
+          ->method('executeRequest')
+          ->with(
+              $expectedHeaderArray,
+              $expectedUrl,
+              $expectedMethod,
+              $expectedPayload
+          );
 
-        return $requestHandler;
-    }
-
-    /**
-     * @covers ::get
-     */
-    public function testGet()
-    {
-        $expectedPath = '/some-path';
-        $expectedPayload = null;
-        $expectedMethod = 'GET';
-        $expectedQueryParams = ['key' => 'value'];
-
-        $requestHandler = $this->createSendRequestObserver(
-            $expectedPath,
-            $expectedMethod,
-            $expectedQueryParams,
-            $expectedPayload
-        );
-
-        $requestHandler->get($expectedPath, $expectedQueryParams);
-    }
-
-    /**
-     * @covers ::post
-     */
-    public function testPost()
-    {
-        $expectedPath = '/some-path';
-        $expectedPayload = new Payload('');
-        $expectedMethod = 'POST';
-        $expectedQueryParams = ['key' => 'value'];
-
-        $requestHandler = $this->createSendRequestObserver(
-            $expectedPath,
-            $expectedMethod,
-            $expectedQueryParams,
-            $expectedPayload
-        );
-
-        $requestHandler->post($expectedPath, $expectedPayload, $expectedQueryParams);
+        $requestHandler->execute($request);
     }
 
     /**
@@ -232,7 +191,7 @@ class AbstractRequestHandlerTest extends TestCase
      * @param array $headers
      * @return bool
      */
-    private function assertCorrectHeaders($requestHandler, $expectedHeaders)
+    private function expectCorrectHeaders($requestHandler, $expectedHeaders)
     {
         $requestHandler->expects($this->exactly(1))
           ->method('executeRequest')
@@ -240,14 +199,8 @@ class AbstractRequestHandlerTest extends TestCase
             foreach ($expectedHeaders as $expectedHeader) {
                 $this->assertContainsHeader($expectedHeader, $headers);
             }
-            $authKey = PEM_AUTH_KEY;
-            $this->assertContainsHeader("X-Yoti-Auth-Key: {$authKey}", $headers);
-            $this->assertContainsHeader('Content-Type: application/json', $headers);
-            $this->assertContainsHeader('Accept: application/json', $headers);
             return true;
           }));
-
-        $requestHandler->sendRequest('/', 'GET');
     }
 
     /**

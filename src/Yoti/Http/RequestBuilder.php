@@ -70,14 +70,19 @@ class RequestBuilder
     private $endpoint;
 
     /**
-     * @var Payload
+     * @var \Yoti\Http\Payload
      */
     private $payload;
 
     /**
+     * @var \Yoti\Http\AbstractRequestHandler
+     */
+    private $handler;
+
+    /**
      * @param string $baseUrl
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withBaseUrl($baseUrl)
     {
@@ -86,7 +91,7 @@ class RequestBuilder
     }
 
     /**
-     * @param PemFile $pemFile
+     * @param \Yoti\Util\PemFile $pemFile
      *
      * @return RequestBuilder
      */
@@ -97,9 +102,9 @@ class RequestBuilder
     }
 
     /**
-     * @param string $pemFile
+     * @param string $filePath
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withPemFilePath($filePath)
     {
@@ -109,7 +114,7 @@ class RequestBuilder
     /**
      * @param string $content
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withPemString($content)
     {
@@ -119,7 +124,7 @@ class RequestBuilder
     /**
      * @param string $method
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withMethod($method)
     {
@@ -128,9 +133,25 @@ class RequestBuilder
     }
 
     /**
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withGet()
+    {
+        return $this->withMethod(Request::METHOD_GET);
+    }
+
+    /**
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withPost()
+    {
+        return $this->withMethod(Request::METHOD_POST);
+    }
+
+    /**
      * @param string $endpoint
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withEndpoint($endpoint)
     {
@@ -141,18 +162,29 @@ class RequestBuilder
     /**
      * @param string $payload
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
-    public function withPayload(Payload $payload)
+    public function withPayload(Payload $payload = null)
     {
         $this->payload = $payload;
         return $this;
     }
 
     /**
+     * @param \Yoti\Http\AbstractRequesthandler $handler
+     *
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withHandler(AbstractRequestHandler $handler)
+    {
+        $this->handler = $handler;
+        return $this;
+    }
+
+    /**
      * @param string $sdkIdentifier
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withSdkIdentifier($sdkIdentifier)
     {
@@ -170,7 +202,7 @@ class RequestBuilder
     /**
      * @param string $sdkVersion
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withSdkVersion($sdkVersion)
     {
@@ -185,7 +217,7 @@ class RequestBuilder
      * @param string $name
      * @param string $value
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withHeader($name, $value)
     {
@@ -197,7 +229,7 @@ class RequestBuilder
      * @param string $name
      * @param string $value
      *
-     * @return RequestBuilder
+     * @return \Yoti\Http\RequestBuilder
      */
     public function withQueryParam($name, $value)
     {
@@ -235,9 +267,9 @@ class RequestBuilder
     }
 
     /**
-     * @return AbstractRequestHandler
+     * @return \Yoti\Http\Request
      *
-     * @throws RequestException
+     * @throws \Yoti\Exception\RequestException
      */
     public function build()
     {
@@ -250,7 +282,7 @@ class RequestBuilder
         }
 
         $signedDataArr = RequestSigner::sign(
-            (string) $this->pemFile,
+            $this->pemFile,
             $this->endpoint,
             $this->method,
             $this->payload,
@@ -267,7 +299,12 @@ class RequestBuilder
             $this->queryParams,
             $this->payload,
             array_merge($defaultHeaders, $this->headers),
+            $this->handler
         );
+
+        if (isset($this->handler)) {
+            $request->setHandler($this->handler);
+        }
 
         return $request;
     }

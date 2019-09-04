@@ -2,91 +2,115 @@
 
 namespace Yoti\Http;
 
-use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 use Yoti\Exception\RequestException;
 
 abstract class AbstractRequestHandler
 {
-    // HTTP methods
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
+    /**
+     * HTTP methods
+     *
+     * @deprecated 3.0.0 replaced by \Yoti\Http\Request
+     */
+    const METHOD_GET = Request::METHOD_GET;
+    const METHOD_POST = Request::METHOD_POST;
+    const METHOD_PUT = Request::METHOD_PUT;
+    const METHOD_PATCH = Request::METHOD_PATCH;
+    const METHOD_DELETE = Request::METHOD_DELETE;
 
-    // Request HttpHeader keys
-    const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
-    const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
-    const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
-    const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
+    /**
+     * Request HttpHeader keys
+     *
+     * @deprecated 3.0.0 replaced by \Yoti\Http\RequestBuilder
+     */
+    const YOTI_AUTH_HEADER_KEY = RequestBuilder::YOTI_AUTH_HEADER_KEY;
+    const YOTI_DIGEST_HEADER_KEY = RequestBuilder::YOTI_DIGEST_HEADER_KEY;
+    const YOTI_SDK_IDENTIFIER_KEY = RequestBuilder::YOTI_SDK_IDENTIFIER_KEY;
+    const YOTI_SDK_VERSION = RequestBuilder::YOTI_SDK_VERSION;
 
-    // Default SDK Identifier.
-    const YOTI_SDK_IDENTIFIER = 'PHP';
+    /**
+     * Default SDK Identifier.
+     * @deprecated 3.0.0 replaced by \Yoti\Http\RequestBuilder
+     */
+    const YOTI_SDK_IDENTIFIER = RequestBuilder::YOTI_SDK_IDENTIFIER;
 
     /**
      * @var \Yoti\Util\PemFile
+     *
+     * @deprecated 3.0.0
      */
     private $pemFile;
 
     /**
      * @var string
+     *
+     * @deprecated 3.0.0
      */
     private $sdkId;
 
     /**
      * @var string
+     *
+     * @deprecated 3.0.0
      */
     private $apiUrl;
 
     /**
      * @var string
-     */
-    private $sdkIdentifier;
-
-    /**
-     * @var string
-     */
-    private $sdkVersion;
-
-    /**
-     * @var array
-     */
-    private $headers = [];
-
-    /**
-     * Accepted HTTP header values for X-Yoti-SDK-Integration header.
      *
-     * @var array
+     * @deprecated 3.0.0
      */
-    private $acceptedsdkIdentifiers = [
-        'PHP',
-        'WordPress',
-        'Drupal',
-        'Joomla',
-    ];
+    private $sdkIdentifier = RequestBuilder::YOTI_SDK_IDENTIFIER;
 
     /**
      * AbstractRequestHandler constructor.
      *
+     * @deprecated 3.0.0 constructor arguments will be removed
+     *
      * @param string $apiUrl
      * @param string $pem
      * @param string $sdkId
-     * @param string $sdkIdentifier - deprecated - use ::setSdkIdentifier() instead.
+     * @param string $sdkIdentifier
      *
      * @throws RequestException
      */
-    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
+    public function __construct($apiUrl = null, $pem = null, $sdkId = null, $sdkIdentifier = null)
     {
-        $this->pemFile = PemFile::fromString($pem);
-        $this->sdkId = $sdkId;
-        $this->apiUrl = rtrim($apiUrl, '/');
-
-        if (isset($sdkIdentifier)) {
-            $this->setSdkIdentifier($sdkIdentifier);
-        } else {
-            $this->sdkIdentifier = self::YOTI_SDK_IDENTIFIER;
+        if (isset($apiUrl)) {
+            $this->apiUrl = $apiUrl;
         }
+        if (isset($pem)) {
+            $this->pemFile = PemFile::fromString($pem);
+        }
+        if (isset($sdkId)) {
+            $this->sdkId = $sdkId;
+        }
+        if (isset($sdkIdentifier)) {
+            $this->sdkIdentifier = $sdkIdentifier;
+        }
+    }
+
+    /**
+     * Executes provided request.
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function execute(Request $request)
+    {
+        $headers = [];
+        foreach ($request->getHeaders() as $name => $value) {
+            $headers[] = "{$name}: {$value}";
+        }
+
+        return $this->executeRequest(
+            $headers,
+            $request->getUrl(),
+            $request->getMethod(),
+            $request->getPayload(),
+            $request
+        );
     }
 
     /**
@@ -99,57 +123,22 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function sendRequest(
-        $endpoint,
-        $httpMethod,
-        Payload $payload = null,
-        array $queryParams = []
-    ) {
-        self::validateHttpMethod($httpMethod);
+    public function sendRequest($endpoint, $httpMethod, Payload $payload = null) {
+        $request = (new RequestBuilder())
+          ->withBaseUrl($this->apiUrl)
+          ->withPemString((string) $this->pemFile)
+          ->withEndpoint($endpoint)
+          ->withMethod($httpMethod)
+          ->withPayload($payload)
+          ->withSdkIdentifier($this->sdkIdentifier)
+          ->withQueryParam('appId', $this->sdkId)
+          ->build();
 
-        // Ensure endpoint always has a single leading slash.
-        $endpoint = '/' . ltrim($endpoint, '/');
-
-        $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload, $queryParams);
-        $requestHeaders = $this->generateRequestHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
-        $requestUrl = $this->apiUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
-
-        return $this->executeRequest($requestHeaders, $requestUrl, $httpMethod, $payload);
+        return $this->execute($request);
     }
 
     /**
-     * Performs GET request.
-     *
-     * @param string $endpoint
-     * @param array queryParams
-     *
-     * @return array
-     *
-     * @throws RequestException
-     */
-    public function get($endpoint, array $queryParams = [])
-    {
-        return $this->sendRequest($endpoint, self::METHOD_GET, null, $queryParams);
-    }
-
-    /**
-     * Performs POST request.
-     *
-     * @param string $endpoint
-     * @param Payload|NULL $payload
-     * @param array queryParams
-     *
-     * @return array
-     *
-     * @throws RequestException
-     */
-    public function post($endpoint, Payload $payload = null, array $queryParams = [])
-    {
-        return $this->sendRequest($endpoint, self::METHOD_POST, $payload, $queryParams);
-    }
-
-    /**
-     * @deprecated will be removed in version 3
+     * @deprecated 3.0.0
      *
      * SDK ID is now added as a query param in \Yoti\YotiClient::sendRequest()
      *
@@ -161,141 +150,13 @@ abstract class AbstractRequestHandler
     }
 
     /**
+     * @deprecated 3.0.0
+     *
      * @return string
      */
     public function getPem()
     {
         return (string) $this->pemFile;
-    }
-
-    /**
-     * Set SDK identifier.
-     *
-     * Allows plugins to declare their identifier.
-     *
-     * @param string $sdkIdentifier
-     *   SDK or Plugin identifier
-     *
-     * @throws RequestException
-     */
-    public function setSdkIdentifier($sdkIdentifier)
-    {
-        if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new RequestException(sprintf(
-                "'%s' is not in the list of accepted identifiers: %s",
-                $sdkIdentifier,
-                implode(', ', $this->acceptedsdkIdentifiers)
-            ));
-        }
-        $this->sdkIdentifier = $sdkIdentifier;
-    }
-
-    /**
-     * Set custom headers.
-     *
-     * @param string[] $headers
-     *   Associative array of header names and values
-     *
-     * @throws RequestException
-     */
-    public function setHeaders($headers)
-    {
-        foreach ($headers as $name => $value) {
-            if (!is_string($value)) {
-                throw new RequestException("Header value for '{$name}' must be a string");
-            }
-        }
-        $this->headers = $headers;
-    }
-
-    /**
-     * Set SDK version.
-     *
-     * Allows plugins to declare their version.
-     *
-     * @param string $sdkVersion
-     *   SDK or Plugin version
-     *
-     * @throws RequestException
-     */
-    public function setSdkVersion($sdkVersion)
-    {
-        if (!is_string($sdkVersion)) {
-            throw new RequestException("Yoti SDK version must be a string");
-        }
-        $this->sdkVersion = $sdkVersion;
-    }
-
-    /**
-     * Return the request headers including the signed message.
-     *
-     * @param string $signedMessage
-     *
-     * @return array
-     */
-    private function generateRequestHeaders($signedMessage)
-    {
-        // Prepare request Http Headers
-        $requestHeaders = array_merge(
-            $this->headers,
-            [
-                self::YOTI_AUTH_HEADER_KEY => $this->pemFile->getAuthKey(),
-                self::YOTI_DIGEST_HEADER_KEY => $signedMessage,
-                self::YOTI_SDK_IDENTIFIER_KEY => $this->sdkIdentifier,
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ]
-        );
-
-        if (is_null($this->sdkVersion) && ($configVersion = Config::getInstance()->get('version'))) {
-            $this->sdkVersion = $configVersion;
-        }
-
-        if (isset($this->sdkVersion)) {
-            $requestHeaders[self::YOTI_SDK_VERSION] =  "{$this->sdkIdentifier}-{$this->sdkVersion}";
-        }
-
-        return array_map(
-            function ($name, $value) {
-                return "{$name}: {$value}";
-            },
-            array_keys($requestHeaders),
-            array_values($requestHeaders)
-        );
-    }
-
-    /**
-     * Check if the provided HTTP method is valid.
-     *
-     * @param string $httpMethod
-     *
-     * @throws RequestException
-     */
-    private static function validateHttpMethod($httpMethod)
-    {
-        if (!self::methodIsAllowed($httpMethod)) {
-            throw new RequestException("Unsupported HTTP Method {$httpMethod}", 400);
-        }
-    }
-
-    /**
-     * Check the HTTP method is allowed.
-     *
-     * @param string $httpMethod
-     *
-     * @return bool
-     */
-    private static function methodIsAllowed($httpMethod)
-    {
-        $allowedMethods = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_PATCH,
-            self::METHOD_DELETE,
-        ];
-
-        return in_array($httpMethod, $allowedMethods, true);
     }
 
     /**
@@ -311,15 +172,4 @@ abstract class AbstractRequestHandler
      * @throws \Yoti\Exception\RequestException
      */
     abstract protected function executeRequest(array $httpHeaders, $requestUrl, $httpMethod, $payload);
-
-    /**
-     * Execute Request against the API.
-     *
-     * @param Request $request
-     *
-     * @return array
-     *
-     * @throws \Yoti\Exception\RequestException
-     */
-    abstract protected function execute(Request $request);
 }
