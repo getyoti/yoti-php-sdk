@@ -29,7 +29,6 @@ abstract class AbstractRequestHandler
 
     /**
      * Default SDK Identifier.
-     * @deprecated 3.0.0 replaced by \Yoti\Http\RequestBuilder
      */
     const YOTI_SDK_IDENTIFIER = RequestBuilder::YOTI_SDK_IDENTIFIER;
 
@@ -60,8 +59,6 @@ abstract class AbstractRequestHandler
      * @param string $pem
      * @param string $sdkId
      * @param string $sdkIdentifier
-     *
-     * @throws RequestException
      */
     public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
     {
@@ -77,12 +74,9 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * @deprecated 3.0.0
-     *
      * @param string $endpoint
      * @param string $httpMethod
      * @param Payload|NULL $payload
-     * @param array queryParams
      *
      * @return array
      *
@@ -118,11 +112,7 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * @deprecated 3.0.0
-     *
-     * SDK ID is now added as a query param in \Yoti\YotiClient::sendRequest()
-     *
-     * @return string|null
+     * @return string
      */
     public function getSdkId()
     {
@@ -130,8 +120,6 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * @deprecated 3.0.0
-     *
      * @return string
      */
     public function getPem()
