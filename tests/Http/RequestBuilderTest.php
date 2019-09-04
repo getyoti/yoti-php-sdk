@@ -5,6 +5,7 @@ namespace YotiTest\Http;
 use YotiTest\TestCase;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
+use Yoti\Http\AbstractRequestHandler;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -18,6 +19,12 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withBaseUrl
+     * @covers ::withPemFilePath
+     * @covers ::withMethod
+     * @covers ::withEndpoint
+     * @covers ::withSdkIdentifier
+     * @covers ::withSdkVersion
      */
     public function testBuild()
     {
@@ -40,6 +47,56 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals('PHP-1.2.3', $request->getHeaders()['X-Yoti-SDK-Version']);
         $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
         $this->assertEquals('application/json', $request->getHeaders()['Accept']);
+    }
+
+
+    /**
+     * @covers ::build
+     * @covers ::withSdkIdentifier
+     * @covers ::withSdkVersion
+     */
+    public function testWithSdkIdentifier()
+    {
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withGet()
+          ->withSdkIdentifier('Drupal')
+          ->withSdkVersion('4.5.6')
+          ->build();
+
+        $this->assertEquals('Drupal', $request->getHeaders()['X-Yoti-SDK']);
+        $this->assertEquals('Drupal-4.5.6', $request->getHeaders()['X-Yoti-SDK-Version']);
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withPost
+     */
+    public function testWithPost()
+    {
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withPost()
+          ->build();
+
+        $this->assertEquals('POST', $request->getMethod());
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withGet
+     */
+    public function testWithGet()
+    {
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withGet()
+          ->build();
+
+        $this->assertEquals('GET', $request->getMethod());
     }
 
     /**
@@ -91,6 +148,32 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withHandler
+     */
+    public function testWithHandler()
+    {
+        $handler = $this->getMockBuilder(AbstractRequestHandler::class)
+          ->disableOriginalConstructor()
+          ->setMethods(['execute'])
+          ->getMockForAbstractClass();
+
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withEndpoint('/some-endpoint')
+          ->withPemFilePath(PEM_FILE)
+          ->withMethod('GET')
+          ->withHandler($handler)
+          ->build();
+
+        $handler->expects($this->exactly(1))
+          ->method('execute')
+          ->with($request);
+
+        $request->execute();
+    }
+
+    /**
+     * @covers ::build
      * @covers ::withPemString
      */
     public function testBuildWithPemString()
@@ -121,6 +204,35 @@ class RequestBuilderTest extends TestCase
         $this->assertInstanceOf(Request::class, $request);
         $this->assertEquals('custom header value', $request->getHeaders()['Custom']);
         $this->assertEquals('a second custom header value', $request->getHeaders()['Custom-2']);
+    }
+
+    /**
+     * @covers ::build
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage HTTP Method must be specified
+     */
+    public function testWithoutMethod()
+    {
+        (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->build();
+    }
+
+    /**
+     * @covers ::build
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Unsupported HTTP Method SOME_METHOD
+     */
+    public function testWithUnsupportedMethod()
+    {
+        (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withMethod('SOME_METHOD')
+          ->build();
     }
 
     /**

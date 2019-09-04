@@ -3,6 +3,7 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
+use Yoti\Util\PemFile;
 
 class RequestSigner
 {
@@ -11,6 +12,8 @@ class RequestSigner
 
     /**
      * Return request signed data.
+     *
+     * @deprecated 3.0.0
      *
      * @param AbstractRequestHandler $requestHandler
      * @param string $endpoint
@@ -30,32 +33,35 @@ class RequestSigner
         array $queryParams = []
     ) {
         // Include `appId` query param if SDK ID has been provided to request handler.
-        // @deprecated AbstractRequestHandler::getSDKId() will be removed in version 3.
+        // @deprecated 3.0.0 AbstractRequestHandler::getSDKId() will be removed in version 3.
         if (!is_null($requestHandler->getSDKId())) {
             $queryParams['appId'] = $requestHandler->getSDKId();
         }
 
-        $endPointPath = self::generateEndPointPath($endpoint, $queryParams);
-
-        $messageToSign = "{$httpMethod}&$endPointPath";
-        if ($payload instanceof Payload) {
-            $messageToSign .= "&{$payload->getBase64Payload()}";
-        }
-
-        openssl_sign($messageToSign, $signedMessage, $requestHandler->getPem(), OPENSSL_ALGO_SHA256);
-
-        self::validateSignedMessage($signedMessage);
-
-        $base64SignedMessage = base64_encode($signedMessage);
-
-        return [
-            self::SIGNED_MESSAGE_KEY => $base64SignedMessage,
-            self::END_POINT_PATH_KEY => $endPointPath
-        ];
+        return self::sign(
+            PemFile::fromString($requestHandler->getPem()),
+            $endpoint,
+            $httpMethod,
+            $payload,
+            $queryParams
+        );
     }
 
+    /**
+     * Return request signed data.
+     *
+     * @param PemFile $pemFile
+     * @param string $endpoint
+     * @param string $httpMethod
+     * @param Payload|NULL $payload
+     * @param array $queryParams
+     *
+     * @return array
+     *
+     * @throws RequestException
+     */
     public static function sign(
-        $pem,
+        PemFile $pemFile,
         $endpoint,
         $httpMethod,
         Payload $payload = null,
@@ -68,7 +74,7 @@ class RequestSigner
             $messageToSign .= "&{$payload->getBase64Payload()}";
         }
 
-        openssl_sign($messageToSign, $signedMessage, $pem, OPENSSL_ALGO_SHA256);
+        openssl_sign($messageToSign, $signedMessage, (string) $pemFile, OPENSSL_ALGO_SHA256);
 
         self::validateSignedMessage($signedMessage);
 

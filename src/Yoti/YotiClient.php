@@ -230,10 +230,7 @@ class YotiClient
 
         $request = $requestBuilder->build();
 
-        $requestHandler = new CurlRequestHandler(
-            $this->connectApi,
-            (string) $this->pemFile
-        );
+        $requestHandler = new CurlRequestHandler();
 
         return $requestHandler->execute($request);
     }
@@ -389,7 +386,7 @@ class YotiClient
     /**
      * Validate and set PEM file content.
      *
-     * @deprecated this will be replaced by \Yoti\Util\PemFile in version 3.
+     * @deprecated 3.0.0 this will be replaced by \Yoti\Util\PemFile.
      *
      * @param string $pem
      *   PEM file path or string
