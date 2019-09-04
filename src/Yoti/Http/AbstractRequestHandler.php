@@ -123,7 +123,8 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function sendRequest($endpoint, $httpMethod, Payload $payload = null) {
+    public function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    {
         $request = (new RequestBuilder())
           ->withBaseUrl($this->apiUrl)
           ->withPemString((string) $this->pemFile)

@@ -6,6 +6,7 @@ use YotiTest\TestCase;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
 use Yoti\Http\AbstractRequestHandler;
+use Yoti\Http\Payload;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -204,6 +205,25 @@ class RequestBuilderTest extends TestCase
         $this->assertInstanceOf(Request::class, $request);
         $this->assertEquals('custom header value', $request->getHeaders()['Custom']);
         $this->assertEquals('a second custom header value', $request->getHeaders()['Custom-2']);
+    }
+
+
+    /**
+     * @covers ::build
+     * @covers ::withPayload
+     */
+    public function testWithPayload()
+    {
+        $expectedPayload = new Payload('some content');
+
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withPayload($expectedPayload)
+          ->withPost()
+          ->build();
+
+        $this->assertSame($expectedPayload, $request->getPayload());
     }
 
     /**
