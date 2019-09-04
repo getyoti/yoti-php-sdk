@@ -257,7 +257,7 @@ class YotiClient
         $response = $request->execute();
 
         return [
-            'response' => $response->getResponse(),
+            'response' => $response->getBody(),
             'http_code' => $response->getStatusCode()
         ];
     }

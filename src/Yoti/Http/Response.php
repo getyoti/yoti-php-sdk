@@ -5,23 +5,33 @@ namespace Yoti\Http;
 class Response
 {
     /**
-     * @param string $response
+     * @var string
+     */
+    private $body;
+
+    /**
+     * @var int
+     */
+    private $statusCode;
+
+    /**
+     * @param string $body
      * @param int $statusCode
      */
     public function __construct(
-        $response,
+        $body,
         $statusCode
     ) {
-        $this->response = (string) $response;
+        $this->body = (string) $body;
         $this->statusCode = (int) $statusCode;
     }
 
     /**
      * @return string
      */
-    public function getResponse()
+    public function getBody()
     {
-        return $this->response;
+        return $this->body;
     }
 
     /**
