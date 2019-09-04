@@ -5,6 +5,7 @@ namespace Yoti\Http\Curl;
 use Yoti\Http\RequestHandlerInterface;
 use Yoti\Http\Request;
 use Yoti\Http\Response;
+use Yoti\Exception\RequestException;
 
 /**
  * Handle HTTP requests.

@@ -107,7 +107,7 @@ class YotiClientTest extends TestCase
     public function testGetActivityDetails()
     {
         $response = $this->createMock(Response::class);
-        $response->method('getResponse')->willReturn(file_get_contents(RECEIPT_JSON));
+        $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
         $response->method('getStatusCode')->willReturn(200);
 
         $requestHandler = $this->createMock(RequestHandlerInterface::class);
@@ -127,7 +127,7 @@ class YotiClientTest extends TestCase
     public function testPerformAmlCheck()
     {
         $response = $this->createMock(Response::class);
-        $response->method('getResponse')->willReturn(file_get_contents(AML_CHECK_RESULT_JSON));
+        $response->method('getBody')->willReturn(file_get_contents(AML_CHECK_RESULT_JSON));
         $response->method('getStatusCode')->willReturn(200);
 
         $requestHandler = $this->createMock(RequestHandlerInterface::class);

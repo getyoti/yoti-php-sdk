@@ -46,10 +46,11 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
         $this->assertEquals('PHP-1.2.3', $request->getHeaders()['X-Yoti-SDK-Version']);
+        $this->assertEquals(PEM_AUTH_KEY, $request->getHeaders()['X-Yoti-Auth-Key']);
+        $this->assertNotEmpty($request->getHeaders()['X-Yoti-Auth-Digest']);
         $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
         $this->assertEquals('application/json', $request->getHeaders()['Accept']);
     }
-
 
     /**
      * @covers ::build
