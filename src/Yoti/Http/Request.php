@@ -65,7 +65,7 @@ class Request
         $this->method = $method;
         $this->url = $url;
         $this->queryParams = $queryParams;
-        $this->payload = (string) $payload;
+        $this->payload = $payload;
         $this->headers = $headers;
     }
 
@@ -102,7 +102,7 @@ class Request
     }
 
     /**
-     * @return string
+     * @return Payload|null
      */
     public function getPayload()
     {
