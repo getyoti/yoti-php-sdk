@@ -3,6 +3,7 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
+use Yoti\Http\Curl\RequestHandler;
 
 class Request
 {
@@ -31,40 +32,33 @@ class Request
     /**
      * @var array
      */
-    private $queryParams;
-
-    /**
-     * @var array
-     */
     private $headers;
 
     /**
-     * @var \Yoti\Http\AbstractRequesthandler
+     * @var \Yoti\Http\RequestHandlerInterface
      */
     private $handler;
 
     /**
-     * AbstractRequestHandler constructor.
+     * Request constructor.
      *
-     * @param string $apiUrl
-     * @param string $pem
-     * @param string $sdkId
-     * @param string $sdkIdentifier - deprecated - use ::setSdkIdentifier() instead.
+     * @param string $method
+     * @param string $url
+     * @param Payload $payload
+     * @param array $header
      *
      * @throws RequestException
      */
     public function __construct(
         $method,
         $url,
-        $queryParams = [],
         Payload $payload = null,
-        $headers = []
+        array $headers = []
     ) {
         $this->validateHttpMethod($method);
         $this->validateHeaders($headers);
         $this->method = $method;
         $this->url = $url;
-        $this->queryParams = $queryParams;
         $this->payload = $payload;
         $this->headers = $headers;
     }
@@ -88,14 +82,6 @@ class Request
     /**
      * @return array
      */
-    public function getQueryParams()
-    {
-        return $this->queryParams;
-    }
-
-    /**
-     * @return array
-     */
     public function getHeaders()
     {
         return $this->headers;
@@ -110,11 +96,11 @@ class Request
     }
 
     /**
-     * @param \Yoti\Http\AbstractRequesthandler $handler
+     * @param \Yoti\Http\RequestHandlerInterface $handler
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function setHandler(AbstractRequesthandler $handler)
+    public function setHandler(RequestHandlerInterface $handler)
     {
         $this->handler = $handler;
     }
@@ -126,7 +112,7 @@ class Request
     {
         if (is_null($this->handler)) {
             // Use Curl handler by default.
-            $this->handler = new CurlRequestHandler();
+            $this->handler = new RequestHandler();
         }
         return $this->handler;
     }
@@ -134,11 +120,11 @@ class Request
     /**
      * Execute the request.
      *
-     * @return array
+     * @return \Yoti\Http\Response
      */
     public function execute()
     {
-        $this->getHandler()->execute($this);
+        return $this->getHandler()->execute($this);
     }
 
     /**

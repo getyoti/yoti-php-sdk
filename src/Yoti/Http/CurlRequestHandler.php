@@ -3,7 +3,11 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
+use Yoti\Http\Curl\RequestHandler;
 
+/**
+ * @deprecated 3.0.0
+ */
 class CurlRequestHandler extends AbstractRequestHandler
 {
     /**
@@ -13,6 +17,7 @@ class CurlRequestHandler extends AbstractRequestHandler
      * @param array $httpHeaders
      * @param string $httpMethod
      * @param Payload|NULL $payload
+     * @param Request $request
      *
      * @return array
      *
@@ -20,37 +25,27 @@ class CurlRequestHandler extends AbstractRequestHandler
      */
     protected function executeRequest(array $httpHeaders, $requestUrl, $httpMethod, $payload)
     {
-        $result = [];
-
-        $ch = curl_init($requestUrl);
-        curl_setopt_array($ch, [
-            CURLOPT_HTTPHEADER => $httpHeaders,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => 0,
-        ]);
-
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $httpMethod);
-
-        // Only send payload data for methods that need it.
-        if ($payload instanceof Payload) {
-            // Send payload data as a JSON string
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload->getPayloadJSON());
+        $requestHeaders = [];
+        foreach ($httpHeaders as $httpHeader) {
+            $headerParts = explode(':', $httpHeader);
+            $name = array_shift($headerParts);
+            $value = implode(':', $headerParts);
+            $requestHeaders[$name] = $value;
         }
 
-        // Set response data
-        $result['response'] = curl_exec($ch);
-        // Set response code
-        $result['http_code'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $request = new Request(
+            $httpMethod,
+            $requestUrl,
+            $payload,
+            $requestHeaders
+        );
 
-        // Check if any related Curl error occurred.
-        if (curl_error($ch)) {
-            throw new RequestException(curl_error($ch));
-        }
+        $response = (new RequestHandler())
+          ->execute($request);
 
-        // Close the session
-        curl_close($ch);
-
-        return $result;
+        return [
+            'response' => $response->getResponse(),
+            'http_code' => $response->getStatusCode()
+        ];
     }
 }

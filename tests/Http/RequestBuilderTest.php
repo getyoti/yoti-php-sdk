@@ -5,8 +5,8 @@ namespace YotiTest\Http;
 use YotiTest\TestCase;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
-use Yoti\Http\AbstractRequestHandler;
 use Yoti\Http\Payload;
+use Yoti\Http\RequestHandlerInterface;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -153,7 +153,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testWithHandler()
     {
-        $handler = $this->getMockBuilder(AbstractRequestHandler::class)
+        $handler = $this->getMockBuilder(RequestHandlerInterface::class)
           ->disableOriginalConstructor()
           ->setMethods(['execute'])
           ->getMockForAbstractClass();
@@ -206,7 +206,6 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals('custom header value', $request->getHeaders()['Custom']);
         $this->assertEquals('a second custom header value', $request->getHeaders()['Custom-2']);
     }
-
 
     /**
      * @covers ::build

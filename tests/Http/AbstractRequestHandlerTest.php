@@ -19,28 +19,44 @@ class AbstractRequestHandlerTest extends TestCase
     const BASE_URL = 'http://www.example.com/api/v1';
 
     /**
+     * Test endpoint.
+     */
+    const SOME_ENDPOINT = '/some-endpoint';
+
+    /**
      * @covers ::sendRequest
      * @covers ::executeRequest
      */
-    public function testHeaders()
+    public function testSendRequest()
     {
         $requestHandler = $this->createRequestHandler([
-          '/',
+          self::BASE_URL,
           file_get_contents(PEM_FILE),
           SDK_ID,
         ]);
 
         $version = Config::getInstance()->get('version');
 
-        $this->expectCorrectHeaders($requestHandler, [
+        $expectedPayload = $this->createMock(Payload::class);
+        $expectedUrl = self::BASE_URL . self::SOME_ENDPOINT;
+        $expectedMethod = 'GET';
+        $expectedHeaders = [
           "X-Yoti-SDK-Version: PHP-{$version}",
           'X-Yoti-SDK: PHP',
           'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
           'Content-Type: application/json',
           'Accept: application/json',
-        ]);
+        ];
 
-        $requestHandler->sendRequest('/', 'GET');
+        $this->expectExecuteRequestWith(
+            $requestHandler,
+            $expectedHeaders,
+            $expectedUrl,
+            $expectedMethod,
+            $expectedPayload
+        );
+
+        $requestHandler->sendRequest(self::SOME_ENDPOINT, $expectedMethod, $expectedPayload);
     }
 
     /**
@@ -56,47 +72,24 @@ class AbstractRequestHandlerTest extends TestCase
           'Drupal'
         ]);
 
-        $this->expectCorrectHeaders($requestHandler, [
+        $expectedMethod = 'POST';
+        $expectedHeaders = [
           "X-Yoti-SDK-Version: Drupal-2.2.1",
           'X-Yoti-SDK: Drupal',
           'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
           'Content-Type: application/json',
           'Accept: application/json',
-        ]);
+        ];
 
-        $requestHandler->sendRequest('/', 'GET');
-    }
+        $this->expectExecuteRequestWith(
+            $requestHandler,
+            $expectedHeaders,
+            '/',
+            $expectedMethod,
+            null
+        );
 
-    /**
-     * @covers ::sendRequest
-     * @covers ::executeRequest
-     * @covers ::setHeaders
-     */
-    public function testSetHeaders()
-    {
-        $request = $this->getMockBuilder(Request::class)
-          ->disableOriginalConstructor()
-          ->setMethods(['getHeaders'])
-          ->getMock();
-
-        $request->method('getHeaders')
-          ->willReturn([
-            'Custom' => 'value 1',
-            'Custom-2' => 'value 2',
-          ]);
-
-        $requestHandler = $this->createRequestHandler([
-          '/',
-          file_get_contents(PEM_FILE),
-          SDK_ID,
-        ]);
-
-        $this->expectCorrectHeaders($requestHandler, [
-          "Custom: value 1",
-          'Custom-2: value 2',
-        ]);
-
-        $requestHandler->execute($request);
+        $requestHandler->sendRequest('/', $expectedMethod);
     }
 
     /**
@@ -133,74 +126,37 @@ class AbstractRequestHandlerTest extends TestCase
     }
 
     /**
-     * @covers ::sendRequest
-     */
-    public function testExecute()
-    {
-        $expectedUrl = self::BASE_URL;
-        $expectedPayload = $this->createMock(Payload::class);
-        $expectedMethod = 'GET';
-
-        // Process associative array of headers into array of strings
-        // formatted `Some-Header: some-value` as executeRequest() expects.
-        $expectedHeaders = [
-          'Custom' => 'value 1',
-          'Custom-2' => 'value 2',
-        ];
-        $expectedHeaderArray = [];
-        foreach ($expectedHeaders as $name => $value) {
-            $expectedHeaderArray[] = "{$name}: {$value}";
-        }
-
-        $request = $this->getMockBuilder(Request::class)
-          ->disableOriginalConstructor()
-          ->setMethods([
-            'getHeaders',
-            'getUrl',
-            'getMethod',
-            'getPayload',
-          ])
-          ->getMock();
-
-        $request->method('getUrl')->willReturn($expectedUrl);
-        $request->method('getMethod')->willReturn($expectedMethod);
-        $request->method('getPayload')->willReturn($expectedPayload);
-        $request->method('getHeaders')->willReturn($expectedHeaders);
-
-        $requestHandler = $this->createRequestHandler([
-          '/',
-          file_get_contents(PEM_FILE),
-          SDK_ID,
-        ]);
-
-        $requestHandler->expects($this->exactly(1))
-          ->method('executeRequest')
-          ->with(
-              $expectedHeaderArray,
-              $expectedUrl,
-              $expectedMethod,
-              $expectedPayload
-          );
-
-        $requestHandler->execute($request);
-    }
-
-    /**
      * Asserts that the provided headers are correct.
      *
      * @param array $headers
      * @return bool
      */
-    private function expectCorrectHeaders($requestHandler, $expectedHeaders)
-    {
+    private function expectExecuteRequestWith(
+        $requestHandler,
+        $expectedHeaders,
+        $expectedUrl,
+        $expectedMethod,
+        $expectedPayload
+    ) {
         $requestHandler->expects($this->exactly(1))
           ->method('executeRequest')
-          ->with($this->callback(function ($headers) use ($expectedHeaders) {
-            foreach ($expectedHeaders as $expectedHeader) {
-                $this->assertContainsHeader($expectedHeader, $headers);
-            }
-            return true;
-          }));
+          ->with(
+              $this->callback(function ($headers) use ($expectedHeaders) {
+                foreach ($expectedHeaders as $expectedHeader) {
+                    $this->assertContainsHeader($expectedHeader, $headers);
+                }
+                return true;
+              }),
+              $this->callback(function ($requestUrl) use ($expectedUrl) {
+                $this->assertRegExp(
+                    '/' . preg_quote($expectedUrl, '/') . '?.*?appId=.*?&nonce.*?timestamp=.*?/',
+                    $requestUrl
+                );
+                return true;
+              }),
+              $expectedMethod,
+              $expectedPayload
+          );
     }
 
     /**

@@ -7,6 +7,8 @@ use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
+use Yoti\Http\RequestHandlerInterface;
+use Yoti\Http\Response;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -35,17 +37,7 @@ class YotiClientTest extends TestCase
 
     public function setUp()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
-        $this->amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
         $this->pem = file_get_contents(PEM_FILE);
-
-        $this->amlResult['response'] = file_get_contents(AML_CHECK_RESULT_JSON);
-        $this->amlResult['http_code'] = 200;
-
-        $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
-            ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['sendRequest'])
-            ->getMock();
     }
 
     /**
@@ -114,13 +106,17 @@ class YotiClientTest extends TestCase
      */
     public function testGetActivityDetails()
     {
-        $result['response'] = file_get_contents(RECEIPT_JSON);
-        $result['http_code'] = 200;
+        $response = $this->createMock(Response::class);
+        $response->method('getResponse')->willReturn(file_get_contents(RECEIPT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
 
-        // Stub the method makeRequest to return the result we want
-        $this->yotiClient->method('sendRequest')
-            ->willReturn($result);
-        $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler->method('execute')->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $ad = $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
     }
@@ -130,10 +126,19 @@ class YotiClientTest extends TestCase
      */
     public function testPerformAmlCheck()
     {
-        $this->yotiClient->method('sendRequest')
-            ->willReturn($this->amlResult);
+        $response = $this->createMock(Response::class);
+        $response->method('getResponse')->willReturn(file_get_contents(AML_CHECK_RESULT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
 
-        $result = $this->yotiClient->performAmlCheck($this->amlProfile);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler->method('execute')->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $amlAddress = new AmlAddress(new Country('GBR'));
+        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+        $result = $yotiClient->performAmlCheck($amlProfile);
 
         $this->assertInstanceOf(AmlResult::class, $result);
     }

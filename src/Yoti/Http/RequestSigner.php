@@ -32,8 +32,6 @@ class RequestSigner
         Payload $payload = null,
         array $queryParams = []
     ) {
-        // Include `appId` query param if SDK ID has been provided to request handler.
-        // @deprecated 3.0.0 AbstractRequestHandler::getSDKId() will be removed in version 3.
         if (!is_null($requestHandler->getSDKId())) {
             $queryParams['appId'] = $requestHandler->getSDKId();
         }
@@ -50,10 +48,10 @@ class RequestSigner
     /**
      * Return request signed data.
      *
-     * @param PemFile $pemFile
+     * @param \Yoti\Util\PemFile $pemFile
      * @param string $endpoint
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param \Yoti\Http\Payload|NULL $payload
      * @param array $queryParams
      *
      * @return array
