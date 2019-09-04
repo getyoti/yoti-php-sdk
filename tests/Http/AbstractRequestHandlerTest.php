@@ -6,7 +6,6 @@ use Yoti\Http\AbstractRequestHandler;
 use Yoti\Http\Payload;
 use YotiTest\TestCase;
 use Yoti\Util\Config;
-use Yoti\Http\Request;
 
 /**
  * @coversDefaultClass \Yoti\Http\AbstractRequestHandler

@@ -6,7 +6,7 @@ use Yoti\Exception\RequestException;
 use Yoti\Http\Curl\RequestHandler;
 
 /**
- * @deprecated 3.0.0
+ * @deprecated 3.0.0 Replaced by \Yoti\Http\Curl\RequestHandler
  */
 class CurlRequestHandler extends AbstractRequestHandler
 {
