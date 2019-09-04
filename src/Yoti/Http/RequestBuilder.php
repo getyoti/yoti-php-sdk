@@ -35,7 +35,7 @@ class RequestBuilder
     private $baseUrl;
 
     /**
-     * @var Yoti\Util\PemFile
+     * @var \Yoti\Util\PemFile
      */
     private $pemFile;
 
@@ -75,7 +75,7 @@ class RequestBuilder
     private $payload;
 
     /**
-     * @var \Yoti\Http\AbstractRequestHandler
+     * @var \Yoti\Http\RequestHandlerInterface
      */
     private $handler;
 
@@ -164,18 +164,18 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withPayload(Payload $payload = null)
+    public function withPayload(Payload $payload)
     {
         $this->payload = $payload;
         return $this;
     }
 
     /**
-     * @param \Yoti\Http\AbstractRequesthandler $handler
+     * @param \Yoti\Http\RequestHandlerInterface $handler
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withHandler(AbstractRequestHandler $handler)
+    public function withHandler(RequestHandlerInterface $handler)
     {
         $this->handler = $handler;
         return $this;
@@ -296,10 +296,8 @@ class RequestBuilder
         $request = new Request(
             $this->method,
             $url,
-            $this->queryParams,
             $this->payload,
-            array_merge($defaultHeaders, $this->headers),
-            $this->handler
+            array_merge($defaultHeaders, $this->headers)
         );
 
         if (isset($this->handler)) {

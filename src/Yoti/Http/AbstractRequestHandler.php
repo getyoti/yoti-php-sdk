@@ -5,12 +5,13 @@ namespace Yoti\Http;
 use Yoti\Util\PemFile;
 use Yoti\Exception\RequestException;
 
+/**
+ * @deprecated 3.0.0 Replaced by \Yoti\Http\RequestHandlerInterface
+ */
 abstract class AbstractRequestHandler
 {
     /**
      * HTTP methods
-     *
-     * @deprecated 3.0.0 replaced by \Yoti\Http\Request
      */
     const METHOD_GET = Request::METHOD_GET;
     const METHOD_POST = Request::METHOD_POST;
@@ -20,8 +21,6 @@ abstract class AbstractRequestHandler
 
     /**
      * Request HttpHeader keys
-     *
-     * @deprecated 3.0.0 replaced by \Yoti\Http\RequestBuilder
      */
     const YOTI_AUTH_HEADER_KEY = RequestBuilder::YOTI_AUTH_HEADER_KEY;
     const YOTI_DIGEST_HEADER_KEY = RequestBuilder::YOTI_DIGEST_HEADER_KEY;
@@ -36,36 +35,26 @@ abstract class AbstractRequestHandler
 
     /**
      * @var \Yoti\Util\PemFile
-     *
-     * @deprecated 3.0.0
      */
     private $pemFile;
 
     /**
      * @var string
-     *
-     * @deprecated 3.0.0
      */
     private $sdkId;
 
     /**
      * @var string
-     *
-     * @deprecated 3.0.0
      */
     private $apiUrl;
 
     /**
      * @var string
-     *
-     * @deprecated 3.0.0
      */
     private $sdkIdentifier = RequestBuilder::YOTI_SDK_IDENTIFIER;
 
     /**
      * AbstractRequestHandler constructor.
-     *
-     * @deprecated 3.0.0 constructor arguments will be removed
      *
      * @param string $apiUrl
      * @param string $pem
@@ -74,14 +63,11 @@ abstract class AbstractRequestHandler
      *
      * @throws RequestException
      */
-    public function __construct($apiUrl = null, $pem = null, $sdkId = null, $sdkIdentifier = null)
+    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
     {
-        if (isset($apiUrl)) {
-            $this->apiUrl = $apiUrl;
-        }
-        if (isset($pem)) {
-            $this->pemFile = PemFile::fromString($pem);
-        }
+        $this->apiUrl = $apiUrl;
+        $this->pemFile = PemFile::fromString($pem);
+
         if (isset($sdkId)) {
             $this->sdkId = $sdkId;
         }
@@ -91,30 +77,7 @@ abstract class AbstractRequestHandler
     }
 
     /**
-     * Executes provided request.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    public function execute(Request $request)
-    {
-        $headers = [];
-        foreach ($request->getHeaders() as $name => $value) {
-            $headers[] = "{$name}: {$value}";
-        }
-
-        return $this->executeRequest(
-            $headers,
-            $request->getUrl(),
-            $request->getMethod(),
-            $request->getPayload(),
-            $request
-        );
-    }
-
-    /**
-     * @deprecated 3.0.0 Replaced by execute()
+     * @deprecated 3.0.0
      *
      * @param string $endpoint
      * @param string $httpMethod
@@ -127,17 +90,31 @@ abstract class AbstractRequestHandler
      */
     public function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        $request = (new RequestBuilder())
+        $requestBuilder = (new RequestBuilder())
           ->withBaseUrl($this->apiUrl)
           ->withPemString((string) $this->pemFile)
           ->withEndpoint($endpoint)
           ->withMethod($httpMethod)
-          ->withPayload($payload)
           ->withSdkIdentifier($this->sdkIdentifier)
-          ->withQueryParam('appId', $this->sdkId)
-          ->build();
+          ->withQueryParam('appId', $this->sdkId);
 
-        return $this->execute($request);
+        if (isset($payload)) {
+            $requestBuilder->withPayload($payload);
+        }
+
+        $request = $requestBuilder->build();
+
+        $headers = [];
+        foreach ($request->getHeaders() as $name => $value) {
+            $headers[] = "{$name}: {$value}";
+        }
+
+        return $this->executeRequest(
+            $headers,
+            $request->getUrl(),
+            $request->getMethod(),
+            $request->getPayload()
+        );
     }
 
     /**

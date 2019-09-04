@@ -11,7 +11,6 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\RequestSigner;
 use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\AbstractRequestHandler;
-use Yoti\Http\Request;
 
 /**
  * @coversDefaultClass \Yoti\Http\CurlRequestHandler
@@ -118,37 +117,6 @@ class CurlRequestHandlerTest extends TestCase
             '/profile/fakeToken',
             'GET'
         );
-        $this->assertEquals(json_encode($expectedResult), json_encode($result));
-    }
-
-    /**
-     * @covers ::execute
-     */
-    public function testExecute()
-    {
-        $expectedResult['response'] = file_get_contents(RECEIPT_JSON);
-        $expectedResult['http_code'] = 200;
-
-        $curlRequestHandler = $this->getMockBuilder('\Yoti\Http\CurlRequestHandler')
-            ->disableOriginalConstructor()
-            ->setMethods(['executeRequest'])
-            ->getMock();
-
-        // Configure the stub.
-        $curlRequestHandler->method('executeRequest')
-            ->willReturn($expectedResult);
-
-        $request = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getHeaders',
-            ])
-            ->getMock();
-
-        $request->method('getHeaders')->willReturn([]);
-
-        $result = $curlRequestHandler->execute($request);
-
         $this->assertEquals(json_encode($expectedResult), json_encode($result));
     }
 }

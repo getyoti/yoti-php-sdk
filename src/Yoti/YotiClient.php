@@ -7,13 +7,14 @@ use Yoti\Exception\RequestException;
 use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
+use Yoti\Http\RequestHandlerInterface;
 use Yoti\Entity\AmlProfile;
-use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\RequestBuilder;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\PemFileException;
+use Yoti\Http\Request;
 use Yoti\Util\PemFile;
 
 /**
@@ -68,6 +69,11 @@ class YotiClient
      * @var string
      */
     private $sdkVersion;
+
+    /**
+     * @var \Yoti\Http\RequestHandlerInterface
+     */
+    private $requestHandler;
 
     /**
      * YotiClient constructor.
@@ -156,7 +162,7 @@ class YotiClient
 
         $result = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,
-            CurlRequestHandler::METHOD_POST,
+            Request::METHOD_POST,
             $amlPayload
         );
 
@@ -199,6 +205,16 @@ class YotiClient
     }
 
     /**
+     * Set a custom request handler.
+     *
+     * @param \Yoti\Http\RequestHandlerInterface $requestHandler
+     */
+    public function setRequestHandler(RequestHandlerInterface $requestHandler)
+    {
+        $this->requestHandler = $requestHandler;
+    }
+
+    /**
      * Make REST request to Connect API.
      * This method allows to stub the request call in test mode.
      *
@@ -217,8 +233,11 @@ class YotiClient
             ->withEndpoint($endpoint)
             ->withMethod($httpMethod)
             ->withPemString((string) $this->pemFile)
-            ->withQueryParam('appId', $this->sdkId)
-            ->withPayload($payload);
+            ->withQueryParam('appId', $this->sdkId);
+
+        if (isset($payload)) {
+            $requestBuilder->withPayload($payload);
+        }
 
         if (isset($this->sdkIdentifier)) {
             $requestBuilder->withSdkIdentifier($this->sdkIdentifier);
@@ -228,11 +247,19 @@ class YotiClient
             $requestBuilder->withSdkVersion($this->sdkVersion);
         }
 
-        $request = $requestBuilder->build();
+        if (isset($this->requestHandler)) {
+            $requestBuilder->withHandler($this->requestHandler);
+        }
 
-        $requestHandler = new CurlRequestHandler();
+        $request = $requestBuilder
+            ->build();
 
-        return $requestHandler->execute($request);
+        $response = $request->execute();
+
+        return [
+            'response' => $response->getResponse(),
+            'http_code' => $response->getStatusCode()
+        ];
     }
 
     /**
@@ -293,7 +320,7 @@ class YotiClient
      * @throws ReceiptException
      * @throws RequestException
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = CurlRequestHandler::METHOD_GET, $payload = null)
+    private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET, $payload = null)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
