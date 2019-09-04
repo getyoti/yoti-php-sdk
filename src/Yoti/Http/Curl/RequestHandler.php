@@ -22,8 +22,10 @@ class RequestHandler implements RequestHandlerInterface
     public function execute(Request $request)
     {
         $headers = [];
-        foreach ($request->getHeaders() as $name => $value) {
-            $headers[] = "{$name}: {$value}";
+        if ($request->getHeaders()) {
+            foreach ($request->getHeaders() as $name => $value) {
+                $headers[] = "{$name}: {$value}";
+            }
         }
 
         $ch = curl_init($request->getUrl());
@@ -47,12 +49,17 @@ class RequestHandler implements RequestHandlerInterface
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         // Check if any related Curl error occurred.
-        if (curl_error($ch)) {
-            throw new RequestException(curl_error($ch));
+        if ($response === false) {
+            $error = curl_error($ch);
         }
 
         // Close the session
         curl_close($ch);
+
+        // Throw if there was an error.
+        if (!empty($error)) {
+            throw new RequestException($error);
+        }
 
         return new Response($response, $statusCode);
     }
