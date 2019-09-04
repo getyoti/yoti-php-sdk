@@ -109,6 +109,34 @@ class RequestHandlerTest extends TestCase
         $this->assertEquals($expectedBody, $response->getBody());
         $this->assertEquals($expectedStatusCode, $response->getStatusCode());
     }
+
+    /**
+     * Test Curl execution error.
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage some error
+     */
+    public function testExecuteError()
+    {
+        $request = $this->createMock(Request::class);
+
+        $this->mockCurl
+            ->expects($this->once())
+            ->method('curl_exec')
+            ->willReturn(false);
+
+        $this->mockCurl
+            ->expects($this->any())
+            ->method('curl_error')
+            ->willReturn('some error');
+
+        $this->mockCurl
+            ->expects($this->once())
+            ->method('curl_close');
+
+        $handler = new RequestHandler();
+        $handler->execute($request);
+    }
 }
 
 /**
@@ -128,9 +156,9 @@ function curl_getinfo($ch, $opt = null)
     return RequestHandlerTest::$curl->curl_getinfo($ch, $opt);
 }
 
-function curl_error()
+function curl_error($ch)
 {
-    return false;
+    return RequestHandlerTest::$curl->curl_error($ch);
 }
 
 function curl_init($url)
