@@ -114,6 +114,8 @@ abstract class AbstractRequestHandler
     }
 
     /**
+     * @deprecated 3.0.0 Replaced by execute()
+     *
      * @param string $endpoint
      * @param string $httpMethod
      * @param Payload|NULL $payload
