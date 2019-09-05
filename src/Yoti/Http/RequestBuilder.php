@@ -160,7 +160,7 @@ class RequestBuilder
     }
 
     /**
-     * @param string $payload
+     * @param \Yoti\Http\Payload $payload
      *
      * @return \Yoti\Http\RequestBuilder
      */
