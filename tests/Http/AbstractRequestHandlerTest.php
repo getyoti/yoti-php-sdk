@@ -71,9 +71,11 @@ class AbstractRequestHandlerTest extends TestCase
           'Drupal'
         ]);
 
+        $version = Config::getInstance()->get('version');
+
         $expectedMethod = 'POST';
         $expectedHeaders = [
-          "X-Yoti-SDK-Version: Drupal-2.2.1",
+          "X-Yoti-SDK-Version: Drupal-{$version}",
           'X-Yoti-SDK: Drupal',
           'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
           'Content-Type: application/json',
