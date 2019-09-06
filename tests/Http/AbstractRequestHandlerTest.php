@@ -15,7 +15,7 @@ class AbstractRequestHandlerTest extends TestCase
     /**
      * Test Base URL.
      */
-    const BASE_URL = 'http://www.example.com/api/v1';
+    const SOME_BASE_URL = 'http://www.example.com/api/v1';
 
     /**
      * Test endpoint.
@@ -29,7 +29,7 @@ class AbstractRequestHandlerTest extends TestCase
     public function testSendRequest()
     {
         $requestHandler = $this->createRequestHandler([
-          self::BASE_URL,
+          self::SOME_BASE_URL,
           file_get_contents(PEM_FILE),
           SDK_ID,
         ]);
@@ -37,7 +37,7 @@ class AbstractRequestHandlerTest extends TestCase
         $version = Config::getInstance()->get('version');
 
         $expectedPayload = $this->createMock(Payload::class);
-        $expectedUrl = self::BASE_URL . self::SOME_ENDPOINT;
+        $expectedUrl = self::SOME_BASE_URL . self::SOME_ENDPOINT;
         $expectedMethod = 'GET';
         $expectedHeaders = [
           "X-Yoti-SDK-Version: PHP-{$version}",
@@ -65,7 +65,7 @@ class AbstractRequestHandlerTest extends TestCase
     public function testCustomSdkIdentifierConstructor()
     {
         $requestHandler = $this->createRequestHandler([
-          '/',
+          self::SOME_BASE_URL,
           file_get_contents(PEM_FILE),
           SDK_ID,
           'Drupal'
@@ -83,12 +83,12 @@ class AbstractRequestHandlerTest extends TestCase
         $this->expectExecuteRequestWith(
             $requestHandler,
             $expectedHeaders,
-            '/',
+            self::SOME_BASE_URL,
             $expectedMethod,
             null
         );
 
-        $requestHandler->sendRequest('/', $expectedMethod);
+        $requestHandler->sendRequest(self::SOME_ENDPOINT, $expectedMethod);
     }
 
     /**
@@ -100,13 +100,13 @@ class AbstractRequestHandlerTest extends TestCase
     public function testInvalidSdkIdentifier()
     {
         $requestHandler = $this->createRequestHandler([
-          '/',
+          self::SOME_BASE_URL,
           file_get_contents(PEM_FILE),
           SDK_ID,
           'Invalid'
         ]);
 
-        $requestHandler->sendRequest('/', 'GET');
+        $requestHandler->sendRequest(self::SOME_ENDPOINT, 'GET');
     }
 
     /**
