@@ -19,8 +19,6 @@ class RestRequest extends AbstractRequest
         curl_setopt_array($ch, [
             CURLOPT_HTTPHEADER => $this->httpHeaders,
             CURLOPT_RETURNTRANSFER => TRUE,
-            CURLOPT_SSL_VERIFYPEER => FALSE,
-            CURLOPT_SSL_VERIFYHOST => 0,
         ]);
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->httpMethod);
