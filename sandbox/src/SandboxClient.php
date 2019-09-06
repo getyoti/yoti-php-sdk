@@ -3,8 +3,9 @@ namespace YotiSandbox;
 
 use Yoti\YotiClient;
 use YotiSandbox\Http\Response;
-use Yoti\Http\CurlRequestHandler;
+use Yoti\Http\RequestHandlerInterface;
 use YotiSandbox\Http\RequestBuilder;
+use Yoti\Http\RequestBuilder as YotiRequestBuilder;
 use YotiSandbox\Http\SandboxPathManager;
 
 class SandboxClient
@@ -17,7 +18,22 @@ class SandboxClient
     private $sdkId;
 
     /**
-     * @var CurlRequestHandler
+     * @var string
+     */
+    private $sdkIdentifier;
+
+    /**
+     * @var string
+     */
+    private $pem;
+
+    /**
+     * @var \YotiSandbox\Http\SandboxPathManager
+     */
+    private $sandboxPathManager;
+
+    /**
+     * @var \Yoti\Http\RequestHandlerInterface|null
      */
     private $requestHandler;
 
@@ -31,23 +47,32 @@ class SandboxClient
      *
      * @param string $sdkId
      * @param string $pem
-     * @param SandboxPathManager $sandboxPathManager
+     * @param \YotiSandbox\Http\SandboxPathManager $sandboxPathManager
      * @param string $sdkIdentifier
+     * @param \Yoti\Http\RequestHandlerInterface $requestHandler
      *
      * @throws \Yoti\Exception\RequestException
      * @throws \Yoti\Exception\YotiClientException
      */
-    public function __construct($sdkId, $pem, SandboxPathManager $sandboxPathManager, $sdkIdentifier = 'PHP')
+    public function __construct(
+        $sdkId,
+        $pem,
+        SandboxPathManager $sandboxPathManager,
+        $sdkIdentifier = 'PHP',
+        RequestHandlerInterface $requestHandler = null
+    )
     {
         $this->sdkId = $sdkId;
-        $pem = $this->includePemWrapper($pem);
-        $this->requestHandler = new CurlRequestHandler(
-            $sandboxPathManager->getTokenApiPath(),
-            $pem,
-            $sdkId,
-            $sdkIdentifier
-        );
-        $this->yotiClient = new YotiClient($sdkId, $pem, $sandboxPathManager->getProfileApiPath());
+        $this->sdkIdentifier = $sdkIdentifier;
+        $this->pem = $this->includePemWrapper($pem);
+        $this->sandboxPathManager = $sandboxPathManager;
+        $this->requestHandler = $requestHandler;
+
+        $this->yotiClient = new YotiClient($sdkId, $this->pem, $sandboxPathManager->getProfileApiPath());
+
+        if (isset($this->requestHandler)) {
+            $this->yotiClient->setRequestHandler($requestHandler);
+        }
     }
 
     /**
@@ -66,7 +91,7 @@ class SandboxClient
     }
 
     /**
-     * @param RequestBuilder $requestBuilder
+     * @param \YotiSandbox\Http\RequestBuilder $requestBuilder
      *
      * @param string $httpMethod
      *
@@ -79,13 +104,13 @@ class SandboxClient
     {
         // Request endpoint
         $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
-        $resultArr = $this->sendRequest($requestBuilder, $endpoint, $httpMethod);
+        $response = $this->sendRequest($requestBuilder, $endpoint, $httpMethod);
 
-        return (new Response($resultArr))->getToken();
+        return (new Response($response))->getToken();
     }
 
     /**
-     * @param RequestBuilder $requestBuilder
+     * @param \YotiSandbox\Http\RequestBuilder $requestBuilder
      *
      * @param string $endpoint
      * @param string $httpMethod
@@ -98,13 +123,20 @@ class SandboxClient
     {
         $payload = $requestBuilder->createRequest()->getPayload();
 
-        $resultArr = $this->requestHandler->sendRequest(
-            $endpoint,
-            $httpMethod,
-            $payload
-        );
+        $requestBuilder = (new YotiRequestBuilder())
+            ->withBaseUrl($this->sandboxPathManager->getTokenApiPath())
+            ->withEndpoint($endpoint)
+            ->withMethod($httpMethod)
+            ->withSdkIdentifier($this->sdkIdentifier)
+            ->withPemString($this->pem)
+            ->withPayload($payload)
+            ->withQueryParam('appId', $this->sdkId);
 
-        return $resultArr;
+        if (isset($this->requestHandler)) {
+            $requestBuilder->withHandler($this->requestHandler);
+        }
+
+        return $requestBuilder->build()->execute();
     }
 
     private function includePemWrapper($pem)

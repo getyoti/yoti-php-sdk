@@ -13,6 +13,13 @@ use Yoti\Exception\RequestException;
 class RequestHandler implements RequestHandlerInterface
 {
     /**
+     * Curl options.
+     *
+     * @var array
+     */
+    private $options = [];
+
+    /**
      * Execute HTTP request.
      *
      * @param Request $request
@@ -35,6 +42,11 @@ class RequestHandler implements RequestHandlerInterface
         ]);
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+
+        // Set additional options.
+        foreach ($this->options as $option => $value) {
+            curl_setopt($ch, $option, $value);
+        }
 
         // Only send payload data for methods that need it.
         if ($request->getPayload()) {
@@ -62,5 +74,22 @@ class RequestHandler implements RequestHandlerInterface
         }
 
         return new Response($response, $statusCode);
+    }
+
+    /**
+     * Set additional options.
+     *
+     * @see https://www.php.net/manual/en/function.curl-setopt.php
+     *
+     * @param int $key
+     * @param mixed $value
+     *
+     * @return Yoti\Http\Curl\RequestHandler
+     *   This request handler
+     */
+    public function setOption($key, $value)
+    {
+        $this->options[$key] = $value;
+        return $this;
     }
 }
