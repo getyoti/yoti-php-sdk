@@ -16,7 +16,12 @@ class RequestBuilderTest extends TestCase
     /**
      * Test Base URL.
      */
-    const BASE_URL = 'http://www.example.com/api/v1';
+    const SOME_BASE_URL = 'http://www.example.com/api/v1';
+
+    /**
+     * Test endpoint.
+     */
+    const SOME_ENDPOINT = '/some-endpoint';
 
     /**
      * @covers ::build
@@ -30,7 +35,7 @@ class RequestBuilderTest extends TestCase
     public function testBuild()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withMethod('POST')
           ->withEndpoint('/some-endpoint')
@@ -40,7 +45,8 @@ class RequestBuilderTest extends TestCase
 
         $this->assertInstanceOf(Request::class, $request);
 
-        $expectedEndpointPattern = '~' . preg_quote(self::BASE_URL, '~') . '/some-endpoint.*?nonce=.*?&timestamp=.*?~';
+        $baseUrlPattern = preg_quote(self::SOME_BASE_URL, '~');
+        $expectedEndpointPattern = "~{$baseUrlPattern}/some-endpoint.*?nonce=.*?&timestamp=.*?~";
 
         $this->assertRegExp($expectedEndpointPattern, $request->getUrl());
         $this->assertEquals('POST', $request->getMethod());
@@ -60,7 +66,7 @@ class RequestBuilderTest extends TestCase
     public function testWithSdkIdentifier()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withGet()
           ->withSdkIdentifier('Drupal')
@@ -78,7 +84,7 @@ class RequestBuilderTest extends TestCase
     public function testWithPost()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withPost()
           ->build();
@@ -93,7 +99,7 @@ class RequestBuilderTest extends TestCase
     public function testWithGet()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withGet()
           ->build();
@@ -111,7 +117,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithInvalidSdkIdentifier()
     {
         (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withSdkIdentifier('Invalid')
           ->build();
@@ -127,7 +133,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithInvalidSdkVersion()
     {
         (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withSdkVersion(['Invalid SDK Version'])
           ->build();
@@ -140,7 +146,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithPemFromFilePath()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withMethod('GET')
           ->build();
@@ -160,7 +166,7 @@ class RequestBuilderTest extends TestCase
           ->getMockForAbstractClass();
 
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint('/some-endpoint')
           ->withPemFilePath(PEM_FILE)
           ->withMethod('GET')
@@ -181,7 +187,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithPemString()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemString(file_get_contents(PEM_FILE))
           ->withMethod('GET')
           ->build();
@@ -196,7 +202,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithHeader()
     {
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withHeader('Custom', 'custom header value')
           ->withHeader('Custom-2', 'a second custom header value')
@@ -217,7 +223,7 @@ class RequestBuilderTest extends TestCase
         $expectedPayload = new Payload('some content');
 
         $request = (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withPayload($expectedPayload)
           ->withPost()
@@ -235,7 +241,7 @@ class RequestBuilderTest extends TestCase
     public function testWithoutMethod()
     {
         (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->build();
     }
@@ -249,7 +255,7 @@ class RequestBuilderTest extends TestCase
     public function testWithUnsupportedMethod()
     {
         (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withMethod('SOME_METHOD')
           ->build();
@@ -265,7 +271,7 @@ class RequestBuilderTest extends TestCase
     public function testWithHeaderInvalidValue()
     {
         (new RequestBuilder())
-          ->withBaseUrl(self::BASE_URL)
+          ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
           ->withHeader('Custom', ['invalid value'])
           ->withMethod('GET')
@@ -294,7 +300,61 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithoutPem()
     {
         (new RequestBuilder())
-            ->withBaseUrl(self::BASE_URL)
+            ->withBaseUrl(self::SOME_BASE_URL)
             ->build();
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withBaseUrl
+     */
+    public function testWithBaseUrlTrailingSlashes()
+    {
+        $trailingSlashes = '/////';
+
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::SOME_BASE_URL . $trailingSlashes)
+          ->withEndpoint(self::SOME_ENDPOINT)
+          ->withPemFilePath(PEM_FILE)
+          ->withMethod('GET')
+          ->build();
+
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withEndpoint
+     */
+    public function testWithEndpointMultipleLeadingSlashes()
+    {
+        $endpointLeadingSlashes = '/////' . self::SOME_ENDPOINT;
+
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::SOME_BASE_URL)
+          ->withEndpoint($endpointLeadingSlashes)
+          ->withPemFilePath(PEM_FILE)
+          ->withMethod('GET')
+          ->build();
+
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withEndpoint
+     */
+    public function testWithEndpointNoLeadingSlashes()
+    {
+        $endpointNoSlashes = ltrim(self::SOME_ENDPOINT, '/');
+
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::SOME_BASE_URL)
+          ->withEndpoint($endpointNoSlashes)
+          ->withPemFilePath(PEM_FILE)
+          ->withMethod('GET')
+          ->build();
+
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
     }
 }

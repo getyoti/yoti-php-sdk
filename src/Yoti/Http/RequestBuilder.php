@@ -81,12 +81,25 @@ class RequestBuilder
 
     /**
      * @param string $baseUrl
+     *   Base URL with no trailing slashes.
      *
      * @return \Yoti\Http\RequestBuilder
      */
     public function withBaseUrl($baseUrl)
     {
-        $this->baseUrl = $baseUrl;
+        $this->baseUrl = rtrim($baseUrl, '/');
+        return $this;
+    }
+
+    /**
+     * @param string $endpoint
+     *   Endpoint with a single leading slash.
+     *
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withEndpoint($endpoint)
+    {
+        $this->endpoint = '/' . ltrim($endpoint, '/');
         return $this;
     }
 
@@ -146,17 +159,6 @@ class RequestBuilder
     public function withPost()
     {
         return $this->withMethod(Request::METHOD_POST);
-    }
-
-    /**
-     * @param string $endpoint
-     *
-     * @return \Yoti\Http\RequestBuilder
-     */
-    public function withEndpoint($endpoint)
-    {
-        $this->endpoint = $endpoint;
-        return $this;
     }
 
     /**
@@ -291,7 +293,7 @@ class RequestBuilder
 
         $defaultHeaders = $this->getHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
 
-        $url = rtrim($this->baseUrl, '/')  . '/' . ltrim($signedDataArr[RequestSigner::END_POINT_PATH_KEY], '/');
+        $url = $this->baseUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
 
         $request = new Request(
             $this->method,
