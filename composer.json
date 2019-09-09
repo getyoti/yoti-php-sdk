@@ -1,7 +1,6 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
-  "version": "2.2.1",
   "keywords": [
     "yoti",
     "sdk"
@@ -28,12 +27,32 @@
   "require-dev": {
     "php": ">=5.6.0",
     "phpunit/phpunit": "5.7.*",
-    "squizlabs/php_codesniffer": "3.*"
+    "squizlabs/php_codesniffer": "3.*",
+    "friendsofphp/php-cs-fixer": "^2.15",
+    "brainmaestro/composer-git-hooks": "^2.7"
   },
   "autoload-dev": {
     "psr-4": {
       "YotiTest\\": "tests/",
       "SandboxTest\\": "sandbox/tests/"
+    }
+  },
+  "scripts": {
+    "cghooks": "cghooks",
+    "test": "phpunit",
+    "lint": [
+      "phpcs",
+      "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
+    ],
+    "post-install-cmd": "cghooks add --ignore-lock",
+    "post-update-cmd": "cghooks update"
+  },
+  "extra": {
+    "hooks": {
+        "commit": [
+          "composer test",
+          "composer lint"
+        ]
     }
   }
 }

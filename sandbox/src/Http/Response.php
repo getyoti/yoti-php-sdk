@@ -3,6 +3,7 @@
 namespace YotiSandbox\Http;
 
 use YotiSandbox\Exception\ResponseException;
+use Yoti\Http\Response as YotiResponse;
 
 class Response
 {
@@ -14,13 +15,13 @@ class Response
     /**
      * Response constructor.
      *
-     * @param array $result
+     * @param \Yoti\Http\Response $response
      *
      * @throws ResponseException
      */
-    public function __construct(array $result)
+    public function __construct(YotiResponse $response)
     {
-        $responseArr = $this->processData($result);
+        $responseArr = $this->processData($response);
         $this->token = $responseArr['token'];
     }
 
@@ -33,18 +34,18 @@ class Response
     }
 
     /**
-     * @param array $result
+     * @param \Yoti\Http\Response $response
      *
      * @return mixed
      *
      * @throws ResponseException
      */
-    private function processData(array $result)
+    private function processData(YotiResponse $response)
     {
-        $this->checkResponseStatus($result['http_code']);
+        $this->checkResponseStatus($response->getStatusCode());
 
         // Get decoded response data
-        $responseJSON = $result['response'];
+        $responseJSON = $response->getBody();
 
         $this->checkJsonError();
 

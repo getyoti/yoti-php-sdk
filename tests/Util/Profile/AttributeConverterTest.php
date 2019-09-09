@@ -360,26 +360,26 @@ class AttributeConverterTest extends TestCase
      */
     public function testEmptyStringAttributeMultiValueValue()
     {
-         // Get MultiValue values.
-         $values = $this->createMultiValueValues();
+        // Get MultiValue values.
+        $values = $this->createMultiValueValues();
 
-         // Add an empty MultiValue.
-         $values[] = $this->createMultiValueValue('', self::CONTENT_TYPE_STRING);
+        // Add an empty MultiValue.
+        $values[] = $this->createMultiValueValue('', self::CONTENT_TYPE_STRING);
 
-         // Create top-level MultiValue.
-         $protoMultiValue = new \Attrpubapi\MultiValue();
-         $protoMultiValue->setValues($values);
+        // Create top-level MultiValue.
+        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue->setValues($values);
 
-         // Create mock Attribute that will return MultiValue as the value.
-         $protobufAttribute = $this->getMockForProtobufAttribute(
-             'test_attr',
-             $protoMultiValue->serializeToString(),
-             self::CONTENT_TYPE_MULTI_VALUE
-         );
+        // Create mock Attribute that will return MultiValue as the value.
+        $protobufAttribute = $this->getMockForProtobufAttribute(
+            'test_attr',
+            $protoMultiValue->serializeToString(),
+            self::CONTENT_TYPE_MULTI_VALUE
+        );
 
-         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
-         $this->assertInstanceOf(Attribute::class, $attr);
-         $this->assertEquals('', $attr->getValue()[3]);
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $this->assertInstanceOf(Attribute::class, $attr);
+        $this->assertEquals('', $attr->getValue()[3]);
     }
 
     /**

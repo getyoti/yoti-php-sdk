@@ -7,6 +7,8 @@ use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
+use Yoti\Http\RequestHandlerInterface;
+use Yoti\Http\Response;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -35,17 +37,7 @@ class YotiClientTest extends TestCase
 
     public function setUp()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
-        $this->amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
         $this->pem = file_get_contents(PEM_FILE);
-
-        $this->amlResult['response'] = file_get_contents(AML_CHECK_RESULT_JSON);
-        $this->amlResult['http_code'] = 200;
-
-        $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
-            ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['sendRequest'])
-            ->getMock();
     }
 
     /**
@@ -114,13 +106,17 @@ class YotiClientTest extends TestCase
      */
     public function testGetActivityDetails()
     {
-        $result['response'] = file_get_contents(RECEIPT_JSON);
-        $result['http_code'] = 200;
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
 
-        // Stub the method makeRequest to return the result we want
-        $this->yotiClient->method('sendRequest')
-            ->willReturn($result);
-        $ad = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler->method('execute')->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $ad = $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
     }
@@ -130,10 +126,19 @@ class YotiClientTest extends TestCase
      */
     public function testPerformAmlCheck()
     {
-        $this->yotiClient->method('sendRequest')
-            ->willReturn($this->amlResult);
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn(file_get_contents(AML_CHECK_RESULT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
 
-        $result = $this->yotiClient->performAmlCheck($this->amlProfile);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler->method('execute')->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $amlAddress = new AmlAddress(new Country('GBR'));
+        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+        $result = $yotiClient->performAmlCheck($amlProfile);
 
         $this->assertInstanceOf(AmlResult::class, $result);
     }
@@ -155,84 +160,96 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::__construct
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
+     */
+    public function testInvalidSdkIdentifierConstructor()
+    {
+        $yotiClient = new YotiClient(
+            SDK_ID,
+            $this->pem,
+            YotiClient::DEFAULT_CONNECT_API,
+            'Invalid'
+        );
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
+    }
+
+    /**
+     * Test invalid http header value for X-Yoti-SDK
+     *
+     * @covers ::setSdkIdentifier
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifier()
     {
-        $this->expectException('Exception');
-        new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            'WrongHeader'
+            YotiClient::DEFAULT_CONNECT_API
         );
+        $yotiClient->setSdkIdentifier('Invalid');
+
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Wordpress
+     * Test invalid http header value for X-Yoti-SDK-Version
      *
-     * @covers ::__construct
+     * @covers ::setSdkVersion
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Yoti SDK version must be a string
      */
-    public function testCanUseWordPressAsSdkIdentifier()
+    public function testInvalidSdkVersion()
     {
-        $expectedValue  = 'WordPress';
-        $yotiClientObj  = new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
+            YotiClient::DEFAULT_CONNECT_API
         );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $yotiClient->setSdkVersion(['WrongVersion']);
+
+        $amlProfile = $this->createMock(AmlProfile::class);
+        $yotiClient->performAmlCheck($amlProfile);
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Drupal
+     * Test X-Yoti-SDK http header value for each allowed identifer.
      *
      * @covers ::__construct
+     * @covers ::setSdkIdentifier
+     *
+     * @dataProvider allowedIdentifierDataProvider
      */
-    public function testCanUseDrupalAsSdkIdentifier()
+    public function testCanUseAllowedSdkIdentifier($identifier)
     {
-        $expectedValue  = 'Drupal';
-        $yotiClientObj  = new YotiClient(
+        $yotiClient = new YotiClient(
             SDK_ID,
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
+            $identifier
         );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        $yotiClient->setSdkIdentifier($identifier);
+        $this->assertInstanceOf(YotiClient::class, $yotiClient);
     }
 
     /**
-     * Test X-Yoti-SDK http header value for Joomla
+     * Data provider to check allowed SDK identifiers.
      *
-     * @covers ::__construct
+     * @return array
      */
-    public function testCanUseJoomlaAsSdkIdentifier()
+    public function allowedIdentifierDataProvider()
     {
-        $expectedValue  = 'Joomla';
-        $yotiClientObj  = new YotiClient(
-            SDK_ID,
-            $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
-        );
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
-    }
-
-    /**
-     * Test X-Yoti-SDK http header value for PHP
-     *
-     * @covers ::__construct
-     */
-    public function testCanUsePHPAsSdkIdentifier()
-    {
-        $expectedValue  = 'PHP';
-        $yotiClientObj  = new YotiClient(
-            SDK_ID,
-            $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            $expectedValue
-        );
-
-        $this->assertInstanceOf(YotiClient::class, $yotiClientObj);
+        return [
+            ['PHP'],
+            ['WordPress'],
+            ['Joomla'],
+            ['Drupal'],
+        ];
     }
 }

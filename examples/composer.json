@@ -16,6 +16,6 @@
   "scripts": {
     "pre-install-cmd": "@copy-sdk",
     "pre-update-cmd": "@copy-sdk",
-    "copy-sdk": "rm -fr ./sdk && mkdir ./sdk && cd ../ && cp -r `ls -A | grep -v 'examples'` ./examples/sdk/ && cd -"
+    "copy-sdk": "grep -q 'yoti-php-sdk' ../composer.json && rm -fr ./sdk && mkdir ./sdk && cd ../ && cp -r `ls -A | grep -v 'examples'` ./examples/sdk/ && cd - || echo 'Could not install SDK from parent directory'"
   }
 }

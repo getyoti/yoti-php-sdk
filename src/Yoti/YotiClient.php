@@ -7,11 +7,15 @@ use Yoti\Exception\RequestException;
 use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
+use Yoti\Http\RequestHandlerInterface;
 use Yoti\Entity\AmlProfile;
-use Yoti\Http\CurlRequestHandler;
+use Yoti\Http\RequestBuilder;
 use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
+use Yoti\Exception\PemFileException;
+use Yoti\Http\Request;
+use Yoti\Util\PemFile;
 
 /**
  * Class YotiClient
@@ -42,24 +46,32 @@ class YotiClient
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
 
     /**
-     * Accepted HTTP header values for X-Yoti-SDK header.
-     *
-     * @var array
+     * @var \Yoti\Util\PemFile
      */
-    private $acceptedSDKIdentifiers = [
-        'PHP',
-        'WordPress',
-        'Drupal',
-        'Joomla',
-    ];
+    private $pemFile;
 
     /**
      * @var string
      */
-    private $pemContent;
+    private $sdkId;
 
     /**
-     * @var CurlRequestHandler
+     * @var string
+     */
+    private $connectApi;
+
+    /**
+     * @var string
+     */
+    private $sdkIdentifier;
+
+    /**
+     * @var string
+     */
+    private $sdkVersion;
+
+    /**
+     * @var \Yoti\Http\RequestHandlerInterface
      */
     private $requestHandler;
 
@@ -73,24 +85,26 @@ class YotiClient
      * @param string $connectApi (optional)
      *   Connect API address
      * @param string $sdkIdentifier (optional)
-     *   SDK or Plugin identifier
+     *   SDK or Plugin identifier - deprecated - use ::setSdkIdentifier() instead.
      *
      * @throws RequestException
      * @throws YotiClientException
      */
-    public function __construct($sdkId, $pem, $connectApi = self::DEFAULT_CONNECT_API, $sdkIdentifier = 'PHP')
-    {
+    public function __construct(
+        $sdkId,
+        $pem,
+        $connectApi = self::DEFAULT_CONNECT_API,
+        $sdkIdentifier = null
+    ) {
         $this->checkRequiredModules();
         $this->extractPemContent($pem);
-        $this->checkSdkId($sdkId);
-        $this->validateSdkIdentifier($sdkIdentifier);
+        $this->setSdkId($sdkId);
 
-        $this->requestHandler = new \Yoti\Http\CurlRequestHandler(
-            $connectApi,
-            $this->pemContent,
-            $sdkId,
-            $sdkIdentifier
-        );
+        $this->connectApi = $connectApi;
+
+        if (isset($sdkIdentifier)) {
+            $this->sdkIdentifier = $sdkIdentifier;
+        }
     }
 
     /**
@@ -128,7 +142,7 @@ class YotiClient
             throw new ActivityDetailsException('Outcome was unsuccessful', 502);
         }
 
-        return new ActivityDetails($receipt, $this->pemContent);
+        return new ActivityDetails($receipt, $this->pemFile);
     }
 
     /**
@@ -144,11 +158,11 @@ class YotiClient
     public function performAmlCheck(AmlProfile $amlProfile)
     {
         // Get payload data from amlProfile
-        $amlPayload     = new Payload($amlProfile->getData());
+        $amlPayload = new Payload($amlProfile->getData());
 
         $result = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,
-            CurlRequestHandler::METHOD_POST,
+            Request::METHOD_POST,
             $amlPayload
         );
 
@@ -165,6 +179,42 @@ class YotiClient
     }
 
     /**
+     * Set SDK identifier.
+     *
+     * Allows plugins to declare their identifier.
+     *
+     * @param string $sdkIdentifier
+     *   SDK or Plugin identifier
+     */
+    public function setSdkIdentifier($sdkIdentifier)
+    {
+        $this->sdkIdentifier = $sdkIdentifier;
+    }
+
+    /**
+     * Set SDK version.
+     *
+     * Allows plugins to declare their version.
+     *
+     * @param string $sdkVersion
+     *   SDK or Plugin version
+     */
+    public function setSdkVersion($sdkVersion)
+    {
+        $this->sdkVersion = $sdkVersion;
+    }
+
+    /**
+     * Set a custom request handler.
+     *
+     * @param \Yoti\Http\RequestHandlerInterface $requestHandler
+     */
+    public function setRequestHandler(RequestHandlerInterface $requestHandler)
+    {
+        $this->requestHandler = $requestHandler;
+    }
+
+    /**
      * Make REST request to Connect API.
      * This method allows to stub the request call in test mode.
      *
@@ -178,7 +228,38 @@ class YotiClient
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        return $this->requestHandler->sendRequest($endpoint, $httpMethod, $payload);
+        $requestBuilder = (new RequestBuilder())
+            ->withBaseUrl($this->connectApi)
+            ->withEndpoint($endpoint)
+            ->withMethod($httpMethod)
+            ->withPemString((string) $this->pemFile)
+            ->withQueryParam('appId', $this->sdkId);
+
+        if (isset($payload)) {
+            $requestBuilder->withPayload($payload);
+        }
+
+        if (isset($this->sdkIdentifier)) {
+            $requestBuilder->withSdkIdentifier($this->sdkIdentifier);
+        }
+
+        if (isset($this->sdkVersion)) {
+            $requestBuilder->withSdkVersion($this->sdkVersion);
+        }
+
+        if (isset($this->requestHandler)) {
+            $requestBuilder->withHandler($this->requestHandler);
+        }
+
+        $request = $requestBuilder
+            ->build();
+
+        $response = $request->execute();
+
+        return [
+            'response' => $response->getBody(),
+            'http_code' => $response->getStatusCode()
+        ];
     }
 
     /**
@@ -239,7 +320,7 @@ class YotiClient
      * @throws ReceiptException
      * @throws RequestException
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = CurlRequestHandler::METHOD_GET, $payload = null)
+    private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET, $payload = null)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -324,13 +405,15 @@ class YotiClient
     private function decryptConnectToken($encryptedConnectToken)
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
-        openssl_private_decrypt($tok, $token, $this->pemContent);
+        openssl_private_decrypt($tok, $token, (string) $this->pemFile);
 
         return $token;
     }
 
     /**
      * Validate and set PEM file content.
+     *
+     * @deprecated 3.0.0 this will be replaced by \Yoti\Util\PemFile.
      *
      * @param string $pem
      *   PEM file path or string
@@ -349,32 +432,31 @@ class YotiClient
             throw new YotiClientException('PEM file was not found.', 400);
         }
 
-        // If file exists grab the content
-        if (is_file($pem)) {
-            $pem = file_get_contents($pem);
-        }
-
-        // Check if key is valid
-        if (!openssl_get_privatekey($pem)) {
+        try {
+            if (is_file($pem)) {
+                $this->pemFile = PemFile::fromFilePath($pem);
+            } else {
+                $this->pemFile = PemFile::fromString($pem);
+            }
+        } catch (PemFileException $e) {
             throw new YotiClientException('PEM file path or content is invalid', 400);
         }
-
-        $this->pemContent = $pem;
     }
 
     /**
-     * Check SDK ID is provided.
+     * Validate and set SDK ID.
      *
      * @param string $sdkId
      *
      * @throws YotiClientException
      */
-    private function checkSdkId($sdkId)
+    private function setSdkId($sdkId)
     {
         // Check SDK ID passed
         if (!$sdkId) {
             throw new YotiClientException('SDK ID is required', 400);
         }
+        $this->sdkId = $sdkId;
     }
 
     /**
@@ -389,20 +471,6 @@ class YotiClient
             if (!extension_loaded($mod)) {
                 throw new YotiClientException("PHP module '$mod' not installed", 501);
             }
-        }
-    }
-
-    /**
-     * Validate SDK identifier.
-     *
-     * @param $sdkIdentifier
-     *
-     * @throws YotiClientException
-     */
-    private function validateSdkIdentifier($sdkIdentifier)
-    {
-        if (!in_array($sdkIdentifier, $this->acceptedSDKIdentifiers, true)) {
-            throw new YotiClientException("Wrong Yoti SDK identifier provided: {$sdkIdentifier}", 406);
         }
     }
 }

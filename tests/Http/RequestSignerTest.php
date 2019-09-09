@@ -52,7 +52,7 @@ class RequestSignerTest extends TestCase
         );
         $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
         $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];
-        $messageToSign = 'POST&'.$endpointPath.'&'.$this->payload->getBase64Payload();
+        $messageToSign = 'POST&' . $endpointPath . '&' . $this->payload->getBase64Payload();
 
         $publicKey = openssl_pkey_get_public($this->getDummyPublicKey());
 

@@ -2,28 +2,40 @@
 
 namespace Yoti\Http;
 
-use Yoti\Util\Config;
+use Yoti\Util\PemFile;
 use Yoti\Exception\RequestException;
 
+/**
+ * @deprecated 3.0.0 Replaced by \Yoti\Http\RequestHandlerInterface
+ */
 abstract class AbstractRequestHandler
 {
-    // HTTP methods
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
-
-    // Request HttpHeader keys
-    const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
-    const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
-    const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
-    const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
+    /**
+     * HTTP methods
+     */
+    const METHOD_GET = Request::METHOD_GET;
+    const METHOD_POST = Request::METHOD_POST;
+    const METHOD_PUT = Request::METHOD_PUT;
+    const METHOD_PATCH = Request::METHOD_PATCH;
+    const METHOD_DELETE = Request::METHOD_DELETE;
 
     /**
-     * @var string
+     * Request HttpHeader keys
      */
-    private $pem;
+    const YOTI_AUTH_HEADER_KEY = RequestBuilder::YOTI_AUTH_HEADER_KEY;
+    const YOTI_DIGEST_HEADER_KEY = RequestBuilder::YOTI_DIGEST_HEADER_KEY;
+    const YOTI_SDK_IDENTIFIER_KEY = RequestBuilder::YOTI_SDK_IDENTIFIER_KEY;
+    const YOTI_SDK_VERSION = RequestBuilder::YOTI_SDK_VERSION;
+
+    /**
+     * Default SDK Identifier.
+     */
+    const YOTI_SDK_IDENTIFIER = RequestBuilder::YOTI_SDK_IDENTIFIER;
+
+    /**
+     * @var \Yoti\Util\PemFile
+     */
+    private $pemFile;
 
     /**
      * @var string
@@ -33,36 +45,32 @@ abstract class AbstractRequestHandler
     /**
      * @var string
      */
-    private $connectApiUrl;
+    private $apiUrl;
 
     /**
      * @var string
      */
-    private $sdkIdentifier;
-
-    /**
-     * @var string
-     */
-    private $authKey;
+    private $sdkIdentifier = RequestBuilder::YOTI_SDK_IDENTIFIER;
 
     /**
      * AbstractRequestHandler constructor.
      *
-     * @param string $connectApiUrl
+     * @param string $apiUrl
      * @param string $pem
      * @param string $sdkId
      * @param string $sdkIdentifier
-     *
-     * @throws RequestException
      */
-    public function __construct($connectApiUrl, $pem, $sdkId, $sdkIdentifier)
+    public function __construct($apiUrl, $pem, $sdkId = null, $sdkIdentifier = null)
     {
-        $this->pem = $pem;
-        $this->sdkId = $sdkId;
-        $this->connectApiUrl = $connectApiUrl;
-        $this->sdkIdentifier = $sdkIdentifier;
+        $this->apiUrl = $apiUrl;
+        $this->pemFile = PemFile::fromString($pem);
 
-        $this->authKey = $this->extractAuthKeyFromPemContent();
+        if (isset($sdkId)) {
+            $this->sdkId = $sdkId;
+        }
+        if (isset($sdkIdentifier)) {
+            $this->sdkIdentifier = $sdkIdentifier;
+        }
     }
 
     /**
@@ -76,13 +84,31 @@ abstract class AbstractRequestHandler
      */
     public function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        self::validateHttpMethod($httpMethod);
+        $requestBuilder = (new RequestBuilder())
+          ->withBaseUrl($this->apiUrl)
+          ->withPemString((string) $this->pemFile)
+          ->withEndpoint($endpoint)
+          ->withMethod($httpMethod)
+          ->withSdkIdentifier($this->sdkIdentifier)
+          ->withQueryParam('appId', $this->sdkId);
 
-        $signedDataArr = RequestSigner::signRequest($this, $endpoint, $httpMethod, $payload);
-        $requestHeaders = $this->generateRequestHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
-        $requestUrl = $this->connectApiUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
+        if (isset($payload)) {
+            $requestBuilder->withPayload($payload);
+        }
 
-        return $this->executeRequest($requestHeaders, $requestUrl, $httpMethod, $payload);
+        $request = $requestBuilder->build();
+
+        $headers = [];
+        foreach ($request->getHeaders() as $name => $value) {
+            $headers[] = "{$name}: {$value}";
+        }
+
+        return $this->executeRequest(
+            $headers,
+            $request->getUrl(),
+            $request->getMethod(),
+            $request->getPayload()
+        );
     }
 
     /**
@@ -98,95 +124,7 @@ abstract class AbstractRequestHandler
      */
     public function getPem()
     {
-        return $this->pem;
-    }
-
-    /**
-     * Return the request headers including the signed message.
-     *
-     * @param string $signedMessage
-     *
-     * @return array
-     */
-    private function generateRequestHeaders($signedMessage)
-    {
-        // Prepare request Http Headers
-        $requestHeaders = [
-            CurlRequestHandler::YOTI_AUTH_HEADER_KEY . ": {$this->authKey}",
-            CurlRequestHandler::YOTI_DIGEST_HEADER_KEY . ": {$signedMessage}",
-            CurlRequestHandler::YOTI_SDK_IDENTIFIER_KEY . ": {$this->sdkIdentifier}",
-            'Content-Type: application/json',
-            'Accept: application/json',
-        ];
-
-        if ($version = Config::getInstance()->get('version')) {
-            $requestHeaders[] = self::YOTI_SDK_VERSION . ": {$this->sdkIdentifier}-{$version}";
-        }
-        return $requestHeaders;
-    }
-
-    /**
-     * @return string
-     *
-     * @throws RequestException
-     */
-    private function extractAuthKeyFromPemContent()
-    {
-        $details = openssl_pkey_get_details(openssl_pkey_get_private($this->pem));
-        if (!array_key_exists('key', $details)) {
-            return null;
-        }
-
-        // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
-        $KeyStr = trim($details['key']);
-        // Support line break on *nix systems, OS, older OS, and Microsoft
-        $keyArr = preg_split('/\r\n|\r|\n/', $KeyStr);
-        if (strpos($KeyStr, 'BEGIN') !== false) {
-            array_shift($keyArr);
-            array_pop($keyArr);
-        }
-        $authKey = implode('', $keyArr);
-
-        // Check auth key is not empty
-        if (empty($authKey)) {
-            throw new RequestException('Could not retrieve Auth key from PEM content.', 401);
-        }
-
-        return $authKey;
-    }
-
-    /**
-     * Check if the provided HTTP method is valid.
-     *
-     * @param string $httpMethod
-     *
-     * @throws RequestException
-     */
-    private static function validateHttpMethod($httpMethod)
-    {
-        if (!self::methodIsAllowed($httpMethod)) {
-            throw new RequestException("Unsupported HTTP Method {$httpMethod}", 400);
-        }
-    }
-
-    /**
-     * Check the HTTP method is allowed.
-     *
-     * @param string $httpMethod
-     *
-     * @return bool
-     */
-    private static function methodIsAllowed($httpMethod)
-    {
-        $allowedMethods = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_PATCH,
-            self::METHOD_DELETE,
-        ];
-
-        return in_array($httpMethod, $allowedMethods, true);
+        return (string) $this->pemFile;
     }
 
     /**

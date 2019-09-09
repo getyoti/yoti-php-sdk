@@ -13,5 +13,5 @@ install:
     - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
-    - vendor/bin/phpunit
-    - vendor/bin/phpcs
+    - composer test
+    - composer lint

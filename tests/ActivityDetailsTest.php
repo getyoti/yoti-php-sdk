@@ -179,7 +179,10 @@ class ActivityDetailsTest extends TestCase
     public function testGetTimestamp()
     {
         $timestamp = $this->activityDetails->getTimestamp();
+
+        $timestamp->setTimezone(new \DateTimeZone('UTC'));
         $this->assertEquals('19-07-2016 08:55:38', $timestamp->format('d-m-Y H:i:s'));
+        $this->assertEquals(1468918538, $timestamp->getTimestamp());
     }
 
     /**

@@ -112,6 +112,7 @@ class CurlRequestHandlerTest extends TestCase
         // Configure the stub.
         $curlRequestHandler->method('executeRequest')
             ->willReturn($expectedResult);
+
         $result = $curlRequestHandler->sendRequest(
             '/profile/fakeToken',
             'GET'

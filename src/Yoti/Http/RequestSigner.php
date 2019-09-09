@@ -3,6 +3,7 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
+use Yoti\Util\PemFile;
 
 class RequestSigner
 {
@@ -12,10 +13,13 @@ class RequestSigner
     /**
      * Return request signed data.
      *
+     * @deprecated 3.0.0
+     *
      * @param AbstractRequestHandler $requestHandler
      * @param string $endpoint
      * @param string $httpMethod
      * @param Payload|NULL $payload
+     * @param array $queryParams
      *
      * @return array
      *
@@ -25,16 +29,50 @@ class RequestSigner
         AbstractRequestHandler $requestHandler,
         $endpoint,
         $httpMethod,
-        Payload $payload = null
+        Payload $payload = null,
+        array $queryParams = []
     ) {
-        $endPointPath = self::generateEndPointPath($endpoint, $requestHandler->getSDKId());
+        if (!is_null($requestHandler->getSDKId())) {
+            $queryParams['appId'] = $requestHandler->getSDKId();
+        }
+
+        return self::sign(
+            PemFile::fromString($requestHandler->getPem()),
+            $endpoint,
+            $httpMethod,
+            $payload,
+            $queryParams
+        );
+    }
+
+    /**
+     * Return request signed data.
+     *
+     * @param \Yoti\Util\PemFile $pemFile
+     * @param string $endpoint
+     * @param string $httpMethod
+     * @param \Yoti\Http\Payload|NULL $payload
+     * @param array $queryParams
+     *
+     * @return array
+     *
+     * @throws RequestException
+     */
+    public static function sign(
+        PemFile $pemFile,
+        $endpoint,
+        $httpMethod,
+        Payload $payload = null,
+        array $queryParams = []
+    ) {
+        $endPointPath = self::generateEndPointPath($endpoint, $queryParams);
 
         $messageToSign = "{$httpMethod}&$endPointPath";
         if ($payload instanceof Payload) {
             $messageToSign .= "&{$payload->getBase64Payload()}";
         }
 
-        openssl_sign($messageToSign, $signedMessage, $requestHandler->getPem(), OPENSSL_ALGO_SHA256);
+        openssl_sign($messageToSign, $signedMessage, (string) $pemFile, OPENSSL_ALGO_SHA256);
 
         self::validateSignedMessage($signedMessage);
 
@@ -48,17 +86,22 @@ class RequestSigner
 
     /**
      * @param string $endpoint
-     * @param string $sdkId
+     * @param array $queryParams
      *
      * @return string
      */
-    private static function generateEndPointPath($endpoint, $sdkId)
+    private static function generateEndPointPath($endpoint, array $queryParams = [])
     {
-        // Prepare message to sign
-        $nonce = self::generateNonce();
-        $timestamp = round(microtime(true) * 1000);
-
-        return "{$endpoint}?nonce={$nonce}&timestamp={$timestamp}&appId={$sdkId}";
+        // Prepare message to sign.
+        return $endpoint . '?' . http_build_query(
+            array_merge(
+                $queryParams,
+                [
+                    'nonce' => self::generateNonce(),
+                    'timestamp' => round(microtime(true) * 1000),
+                ]
+            )
+        );
     }
 
     /**
