@@ -1,7 +1,6 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
-  "version": "2.2.1",
   "keywords": [
     "yoti",
     "sdk"
