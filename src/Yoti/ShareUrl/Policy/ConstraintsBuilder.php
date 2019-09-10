@@ -4,20 +4,18 @@ namespace Yoti\ShareUrl\Policy;
 
 /**
  * Builder for Constraints.
- *
- * @class ConstraintsBuilder
  */
 class ConstraintsBuilder
 {
     /**
-     * @var Constraints
+     * @var mixed[]
      */
     private $constraints = [];
 
     /**
-     * @param SourceConstraint $sourceConstraint
+     * @param \Yoti\ShareUrl\Policy\SourceConstraint $constraint
      */
-    public function withSourceConstraint(SourceContraint $sourceConstraint)
+    public function withSourceConstraint(SourceConstraint $sourceConstraint)
     {
         $this->constraints[] = $sourceConstraint;
         return $this;
