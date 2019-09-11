@@ -60,4 +60,12 @@ class Extension implements \JsonSerializable
             'content' => $this->getContent(),
         ];
     }
+
+    /**
+     * @return string JSON string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
+    }
 }

@@ -27,12 +27,12 @@ class LocationConstraintExtensionBuilder
     /**
      * @var float
      */
-    private $radius;
+    private $radius = 150;
 
     /**
      * @var float
      */
-    private $maxUncertainty;
+    private $maxUncertainty = 150;
 
     /**
      * Allows you to specify the Latitude of the user's expected location
@@ -100,7 +100,7 @@ class LocationConstraintExtensionBuilder
      */
     public function build()
     {
-        $content = new LocationConstraintExtensionContent(
+        $content = new LocationConstraintContent(
             $this->latitude,
             $this->longitude,
             $this->radius,

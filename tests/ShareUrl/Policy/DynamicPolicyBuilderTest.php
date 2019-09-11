@@ -11,14 +11,7 @@ use YotiTest\TestCase;
  */
 class DynamicPolicyBuilderTest extends TestCase
 {
-    /**
-     * Selfie auth type.
-     */
     const SELFIE_AUTH_TYPE = 1;
-
-    /**
-     * PIN auth type.
-     */
     const PIN_AUTH_TYPE = 2;
 
     /**
