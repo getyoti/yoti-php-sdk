@@ -12,14 +12,12 @@ use YotiTest\TestCase;
 class SourceConstraintBuilderTest extends TestCase
 {
     const ANCHOR_TYPE_SOURCE = 'SOURCE';
-    const ANCHOR_PASSPORT = 'PASSPORT';
-    const ANCHOR_DRIVING_LICENSE = 'DRIVING_LICENCE';
-    const ANCHOR_NATIONAL_ID = 'NATIONAL_ID';
-    const ANCHOR_PASSCARD = 'PASS_CARD';
+    const ANCHOR_VALUE_PASSPORT = 'PASSPORT';
+    const ANCHOR_VALUE_DRIVING_LICENSE = 'DRIVING_LICENCE';
+    const ANCHOR_VALUE_NATIONAL_ID = 'NATIONAL_ID';
+    const ANCHOR_VALUE_PASSCARD = 'PASS_CARD';
     const ANCHOR_SUB_TYPE_NATIONAL_ID = 'NATIONAL_ID_SUB_TYPE';
     const ANCHOR_SUB_TYPE_PASSCARD = 'PASSCARD_SUB_TYPE';
-    const CONSTRAINT_TYPE_SOURCE = 'SOURCE';
-
     const SOME_VALUE = 'test value';
     const SOME_SUB_TYPE = 'test sub type';
 
@@ -32,7 +30,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withPassport()
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_PASSPORT, '');
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_PASSPORT, '');
     }
 
     /**
@@ -44,7 +42,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withPassport(self::SOME_SUB_TYPE)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_PASSPORT, self::SOME_SUB_TYPE);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_PASSPORT, self::SOME_SUB_TYPE);
     }
 
     /**
@@ -56,7 +54,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withPasscard()
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_PASSCARD, '');
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_PASSCARD, '');
     }
 
     /**
@@ -68,7 +66,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withPasscard(self::SOME_SUB_TYPE)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_PASSCARD, self::SOME_SUB_TYPE);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_PASSCARD, self::SOME_SUB_TYPE);
     }
 
     /**
@@ -80,7 +78,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withDrivingLicence()
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_DRIVING_LICENSE, '');
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_DRIVING_LICENSE, '');
     }
 
     /**
@@ -92,7 +90,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withDrivingLicence(self::SOME_SUB_TYPE)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_DRIVING_LICENSE, self::SOME_SUB_TYPE);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_DRIVING_LICENSE, self::SOME_SUB_TYPE);
     }
 
     /**
@@ -104,7 +102,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withNationalId()
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_NATIONAL_ID, '');
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_NATIONAL_ID, '');
     }
 
     /**
@@ -116,7 +114,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withNationalId(self::SOME_SUB_TYPE)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_NATIONAL_ID, self::SOME_SUB_TYPE);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_NATIONAL_ID, self::SOME_SUB_TYPE);
     }
 
 
@@ -212,15 +210,15 @@ class SourceConstraintBuilderTest extends TestCase
             'preferred_sources' => [
                 'anchors' => [
                     [
-                        'name' => self::ANCHOR_DRIVING_LICENSE,
+                        'name' => self::ANCHOR_VALUE_DRIVING_LICENSE,
                         'sub_type' => '',
                     ],
                     [
-                        'name' => self::ANCHOR_NATIONAL_ID,
+                        'name' => self::ANCHOR_VALUE_NATIONAL_ID,
                         'sub_type' => self::ANCHOR_SUB_TYPE_NATIONAL_ID,
                     ],
                     [
-                        'name' => self::ANCHOR_PASSCARD,
+                        'name' => self::ANCHOR_VALUE_PASSCARD,
                         'sub_type' => self::ANCHOR_SUB_TYPE_PASSCARD,
                     ],
                 ],
@@ -242,7 +240,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withSoftPreference()
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_DRIVING_LICENSE, '', true);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_DRIVING_LICENSE, '', true);
     }
 
     /**
@@ -255,7 +253,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withSoftPreference(false)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_DRIVING_LICENSE, '', false);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_DRIVING_LICENSE, '', false);
     }
 
     /**
@@ -269,7 +267,7 @@ class SourceConstraintBuilderTest extends TestCase
             ->withSoftPreference(true)
             ->build();
 
-        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_DRIVING_LICENSE, '', true);
+        $this->assertSourceConstraint($sourceConstraint, self::ANCHOR_VALUE_DRIVING_LICENSE, '', true);
     }
 
     /**

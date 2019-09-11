@@ -7,7 +7,7 @@ use \Yoti\Util\Validation;
 /**
  * Defines an expected device location constraint.
  */
-class LocationConstraintContent
+class LocationConstraintContent implements \JsonSerializable
 {
     /**
      * @param float $latitude

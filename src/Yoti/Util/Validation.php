@@ -138,7 +138,7 @@ class Validation
             if (!is_integer($value)) {
                 throw new \TypeError(sprintf(
                     '%s must be array of integers',
-                    $name,
+                    $name
                 ));
             }
         }
