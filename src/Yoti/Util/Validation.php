@@ -128,6 +128,24 @@ class Validation
 
     /**
      * @param array $values
+     * @param string $name
+     *
+     * @throws \TypeError
+     */
+    public static function isArrayOfIntegers(array $values, $name)
+    {
+        foreach ($values as $value) {
+            if (!is_integer($value)) {
+                throw new \TypeError(sprintf(
+                    '%s must be array of integers',
+                    $name,
+                ));
+            }
+        }
+    }
+
+    /**
+     * @param array $values
      * @param array $types
      * @param string $name
      *

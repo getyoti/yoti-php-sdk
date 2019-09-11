@@ -62,4 +62,12 @@ class DynamicPolicy implements \JsonSerializable
             'wanted_remember_me_optional' => false,
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
+    }
 }

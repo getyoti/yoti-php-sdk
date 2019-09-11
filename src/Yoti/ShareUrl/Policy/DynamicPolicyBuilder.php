@@ -310,13 +310,14 @@ class DynamicPolicyBuilder
      */
     public function withWantedAuthType($wantedAuthType, $enabled = true)
     {
+        Validation::isInteger($wantedAuthType, 'wantedAuthType');
         if ($enabled) {
             $this->wantedAuthTypes[$wantedAuthType] = $wantedAuthType;
         } else {
             unset($this->wantedAuthTypes[$wantedAuthType]);
         }
 
-        return this;
+        return $this;
     }
 
     /**
