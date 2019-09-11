@@ -58,7 +58,7 @@ class ProfileTest extends TestCase
             ->setMethods(['sendRequest'])
             ->getMock();
 
-        // Stub the method makeRequest to return the result we want
+        // Stub the method sendRequest to return the result we want
         $this->yotiClient->method('sendRequest')
             ->willReturn($result);
 

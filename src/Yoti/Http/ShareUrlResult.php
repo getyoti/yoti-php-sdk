@@ -1,8 +1,7 @@
 <?php
 
-namespace Yoti\ShareUrl;
+namespace Yoti\Http;
 
-use Yoti\Http\Response;
 use Yoti\Util\Validation;
 
 /**

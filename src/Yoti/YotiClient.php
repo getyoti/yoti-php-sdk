@@ -17,7 +17,7 @@ use Yoti\Exception\PemFileException;
 use Yoti\Http\Request;
 use Yoti\Util\PemFile;
 use Yoti\ShareUrl\DynamicScenario;
-use Yoti\ShareUrl\ShareUrlResult;
+use Yoti\Http\ShareUrlResult;
 
 /**
  * Class YotiClient
@@ -46,6 +46,9 @@ class YotiClient
 
     // Profile sharing endpoint
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
+
+    // Share URL endpoint
+    const SHARE_URL_ENDPOINT = '/qrcodes/apps/%s';
 
     /**
      * @var \Yoti\Util\PemFile
@@ -185,12 +188,12 @@ class YotiClient
      *
      * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
      *
-     * @return \Yoti\ShareUrl\ShareUrlResult
+     * @return \Yoti\Http\ShareUrlResult
      */
-    public function getShareUrl(DynamicScenario $dynamicScenario)
+    public function createShareUrl(DynamicScenario $dynamicScenario)
     {
-        $response = $this->makeRequest(
-            sprintf('/qrcodes/apps/%s', $this->sdkId),
+        $response = $this->sendConnectRequest(
+            sprintf(self::SHARE_URL_ENDPOINT, $this->sdkId),
             Request::METHOD_POST,
             new Payload($dynamicScenario)
         );
@@ -246,7 +249,7 @@ class YotiClient
      *
      * @throws RequestException
      */
-    private function makeRequest($endpoint, $httpMethod, Payload $payload = null)
+    private function sendConnectRequest($endpoint, $httpMethod, Payload $payload = null)
     {
         $requestBuilder = (new RequestBuilder())
             ->withBaseUrl($this->connectApi)
@@ -281,7 +284,7 @@ class YotiClient
      * Make REST request to Connect API.
      * This method allows to stub the request call in test mode.
      *
-     * @deprecated 3.0.0 replaced by ::makeRequest()
+     * @deprecated 3.0.0 replaced by ::sendConnectRequest()
      *
      * @param string $endpoint
      * @param string $httpMethod
@@ -293,7 +296,7 @@ class YotiClient
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
-        $response = $this->makeRequest($endpoint, $httpMethod, $payload);
+        $response = $this->sendConnectRequest($endpoint, $httpMethod, $payload);
 
         return [
             'response' => $response->getBody(),

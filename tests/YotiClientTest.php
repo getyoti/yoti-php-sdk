@@ -9,6 +9,8 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 use Yoti\Http\RequestHandlerInterface;
 use Yoti\Http\Response;
+use Yoti\ShareUrl\DynamicScenarioBuilder;
+use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -251,5 +253,52 @@ class YotiClientTest extends TestCase
             ['Joomla'],
             ['Drupal'],
         ];
+    }
+
+    /**
+     * @covers ::createShareUrl
+     */
+    public function testCreateShareUrl()
+    {
+        $expectedUrl = YotiClient::DEFAULT_CONNECT_API . sprintf('/qrcodes/apps/%s', SDK_ID) . '?appId=' . SDK_ID;
+        $expectedUrlPattern = sprintf('~%s.*?nonce=.*?&timestamp=.*?~', preg_quote($expectedUrl));
+
+        $dynamicScenario = (new DynamicScenarioBuilder())
+            ->withCallbackEndpoint('/test-callback-url')
+            ->withPolicy(
+                (new DynamicPolicyBuilder())->build()
+            )
+            ->build();
+
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn(file_get_contents(SHARE_URL_RESULT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
+        $requestHandler
+                ->expects($this->once())
+                ->method('execute')
+                ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
+                    $this->assertRegExp($expectedUrlPattern, $request->getUrl());
+                    $this->assertEquals(json_encode($dynamicScenario), $request->getPayload());
+                    return true;
+                }))
+                ->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $shareUrlResult = $yotiClient->createShareUrl($dynamicScenario);
+
+        $this->assertEquals(
+            'https://dynamic-code.yoti.com/CAEaJDRjNTQ3M2IxLTNiNzktNDg3My1iMmM4LThiMTQxZDYwMjM5ODAC',
+            $shareUrlResult->getShareUrl()
+        );
+
+        $this->assertEquals(
+            '4c5473b1-3b79-4873-b2c8-8b141d602398',
+            $shareUrlResult->getRefId()
+        );
     }
 }
