@@ -52,4 +52,12 @@ class WantedAnchor implements \JsonSerializable
             'sub_type' => $this->subType,
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
+    }
 }
