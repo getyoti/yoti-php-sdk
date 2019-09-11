@@ -10,6 +10,26 @@ use Yoti\Util\Validation;
 class WantedAttribute implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $derivation;
+
+    /**
+     * @var \Yoti\ShareUrl\Policy\Constraints
+     */
+    private $constraints;
+
+    /**
+     * @var boolean
+     */
+    private $acceptSelfAsserted;
+
+    /**
      * @param string $name
      * @param string $derivation
      * @param boolean $acceptSelfAsserted

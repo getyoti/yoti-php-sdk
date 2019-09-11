@@ -31,6 +31,11 @@ class DynamicPolicyBuilder
     private $wantedAuthTypes = [];
 
     /**
+     * @var boolean
+     */
+    private $wantedRememberMe = false;
+
+    /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute wantedAttribute
      */
     public function withWantedAttribute(WantedAttribute $wantedAttribute)
