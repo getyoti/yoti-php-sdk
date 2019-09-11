@@ -117,4 +117,12 @@ class WantedAttribute implements \JsonSerializable
 
         return $json;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
+    }
 }

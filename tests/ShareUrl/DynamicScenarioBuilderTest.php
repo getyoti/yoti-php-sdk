@@ -1,6 +1,6 @@
 <?php
 
-namespace YotiTest\ShareUrl\Policy;
+namespace YotiTest\ShareUrl;
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
@@ -80,6 +80,6 @@ class DynamicScenarioBuilderTest extends TestCase
         ];
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($dynamicScenario));
-        $this->assertEquals(json_encode($expectedJsonData), (string) $dynamicScenario);
+        $this->assertEquals(json_encode($expectedJsonData), $dynamicScenario);
     }
 }
