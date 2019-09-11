@@ -8,6 +8,26 @@ namespace Yoti\ShareUrl\Policy;
 class WantedAttributeBuilder
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $derivation = '';
+
+    /**
+     * @var \Yoti\ShareUrl\Policy\Constraints
+     */
+    private $constraints;
+
+    /**
+     * @var boolean
+     */
+    private $acceptSelfAsserted;
+
+    /**
      * @param string $name
      *
      * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
