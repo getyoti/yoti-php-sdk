@@ -125,4 +125,40 @@ class Validation
         self::notLessThan($value, $minLimit, $name);
         self::notGreaterThan($value, $maxLimit, $name);
     }
+
+    /**
+     * @param array $values
+     * @param array $types
+     * @param string $name
+     *
+     * @throws \TypeError
+     */
+    public static function isArrayOfType(array $values, array $types, $name)
+    {
+        foreach ($values as $value) {
+            if (!self::isOneOfType($value, $types)) {
+                throw new \TypeError(sprintf(
+                    '%s must be array of %s',
+                    $name,
+                    implode(', ', $types)
+                ));
+            }
+        }
+    }
+
+    /**
+     * @param mixed $value
+     * @param array $types
+     *
+     * @return boolean
+     */
+    private static function isOneOfType($value, array $types)
+    {
+        foreach ($types as $type) {
+            if ($value instanceof $type) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -10,7 +10,14 @@ use Yoti\Util\Validation;
  */
 class DynamicPolicyBuilder
 {
+    /**
+     * Selfie auth type.
+     */
     const SELFIE_AUTH_TYPE = 1;
+
+    /**
+     * PIN auth type.
+     */
     const PIN_AUTH_TYPE = 2;
 
     /**
@@ -317,7 +324,7 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * @returns {DynamicPolicy}
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicy
      */
     public function build()
     {

@@ -2,8 +2,16 @@
 
 namespace Yoti\ShareUrl\Policy;
 
+use Yoti\Util\Validation;
+
+/**
+ * Defines a contraint for wanted attributes.
+ */
 class SourceConstraint implements \JsonSerializable
 {
+    /**
+     * Constraint Type.
+     */
     const TYPE = 'SOURCE';
 
     /**
@@ -22,14 +30,15 @@ class SourceConstraint implements \JsonSerializable
      */
     public function __construct($anchors, $softPreference = false)
     {
+        Validation::isArrayOfType($anchors, [WantedAnchor::class], 'anchors');
         $this->anchors = $anchors;
+
+        Validation::isBoolean($softPreference, 'softPreference');
         $this->softPreference = $softPreference;
     }
 
     /**
      * @inheritDoc
-     *
-     * @return array
      */
     public function jsonSerialize()
     {
