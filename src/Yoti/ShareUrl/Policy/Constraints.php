@@ -20,7 +20,6 @@ class Constraints implements \JsonSerializable
     public function __construct(array $constraints = [])
     {
         Validation::isArrayOfType($constraints, [SourceConstraint::class], 'constraints');
-        $this->validateConstraints($constraints);
         $this->constraints = $constraints;
     }
 
