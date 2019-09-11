@@ -43,22 +43,4 @@ class ConstraintsBuilderTest extends TestCase
         $this->assertEquals($expectedJson, json_encode($constraints));
         $this->assertEquals($expectedJson, $constraints);
     }
-
-    /**
-     * @covers ::withSourceConstraint
-     */
-    public function testInvalidConstraint()
-    {
-        $this->setExpectedException(
-            \TypeError::class,
-            sprintf(
-                'Argument 1 passed to %s::%s() must be an instance of %s',
-                \Yoti\ShareUrl\Policy\ConstraintsBuilder::class,
-                'withSourceConstraint',
-                \Yoti\ShareUrl\Policy\SourceConstraint::class
-            )
-        );
-
-        (new ConstraintsBuilder())->withSourceConstraint(['invalid type']);
-    }
 }

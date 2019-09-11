@@ -130,24 +130,6 @@ class DynamicPolicyBuilderTest extends TestCase
     }
 
     /**
-     * @covers ::withWantedAttribute
-     */
-    public function testWithInvalidAttributeObjects()
-    {
-        $this->setExpectedException(
-            \TypeError::class,
-            sprintf(
-                'Argument 1 passed to %s::%s() must be an instance of %s',
-                \Yoti\ShareUrl\Policy\DynamicPolicyBuilder::class,
-                'withWantedAttribute',
-                \Yoti\ShareUrl\Policy\WantedAttribute::class
-            )
-        );
-        (new DynamicPolicyBuilder())
-            ->withWantedAttribute('INVALID ATTRIBUTE');
-    }
-
-    /**
      * @covers ::withDateOfBirth
      * @covers ::withAgeOver
      * @covers ::withAgeUnder
@@ -179,7 +161,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withAgeOver
      *
-     * @expectedException TypeError
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeOverIntegersOnly()
@@ -193,7 +175,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withAgeUnder
      *
-     * @expectedException TypeError
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeUnderIntegersOnly()
@@ -402,7 +384,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withWantedAuthType
      *
-     * @expectedException TypeError
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage wantedAuthType must be an integer
      */
     public function testWithNonIntegerAuthType()

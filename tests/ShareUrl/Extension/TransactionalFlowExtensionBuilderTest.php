@@ -37,7 +37,7 @@ class TransactionalFlowExtensionBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withContent
      *
-     * @expectedException TypeError
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage content cannot be null
      */
     public function testNullContent()
