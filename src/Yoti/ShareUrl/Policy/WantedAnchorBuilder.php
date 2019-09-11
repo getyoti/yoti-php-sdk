@@ -8,6 +8,16 @@ namespace Yoti\ShareUrl\Policy;
 class WantedAnchorBuilder
 {
     /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @var string
+     */
+    private $subType = '';
+
+    /**
      * @param string $value
      */
     public function withValue($value)

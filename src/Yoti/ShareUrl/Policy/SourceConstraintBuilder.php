@@ -22,7 +22,7 @@ class SourceConstraintBuilder
      */
     public function withAnchor(WantedAnchor $anchor)
     {
-        $this->anchors = $anchor;
+        $this->anchors[] = $anchor;
         return $this;
     }
 
