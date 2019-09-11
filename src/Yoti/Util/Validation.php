@@ -8,12 +8,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isString($value, $name)
     {
         if (!is_string($value)) {
-            throw new \TypeError("{$name} must be a string");
+            throw new \InvalidArgumentException("{$name} must be a string");
         }
     }
 
@@ -21,12 +21,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isBoolean($value, $name)
     {
         if (!is_bool($value)) {
-            throw new \TypeError("{$name} must be a boolean");
+            throw new \InvalidArgumentException("{$name} must be a boolean");
         }
     }
 
@@ -34,12 +34,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isInteger($value, $name)
     {
         if (!is_integer($value)) {
-            throw new \TypeError("{$name} must be an integer");
+            throw new \InvalidArgumentException("{$name} must be an integer");
         }
     }
 
@@ -47,12 +47,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isFloat($value, $name)
     {
         if (!is_float($value)) {
-            throw new \TypeError("{$name} must be a float");
+            throw new \InvalidArgumentException("{$name} must be a float");
         }
     }
 
@@ -60,12 +60,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isNumeric($value, $name)
     {
         if (!is_numeric($value)) {
-            throw new \TypeError("{$name} must be numeric");
+            throw new \InvalidArgumentException("{$name} must be numeric");
         }
     }
 
@@ -73,12 +73,12 @@ class Validation
      * @param mixed $value
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function notNull($value, $name)
     {
         if (is_null($value)) {
-            throw new \TypeError("{$name} cannot be null");
+            throw new \InvalidArgumentException("{$name} cannot be null");
         }
     }
 
@@ -130,13 +130,13 @@ class Validation
      * @param array $values
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isArrayOfIntegers(array $values, $name)
     {
         foreach ($values as $value) {
             if (!is_integer($value)) {
-                throw new \TypeError(sprintf(
+                throw new \InvalidArgumentException(sprintf(
                     '%s must be array of integers',
                     $name
                 ));
@@ -149,13 +149,13 @@ class Validation
      * @param array $types
      * @param string $name
      *
-     * @throws \TypeError
+     * @throws \InvalidArgumentException
      */
     public static function isArrayOfType(array $values, array $types, $name)
     {
         foreach ($values as $value) {
             if (!self::isOneOfType($value, $types)) {
-                throw new \TypeError(sprintf(
+                throw new \InvalidArgumentException(sprintf(
                     '%s must be array of %s',
                     $name,
                     implode(', ', $types)
