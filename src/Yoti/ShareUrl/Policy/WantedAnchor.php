@@ -9,9 +9,24 @@ use Yoti\Util\Validation;
  */
 class WantedAnchor implements \JsonSerializable
 {
+    /**
+     * Passport value.
+     */
     const VALUE_PASSPORT = 'PASSPORT';
+
+    /**
+     * Driving Licence value.
+     */
     const VALUE_DRIVING_LICENSE = 'DRIVING_LICENCE';
+
+    /**
+     * National ID value.
+     */
     const VALUE_NATIONAL_ID = 'NATIONAL_ID';
+
+    /**
+     * Passcard value.
+     */
     const VALUE_PASSCARD = 'PASS_CARD';
 
     /**

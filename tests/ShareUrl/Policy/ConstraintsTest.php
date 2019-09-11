@@ -14,7 +14,7 @@ class ConstraintsTest extends TestCase
      * @covers ::__construct
      *
      * @expectedException TypeError
-     * @expectedExceptionMessage Constraints must be instance of Yoti\ShareUrl\Policy\SourceConstraint
+     * @expectedExceptionMessage constraints must be array of Yoti\ShareUrl\Policy\SourceConstraint
      */
     public function testInvalidConstraint()
     {

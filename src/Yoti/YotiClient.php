@@ -16,6 +16,8 @@ use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\PemFileException;
 use Yoti\Http\Request;
 use Yoti\Util\PemFile;
+use Yoti\ShareUrl\DynamicScenario;
+use Yoti\ShareUrl\ShareUrlResult;
 
 /**
  * Class YotiClient
@@ -172,10 +174,28 @@ class YotiClient
         $this->checkJsonError();
 
         // Validate result
-        $this->validateResult($responseArr, $result['http_code']);
+        $this->validateAmlResult($responseArr, $result['http_code']);
 
         // Set and return result
         return new AmlResult($responseArr);
+    }
+
+    /**
+     * Get Share URL for provided dynamic scenarion.
+     *
+     * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
+     *
+     * @return \Yoti\ShareUrl\ShareUrlResult
+     */
+    public function getShareUrl(DynamicScenario $dynamicScenario)
+    {
+        $response = $this->makeRequest(
+            sprintf('/qrcodes/apps/%s', $this->sdkId),
+            Request::METHOD_POST,
+            new Payload($dynamicScenario)
+        );
+
+        return new ShareUrlResult($response);
     }
 
     /**
@@ -222,11 +242,11 @@ class YotiClient
      * @param string $httpMethod
      * @param Payload|NULL $payload
      *
-     * @return array
+     * @return \Yoti\Http\Response
      *
      * @throws RequestException
      */
-    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    private function makeRequest($endpoint, $httpMethod, Payload $payload = null)
     {
         $requestBuilder = (new RequestBuilder())
             ->withBaseUrl($this->connectApi)
@@ -254,7 +274,26 @@ class YotiClient
         $request = $requestBuilder
             ->build();
 
-        $response = $request->execute();
+        return $request->execute();
+    }
+
+    /**
+     * Make REST request to Connect API.
+     * This method allows to stub the request call in test mode.
+     *
+     * @deprecated 3.0.0 replaced by ::makeRequest()
+     *
+     * @param string $endpoint
+     * @param string $httpMethod
+     * @param Payload|NULL $payload
+     *
+     * @return array
+     *
+     * @throws RequestException
+     */
+    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    {
+        $response = $this->makeRequest($endpoint, $httpMethod, $payload);
 
         return [
             'response' => $response->getBody(),
@@ -270,7 +309,7 @@ class YotiClient
      *
      * @throws AmlException
      */
-    private function validateResult(array $responseArr, $httpCode)
+    private function validateAmlResult(array $responseArr, $httpCode)
     {
         $httpCode = (int) $httpCode;
 

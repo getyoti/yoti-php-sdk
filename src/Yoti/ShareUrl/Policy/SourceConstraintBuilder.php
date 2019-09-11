@@ -36,8 +36,8 @@ class SourceConstraintBuilder
     }
 
     /**
-     * @param {string} value
-     * @param {string} subType
+     * @param string $value
+     * @param string $subType
      */
     public function withAnchorByValue($value, $subType = '')
     {
@@ -81,7 +81,7 @@ class SourceConstraintBuilder
     }
 
     /**
-     * @returns {SourceConstraint}
+     * @return \Yoti\ShareUrl\Policy\SourceConstraint
      */
     public function build()
     {
