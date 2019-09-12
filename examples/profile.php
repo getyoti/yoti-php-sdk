@@ -74,9 +74,22 @@ require_once __DIR__ . '/profile.inc.php';
                                             echo htmlspecialchars($item['obj']->getValue()->format('d-m-Y'));
                                             break;
                                         case 'Age Verification':
-                                            // Because AgeVerification::class has a different structure
-                                            $attributeObj = $item['obj']->getAttribute();
-                                            echo htmlspecialchars($ageVerificationStr);
+                                            ?>
+                                            <table>
+                                                <tr>
+                                                    <td>Check Type</td>
+                                                    <td><?php echo htmlspecialchars($item['age_verification']->getCheckType()); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Age</td>
+                                                    <td><?php echo htmlspecialchars($item['age_verification']->getAge()); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Result</td>
+                                                    <td><?php echo htmlspecialchars($item['age_verification']->getResult()); ?></td>
+                                                </tr>
+                                            </table>
+                                            <?php
                                             break;
                                         case 'Structured Postal Address':
                                             ?>
@@ -89,6 +102,35 @@ require_once __DIR__ . '/profile.inc.php';
                                                 <?php endforeach; ?>
                                             </table>
                                             <?php
+                                            break;
+                                        case 'Document Details':
+                                            ?>
+                                            <table>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td><?php echo htmlspecialchars($item['obj']->getValue()->getType()); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Issuing Country</td>
+                                                    <td><?php echo htmlspecialchars($item['obj']->getValue()->getIssuingCountry()); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Document Number</td>
+                                                    <td><?php echo htmlspecialchars($item['obj']->getValue()->getDocumentNumber()); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Expiration Date</td>
+                                                    <td><?php echo htmlspecialchars($item['obj']->getValue()->getExpirationDate()->format('d-m-Y')); ?></td>
+                                                </tr>
+                                            </table>
+                                            <?php
+                                            break;
+                                        case 'Document Images':
+                                            foreach ($item['obj']->getValue() as $image) {
+                                            ?>
+                                                <img src="<?php echo htmlspecialchars($image->getBase64Content()); ?>" />
+                                            <?php
+                                            }
                                             break;
                                         default:
                                             echo htmlspecialchars($item['obj']->getValue());

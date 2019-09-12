@@ -43,11 +43,6 @@ try {
             'icon' => 'yoti-icon-calendar',
         ],
         [
-            'name' => 'Age Verification',
-            'obj' => $ageVerification,
-            'icon' => 'yoti-icon-calendar',
-        ],
-        [
             'name' => 'Address',
             'obj' => $profile->getPostalAddress(),
             'icon' => 'yoti-icon-address',
@@ -66,14 +61,31 @@ try {
             'name' => 'Structured Postal Address',
             'obj' => $profile->getStructuredPostalAddress(),
             'icon' => 'yoti-icon-profile',
+        ],
+        [
+            'name' => 'Document Details',
+            'obj' => $profile->getDocumentDetails(),
+            'icon' => 'yoti-icon-profile',
+        ],
+        [
+            'name' => 'Document Images',
+            'obj' => $profile->getDocumentImages(),
+            'icon' => 'yoti-icon-profile',
         ]
     ];
 
-    $ageVerificationStr = '';
-    if ($ageVerification) {
-        $result = $ageVerification->getResult() ? 'Yes' : 'No';
-        $ageVerificationStr = "({$ageVerification->getChecktype()} {$ageVerification->getAge()}) : {$result}";
+    $ageVerifications = $profile->getAgeVerifications();
+    if ($ageVerifications) {
+        foreach ($ageVerifications as $ageVerification) {
+            $profileAttributes[] = [
+                'name' => 'Age Verification',
+                'obj' => $ageVerification->getAttribute(),
+                'age_verification' => $ageVerification,
+                'icon' => 'yoti-icon-profile',
+            ];
+        }
     }
+
     $fullName = $profile->getFullName();
     $selfie = $profile->getSelfie();
     $selfieFileName = 'selfie.jpeg';
