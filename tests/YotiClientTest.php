@@ -291,6 +291,8 @@ class YotiClientTest extends TestCase
     {
         $expectedUrl = YotiClient::DEFAULT_CONNECT_API . sprintf('/qrcodes/apps/%s', SDK_ID) . '?appId=' . SDK_ID;
         $expectedUrlPattern = sprintf('~%s.*?nonce=.*?&timestamp=.*?~', preg_quote($expectedUrl));
+        $expectedQrCode = 'https://dynamic-code.yoti.com/CAEaJDRjNTQ3M2IxLTNiNzktNDg3My1iMmM4LThiMTQxZDYwMjM5ODAC';
+        $expectedRefId = '4c5473b1-3b79-4873-b2c8-8b141d602398';
 
         $dynamicScenario = (new DynamicScenarioBuilder())
             ->withCallbackEndpoint('/test-callback-url')
@@ -300,35 +302,31 @@ class YotiClientTest extends TestCase
             ->build();
 
         $response = $this->createMock(Response::class);
-        $response->method('getBody')->willReturn(file_get_contents(SHARE_URL_RESULT_JSON));
+        $response->method('getBody')->willReturn(json_encode([
+            'qrcode' => $expectedQrCode,
+            'ref_id' => $expectedRefId,
+        ]));
         $response->method('getStatusCode')->willReturn(201);
 
         $requestHandler = $this->createMock(RequestHandlerInterface::class);
 
         $requestHandler
-                ->expects($this->once())
-                ->method('execute')
-                ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
-                    $this->assertRegExp($expectedUrlPattern, $request->getUrl());
-                    $this->assertEquals(json_encode($dynamicScenario), $request->getPayload());
-                    return true;
-                }))
-                ->willReturn($response);
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
+                $this->assertRegExp($expectedUrlPattern, $request->getUrl());
+                $this->assertEquals(json_encode($dynamicScenario), $request->getPayload());
+                return true;
+            }))
+            ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
         $yotiClient->setRequestHandler($requestHandler);
 
         $shareUrlResult = $yotiClient->createShareUrl($dynamicScenario);
 
-        $this->assertEquals(
-            'https://dynamic-code.yoti.com/CAEaJDRjNTQ3M2IxLTNiNzktNDg3My1iMmM4LThiMTQxZDYwMjM5ODAC',
-            $shareUrlResult->getShareUrl()
-        );
-
-        $this->assertEquals(
-            '4c5473b1-3b79-4873-b2c8-8b141d602398',
-            $shareUrlResult->getRefId()
-        );
+        $this->assertEquals($expectedQrCode, $shareUrlResult->getShareUrl());
+        $this->assertEquals($expectedRefId, $shareUrlResult->getRefId());
     }
 
     /**
