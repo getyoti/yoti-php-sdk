@@ -14,10 +14,12 @@ use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\PemFileException;
+use Yoti\Exception\ShareUrlException;
 use Yoti\Http\Request;
 use Yoti\Util\PemFile;
 use Yoti\ShareUrl\DynamicScenario;
 use Yoti\Http\ShareUrlResult;
+use Yoti\Util\Validation;
 
 /**
  * Class YotiClient
@@ -165,30 +167,30 @@ class YotiClient
         // Get payload data from amlProfile
         $amlPayload = new Payload($amlProfile->getData());
 
-        $result = $this->sendRequest(
+        $response = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,
             Request::METHOD_POST,
             $amlPayload
         );
 
         // Get response data array
-        $responseArr = json_decode($result['response'], true);
-        // Check if there is a JSON decode error
-        $this->checkJsonError();
+        $result = $this->processJsonResponse($response['response']);
 
         // Validate result
-        $this->validateAmlResult($responseArr, $result['http_code']);
+        $this->validateAmlResult($result, $response['http_code']);
 
         // Set and return result
-        return new AmlResult($responseArr);
+        return new AmlResult($result);
     }
 
     /**
-     * Get Share URL for provided dynamic scenarion.
+     * Get Share URL for provided dynamic scenario.
      *
      * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
      *
      * @return \Yoti\Http\ShareUrlResult
+     *
+     * @throws \Yoti\Exception\ShareUrlException
      */
     public function createShareUrl(DynamicScenario $dynamicScenario)
     {
@@ -198,7 +200,14 @@ class YotiClient
             new Payload($dynamicScenario)
         );
 
-        return new ShareUrlResult($response);
+        $httpCode = $response->getStatusCode();
+        if (!$this->isResponseSuccess($httpCode)) {
+            throw new ShareUrlException("Server responded with {$httpCode}");
+        }
+
+        $result = $this->processJsonResponse($response->getBody());
+
+        return new ShareUrlResult($result);
     }
 
     /**
@@ -314,9 +323,7 @@ class YotiClient
      */
     private function validateAmlResult(array $responseArr, $httpCode)
     {
-        $httpCode = (int) $httpCode;
-
-        if ($httpCode === 200) {
+        if ($this->isResponseSuccess((int) $httpCode)) {
             // The request is successful - nothing to do
             return;
         }
@@ -372,31 +379,36 @@ class YotiClient
 
         // Request endpoint
         $endpoint = sprintf(self::PROFILE_REQUEST_ENDPOINT, $token);
-        $result = $this->sendRequest($endpoint, $httpMethod, $payload);
+        $response = $this->sendRequest($endpoint, $httpMethod, $payload);
 
-        $responseArr = $this->processResult($result);
-        $this->checkForReceipt($responseArr);
+        $httpCode = (int) $response['http_code'];
+        if (!$this->isResponseSuccess($httpCode)) {
+            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
+        }
 
-        return new Receipt($responseArr['receipt']);
+        $result = $this->processJsonResponse($response['response']);
+        $this->checkForReceipt($result);
+
+        return new Receipt($result['receipt']);
     }
 
     /**
-     * @param array $result
+     * @param string $json
      *
-     * @return mixed
+     * @return mixed the decoded JSON result.
      *
-     * @throws ActivityDetailsException
+     * @throws YotiClientException
      */
-    private function processResult(array $result)
+    private function processJsonResponse($json)
     {
-        $this->checkResponseStatus($result['http_code']);
-
         // Get decoded response data
-        $responseArr = json_decode($result['response'], true);
+        $result = json_decode($json, true);
 
-        $this->checkJsonError();
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new YotiClientException('JSON response was invalid', 502);
+        }
 
-        return $responseArr;
+        return $result;
     }
 
     /**
@@ -413,28 +425,17 @@ class YotiClient
     }
 
     /**
-     * @param $httpCode
+     * @param int $httpCode
      *
      * @throws ActivityDetailsException
      */
-    private function checkResponseStatus($httpCode)
+    private function isResponseSuccess($httpCode)
     {
-        $httpCode = (int) $httpCode;
-        if ($httpCode !== 200) {
-            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
+        Validation::isInteger($httpCode, 'httpCode');
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return true;
         }
-    }
-
-    /**
-     * Check if any error occurs during JSON decode.
-     *
-     * @throws YotiClientException
-     */
-    private function checkJsonError()
-    {
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new YotiClientException('JSON response was invalid', 502);
-        }
+        return false;
     }
 
     /**
