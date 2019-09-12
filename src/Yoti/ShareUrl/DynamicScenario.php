@@ -43,11 +43,7 @@ class DynamicScenario implements \JsonSerializable
 
         $this->dynamicPolicy = $dynamicPolicy;
 
-        foreach ($extensions as $extension) {
-            if (!$extension instanceof Extension) {
-                throw new \TypeError(sprintf('All extensions must be instance of ' . Extension::class));
-            }
-        }
+        Validation::isArrayOfType($extensions, [Extension::class], 'extensions');
         $this->extensions = $extensions;
     }
 
