@@ -10,14 +10,14 @@ use \Yoti\Util\Validation;
 class LocationConstraintContent implements \JsonSerializable
 {
     /**
-     * @param float $latitude
+     * @param int|float $latitude
      *   Latitude of the user's expected location
-     * @param float $longitude
+     * @param int|float $longitude
      *   Longitude of the user's expected location
-     * @param float $radius
+     * @param int|float $radius
      *   Radius of the circle, centred on the specified location
      *   coordinates, where the device is allowed to perform the share
-     * @param float $maxUncertainty
+     * @param int|float $maxUncertainty
      *   Maximum acceptable distance, in metres, of the area of
      *   uncertainty associated with the device location coordinates.
      */
@@ -51,5 +51,13 @@ class LocationConstraintContent implements \JsonSerializable
                 'max_uncertainty_radius' => $this->maxUncertainty,
             ]
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
     }
 }

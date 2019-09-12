@@ -83,8 +83,8 @@ class Validation
     }
 
     /**
-     * @param integer|float $value
-     * @param integer|float $limit
+     * @param int|float $value
+     * @param int|float $limit
      * @param string $name
      *
      * @throws \RangeException
@@ -98,8 +98,8 @@ class Validation
     }
 
     /**
-     * @param integer|float $value
-     * @param integer|float $limit
+     * @param int|float $value
+     * @param int|float $limit
      * @param string $name
      *
      * @throws \RangeException
@@ -113,9 +113,9 @@ class Validation
     }
 
     /**
-     * @param integer|float $value
-     * @param integer|float $minLimit
-     * @param integer|float $maxLimit
+     * @param int|float $value
+     * @param int|float $minLimit
+     * @param int|float $maxLimit
      * @param string $name
      *
      * @throws \RangeException

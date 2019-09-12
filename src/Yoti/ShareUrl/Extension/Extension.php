@@ -62,7 +62,7 @@ class Extension implements \JsonSerializable
     }
 
     /**
-     * @return string JSON string
+     * @return string
      */
     public function __toString()
     {
