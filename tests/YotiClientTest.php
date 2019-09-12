@@ -357,7 +357,7 @@ class YotiClientTest extends TestCase
             function ($code) {
                 return [$code];
             },
-            $clientCodes + $serverCodes,
+            $clientCodes + $serverCodes
         );
     }
 
@@ -374,8 +374,8 @@ class YotiClientTest extends TestCase
 
         $requestHandler = $this->createMock(RequestHandlerInterface::class);
         $requestHandler
-                ->method('execute')
-                ->willReturn($response);
+            ->method('execute')
+            ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
         $yotiClient->setRequestHandler($requestHandler);
