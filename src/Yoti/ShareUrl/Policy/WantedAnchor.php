@@ -44,6 +44,8 @@ class WantedAnchor implements \JsonSerializable
 
     /**
      * @inheritDoc
+     *
+     * @return array
      */
     public function jsonSerialize()
     {
