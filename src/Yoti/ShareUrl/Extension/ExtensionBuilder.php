@@ -20,7 +20,7 @@ class ExtensionBuilder
     /**
      * @param string $type
      *
-     * @return ExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\ExtensionBuilder
      */
     public function withType($type)
     {
@@ -31,7 +31,7 @@ class ExtensionBuilder
     /**
      * @param mixed $content
      *
-     * @return ExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\ExtensionBuilder
      */
     public function withContent($content)
     {
@@ -40,7 +40,7 @@ class ExtensionBuilder
     }
 
     /**
-     * @return Extension
+     * @return \Yoti\ShareUrl\Extension\Extension
      */
     public function build()
     {

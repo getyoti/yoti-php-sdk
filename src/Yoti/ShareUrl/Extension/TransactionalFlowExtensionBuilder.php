@@ -33,7 +33,7 @@ class TransactionalFlowExtensionBuilder
     }
 
     /**
-     * @return Extension
+     * @return \Yoti\ShareUrl\Extension\Extension
      *   Extension with TRANSACTIONAL_FLOW type
      */
     public function build()

@@ -22,7 +22,7 @@ class ConstraintsBuilder
     }
 
     /**
-     * @return Constraints
+     * @return \Yoti\ShareUrl\Policy\Constraints
      */
     public function build()
     {

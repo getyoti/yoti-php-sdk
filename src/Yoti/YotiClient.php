@@ -3,7 +3,6 @@
 namespace Yoti;
 
 use Yoti\Entity\Receipt;
-use Yoti\Exception\RequestException;
 use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
@@ -94,8 +93,8 @@ class YotiClient
      * @param string $sdkIdentifier (optional)
      *   SDK or Plugin identifier - deprecated - use ::setSdkIdentifier() instead.
      *
-     * @throws RequestException
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\RequestException
+     * @throws \Yoti\Exception\YotiClientException
      */
     public function __construct(
         $sdkId,
@@ -131,10 +130,10 @@ class YotiClient
      *
      * @param null|string $encryptedConnectToken
      *
-     * @return ActivityDetails
+     * @return \Yoti\ActivityDetails
      *
-     * @throws ActivityDetailsException
-     * @throws Exception\ReceiptException
+     * @throws \Yoti\Exception\ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
      */
     public function getActivityDetails($encryptedConnectToken = null)
     {
@@ -155,12 +154,12 @@ class YotiClient
     /**
      * Perform AML profile check.
      *
-     * @param AmlProfile $amlProfile
+     * @param \Yoti\Entity\AmlProfile $amlProfile
      *
-     * @return AmlResult
+     * @return \Yoti\Http\AmlResult
      *
-     * @throws AmlException
-     * @throws RequestException
+     * @throws \Yoti\Exception\AmlException
+     * @throws \Yoti\Exception\RequestException
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
@@ -191,6 +190,7 @@ class YotiClient
      * @return \Yoti\Http\ShareUrlResult
      *
      * @throws \Yoti\Exception\ShareUrlException
+     * @throws \Yoti\Exception\RequestException
      */
     public function createShareUrl(DynamicScenario $dynamicScenario)
     {
@@ -256,7 +256,7 @@ class YotiClient
      *
      * @return \Yoti\Http\Response
      *
-     * @throws RequestException
+     * @throws \Yoti\Exception\RequestException
      */
     private function sendConnectRequest($endpoint, $httpMethod, Payload $payload = null)
     {
@@ -283,10 +283,7 @@ class YotiClient
             $requestBuilder->withHandler($this->requestHandler);
         }
 
-        $request = $requestBuilder
-            ->build();
-
-        return $request->execute();
+        return $requestBuilder->build()->execute();
     }
 
     /**
@@ -301,7 +298,7 @@ class YotiClient
      *
      * @return array
      *
-     * @throws RequestException
+     * @throws \Yoti\Exception\RequestException
      */
     protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
     {
@@ -319,7 +316,7 @@ class YotiClient
      * @param array $responseArr
      * @param int $httpCode
      *
-     * @throws AmlException
+     * @throws \Yoti\Exception\AmlException
      */
     private function validateAmlResult(array $responseArr, $httpCode)
     {
@@ -363,11 +360,11 @@ class YotiClient
      * @param string $httpMethod
      * @param Payload|NULL $payload
      *
-     * @return Receipt
+     * @return \Yoti\Entity\Receipt
      *
-     * @throws ActivityDetailsException
-     * @throws ReceiptException
-     * @throws RequestException
+     * @throws \Yoti\Exception\ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
+     * @throws \Yoti\Exception\RequestException
      */
     private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET, $payload = null)
     {
@@ -397,7 +394,7 @@ class YotiClient
      *
      * @return mixed the decoded JSON result.
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function processJsonResponse($json)
     {
@@ -414,7 +411,7 @@ class YotiClient
     /**
      * @param array $response
      *
-     * @throws ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
      */
     private function checkForReceipt(array $responseArr)
     {
@@ -427,15 +424,12 @@ class YotiClient
     /**
      * @param int $httpCode
      *
-     * @throws ActivityDetailsException
+     * @return boolean
      */
     private function isResponseSuccess($httpCode)
     {
         Validation::isInteger($httpCode, 'httpCode');
-        if ($httpCode >= 200 && $httpCode < 300) {
-            return true;
-        }
-        return false;
+        return $httpCode >= 200 && $httpCode < 300;
     }
 
     /**
@@ -461,7 +455,7 @@ class YotiClient
      * @param string $pem
      *   PEM file path or string
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function extractPemContent($pem)
     {
@@ -491,7 +485,7 @@ class YotiClient
      *
      * @param string $sdkId
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function setSdkId($sdkId)
     {
@@ -505,7 +499,7 @@ class YotiClient
     /**
      * Check PHP required modules.
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function checkRequiredModules()
     {

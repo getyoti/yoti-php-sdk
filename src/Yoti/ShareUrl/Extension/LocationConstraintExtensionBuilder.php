@@ -15,31 +15,31 @@ class LocationConstraintExtensionBuilder
     const LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
 
     /**
-     * @var float
+     * @var int|float
      */
     private $latitude;
 
     /**
-     * @var float
+     * @var int|float
      */
     private $longitude;
 
     /**
-     * @var float
+     * @var int|float
      */
     private $radius = 150;
 
     /**
-     * @var float
+     * @var int|float
      */
     private $maxUncertainty = 150;
 
     /**
      * Allows you to specify the Latitude of the user's expected location
      *
-     * @param float $latitude
+     * @param int|float $latitude
      *
-     * @return LocationConstraintExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
      */
     public function withLatitude($latitude)
     {
@@ -50,9 +50,9 @@ class LocationConstraintExtensionBuilder
     /**
      * Allows you to specify the Longitude of the user's expected location
      *
-     * @param float $longitude
+     * @param int|float $longitude
      *
-     * @return LocationConstraintExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
      */
     public function withLongitude($longitude)
     {
@@ -66,10 +66,10 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param float $radius
+     * @param int|float $radius
      *   The allowable distance, in metres, from the given lat/long location
      *
-     * @return LocationConstraintExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
      */
     public function withRadius($radius)
     {
@@ -83,10 +83,10 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param float $maxUncertainty
+     * @param int|float $maxUncertainty
      *   Maximum allowed measurement uncertainty, in metres
      *
-     * @return LocationConstraintExtensionBuilder
+     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
      */
     public function withMaxUncertainty($maxUncertainty)
     {
@@ -95,7 +95,7 @@ class LocationConstraintExtensionBuilder
     }
 
     /**
-     * @return Extension
+     * @return \Yoti\ShareUrl\Extension\Extension
      *   Extension with LocationConstraintExtensionContent content
      */
     public function build()
