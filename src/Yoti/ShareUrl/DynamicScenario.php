@@ -49,6 +49,8 @@ class DynamicScenario implements \JsonSerializable
 
     /**
      * @inheritDoc
+     *
+     * @return array
      */
     public function jsonSerialize()
     {
@@ -60,7 +62,7 @@ class DynamicScenario implements \JsonSerializable
     }
 
     /**
-     * @return string JSON string
+     * @return string
      */
     public function __toString()
     {

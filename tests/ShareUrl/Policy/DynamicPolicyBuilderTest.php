@@ -74,6 +74,29 @@ class DynamicPolicyBuilderTest extends TestCase
     }
 
     /**
+     * @covers ::withWantedAttribute
+     * @covers ::withFamilyName
+     */
+    public function testWithDuplicateAttribute()
+    {
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withFamilyName()
+            ->withFamilyName()
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'family_name', 'derivation' => '', 'optional' => false],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
      * @covers ::build
      * @covers ::withWantedAttributeByName
      */

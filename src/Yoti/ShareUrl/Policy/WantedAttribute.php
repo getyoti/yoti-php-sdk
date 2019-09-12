@@ -98,6 +98,8 @@ class WantedAttribute implements \JsonSerializable
 
     /**
      * @inheritDoc
+     *
+     * @return array
      */
     public function jsonSerialize()
     {
