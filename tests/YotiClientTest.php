@@ -9,6 +9,7 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 use Yoti\Http\RequestHandlerInterface;
 use Yoti\Http\Response;
+use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 
@@ -124,6 +125,20 @@ class YotiClientTest extends TestCase
     }
 
     /**
+     * @covers ::getActivityDetails
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException Yoti\Exception\ActivityDetailsException
+     */
+    public function testGetActivityDetailsFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
+    }
+
+    /**
      * @covers ::performAmlCheck
      */
     public function testPerformAmlCheck()
@@ -143,6 +158,20 @@ class YotiClientTest extends TestCase
         $result = $yotiClient->performAmlCheck($amlProfile);
 
         $this->assertInstanceOf(AmlResult::class, $result);
+    }
+
+    /**
+     * @covers ::performAmlCheck
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException Yoti\Exception\AmlException
+     */
+    public function testPerformAmlCheckFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
     }
 
     /**
@@ -272,7 +301,7 @@ class YotiClientTest extends TestCase
 
         $response = $this->createMock(Response::class);
         $response->method('getBody')->willReturn(file_get_contents(SHARE_URL_RESULT_JSON));
-        $response->method('getStatusCode')->willReturn(200);
+        $response->method('getStatusCode')->willReturn(201);
 
         $requestHandler = $this->createMock(RequestHandlerInterface::class);
 
@@ -300,5 +329,57 @@ class YotiClientTest extends TestCase
             '4c5473b1-3b79-4873-b2c8-8b141d602398',
             $shareUrlResult->getRefId()
         );
+    }
+
+    /**
+     * @covers ::createShareUrl
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException Yoti\Exception\ShareUrlException
+     */
+    public function testCreateShareUrlFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));
+    }
+
+    /**
+     * Provides HTTP error status codes.
+     */
+    public function httpErrorStatusCodeProvider()
+    {
+        $clientCodes = [400, 401, 402, 403, 404];
+        $serverCodes = [500, 501, 502, 503, 504];
+
+        return array_map(
+            function ($code) {
+                return [$code];
+            },
+            $clientCodes + $serverCodes,
+        );
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @return \Yoti\YotiClient
+     */
+    private function createClientWithErrorResponse($statusCode)
+    {
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn('{}');
+        $response->method('getStatusCode')->willReturn($statusCode);
+
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler
+                ->method('execute')
+                ->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        return $yotiClient;
     }
 }

@@ -20,17 +20,15 @@ class ShareUrlResult
     private $refId;
 
     /**
-     * @param \Yoti\Http\Response $response
+     * @param array $result
      */
-    public function __construct(Response $response)
+    public function __construct(array $result)
     {
-        $json = json_decode($response->getBody(), true);
+        Validation::isString($result['qrcode'], 'QR Code URL');
+        $this->shareUrl = $result['qrcode'];
 
-        Validation::isString($json['qrcode'], 'QR Code URL');
-        $this->shareUrl = $json['qrcode'];
-
-        Validation::isString($json['ref_id'], 'Ref ID');
-        $this->refId = $json['ref_id'];
+        Validation::isString($result['ref_id'], 'Ref ID');
+        $this->refId = $result['ref_id'];
     }
 
     /**
