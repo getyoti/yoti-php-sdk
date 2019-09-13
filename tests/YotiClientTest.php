@@ -129,7 +129,7 @@ class YotiClientTest extends TestCase
      *
      * @dataProvider httpErrorStatusCodeProvider
      *
-     * @expectedException Yoti\Exception\ActivityDetailsException
+     * @expectedException \Yoti\Exception\ActivityDetailsException
      */
     public function testGetActivityDetailsFailure($statusCode)
     {
@@ -165,7 +165,7 @@ class YotiClientTest extends TestCase
      *
      * @dataProvider httpErrorStatusCodeProvider
      *
-     * @expectedException Yoti\Exception\AmlException
+     * @expectedException \Yoti\Exception\AmlException
      */
     public function testPerformAmlCheckFailure($statusCode)
     {
@@ -334,7 +334,7 @@ class YotiClientTest extends TestCase
      *
      * @dataProvider httpErrorStatusCodeProvider
      *
-     * @expectedException Yoti\Exception\ShareUrlException
+     * @expectedException \Yoti\Exception\ShareUrlException
      */
     public function testCreateShareUrlFailure($statusCode)
     {

@@ -19,6 +19,8 @@ class SourceConstraintBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\WantedAnchor anchor
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withAnchor(WantedAnchor $anchor)
     {
@@ -28,6 +30,8 @@ class SourceConstraintBuilder
 
     /**
      * @param boolean $softPreference
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withSoftPreference($softPreference = true)
     {
@@ -38,6 +42,8 @@ class SourceConstraintBuilder
     /**
      * @param string $value
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withAnchorByValue($value, $subType = '')
     {
@@ -50,6 +56,8 @@ class SourceConstraintBuilder
 
     /**
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withPassport($subType = '')
     {
@@ -58,6 +66,8 @@ class SourceConstraintBuilder
 
     /**
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withDrivingLicence($subType = '')
     {
@@ -66,6 +76,8 @@ class SourceConstraintBuilder
 
     /**
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withNationalId($subType = '')
     {
@@ -74,6 +86,8 @@ class SourceConstraintBuilder
 
     /**
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
      */
     public function withPasscard($subType = '')
     {

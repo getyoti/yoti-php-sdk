@@ -19,6 +19,8 @@ class WantedAnchorBuilder
 
     /**
      * @param string $value
+     *
+     * @return \Yoti\ShareUrl\Policy\WantedAnchorBuilder
      */
     public function withValue($value)
     {
@@ -28,6 +30,8 @@ class WantedAnchorBuilder
 
     /**
      * @param string $subType
+     *
+     * @return \Yoti\ShareUrl\Policy\WantedAnchorBuilder
      */
     public function withSubType($subType)
     {

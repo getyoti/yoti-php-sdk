@@ -31,7 +31,7 @@ class ProfileTest extends TestCase
     private $expectedPhoneNumber;
 
     /**
-     * @var Array Structured Postal Address
+     * @var array Structured Postal Address
      */
     private $dummyStructuredPostalAddress;
 

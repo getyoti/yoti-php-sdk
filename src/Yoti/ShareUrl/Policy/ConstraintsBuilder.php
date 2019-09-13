@@ -14,6 +14,8 @@ class ConstraintsBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\SourceConstraint $constraint
+     *
+     * @return \Yoti\ShareUrl\Policy\ConstraintsBuilder
      */
     public function withSourceConstraint(SourceConstraint $sourceConstraint)
     {

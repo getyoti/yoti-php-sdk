@@ -17,7 +17,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withLatitude
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'latitude' value '-91' is less than '-90'
      */
     public function testLatitudeTooLow()
@@ -31,7 +31,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withLatitude
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'latitude' value '91' is greater than '90'
      */
     public function testLatitudeTooHigh()
@@ -45,7 +45,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withLongitude
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'longitude' value '-181' is less than '-180'
      */
     public function testLongitudeTooLow()
@@ -59,7 +59,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withLongitude
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'longitude' value '181' is greater than '180'
      */
     public function testLongitudeTooHigh()
@@ -73,7 +73,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withRadius
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'radius' value '-1' is less than '0'
      */
     public function testRadiusLessThanZero()
@@ -88,7 +88,7 @@ class LocationConstraintExtensionBuilderTest extends TestCase
     /**
      * @covers ::withMaxUncertainty
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      * @expectedExceptionMessage 'maxUncertainty' value '-1' is less than '0'
      */
     public function testMaxUncertaintyLessThanZero()
