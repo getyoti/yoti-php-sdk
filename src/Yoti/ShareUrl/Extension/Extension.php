@@ -33,22 +33,6 @@ class Extension implements \JsonSerializable
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
      * @inheritDoc
      *
      * @return array
@@ -56,8 +40,8 @@ class Extension implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'type' => $this->getType(),
-            'content' => $this->getContent(),
+            'type' => $this->type,
+            'content' => $this->content,
         ];
     }
 
