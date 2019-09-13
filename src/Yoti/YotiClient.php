@@ -252,7 +252,7 @@ class YotiClient
      *
      * @param string $endpoint
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param Payload|null $payload
      *
      * @return \Yoti\Http\Response
      *
@@ -294,7 +294,7 @@ class YotiClient
      *
      * @param string $endpoint
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param Payload|null $payload
      *
      * @return array
      *
@@ -358,7 +358,7 @@ class YotiClient
      *
      * @param string $encryptedConnectToken
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param Payload|null $payload
      *
      * @return \Yoti\Entity\Receipt
      *

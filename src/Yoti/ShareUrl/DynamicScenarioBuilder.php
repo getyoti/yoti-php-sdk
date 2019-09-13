@@ -17,6 +17,8 @@ class DynamicScenarioBuilder
 
     /**
      * @param string $callbackEndpoint
+     *
+     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
      */
     public function withCallbackEndpoint($callbackEndpoint)
     {
@@ -26,6 +28,8 @@ class DynamicScenarioBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\DynamicPolicy $dynamicPolicy
+     *
+     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
      */
     public function withPolicy(DynamicPolicy $dynamicPolicy)
     {
@@ -35,6 +39,8 @@ class DynamicScenarioBuilder
 
     /**
      * @param \Yoti\ShareUrl\Extension\Extension $extension
+     *
+     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
      */
     public function withExtension(Extension $extension)
     {

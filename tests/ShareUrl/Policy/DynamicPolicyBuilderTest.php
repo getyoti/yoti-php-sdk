@@ -184,7 +184,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withAgeOver
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeOverIntegersOnly()
@@ -198,7 +198,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withAgeUnder
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeUnderIntegersOnly()
@@ -407,7 +407,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withWantedAuthType
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage wantedAuthType must be an integer
      */
     public function testWithNonIntegerAuthType()

@@ -30,7 +30,7 @@ class ShareUrlResultTest extends TestCase
     /**
      * @covers ::__construct
      *
-     * @expectedException Yoti\Exception\ShareUrlException
+     * @expectedException \Yoti\Exception\ShareUrlException
      * @expectedExceptionMessage JSON result does not contain 'qrcode'
      */
     public function testInvalidResponseNoQr()
@@ -56,7 +56,7 @@ class ShareUrlResultTest extends TestCase
     /**
      * @covers ::__construct
      *
-     * @expectedException Yoti\Exception\ShareUrlException
+     * @expectedException \Yoti\Exception\ShareUrlException
      * @expectedExceptionMessage JSON result does not contain 'ref_id'
      */
     public function testInvalidResponseNoRefId()

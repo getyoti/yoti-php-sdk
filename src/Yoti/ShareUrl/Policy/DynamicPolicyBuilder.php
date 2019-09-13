@@ -37,6 +37,8 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute wantedAttribute
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withWantedAttribute(WantedAttribute $wantedAttribute)
     {
@@ -53,6 +55,8 @@ class DynamicPolicyBuilder
      * @param string $name
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withWantedAttributeByName($name, $constraints = null, $acceptSelfAsserted = null)
     {
@@ -73,6 +77,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withFamilyName($constraints = null, $acceptSelfAsserted = null)
     {
@@ -86,6 +92,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withGivenNames(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -99,6 +107,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withFullName(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -112,6 +122,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withDateOfBirth(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -126,6 +138,8 @@ class DynamicPolicyBuilder
      * @param int $age
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withAgeOver($age, Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -141,6 +155,8 @@ class DynamicPolicyBuilder
      * @param int $age
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withAgeUnder($age, Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -156,6 +172,8 @@ class DynamicPolicyBuilder
      * @param string $derivation
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withAgeDerivedAttribute($derivation, Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -174,6 +192,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withGender(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -187,6 +207,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withPostalAddress(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -200,6 +222,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withStructuredPostalAddress(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -213,6 +237,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withNationality(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -226,6 +252,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withPhoneNumber(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -239,6 +267,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withSelfie(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -252,6 +282,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withDocumentDetails(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -265,6 +297,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withDocumentImages(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -278,6 +312,8 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withEmail(Constraints $constraints = null, $acceptSelfAsserted = null)
     {
@@ -290,6 +326,8 @@ class DynamicPolicyBuilder
 
     /**
      * @param boolean $enabled
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withSelfieAuthentication($enabled = true)
     {
@@ -298,6 +336,8 @@ class DynamicPolicyBuilder
 
     /**
      * @param boolean $enabled
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withPinAuthentication($enabled = true)
     {
@@ -307,6 +347,8 @@ class DynamicPolicyBuilder
     /**
      * @param int $wantedAuthType
      * @param boolean $enabled
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withWantedAuthType($wantedAuthType, $enabled = true)
     {
@@ -322,6 +364,8 @@ class DynamicPolicyBuilder
 
     /**
      * @param boolean $wantedRememberMe
+     *
+     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
      */
     public function withWantedRememberMe($wantedRememberMe)
     {
