@@ -50,7 +50,7 @@ $shareUrlResult = $yotiClient->createShareUrl($scenario);
                     </a>
                 </div>
 
-                <h1 class="yoti-top-header">We now accept Yoti</h1>
+                <h1 class="yoti-top-header">Dynamic Share Example</h1>
 
                 <div class="yoti-sdk-integration-section">
                     <div id="yoti-share-button"></div>
