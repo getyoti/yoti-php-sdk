@@ -42,7 +42,7 @@ class RequestBuilder
     /**
      * @var string
      */
-    private $sdkIdentifier = self::YOTI_SDK_IDENTIFIER_KEY;
+    private $sdkIdentifier = self::YOTI_SDK_IDENTIFIER;
 
     /**
      * @var string
