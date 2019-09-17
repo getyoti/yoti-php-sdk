@@ -14,6 +14,13 @@ composer test
 
 See [.travis.yml](.travis.yml) for PHP versions we currently support.
 
+Generate and view coverage report by running:
+
+```shell
+composer coverage
+open ./coverage/report/index.html
+```
+
 ## Style guide
 
 We follow the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12/), which
