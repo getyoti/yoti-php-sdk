@@ -34,7 +34,9 @@ class MultiValueTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
      * @covers ::allowInstance
+     * @covers ::applyFilters
      */
     public function testMultiValueFilterArrayAccess()
     {
@@ -60,6 +62,7 @@ class MultiValueTest extends TestCase
 
     /**
      * @covers ::allowInstance
+     * @covers ::applyFilters
      */
     public function testMultiValueFilterIterator()
     {
@@ -73,6 +76,8 @@ class MultiValueTest extends TestCase
 
     /**
      * @covers ::allowInstance
+     * @covers ::allowType
+     * @covers ::applyFilters
      */
     public function testMultiValueFilterMultipleTypes()
     {
@@ -91,6 +96,7 @@ class MultiValueTest extends TestCase
 
     /**
      * @covers ::filter
+     * @covers ::applyFilters
      */
     public function testMultiValueCustomFilters()
     {
@@ -116,6 +122,8 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::immutable
      * @covers ::filter
+     * @covers ::applyFilters
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to filter immutable array
@@ -130,6 +138,8 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::immutable
      * @covers ::allowType
+     * @covers ::applyFilters
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to filter immutable array
@@ -142,6 +152,8 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::immutable
      * @covers ::allowInstance
+     * @covers ::applyFilters
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to filter immutable array
@@ -154,6 +166,8 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::append
      * @covers ::immutable
+     * @covers ::applyFilters
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to append to immutable array
@@ -169,6 +183,7 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::exchangeArray
      * @covers ::immutable
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to change immutable array
@@ -183,6 +198,7 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::offsetSet
      * @covers ::immutable
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to add to immutable array
@@ -198,6 +214,7 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::offsetUnset
      * @covers ::immutable
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to remove from immutable array
@@ -213,6 +230,7 @@ class MultiValueTest extends TestCase
     /**
      * @covers ::offsetUnset
      * @covers ::immutable
+     * @covers ::assertMutable
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage Attempting to remove from immutable array

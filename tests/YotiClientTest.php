@@ -47,6 +47,8 @@ class YotiClientTest extends TestCase
      * Test the use of pem file path
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
+     * @covers ::checkRequiredModules
      */
     public function testCanUsePemFile()
     {
@@ -58,6 +60,7 @@ class YotiClientTest extends TestCase
      * Test the use of pem file path with file:// stream wrapper
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      */
     public function testCanUsePemFileStreamWrapper()
     {
@@ -69,6 +72,7 @@ class YotiClientTest extends TestCase
      * Test passing invalid pem file path with file:// stream wrapper
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file was not found
@@ -82,6 +86,7 @@ class YotiClientTest extends TestCase
      * Test passing pem file with invalid contents
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file path or content is invalid
@@ -95,6 +100,7 @@ class YotiClientTest extends TestCase
      * Test passing invalid pem string
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file path or content is invalid
@@ -106,6 +112,14 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::getActivityDetails
+     * @covers ::decryptConnectToken
+     * @covers ::setRequestHandler
+     * @covers ::sendRequest
+     * @covers ::getReceipt
+     * @covers ::checkForReceipt
+     * @covers ::processResult
+     * @covers ::checkResponseStatus
+     * @covers ::checkJsonError
      */
     public function testGetActivityDetails()
     {
@@ -140,6 +154,9 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::performAmlCheck
+     * @covers ::setRequestHandler
+     * @covers ::sendRequest
+     * @covers ::validateResult
      */
     public function testPerformAmlCheck()
     {
@@ -191,6 +208,7 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::__construct
+     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
@@ -211,6 +229,7 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::setSdkIdentifier
+     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla

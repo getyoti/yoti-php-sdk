@@ -88,6 +88,7 @@ class AttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
      */
     public function testConvertUndefinedContentType()
     {
@@ -104,6 +105,7 @@ class AttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
      */
     public function testConvertUnknownContentType()
     {
@@ -153,6 +155,7 @@ class AttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
      *
      * @dataProvider validIntegerDataProvider
      */
@@ -178,6 +181,7 @@ class AttributeConverterTest extends TestCase
      * Check that `document_images` attribute is an array of 2 images.
      *
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
@@ -211,6 +215,8 @@ class AttributeConverterTest extends TestCase
      * Check that `document_images` attribute has non-image values filtered out.
      *
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnAttributeName
+     * @covers ::convertMultiValue
      */
     public function testConvertToYotiAttributeDocumentImagesFiltered()
     {
@@ -244,6 +250,7 @@ class AttributeConverterTest extends TestCase
      * Check that `document_images` is null when not converted to a MultiValue object.
      *
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertToYotiAttributeDocumentImagesInvalid()
     {
@@ -324,6 +331,7 @@ class AttributeConverterTest extends TestCase
      * Check that empty non-string MultiValue Values result in no attribute being returned.
      *
      * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
      *
      * @dataProvider nonStringContentTypesDataProvider
      */
