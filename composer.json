@@ -42,6 +42,7 @@
   "scripts": {
     "cghooks": "cghooks",
     "test": "phpunit",
+    "coverage": "phpunit --coverage-html ./coverage/report",
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
