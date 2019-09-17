@@ -55,7 +55,7 @@ class Request
         Payload $payload = null,
         array $headers = []
     ) {
-        $this->validateHttpMethod($method);
+        self::validateHttpMethod($method);
         $this->validateHeaders($headers);
         $this->method = $method;
         $this->url = $url;

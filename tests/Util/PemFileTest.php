@@ -24,7 +24,7 @@ class PemFileTest extends TestCase
     }
 
     /**
-     * @covers ::__constructor
+     * @covers ::__construct
      * @covers ::__toString
      */
     public function testConstructFromString()

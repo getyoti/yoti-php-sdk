@@ -72,7 +72,6 @@ class MultiValueTest extends TestCase
     }
 
     /**
-     * @covers ::filterType
      * @covers ::allowInstance
      */
     public function testMultiValueFilterMultipleTypes()
