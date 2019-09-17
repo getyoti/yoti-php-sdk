@@ -16,33 +16,70 @@ use YotiTest\Util\Profile\TestAnchors;
 class ProfileTest extends TestCase
 {
     /**
-     * @var \Yoti\Entity\Profile
+     * @covers ::getGivenNames
+     * @covers ::getFamilyName
+     * @covers ::getGivenNames
+     * @covers ::getFullName
+     * @covers ::getDateOfBirth
+     * @covers ::getAgeVerifications
+     * @covers ::getGender
+     * @covers ::getNationality
+     * @covers ::getPhoneNumber
+     * @covers ::getSelfie
+     * @covers ::getEmailAddress
+     * @covers ::getPostalAddress
+     * @covers ::getDocumentDetails
+     * @covers ::getDocumentImages
+     * @covers ::getStructuredPostalAddress
+     *
+     * @dataProvider attributeGettersProvider
      */
-    private $profile;
-
-    /**
-     * @var \Yoti\YotiClient
-     */
-    private $yotiClient;
-
-    /**
-     * @var string
-     */
-    private $expectedPhoneNumber;
-
-    /**
-     * @var array Structured Postal Address
-     */
-    private $dummyStructuredPostalAddress;
-
-    public function setup()
+    public function testAttributeGetters($name, $method)
     {
-        $this->pem = file_get_contents(PEM_FILE);
-        $this->expectedPhoneNumber = '+447474747474';
-        $result['response'] = file_get_contents(RECEIPT_JSON);
-        $result['http_code'] = 200;
+        $expectedValue = 'some value';
+        $profile = new Profile([
+            $name => new Attribute($name, $expectedValue, []),
+        ]);
+        $attribute = $profile->{$method}();
+        $this->assertEquals($expectedValue, $attribute->getValue());
+        $this->assertEquals($name, $attribute->getName());
+    }
 
-        $this->dummyStructuredPostalAddress = [
+    /**
+     * Provides mapping of attribute names and corresponding getters.
+     *
+     * @return array
+     */
+    public function attributeGettersProvider()
+    {
+        return [
+            [ 'family_name', 'getFamilyName' ],
+            [ 'given_names' , 'getGivenNames' ],
+            [ 'full_name', 'getFullName' ],
+            [ 'date_of_birth', 'getDateOfBirth' ],
+            [ 'age_verifications', 'getAgeVerifications' ],
+            [ 'gender', 'getGender' ],
+            [ 'nationality', 'getNationality' ],
+            [ 'phone_number', 'getPhoneNumber' ],
+            [ 'selfie', 'getSelfie' ],
+            [ 'email_address', 'getEmailAddress' ],
+            [ 'postal_address', 'getPostalAddress' ],
+            [ 'document_details', 'getDocumentDetails' ],
+            [ 'document_images', 'getDocumentImages' ],
+            [ 'structured_postal_address', 'getStructuredPostalAddress' ],
+        ];
+    }
+
+    /**
+     * @covers ::getPostalAddress
+     * @covers ::getFormattedAddress
+     * @covers ::getAttributeAnchorMap
+     * @covers ::getGivenNames
+     * @covers ::getStructuredPostalAddress
+     */
+    public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
+    {
+        $expectedPostalAddress = [
             "address_format" => 1,
             "building_number" => "15a",
             "address_line1" => "15a North Street",
@@ -53,49 +90,6 @@ class ProfileTest extends TestCase
             "formatted_address" => "15a North Street CARSHALTON SM5 2HW UK"
         ];
 
-        $this->yotiClient = $this->getMockBuilder('Yoti\YotiClient')
-            ->setConstructorArgs([SDK_ID, $this->pem])
-            ->setMethods(['sendRequest'])
-            ->getMock();
-
-        // Stub the method sendRequest to return the result we want
-        $this->yotiClient->method('sendRequest')
-            ->willReturn($result);
-
-        $activityDetails = $this->yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
-        $this->profile = $activityDetails->getProfile();
-    }
-
-    /**
-     * @covers \Yoti\Entity\Attribute::getValue
-     * @covers ::getPhoneNumber
-     * @covers ::getProfileAttribute
-     */
-    public function testGetAttributeValue()
-    {
-        $phoneNumber = $this->profile->getPhoneNumber();
-        $this->assertInstanceOf(Attribute::class, $phoneNumber);
-        $this->assertEquals($this->expectedPhoneNumber, $phoneNumber->getValue());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Attribute::getName
-     * @covers ::getPhoneNumber
-     * @covers ::getProfileAttribute
-     */
-    public function testGetAttributeName()
-    {
-        $phoneNumber = $this->profile->getPhoneNumber();
-        $this->assertInstanceOf(Attribute::class, $phoneNumber);
-        $this->assertEquals('phone_number', $phoneNumber->getName());
-    }
-
-    /**
-     * @covers ::getPostalAddress
-     * @covers ::getStructuredPostalAddress
-     */
-    public function testShouldReturnFormattedAddressAsPostalAddressWhenNull()
-    {
         $anchorsMap = AnchorListConverter::convert(new \ArrayObject([
             $this->parseAnchor(TestAnchors::UNKNOWN_ANCHOR),
             $this->parseAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
@@ -104,21 +98,15 @@ class ProfileTest extends TestCase
 
         $structuredPostalAddress = new Attribute(
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
-            $this->dummyStructuredPostalAddress,
+            $expectedPostalAddress,
             $anchorsMap
         );
 
         $profile = new Profile([
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS => $structuredPostalAddress,
-            Profile::ATTR_GIVEN_NAMES => new Attribute(
-                Profile::ATTR_GIVEN_NAMES,
-                'Given Name TEST',
-                []
-            ),
         ]);
-        $this->assertEquals('Given Name TEST', $profile->getGivenNames()->getValue());
         $this->assertEquals(
-            json_encode($this->dummyStructuredPostalAddress),
+            json_encode($expectedPostalAddress),
             json_encode($profile->getStructuredPostalAddress()->getValue())
         );
 
@@ -139,6 +127,7 @@ class ProfileTest extends TestCase
      * Should not return age_verifications in the array
      *
      * @covers ::getAttributes
+     *
      * @dataProvider getDummyProfileDataWithAgeVerifications
      */
     public function testGetAttributes($profileData)
@@ -150,9 +139,11 @@ class ProfileTest extends TestCase
 
     /**
      * @covers ::findAgeOverVerification
+     * @covers ::getAgeVerificationByAttribute
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
      * @covers \Yoti\Entity\AgeVerification::getResult
+     *
      * @dataProvider getDummyProfileDataWithAgeVerifications
      */
     public function testFindAgeOverVerification($profileData)
@@ -168,9 +159,11 @@ class ProfileTest extends TestCase
 
     /**
      * @covers ::findAgeUnderVerification
+     * @covers ::getAgeVerificationByAttribute
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
      * @covers \Yoti\Entity\AgeVerification::getResult
+     *
      * @dataProvider getDummyProfileDataWithAgeVerifications
      */
     public function testFindAgeUnderVerification($profileData)

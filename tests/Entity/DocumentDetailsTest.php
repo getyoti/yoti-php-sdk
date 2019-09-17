@@ -21,6 +21,13 @@ class DocumentDetailsTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::parseFromValue
+     * @covers ::setType
+     * @covers ::setIssuingCountry
+     * @covers ::setDocumentNumber
+     * @covers ::setExpirationDate
+     * @covers ::setIssuingAuthority
      * @covers ::getType
      * @covers ::getIssuingCountry
      * @covers ::getDocumentNumber
@@ -54,6 +61,7 @@ class DocumentDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::validateValue
      */
     public function testShouldThrowExceptionWhenValueIsEmpty()
     {
@@ -63,6 +71,7 @@ class DocumentDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::validateValue
      */
     public function testShouldThrowExceptionForInvalidCountry()
     {
@@ -72,11 +81,12 @@ class DocumentDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::validateValue
      */
     public function testShouldThrowExceptionForInvalidNumber()
     {
         $this->expectException('Yoti\Exception\AttributeException');
-        $document = new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
+        new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
     }
 
     /**
@@ -102,7 +112,7 @@ class DocumentDetailsTest extends TestCase
     public function testWhenTheValueIsLessThanThreeWords()
     {
         $this->expectException('Yoti\Exception\AttributeException');
-        $documentDetails = new DocumentDetails('PASS_CARD GBR');
+        new DocumentDetails('PASS_CARD GBR');
     }
 
     /**
@@ -111,7 +121,7 @@ class DocumentDetailsTest extends TestCase
     public function testShouldThrowExceptionForInvalidDate()
     {
         $this->expectException('Yoti\Exception\AttributeException');
-        $document = new DocumentDetails('PASSPORT GBR 1234abc X016-05-01');
+        new DocumentDetails('PASSPORT GBR 1234abc X016-05-01');
     }
 
     /**
