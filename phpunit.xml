@@ -13,7 +13,12 @@
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">src/Yoti/</directory>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-html" target="./coverage/report" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="./coverage/coverage.xml"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+    </logging>
 </phpunit>

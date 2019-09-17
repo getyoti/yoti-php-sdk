@@ -7,6 +7,9 @@ use Yoti\Http\Curl\RequestHandler;
 use Yoti\Http\Request;
 use Yoti\Http\Payload;
 
+/**
+ * @coversDefaultClass \Yoti\Http\Curl\RequestHandler
+ */
 class RequestHandlerTest extends TestCase
 {
     /**
@@ -35,7 +38,7 @@ class RequestHandlerTest extends TestCase
     }
 
     /**
-     * Test Curl execution.
+     * @covers ::execute
      */
     public function testExecute()
     {
