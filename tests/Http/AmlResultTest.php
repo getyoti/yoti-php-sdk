@@ -23,6 +23,9 @@ class AmlResultTest extends TestCase
 
     /**
      * @covers ::isOnPepList
+     * @covers ::__construct
+     * @covers ::setAttributes
+     * @covers ::checkAttributes
      */
     public function testIsOnPepeList()
     {
@@ -31,6 +34,9 @@ class AmlResultTest extends TestCase
 
     /**
      * @covers ::isOnFraudList
+     * @covers ::__construct
+     * @covers ::setAttributes
+     * @covers ::checkAttributes
      */
     public function testIsOnFraudList()
     {
@@ -39,6 +45,9 @@ class AmlResultTest extends TestCase
 
     /**
      * @covers ::isOnWatchList
+     * @covers ::__construct
+     * @covers ::setAttributes
+     * @covers ::checkAttributes
      */
     public function testIsOnWatchList()
     {

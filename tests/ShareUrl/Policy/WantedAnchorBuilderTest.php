@@ -12,8 +12,11 @@ class WantedAnchorBuilderTest extends TestCase
 {
     /**
      * @covers ::build
-     * @covers ::withName
+     * @covers ::withValue
      * @covers ::withSubType
+     * @covers \Yoti\ShareUrl\Policy\WantedAnchor::__construct
+     * @covers \Yoti\ShareUrl\Policy\WantedAnchor::__toString
+     * @covers \Yoti\ShareUrl\Policy\WantedAnchor::jsonSerialize
      */
     public function testBuild()
     {

@@ -115,11 +115,10 @@ class YotiClientTest extends TestCase
      * @covers ::decryptConnectToken
      * @covers ::setRequestHandler
      * @covers ::sendRequest
+     * @covers ::sendConnectRequest
      * @covers ::getReceipt
+     * @covers ::processJsonResponse
      * @covers ::checkForReceipt
-     * @covers ::processResult
-     * @covers ::checkResponseStatus
-     * @covers ::checkJsonError
      */
     public function testGetActivityDetails()
     {
@@ -140,6 +139,7 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::getActivityDetails
+     * @covers ::isResponseSuccess
      *
      * @dataProvider httpErrorStatusCodeProvider
      *
@@ -156,7 +156,12 @@ class YotiClientTest extends TestCase
      * @covers ::performAmlCheck
      * @covers ::setRequestHandler
      * @covers ::sendRequest
-     * @covers ::validateResult
+     * @covers ::sendConnectRequest
+     * @covers ::processJsonResponse
+     * @covers ::validateAmlResult
+     * @covers \Yoti\Entity\AmlAddress::__construct
+     * @covers \Yoti\Entity\AmlProfile::__construct
+     * @covers \Yoti\Entity\Country::__construct
      */
     public function testPerformAmlCheck()
     {
@@ -179,6 +184,9 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::performAmlCheck
+     * @covers ::validateAmlResult
+     * @covers ::getErrorMessage
+     * @covers ::isResponseSuccess
      *
      * @dataProvider httpErrorStatusCodeProvider
      *
@@ -305,6 +313,8 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::createShareUrl
+     * @covers ::sendConnectRequest
+     * @covers ::processJsonResponse
      */
     public function testCreateShareUrl()
     {
@@ -350,6 +360,7 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::createShareUrl
+     * @covers ::isResponseSuccess
      *
      * @dataProvider httpErrorStatusCodeProvider
      *

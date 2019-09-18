@@ -14,6 +14,9 @@ class ConstraintsBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withSourceConstraint
+     * @covers \Yoti\ShareUrl\Policy\Constraints::__construct
+     * @covers \Yoti\ShareUrl\Policy\Constraints::__toString
+     * @covers \Yoti\ShareUrl\Policy\Constraints::jsonSerialize
      */
     public function testBuild()
     {

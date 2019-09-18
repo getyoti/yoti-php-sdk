@@ -29,6 +29,9 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withEmail
      * @covers ::withDocumentDetails
      * @covers ::withDocumentImages
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__toString
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::jsonSerialize
      */
     public function testBuildWithAttributes()
     {

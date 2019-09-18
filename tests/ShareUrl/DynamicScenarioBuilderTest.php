@@ -17,6 +17,9 @@ class DynamicScenarioBuilderTest extends TestCase
      * @covers ::withCallbackEndpoint
      * @covers ::withPolicy
      * @covers ::withExtension
+     * @covers \Yoti\ShareUrl\DynamicScenario::__construct
+     * @covers \Yoti\ShareUrl\DynamicScenario::__toString
+     * @covers \Yoti\ShareUrl\DynamicScenario::jsonSerialize
      */
     public function testBuild()
     {

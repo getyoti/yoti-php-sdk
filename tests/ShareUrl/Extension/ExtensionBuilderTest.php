@@ -6,12 +6,17 @@ use Yoti\ShareUrl\Extension\ExtensionBuilder;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\ShareUrl\Policy\ExtensionBuilder
+ * @coversDefaultClass \Yoti\ShareUrl\Extension\ExtensionBuilder
  */
 class ExtensionBuilderTest extends TestCase
 {
     /**
      * @covers ::build
+     * @covers ::withType
+     * @covers ::withContent
+     * @covers \Yoti\ShareUrl\Extension\Extension::__construct
+     * @covers \Yoti\ShareUrl\Extension\Extension::__toString
+     * @covers \Yoti\ShareUrl\Extension\Extension::jsonSerialize
      */
     public function testBuild()
     {
