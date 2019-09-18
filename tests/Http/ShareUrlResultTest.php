@@ -15,6 +15,9 @@ class ShareUrlResultTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getResultValue
+     * @covers ::getShareUrl
+     * @covers ::getRefId
      */
     public function testValidResponse()
     {
@@ -29,6 +32,7 @@ class ShareUrlResultTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getResultValue
      *
      * @expectedException \Yoti\Exception\ShareUrlException
      * @expectedExceptionMessage JSON result does not contain 'qrcode'
@@ -42,6 +46,7 @@ class ShareUrlResultTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getResultValue
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage qrcode must be a string
@@ -55,6 +60,7 @@ class ShareUrlResultTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getResultValue
      *
      * @expectedException \Yoti\Exception\ShareUrlException
      * @expectedExceptionMessage JSON result does not contain 'ref_id'
@@ -68,6 +74,7 @@ class ShareUrlResultTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getResultValue
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage ref_id must be a string

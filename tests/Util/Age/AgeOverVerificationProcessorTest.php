@@ -13,6 +13,7 @@ class AgeOverVerificationProcessorTest extends TestCase
 {
     /**
      * @covers ::process
+     * @covers ::createAgeVerification
      * @covers \Yoti\Entity\AgeVerification::getResult
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
@@ -30,6 +31,7 @@ class AgeOverVerificationProcessorTest extends TestCase
 
     /**
      * @covers ::process
+     * @covers ::createAgeVerification
      * @covers \Yoti\Entity\AgeVerification::getResult
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
@@ -47,6 +49,7 @@ class AgeOverVerificationProcessorTest extends TestCase
 
     /**
      * @covers ::process
+     * @covers ::createAgeVerification
      */
     public function testWhenThereIsNotAgeOverShouldReturnNull()
     {

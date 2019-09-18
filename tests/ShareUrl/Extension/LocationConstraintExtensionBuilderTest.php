@@ -6,7 +6,7 @@ use Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\ShareUrl\Policy\LocationConstraintExtensionBuilder
+ * @coversDefaultClass \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
  */
 class LocationConstraintExtensionBuilderTest extends TestCase
 {
@@ -135,6 +135,8 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers \Yoti\ShareUrl\Extension\LocationConstraintContent::__construct
+     * @covers \Yoti\ShareUrl\Extension\LocationConstraintContent::jsonSerialize
      */
     public function testBuildDefaultValues()
     {

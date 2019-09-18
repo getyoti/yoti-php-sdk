@@ -16,6 +16,11 @@ class WantedAttributeBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withName
      * @covers ::withDerivation
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::__construct
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::__toString
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getDerivation
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getName
      */
     public function testBuild()
     {
@@ -39,6 +44,8 @@ class WantedAttributeBuilderTest extends TestCase
 
     /**
      * @covers ::withAcceptSelfAsserted
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getAcceptSelfAsserted
      */
     public function testAcceptSelfAsserted()
     {
@@ -70,6 +77,8 @@ class WantedAttributeBuilderTest extends TestCase
 
     /**
      * @covers ::withAcceptSelfAsserted
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getAcceptSelfAsserted
      */
     public function testWithoutAcceptSelfAsserted()
     {
@@ -93,6 +102,8 @@ class WantedAttributeBuilderTest extends TestCase
 
     /**
      * @covers ::withConstraints
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getConstraints
      */
     public function testWithConstraints()
     {

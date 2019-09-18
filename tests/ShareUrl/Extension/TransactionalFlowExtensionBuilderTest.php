@@ -6,7 +6,7 @@ use Yoti\ShareUrl\Extension\TransactionalFlowExtensionBuilder;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\ShareUrl\Policy\TransactionalFlowExtensionBuilder
+ * @coversDefaultClass \Yoti\ShareUrl\Extension\TransactionalFlowExtensionBuilder
  */
 class TransactionalFlowExtensionBuilderTest extends TestCase
 {

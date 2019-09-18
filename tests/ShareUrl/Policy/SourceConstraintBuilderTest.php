@@ -22,6 +22,29 @@ class SourceConstraintBuilderTest extends TestCase
     const SOME_SUB_TYPE = 'test sub type';
 
     /**
+     * @covers ::build
+     * @covers \Yoti\ShareUrl\Policy\SourceConstraint::__construct
+     * @covers \Yoti\ShareUrl\Policy\SourceConstraint::__toString
+     * @covers \Yoti\ShareUrl\Policy\SourceConstraint::jsonSerialize
+     */
+    public function testBuild()
+    {
+        $sourceConstraint = (new SourceConstraintBuilder())
+            ->build();
+
+        $expectedJsonData = [
+            'type' => self::ANCHOR_TYPE_SOURCE,
+            'preferred_sources' => [
+                'anchors' => [],
+                'soft_preference' => false,
+            ]
+        ];
+
+        $this->assertEquals(json_encode($expectedJsonData), json_encode($sourceConstraint));
+        $this->assertEquals(json_encode($expectedJsonData), $sourceConstraint);
+    }
+
+    /**
      * @covers ::withPassport
      */
     public function testWithPassport()
