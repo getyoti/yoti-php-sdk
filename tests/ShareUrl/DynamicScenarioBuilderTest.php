@@ -6,12 +6,15 @@ use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use YotiTest\TestCase;
+use Yoti\ShareUrl\Policy\DynamicPolicy;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\DynamicScenarioBuilder
  */
 class DynamicScenarioBuilderTest extends TestCase
 {
+    const SOME_ENDPOINT = '/test-callback';
+
     /**
      * @covers ::build
      * @covers ::withCallbackEndpoint
@@ -23,8 +26,6 @@ class DynamicScenarioBuilderTest extends TestCase
      */
     public function testBuild()
     {
-        $someCallback = '/test-callback';
-
         $somePolicy = (new DynamicPolicyBuilder())
             ->withFullName()
             ->withGivenNames()
@@ -41,14 +42,14 @@ class DynamicScenarioBuilderTest extends TestCase
             ->build();
 
         $dynamicScenario = (new DynamicScenarioBuilder())
-            ->withCallbackEndpoint($someCallback)
+            ->withCallbackEndpoint(self::SOME_ENDPOINT)
             ->withPolicy($somePolicy)
             ->withExtension($someExtension1)
             ->withExtension($someExtension2)
             ->build();
 
         $expectedJsonData = [
-            'callback_endpoint' => '/test-callback',
+            'callback_endpoint' => self::SOME_ENDPOINT,
             'policy' => [
                 'wanted' => [
                     [
@@ -84,5 +85,19 @@ class DynamicScenarioBuilderTest extends TestCase
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($dynamicScenario));
         $this->assertEquals(json_encode($expectedJsonData), $dynamicScenario);
+    }
+
+    /**
+     * @covers ::build
+     * @covers \Yoti\ShareUrl\DynamicScenario::__construct
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage callbackEndpoint must be a string
+     */
+    public function testBuildWithoutCallback()
+    {
+        (new DynamicScenarioBuilder())
+            ->withPolicy($this->createMock(DynamicPolicy::class))
+            ->build();
     }
 }

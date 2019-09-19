@@ -30,6 +30,16 @@ class WantedAnchor implements \JsonSerializable
     const VALUE_PASSCARD = 'PASS_CARD';
 
     /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @var string
+     */
+    private $subType;
+
+    /**
      * @param string $value
      * @param string $subType
      */
