@@ -10,6 +10,26 @@ use \Yoti\Util\Validation;
 class LocationConstraintContent implements \JsonSerializable
 {
     /**
+     * @var int|float
+     */
+    private $latitude;
+
+    /**
+     * @var int|float
+     */
+    private $longitude;
+
+    /**
+     * @var int|float
+     */
+    private $radius;
+
+    /**
+     * @var int|float
+     */
+    private $maxUncertainty;
+
+    /**
      * @param int|float $latitude
      *   Latitude of the user's expected location
      * @param int|float $longitude

@@ -11,6 +11,16 @@ use Yoti\ShareUrl\Extension\Extension;
 class DynamicScenarioBuilder
 {
     /**
+     * @var string
+     */
+    private $callbackEndpoint;
+
+    /**
+     * @var \Yoti\ShareUrl\Policy\DynamicPolicy
+     */
+    private $dynamicPolicy;
+
+    /**
      * @var \Yoti\ShareUrl\Extension\Extension[]
      */
     private $extensions = [];
