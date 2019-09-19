@@ -95,6 +95,7 @@ class RequestBuilderTest extends TestCase
           ->withGet()
           ->build();
 
+        $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
         $this->assertRegExp('~PHP-\d+.\d+.\d+~', $request->getHeaders()['X-Yoti-SDK-Version']);
     }
 
