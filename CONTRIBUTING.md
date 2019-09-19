@@ -17,8 +17,14 @@ See [.travis.yml](.travis.yml) for PHP versions we currently support.
 Generate and view coverage report by running:
 
 ```shell
-composer coverage
+composer coverage-html
 open ./coverage/report/index.html
+```
+
+To generate clover report run:
+
+```shell
+composer coverage-clover
 ```
 
 ## Style guide
