@@ -55,7 +55,7 @@ class Request
         Payload $payload = null,
         array $headers = []
     ) {
-        self::validateHttpMethod($method);
+        $this->validateHttpMethod($method);
         $this->validateHeaders($headers);
         $this->method = $method;
         $this->url = $url;
@@ -151,12 +151,12 @@ class Request
      *
      * @throws RequestException
      */
-    private static function validateHttpMethod($httpMethod)
+    private function validateHttpMethod($httpMethod)
     {
         if (empty($httpMethod)) {
             throw new RequestException("HTTP Method must be specified");
         }
-        if (!self::methodIsAllowed($httpMethod)) {
+        if (!$this->methodIsAllowed($httpMethod)) {
             throw new RequestException("Unsupported HTTP Method {$httpMethod}", 400);
         }
     }
@@ -168,7 +168,7 @@ class Request
      *
      * @return bool
      */
-    private static function methodIsAllowed($httpMethod)
+    private function methodIsAllowed($httpMethod)
     {
         $allowedMethods = [
             self::METHOD_GET,
