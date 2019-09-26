@@ -65,21 +65,31 @@
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "2.2.1",
+            "version": "2.4.0",
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "02316f866480cdb32f178da4bc8ac0b5246bfd12"
+                "reference": "2cf12e4c8b9f86c60d301d160e3afe61714310c4"
             },
             "require": {
                 "php": ">=5.5.19"
             },
             "require-dev": {
+                "brainmaestro/composer-git-hooks": "^2.8",
+                "friendsofphp/php-cs-fixer": "^2.15",
                 "php": ">=5.6.0",
                 "phpunit/phpunit": "5.7.*",
                 "squizlabs/php_codesniffer": "3.*"
             },
             "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-commit": [
+                        "composer test",
+                        "composer lint"
+                    ]
+                }
+            },
             "autoload": {
                 "files": [
                     "src/phpseclib/bootstrap.php"
@@ -99,6 +109,24 @@
                     "YotiTest\\": "tests/",
                     "SandboxTest\\": "sandbox/tests/"
                 }
+            },
+            "scripts": {
+                "cghooks": [
+                    "cghooks"
+                ],
+                "test": [
+                    "phpunit"
+                ],
+                "lint": [
+                    "phpcs",
+                    "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
+                ],
+                "post-install-cmd": [
+                    "cghooks add --ignore-lock"
+                ],
+                "post-update-cmd": [
+                    "cghooks update"
+                ]
             },
             "license": [
                 "MIT"

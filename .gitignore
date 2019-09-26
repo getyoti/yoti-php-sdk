@@ -14,4 +14,8 @@ phpcs.xml
 
 logs
 
+coverage
+
+.scannerwork
+
 .DS_Store

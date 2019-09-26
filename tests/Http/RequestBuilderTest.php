@@ -31,6 +31,12 @@ class RequestBuilderTest extends TestCase
      * @covers ::withEndpoint
      * @covers ::withSdkIdentifier
      * @covers ::withSdkVersion
+     * @covers ::getHeaders
+     * @covers \Yoti\Http\Request::__construct
+     * @covers \Yoti\Http\Request::getUrl
+     * @covers \Yoti\Http\Request::getMethod
+     * @covers \Yoti\Http\Request::getHeaders
+     * @covers \Yoti\Http\Request::validateHttpMethod
      */
     public function testBuild()
     {
@@ -75,6 +81,22 @@ class RequestBuilderTest extends TestCase
 
         $this->assertEquals('Drupal', $request->getHeaders()['X-Yoti-SDK']);
         $this->assertEquals('Drupal-4.5.6', $request->getHeaders()['X-Yoti-SDK-Version']);
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::getHeaders
+     */
+    public function testWithoutSdkIdentifier()
+    {
+        $request = (new RequestBuilder())
+          ->withBaseUrl(self::SOME_BASE_URL)
+          ->withPemFilePath(PEM_FILE)
+          ->withGet()
+          ->build();
+
+        $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
+        $this->assertRegExp('~PHP-\d+.\d+.\d+~', $request->getHeaders()['X-Yoti-SDK-Version']);
     }
 
     /**
@@ -157,6 +179,9 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHandler
+     * @covers \Yoti\Http\Request::execute
+     * @covers \Yoti\Http\Request::setHandler
+     * @covers \Yoti\Http\Request::getHandler
      */
     public function testWithHandler()
     {
@@ -198,6 +223,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHeader
+     * @covers \Yoti\Http\Request::validateHeaders
      */
     public function testBuildWithHeader()
     {
@@ -217,6 +243,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withPayload
+     * @covers \Yoti\Http\Request::getPayload
      */
     public function testWithPayload()
     {
@@ -234,6 +261,8 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers \Yoti\Http\Request::validateHttpMethod
+     * @covers \Yoti\Http\Request::methodIsAllowed
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage HTTP Method must be specified
@@ -248,6 +277,9 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withMethod
+     * @covers \Yoti\Http\Request::validateHttpMethod
+     * @covers \Yoti\Http\Request::methodIsAllowed
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage Unsupported HTTP Method SOME_METHOD
@@ -264,6 +296,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHeader
+     * @covers \Yoti\Http\Request::validateHeaders
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage Header value for 'Custom' must be a string
@@ -356,5 +389,35 @@ class RequestBuilderTest extends TestCase
           ->build();
 
         $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withQueryParam
+     */
+    public function testWithQueryParam()
+    {
+        $expectedQueryParams = [
+          'some' => 'value 1',
+          'another' => 'value 2',
+        ];
+        $requestBuilder = (new RequestBuilder())
+          ->withBaseUrl(self::SOME_BASE_URL)
+          ->withEndpoint(self::SOME_ENDPOINT)
+          ->withPemFilePath(PEM_FILE)
+          ->withGet();
+        foreach ($expectedQueryParams as $key => $value) {
+            $requestBuilder->withQueryParam($key, $value);
+        }
+        $request = $requestBuilder->build();
+
+        parse_str(parse_url($request->getUrl(), PHP_URL_QUERY), $queryParams);
+
+        foreach ($expectedQueryParams as $key => $value) {
+            $this->assertEquals($expectedQueryParams[$key], $queryParams[$key]);
+        }
+
+        $this->assertNotNull($queryParams['nonce']);
+        $this->assertNotNull($queryParams['timestamp']);
     }
 }

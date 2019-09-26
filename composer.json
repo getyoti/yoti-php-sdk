@@ -1,6 +1,7 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
+  "version": "2.4.0",
   "keywords": [
     "yoti",
     "sdk"
@@ -26,10 +27,10 @@
   },
   "require-dev": {
     "php": ">=5.6.0",
-    "phpunit/phpunit": "5.7.*",
-    "squizlabs/php_codesniffer": "3.*",
+    "phpunit/phpunit": "^5.7",
+    "squizlabs/php_codesniffer": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.15",
-    "brainmaestro/composer-git-hooks": "^2.7"
+    "brainmaestro/composer-git-hooks": "^2.8"
   },
   "autoload-dev": {
     "psr-4": {
@@ -40,6 +41,8 @@
   "scripts": {
     "cghooks": "cghooks",
     "test": "phpunit",
+    "coverage-clover": "phpunit --coverage-clover ./coverage/coverage.xml",
+    "coverage-html": "phpunit --coverage-html ./coverage/report",
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
@@ -49,7 +52,7 @@
   },
   "extra": {
     "hooks": {
-        "commit": [
+        "pre-commit": [
           "composer test",
           "composer lint"
         ]

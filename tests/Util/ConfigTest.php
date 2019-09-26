@@ -26,4 +26,15 @@ class ConfigTest extends TestCase
         $sdkVersion = Config::getInstance()->get('version');
         $this->assertNotNull($sdkVersion);
     }
+
+    /**
+     * @covers ::get
+     */
+    public function testSDKVersionMatchesComposer()
+    {
+        $configSdkVersion = Config::getInstance()->get('version');
+        $composerJson = json_decode(file_get_contents(__DIR__ . '/../../composer.json'));
+
+        $this->assertEquals($composerJson->version, $configSdkVersion);
+    }
 }

@@ -23,6 +23,7 @@ class AbstractRequestHandlerTest extends TestCase
     const SOME_ENDPOINT = '/some-endpoint';
 
     /**
+     * @covers ::__construct
      * @covers ::sendRequest
      * @covers ::executeRequest
      */
@@ -59,6 +60,7 @@ class AbstractRequestHandlerTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
      * @covers ::sendRequest
      * @covers ::executeRequest
      */
@@ -94,7 +96,8 @@ class AbstractRequestHandlerTest extends TestCase
     }
 
     /**
-     * @covers ::setSdkIdentifier
+     * @covers ::__construct
+     * @covers \Yoti\Http\RequestBuilder::withSdkIdentifier
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla

@@ -15,6 +15,8 @@ class AgeVerificationConverterTest extends TestCase
 {
     /**
      * @covers ::getAgeVerificationsFromAttrsMap
+     * @covers \Yoti\Entity\AgeVerification::__construct
+     * @covers \Yoti\Entity\AgeVerification::getAttribute
      */
     public function testGetAgeVerificationsFromAttrsMap()
     {

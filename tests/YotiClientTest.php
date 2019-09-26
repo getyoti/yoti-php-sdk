@@ -9,6 +9,9 @@ use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
 use Yoti\Http\RequestHandlerInterface;
 use Yoti\Http\Response;
+use Yoti\ShareUrl\DynamicScenario;
+use Yoti\ShareUrl\DynamicScenarioBuilder;
+use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -44,6 +47,8 @@ class YotiClientTest extends TestCase
      * Test the use of pem file path
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
+     * @covers ::checkRequiredModules
      */
     public function testCanUsePemFile()
     {
@@ -55,6 +60,7 @@ class YotiClientTest extends TestCase
      * Test the use of pem file path with file:// stream wrapper
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      */
     public function testCanUsePemFileStreamWrapper()
     {
@@ -66,6 +72,7 @@ class YotiClientTest extends TestCase
      * Test passing invalid pem file path with file:// stream wrapper
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file was not found
@@ -79,6 +86,7 @@ class YotiClientTest extends TestCase
      * Test passing pem file with invalid contents
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file path or content is invalid
@@ -92,6 +100,7 @@ class YotiClientTest extends TestCase
      * Test passing invalid pem string
      *
      * @covers ::__construct
+     * @covers ::extractPemContent
      *
      * @expectedException \Yoti\Exception\YotiClientException
      * @expectedExceptionMessage PEM file path or content is invalid
@@ -103,6 +112,13 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::getActivityDetails
+     * @covers ::decryptConnectToken
+     * @covers ::setRequestHandler
+     * @covers ::sendRequest
+     * @covers ::sendConnectRequest
+     * @covers ::getReceipt
+     * @covers ::processJsonResponse
+     * @covers ::checkForReceipt
      */
     public function testGetActivityDetails()
     {
@@ -122,7 +138,30 @@ class YotiClientTest extends TestCase
     }
 
     /**
+     * @covers ::getActivityDetails
+     * @covers ::isResponseSuccess
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException \Yoti\Exception\ActivityDetailsException
+     */
+    public function testGetActivityDetailsFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
+    }
+
+    /**
      * @covers ::performAmlCheck
+     * @covers ::setRequestHandler
+     * @covers ::sendRequest
+     * @covers ::sendConnectRequest
+     * @covers ::processJsonResponse
+     * @covers ::validateAmlResult
+     * @covers \Yoti\Entity\AmlAddress::__construct
+     * @covers \Yoti\Entity\AmlProfile::__construct
+     * @covers \Yoti\Entity\Country::__construct
      */
     public function testPerformAmlCheck()
     {
@@ -144,6 +183,23 @@ class YotiClientTest extends TestCase
     }
 
     /**
+     * @covers ::performAmlCheck
+     * @covers ::validateAmlResult
+     * @covers ::getErrorMessage
+     * @covers ::isResponseSuccess
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException \Yoti\Exception\AmlException
+     */
+    public function testPerformAmlCheckFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
+    }
+
+    /**
      * Test invalid Token
      *
      * @covers ::getActivityDetails
@@ -160,6 +216,7 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::__construct
+     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
@@ -180,6 +237,7 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::setSdkIdentifier
+     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
@@ -251,5 +309,105 @@ class YotiClientTest extends TestCase
             ['Joomla'],
             ['Drupal'],
         ];
+    }
+
+    /**
+     * @covers ::createShareUrl
+     * @covers ::sendConnectRequest
+     * @covers ::processJsonResponse
+     */
+    public function testCreateShareUrl()
+    {
+        $expectedUrl = YotiClient::DEFAULT_CONNECT_API . sprintf('/qrcodes/apps/%s', SDK_ID) . '?appId=' . SDK_ID;
+        $expectedUrlPattern = sprintf('~%s.*?nonce=.*?&timestamp=.*?~', preg_quote($expectedUrl));
+        $expectedQrCode = 'https://dynamic-code.yoti.com/CAEaJDRjNTQ3M2IxLTNiNzktNDg3My1iMmM4LThiMTQxZDYwMjM5ODAC';
+        $expectedRefId = '4c5473b1-3b79-4873-b2c8-8b141d602398';
+
+        $dynamicScenario = (new DynamicScenarioBuilder())
+            ->withCallbackEndpoint('/test-callback-url')
+            ->withPolicy(
+                (new DynamicPolicyBuilder())->build()
+            )
+            ->build();
+
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn(json_encode([
+            'qrcode' => $expectedQrCode,
+            'ref_id' => $expectedRefId,
+        ]));
+        $response->method('getStatusCode')->willReturn(201);
+
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
+        $requestHandler
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
+                $this->assertRegExp($expectedUrlPattern, $request->getUrl());
+                $this->assertEquals(json_encode($dynamicScenario), $request->getPayload());
+                return true;
+            }))
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        $shareUrlResult = $yotiClient->createShareUrl($dynamicScenario);
+
+        $this->assertEquals($expectedQrCode, $shareUrlResult->getShareUrl());
+        $this->assertEquals($expectedRefId, $shareUrlResult->getRefId());
+    }
+
+    /**
+     * @covers ::createShareUrl
+     * @covers ::isResponseSuccess
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     *
+     * @expectedException \Yoti\Exception\ShareUrlException
+     */
+    public function testCreateShareUrlFailure($statusCode)
+    {
+        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $yotiClient = $this->createClientWithErrorResponse($statusCode);
+        $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));
+    }
+
+    /**
+     * Provides HTTP error status codes.
+     */
+    public function httpErrorStatusCodeProvider()
+    {
+        $clientCodes = [400, 401, 402, 403, 404];
+        $serverCodes = [500, 501, 502, 503, 504];
+
+        return array_map(
+            function ($code) {
+                return [$code];
+            },
+            $clientCodes + $serverCodes
+        );
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @return \Yoti\YotiClient
+     */
+    private function createClientWithErrorResponse($statusCode)
+    {
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn('{}');
+        $response->method('getStatusCode')->willReturn($statusCode);
+
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler
+            ->method('execute')
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+
+        return $yotiClient;
     }
 }

@@ -322,6 +322,10 @@
     padding: 5px;
 }
 
+.yoti-attribute-value-text img {
+    width: 100%;
+}
+
 .yoti-attribute-value {
     grid-column: 2 / 3;
 

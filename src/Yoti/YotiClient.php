@@ -3,7 +3,6 @@
 namespace Yoti;
 
 use Yoti\Entity\Receipt;
-use Yoti\Exception\RequestException;
 use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
@@ -14,8 +13,12 @@ use Yoti\Exception\AmlException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\PemFileException;
+use Yoti\Exception\ShareUrlException;
 use Yoti\Http\Request;
 use Yoti\Util\PemFile;
+use Yoti\ShareUrl\DynamicScenario;
+use Yoti\Http\ShareUrlResult;
+use Yoti\Util\Validation;
 
 /**
  * Class YotiClient
@@ -44,6 +47,9 @@ class YotiClient
 
     // Profile sharing endpoint
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
+
+    // Share URL endpoint
+    const SHARE_URL_ENDPOINT = '/qrcodes/apps/%s';
 
     /**
      * @var \Yoti\Util\PemFile
@@ -87,8 +93,8 @@ class YotiClient
      * @param string $sdkIdentifier (optional)
      *   SDK or Plugin identifier - deprecated - use ::setSdkIdentifier() instead.
      *
-     * @throws RequestException
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\RequestException
+     * @throws \Yoti\Exception\YotiClientException
      */
     public function __construct(
         $sdkId,
@@ -124,10 +130,10 @@ class YotiClient
      *
      * @param null|string $encryptedConnectToken
      *
-     * @return ActivityDetails
+     * @return \Yoti\ActivityDetails
      *
-     * @throws ActivityDetailsException
-     * @throws Exception\ReceiptException
+     * @throws \Yoti\Exception\ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
      */
     public function getActivityDetails($encryptedConnectToken = null)
     {
@@ -148,34 +154,60 @@ class YotiClient
     /**
      * Perform AML profile check.
      *
-     * @param AmlProfile $amlProfile
+     * @param \Yoti\Entity\AmlProfile $amlProfile
      *
-     * @return AmlResult
+     * @return \Yoti\Http\AmlResult
      *
-     * @throws AmlException
-     * @throws RequestException
+     * @throws \Yoti\Exception\AmlException
+     * @throws \Yoti\Exception\RequestException
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
         // Get payload data from amlProfile
         $amlPayload = new Payload($amlProfile->getData());
 
-        $result = $this->sendRequest(
+        $response = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,
             Request::METHOD_POST,
             $amlPayload
         );
 
         // Get response data array
-        $responseArr = json_decode($result['response'], true);
-        // Check if there is a JSON decode error
-        $this->checkJsonError();
+        $result = $this->processJsonResponse($response['response']);
 
         // Validate result
-        $this->validateResult($responseArr, $result['http_code']);
+        $this->validateAmlResult($result, $response['http_code']);
 
         // Set and return result
-        return new AmlResult($responseArr);
+        return new AmlResult($result);
+    }
+
+    /**
+     * Get Share URL for provided dynamic scenario.
+     *
+     * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
+     *
+     * @return \Yoti\Http\ShareUrlResult
+     *
+     * @throws \Yoti\Exception\ShareUrlException
+     * @throws \Yoti\Exception\RequestException
+     */
+    public function createShareUrl(DynamicScenario $dynamicScenario)
+    {
+        $response = $this->sendConnectRequest(
+            sprintf(self::SHARE_URL_ENDPOINT, $this->sdkId),
+            Request::METHOD_POST,
+            new Payload($dynamicScenario)
+        );
+
+        $httpCode = $response->getStatusCode();
+        if (!$this->isResponseSuccess($httpCode)) {
+            throw new ShareUrlException("Server responded with {$httpCode}");
+        }
+
+        $result = $this->processJsonResponse($response->getBody());
+
+        return new ShareUrlResult($result);
     }
 
     /**
@@ -220,13 +252,13 @@ class YotiClient
      *
      * @param string $endpoint
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param Payload|null $payload
      *
-     * @return array
+     * @return \Yoti\Http\Response
      *
-     * @throws RequestException
+     * @throws \Yoti\Exception\RequestException
      */
-    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    private function sendConnectRequest($endpoint, $httpMethod, Payload $payload = null)
     {
         $requestBuilder = (new RequestBuilder())
             ->withBaseUrl($this->connectApi)
@@ -251,10 +283,26 @@ class YotiClient
             $requestBuilder->withHandler($this->requestHandler);
         }
 
-        $request = $requestBuilder
-            ->build();
+        return $requestBuilder->build()->execute();
+    }
 
-        $response = $request->execute();
+    /**
+     * Make REST request to Connect API.
+     * This method allows to stub the request call in test mode.
+     *
+     * @deprecated 3.0.0 replaced by ::sendConnectRequest()
+     *
+     * @param string $endpoint
+     * @param string $httpMethod
+     * @param Payload|null $payload
+     *
+     * @return array
+     *
+     * @throws \Yoti\Exception\RequestException
+     */
+    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    {
+        $response = $this->sendConnectRequest($endpoint, $httpMethod, $payload);
 
         return [
             'response' => $response->getBody(),
@@ -268,13 +316,11 @@ class YotiClient
      * @param array $responseArr
      * @param int $httpCode
      *
-     * @throws AmlException
+     * @throws \Yoti\Exception\AmlException
      */
-    private function validateResult(array $responseArr, $httpCode)
+    private function validateAmlResult(array $responseArr, $httpCode)
     {
-        $httpCode = (int) $httpCode;
-
-        if ($httpCode === 200) {
+        if ($this->isResponseSuccess((int) $httpCode)) {
             // The request is successful - nothing to do
             return;
         }
@@ -312,13 +358,13 @@ class YotiClient
      *
      * @param string $encryptedConnectToken
      * @param string $httpMethod
-     * @param Payload|NULL $payload
+     * @param Payload|null $payload
      *
-     * @return Receipt
+     * @return \Yoti\Entity\Receipt
      *
-     * @throws ActivityDetailsException
-     * @throws ReceiptException
-     * @throws RequestException
+     * @throws \Yoti\Exception\ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
+     * @throws \Yoti\Exception\RequestException
      */
     private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET, $payload = null)
     {
@@ -330,37 +376,42 @@ class YotiClient
 
         // Request endpoint
         $endpoint = sprintf(self::PROFILE_REQUEST_ENDPOINT, $token);
-        $result = $this->sendRequest($endpoint, $httpMethod, $payload);
+        $response = $this->sendRequest($endpoint, $httpMethod, $payload);
 
-        $responseArr = $this->processResult($result);
-        $this->checkForReceipt($responseArr);
+        $httpCode = (int) $response['http_code'];
+        if (!$this->isResponseSuccess($httpCode)) {
+            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
+        }
 
-        return new Receipt($responseArr['receipt']);
+        $result = $this->processJsonResponse($response['response']);
+        $this->checkForReceipt($result);
+
+        return new Receipt($result['receipt']);
     }
 
     /**
-     * @param array $result
+     * @param string $json
      *
-     * @return mixed
+     * @return mixed the decoded JSON result.
      *
-     * @throws ActivityDetailsException
+     * @throws \Yoti\Exception\YotiClientException
      */
-    private function processResult(array $result)
+    private function processJsonResponse($json)
     {
-        $this->checkResponseStatus($result['http_code']);
-
         // Get decoded response data
-        $responseArr = json_decode($result['response'], true);
+        $result = json_decode($json, true);
 
-        $this->checkJsonError();
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new YotiClientException('JSON response was invalid', 502);
+        }
 
-        return $responseArr;
+        return $result;
     }
 
     /**
      * @param array $response
      *
-     * @throws ActivityDetailsException
+     * @throws \Yoti\Exception\ReceiptException
      */
     private function checkForReceipt(array $responseArr)
     {
@@ -371,28 +422,14 @@ class YotiClient
     }
 
     /**
-     * @param $httpCode
+     * @param int $httpCode
      *
-     * @throws ActivityDetailsException
+     * @return boolean
      */
-    private function checkResponseStatus($httpCode)
+    private function isResponseSuccess($httpCode)
     {
-        $httpCode = (int) $httpCode;
-        if ($httpCode !== 200) {
-            throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
-        }
-    }
-
-    /**
-     * Check if any error occurs during JSON decode.
-     *
-     * @throws YotiClientException
-     */
-    private function checkJsonError()
-    {
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new YotiClientException('JSON response was invalid', 502);
-        }
+        Validation::isInteger($httpCode, 'httpCode');
+        return $httpCode >= 200 && $httpCode < 300;
     }
 
     /**
@@ -418,7 +455,7 @@ class YotiClient
      * @param string $pem
      *   PEM file path or string
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function extractPemContent($pem)
     {
@@ -448,7 +485,7 @@ class YotiClient
      *
      * @param string $sdkId
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function setSdkId($sdkId)
     {
@@ -462,7 +499,7 @@ class YotiClient
     /**
      * Check PHP required modules.
      *
-     * @throws YotiClientException
+     * @throws \Yoti\Exception\YotiClientException
      */
     private function checkRequiredModules()
     {
