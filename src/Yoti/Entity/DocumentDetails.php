@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Entity;
 
 use Yoti\Exception\AttributeException;

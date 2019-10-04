@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Util\Profile;
 
 use Yoti\Entity\Attribute;
@@ -168,8 +169,10 @@ class AttributeConverter
         $yotiAttribute = null;
 
         // Application Logo can be empty, return NULL when this occurs.
-        if ($protobufAttribute->getName() == ApplicationProfile::ATTR_APPLICATION_LOGO &&
-          empty($protobufAttribute->getValue())) {
+        if (
+            $protobufAttribute->getName() == ApplicationProfile::ATTR_APPLICATION_LOGO &&
+            empty($protobufAttribute->getValue())
+        ) {
             return $yotiAttribute;
         }
 

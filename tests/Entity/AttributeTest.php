@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiTest\Entity;
 
 use YotiTest\TestCase;
