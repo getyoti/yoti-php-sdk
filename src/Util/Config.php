@@ -42,7 +42,7 @@ class Config
 
     private function getConfigFile()
     {
-        return __DIR__ . '/../../../' . self::CONFIG_FILE_NAME;
+        return __DIR__ . '/../../' . self::CONFIG_FILE_NAME;
     }
 
     private function __clone()

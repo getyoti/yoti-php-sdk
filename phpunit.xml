@@ -13,7 +13,7 @@
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/Yoti/</directory>
+            <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
     <logging>
