@@ -9,20 +9,16 @@
   "homepage": "https://yoti.com",
   "license": "MIT",
   "require": {
-    "php": ">=5.5.19"
+    "php": ">=5.5.19",
+    "google/protobuf": "^3.10",
+    "phpseclib/phpseclib": "^2.0"
   },
   "autoload": {
-    "files": [
-      "src/phpseclib/bootstrap.php"
-    ],
     "psr-4": {
       "Attrpubapi\\": "src/Attrpubapi",
       "Compubapi\\": "src/Compubapi",
-      "Sharepubapi\\": "src/Sharepubapi",
-      "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
-      "GPBMetadata\\": "src/protobuflib/GPBMetadata",
-      "phpseclib\\": "src/phpseclib/",
-      "Yoti\\": "src/Yoti",
+      "GPBMetadata\\": "src/GPBMetadata",
+      "Yoti\\": "src",
       "YotiSandbox\\": "sandbox/src"
     }
   },

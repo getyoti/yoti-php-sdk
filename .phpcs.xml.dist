@@ -13,6 +13,6 @@
     Note: This sniff will always be included on Travis CI.
     -->
   </rule>
-  <file>src/Yoti</file>
+  <file>src</file>
   <file>tests</file>
 </ruleset>
