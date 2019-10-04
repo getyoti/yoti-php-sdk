@@ -15,4 +15,5 @@
   </rule>
   <file>src</file>
   <file>tests</file>
+  <exclude-pattern>src/Protobuf/*</exclude-pattern>
 </ruleset>
