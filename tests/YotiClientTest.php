@@ -44,6 +44,20 @@ class YotiClientTest extends TestCase
     }
 
     /**
+     * Test empty SDK ID
+     *
+     * @covers ::__construct
+     * @covers ::setSdkId
+     *
+     * @expectedException \Yoti\Exception\YotiClientException
+     * @expectedExceptionMessage SDK ID is required
+     */
+    public function testEmptySdkId()
+    {
+        new YotiClient('', PEM_FILE);
+    }
+
+    /**
      * Test the use of pem file path
      *
      * @covers ::__construct
@@ -119,6 +133,7 @@ class YotiClientTest extends TestCase
      * @covers ::getReceipt
      * @covers ::processJsonResponse
      * @covers ::checkForReceipt
+     * @covers ::setSdkId
      */
     public function testGetActivityDetails()
     {
@@ -150,6 +165,40 @@ class YotiClientTest extends TestCase
         $ad = $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
+    }
+
+
+    /**
+     * @covers ::setSdkIdentifier
+     * @covers ::setSdkVersion
+     * @covers ::sendConnectRequest
+     */
+    public function testSetSdkHeaders()
+    {
+        $expectedSdkIdentifier = 'Drupal';
+        $expectedSdkVersion = '1.2.3';
+
+        $response = $this->createMock(Response::class);
+        $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+        $requestHandler->expects($this->exactly(1))
+            ->method('execute')
+            ->with($this->callback(function ($request) use ($expectedSdkIdentifier, $expectedSdkVersion) {
+                $headers = $request->getHeaders();
+                $this->assertEquals($expectedSdkIdentifier, $headers['X-Yoti-SDK']);
+                $this->assertEquals("{$expectedSdkIdentifier}-{$expectedSdkVersion}", $headers['X-Yoti-SDK-Version']);
+                return true;
+            }))
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(SDK_ID, $this->pem);
+        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setSdkIdentifier($expectedSdkIdentifier);
+        $yotiClient->setSdkVersion($expectedSdkVersion);
+
+        $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
     }
 
     /**

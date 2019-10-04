@@ -30,7 +30,7 @@ class RequestBuilder
     /** SDK Version HTTP header key. */
     const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
 
-    /** SDK Version HTTP header key. @deprecated 3.0.0 */
+    /** Auth HTTP header key. @deprecated 3.0.0 */
     const YOTI_AUTH_HEADER_KEY = YotiClient::YOTI_AUTH_HEADER_KEY;
 
     /** Default SDK Identifier. */
