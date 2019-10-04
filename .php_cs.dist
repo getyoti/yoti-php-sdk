@@ -1,6 +1,6 @@
 <?php
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/src/Yoti')
+    ->in(__DIR__ . '/src')
     ->in(__DIR__ . '/tests')
     ->in(__DIR__ . '/sandbox')
 ;
