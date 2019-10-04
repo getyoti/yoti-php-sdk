@@ -49,7 +49,7 @@ class YotiClient
     /** Share URL endpoint */
     const SHARE_URL_ENDPOINT = '/qrcodes/apps/%s';
 
-    /** HTTP auth key header. */
+    /** Auth HTTP header key */
     const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
 
     /**
