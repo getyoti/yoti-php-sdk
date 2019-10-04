@@ -4,6 +4,7 @@ namespace Yoti\Http;
 
 use Yoti\Util\PemFile;
 use Yoti\Exception\RequestException;
+use Yoti\YotiClient;
 
 /**
  * @deprecated 3.0.0 Replaced by \Yoti\Http\RequestHandlerInterface
@@ -22,7 +23,7 @@ abstract class AbstractRequestHandler
     /**
      * Request HttpHeader keys
      */
-    const YOTI_AUTH_HEADER_KEY = RequestBuilder::YOTI_AUTH_HEADER_KEY;
+    const YOTI_AUTH_HEADER_KEY = YotiClient::YOTI_AUTH_HEADER_KEY;
     const YOTI_DIGEST_HEADER_KEY = RequestBuilder::YOTI_DIGEST_HEADER_KEY;
     const YOTI_SDK_IDENTIFIER_KEY = RequestBuilder::YOTI_SDK_IDENTIFIER_KEY;
     const YOTI_SDK_VERSION = RequestBuilder::YOTI_SDK_VERSION;
