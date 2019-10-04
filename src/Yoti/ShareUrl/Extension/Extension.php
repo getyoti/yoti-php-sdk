@@ -2,7 +2,7 @@
 
 namespace Yoti\ShareUrl\Extension;
 
-use \Yoti\Util\Validation;
+use Yoti\Util\Validation;
 
 /**
  * Defines Extension for Dynamic Scenario.

@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Http;
 
 use Yoti\Exception\AmlException;

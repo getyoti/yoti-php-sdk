@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Http;
 
 class Payload

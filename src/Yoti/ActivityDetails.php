@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti;
 
 use Yoti\Entity\Profile;

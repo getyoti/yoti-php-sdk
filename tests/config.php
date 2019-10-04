@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Define constants required by test suite.
  */
+
 define('SDK_ID', '990a3996-5762-4e8a-aa64-cb406fdb0e68');
 define('RECEIPT_JSON', __DIR__ . '/sample-data/receipt.json');
 define('INVALID_YOTI_CONNECT_TOKEN', 'sdfsdfsdasdajsopifajsd=');

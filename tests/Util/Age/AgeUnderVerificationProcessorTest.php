@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiTest\Util\Age;
 
 use YotiTest\TestCase;

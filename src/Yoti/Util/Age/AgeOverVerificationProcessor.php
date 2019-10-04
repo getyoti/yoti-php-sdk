@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Util\Age;
 
 class AgeOverVerificationProcessor extends AbstractAgeProcessor
