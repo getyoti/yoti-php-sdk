@@ -40,6 +40,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuild()
     {
+        $expectedPayload = new Payload('SOME PAYLOAD');
+
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
@@ -47,6 +49,7 @@ class RequestBuilderTest extends TestCase
           ->withEndpoint('/some-endpoint')
           ->withSdkIdentifier('PHP')
           ->withSdkVersion('1.2.3')
+          ->withPayload($expectedPayload)
           ->build();
 
         $this->assertInstanceOf(Request::class, $request);
@@ -58,10 +61,10 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
         $this->assertEquals('PHP-1.2.3', $request->getHeaders()['X-Yoti-SDK-Version']);
-        $this->assertEquals(PEM_AUTH_KEY, $request->getHeaders()['X-Yoti-Auth-Key']);
         $this->assertNotEmpty($request->getHeaders()['X-Yoti-Auth-Digest']);
         $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
         $this->assertEquals('application/json', $request->getHeaders()['Accept']);
+        $this->assertEquals($expectedPayload, $request->getPayload());
     }
 
     /**
@@ -127,6 +130,7 @@ class RequestBuilderTest extends TestCase
           ->build();
 
         $this->assertEquals('GET', $request->getMethod());
+        $this->assertArrayNotHasKey('Content-Type', $request->getHeaders());
     }
 
     /**

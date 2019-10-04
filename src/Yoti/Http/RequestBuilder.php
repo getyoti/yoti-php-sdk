@@ -5,6 +5,7 @@ namespace Yoti\Http;
 use Yoti\Exception\RequestException;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
+use Yoti\YotiClient;
 
 class RequestBuilder
 {
@@ -20,13 +21,19 @@ class RequestBuilder
         'Joomla',
     ];
 
-    // Request HttpHeader keys
-    const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
+    /** Digest HTTP header key. */
     const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
+
+    /** SDK Identifier HTTP header key. */
     const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
+
+    /** SDK Version HTTP header key. */
     const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
 
-    // Default SDK Identifier.
+    /** SDK Version HTTP header key. @deprecated 3.0.0 */
+    const YOTI_AUTH_HEADER_KEY = YotiClient::YOTI_AUTH_HEADER_KEY;
+
+    /** Default SDK Identifier. */
     const YOTI_SDK_IDENTIFIER = 'PHP';
 
     /**
@@ -250,12 +257,14 @@ class RequestBuilder
     {
         // Prepare request Http Headers
         $requestHeaders = [
-            self::YOTI_AUTH_HEADER_KEY => $this->pemFile->getAuthKey(),
             self::YOTI_DIGEST_HEADER_KEY => $signedMessage,
             self::YOTI_SDK_IDENTIFIER_KEY => $this->sdkIdentifier,
-            'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
+
+        if (isset($this->payload)) {
+            $requestHeaders['Content-Type'] = 'application/json';
+        }
 
         if (is_null($this->sdkVersion) && ($configVersion = Config::getInstance()->get('version'))) {
             $this->sdkVersion = $configVersion;
