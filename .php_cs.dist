@@ -1,5 +1,6 @@
 <?php
 $finder = PhpCsFixer\Finder::create()
+    ->exclude('Protobuf')
     ->in(__DIR__ . '/src')
     ->in(__DIR__ . '/tests')
     ->in(__DIR__ . '/sandbox')
