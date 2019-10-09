@@ -30,7 +30,8 @@
     "phpunit/phpunit": "^5.7",
     "squizlabs/php_codesniffer": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.15",
-    "brainmaestro/composer-git-hooks": "^2.8"
+    "brainmaestro/composer-git-hooks": "^2.8",
+    "php-coveralls/php-coveralls": "^2.1"
   },
   "autoload-dev": {
     "psr-4": {
@@ -43,6 +44,10 @@
     "test": "phpunit",
     "coverage-clover": "phpunit --coverage-clover ./coverage/coverage.xml",
     "coverage-html": "phpunit --coverage-html ./coverage/report",
+    "coveralls": [
+      "@coverage-clover",
+      "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
+    ],
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
