@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "2cf12e4c8b9f86c60d301d160e3afe61714310c4"
+                "reference": "18a5d5ecc6d61e97bc9599b78d2eacd216487bb6"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -78,8 +78,9 @@
                 "brainmaestro/composer-git-hooks": "^2.8",
                 "friendsofphp/php-cs-fixer": "^2.15",
                 "php": ">=5.6.0",
-                "phpunit/phpunit": "5.7.*",
-                "squizlabs/php_codesniffer": "3.*"
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.4"
             },
             "type": "library",
             "extra": {
@@ -116,6 +117,16 @@
                 ],
                 "test": [
                     "phpunit"
+                ],
+                "coverage-clover": [
+                    "phpunit --coverage-clover ./coverage/coverage.xml"
+                ],
+                "coverage-html": [
+                    "phpunit --coverage-html ./coverage/report"
+                ],
+                "coveralls": [
+                    "@coverage-clover",
+                    "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
                 ],
                 "lint": [
                     "phpcs",

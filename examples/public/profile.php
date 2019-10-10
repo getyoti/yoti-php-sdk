@@ -23,7 +23,7 @@ require_once __DIR__ . '/profile.inc.php';
                <div class="yoti-profile-picture-section">
                    <?php if ($profile->getSelfie()) : ?>
                        <div class="yoti-profile-picture-area">
-                           <img src="./<?php echo $selfieFileName ?>" class="yoti-profile-picture-image" alt="Yoti" />
+                           <img src="<?php echo $profile->getSelfie()->getValue()->getBase64Content(); ?>" class="yoti-profile-picture-image" alt="Yoti" />
                            <i class="yoti-profile-picture-verified-icon"></i>
                        </div>
                    <?php endif; ?>

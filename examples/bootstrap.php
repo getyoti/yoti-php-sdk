@@ -14,3 +14,15 @@ try {
     $errorMessage = "Error loading env variables - {$e->getMessage()}";
     die($errorMessage . PHP_EOL);
 }
+
+// Get SDK ID.
+define('YOTI_SDK_ID', getenv('YOTI_SDK_ID'));
+
+// Resolve key path.
+define('YOTI_KEY_FILE_PATH_KEY', 'YOTI_KEY_FILE_PATH');
+if (strpos(getenv(YOTI_KEY_FILE_PATH_KEY), '/') === 0) {
+    define(YOTI_KEY_FILE_PATH_KEY, getenv(YOTI_KEY_FILE_PATH_KEY));
+} else {
+    define(YOTI_KEY_FILE_PATH_KEY, __DIR__ . '/' . trim(getenv(YOTI_KEY_FILE_PATH_KEY), './'));
+}
+
