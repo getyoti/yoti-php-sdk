@@ -1,0 +1,5 @@
+.env
+vendor
+*.pem
+keys/*.pem
+sdk

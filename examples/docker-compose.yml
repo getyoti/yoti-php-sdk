@@ -10,7 +10,9 @@ services:
       links:
           - php
   php:
-      image: php:7-fpm-alpine
+      build:
+        context: ./
+        dockerfile: php.dockerfile
       volumes:
         - ./:/usr/share/nginx/html
 
