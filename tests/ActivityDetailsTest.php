@@ -193,4 +193,25 @@ class ActivityDetailsTest extends TestCase
         $receiptId = '9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl';
         $this->assertEquals($receiptId, $this->activityDetails->getReceiptId());
     }
+
+    /**
+     * @covers ::getExtraData
+     * @covers \Yoti\Entity\ExtraData::getCredentialIssuanceDetails
+     */
+    public function testGetCredentialIssuanceDetails()
+    {
+        $receipt = new Receipt([
+            'wrapped_receipt_key' => '',
+            'extra_data_content' => EXTRA_DATA_CONTENT,
+        ]);
+        $activityDetails = new ActivityDetails($receipt, file_get_contents(PEM_FILE));
+
+        $credentialIssuanceDetails = $activityDetails
+            ->getExtraData()
+            ->getCredentialIssuanceDetails();
+
+        $this->assertEquals('test-third-party-attribute-0', $credentialIssuanceDetails->getToken());
+        $this->assertEquals(new Date(), $credentialIssuanceDetails->getExpiryDate());
+        $this->assertEquals([], $credentialIssuanceDetails->getIssuingAttributes());
+    }
 }

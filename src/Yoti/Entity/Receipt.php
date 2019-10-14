@@ -5,6 +5,9 @@ namespace Yoti\Entity;
 use Yoti\Exception\ReceiptException;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;
+use Yoti\Sharepubapi\DataEntry\Type as DataEntryTypeProto;
+use Yoti\Sharepubapi\ExtraData as ExtraDataProto;
+use Yoti\Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
 
 class Receipt
 {
@@ -16,6 +19,7 @@ class Receipt
     const ATTR_SHARING_OUT_COME = 'sharing_outcome';
     const ATTR_WRAPPED_RECEIPT_KEY = 'wrapped_receipt_key';
     const ATTR_OTHER_PARTY_PROFILE_CONTENT = 'other_party_profile_content';
+    const ATTR_EXTRA_DATA_CONTENT = 'extra_data_content';
 
     /**
      * @var array
@@ -102,6 +106,37 @@ class Receipt
             $this->getWrappedReceiptKey(),
             $pem
         );
+    }
+
+    /**
+     * @return \Yoti\Entity\ExtraData
+     */
+    public function getExtraData()
+    {
+        $data = $this->getAttribute(self::ATTR_EXTRA_DATA_CONTENT);
+
+        $extraDataProto = new ExtraDataProto();
+        $extraDataProto->mergeFromString(base64_decode($data));
+
+        $dataEntryList = [];
+        foreach ($extraDataProto->getList() as $dataEntryProto) {
+            switch ($dataEntryProto->getType()) {
+                case DataEntryTypeProto::THIRD_PARTY_ATTRIBUTE:
+                    $thirdPartyAttributeProto = new ThirdPartyAttributeProto();
+                    $thirdPartyAttributeProto->mergeFromString($dataEntryProto->getValue());
+
+                    $issuingAttributes = $thirdPartyAttributeProto->getIssuingAttributes();
+
+                    $dataEntryList[] = new CredentialIssuanceDetails(
+                        $thirdPartyAttributeProto->getIssuanceToken(),
+                        new \DateTime($issuingAttributes->getExpiryDate()),
+                        (array) $issuingAttributes->getDefinitions()
+                    );
+                    break;
+            }
+        }
+
+        return new ExtraData($dataEntryList);
     }
 
     /**

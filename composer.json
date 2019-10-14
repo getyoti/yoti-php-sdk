@@ -22,7 +22,8 @@
       "GPBMetadata\\": "src/protobuflib/GPBMetadata",
       "phpseclib\\": "src/phpseclib/",
       "Yoti\\": "src/Yoti",
-      "YotiSandbox\\": "sandbox/src"
+      "YotiSandbox\\": "sandbox/src",
+      "Yoti\\Sharepubapi\\": "src/Sharepubapi"
     }
   },
   "require-dev": {
