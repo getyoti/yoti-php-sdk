@@ -391,6 +391,26 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testThirdPartyAttribute()
+    {
+        $protobufAttribute = new \Attrpubapi\Attribute();
+        $protobufAttribute->mergeFromString(base64_decode(THIRD_PARTY_ATTRIBUTE));
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+
+        $this->assertEquals('test-third-party-attribute-0', $attr->getValue());
+        $this->assertEquals('com.thirdparty.id', $attr->getName());
+
+        $this->assertEquals('THIRD_PARTY', $attr->getSources()[0]->getValue());
+        $this->assertEquals('orgName', $attr->getSources()[0]->getSubType());
+
+        $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
+        $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
+    }
+
+    /**
      * Creates a nested MultiValue Value.
      *
      * @return \Attrpubapi\MultiValue\Value
