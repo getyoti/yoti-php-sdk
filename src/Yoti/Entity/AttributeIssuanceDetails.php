@@ -2,14 +2,14 @@
 
 namespace Yoti\Entity;
 
-class CredentialIssuanceDetails
+class AttributeIssuanceDetails
 {
     /**
      * @param string $token
      * @param \DateTime $expiryDate
      * @param array $issuingAttributes
      */
-    public function __construct($token, \DateTime $expiryDate, array $issuingAttributes)
+    public function __construct($token, \DateTime $expiryDate = null, array $issuingAttributes = [])
     {
         $this->token = $token;
         $this->expiryDate = $expiryDate;
@@ -25,7 +25,7 @@ class CredentialIssuanceDetails
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getExpiryDate()
     {

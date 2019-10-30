@@ -5,9 +5,7 @@ namespace Yoti\Entity;
 use Yoti\Exception\ReceiptException;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;
-use Yoti\Sharepubapi\DataEntry\Type as DataEntryTypeProto;
-use Yoti\Sharepubapi\ExtraData as ExtraDataProto;
-use Yoti\Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
+use Yoti\Util\ExtraData\ExtraDataConverter;
 
 class Receipt
 {
@@ -113,30 +111,7 @@ class Receipt
      */
     public function getExtraData()
     {
-        $data = $this->getAttribute(self::ATTR_EXTRA_DATA_CONTENT);
-
-        $extraDataProto = new ExtraDataProto();
-        $extraDataProto->mergeFromString(base64_decode($data));
-
-        $dataEntryList = [];
-        foreach ($extraDataProto->getList() as $dataEntryProto) {
-            switch ($dataEntryProto->getType()) {
-                case DataEntryTypeProto::THIRD_PARTY_ATTRIBUTE:
-                    $thirdPartyAttributeProto = new ThirdPartyAttributeProto();
-                    $thirdPartyAttributeProto->mergeFromString($dataEntryProto->getValue());
-
-                    $issuingAttributes = $thirdPartyAttributeProto->getIssuingAttributes();
-
-                    $dataEntryList[] = new CredentialIssuanceDetails(
-                        $thirdPartyAttributeProto->getIssuanceToken(),
-                        new \DateTime($issuingAttributes->getExpiryDate()),
-                        (array) $issuingAttributes->getDefinitions()
-                    );
-                    break;
-            }
-        }
-
-        return new ExtraData($dataEntryList);
+        return ExtraDataConverter::convertValue($this->getAttribute(self::ATTR_EXTRA_DATA_CONTENT));
     }
 
     /**
