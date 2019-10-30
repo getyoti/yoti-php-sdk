@@ -196,9 +196,9 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getExtraData
-     * @covers \Yoti\Entity\ExtraData::getCredentialIssuanceDetails
+     * @covers \Yoti\Entity\ExtraData::getAttributeIssuanceDetails
      */
-    public function testGetCredentialIssuanceDetails()
+    public function testGetAttributeIssuanceDetails()
     {
         $receipt = new Receipt([
             'wrapped_receipt_key' => '',
@@ -208,10 +208,16 @@ class ActivityDetailsTest extends TestCase
 
         $credentialIssuanceDetails = $activityDetails
             ->getExtraData()
-            ->getCredentialIssuanceDetails();
+            ->getAttributeIssuanceDetails();
 
-        $this->assertEquals('test-third-party-attribute-0', $credentialIssuanceDetails->getToken());
-        $this->assertEquals(new Date(), $credentialIssuanceDetails->getExpiryDate());
-        $this->assertEquals([], $credentialIssuanceDetails->getIssuingAttributes());
+        $this->assertEquals('someIssuanceToken', $credentialIssuanceDetails->getToken());
+        $this->assertEquals(
+            new \DateTime('2019-10-15T22:04:05.123000+0000'),
+            $credentialIssuanceDetails->getExpiryDate()
+        );
+        $this->assertEquals([
+            'com.thirdparty.id',
+            'com.thirdparty.other_id',
+        ], $credentialIssuanceDetails->getIssuingAttributes());
     }
 }

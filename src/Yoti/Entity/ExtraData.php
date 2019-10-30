@@ -16,22 +16,22 @@ class ExtraData
      */
     public function __construct(array $dataEntryList)
     {
-        Validation::isArrayOfType($dataEntryList, [CredentialIssuanceDetails::class], 'dataEntryList');
+        Validation::isArrayOfType($dataEntryList, [AttributeIssuanceDetails::class], 'dataEntryList');
         $this->dataEntryList = $dataEntryList;
     }
 
     /**
      * @return \Yoti\Entity\DataEntry|null
      */
-    public function getCredentialIssuanceDetails()
+    public function getAttributeIssuanceDetails()
     {
-        $credentialIssuanceDetails = array_filter(
+        $attributeIssuanceDetails = array_filter(
             $this->dataEntryList,
             function ($dataEntry) {
-                return $dataEntry instanceof CredentialIssuanceDetails;
+                return $dataEntry instanceof AttributeIssuanceDetails;
             }
         );
 
-        return reset($credentialIssuanceDetails) ?: null;
+        return reset($attributeIssuanceDetails) ?: null;
     }
 }
