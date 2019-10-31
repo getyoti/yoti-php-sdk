@@ -207,8 +207,7 @@ class ActivityDetailsTest extends TestCase
         ]);
         $activityDetails = new ActivityDetails($receipt, file_get_contents(PEM_FILE));
 
-        $extraData = $activityDetails
-            ->getExtraData();
+        $extraData = $activityDetails->getExtraData();
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());

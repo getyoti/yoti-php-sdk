@@ -16,7 +16,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
     const SOME_ISSUANCE_TOKEN = 'some issuance token';
     const SOME_OTHER_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.other_id';
     const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
-    const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.000Z';
+    const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.123Z';
 
     /**
      * @covers ::convertValue
@@ -35,11 +35,10 @@ class ThirdPartyAttributeConverterTest extends TestCase
         );
 
         $this->assertEquals(self::SOME_ISSUANCE_TOKEN, $thirdPartyAttribute->getToken());
-        $this->assertEquals(self::SOME_EXPIRY_DATE, $thirdPartyAttribute->getExpiryDate()->format('Y-m-d\TH:i:s.ve'));
+        $this->assertEquals(new \DateTime(self::SOME_EXPIRY_DATE), $thirdPartyAttribute->getExpiryDate());
         $this->assertEquals(self::SOME_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[0]);
         $this->assertEquals(self::SOME_OTHER_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[1]);
     }
-
 
     /**
      * @covers ::convertValue
@@ -66,10 +65,10 @@ class ThirdPartyAttributeConverterTest extends TestCase
     public function invalidTokenProvider()
     {
         return [
-            [''],
-            [null],
-            [false],
-            [0],
+            [ '' ],
+            [ null ],
+            [ false ],
+            [ 0 ],
         ];
     }
 
@@ -95,11 +94,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
         $this->assertEquals(self::SOME_ISSUANCE_TOKEN, $thirdPartyAttribute->getToken());
         $this->assertNull($thirdPartyAttribute->getExpiryDate());
         $this->assertEquals(self::SOME_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[0]);
-
-        $this->assertLogContains(sprintf(
-            "Failed to parse expiry date '%s' from ThirdPartyAttribute using format 'Y-m-d\TH:i:s.vP'",
-            $invalidExpiryDate
-        ));
+        $this->assertLogContains('Failed to parse expiry date from ThirdPartyAttribute');
     }
 
     /**
@@ -108,11 +103,12 @@ class ThirdPartyAttributeConverterTest extends TestCase
     public function invalidDateProvider()
     {
         return [
-            ['2019-12-02T12:00:00.000000Z'],
-            ['2019-12-02'],
-            ['2019-12-02'],
-            ['invalid'],
-            [''],
+            [ '' ],
+            [ 1 ],
+            [ 'invalid date' ],
+            [ '2019-12-02' ],
+            [ '2019-12-02' ],
+            [ '2019-12-02T12:00:00Z' ],
         ];
     }
 
