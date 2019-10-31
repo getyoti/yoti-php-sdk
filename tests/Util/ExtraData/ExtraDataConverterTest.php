@@ -7,6 +7,7 @@ use Yoti\Entity\ExtraData;
 use Yoti\Sharepubapi\DataEntry;
 use Yoti\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Sharepubapi\ExtraData as ExtraDataProto;
+use Yoti\Sharepubapi\IssuingAttributes;
 use Yoti\Util\ExtraData\ExtraDataConverter;
 use YotiTest\TestCase;
 
@@ -57,15 +58,15 @@ class ExtraDataConverterTest extends TestCase
                 ])),
                 (new DataEntry([
                     'type' => self::TYPE_THIRD_PARTY_ATTRIBUTE,
-                    'value' => (new ThirdPartyAttribute([
-                        'issuance_token' => $someToken,
-                    ]))->serializeToString()
+                    'value' => $this->createThirdPartyAttribute(''),
                 ])),
                 (new DataEntry([
                     'type' => self::TYPE_THIRD_PARTY_ATTRIBUTE,
-                    'value' => (new ThirdPartyAttribute([
-                        'issuance_token' => 'some other token',
-                    ]))->serializeToString()
+                    'value' => $this->createThirdPartyAttribute($someToken),
+                ])),
+                (new DataEntry([
+                    'type' => self::TYPE_THIRD_PARTY_ATTRIBUTE,
+                    'value' => $this->createThirdPartyAttribute('some other token'),
                 ]))
             ]
         ]))->serializeToString();
@@ -75,6 +76,7 @@ class ExtraDataConverterTest extends TestCase
         $this->assertEquals($extraData->getAttributeIssuanceDetails()->getToken(), $someToken);
 
         $this->assertLogContains("Failed to convert data entry: Unsupported data entry '0'");
+        $this->assertLogContains("Failed to convert data entry: Failed to retrieve token from ThirdPartyAttribute");
     }
 
     /**
@@ -140,5 +142,20 @@ class ExtraDataConverterTest extends TestCase
             [ '' ],
             [ null ],
         ];
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return string serialized ThirdPartyAttribute
+     */
+    private function createThirdPartyAttribute($token)
+    {
+        return (new ThirdPartyAttribute([
+            'issuance_token' => $token,
+            'issuing_attributes' => new IssuingAttributes([
+                'expiry_date' => '2019-12-02T12:00:00.000Z',
+            ]),
+        ]))->serializeToString();
     }
 }
