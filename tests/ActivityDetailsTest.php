@@ -8,6 +8,8 @@ use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
 use Yoti\Entity\Image;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Entity\AttributeIssuanceDetails;
+use Yoti\Entity\ExtraData;
 
 /**
  * @coversDefaultClass \Yoti\ActivityDetails
@@ -206,18 +208,10 @@ class ActivityDetailsTest extends TestCase
         ]);
         $activityDetails = new ActivityDetails($receipt, file_get_contents(PEM_FILE));
 
-        $credentialIssuanceDetails = $activityDetails
-            ->getExtraData()
-            ->getAttributeIssuanceDetails();
+        $extraData = $activityDetails
+            ->getExtraData();
 
-        $this->assertEquals('someIssuanceToken', $credentialIssuanceDetails->getToken());
-        $this->assertEquals(
-            new \DateTime('2019-10-15T22:04:05.123000+0000'),
-            $credentialIssuanceDetails->getExpiryDate()
-        );
-        $this->assertEquals([
-            'com.thirdparty.id',
-            'com.thirdparty.other_id',
-        ], $credentialIssuanceDetails->getIssuingAttributes());
+        $this->assertInstanceOf(ExtraData::class, $extraData);
+        $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());
     }
 }
