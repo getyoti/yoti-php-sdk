@@ -3,6 +3,7 @@
 namespace Yoti\Util\ExtraData;
 
 use Yoti\Entity\AttributeIssuanceDetails;
+use Yoti\Exception\ExtraDataException;
 use Yoti\Sharepubapi\IssuingAttributes;
 use Yoti\Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
 
@@ -25,6 +26,11 @@ class ThirdPartyAttributeConverter
     {
         $thirdPartyAttributeProto = new ThirdPartyAttributeProto();
         $thirdPartyAttributeProto->mergeFromString($value);
+
+        $token = $thirdPartyAttributeProto->getIssuanceToken();
+        if (empty($token)) {
+            throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');
+        }
 
         $expiryDate = null;
         $issuingAttributes = [];
@@ -57,9 +63,9 @@ class ThirdPartyAttributeConverter
         }
 
         return new AttributeIssuanceDetails(
-            $thirdPartyAttributeProto->getIssuanceToken(),
+            $token,
             $expiryDate,
-            $issuingAttributes,
+            $issuingAttributes
         );
     }
 }
