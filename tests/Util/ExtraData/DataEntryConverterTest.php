@@ -12,7 +12,7 @@ use YotiTest\TestCase;
  */
 class DataEntryConverterTest extends TestCase
 {
-    const THIRD_PARTY_ATTRIBUTE = 6;
+    const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
 
     /**
      * @covers ::convertValue
@@ -20,7 +20,25 @@ class DataEntryConverterTest extends TestCase
     public function testConvertValueThirdPartyAttribute()
     {
         $thirdPartyAttribute = DataEntryConverter::convertValue(
-            self::THIRD_PARTY_ATTRIBUTE,
+            self::TYPE_THIRD_PARTY_ATTRIBUTE,
+            (new ThirdPartyAttribute([
+                'issuance_token' => 'some token',
+            ]))->serializeToString()
+        );
+
+        $this->assertInstanceOf(AttributeIssuanceDetails::class, $thirdPartyAttribute);
+    }
+
+    /**
+     * @covers ::convertValue
+     *
+     * @expectedException \Yoti\Exception\ExtraDataException
+     * @expectedExceptionMessage Value is empty
+     */
+    public function testConvertValueThirdPartyAttributeEmptyValue()
+    {
+        $thirdPartyAttribute = DataEntryConverter::convertValue(
+            self::TYPE_THIRD_PARTY_ATTRIBUTE,
             (new ThirdPartyAttribute())->serializeToString()
         );
 
@@ -29,17 +47,33 @@ class DataEntryConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
+     *
+     * @expectedException \Yoti\Exception\ExtraDataException
+     * @expectedExceptionMessage Value is empty
      */
-    public function testConvertValueUnknown()
+    public function testConvertValueEmpty()
     {
         $this->captureExpectedLogs();
 
-        $thirdPartyAttribute = DataEntryConverter::convertValue(
-            'Some unknown type',
+        DataEntryConverter::convertValue(
+            self::TYPE_THIRD_PARTY_ATTRIBUTE,
             ''
         );
+    }
 
-        $this->assertLogContains("Skipping unsupported data entry");
+    /**
+     * @covers ::convertValue
+     *
+     * @expectedException \Yoti\Exception\ExtraDataException
+     * @expectedExceptionMessage Unsupported data entry
+     */
+    public function testConvertValueUnknown()
+    {
+        $thirdPartyAttribute = DataEntryConverter::convertValue(
+            'Some unknown type',
+            'Some value'
+        );
+
         $this->assertNull($thirdPartyAttribute);
     }
 }
