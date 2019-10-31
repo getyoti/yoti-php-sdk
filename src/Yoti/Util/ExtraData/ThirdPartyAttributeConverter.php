@@ -36,7 +36,7 @@ class ThirdPartyAttributeConverter
             $parsedExpiryDate = \DateTime::createFromFormat(
                 self::DATE_FORMAT_RFC3339,
                 $expiryDateString,
-                new \DateTimeZone("UTC"),
+                new \DateTimeZone("UTC")
             );
             if ($parsedExpiryDate !== false) {
                 $expiryDate = $parsedExpiryDate;
