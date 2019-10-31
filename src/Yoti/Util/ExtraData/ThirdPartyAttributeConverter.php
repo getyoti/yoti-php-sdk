@@ -15,7 +15,7 @@ class ThirdPartyAttributeConverter
      * This will be replaced by \DateTime::RFC3339_EXTENDED
      * once PHP 5.6 is no longer supported.
      */
-    const DATE_FORMAT_RFC3339 = 'Y-m-d\TH:i:s.vP';
+    const DATE_FORMAT_RFC3339 = 'Y-m-d\TH:i:s.uP';
 
     /**
      * @param string $value
@@ -38,20 +38,16 @@ class ThirdPartyAttributeConverter
         $issuingAttributesProto = $thirdPartyAttributeProto->getIssuingAttributes();
 
         if ($issuingAttributesProto instanceof IssuingAttributes) {
-            $expiryDateString = $issuingAttributesProto->getExpiryDate();
-            $parsedExpiryDate = \DateTime::createFromFormat(
+            $parsedDateTime = \DateTime::createFromFormat(
                 self::DATE_FORMAT_RFC3339,
-                $expiryDateString,
+                $issuingAttributesProto->getExpiryDate(),
                 new \DateTimeZone("UTC")
             );
-            if ($parsedExpiryDate !== false) {
-                $expiryDate = $parsedExpiryDate;
+
+            if ($parsedDateTime !== false) {
+                $expiryDate = $parsedDateTime;
             } else {
-                error_log(sprintf(
-                    "Failed to parse expiry date '%s' from ThirdPartyAttribute using format '%s'",
-                    $expiryDateString,
-                    self::DATE_FORMAT_RFC3339
-                ), 0);
+                error_log("Failed to parse expiry date from ThirdPartyAttribute", 0);
             }
 
             $issuingAttributes = array_map(
