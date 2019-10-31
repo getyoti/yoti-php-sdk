@@ -67,11 +67,9 @@ class DataEntryConverterTest extends TestCase
      */
     public function testConvertValueUnknown()
     {
-        $thirdPartyAttribute = DataEntryConverter::convertValue(
+        DataEntryConverter::convertValue(
             'Some unknown type',
             'Some value'
         );
-
-        $this->assertNull($thirdPartyAttribute);
     }
 }
