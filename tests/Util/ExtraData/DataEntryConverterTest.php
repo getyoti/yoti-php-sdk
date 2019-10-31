@@ -53,8 +53,6 @@ class DataEntryConverterTest extends TestCase
      */
     public function testConvertValueEmpty()
     {
-        $this->captureExpectedLogs();
-
         DataEntryConverter::convertValue(
             self::TYPE_THIRD_PARTY_ATTRIBUTE,
             ''
