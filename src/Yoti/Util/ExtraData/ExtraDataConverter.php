@@ -2,6 +2,7 @@
 
 namespace Yoti\Util\ExtraData;
 
+use Exception;
 use Yoti\Entity\ExtraData;
 use Yoti\Sharepubapi\ExtraData as ExtraDataProto;
 
@@ -16,14 +17,24 @@ class ExtraDataConverter
     public static function convertValue($data)
     {
         $extraDataProto = new ExtraDataProto();
-        $extraDataProto->mergeFromString(base64_decode($data));
+
+        try {
+            $extraDataProto->mergeFromString(base64_decode($data));
+        } catch (Exception $e) {
+            error_log(sprintf('Failed to parse extra data: %s', $e->getMessage()), 0);
+            return new ExtraData([]);
+        }
 
         $dataEntryList = [];
         foreach ($extraDataProto->getList() as $dataEntryProto) {
-            $dataEntryList[] = DataEntryConverter::convertValue(
-                $dataEntryProto->getType(),
-                $dataEntryProto->getValue()
-            );
+            try {
+                $dataEntryList[] = DataEntryConverter::convertValue(
+                    $dataEntryProto->getType(),
+                    $dataEntryProto->getValue()
+                );
+            } catch (Exception $e) {
+                error_log(sprintf('Failed to convert data entry: %s', $e->getMessage()), 0);
+            }
         }
 
         return new ExtraData($dataEntryList);
