@@ -198,7 +198,6 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getExtraData
-     * @covers \Yoti\Entity\ExtraData::getAttributeIssuanceDetails
      */
     public function testGetAttributeIssuanceDetails()
     {

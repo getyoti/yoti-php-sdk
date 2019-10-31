@@ -2,6 +2,8 @@
 
 namespace Yoti\Entity;
 
+use Yoti\Util\Validation;
+
 class AttributeIssuanceDetails
 {
     /**
@@ -11,8 +13,12 @@ class AttributeIssuanceDetails
      */
     public function __construct($token, \DateTime $expiryDate = null, array $issuingAttributes = [])
     {
+        Validation::isString($token, 'token');
         $this->token = $token;
+
         $this->expiryDate = $expiryDate;
+
+        Validation::isArrayOfStrings($issuingAttributes, 'issuingAttributes');
         $this->issuingAttributes = $issuingAttributes;
     }
 

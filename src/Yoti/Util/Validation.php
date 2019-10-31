@@ -146,6 +146,24 @@ class Validation
 
     /**
      * @param array $values
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function isArrayOfStrings(array $values, $name)
+    {
+        foreach ($values as $value) {
+            if (!is_string($value)) {
+                throw new \InvalidArgumentException(sprintf(
+                    '%s must be array of strings',
+                    $name
+                ));
+            }
+        }
+    }
+
+    /**
+     * @param array $values
      * @param array $types
      * @param string $name
      *
