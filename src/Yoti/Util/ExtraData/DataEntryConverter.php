@@ -11,7 +11,7 @@ class DataEntryConverter
      * @param string $type
      * @param string $value
      *
-     * @return \Yoti\Entity\AttributeIssuanceDetails|null
+     * @return \Yoti\Entity\AttributeIssuanceDetails
      *
      * @throws \Yoti\Exception\ExtraDataException
      */
