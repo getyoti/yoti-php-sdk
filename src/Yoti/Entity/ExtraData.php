@@ -7,7 +7,7 @@ use Yoti\Util\Validation;
 class ExtraData
 {
     /**
-     * @var \Yoti\Entity\DataEntry[]
+     * @var mixed[]
      */
     private $dataEntryList = [];
 
@@ -21,7 +21,7 @@ class ExtraData
     }
 
     /**
-     * @return \Yoti\Entity\DataEntry|null
+     * @return \Yoti\Entity\AttributeIssuanceDetails|null
      */
     public function getAttributeIssuanceDetails()
     {

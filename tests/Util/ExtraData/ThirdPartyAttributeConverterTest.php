@@ -14,7 +14,7 @@ use YotiTest\TestCase;
 class ThirdPartyAttributeConverterTest extends TestCase
 {
     const SOME_ISSUANCE_TOKEN = 'some issuance token';
-    const SOME_OTHER_ISSUING_ATTRIBUTE_NAME = 'com.other.thirdparty.id';
+    const SOME_OTHER_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.other_id';
     const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
 
     /**
@@ -29,8 +29,8 @@ class ThirdPartyAttributeConverterTest extends TestCase
                 self::SOME_ISSUANCE_TOKEN,
                 $someExpiryDate,
                 [
-                [ 'name' => self::SOME_ISSUING_ATTRIBUTE_NAME ],
-                [ 'name' => self::SOME_OTHER_ISSUING_ATTRIBUTE_NAME ],
+                    [ 'name' => self::SOME_ISSUING_ATTRIBUTE_NAME ],
+                    [ 'name' => self::SOME_OTHER_ISSUING_ATTRIBUTE_NAME ],
                 ]
             )
         );
@@ -55,7 +55,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
                 self::SOME_ISSUANCE_TOKEN,
                 $someExpiryDate,
                 [
-                [ 'name' => self::SOME_ISSUING_ATTRIBUTE_NAME ],
+                    [ 'name' => self::SOME_ISSUING_ATTRIBUTE_NAME ],
                 ]
             )
         );
@@ -66,7 +66,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
         $this->assertLogContains(sprintf(
             "Failed to parse expiry date '%s' from ThirdPartyAttribute using format 'Y-m-d\TH:i:s.vP'",
-            $someExpiryDate,
+            $someExpiryDate
         ));
     }
 
@@ -76,11 +76,11 @@ class ThirdPartyAttributeConverterTest extends TestCase
     public function invalidDateProvider()
     {
         return [
-        ['2019-12-02T12:00:00.000000Z'],
-        ['2019-12-02'],
-        ['2019-12-02'],
-        ['invalid'],
-        [''],
+            ['2019-12-02T12:00:00.000000Z'],
+            ['2019-12-02'],
+            ['2019-12-02'],
+            ['invalid'],
+            [''],
         ];
     }
 
@@ -89,7 +89,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
      * @param string $expiryDate
      * @param array $definitions
      *
-     * @return \Yoti\Sharepubapi\ThirdPartyAttribute
+     * @return string serialized ThirdPartyAttribute
      */
     private function createThirdPartyAttribute($token, $expiryDate, $definitions)
     {
