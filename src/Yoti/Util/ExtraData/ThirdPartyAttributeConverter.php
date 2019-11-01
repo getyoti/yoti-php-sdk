@@ -2,6 +2,7 @@
 
 namespace Yoti\Util\ExtraData;
 
+use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
 use Yoti\Sharepubapi\IssuingAttributes;
@@ -52,7 +53,7 @@ class ThirdPartyAttributeConverter
 
             $issuingAttributes = array_map(
                 function ($definition) {
-                    return $definition->getName();
+                    return new AttributeDefinition($definition->getName());
                 },
                 iterator_to_array($issuingAttributesProto->getDefinitions())
             );

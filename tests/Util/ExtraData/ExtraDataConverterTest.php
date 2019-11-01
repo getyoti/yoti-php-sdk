@@ -24,21 +24,19 @@ class ExtraDataConverterTest extends TestCase
     public function testConvertValue()
     {
         $extraData = ExtraDataConverter::convertValue(EXTRA_DATA_CONTENT);
-
         $this->assertInstanceOf(ExtraData::class, $extraData);
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
-
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $attributeIssuanceDetails);
         $this->assertEquals('someIssuanceToken', $attributeIssuanceDetails->getToken());
         $this->assertEquals(
             new \DateTime('2019-10-15T22:04:05.123000+0000'),
             $attributeIssuanceDetails->getExpiryDate()
         );
-        $this->assertEquals([
-            'com.thirdparty.id',
-            'com.thirdparty.other_id',
-        ], $attributeIssuanceDetails->getIssuingAttributes());
+
+        $issuingAttributes = $attributeIssuanceDetails->getIssuingAttributes();
+        $this->assertEquals('com.thirdparty.id', $issuingAttributes[0]->getName());
+        $this->assertEquals('com.thirdparty.other_id', $issuingAttributes[1]->getName());
     }
 
     /**
