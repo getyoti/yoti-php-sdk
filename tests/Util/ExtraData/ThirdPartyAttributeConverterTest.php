@@ -36,8 +36,14 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
         $this->assertEquals(self::SOME_ISSUANCE_TOKEN, $thirdPartyAttribute->getToken());
         $this->assertEquals(new \DateTime(self::SOME_EXPIRY_DATE), $thirdPartyAttribute->getExpiryDate());
-        $this->assertEquals(self::SOME_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[0]);
-        $this->assertEquals(self::SOME_OTHER_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[1]);
+        $this->assertEquals(
+            self::SOME_ISSUING_ATTRIBUTE_NAME,
+            $thirdPartyAttribute->getIssuingAttributes()[0]->getName()
+        );
+        $this->assertEquals(
+            self::SOME_OTHER_ISSUING_ATTRIBUTE_NAME,
+            $thirdPartyAttribute->getIssuingAttributes()[1]->getName()
+        );
     }
 
     /**
@@ -93,7 +99,10 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
         $this->assertEquals(self::SOME_ISSUANCE_TOKEN, $thirdPartyAttribute->getToken());
         $this->assertNull($thirdPartyAttribute->getExpiryDate());
-        $this->assertEquals(self::SOME_ISSUING_ATTRIBUTE_NAME, $thirdPartyAttribute->getIssuingAttributes()[0]);
+        $this->assertEquals(
+            self::SOME_ISSUING_ATTRIBUTE_NAME,
+            $thirdPartyAttribute->getIssuingAttributes()[0]->getName()
+        );
         $this->assertLogContains('Failed to parse expiry date from ThirdPartyAttribute');
     }
 
