@@ -2,8 +2,6 @@
 
 namespace Yoti\ShareUrl\Extension;
 
-const LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
-
 /**
  * Builds location constraint Extension.
  */
@@ -106,6 +104,7 @@ class LocationConstraintExtensionBuilder
             $this->radius,
             $this->maxUncertainty
         );
-        return new Extension(LOCATION_CONSTRAINT, $content);
+
+        return new Extension(self::LOCATION_CONSTRAINT, $content);
     }
 }
