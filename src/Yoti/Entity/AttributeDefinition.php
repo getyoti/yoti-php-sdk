@@ -4,7 +4,7 @@ namespace Yoti\Entity;
 
 use Yoti\Util\Validation;
 
-class AttributeDefinition
+class AttributeDefinition implements \JsonSerializable
 {
     /**
      * @param string $name
@@ -21,5 +21,25 @@ class AttributeDefinition
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->getName(),
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this);
     }
 }

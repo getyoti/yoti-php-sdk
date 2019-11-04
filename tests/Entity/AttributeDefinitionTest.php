@@ -13,13 +13,22 @@ class AttributeDefinitionTest extends TestCase
     const SOME_NAME = 'some name';
 
     /**
+     * @var \Yoti\Entity\AttributeDefinition
+     */
+    private $attributeDefinition;
+
+    public function setup()
+    {
+        $this->attributeDefinition = new AttributeDefinition(self::SOME_NAME);
+    }
+
+    /**
      * @covers ::__construct
      * @covers ::getName
      */
     public function testGetName()
     {
-        $attributeDefinition = new AttributeDefinition(self::SOME_NAME);
-        $this->assertEquals(self::SOME_NAME, $attributeDefinition->getName());
+        $this->assertEquals(self::SOME_NAME, $this->attributeDefinition->getName());
     }
 
     /**
@@ -50,5 +59,24 @@ class AttributeDefinitionTest extends TestCase
             [ [] ],
             [ (object)[] ],
         ];
+    }
+
+    /**
+     * @covers ::jsonSerialize
+     * @covers ::__toString
+     */
+    public function testJsonSerialize()
+    {
+        $expectedJson = json_encode(['name' => self::SOME_NAME]);
+
+        $this->assertEquals(
+            $expectedJson,
+            json_encode($this->attributeDefinition)
+        );
+
+        $this->assertEquals(
+            $expectedJson,
+            $this->attributeDefinition
+        );
     }
 }
