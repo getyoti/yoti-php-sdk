@@ -109,7 +109,7 @@ class Receipt
     /**
      * @return \Yoti\Entity\ExtraData
      */
-    public function getExtraData()
+    public function parseExtraData()
     {
         return ExtraDataConverter::convertValue($this->getAttribute(self::ATTR_EXTRA_DATA_CONTENT));
     }
