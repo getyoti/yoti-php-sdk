@@ -7,9 +7,9 @@ use Yoti\Util\Validation;
 class ExtraData
 {
     /**
-     * @var mixed[]
+     * @var \Yoti\Entity\AttributeIssuanceDetails|null
      */
-    private $dataEntryList = [];
+    private $attributeIssuanceDetails;
 
     /**
      * @param mixed[] $dataEntryList
@@ -17,7 +17,22 @@ class ExtraData
     public function __construct(array $dataEntryList)
     {
         Validation::isArrayOfType($dataEntryList, [AttributeIssuanceDetails::class], 'dataEntryList');
-        $this->dataEntryList = $dataEntryList;
+        $this->setAttributeIssuanceDetails($dataEntryList);
+    }
+
+    /**
+     * @param mixed[] $dataEntryList
+     */
+    private function setAttributeIssuanceDetails($dataEntryList)
+    {
+        $attributeIssuanceDetailsList = array_filter(
+            $dataEntryList,
+            function ($dataEntry) {
+                return $dataEntry instanceof AttributeIssuanceDetails;
+            }
+        );
+
+        $this->attributeIssuanceDetails = reset($attributeIssuanceDetailsList) ?: null;
     }
 
     /**
@@ -25,13 +40,6 @@ class ExtraData
      */
     public function getAttributeIssuanceDetails()
     {
-        $attributeIssuanceDetails = array_filter(
-            $this->dataEntryList,
-            function ($dataEntry) {
-                return $dataEntry instanceof AttributeIssuanceDetails;
-            }
-        );
-
-        return reset($attributeIssuanceDetails) ?: null;
+        return $this->attributeIssuanceDetails;
     }
 }
