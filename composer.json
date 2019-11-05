@@ -57,10 +57,7 @@
   },
   "extra": {
     "hooks": {
-        "pre-commit": [
-          "composer test",
-          "composer lint"
-        ]
+        "pre-commit": "composer test && composer lint"
     }
   }
 }

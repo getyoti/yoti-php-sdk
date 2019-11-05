@@ -15,7 +15,7 @@ class WantedAttributeBuilder
     /**
      * @var string
      */
-    private $derivation = '';
+    private $derivation;
 
     /**
      * @var \Yoti\ShareUrl\Policy\Constraints

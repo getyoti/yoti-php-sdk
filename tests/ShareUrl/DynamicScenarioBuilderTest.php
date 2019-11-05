@@ -54,12 +54,10 @@ class DynamicScenarioBuilderTest extends TestCase
                 'wanted' => [
                     [
                         'name' => 'full_name',
-                        'derivation' => '',
                         'optional' => false,
                     ],
                     [
                         'name' => 'given_names',
-                        'derivation' => '',
                         'optional' => false,
                     ],
                 ],

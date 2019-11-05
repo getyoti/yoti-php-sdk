@@ -34,8 +34,8 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => $someDerivation,
             'optional' => false,
+            'derivation' => $someDerivation,
         ];
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($wantedAttribute));
@@ -53,7 +53,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'accept_self_asserted' => true,
         ];
@@ -86,7 +85,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'accept_self_asserted' => false,
         ];
@@ -124,7 +122,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'constraints' => [
                 [
