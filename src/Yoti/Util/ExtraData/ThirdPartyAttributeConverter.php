@@ -5,6 +5,7 @@ namespace Yoti\Util\ExtraData;
 use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
+use Yoti\Util\Constants;
 use Sharepubapi\IssuingAttributes;
 use Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
 
@@ -28,7 +29,7 @@ class ThirdPartyAttributeConverter
 
         if ($issuingAttributesProto instanceof IssuingAttributes) {
             $parsedDateTime = \DateTime::createFromFormat(
-                AttributeIssuanceDetails::DATE_FORMAT_RFC3339,
+                Constants::DATE_FORMAT_RFC3339,
                 $issuingAttributesProto->getExpiryDate(),
                 new \DateTimeZone("UTC")
             );
