@@ -28,11 +28,7 @@ class ThirdPartyAttributeConverter
         $thirdPartyAttributeProto = new ThirdPartyAttributeProto();
         $thirdPartyAttributeProto->mergeFromString($value);
 
-        $token = $thirdPartyAttributeProto->getIssuanceToken();
-        if (empty($token)) {
-            throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');
-        }
-
+        $token = self::parseToken($thirdPartyAttributeProto->getIssuanceToken());
         $expiryDate = null;
         $issuingAttributes = [];
 
@@ -64,5 +60,22 @@ class ThirdPartyAttributeConverter
             $expiryDate,
             $issuingAttributes
         );
+    }
+
+    /**
+     * @param string $token
+     *   Tokens bytes.
+     *
+     * @return string
+     *   Base64 encoded token.
+     *
+     * @throws \Yoti\Exception\ExtraDataException
+     */
+    private static function parseToken($token)
+    {
+        if (empty($token)) {
+            throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');
+        }
+        return base64_encode($token);
     }
 }
