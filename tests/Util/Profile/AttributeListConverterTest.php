@@ -52,7 +52,6 @@ class AttributeListConverterTest extends TestCase
 
     /**
      * @covers ::convertToProtobufAttributeList
-     * @covers ::decryptCipherText
      */
     public function testConvertToProtobufAttributeList()
     {
