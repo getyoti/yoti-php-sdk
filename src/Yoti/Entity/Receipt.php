@@ -3,6 +3,7 @@
 namespace Yoti\Entity;
 
 use Yoti\Exception\ReceiptException;
+use Yoti\Util\EncryptedData;
 use Yoti\Util\ExtraData\ExtraDataConverter;
 
 class Receipt
@@ -122,12 +123,11 @@ class Receipt
      */
     private function decryptAttribute($attributeName, $pem)
     {
-        $data = $this->getAttribute($attributeName);
-
-        return EncryptedData::fromString($data)
-            ->withPem($pem)
-            ->withWrappedKey($this->getWrappedReceiptKey())
-            ->decrypt();
+        return EncryptedData::decrypt(
+            $this->getAttribute($attributeName),
+            $this->getWrappedReceiptKey(),
+            $pem
+        );
     }
 
     /**
