@@ -197,7 +197,7 @@ class ActivityDetails
      */
     private function setExtraData()
     {
-        $this->extraData = $this->receipt->parseExtraData();
+        $this->extraData = $this->receipt->parseExtraData($this->pem);
     }
 
     /**
