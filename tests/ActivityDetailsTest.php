@@ -201,13 +201,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetAttributeIssuanceDetails()
     {
-        $receipt = new Receipt([
-            'wrapped_receipt_key' => '',
-            'extra_data_content' => EXTRA_DATA_CONTENT,
-        ]);
-        $activityDetails = new ActivityDetails($receipt, file_get_contents(PEM_FILE));
-
-        $extraData = $activityDetails->getExtraData();
+        $extraData = $this->activityDetails->getExtraData();
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());

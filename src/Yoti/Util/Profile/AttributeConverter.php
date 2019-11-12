@@ -6,8 +6,8 @@ use Yoti\Entity\Attribute;
 use Yoti\Entity\DocumentDetails;
 use Yoti\Entity\Image;
 use Yoti\Entity\Profile;
-use Compubapi\EncryptedData;
 use Attrpubapi\Attribute as ProtobufAttribute;
+use Compubapi\EncryptedData;
 use Yoti\Exception\AttributeException;
 use Yoti\Entity\MultiValue;
 use Yoti\Entity\ApplicationProfile;
@@ -144,16 +144,17 @@ class AttributeConverter
     /**
      * Parses a protobuf binary contained in a string.
      *
+     * @deprecated 3.0.0 No longer in use.
+     *
      * @param @param string $data Binary protobuf data.
      *
-     * @return EncryptedData
+     * @return \Compubapi\EncryptedData
      */
     public static function getEncryptedData($data)
     {
         // Get cipher_text and iv
         $encryptedData = new EncryptedData();
         $encryptedData->mergeFromString(base64_decode($data));
-
         return $encryptedData;
     }
 
