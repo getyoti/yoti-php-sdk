@@ -4,7 +4,7 @@ namespace Yoti\Util\Profile;
 
 use Attrpubapi\AttributeList;
 use Attrpubapi\Attribute as ProtobufAttribute;
-use Yoti\Entity\EncryptedData;
+use Yoti\Util\EncryptedData;
 
 class AttributeListConverter
 {
@@ -44,10 +44,7 @@ class AttributeListConverter
     {
         $attributeList = new \Attrpubapi\AttributeList();
         $attributeList->mergeFromString(
-            EncryptedData::fromEncryptedDataProto($encryptedData)
-                ->withWrappedKey($wrappedReceiptKey)
-                ->withPem($pem)
-                ->decrypt()
+            EncryptedData::decryptFromProto($encryptedData, $wrappedReceiptKey, $pem)
         );
 
         return $attributeList;
