@@ -3,8 +3,6 @@
 namespace Yoti\Entity;
 
 use Yoti\Exception\ReceiptException;
-use Yoti\Util\Profile\AttributeConverter;
-use Yoti\Util\Profile\AttributeListConverter;
 use Yoti\Util\ExtraData\ExtraDataConverter;
 
 class Receipt
@@ -96,22 +94,40 @@ class Receipt
      */
     public function parseAttribute($attributeName, $pem)
     {
-        $data = $this->getAttribute($attributeName);
-        $encryptedData = AttributeConverter::getEncryptedData($data);
-
-        return AttributeListConverter::convertToProtobufAttributeList(
-            $encryptedData,
-            $this->getWrappedReceiptKey(),
-            $pem
+        $attributeList = new \Attrpubapi\AttributeList();
+        $attributeList->mergeFromString(
+            $this->decryptAttribute($attributeName, $pem)
         );
+
+        return $attributeList;
     }
 
     /**
      * @return \Yoti\Entity\ExtraData
      */
-    public function parseExtraData()
+    public function parseExtraData($pem)
     {
-        return ExtraDataConverter::convertValue($this->getAttribute(self::ATTR_EXTRA_DATA_CONTENT));
+        return ExtraDataConverter::convertValue(
+            $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pem)
+        );
+    }
+
+    /**
+     * Decrypt receipt attribute.
+     *
+     * @param string $attributeName
+     * @param string $pem
+     *
+     * @return string
+     */
+    private function decryptAttribute($attributeName, $pem)
+    {
+        $data = $this->getAttribute($attributeName);
+
+        return EncryptedData::fromString($data)
+            ->withPem($pem)
+            ->withWrappedKey($this->getWrappedReceiptKey())
+            ->decrypt();
     }
 
     /**

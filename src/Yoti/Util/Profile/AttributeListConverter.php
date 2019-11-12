@@ -4,6 +4,7 @@ namespace Yoti\Util\Profile;
 
 use Attrpubapi\AttributeList;
 use Attrpubapi\Attribute as ProtobufAttribute;
+use Yoti\Entity\EncryptedData;
 
 class AttributeListConverter
 {
@@ -31,6 +32,8 @@ class AttributeListConverter
     /**
      * Return Protobuf AttributeList.
      *
+     * @deprecated 3.0.0 No longer in use.
+     *
      * @param $encryptedData
      * @param $wrappedReceiptKey
      * @param $pem
@@ -39,41 +42,14 @@ class AttributeListConverter
      */
     public static function convertToProtobufAttributeList($encryptedData, $wrappedReceiptKey, $pem)
     {
-        $decryptedCipherText = self::decryptCipherText(
-            $encryptedData,
-            $wrappedReceiptKey,
-            $pem
-        );
-
         $attributeList = new \Attrpubapi\AttributeList();
-        $attributeList->mergeFromString($decryptedCipherText);
+        $attributeList->mergeFromString(
+            EncryptedData::fromEncryptedDataProto($encryptedData)
+                ->withWrappedKey($wrappedReceiptKey)
+                ->withPem($pem)
+                ->decrypt()
+        );
 
         return $attributeList;
-    }
-
-    /**
-     * Return decrypted cipher text.
-     *
-     * @param $encryptedData
-     * @param $wrappedReceiptKey
-     * @param $pem
-     *
-     * @return string
-     */
-    private static function decryptCipherText($encryptedData, $wrappedReceiptKey, $pem)
-    {
-        // Unwrap key and get profile
-        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $pem);
-
-        // Decipher encrypted data with unwrapped key and IV
-        $cipherText = openssl_decrypt(
-            $encryptedData->getCipherText(),
-            'aes-256-cbc',
-            $unwrappedKey,
-            OPENSSL_RAW_DATA,
-            $encryptedData->getIv()
-        );
-
-        return $cipherText;
     }
 }
