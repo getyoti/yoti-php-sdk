@@ -2,6 +2,7 @@
 
 namespace YotiTest\Util\Profile;
 
+use Compubapi\EncryptedData;
 use YotiTest\TestCase;
 use Yoti\Entity\Image;
 use Yoti\Entity\Receipt;
@@ -408,6 +409,16 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
         $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
+    }
+
+    /**
+     * @covers ::getEncryptedData
+     */
+    public function testGetEncryptedData()
+    {
+        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $encryptedData = AttributeConverter::getEncryptedData($receiptArr['receipt']['profile_content']);
+        $this->assertInstanceOf(EncryptedData::class, $encryptedData);
     }
 
     /**

@@ -48,6 +48,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
+     * @covers ::parseToken
      *
      * @dataProvider invalidTokenProvider
      *
