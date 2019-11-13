@@ -23,9 +23,11 @@ class AnchorTest extends TestCase
 
     /**
      * @covers ::getType
+     * @covers ::getSubType
      * @covers ::getValue
      * @covers ::getSignedTimeStamp
      * @covers ::getOriginServerCerts
+     * @covers ::__construct
      */
     public function testYotiAnchorEndpoints()
     {
@@ -40,6 +42,7 @@ class AnchorTest extends TestCase
         $sourceAnchor = $anchorList[Anchor::TYPE_SOURCE_OID][0];
 
         $this->assertEquals(Anchor::TYPE_SOURCE_NAME, $sourceAnchor->getType());
+        $this->assertEquals('', $sourceAnchor->getSubtype());
         $this->assertequals('DRIVING_LICENCE', $sourceAnchor->getValue());
         $this->assertInstanceOf(
             \DateTime::class,

@@ -183,6 +183,7 @@ class AttributeConverterTest extends TestCase
      *
      * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnAttributeName
+     * @covers ::imageTypeToExtension
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
@@ -418,6 +419,7 @@ class AttributeConverterTest extends TestCase
     {
         $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
         $encryptedData = AttributeConverter::getEncryptedData($receiptArr['receipt']['profile_content']);
+
         $this->assertInstanceOf(EncryptedData::class, $encryptedData);
     }
 
