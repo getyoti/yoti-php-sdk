@@ -7,12 +7,18 @@ use YotiTest\TestCase;
 use Yoti\Util\Profile\AnchorConverter;
 
 /**
- * @coversDefaultClass \Yoti\Util\Profile\AnchorListConverter
+ * @coversDefaultClass \Yoti\Util\Profile\AnchorConverter
  */
 class AnchorConverterTest extends TestCase
 {
     /**
      * @covers ::convert
+     * @covers ::convertToYotiSignedTimestamp
+     * @covers ::decodeAnchorValue
+     * @covers ::getAnchorTypeByOid
+     * @covers ::getAnchorTypesMap
+     * @covers ::convertCertsListToX509
+     * @covers ::convertCertToX509
      */
     public function testConvertingSourceAnchor()
     {
@@ -32,6 +38,12 @@ class AnchorConverterTest extends TestCase
 
     /**
      * @covers ::convert
+     * @covers ::convertToYotiSignedTimestamp
+     * @covers ::decodeAnchorValue
+     * @covers ::getAnchorTypeByOid
+     * @covers ::getAnchorTypesMap
+     * @covers ::convertCertsListToX509
+     * @covers ::convertCertToX509
      */
     public function testConvertingVerifierAnchor()
     {

@@ -13,6 +13,8 @@ class ExtraDataTest extends TestCase
 {
     /**
      * @covers ::getAttributeIssuanceDetails
+     * @covers ::setAttributeIssuanceDetails
+     * @covers ::__construct
      */
     public function testGetAttributeIssuanceDetails()
     {
@@ -31,6 +33,8 @@ class ExtraDataTest extends TestCase
 
     /**
      * @covers ::getAttributeIssuanceDetails
+     * @covers ::setAttributeIssuanceDetails
+     * @covers ::__construct
      */
     public function testGetAttributeIssuanceDetailsEmpty()
     {
