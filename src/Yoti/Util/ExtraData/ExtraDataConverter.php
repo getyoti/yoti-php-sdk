@@ -18,7 +18,7 @@ class ExtraDataConverter
         $extraDataProto = new ExtraDataProto();
 
         try {
-            $extraDataProto->mergeFromString(base64_decode($data));
+            $extraDataProto->mergeFromString($data);
         } catch (\Exception $e) {
             error_log(sprintf('Failed to parse extra data: %s', $e->getMessage()), 0);
             return new ExtraData([]);

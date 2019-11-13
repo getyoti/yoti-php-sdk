@@ -23,7 +23,7 @@ class ExtraDataConverterTest extends TestCase
      */
     public function testConvertValue()
     {
-        $extraData = ExtraDataConverter::convertValue(EXTRA_DATA_CONTENT);
+        $extraData = ExtraDataConverter::convertValue(base64_decode(EXTRA_DATA_CONTENT));
         $this->assertInstanceOf(ExtraData::class, $extraData);
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
@@ -69,7 +69,7 @@ class ExtraDataConverterTest extends TestCase
             ]
         ]))->serializeToString();
 
-        $extraData = ExtraDataConverter::convertValue(base64_encode($extraDataContent));
+        $extraData = ExtraDataConverter::convertValue($extraDataContent);
 
         $this->assertEquals(base64_encode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
 
@@ -79,43 +79,16 @@ class ExtraDataConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
-     *
-     * @dataProvider invalidDataProvider
      */
-    public function testConvertValueInvalidData($invalidData, $errorMessage)
+    public function testConvertValueInvalidData()
     {
         $this->captureExpectedLogs();
 
-        $extraData = ExtraDataConverter::convertValue($invalidData);
+        $extraData = ExtraDataConverter::convertValue('some invalid data');
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());
-        $this->assertLogContains("Failed to parse extra data: {$errorMessage}");
-    }
-
-    /**
-     * Provides invalid data values.
-     */
-    public function invalidDataProvider()
-    {
-        return [
-            [
-                'some invalid data',
-                'Error occurred during parsing: Unexpected EOF inside length delimited data',
-            ],
-            [
-                base64_encode('some invalid data'),
-                'Error occurred during parsing: Unexpected wire type',
-            ],
-            [
-                base64_encode(0),
-                'Error occurred during parsing: Unexpected EOF inside varint',
-            ],
-            [
-                base64_encode(1),
-                'Error occurred during parsing: Unexpected EOF inside fixed64',
-            ],
-        ];
+        $this->assertLogContains("Failed to parse extra data: Error occurred during parsing: Unexpected wire type");
     }
 
     /**
