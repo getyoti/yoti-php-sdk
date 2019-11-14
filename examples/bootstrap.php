@@ -4,6 +4,7 @@
 require_once __DIR__ .'/vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
+use Yoti\YotiClient;
 
 // Load environment variables from .env file if present.
 try {
@@ -28,3 +29,5 @@ if (strpos(getenv(YOTI_KEY_FILE_PATH_KEY), '/') === 0) {
     define(YOTI_KEY_FILE_PATH_KEY, __DIR__ . '/' . trim(getenv(YOTI_KEY_FILE_PATH_KEY), './'));
 }
 
+// Set the Connect API Base URL
+define('YOTI_CONNECT_BASE_URL', getenv('YOTI_CONNECT_BASE_URL') ?: YotiClient::CONNECT_BASE_URL);

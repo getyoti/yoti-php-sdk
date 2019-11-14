@@ -4,7 +4,7 @@ services:
   web:
       build: .
       ports:
-          - "4002:443"
+          - "8443:443"
       volumes:
         - ./:/usr/share/nginx/html
       links:
