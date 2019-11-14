@@ -2,7 +2,9 @@
 
 namespace YotiTest\ShareUrl\Policy;
 
+use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 use Yoti\ShareUrl\Policy\WantedAttributeBuilder;
 use YotiTest\TestCase;
 
@@ -97,6 +99,42 @@ class DynamicPolicyBuilderTest extends TestCase
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::withWantedAttribute
+     * @covers ::withFamilyName
+     */
+    public function testWithDuplicateAttributeDifferentConstraints()
+    {
+        $passportConstraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withPassport()
+                    ->build()
+            )
+            ->build();
+
+        $drivingLicenseConstraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withDrivingLicence()
+                    ->build()
+            )
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withFamilyName()
+            ->withFamilyName($passportConstraints)
+            ->withFamilyName($drivingLicenseConstraints)
+            ->build();
+
+        $jsonData = $dynamicPolicy->jsonSerialize();
+
+        $this->assertCount(3, $jsonData['wanted']);
+        foreach ($jsonData['wanted'] as $wantedAttribute) {
+            $this->assertEquals('family_name', $wantedAttribute->getName());
+        }
     }
 
     /**

@@ -57,7 +57,6 @@ class ProfileTest extends TestCase
             [ 'given_names' , 'getGivenNames' ],
             [ 'full_name', 'getFullName' ],
             [ 'date_of_birth', 'getDateOfBirth' ],
-            [ 'age_verifications', 'getAgeVerifications' ],
             [ 'gender', 'getGender' ],
             [ 'nationality', 'getNationality' ],
             [ 'phone_number', 'getPhoneNumber' ],
@@ -124,27 +123,27 @@ class ProfileTest extends TestCase
     }
 
     /**
-     * Should not return age_verifications in the array
+     * @covers ::getAgeVerifications
      *
-     * @covers ::getAttributes
-     *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
-    public function testGetAttributes($profileData)
+    public function testGetAgeVerifications($profileData)
     {
         $profile = new Profile($profileData);
-
-        $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
+        foreach ($profile->getAgeVerifications() as $ageVerification) {
+            $this->assertInstanceOf(AgeVerification::class, $ageVerification);
+        }
     }
 
     /**
      * @covers ::findAgeOverVerification
      * @covers ::getAgeVerificationByAttribute
+     * @covers ::findAllAgeVerifications
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
      * @covers \Yoti\Entity\AgeVerification::getResult
      *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
     public function testFindAgeOverVerification($profileData)
     {
@@ -160,11 +159,12 @@ class ProfileTest extends TestCase
     /**
      * @covers ::findAgeUnderVerification
      * @covers ::getAgeVerificationByAttribute
+     * @covers ::findAllAgeVerifications
      * @covers \Yoti\Entity\AgeVerification::getCheckType
      * @covers \Yoti\Entity\AgeVerification::getAge
      * @covers \Yoti\Entity\AgeVerification::getResult
      *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
     public function testFindAgeUnderVerification($profileData)
     {
@@ -180,31 +180,19 @@ class ProfileTest extends TestCase
     /**
      * Profile data provider with age verifications.
      */
-    public function getDummyProfileDataWithAgeVerifications()
+    public function profileDataWithAgeVerificationsDataProvider()
     {
         $profileData = [
-            Profile::ATTR_AGE_VERIFICATIONS => [
-                'age_under:18' => new AgeVerification(
-                    new Attribute(
-                        'age_under:18',
-                        'false',
-                        []
-                    ),
-                    'age_under',
-                    18,
-                    false
-                ),
-                'age_over:35' => new AgeVerification(
-                    new Attribute(
-                        'age_over:35',
-                        'true',
-                        []
-                    ),
-                    'age_over',
-                    35,
-                    true
-                ),
-            ],
+            sprintf(Profile::AGE_UNDER_FORMAT, '18') => new Attribute(
+                sprintf(Profile::AGE_UNDER_FORMAT, '18'),
+                'false',
+                []
+            ),
+            sprintf(Profile::AGE_OVER_FORMAT, '35') => new Attribute(
+                sprintf(Profile::AGE_OVER_FORMAT, '35'),
+                'true',
+                []
+            ),
             Profile::ATTR_GIVEN_NAMES => new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'TEST GIVEN NAMES',
@@ -224,12 +212,15 @@ class ProfileTest extends TestCase
      */
     public function testGetDocumentImages()
     {
-        $mockAttr = $this->getMockBuilder(\Yoti\Entity\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeName = 'document_images';
+
+        $someAttribute = $this->createMock(\Yoti\Entity\Attribute::class);
+        $someAttribute
+            ->method('getName')
+            ->willReturn($attributeName);
 
         $profileData = [
-            'document_images' => $mockAttr,
+            $attributeName => $someAttribute,
         ];
         $profile = new Profile($profileData);
         $this->assertSame($profileData['document_images'], $profile->getDocumentImages());

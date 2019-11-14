@@ -6,9 +6,27 @@ require_once __DIR__ . '/../bootstrap.php';
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder;
+use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 
 $yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+
+$drivingLicenseConstraint = (new ConstraintsBuilder())
+    ->withSourceConstraint(
+        (new SourceConstraintBuilder())
+            ->withDrivingLicence()
+            ->build()
+    )
+    ->build();
+
+$passportConstraint = (new ConstraintsBuilder())
+    ->withSourceConstraint(
+        (new SourceConstraintBuilder())
+            ->withPassport()
+            ->build()
+    )
+    ->build();
 
 $locationConstraint = (new LocationConstraintExtensionBuilder())
     ->withLatitude(50.8169)
@@ -18,7 +36,8 @@ $locationConstraint = (new LocationConstraintExtensionBuilder())
 
 $policy = (new DynamicPolicyBuilder())
     ->withFullName()
-    ->withDocumentDetails()
+    ->withDocumentDetails($drivingLicenseConstraint)
+    ->withDocumentDetails($passportConstraint)
     ->withDocumentImages()
     ->withAgeOver(18)
     ->withSelfie()

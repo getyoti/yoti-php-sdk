@@ -43,8 +43,13 @@ class DynamicPolicyBuilder
     public function withWantedAttribute(WantedAttribute $wantedAttribute)
     {
         $key = $wantedAttribute->getName();
-        if ($wantedAttribute->getDerivation()) {
+
+        if ($wantedAttribute->getDerivation() !== null) {
             $key = $wantedAttribute->getDerivation();
+        }
+
+        if ($wantedAttribute->getConstraints() !== null) {
+            $key .= '-' . md5(json_encode($wantedAttribute->getConstraints()));
         }
 
         $this->wantedAttributes[$key] = $wantedAttribute;

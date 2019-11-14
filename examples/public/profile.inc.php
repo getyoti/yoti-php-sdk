@@ -71,7 +71,23 @@ try {
             'name' => 'Document Images',
             'obj' => $profile->getDocumentImages(),
             'icon' => 'yoti-icon-profile',
-        ]
+        ],
+        [
+            'name' => 'Passport Details',
+            'obj' => findAttributeWithSourceValue(
+                $profile->getAttributesByName('document_details'),
+                'PASSPORT'
+            ),
+            'icon' => 'yoti-icon-profile',
+        ],
+        [
+            'name' => 'Driving Licence Details',
+            'obj' => findAttributeWithSourceValue(
+                $profile->getAttributesByName('document_details'),
+                'DRIVING_LICENCE'
+            ),
+            'icon' => 'yoti-icon-profile',
+        ],
     ];
 
     $ageVerifications = $profile->getAgeVerifications();
@@ -87,7 +103,27 @@ try {
     }
 
     $fullName = $profile->getFullName();
-} catch(\Exception $e) {
-    header('Location: /error.php?msg='.$e->getMessage());
+} catch (\Exception $e) {
+    header('Location: /error.php?msg=' . $e->getMessage());
     exit;
+}
+
+/**
+ * Returns attribute with provided source value.
+ *
+ * @param \Yoti\Entity\Attribute[] $attributeList
+ * @param string $source
+ *
+ * @return \Yoti\Entity\Attribute
+ */
+function findAttributeWithSourceValue($attributeList, $source)
+{
+    $filteredAttributes = array_filter(
+        $attributeList,
+        function ($attribute) use ($source) {
+            return $attribute->getSources()[0]->getValue() === $source;
+        }
+    );
+
+    return reset($filteredAttributes);
 }

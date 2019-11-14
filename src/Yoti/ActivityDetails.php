@@ -4,9 +4,7 @@ namespace Yoti;
 
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
-use Attrpubapi\AttributeList;
 use Yoti\Entity\ApplicationProfile;
-use Yoti\Util\Age\AgeVerificationConverter;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;
 
@@ -98,7 +96,9 @@ class ActivityDetails
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pem
         );
-        $this->userProfile = new Profile($this->processUserProfileAttributes($protobufAttrList));
+        $this->userProfile = new Profile(
+            AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
+        );
     }
 
     private function setApplicationProfile()
@@ -108,28 +108,8 @@ class ActivityDetails
             $this->pem
         );
         $this->applicationProfile = new ApplicationProfile(
-            AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList)
+            AttributeListConverter::convertToYotiAttributesList($protobufAttributesList)
         );
-    }
-
-    private function processUserProfileAttributes(AttributeList $protobufAttributesList)
-    {
-        $attributesMap = AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList);
-        $this->appendAgeVerifications($attributesMap);
-
-        return $attributesMap;
-    }
-
-    /**
-     * Add age_verifications data to the attributesMap
-     *
-     * @param array $attributesMap
-     */
-    private function appendAgeVerifications(array &$attributesMap)
-    {
-        $ageVerificationConverter = new AgeVerificationConverter($attributesMap);
-        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
-        $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
     }
 
     /**

@@ -3,29 +3,53 @@
 namespace Yoti\Util\Profile;
 
 use Attrpubapi\AttributeList;
-use Attrpubapi\Attribute as ProtobufAttribute;
+use Yoti\Entity\Attribute;
 
 class AttributeListConverter
 {
     /**
-     * Convert Protobuf AttributeList to Yoti Attributes map.
+     * Convert Protobuf AttributeList to array of Yoti Attributes.
      *
      * @param AttributeList $attributeList
      *
-     * @return array
+     * @return \Yoti\Entity\Attribute[]
      */
-    public static function convertToYotiAttributesMap(AttributeList $attributeList)
+    public static function convertToYotiAttributesList(AttributeList $attributeList)
     {
         $yotiAttributes = [];
 
-        foreach ($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
-            $attrName = $attr->getName();
-            if (null === $attrName) {
+        foreach ($attributeList->getAttributes() as $attr) { /** @var \Attrpubapi\Attribute $attr */
+            if ($attr->getName() === null) {
                 continue;
             }
-            $yotiAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute($attr);
+            $yotiAttribute = AttributeConverter::convertToYotiAttribute($attr);
+            if (!($yotiAttribute instanceof Attribute)) {
+                continue;
+            }
+            $yotiAttributes[] = $yotiAttribute;
         }
         return $yotiAttributes;
+    }
+
+    /**
+     * Convert Protobuf AttributeList to Yoti Attributes map.
+     *
+     * @deprecated 3.0.0 Replaced by ::convertToYotiAttributesList
+     *
+     * @param AttributeList $attributeList
+     *
+     * @return \Yoti\Entity\Attribute[]
+     */
+    public static function convertToYotiAttributesMap(AttributeList $attributeList)
+    {
+        return array_reduce(
+            self::convertToYotiAttributesList($attributeList),
+            function ($carry, Attribute $attr) {
+                $carry[$attr->getName()] = $attr;
+                return $carry;
+            },
+            []
+        );
     }
 
     /**

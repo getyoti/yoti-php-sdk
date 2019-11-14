@@ -36,4 +36,14 @@ class TestCase extends PHPUnit_Framework_TestCase
         $this->assertFileExists(ini_get('error_log'));
         $this->assertContains($str, file_get_contents(ini_get('error_log')));
     }
+
+    /**
+     * Assert value is array.
+     *
+     * @param mixed $value
+     */
+    protected function assertIsArray($value)
+    {
+        $this->assertTrue(is_array($value), 'Value is not an array');
+    }
 }

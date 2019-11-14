@@ -2,6 +2,8 @@
 
 namespace Yoti\Entity;
 
+use Yoti\Util\Age\AgeVerificationConverter;
+
 /**
  * Profile of a human user with convenience methods to access well-known attributes.
  */
@@ -14,7 +16,6 @@ class Profile extends BaseProfile
     const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_AGE_VERIFICATIONS = 'age_verifications';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
     const ATTR_PHONE_NUMBER = 'phone_number';
@@ -25,10 +26,16 @@ class Profile extends BaseProfile
     const ATTR_DOCUMENT_IMAGES = 'document_images';
     const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
+    /** @deprecated 3.0.0 No longer used to store age verifcations. */
+    const ATTR_AGE_VERIFICATIONS = 'age_verifications';
+
+    /** @var \Yoti\Entity\AgeVerification[] */
+    private $ageVerifications;
+
     /**
      * The full name attribute.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getFullName()
     {
@@ -38,7 +45,7 @@ class Profile extends BaseProfile
     /**
      * Corresponds to primary name in passport, and surname in English.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getFamilyName()
     {
@@ -48,7 +55,7 @@ class Profile extends BaseProfile
     /**
      * Corresponds to secondary names in passport, and first/middle names in English.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getGivenNames()
     {
@@ -58,7 +65,7 @@ class Profile extends BaseProfile
     /**
      * Date of birth.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getDateOfBirth()
     {
@@ -69,7 +76,7 @@ class Profile extends BaseProfile
      * Corresponds to the gender in the passport; will be one of the strings
      * "MALE", "FEMALE", "TRANSGENDER" or "OTHER".
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getGender()
     {
@@ -79,7 +86,7 @@ class Profile extends BaseProfile
     /**
      * Corresponds to the nationality in the passport.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getNationality()
     {
@@ -90,7 +97,7 @@ class Profile extends BaseProfile
      * The user's phone number, as verified at registration time. This will be a number with + for
      * international prefix and no spaces, e.g. "+447777123456".
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getPhoneNumber()
     {
@@ -100,7 +107,7 @@ class Profile extends BaseProfile
     /**
      * Photograph of user, encoded as a JPEG image.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getSelfie()
     {
@@ -110,7 +117,7 @@ class Profile extends BaseProfile
     /**
      * The user's verified email address.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getEmailAddress()
     {
@@ -120,7 +127,7 @@ class Profile extends BaseProfile
     /**
      * The user's postal address as a string.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getPostalAddress()
     {
@@ -135,7 +142,7 @@ class Profile extends BaseProfile
     /**
      * The user's structured postal address as a JSON.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getStructuredPostalAddress()
     {
@@ -145,7 +152,7 @@ class Profile extends BaseProfile
     /**
      * Document details.
      *
-     * @return null|Attribute
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getDocumentDetails()
     {
@@ -155,7 +162,7 @@ class Profile extends BaseProfile
     /**
      * Return a list of document images.
      *
-     * @return array
+     * @return \Yoti\Entity\Attribute|null
      */
     public function getDocumentImages()
     {
@@ -166,7 +173,7 @@ class Profile extends BaseProfile
      * Return all derived attributes from the DOB e.g 'Age Over', 'Age Under'
      * As a list of AgeVerification
      *
-     * @return array
+     * @return \Yoti\Entity\AgeVerification[]
      * e.g [
      *      'age_under:18' => new AgeVerification(...),
      *      'age_over:50' => new AgeVerification(...),
@@ -175,8 +182,8 @@ class Profile extends BaseProfile
      */
     public function getAgeVerifications()
     {
-        return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
-            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : [];
+        $this->findAllAgeVerifications();
+        return $this->ageVerifications;
     }
 
     /**
@@ -184,7 +191,7 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return null|AgeVerification
+     * @return \Yoti\Entity\AgeVerification|null
      */
     public function findAgeOverVerification($age)
     {
@@ -197,7 +204,7 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return null|AgeVerification
+     * @return \Yoti\Entity\AgeVerification|null
      */
     public function findAgeUnderVerification($age)
     {
@@ -210,7 +217,7 @@ class Profile extends BaseProfile
      *
      * @param string $ageAttr
      *
-     * @return mixed|null
+     * @return \Yoti\Entity\AgeVerification|null
      */
     private function getAgeVerificationByAttribute($ageAttr)
     {
@@ -219,7 +226,18 @@ class Profile extends BaseProfile
     }
 
     /**
-     * @return null|Attribute
+     * Finds and sets all age verifications.
+     */
+    private function findAllAgeVerifications()
+    {
+        if (!isset($this->ageVerifications)) {
+            $ageVerificationConverter = new AgeVerificationConverter($this->getAttributes());
+            $this->ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
+        }
+    }
+
+    /**
+     * @return \Yoti\Entity\Attribute|null
      */
     private function getFormattedAddress()
     {
