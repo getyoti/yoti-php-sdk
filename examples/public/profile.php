@@ -13,8 +13,7 @@ require_once __DIR__ . '/profile.inc.php';
  */
 function formatAttributeValue($value)
 {
-    if ($value instanceof \Yoti\Entity\MultiValue)
-    {
+    if ($value instanceof \Yoti\Entity\MultiValue) {
         foreach ($value as $multiValue) {
             formatAttributeValue($multiValue);
         }

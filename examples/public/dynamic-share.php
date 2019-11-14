@@ -36,6 +36,7 @@ $locationConstraint = (new LocationConstraintExtensionBuilder())
 
 $policy = (new DynamicPolicyBuilder())
     ->withFullName()
+    ->withGivenNames()
     ->withDocumentDetails($drivingLicenseConstraint)
     ->withDocumentDetails($passportConstraint)
     ->withDocumentImages()

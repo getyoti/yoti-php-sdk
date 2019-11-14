@@ -1,6 +1,10 @@
 <?php
 
 // Load dependent packages and env data
+
+use Yoti\Entity\Attribute;
+use Yoti\Entity\Profile;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 // Get the token
@@ -12,84 +16,56 @@ try {
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 
-    $ageVerifications = $profile->getAgeVerifications();
-    // Get the first AgeVerification element
-    $ageVerification = current($ageVerifications);
+    $profileAttributes = [];
+    foreach ($profile->getAttributesList() as $attribute) {
+        switch ($attribute->getName()) {
+            case Profile::ATTR_SELFIE:
+            case Profile::ATTR_FULL_NAME:
+                // Selfie and full name are handled separately.
+                break;
+            case Profile::ATTR_GIVEN_NAMES:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Given names', 'yoti-icon-profile');
+                break;
+            case Profile::ATTR_FAMILY_NAME:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Family names', 'yoti-icon-profile');
+                break;
+            case Profile::ATTR_DATE_OF_BIRTH:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Date of Birth', 'yoti-icon-calendar');
+                break;
+            case Profile::ATTR_GENDER:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Gender', 'yoti-icon-gender');
+                break;
+            case Profile::ATTR_STRUCTURED_POSTAL_ADDRESS:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Structured Postal Address', 'yoti-icon-address');
+                break;
+            case Profile::ATTR_POSTAL_ADDRESS:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Address', 'yoti-icon-address');
+                break;
+            case Profile::ATTR_PHONE_NUMBER:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Mobile number', 'yoti-icon-phone');
+                break;
+            case Profile::ATTR_NATIONALITY:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Nationality', 'yoti-icon-nationality');
+                break;
+            case Profile::ATTR_EMAIL_ADDRESS:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Email address', 'yoti-icon-email');
+                break;
+            case Profile::ATTR_DOCUMENT_DETAILS:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Document Details', 'yoti-icon-profile');
+                break;
+            case Profile::ATTR_DOCUMENT_IMAGES:
+                $profileAttributes[] = createAttributeDisplayItem($attribute, 'Document Images', 'yoti-icon-profile');
+                break;
+            default:
+                $profileAttributes[] = createAttributeDisplayItem(
+                    $attribute,
+                    ucwords(str_replace('_', ' ', $attribute->getName())),
+                    'yoti-icon-profile'
+                );
+        }
+    }
 
-    $profileAttributes = [
-        [
-            'name' => 'Given names',
-            'obj' => $profile->getGivenNames(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Family names',
-            'obj' => $profile->getFamilyName(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Mobile number',
-            'obj' => $profile->getPhoneNumber(),
-            'icon' => 'yoti-icon-phone',
-        ],
-        [
-            'name' => 'Email address',
-            'obj' => $profile->getEmailAddress(),
-            'icon' => 'yoti-icon-email',
-        ],
-        [
-            'name' => 'Date of birth',
-            'obj' => $profile->getDateOfBirth(),
-            'icon' => 'yoti-icon-calendar',
-        ],
-        [
-            'name' => 'Address',
-            'obj' => $profile->getPostalAddress(),
-            'icon' => 'yoti-icon-address',
-        ],
-        [
-            'name' => 'Gender',
-            'obj' => $profile->getGender(),
-            'icon' => 'yoti-icon-gender',
-        ],
-        [
-            'name' => 'Nationality',
-            'obj' => $profile->getNationality(),
-            'icon' => 'yoti-icon-nationality',
-        ],
-        [
-            'name' => 'Structured Postal Address',
-            'obj' => $profile->getStructuredPostalAddress(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Document Details',
-            'obj' => $profile->getDocumentDetails(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Document Images',
-            'obj' => $profile->getDocumentImages(),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Passport Details',
-            'obj' => findAttributeWithSourceValue(
-                $profile->getAttributesByName('document_details'),
-                'PASSPORT'
-            ),
-            'icon' => 'yoti-icon-profile',
-        ],
-        [
-            'name' => 'Driving Licence Details',
-            'obj' => findAttributeWithSourceValue(
-                $profile->getAttributesByName('document_details'),
-                'DRIVING_LICENCE'
-            ),
-            'icon' => 'yoti-icon-profile',
-        ],
-    ];
-
+    // Add age verifications.
     $ageVerifications = $profile->getAgeVerifications();
     if ($ageVerifications) {
         foreach ($ageVerifications as $ageVerification) {
@@ -109,21 +85,16 @@ try {
 }
 
 /**
- * Returns attribute with provided source value.
+ * @param  \Yoti\Entity\Attribute $attribute
+ * @param string $displayName
+ * @param string $iconClass
  *
- * @param \Yoti\Entity\Attribute[] $attributeList
- * @param string $source
- *
- * @return \Yoti\Entity\Attribute
+ * @return array
  */
-function findAttributeWithSourceValue($attributeList, $source)
-{
-    $filteredAttributes = array_filter(
-        $attributeList,
-        function ($attribute) use ($source) {
-            return $attribute->getSources()[0]->getValue() === $source;
-        }
-    );
-
-    return reset($filteredAttributes);
+function createAttributeDisplayItem(Attribute $attribute, $displayName, $iconClass) {
+    return [
+        'name' => $displayName,
+        'obj' => $attribute,
+        'icon' => $iconClass,
+    ];
 }
