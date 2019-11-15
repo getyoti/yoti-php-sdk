@@ -12,22 +12,6 @@ use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 
 $yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
 
-$drivingLicenseConstraint = (new ConstraintsBuilder())
-    ->withSourceConstraint(
-        (new SourceConstraintBuilder())
-            ->withDrivingLicence()
-            ->build()
-    )
-    ->build();
-
-$passportConstraint = (new ConstraintsBuilder())
-    ->withSourceConstraint(
-        (new SourceConstraintBuilder())
-            ->withPassport()
-            ->build()
-    )
-    ->build();
-
 $locationConstraint = (new LocationConstraintExtensionBuilder())
     ->withLatitude(50.8169)
     ->withLongitude(-0.1367)
@@ -36,9 +20,7 @@ $locationConstraint = (new LocationConstraintExtensionBuilder())
 
 $policy = (new DynamicPolicyBuilder())
     ->withFullName()
-    ->withGivenNames()
-    ->withDocumentDetails($drivingLicenseConstraint)
-    ->withDocumentDetails($passportConstraint)
+    ->withDocumentDetails()
     ->withDocumentImages()
     ->withAgeOver(18)
     ->withSelfie()
