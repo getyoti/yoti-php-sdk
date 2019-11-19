@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "9d6bc090647b99cf1bcd0c560d6f5c216b674995"
+                "reference": "943af3cdc2e96a8fab7512496d3a1decc2b0ad09"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -95,6 +95,7 @@
                 "psr-4": {
                     "Attrpubapi\\": "src/Attrpubapi",
                     "Compubapi\\": "src/Compubapi",
+                    "Sharepubapi\\": "src/Sharepubapi",
                     "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
                     "GPBMetadata\\": "src/protobuflib/GPBMetadata",
                     "phpseclib\\": "src/phpseclib/",

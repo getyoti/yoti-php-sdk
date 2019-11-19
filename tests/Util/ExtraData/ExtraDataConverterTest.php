@@ -4,12 +4,12 @@ namespace YotiTest\Util\Profile;
 
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Entity\ExtraData;
-use Yoti\Sharepubapi\DataEntry;
-use Yoti\Sharepubapi\ThirdPartyAttribute;
-use Yoti\Sharepubapi\ExtraData as ExtraDataProto;
-use Yoti\Sharepubapi\IssuingAttributes;
 use Yoti\Util\ExtraData\ExtraDataConverter;
 use YotiTest\TestCase;
+use Sharepubapi\DataEntry;
+use Sharepubapi\ThirdPartyAttribute;
+use Sharepubapi\ExtraData as ExtraDataProto;
+use Sharepubapi\IssuingAttributes;
 
 /**
  * @coversDefaultClass \Yoti\Util\ExtraData\ExtraDataConverter

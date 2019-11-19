@@ -3,7 +3,7 @@
 namespace Yoti\Util\ExtraData;
 
 use Yoti\Exception\ExtraDataException;
-use Yoti\Sharepubapi\DataEntry\Type as DataEntryTypeProto;
+use Sharepubapi\DataEntry\Type as DataEntryTypeProto;
 
 class DataEntryConverter
 {
