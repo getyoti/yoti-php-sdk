@@ -5,8 +5,8 @@ namespace Yoti\Util\ExtraData;
 use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
-use Yoti\Sharepubapi\IssuingAttributes;
-use Yoti\Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
+use Sharepubapi\IssuingAttributes;
+use Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
 
 class ThirdPartyAttributeConverter
 {

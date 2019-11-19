@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "076295dcf91d038579d0cd2542055163a53cc8fa"
+                "reference": "1407dd25068f0346b4599b8a720889936a681523"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -95,12 +95,12 @@
                 "psr-4": {
                     "Attrpubapi\\": "src/Attrpubapi",
                     "Compubapi\\": "src/Compubapi",
+                    "Sharepubapi\\": "src/Sharepubapi",
                     "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
                     "GPBMetadata\\": "src/protobuflib/GPBMetadata",
                     "phpseclib\\": "src/phpseclib/",
                     "Yoti\\": "src/Yoti",
-                    "YotiSandbox\\": "sandbox/src",
-                    "Yoti\\Sharepubapi\\": "src/Sharepubapi"
+                    "YotiSandbox\\": "sandbox/src"
                 }
             },
             "autoload-dev": {
