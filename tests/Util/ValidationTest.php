@@ -287,6 +287,27 @@ class ValidationTest extends TestCase
     }
 
     /**
+     * @covers ::isArrayOfStrings
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testIsArrayOfStrings()
+    {
+        Validation::isArrayOfStrings(['', self::SOME_STRING], self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::isArrayOfStrings
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage some_name must be array of strings
+     */
+    public function testIsArrayOfStringsInvalid()
+    {
+        Validation::isArrayOfStrings([1, [], self::SOME_STRING], self::SOME_NAME);
+    }
+
+    /**
      * @covers ::isArrayOfType
      * @covers ::isOneOfType
      *

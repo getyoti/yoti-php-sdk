@@ -2,6 +2,8 @@
 
 namespace Yoti\Http;
 
+use Yoti\Util\Validation;
+
 class Response
 {
     /**
@@ -15,15 +17,24 @@ class Response
     private $statusCode;
 
     /**
+     * @var string[]
+     */
+    private $headers;
+
+    /**
      * @param string $body
      * @param int $statusCode
      */
     public function __construct(
         $body,
-        $statusCode
+        $statusCode,
+        array $headers = []
     ) {
         $this->body = (string) $body;
         $this->statusCode = (int) $statusCode;
+
+        Validation::isArrayOfStrings($headers, 'headers');
+        $this->headers = $headers;
     }
 
     /**
@@ -40,5 +51,13 @@ class Response
     public function getStatusCode()
     {
         return $this->statusCode;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }
