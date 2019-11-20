@@ -14,22 +14,14 @@ class ResponseTest extends TestCase
     const SOME_STATUS_CODE = '200';
 
     /**
-     * @var \Yoti\Http\Response
-     */
-    public $response;
-
-    public function setup()
-    {
-        $this->response = new Response(self::SOME_BODY, self::SOME_STATUS_CODE);
-    }
-
-    /**
      * @covers ::__construct
      * @covers ::getBody
      */
     public function testGetBody()
     {
-        $this->assertEquals(self::SOME_BODY, $this->response->getBody());
+        $response = new Response(self::SOME_BODY, self::SOME_STATUS_CODE);
+
+        $this->assertEquals(self::SOME_BODY, $response->getBody());
     }
 
     /**
@@ -38,7 +30,44 @@ class ResponseTest extends TestCase
      */
     public function testGetStatusCode()
     {
-        $this->assertEquals(self::SOME_STATUS_CODE, $this->response->getStatusCode());
-        $this->assertTrue(is_int($this->response->getStatusCode()));
+        $response = new Response(self::SOME_BODY, self::SOME_STATUS_CODE);
+
+        $this->assertEquals(self::SOME_STATUS_CODE, $response->getStatusCode());
+        $this->assertTrue(is_int($response->getStatusCode()));
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getHeaders
+     */
+    public function testGetHeaders()
+    {
+        $expectedHeaders = [
+            'Some-Header' => 'some value',
+            'Some-Other-Header' => 'some other value',
+        ];
+        $response = new Response(self::SOME_BODY, self::SOME_STATUS_CODE, $expectedHeaders);
+
+        $this->assertEquals($expectedHeaders, $response->getHeaders());
+    }
+
+    /**
+     * @covers ::__construct
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage headers must be array of strings
+     */
+    public function testInvalidHeaders()
+    {
+        new Response(self::SOME_BODY, self::SOME_STATUS_CODE, [['invalid header value']]);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testEmptyHeaders()
+    {
+        $response = new Response(self::SOME_BODY, self::SOME_STATUS_CODE);
+        $this->assertEquals([], $response->getHeaders());
     }
 }

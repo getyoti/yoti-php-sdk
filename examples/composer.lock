@@ -69,7 +69,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "18a5d5ecc6d61e97bc9599b78d2eacd216487bb6"
+                "reference": "9d6bc090647b99cf1bcd0c560d6f5c216b674995"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -85,10 +85,7 @@
             "type": "library",
             "extra": {
                 "hooks": {
-                    "pre-commit": [
-                        "composer test",
-                        "composer lint"
-                    ]
+                    "pre-commit": "composer test && composer lint"
                 }
             },
             "autoload": {
