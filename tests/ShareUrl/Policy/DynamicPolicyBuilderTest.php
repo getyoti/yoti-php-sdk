@@ -2,6 +2,7 @@
 
 namespace YotiTest\ShareUrl\Policy;
 
+use Yoti\ShareUrl\Policy\Constraints;
 use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
@@ -15,6 +16,22 @@ class DynamicPolicyBuilderTest extends TestCase
 {
     const SELFIE_AUTH_TYPE = 1;
     const PIN_AUTH_TYPE = 2;
+
+    /**
+     * @var \Yoti\ShareUrl\Policy\Constraints
+     */
+    private $someConstraints;
+
+    /**
+     * Setup mocks.
+     */
+    public function setup()
+    {
+        $this->someConstraints = $this->createMock(Constraints::class);
+        $this->someConstraints
+            ->method('jsonSerialize')
+            ->willReturn([]);
+    }
 
     /**
      * @covers ::build
@@ -141,7 +158,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withWantedAttributeByName
      */
-    public function testWithAttributesByName()
+    public function testWithWantedAttributeByName()
     {
         $dynamicPolicy = (new DynamicPolicyBuilder())
             ->withWantedAttributeByName('family_name')
@@ -163,9 +180,53 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withWantedAttributeByName
+     */
+    public function testWithWantedAttributeByNameWithConstraints()
+    {
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttributeByName('family_name', $this->someConstraints)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'family_name', 'optional' => false, 'constraints' => []],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withWantedAttributeByName
+     */
+    public function testWithWantedAttributeByNameWithAcceptSelfAsserted()
+    {
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttributeByName('family_name', null, true)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'family_name', 'optional' => false, 'accept_self_asserted' => true],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::build
      * @covers ::withWantedAttribute
      */
-    public function testWithAttributeObjects()
+    public function testWithWantedAttribute()
     {
         $wantedFamilyName = (new WantedAttributeBuilder())
             ->withName('family_name')
@@ -194,11 +255,67 @@ class DynamicPolicyBuilderTest extends TestCase
     }
 
     /**
+     * @covers ::build
+     * @covers ::withWantedAttribute
+     */
+    public function testWithWantedAttributeWithConstraints()
+    {
+        $wantedFamilyName = (new WantedAttributeBuilder())
+            ->withName('family_name')
+            ->withConstraints($this->someConstraints)
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttribute($wantedFamilyName)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'family_name', 'optional' => false, 'constraints' => []],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withWantedAttribute
+     */
+    public function testWithWantedAttributeWithDerivation()
+    {
+        $someDerivation = 'some derivation';
+
+        $wantedFamilyName = (new WantedAttributeBuilder())
+            ->withName('family_name')
+            ->withDerivation($someDerivation)
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttribute($wantedFamilyName)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'family_name', 'optional' => false, 'derivation' => $someDerivation],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
      * @covers ::withDateOfBirth
      * @covers ::withAgeOver
      * @covers ::withAgeUnder
      */
-    public function testWithAgeDerivedAttributes()
+    public function testWithMultipleAgeDerivedAttributes()
     {
         $dynamicPolicy = (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -213,6 +330,59 @@ class DynamicPolicyBuilderTest extends TestCase
                 ['name' => 'date_of_birth', 'optional' => false, 'derivation' => 'age_over:18'],
                 ['name' => 'date_of_birth', 'optional' => false, 'derivation' => 'age_under:30'],
                 ['name' => 'date_of_birth', 'optional' => false, 'derivation' => 'age_under:40'],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::withAgeDerivedAttribute
+     */
+    public function testWithAgeDerivedAttribute()
+    {
+        $someDerivation = 'age_over:18';
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withAgeDerivedAttribute($someDerivation)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                ['name' => 'date_of_birth', 'optional' => false, 'derivation' => $someDerivation],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::withAgeDerivedAttribute
+     */
+    public function testWithAgeDerivedAttributeWithConstraints()
+    {
+        $someDerivation = 'age_over:18';
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withAgeDerivedAttribute(
+                $someDerivation,
+                $this->someConstraints
+            )
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => 'date_of_birth',
+                    'optional' => false,
+                    'derivation' => $someDerivation,
+                    'constraints' => []
+                ],
             ],
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
@@ -276,6 +446,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withSelfieAuthentication
      * @covers ::withPinAuthentication
      * @covers ::withWantedAuthType
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
      */
     public function testWithAuthTypes()
     {
@@ -299,6 +470,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withSelfieAuthentication
      * @covers ::withPinAuthentication
      * @covers ::withWantedAuthType
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
      */
     public function testWithAuthTypesTrue()
     {
@@ -322,6 +494,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withSelfieAuthentication
      * @covers ::withPinAuthentication
      * @covers ::withWantedAuthType
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
      */
     public function testWithAuthTypesFalse()
     {
@@ -344,6 +517,7 @@ class DynamicPolicyBuilderTest extends TestCase
     /**
      * @covers ::withSelfieAuthentication
      * @covers ::withPinAuthentication
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
      */
     public function testWithAuthEnabledThenDisabled()
     {
