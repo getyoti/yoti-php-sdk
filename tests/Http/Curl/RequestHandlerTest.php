@@ -13,11 +13,6 @@ use Yoti\Http\Payload;
 class RequestHandlerTest extends TestCase
 {
     /**
-     * cURL header callback.
-     */
-    const CURLOPT_HEADERFUNCTION = 'setResponseHeader';
-
-    /**
      * cURL Observer.
      */
     public static $curl;
@@ -103,7 +98,6 @@ class RequestHandlerTest extends TestCase
             ->method('curl_getinfo')
             ->will($this->returnValueMap([
                 [$this->someCurlResource, CURLINFO_HTTP_CODE, $someStatusCode],
-                [$this->someCurlResource, CURLOPT_PRIVATE, $someResourceId],
             ]));
 
         $this->mockCurl
@@ -111,26 +105,26 @@ class RequestHandlerTest extends TestCase
             ->method('curl_setopt')
             ->withConsecutive(
                 [$this->someCurlResource, CURLOPT_CUSTOMREQUEST, $someMethod],
-                [$this->someCurlResource, CURLOPT_PRIVATE, $someResourceId],
                 [$this->someCurlResource, CURLOPT_POSTFIELDS, $somePayloadJson]
             );
 
+        $someHeaders = array_map(
+            function ($name, $value) {
+                return "${name}: ${value}";
+            },
+            array_keys($someRequestHeaders),
+            array_values($someRequestHeaders)
+        );
         $this->mockCurl
             ->expects($this->once())
             ->method('curl_setopt_array')
-            ->with($this->someCurlResource, $this->callback(function ($options) use ($someRequestHeaders) {
-                $someHeaders = array_map(
-                    function ($name, $value) {
-                        return "${name}: ${value}";
-                    },
-                    array_keys($someRequestHeaders),
-                    array_values($someRequestHeaders)
-                );
-                $this->assertEquals($someHeaders, $options[CURLOPT_HTTPHEADER]);
-                $this->assertTrue($options[CURLOPT_RETURNTRANSFER]);
-                $this->assertEquals(self::CURLOPT_HEADERFUNCTION, $options[CURLOPT_HEADERFUNCTION][1]);
-                return true;
-            }));
+            ->with(
+                $this->someCurlResource,
+                [
+                    CURLOPT_HTTPHEADER => $someHeaders,
+                    CURLOPT_RETURNTRANSFER => true,
+                ]
+            );
 
         $this->mockCurl
             ->expects($this->once())
@@ -202,17 +196,11 @@ class RequestHandlerTest extends TestCase
     }
 
     /**
-     * @covers ::getResponseHeadersMap
-     * @covers ::getResponseHeaders
-     * @covers ::setResponseHeader
-     * @covers ::setResourceId
-     * @covers ::getResourceId
+     * @covers ::execute
+     * @covers ::createResponseHeadersMap
      */
     public function testHeadersCallback()
     {
-        $someUrl = 'https://www.example.com';
-        $someOtherUrl = 'https://other.example.com';
-
         $someHeaders = [
             'Some-Header: value 1',
             'Another-Header: value 2',
@@ -231,86 +219,53 @@ class RequestHandlerTest extends TestCase
         $requestHandler = new RequestHandler();
 
         $someRequest = $this->createMock(Request::class);
-        $someRequest->method('getUrl')->willReturn($someUrl);
-
-        $someOtherRequest = $this->createMock(Request::class);
-        $someOtherRequest->method('getUrl')->willReturn($someOtherUrl);
-
-        $this->mockCurl
-            ->method('curl_init')
-            ->will($this->returnValueMap([
-                [$someUrl, $this->someCurlResource],
-                [$someOtherUrl, $this->someOtherCurlResource],
-            ]));
 
         $this->mockCurl
             ->expects($this->exactly(2))
-            ->method('curl_exec')
-            ->withConsecutive(
-                [$this->curlExecCallback($this->someCurlResource, $requestHandler, $someHeaders)],
-                [$this->curlExecCallback($this->someOtherCurlResource, $requestHandler, [])]
-            );
+            ->method('curl_init')
+            ->willReturn($this->someCurlResource);
 
         $this->mockCurl
             ->expects($this->any())
             ->method('curl_setopt')
             ->withConsecutive(
                 $this->any(),
-                [$this->someCurlResource, CURLOPT_PRIVATE, 0],
+                [
+                    $this->someCurlResource,
+                    CURLOPT_HEADERFUNCTION,
+                    $this->curlHeadersCallback($someHeaders),
+                ],
                 $this->any(),
-                [$this->someOtherCurlResource, CURLOPT_PRIVATE, 1]
+                [
+                    $this->someCurlResource,
+                    CURLOPT_HEADERFUNCTION,
+                    $this->curlHeadersCallback([]),
+                ]
             );
 
-        $this->mockCurl
-            ->expects($this->any())
-            ->method('curl_getinfo')
-            ->will($this->returnValueMap([
-                [$this->someCurlResource, CURLOPT_PRIVATE, 0],
-                [$this->someOtherCurlResource, CURLOPT_PRIVATE, 1],
-            ]));
-
         $someResponse = $requestHandler->execute($someRequest);
-        $someOtherResponse = $requestHandler->execute($someOtherRequest);
+        $someOtherResponse = $requestHandler->execute($someRequest);
 
         $this->assertEquals($someHeadersMap, $someResponse->getHeaders());
         $this->assertEmpty($someOtherResponse->getHeaders());
     }
 
     /**
-     * Asserts provided cURL resource was executed and calls header callback.
+     * Asserts Closure was provided and executes with provided headers.
      *
-     * @param resource $someCurlResource
-     * @param \Yoti\Http\Curl\RequestHandler $requestHandler
      * @param string[] $someHeaders
      *
      * @return PHPUnit_Framework_Constraint_Callback
      */
-    private function curlExecCallback($someCurlResource, $requestHandler, $someHeaders)
+    private function curlHeadersCallback($someHeaders)
     {
-        return $this->callback(function ($ch) use ($someCurlResource, $requestHandler, $someHeaders) {
-            $this->assertEquals($someCurlResource, $ch);
-
-            foreach ($someHeaders as $header) {
-                $this->invokeCurlHeaderCallback($requestHandler, $ch, $header);
+        return $this->callback(function ($callback) use ($someHeaders) {
+            $this->assertInstanceOf(\Closure::class, $callback);
+            foreach ($someHeaders as $someHeader) {
+                $callback($this->someCurlResource, $someHeader);
             }
-
             return true;
         });
-    }
-
-    /**
-     * Invoke cURL headers callback.
-     *
-     * @param \Yoti\Http\Curl\RequestHandler $requestHandler
-     * @param resource $ch
-     * @param string $header
-     */
-    private function invokeCurlHeaderCallback(RequestHandler $requestHandler, $ch, $header)
-    {
-        $reflection = new \ReflectionClass(get_class($requestHandler));
-        $callback = $reflection->getMethod(self::CURLOPT_HEADERFUNCTION);
-        $callback->setAccessible(true);
-        $callback->invokeArgs($requestHandler, [$ch, $header]);
     }
 }
 
