@@ -96,7 +96,7 @@ function formatAgeVerification(AgeVerification $ageVerification)
 
 
 /**
- * Format Structure Postal Address.
+ * Format Structured Postal Address.
  *
  * @param array $structuredAddress
  */

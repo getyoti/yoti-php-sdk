@@ -26,7 +26,7 @@ class Profile extends BaseProfile
     const ATTR_DOCUMENT_IMAGES = 'document_images';
     const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
-    /** @deprecated 3.0.0 No longer used to store age verifcations. */
+    /** @deprecated 3.0.0 No longer used to store age verifications. */
     const ATTR_AGE_VERIFICATIONS = 'age_verifications';
 
     /** @var \Yoti\Entity\AgeVerification[] */
