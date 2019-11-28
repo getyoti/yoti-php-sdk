@@ -242,7 +242,7 @@ class ProfileTest extends TestCase
      */
     private function parseAnchor($anchorString)
     {
-        $anchor = new \Attrpubapi\Anchor();
+        $anchor = new \Yoti\Protobuf\Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
         return $anchor;
     }

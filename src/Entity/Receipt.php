@@ -91,11 +91,11 @@ class Receipt
      * @param $attributeName
      * @param $pem
      *
-     * @return \Attrpubapi\AttributeList
+     * @return \Yoti\Protobuf\Attrpubapi\AttributeList
      */
     public function parseAttribute($attributeName, $pem)
     {
-        $attributeList = new \Attrpubapi\AttributeList();
+        $attributeList = new \Yoti\Protobuf\Attrpubapi\AttributeList();
         $attributeList->mergeFromString(
             $this->decryptAttribute($attributeName, $pem)
         );

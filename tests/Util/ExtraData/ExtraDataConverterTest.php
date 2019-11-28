@@ -6,10 +6,10 @@ use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Entity\ExtraData;
 use Yoti\Util\ExtraData\ExtraDataConverter;
 use YotiTest\TestCase;
-use Sharepubapi\DataEntry;
-use Sharepubapi\ThirdPartyAttribute;
-use Sharepubapi\ExtraData as ExtraDataProto;
-use Sharepubapi\IssuingAttributes;
+use Yoti\Protobuf\Sharepubapi\DataEntry;
+use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
+use Yoti\Protobuf\Sharepubapi\ExtraData as ExtraDataProto;
+use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 
 /**
  * @coversDefaultClass \Yoti\Util\ExtraData\ExtraDataConverter

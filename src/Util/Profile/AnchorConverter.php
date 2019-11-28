@@ -5,19 +5,19 @@ namespace Yoti\Util\Profile;
 use Traversable;
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
-use Attrpubapi\Anchor;
-use Yoti\Entity\Anchor as YotiAnchor;
+use Yoti\Entity\Anchor;
+use Yoti\Protobuf\Attrpubapi\Anchor as ProtobufAnchor;
 
 class AnchorConverter
 {
     /**
      * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
      *
-     * @param Anchor $anchor
+     * @param \Yoti\Protobuf\Attrpubapi\Anchor $anchor
      *
      * @return array
      */
-    public static function convert(Anchor $protobufAnchor)
+    public static function convert(ProtobufAnchor $protobufAnchor)
     {
         $anchorSubType = $protobufAnchor->getSubType();
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
@@ -26,10 +26,10 @@ class AnchorConverter
         foreach ($X509CertsList as $certX509Obj) {
             foreach ($certX509Obj->tbsCertificate->extensions as $extObj) {
                 $anchorType = self::getAnchorTypeByOid($extObj->extnId);
-                if ($anchorType !== YotiAnchor::TYPE_UNKNOWN_NAME) {
+                if ($anchorType !== Anchor::TYPE_UNKNOWN_NAME) {
                     return [
                         'oid' => $extObj->extnId,
-                        'yoti_anchor' => new YotiAnchor(
+                        'yoti_anchor' => new Anchor(
                             self::decodeAnchorValue($extObj->extnValue),
                             $anchorType,
                             $anchorSubType,
@@ -42,10 +42,10 @@ class AnchorConverter
         }
 
         return [
-            'oid' => YotiAnchor::TYPE_UNKNOWN_NAME,
-            'yoti_anchor' => new YotiAnchor(
+            'oid' => Anchor::TYPE_UNKNOWN_NAME,
+            'yoti_anchor' => new Anchor(
                 '',
-                YotiAnchor::TYPE_UNKNOWN_NAME,
+                Anchor::TYPE_UNKNOWN_NAME,
                 $anchorSubType,
                 $yotiSignedTimeStamp,
                 $X509CertsList
@@ -71,13 +71,13 @@ class AnchorConverter
     }
 
     /**
-     * @param \Attrpubapi\Anchor $anchor
+     * @param \Yoti\Protobuf\Attrpubapi\Anchor $anchor
      *
      * @return \Yoti\Entity\SignedTimeStamp
      */
-    private static function convertToYotiSignedTimestamp(Anchor $anchor)
+    private static function convertToYotiSignedTimestamp(ProtobufAnchor $anchor)
     {
-        $signedTimeStamp = new \Compubapi\SignedTimestamp();
+        $signedTimeStamp = new \Yoti\Protobuf\Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
         $timestamp = $signedTimeStamp->getTimestamp() / 1000000;
@@ -146,7 +146,7 @@ class AnchorConverter
     private static function getAnchorTypeByOid($oid)
     {
         $anchorTypesMap = self::getAnchorTypesMap();
-        return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : YotiAnchor::TYPE_UNKNOWN_NAME;
+        return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : Anchor::TYPE_UNKNOWN_NAME;
     }
 
     /**
@@ -155,8 +155,8 @@ class AnchorConverter
     private static function getAnchorTypesMap()
     {
         return [
-            YotiAnchor::TYPE_SOURCE_OID => YotiAnchor::TYPE_SOURCE_NAME,
-            YotiAnchor::TYPE_VERIFIER_OID => YotiAnchor::TYPE_VERIFIER_NAME,
+            Anchor::TYPE_SOURCE_OID => Anchor::TYPE_SOURCE_NAME,
+            Anchor::TYPE_VERIFIER_OID => Anchor::TYPE_VERIFIER_NAME,
         ];
     }
 }

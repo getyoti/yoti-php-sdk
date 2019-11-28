@@ -5,8 +5,8 @@ namespace Yoti\Util\ExtraData;
 use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
-use Sharepubapi\IssuingAttributes;
-use Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
+use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
+use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Util\DateTime;
 
 class ThirdPartyAttributeConverter
@@ -18,7 +18,7 @@ class ThirdPartyAttributeConverter
      */
     public static function convertValue($value)
     {
-        $thirdPartyAttributeProto = new ThirdPartyAttributeProto();
+        $thirdPartyAttributeProto = new ThirdPartyAttribute();
         $thirdPartyAttributeProto->mergeFromString($value);
 
         $token = self::parseToken($thirdPartyAttributeProto->getIssuanceToken());

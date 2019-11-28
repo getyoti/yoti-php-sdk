@@ -3,7 +3,7 @@
 namespace Yoti\Util\ExtraData;
 
 use Yoti\Entity\ExtraData;
-use Sharepubapi\ExtraData as ExtraDataProto;
+use Yoti\Protobuf\Sharepubapi\ExtraData as ExtraDataProto;
 
 class ExtraDataConverter
 {
