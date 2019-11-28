@@ -6,8 +6,8 @@ use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
 use Yoti\Util\Constants;
-use Sharepubapi\IssuingAttributes;
-use Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
+use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
+use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
 
 class ThirdPartyAttributeConverter
 {

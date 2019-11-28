@@ -2,7 +2,7 @@
 
 namespace Yoti\Util;
 
-use Compubapi\EncryptedData as EncryptedDataProto;
+use Yoti\Protobuf\Compubapi\EncryptedData as EncryptedDataProto;
 
 class EncryptedData
 {
@@ -15,13 +15,13 @@ class EncryptedData
      */
     public static function decrypt($data, $wrappedKey, $pem)
     {
-        $encryptedDataProto = new \Compubapi\EncryptedData();
+        $encryptedDataProto = new EncryptedDataProto();
         $encryptedDataProto->mergeFromString(base64_decode($data));
         return self::decryptFromProto($encryptedDataProto, $wrappedKey, $pem);
     }
 
     /**
-     * @param \Compubapi\EncryptedData $encryptedDataProto
+     * @param \Yoti\Protobuf\Compubapi\EncryptedData $encryptedDataProto
      * @param string $wrappedKey
      * @param string $pem
      *

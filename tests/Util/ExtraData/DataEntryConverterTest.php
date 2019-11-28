@@ -3,9 +3,9 @@
 namespace YotiTest\Util\Profile;
 
 use Yoti\Entity\AttributeIssuanceDetails;
+use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Util\ExtraData\DataEntryConverter;
 use YotiTest\TestCase;
-use Sharepubapi\ThirdPartyAttribute;
 
 /**
  * @coversDefaultClass \Yoti\Util\ExtraData\DataEntryConverter
