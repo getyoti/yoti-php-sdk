@@ -5,7 +5,7 @@ namespace YotiTest\Http;
 use Yoti\Http\AbstractRequestHandler;
 use Yoti\Http\Payload;
 use YotiTest\TestCase;
-use Yoti\Util\Config;
+use Yoti\Util\Constants;
 
 /**
  * @coversDefaultClass \Yoti\Http\AbstractRequestHandler
@@ -35,7 +35,7 @@ class AbstractRequestHandlerTest extends TestCase
           SDK_ID,
         ]);
 
-        $version = Config::getInstance()->get('version');
+        $version = Constants::SDK_VERSION;
 
         $expectedPayload = $this->createMock(Payload::class);
         $expectedUrl = self::SOME_BASE_URL . self::SOME_ENDPOINT;
@@ -72,7 +72,7 @@ class AbstractRequestHandlerTest extends TestCase
           'Drupal'
         ]);
 
-        $version = Config::getInstance()->get('version');
+        $version = Constants::SDK_VERSION;
 
         $expectedMethod = 'POST';
         $expectedHeaders = [
