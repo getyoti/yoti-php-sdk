@@ -2,9 +2,7 @@
 
 namespace Yoti\Util\Profile;
 
-use Attrpubapi\AttributeList;
-use Attrpubapi\Attribute as ProtobufAttribute;
-use Yoti\Util\EncryptedData;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
 
 class AttributeListConverter
 {
@@ -19,7 +17,7 @@ class AttributeListConverter
     {
         $yotiAttributes = [];
 
-        foreach ($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
+        foreach ($attributeList->getAttributes() as $attr) { /** @var Yoti\Protobuf\Attrpubapi\Attribute $attr */
             $attrName = $attr->getName();
             if (null === $attrName) {
                 continue;
@@ -42,11 +40,39 @@ class AttributeListConverter
      */
     public static function convertToProtobufAttributeList($encryptedData, $wrappedReceiptKey, $pem)
     {
-        $attributeList = new \Attrpubapi\AttributeList();
-        $attributeList->mergeFromString(
-            EncryptedData::decryptFromProto($encryptedData, $wrappedReceiptKey, $pem)
+        $decryptedCipherText = self::decryptCipherText(
+            $encryptedData,
+            $wrappedReceiptKey,
+            $pem
         );
 
+        $attributeList = new AttributeList();
+        $attributeList->mergeFromString($decryptedCipherText);
+
         return $attributeList;
+    }
+
+    /**
+     * Return decrypted cipher text.
+     *
+     * @param $encryptedData
+     * @param $wrappedReceiptKey
+     * @param $pem
+     *
+     * @return string
+     */
+    private static function decryptCipherText($encryptedData, $wrappedReceiptKey, $pem)
+    {
+        // Unwrap key and get profile
+        openssl_private_decrypt(base64_decode($wrappedReceiptKey), $unwrappedKey, $pem);
+
+        // Decipher encrypted data with unwrapped key and IV
+        return openssl_decrypt(
+            $encryptedData->getCipherText(),
+            'aes-256-cbc',
+            $unwrappedKey,
+            OPENSSL_RAW_DATA,
+            $encryptedData->getIv()
+        );
     }
 }

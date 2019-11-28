@@ -15,9 +15,6 @@
   },
   "autoload": {
     "psr-4": {
-      "Attrpubapi\\": "src/Protobuf/Attrpubapi",
-      "Compubapi\\": "src/Protobuf/Compubapi",
-      "GPBMetadata\\": "src/Protobuf/GPBMetadata",
       "Yoti\\": "src",
       "YotiSandbox\\": "sandbox/src"
     }

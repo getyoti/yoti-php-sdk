@@ -118,11 +118,11 @@ class AttributeTest extends TestCase
      * Convert anchor string to Protobuf Anchor
      *
      * @param string $anchorString
-     * @return \Attrpubapi\Anchor
+     * @return \Yoti\Protobuf\Attrpubapi\Anchor
      */
     public function convertToProtobufAnchor($anchorString)
     {
-        $anchor = new \Attrpubapi\Anchor();
+        $anchor = new \Yoti\Protobuf\Attrpubapi\Anchor();
         $anchor->mergeFromString(base64_decode($anchorString));
         return $anchor;
     }

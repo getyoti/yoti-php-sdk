@@ -2,9 +2,9 @@
 
 namespace YotiTest\Util\Profile;
 
-use Attrpubapi\Attribute;
-use Attrpubapi\AttributeList;
-use Compubapi\EncryptedData;
+use Yoti\Protobuf\Attrpubapi\Attribute;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Protobuf\Compubapi\EncryptedData;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;
 use YotiTest\TestCase;

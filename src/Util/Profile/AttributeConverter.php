@@ -6,8 +6,8 @@ use Yoti\Entity\Attribute;
 use Yoti\Entity\DocumentDetails;
 use Yoti\Entity\Image;
 use Yoti\Entity\Profile;
-use Attrpubapi\Attribute as ProtobufAttribute;
-use Compubapi\EncryptedData;
+use Yoti\Protobuf\Compubapi\EncryptedData;
+use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Exception\AttributeException;
 use Yoti\Entity\MultiValue;
 use Yoti\Entity\ApplicationProfile;
@@ -103,7 +103,7 @@ class AttributeConverter
      */
     private static function convertMultiValue($value)
     {
-        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->mergeFromString($value);
         $items = [];
         foreach ($protoMultiValue->getValues() as $protoValue) {
@@ -148,7 +148,7 @@ class AttributeConverter
      *
      * @param @param string $data Binary protobuf data.
      *
-     * @return \Compubapi\EncryptedData
+     * @return \oti\Protobuf\Compubapi\EncryptedData
      */
     public static function getEncryptedData($data)
     {

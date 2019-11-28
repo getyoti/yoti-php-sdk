@@ -61,7 +61,7 @@ class EncrypedDataTest extends TestCase
     }
 
     /**
-     * @return \Compubapi\EncryptedData
+     * @return \Yoti\Protobuf\Compubapi\EncryptedData
      */
     private function createEncryptedDataProto()
     {
@@ -73,7 +73,7 @@ class EncrypedDataTest extends TestCase
 
         $iv = random_bytes(16);
 
-        return new \Compubapi\EncryptedData([
+        return new \Yoti\Protobuf\Compubapi\EncryptedData([
             'cipher_text' => openssl_encrypt(
                 self::SOME_DATA,
                 'aes-256-cbc',
