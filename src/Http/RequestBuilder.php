@@ -3,7 +3,7 @@
 namespace Yoti\Http;
 
 use Yoti\Exception\RequestException;
-use Yoti\Util\Config;
+use Yoti\Util\Constants;
 use Yoti\Util\PemFile;
 use Yoti\YotiClient;
 
@@ -266,8 +266,8 @@ class RequestBuilder
             $requestHeaders['Content-Type'] = 'application/json';
         }
 
-        if (is_null($this->sdkVersion) && ($configVersion = Config::getInstance()->get('version'))) {
-            $this->sdkVersion = $configVersion;
+        if (is_null($this->sdkVersion)) {
+            $this->sdkVersion = Constants::SDK_VERSION;
         }
 
         if (isset($this->sdkVersion)) {
