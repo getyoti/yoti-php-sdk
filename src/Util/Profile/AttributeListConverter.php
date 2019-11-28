@@ -2,8 +2,7 @@
 
 namespace Yoti\Util\Profile;
 
-use Attrpubapi\AttributeList;
-use Attrpubapi\Attribute as ProtobufAttribute;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
 
 class AttributeListConverter
 {
@@ -18,7 +17,7 @@ class AttributeListConverter
     {
         $yotiAttributes = [];
 
-        foreach ($attributeList->getAttributes() as $attr) { /** @var ProtobufAttribute $attr */
+        foreach ($attributeList->getAttributes() as $attr) { /** @var Yoti\Protobuf\Attrpubapi\Attribute $attr */
             $attrName = $attr->getName();
             if (null === $attrName) {
                 continue;
@@ -45,7 +44,7 @@ class AttributeListConverter
             $pem
         );
 
-        $attributeList = new \Attrpubapi\AttributeList();
+        $attributeList = new \Yoti\Protobuf\Attrpubapi\AttributeList();
         $attributeList->mergeFromString($decryptedCipherText);
 
         return $attributeList;

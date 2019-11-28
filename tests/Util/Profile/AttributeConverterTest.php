@@ -28,12 +28,12 @@ class AttributeConverterTest extends TestCase
     const CONTENT_TYPE_INT = 7;
 
     /**
-     * Mocks \Attrpubapi\Attribute with provided name and value.
+     * Mocks \Yoti\Protobuf\Attrpubapi\Attribute with provided name and value.
      */
     private function getMockForProtobufAttribute($name, $value, $contentType = self::CONTENT_TYPE_STRING)
     {
         // Setup protobuf mock.
-        $protobufAttribute = $this->getMockBuilder(\Attrpubapi\Attribute::class)
+        $protobufAttribute = $this->getMockBuilder(\Yoti\Protobuf\Attrpubapi\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $protobufAttribute
@@ -185,7 +185,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
-        $protobufAttribute = new \Attrpubapi\Attribute();
+        $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
         $protobufAttribute->mergeFromString(base64_decode(MULTI_VALUE_ATTRIBUTE));
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
@@ -221,7 +221,7 @@ class AttributeConverterTest extends TestCase
     public function testConvertToYotiAttributeDocumentImagesFiltered()
     {
         // Create top-level MultiValue.
-        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->setValues($this->createMultiValueValues());
 
         // Create mock Attribute that will return MultiValue as the value.
@@ -283,7 +283,7 @@ class AttributeConverterTest extends TestCase
         $values[] = $this->createNestedMultiValueValue();
 
         // Create top-level MultiValue.
-        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
@@ -346,7 +346,7 @@ class AttributeConverterTest extends TestCase
         $values[] = $this->createMultiValueValue('', $contentType);
 
         // Create top-level MultiValue.
-        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
@@ -375,7 +375,7 @@ class AttributeConverterTest extends TestCase
         $values[] = $this->createMultiValueValue('', self::CONTENT_TYPE_STRING);
 
         // Create top-level MultiValue.
-        $protoMultiValue = new \Attrpubapi\MultiValue();
+        $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
@@ -393,11 +393,11 @@ class AttributeConverterTest extends TestCase
     /**
      * Creates a nested MultiValue Value.
      *
-     * @return \Attrpubapi\MultiValue\Value
+     * @return \Yoti\Protobuf\Attrpubapi\MultiValue\Value
      */
     private function createNestedMultiValueValue()
     {
-        $multiValue = new \Attrpubapi\MultiValue();
+        $multiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $multiValue->setValues($this->createMultiValueValues());
 
         return $this->createMultiValueValue($multiValue->serializeToString(), self::CONTENT_TYPE_MULTI_VALUE);
@@ -406,7 +406,7 @@ class AttributeConverterTest extends TestCase
     /**
      * Created an array of MultiValue image items.
      *
-     * @return \Attrpubapi\MultiValue\Value[]
+     * @return \Yoti\Protobuf\Attrpubapi\MultiValue\Value[]
      */
     private function createMultiValueValues()
     {
@@ -431,11 +431,11 @@ class AttributeConverterTest extends TestCase
      * @param string $data
      * @param int $contentType
      *
-     * @return \Attrpubapi\MultiValue\Value
+     * @return \Yoti\Protobuf\Attrpubapi\MultiValue\Value
      */
     private function createMultiValueValue($data, $contentType)
     {
-        $protoMultiValueValue = new \Attrpubapi\MultiValue\Value();
+        $protoMultiValueValue = new \Yoti\Protobuf\Attrpubapi\MultiValue\Value();
         $protoMultiValueValue->setData($data);
         $protoMultiValueValue->setContentType($contentType);
         return $protoMultiValueValue;

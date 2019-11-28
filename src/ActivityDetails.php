@@ -4,8 +4,8 @@ namespace Yoti;
 
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
-use Attrpubapi\AttributeList;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\Age\AgeVerificationConverter;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Util\Profile\AttributeListConverter;

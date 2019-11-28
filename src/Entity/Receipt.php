@@ -90,7 +90,7 @@ class Receipt
      * @param $attributeName
      * @param $pem
      *
-     * @return \Attrpubapi\AttributeList
+     * @return \Yoti\Protobuf\Attrpubapi\AttributeList
      */
     public function parseAttribute($attributeName, $pem)
     {
