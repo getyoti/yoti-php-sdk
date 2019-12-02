@@ -28,7 +28,7 @@ class EncrypedDataTest extends TestCase
     public function setup()
     {
         $this->pem = file_get_contents(PEM_FILE);
-        $this->wrappedKey = json_decode(RECEIPT_JSON)['wrapped_receipt_key'];
+        $this->wrappedKey = json_decode(file_get_contents(RECEIPT_JSON), true)['receipt']['wrapped_receipt_key'];
         $this->encryptedDataProto = $this->createEncryptedDataProto();
     }
 
