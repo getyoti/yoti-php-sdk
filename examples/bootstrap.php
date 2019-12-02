@@ -30,4 +30,4 @@ if (strpos(getenv(YOTI_KEY_FILE_PATH_KEY), '/') === 0) {
 }
 
 // Set the Connect API Base URL
-define('YOTI_CONNECT_BASE_URL', getenv('YOTI_CONNECT_BASE_URL') ?: YotiClient::CONNECT_BASE_URL);
+define('YOTI_CONNECT_BASE_URL', getenv('YOTI_CONNECT_BASE_URL') ?: YotiClient::DEFAULT_CONNECT_API);
