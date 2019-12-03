@@ -65,11 +65,11 @@
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "943af3cdc2e96a8fab7512496d3a1decc2b0ad09"
+                "reference": "828e896870bbfb4ec77739494cf5414e471142e3"
             },
             "require": {
                 "php": ">=5.5.19"
