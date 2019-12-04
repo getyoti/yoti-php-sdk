@@ -4,8 +4,7 @@
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
          bootstrap="tests/bootstrap.php"
-         stopOnFailure="false"
-         syntaxCheck="true">
+         stopOnFailure="false">
     <testsuites>
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>

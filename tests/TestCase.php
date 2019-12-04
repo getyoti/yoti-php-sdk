@@ -2,9 +2,7 @@
 
 namespace YotiTest;
 
-use PHPUnit_Framework_TestCase;
-
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Restores ini settings after tests run.
