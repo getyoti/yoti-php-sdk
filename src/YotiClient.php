@@ -129,19 +129,15 @@ class YotiClient
     /**
      * Return Yoti user profile.
      *
-     * @param null|string $encryptedConnectToken
+     * @param string $encryptedConnectToken
      *
      * @return \Yoti\ActivityDetails
      *
      * @throws \Yoti\Exception\ActivityDetailsException
      * @throws \Yoti\Exception\ReceiptException
      */
-    public function getActivityDetails($encryptedConnectToken = null)
+    public function getActivityDetails($encryptedConnectToken)
     {
-        if (!$encryptedConnectToken && array_key_exists('token', $_GET)) {
-            $encryptedConnectToken = $_GET['token'];
-        }
-
         $receipt = $this->getReceipt($encryptedConnectToken);
 
         // Check response was successful
