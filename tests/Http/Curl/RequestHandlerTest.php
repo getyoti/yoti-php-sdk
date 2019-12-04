@@ -159,7 +159,7 @@ class RequestHandlerTest extends TestCase
             ->expects($this->any())
             ->method('curl_setopt')
             ->withConsecutive(
-                $this->any(),
+                [$this->someCurlResource, CURLOPT_CUSTOMREQUEST],
                 [$this->someCurlResource, CURLOPT_VERBOSE, true]
             );
 
@@ -229,13 +229,19 @@ class RequestHandlerTest extends TestCase
             ->expects($this->any())
             ->method('curl_setopt')
             ->withConsecutive(
-                $this->any(),
+                [
+                    $this->someCurlResource,
+                    CURLOPT_CUSTOMREQUEST
+                ],
                 [
                     $this->someCurlResource,
                     CURLOPT_HEADERFUNCTION,
                     $this->curlHeadersCallback($someHeaders),
                 ],
-                $this->any(),
+                [
+                    $this->someCurlResource,
+                    CURLOPT_CUSTOMREQUEST
+                ],
                 [
                     $this->someCurlResource,
                     CURLOPT_HEADERFUNCTION,
