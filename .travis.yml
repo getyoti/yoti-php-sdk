@@ -22,7 +22,7 @@ jobs:
     - <<: *compatibility
       php: "7.2"
     - <<: *compatibility
-      php: "7.1"
+      php: "7.4snapshot"
     - <<: *test
       stage: Coverage
       name: Coveralls
