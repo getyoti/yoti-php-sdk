@@ -64,10 +64,10 @@ class AmlAddressTest extends TestCase
     }
 
     /**
-     * @covers ::getData
+     * @covers ::jsonSerialize
      * @covers ::__toString
      */
-    public function testGetData()
+    public function testJsonSerialize()
     {
         $someCountry = $this->createMock(Country::class);
         $someCountry
@@ -81,7 +81,8 @@ class AmlAddressTest extends TestCase
             'country' => self::SOME_COUNTRY_CODE,
         ];
 
-        $this->assertEquals($expectedData, $amlAddress->getData());
+        $this->assertEquals($expectedData, $amlAddress->jsonSerialize());
+        $this->assertEquals(json_encode($expectedData), json_encode($amlAddress));
         $this->assertEquals(json_encode($expectedData), (string) $amlAddress);
     }
 }

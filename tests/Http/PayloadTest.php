@@ -32,7 +32,7 @@ class PayloadTest extends TestCase
     {
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        $this->payload = new Payload($amlProfile->getData());
+        $this->payload = new Payload($amlProfile);
 
         // Expected test data
         $this->payloadJSON = '{"given_names":"Edward Richard George","family_name":"Heath",' .

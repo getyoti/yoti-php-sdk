@@ -105,6 +105,6 @@ class RequestSignerTest extends TestCase
     {
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        return new Payload($amlProfile->getData());
+        return new Payload($amlProfile);
     }
 }

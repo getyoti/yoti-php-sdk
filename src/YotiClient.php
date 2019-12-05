@@ -161,7 +161,7 @@ class YotiClient
     public function performAmlCheck(AmlProfile $amlProfile)
     {
         // Get payload data from amlProfile
-        $amlPayload = new Payload($amlProfile->getData());
+        $amlPayload = new Payload($amlProfile);
 
         $response = $this->sendRequest(
             self::AML_CHECK_ENDPOINT,

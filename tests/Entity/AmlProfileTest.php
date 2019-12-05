@@ -130,10 +130,10 @@ class AmlProfileTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::getData
+     * @covers ::jsonSerialize
      * @covers ::__toString
      */
-    public function testGetData()
+    public function testJsonSerialize()
     {
         $expectedData = [
             'given_names' => self::SOME_GIVEN_NAMES,
@@ -145,7 +145,7 @@ class AmlProfileTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expectedData, $this->amlProfile->getData());
+        $this->assertEquals(json_encode($expectedData), json_encode($this->amlProfile));
         $this->assertEquals(json_encode($expectedData), (string) $this->amlProfile);
     }
 }
