@@ -13,41 +13,6 @@ class RequestSigner
     /**
      * Return request signed data.
      *
-     * @deprecated 3.0.0
-     *
-     * @param AbstractRequestHandler $requestHandler
-     * @param string $endpoint
-     * @param string $httpMethod
-     * @param Payload|NULL $payload
-     * @param array $queryParams
-     *
-     * @return array
-     *
-     * @throws RequestException
-     */
-    public static function signRequest(
-        AbstractRequestHandler $requestHandler,
-        $endpoint,
-        $httpMethod,
-        Payload $payload = null,
-        array $queryParams = []
-    ) {
-        if (!is_null($requestHandler->getSDKId())) {
-            $queryParams['appId'] = $requestHandler->getSDKId();
-        }
-
-        return self::sign(
-            PemFile::fromString($requestHandler->getPem()),
-            $endpoint,
-            $httpMethod,
-            $payload,
-            $queryParams
-        );
-    }
-
-    /**
-     * Return request signed data.
-     *
      * @param \Yoti\Util\PemFile $pemFile
      * @param string $endpoint
      * @param string $httpMethod
