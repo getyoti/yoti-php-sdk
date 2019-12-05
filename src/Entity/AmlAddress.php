@@ -2,7 +2,7 @@
 
 namespace Yoti\Entity;
 
-class AmlAddress
+class AmlAddress implements \JsonSerializable
 {
     const POSTCODE_ATTR = 'post_code';
     const COUNTRY_ATTR = 'country';
@@ -66,7 +66,7 @@ class AmlAddress
      *
      * @return array
      */
-    public function getData()
+    public function jsonSerialize()
     {
         return [
             self::POSTCODE_ATTR => $this->postcode,
@@ -79,6 +79,6 @@ class AmlAddress
      */
     public function __toString()
     {
-        return json_encode($this->getData());
+        return json_encode($this);
     }
 }

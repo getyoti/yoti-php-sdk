@@ -2,7 +2,7 @@
 
 namespace Yoti\Entity;
 
-class AmlProfile
+class AmlProfile implements \JsonSerializable
 {
     const GIVEN_NAMES_ATTR  = 'given_names';
     const FAMILY_NAME_ATTR  = 'family_name';
@@ -122,13 +122,13 @@ class AmlProfile
      *
      * @return array
      */
-    public function getData()
+    public function jsonSerialize()
     {
         return [
             self::GIVEN_NAMES_ATTR  => $this->givenNames,
             self::FAMILY_NAME_ATTR  => $this->familyName,
             self::SSN_ATTR => $this->ssn,
-            self::ADDRESS_ATTR => $this->amlAddress->getData(),
+            self::ADDRESS_ATTR => $this->amlAddress,
         ];
     }
 
@@ -137,6 +137,6 @@ class AmlProfile
      */
     public function __toString()
     {
-        return json_encode($this->getData());
+        return json_encode($this);
     }
 }
