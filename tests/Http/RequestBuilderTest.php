@@ -2,11 +2,11 @@
 
 namespace YotiTest\Http;
 
+use Psr\Http\Client\ClientInterface;
 use YotiTest\TestCase;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
 use Yoti\Http\Payload;
-use Yoti\Http\RequestHandlerInterface;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -32,11 +32,10 @@ class RequestBuilderTest extends TestCase
      * @covers ::withSdkIdentifier
      * @covers ::withSdkVersion
      * @covers ::getHeaders
+     * @covers ::validateMethod
+     * @covers ::validateHeaders
      * @covers \Yoti\Http\Request::__construct
-     * @covers \Yoti\Http\Request::getUrl
-     * @covers \Yoti\Http\Request::getMethod
-     * @covers \Yoti\Http\Request::getHeaders
-     * @covers \Yoti\Http\Request::validateHttpMethod
+     * @covers \Yoti\Http\Request::getMessage
      */
     public function testBuild()
     {
@@ -57,14 +56,15 @@ class RequestBuilderTest extends TestCase
         $baseUrlPattern = preg_quote(self::SOME_BASE_URL, '~');
         $expectedEndpointPattern = "~{$baseUrlPattern}/some-endpoint.*?nonce=.*?&timestamp=.*?~";
 
-        $this->assertRegExp($expectedEndpointPattern, $request->getUrl());
-        $this->assertEquals('POST', $request->getMethod());
-        $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
-        $this->assertEquals('PHP-1.2.3', $request->getHeaders()['X-Yoti-SDK-Version']);
-        $this->assertNotEmpty($request->getHeaders()['X-Yoti-Auth-Digest']);
-        $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
-        $this->assertEquals('application/json', $request->getHeaders()['Accept']);
-        $this->assertEquals($expectedPayload, $request->getPayload());
+        $message = $request->getMessage();
+        $this->assertRegExp($expectedEndpointPattern, $message->getUri());
+        $this->assertEquals('POST', $message->getMethod());
+        $this->assertEquals('PHP', $message->getHeader('X-Yoti-SDK')[0]);
+        $this->assertEquals('PHP-1.2.3', $message->getHeader('X-Yoti-SDK-Version')[0]);
+        $this->assertNotEmpty($message->getHeader('X-Yoti-Auth-Digest')[0]);
+        $this->assertEquals('application/json', $message->getHeader('Content-Type')[0]);
+        $this->assertEquals('application/json', $message->getHeader('Accept')[0]);
+        $this->assertEquals($expectedPayload->getPayloadJSON(), $message->getBody());
     }
 
     /**
@@ -82,8 +82,9 @@ class RequestBuilderTest extends TestCase
           ->withSdkVersion('4.5.6')
           ->build();
 
-        $this->assertEquals('Drupal', $request->getHeaders()['X-Yoti-SDK']);
-        $this->assertEquals('Drupal-4.5.6', $request->getHeaders()['X-Yoti-SDK-Version']);
+        $message = $request->getMessage();
+        $this->assertEquals('Drupal', $message->getHeader('X-Yoti-SDK')[0]);
+        $this->assertEquals('Drupal-4.5.6', $message->getHeader('X-Yoti-SDK-Version')[0]);
     }
 
     /**
@@ -98,8 +99,9 @@ class RequestBuilderTest extends TestCase
           ->withGet()
           ->build();
 
-        $this->assertEquals('PHP', $request->getHeaders()['X-Yoti-SDK']);
-        $this->assertRegExp('~PHP-\d+.\d+.\d+~', $request->getHeaders()['X-Yoti-SDK-Version']);
+        $message = $request->getMessage();
+        $this->assertEquals('PHP', $message->getHeader('X-Yoti-SDK')[0]);
+        $this->assertRegExp('~PHP-\d+.\d+.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
     }
 
     /**
@@ -114,7 +116,8 @@ class RequestBuilderTest extends TestCase
           ->withPost()
           ->build();
 
-        $this->assertEquals('POST', $request->getMethod());
+        $message = $request->getMessage();
+        $this->assertEquals('POST', $message->getMethod());
     }
 
     /**
@@ -129,8 +132,9 @@ class RequestBuilderTest extends TestCase
           ->withGet()
           ->build();
 
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertArrayNotHasKey('Content-Type', $request->getHeaders());
+        $message = $request->getMessage();
+        $this->assertEquals('GET', $message->getMethod());
+        $this->assertArrayNotHasKey('Content-Type', $message->getHeaders());
     }
 
     /**
@@ -168,6 +172,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withPemFilePath
+     * @covers ::withPemFile
      */
     public function testBuildWithPemFromFilePath()
     {
@@ -182,29 +187,23 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
-     * @covers ::withHandler
-     * @covers \Yoti\Http\Request::execute
-     * @covers \Yoti\Http\Request::setHandler
-     * @covers \Yoti\Http\Request::getHandler
+     * @covers ::withClient
      */
-    public function testWithHandler()
+    public function testWithClient()
     {
-        $handler = $this->getMockBuilder(RequestHandlerInterface::class)
-          ->disableOriginalConstructor()
-          ->setMethods(['execute'])
-          ->getMockForAbstractClass();
+        $client = $this->createMock(ClientInterface::class);
 
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint('/some-endpoint')
           ->withPemFilePath(PEM_FILE)
           ->withMethod('GET')
-          ->withHandler($handler)
+          ->withClient($client)
           ->build();
 
-        $handler->expects($this->exactly(1))
-          ->method('execute')
-          ->with($request);
+        $client->expects($this->exactly(1))
+          ->method('sendRequest')
+          ->with($request->getMessage());
 
         $request->execute();
     }
@@ -212,6 +211,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withPemString
+     * @covers ::withPemFile
      */
     public function testBuildWithPemString()
     {
@@ -227,7 +227,6 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHeader
-     * @covers \Yoti\Http\Request::validateHeaders
      */
     public function testBuildWithHeader()
     {
@@ -240,14 +239,15 @@ class RequestBuilderTest extends TestCase
           ->build();
 
         $this->assertInstanceOf(Request::class, $request);
-        $this->assertEquals('custom header value', $request->getHeaders()['Custom']);
-        $this->assertEquals('a second custom header value', $request->getHeaders()['Custom-2']);
+
+        $message = $request->getMessage();
+        $this->assertEquals('custom header value', $message->getHeader('Custom')[0]);
+        $this->assertEquals('a second custom header value', $message->getHeader('Custom-2')[0]);
     }
 
     /**
      * @covers ::build
      * @covers ::withPayload
-     * @covers \Yoti\Http\Request::getPayload
      */
     public function testWithPayload()
     {
@@ -260,13 +260,12 @@ class RequestBuilderTest extends TestCase
           ->withPost()
           ->build();
 
-        $this->assertSame($expectedPayload, $request->getPayload());
+        $this->assertSame($expectedPayload->getPayloadJSON(), (string) $request->getMessage()->getBody());
     }
 
     /**
      * @covers ::build
-     * @covers \Yoti\Http\Request::validateHttpMethod
-     * @covers \Yoti\Http\Request::methodIsAllowed
+     * @covers ::validateMethod
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage HTTP Method must be specified
@@ -282,8 +281,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withMethod
-     * @covers \Yoti\Http\Request::validateHttpMethod
-     * @covers \Yoti\Http\Request::methodIsAllowed
+     * @covers ::validateMethod
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage Unsupported HTTP Method SOME_METHOD
@@ -300,7 +298,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHeader
-     * @covers \Yoti\Http\Request::validateHeaders
+     * @covers ::validateHeaders
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage Header value for 'Custom' must be a string
@@ -356,7 +354,7 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
     }
 
     /**
@@ -374,7 +372,7 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
     }
 
     /**
@@ -392,7 +390,7 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, $request->getUrl());
+        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
     }
 
     /**
@@ -415,7 +413,7 @@ class RequestBuilderTest extends TestCase
         }
         $request = $requestBuilder->build();
 
-        parse_str(parse_url($request->getUrl(), PHP_URL_QUERY), $queryParams);
+        parse_str(parse_url($request->getMessage()->getUri(), PHP_URL_QUERY), $queryParams);
 
         foreach ($expectedQueryParams as $key => $value) {
             $this->assertEquals($expectedQueryParams[$key], $queryParams[$key]);

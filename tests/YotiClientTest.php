@@ -2,16 +2,18 @@
 
 namespace YotiTest;
 
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 use Yoti\YotiClient;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\AmlResult;
-use Yoti\Http\RequestHandlerInterface;
-use Yoti\Http\Response;
 use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+
+use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -127,7 +129,7 @@ class YotiClientTest extends TestCase
     /**
      * @covers ::getActivityDetails
      * @covers ::decryptConnectToken
-     * @covers ::setRequestHandler
+     * @covers ::setHttpClient
      * @covers ::sendRequest
      * @covers ::sendConnectRequest
      * @covers ::getReceipt
@@ -144,27 +146,28 @@ class YotiClientTest extends TestCase
             SDK_ID
         );
 
-        $response = $this->createMock(Response::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
         $response->method('getStatusCode')->willReturn(200);
 
-        $requestHandler = $this->createMock(RequestHandlerInterface::class);
-        $requestHandler->expects($this->exactly(1))
-            ->method('execute')
-            ->with($this->callback(function ($request) use ($expectedPathPattern) {
-                $this->assertEquals('GET', $request->getMethod());
-                $this->assertRegExp($expectedPathPattern, $request->getUrl());
-                $this->assertEquals(PEM_AUTH_KEY, $request->getHeaders()['X-Yoti-Auth-Key']);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) use ($expectedPathPattern) {
+                $this->assertEquals('GET', $requestMessage->getMethod());
+                $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                $this->assertEquals(PEM_AUTH_KEY, $requestMessage->getHeader('X-Yoti-Auth-Key')[0]);
                 return true;
             }))
             ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
-        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setHttpClient($httpClient);
 
-        $ad = $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN);
-
-        $this->assertInstanceOf(\Yoti\ActivityDetails::class, $ad);
+        $this->assertInstanceOf(
+            \Yoti\ActivityDetails::class,
+            $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN)
+        );
     }
 
 
@@ -178,23 +181,28 @@ class YotiClientTest extends TestCase
         $expectedSdkIdentifier = 'Drupal';
         $expectedSdkVersion = '1.2.3';
 
-        $response = $this->createMock(Response::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
         $response->method('getStatusCode')->willReturn(200);
 
-        $requestHandler = $this->createMock(RequestHandlerInterface::class);
-        $requestHandler->expects($this->exactly(1))
-            ->method('execute')
-            ->with($this->callback(function ($request) use ($expectedSdkIdentifier, $expectedSdkVersion) {
-                $headers = $request->getHeaders();
-                $this->assertEquals($expectedSdkIdentifier, $headers['X-Yoti-SDK']);
-                $this->assertEquals("{$expectedSdkIdentifier}-{$expectedSdkVersion}", $headers['X-Yoti-SDK-Version']);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) use ($expectedSdkIdentifier, $expectedSdkVersion) {
+                $this->assertEquals(
+                    $expectedSdkIdentifier,
+                    $requestMessage->getHeader('X-Yoti-SDK')[0]
+                );
+                $this->assertEquals(
+                    "{$expectedSdkIdentifier}-{$expectedSdkVersion}",
+                    $requestMessage->getHeader('X-Yoti-SDK-Version')[0]
+                );
                 return true;
             }))
             ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
-        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setHttpClient($httpClient);
         $yotiClient->setSdkIdentifier($expectedSdkIdentifier);
         $yotiClient->setSdkVersion($expectedSdkVersion);
 
@@ -218,7 +226,7 @@ class YotiClientTest extends TestCase
 
     /**
      * @covers ::performAmlCheck
-     * @covers ::setRequestHandler
+     * @covers ::setHttpClient
      * @covers ::sendRequest
      * @covers ::sendConnectRequest
      * @covers ::processJsonResponse
@@ -238,26 +246,26 @@ class YotiClientTest extends TestCase
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 
-        $response = $this->createMock(Response::class);
-        $response->method('getBody')->willReturn(file_get_contents(AML_CHECK_RESULT_JSON));
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(stream_for(file_get_contents(AML_CHECK_RESULT_JSON)));
         $response->method('getStatusCode')->willReturn(200);
 
-        $requestHandler = $this->createMock(RequestHandlerInterface::class);
-        $requestHandler->expects($this->exactly(1))
-            ->method('execute')
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
             ->with(
-                $this->callback(function ($request) use ($amlProfile, $expectedPathPattern) {
-                    $this->assertEquals('POST', $request->getMethod());
-                    $this->assertEquals((string) $amlProfile, (string) $request->getPayload());
-                    $this->assertRegExp($expectedPathPattern, $request->getUrl());
-                    $this->assertEquals('application/json', $request->getHeaders()['Content-Type']);
+                $this->callback(function ($requestMessage) use ($amlProfile, $expectedPathPattern) {
+                    $this->assertEquals('POST', $requestMessage->getMethod());
+                    $this->assertEquals((string) $amlProfile, (string) $requestMessage->getBody());
+                    $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                    $this->assertEquals('application/json', $requestMessage->getHeader('Content-Type')[0]);
                     return true;
                 })
             )
             ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
-        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setHttpClient($httpClient);
 
         $result = $yotiClient->performAmlCheck($amlProfile);
 
@@ -412,27 +420,26 @@ class YotiClientTest extends TestCase
             )
             ->build();
 
-        $response = $this->createMock(Response::class);
-        $response->method('getBody')->willReturn(json_encode([
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(stream_for(json_encode([
             'qrcode' => $expectedQrCode,
             'ref_id' => $expectedRefId,
-        ]));
+        ])));
         $response->method('getStatusCode')->willReturn(201);
 
-        $requestHandler = $this->createMock(RequestHandlerInterface::class);
-
-        $requestHandler
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
             ->expects($this->once())
-            ->method('execute')
+            ->method('sendRequest')
             ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
-                $this->assertRegExp($expectedUrlPattern, $request->getUrl());
-                $this->assertEquals(json_encode($dynamicScenario), $request->getPayload());
+                $this->assertRegExp($expectedUrlPattern, (string) $request->getUri());
+                $this->assertEquals(json_encode($dynamicScenario), (string) $request->getBody());
                 return true;
             }))
             ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
-        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setHttpClient($httpClient);
 
         $shareUrlResult = $yotiClient->createShareUrl($dynamicScenario);
 
@@ -478,17 +485,17 @@ class YotiClientTest extends TestCase
      */
     private function createClientWithErrorResponse($statusCode)
     {
-        $response = $this->createMock(Response::class);
-        $response->method('getBody')->willReturn('{}');
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(stream_for('{}'));
         $response->method('getStatusCode')->willReturn($statusCode);
 
-        $requestHandler = $this->createMock(RequestHandlerInterface::class);
-        $requestHandler
-            ->method('execute')
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->method('sendRequest')
             ->willReturn($response);
 
         $yotiClient = new YotiClient(SDK_ID, $this->pem);
-        $yotiClient->setRequestHandler($requestHandler);
+        $yotiClient->setHttpClient($httpClient);
 
         return $yotiClient;
     }
