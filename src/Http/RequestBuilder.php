@@ -2,10 +2,14 @@
 
 namespace Yoti\Http;
 
+use GuzzleHttp\Psr7\Request as RequestMessage;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Client\ClientInterface;
 use Yoti\Exception\RequestException;
 use Yoti\Util\Constants;
 use Yoti\Util\PemFile;
-use Yoti\YotiClient;
+
+use function GuzzleHttp\Psr7\stream_for;
 
 class RequestBuilder
 {
@@ -29,9 +33,6 @@ class RequestBuilder
 
     /** SDK Version HTTP header key. */
     const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
-
-    /** Auth HTTP header key. @deprecated 3.0.0 */
-    const YOTI_AUTH_HEADER_KEY = YotiClient::YOTI_AUTH_HEADER_KEY;
 
     /** Default SDK Identifier. */
     const YOTI_SDK_IDENTIFIER = 'PHP';
@@ -82,9 +83,9 @@ class RequestBuilder
     private $payload;
 
     /**
-     * @var \Yoti\Http\RequestHandlerInterface
+     * @var \Psr\Http\Client\ClientInterface
      */
-    private $handler;
+    private $client;
 
     /**
      * @param string $baseUrl
@@ -157,7 +158,7 @@ class RequestBuilder
      */
     public function withGet()
     {
-        return $this->withMethod(Request::METHOD_GET);
+        return $this->withMethod('GET');
     }
 
     /**
@@ -165,7 +166,7 @@ class RequestBuilder
      */
     public function withPost()
     {
-        return $this->withMethod(Request::METHOD_POST);
+        return $this->withMethod('POST');
     }
 
     /**
@@ -180,13 +181,13 @@ class RequestBuilder
     }
 
     /**
-     * @param \Yoti\Http\RequestHandlerInterface $handler
+     * @param \Psr\Http\Client\ClientInterface $client
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withHandler(RequestHandlerInterface $handler)
+    public function withClient(ClientInterface $client)
     {
-        $this->handler = $handler;
+        $this->client = $client;
         return $this;
     }
 
@@ -278,6 +279,44 @@ class RequestBuilder
     }
 
     /**
+     * @throws \Yoti\Exception\RequestException
+     */
+    private function validateMethod()
+    {
+        if (empty($this->method)) {
+            throw new RequestException('HTTP Method must be specified');
+        }
+
+        if (
+            !in_array(
+                $this->method,
+                [
+                Request::METHOD_GET,
+                Request::METHOD_POST,
+                Request::METHOD_PUT,
+                Request::METHOD_PATCH,
+                Request::METHOD_DELETE,
+                ],
+                true
+            )
+        ) {
+            throw new RequestException("Unsupported HTTP Method {$this->method}", 400);
+        }
+    }
+
+    /**
+     * @throws \Yoti\Exception\RequestException
+     */
+    private function validateHeaders()
+    {
+        foreach ($this->headers as $name => $value) {
+            if (!is_string($value)) {
+                throw new RequestException("Header value for '{$name}' must be a string");
+            }
+        }
+    }
+
+    /**
      * @return \Yoti\Http\Request
      *
      * @throws \Yoti\Exception\RequestException
@@ -292,6 +331,9 @@ class RequestBuilder
             throw new RequestException('Pem file must be provided to ' . __CLASS__);
         }
 
+        $this->validateMethod();
+        $this->validateHeaders();
+
         $signedDataArr = RequestSigner::sign(
             $this->pemFile,
             $this->endpoint,
@@ -304,15 +346,17 @@ class RequestBuilder
 
         $url = $this->baseUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
 
-        $request = new Request(
+        $message = new RequestMessage(
             $this->method,
-            $url,
-            $this->payload,
-            array_merge($defaultHeaders, $this->headers)
+            new Uri($url),
+            array_merge($defaultHeaders, $this->headers),
+            $this->payload ? stream_for($this->payload->getPayloadJSON()) : null
         );
 
-        if (isset($this->handler)) {
-            $request->setHandler($this->handler);
+        $request = new Request($message);
+
+        if (isset($this->client)) {
+            $request->setClient($this->client);
         }
 
         return $request;

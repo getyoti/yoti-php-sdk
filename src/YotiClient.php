@@ -2,11 +2,11 @@
 
 namespace Yoti;
 
+use Psr\Http\Client\ClientInterface;
 use Yoti\Entity\Receipt;
 use Yoti\Exception\YotiClientException;
 use Yoti\Http\Payload;
 use Yoti\Http\AmlResult;
-use Yoti\Http\RequestHandlerInterface;
 use Yoti\Entity\AmlProfile;
 use Yoti\Http\RequestBuilder;
 use Yoti\Exception\AmlException;
@@ -32,7 +32,7 @@ class YotiClient
     const OUTCOME_SUCCESS = 'SUCCESS';
 
     /** Default url for api (is passed in via constructor) */
-    const DEFAULT_CONNECT_API = 'https://api.yoti.com:443/api/v1';
+    const DEFAULT_CONNECT_API = 'https://api.yoti.com/api/v1';
 
     /** Base url for connect page (user will be redirected to this page eg. baseurl/app-id) */
     const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
@@ -78,9 +78,9 @@ class YotiClient
     private $sdkVersion;
 
     /**
-     * @var \Yoti\Http\RequestHandlerInterface
+     * @var \Psr\Http\Client\ClientInterface
      */
-    private $requestHandler;
+    private $httpClient;
 
     /**
      * YotiClient constructor.
@@ -236,11 +236,11 @@ class YotiClient
     /**
      * Set a custom request handler.
      *
-     * @param \Yoti\Http\RequestHandlerInterface $requestHandler
+     * @param \Psr\Http\Client\ClientInterface $httpClient
      */
-    public function setRequestHandler(RequestHandlerInterface $requestHandler)
+    public function setHttpClient(ClientInterface $httpClient)
     {
-        $this->requestHandler = $requestHandler;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -276,8 +276,8 @@ class YotiClient
             $requestBuilder->withSdkVersion($this->sdkVersion);
         }
 
-        if (isset($this->requestHandler)) {
-            $requestBuilder->withHandler($this->requestHandler);
+        if (isset($this->httpClient)) {
+            $requestBuilder->withClient($this->httpClient);
         }
 
         foreach ($headers as $name => $value) {

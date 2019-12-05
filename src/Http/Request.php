@@ -2,12 +2,12 @@
 
 namespace Yoti\Http;
 
+use Psr\Http\Message\RequestInterface;
 use Yoti\Exception\RequestException;
-use Yoti\Http\Curl\RequestHandler;
 
 class Request
 {
-    // HTTP methods
+    /** HTTP methods */
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
     const METHOD_PUT = 'PUT';
@@ -15,169 +15,63 @@ class Request
     const METHOD_DELETE = 'DELETE';
 
     /**
-     * @var string
+     * @var \Psr\Http\Message\RequestInterface
      */
-    private $method;
+    private $message;
 
     /**
-     * @var string
+     * @var \Psr\Http\Client\ClientInterface
      */
-    private $url;
-
-    /**
-     * @var string
-     */
-    private $payload;
-
-    /**
-     * @var array
-     */
-    private $headers;
-
-    /**
-     * @var \Yoti\Http\RequestHandlerInterface
-     */
-    private $handler;
+    private $client;
 
     /**
      * Request constructor.
      *
-     * @param string $method
-     * @param string $url
-     * @param Payload $payload
-     * @param array $header
+     * @param \Psr\Http\Message\RequestInterface $message
      *
      * @throws RequestException
      */
-    public function __construct(
-        $method,
-        $url,
-        Payload $payload = null,
-        array $headers = []
-    ) {
-        $this->validateHttpMethod($method);
-        $this->validateHeaders($headers);
-        $this->method = $method;
-        $this->url = $url;
-        $this->payload = $payload;
-        $this->headers = $headers;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
+    public function __construct(RequestInterface $message)
     {
-        return $this->method;
+        $this->message = $message;
     }
 
     /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * @return Payload|null
-     */
-    public function getPayload()
-    {
-        return $this->payload;
-    }
-
-    /**
-     * @param \Yoti\Http\RequestHandlerInterface $handler
+     * @param \Psr\Http\Client\ClientInterface $client
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function setHandler(RequestHandlerInterface $handler)
+    public function setClient(\Psr\Http\Client\ClientInterface $client)
     {
-        $this->handler = $handler;
+        $this->client = $client;
     }
 
     /**
-     * @return \Yoti\Http\RequestBuilder
+     * @return \Psr\Http\Client\ClientInterface
      */
-    private function getHandler()
+    private function getClient()
     {
-        if (is_null($this->handler)) {
-            // Use Curl handler by default.
-            $this->handler = new RequestHandler();
+        if (is_null($this->client)) {
+            $this->client = new Client();
         }
-        return $this->handler;
+        return $this->client;
+    }
+
+    /**
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     /**
      * Execute the request.
      *
-     * @return \Yoti\Http\Response
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function execute()
     {
-        return $this->getHandler()->execute($this);
-    }
-
-    /**
-     * Set custom headers.
-     *
-     * @param string[] $headers
-     *   Associative array of header names and values
-     *
-     * @throws RequestException
-     */
-    public function validateHeaders($headers)
-    {
-        foreach ($headers as $name => $value) {
-            if (!is_string($value)) {
-                throw new RequestException("Header value for '{$name}' must be a string");
-            }
-        }
-    }
-
-    /**
-     * Check if the provided HTTP method is valid.
-     *
-     * @param string $httpMethod
-     *
-     * @throws RequestException
-     */
-    private function validateHttpMethod($httpMethod)
-    {
-        if (empty($httpMethod)) {
-            throw new RequestException("HTTP Method must be specified");
-        }
-        if (!$this->methodIsAllowed($httpMethod)) {
-            throw new RequestException("Unsupported HTTP Method {$httpMethod}", 400);
-        }
-    }
-
-    /**
-     * Check the HTTP method is allowed.
-     *
-     * @param string $httpMethod
-     *
-     * @return bool
-     */
-    private function methodIsAllowed($httpMethod)
-    {
-        $allowedMethods = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_PATCH,
-            self::METHOD_DELETE,
-        ];
-
-        return in_array($httpMethod, $allowedMethods, true);
+        return $this->getClient()->sendRequest($this->getMessage());
     }
 }
