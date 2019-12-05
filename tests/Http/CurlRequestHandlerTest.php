@@ -42,7 +42,7 @@ class CurlRequestHandlerTest extends TestCase
         $endpoint = '/aml-check';
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        $this->payload = new Payload($amlProfile->getData());
+        $this->payload = new Payload($amlProfile);
         $this->pem = file_get_contents(PEM_FILE);
 
         $this->requestSigner = new RequestSigner(
