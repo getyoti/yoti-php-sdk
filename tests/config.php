@@ -22,4 +22,4 @@ define('MULTI_VALUE_ATTRIBUTE', file_get_contents(__DIR__ . '/sample-data/attrib
 define('EXTRA_DATA_CONTENT', file_get_contents(__DIR__ . '/sample-data/extra-data-content.txt'));
 define('THIRD_PARTY_ATTRIBUTE', file_get_contents(__DIR__ . '/sample-data/attributes/third-party-attribute.txt'));
 define('PEM_AUTH_KEY', file_get_contents(__DIR__ . '/sample-data/pem-auth-key.txt'));
-define('CONNECT_BASE_URL', 'https://api.yoti.com:443/api/v1');
+define('CONNECT_BASE_URL', 'https://api.yoti.com/api/v1');

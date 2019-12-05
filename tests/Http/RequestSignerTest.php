@@ -3,9 +3,7 @@
 namespace YotiTest\Http;
 
 use YotiTest\TestCase;
-use Yoti\Http\CurlRequestHandler;
 use Yoti\Http\Payload;
-use Yoti\YotiClient;
 use Yoti\Entity\Country;
 use Yoti\Entity\AmlAddress;
 use Yoti\Entity\AmlProfile;
@@ -49,38 +47,6 @@ class RequestSignerTest extends TestCase
     {
         $signedData = RequestSigner::sign(
             PemFile::fromString($this->pem),
-            '/aml-check',
-            'POST',
-            $this->payload
-        );
-        $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
-        $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];
-        $messageToSign = 'POST&' . $endpointPath . '&' . $this->payload->getBase64Payload();
-
-        $publicKey = openssl_pkey_get_public($this->publicKey);
-
-        $verify = openssl_verify($messageToSign, base64_decode($signedMessage), $publicKey, OPENSSL_ALGO_SHA256);
-
-        $this->assertEquals(1, $verify);
-    }
-
-    /**
-     * @covers ::signRequest
-     * @covers ::generateEndPointPath
-     * @covers ::validateSignedMessage
-     * @covers ::generateNonce
-     */
-    public function testShouldVerifySignedMessage()
-    {
-        $request = new CurlRequestHandler(
-            YotiClient::DEFAULT_CONNECT_API,
-            $this->pem,
-            SDK_ID,
-            'PHP'
-        );
-
-        $signedData = RequestSigner::signRequest(
-            $request,
             '/aml-check',
             'POST',
             $this->payload
