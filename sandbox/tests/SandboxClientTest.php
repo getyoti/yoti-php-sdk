@@ -2,9 +2,9 @@
 
 namespace SandboxTest;
 
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 use Yoti\ActivityDetails;
-use Yoti\Http\RequestHandlerInterface;
-use Yoti\Http\Response;
 use YotiSandbox\Http\RequestBuilder;
 use YotiSandbox\Http\SandboxPathManager;
 use YotiSandbox\SandboxClient;
@@ -23,7 +23,7 @@ class SandboxClientTest extends TestCase
      */
     public function testGetToken()
     {
-        $mockResponse = $this->createMock(Response::class);
+        $mockResponse = $this->createMock(ResponseInterface::class);
         $mockResponse
             ->method('getBody')
             ->willReturn(json_encode([
@@ -33,8 +33,8 @@ class SandboxClientTest extends TestCase
             ->method('getStatusCode')
             ->willReturn(201);
 
-        $mockRequestHandler = $this->createMock(RequestHandlerInterface::class);
-        $mockRequestHandler->method('execute')->willReturn($mockResponse);
+        $mockHttpClient = $this->createMock(ClientInterface::class);
+        $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
         $mockSandboxPathManager = $this->createMock(SandboxPathManager::class);
         $mockSandboxPathManager->method('getTokenApiPath')->willReturn('/some-api-path');
@@ -44,7 +44,7 @@ class SandboxClientTest extends TestCase
             file_get_contents(PEM_FILE),
             $mockSandboxPathManager,
             'PHP',
-            $mockRequestHandler
+            $mockHttpClient
         );
 
         $token = $sandboxClient->getToken(new RequestBuilder(), 'POST');
@@ -64,13 +64,12 @@ class SandboxClientTest extends TestCase
             file_get_contents(PEM_FILE),
             $this->createMockPathManager(),
             'PHP',
-            $this->createMockHandlerForActivityDetails()
+            $this->createMockHttpClientForActivityDetails()
         );
         $activityDetails = $sandboxClient->getActivityDetails(YOTI_CONNECT_TOKEN);
 
         $this->assertInstanceOf(ActivityDetails::class, $activityDetails);
     }
-
 
     /**
      * @covers ::includePemWrapper
@@ -88,7 +87,7 @@ class SandboxClientTest extends TestCase
             $pemWithoutWrapper,
             $this->createMockPathManager(),
             'PHP',
-            $this->createMockHandlerForActivityDetails()
+            $this->createMockHttpClientForActivityDetails()
         );
 
         $activityDetails = $sandboxClient->getActivityDetails(YOTI_CONNECT_TOKEN);
@@ -109,11 +108,11 @@ class SandboxClientTest extends TestCase
     }
 
     /**
-     * @return \Yoti\Http\RequestHandlerInterface
+     * @return \Psr\Http\Client\ClientInterface
      */
-    private function createMockHandlerForActivityDetails()
+    private function createMockHttpClientForActivityDetails()
     {
-        $mockResponse = $this->createMock(Response::class);
+        $mockResponse = $this->createMock(ResponseInterface::class);
         $mockResponse
             ->method('getBody')
             ->willReturn(file_get_contents(RECEIPT_JSON));
@@ -121,9 +120,9 @@ class SandboxClientTest extends TestCase
             ->method('getStatusCode')
             ->willReturn(200);
 
-        $mockRequestHandler = $this->createMock(RequestHandlerInterface::class);
-        $mockRequestHandler->method('execute')->willReturn($mockResponse);
+        $mockHttpClient = $this->createMock(ClientInterface::class);
+        $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
-        return $mockRequestHandler;
+        return $mockHttpClient;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace YotiSandbox;
 
+use Psr\Http\Client\ClientInterface;
 use Yoti\YotiClient;
 use YotiSandbox\Http\Response;
-use Yoti\Http\RequestHandlerInterface;
 use YotiSandbox\Http\RequestBuilder as TokenRequestBuilder;
 use Yoti\Http\RequestBuilder;
 use YotiSandbox\Http\SandboxPathManager;
@@ -34,9 +34,9 @@ class SandboxClient
     private $sandboxPathManager;
 
     /**
-     * @var \Yoti\Http\RequestHandlerInterface|null
+     * @var \Psr\Http\Client\ClientInterface|null
      */
-    private $requestHandler;
+    private $httpClient;
 
     /**
      * @var YotiClient
@@ -50,7 +50,7 @@ class SandboxClient
      * @param string $pem
      * @param \YotiSandbox\Http\SandboxPathManager $sandboxPathManager
      * @param string $sdkIdentifier
-     * @param \Yoti\Http\RequestHandlerInterface $requestHandler
+     * @param \Psr\Http\Client\ClientInterfaces $httpClient
      *
      * @throws \Yoti\Exception\RequestException
      * @throws \Yoti\Exception\YotiClientException
@@ -60,18 +60,18 @@ class SandboxClient
         $pem,
         SandboxPathManager $sandboxPathManager,
         $sdkIdentifier = 'PHP',
-        RequestHandlerInterface $requestHandler = null
+        ClientInterface $httpClient = null
     ) {
         $this->sdkId = $sdkId;
         $this->sdkIdentifier = $sdkIdentifier;
         $this->pem = $this->includePemWrapper($pem);
         $this->sandboxPathManager = $sandboxPathManager;
-        $this->requestHandler = $requestHandler;
+        $this->httpClient = $httpClient;
 
         $this->yotiClient = new YotiClient($sdkId, $this->pem, $sandboxPathManager->getProfileApiPath());
 
-        if (isset($this->requestHandler)) {
-            $this->yotiClient->setRequestHandler($requestHandler);
+        if (isset($this->httpClient)) {
+            $this->yotiClient->setHttpClient($httpClient);
         }
     }
 
@@ -93,18 +93,16 @@ class SandboxClient
     /**
      * @param \YotiSandbox\Http\RequestBuilder $requestBuilder
      *
-     * @param string $httpMethod
-     *
      * @return string
      *
      * @throws Exception\ResponseException
      * @throws \Yoti\Exception\RequestException
      */
-    public function getToken(TokenRequestBuilder $requestBuilder, $httpMethod)
+    public function getToken(TokenRequestBuilder $requestBuilder)
     {
         // Request endpoint
         $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
-        $response = $this->sendRequest($requestBuilder, $endpoint, $httpMethod);
+        $response = $this->sendRequest($requestBuilder, $endpoint, 'POST');
 
         return (new Response($response))->getToken();
     }
@@ -132,8 +130,8 @@ class SandboxClient
             ->withPayload($payload)
             ->withQueryParam('appId', $this->sdkId);
 
-        if (isset($this->requestHandler)) {
-            $requestBuilder->withHandler($this->requestHandler);
+        if (isset($this->httpClient)) {
+            $requestBuilder->withClient($this->httpClient);
         }
 
         return $requestBuilder->build()->execute();
