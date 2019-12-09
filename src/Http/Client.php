@@ -2,6 +2,7 @@
 
 namespace Yoti\Http;
 
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Client\ClientInterface;
@@ -24,7 +25,8 @@ class Client implements ClientInterface
     {
         $this->config = array_merge(
             [
-                'timeout' => 30,
+                RequestOptions::TIMEOUT => 30,
+                RequestOptions::HTTP_ERRORS => false,
             ],
             $config
         );

@@ -163,17 +163,17 @@ class YotiClient
         // Get payload data from amlProfile
         $amlPayload = new Payload($amlProfile);
 
-        $response = $this->sendRequest(
+        $response = $this->sendConnectRequest(
             self::AML_CHECK_ENDPOINT,
             Request::METHOD_POST,
             $amlPayload
         );
 
         // Get response data array
-        $result = $this->processJsonResponse($response['response']);
+        $result = $this->processJsonResponse($response->getBody());
 
         // Validate result
-        $this->validateAmlResult($result, $response['http_code']);
+        $this->validateAmlResult($result, $response->getStatusCode());
 
         // Set and return result
         return new AmlResult($result);
@@ -288,30 +288,6 @@ class YotiClient
     }
 
     /**
-     * Make REST request to Connect API.
-     * This method allows to stub the request call in test mode.
-     *
-     * @deprecated 3.0.0 replaced by ::sendConnectRequest()
-     *
-     * @param string $endpoint
-     * @param string $httpMethod
-     * @param Payload|null $payload
-     *
-     * @return array
-     *
-     * @throws \Yoti\Exception\RequestException
-     */
-    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null, $headers = [])
-    {
-        $response = $this->sendConnectRequest($endpoint, $httpMethod, $payload, $headers);
-
-        return [
-            'response' => $response->getBody(),
-            'http_code' => $response->getStatusCode()
-        ];
-    }
-
-    /**
      * Handle request result.
      *
      * @param array $responseArr
@@ -375,19 +351,19 @@ class YotiClient
 
         // Request endpoint
         $endpoint = sprintf(self::PROFILE_REQUEST_ENDPOINT, $token);
-        $response = $this->sendRequest(
+        $response = $this->sendConnectRequest(
             $endpoint,
             Request::METHOD_GET,
             null,
             [self::YOTI_AUTH_HEADER_KEY => $this->pemFile->getAuthKey()]
         );
 
-        $httpCode = (int) $response['http_code'];
+        $httpCode = $response->getStatusCode();
         if (!$this->isResponseSuccess($httpCode)) {
             throw new ActivityDetailsException("Server responded with {$httpCode}", $httpCode);
         }
 
-        $result = $this->processJsonResponse($response['response']);
+        $result = $this->processJsonResponse($response->getBody());
         $this->checkForReceipt($result);
 
         return new Receipt($result['receipt']);
