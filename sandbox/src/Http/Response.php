@@ -3,7 +3,7 @@
 namespace YotiSandbox\Http;
 
 use YotiSandbox\Exception\ResponseException;
-use Yoti\Http\Response as YotiResponse;
+use Psr\Http\Message\ResponseInterface;
 
 class Response
 {
@@ -19,7 +19,7 @@ class Response
      *
      * @throws ResponseException
      */
-    public function __construct(YotiResponse $response)
+    public function __construct(ResponseInterface $response)
     {
         $responseArr = $this->processData($response);
         $this->token = $responseArr['token'];
@@ -40,7 +40,7 @@ class Response
      *
      * @throws ResponseException
      */
-    private function processData(YotiResponse $response)
+    private function processData(ResponseInterface $response)
     {
         $this->checkResponseStatus($response->getStatusCode());
 
