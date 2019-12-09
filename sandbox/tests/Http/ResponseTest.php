@@ -2,7 +2,7 @@
 
 namespace SandboxTest\Http;
 
-use Yoti\Http\Response;
+use Psr\Http\Message\ResponseInterface;
 use YotiSandbox\Http\Response as TokenResponse;
 use YotiTest\TestCase;
 
@@ -22,7 +22,7 @@ class ResponseTest extends TestCase
     {
         $someToken = 'some-token';
 
-        $someResponse = $this->createMock(Response::class);
+        $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
         $someResponse->method('getBody')->willReturn(json_encode([
             'token' => $someToken,
@@ -47,7 +47,7 @@ class ResponseTest extends TestCase
      */
     public function testGetTokenEmpty()
     {
-        $someResponse = $this->createMock(Response::class);
+        $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
         $someResponse->method('getBody')->willReturn('{}');
 
@@ -62,7 +62,7 @@ class ResponseTest extends TestCase
      */
     public function testBadResponseStatusCode()
     {
-        $someResponse = $this->createMock(Response::class);
+        $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(500);
         $someResponse->method('getBody')->willReturn('{}');
 
@@ -77,7 +77,7 @@ class ResponseTest extends TestCase
      */
     public function testInvalidJson()
     {
-        $someResponse = $this->createMock(Response::class);
+        $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
         $someResponse->method('getBody')->willReturn('invalid json');
 
