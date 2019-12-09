@@ -12,10 +12,29 @@ use Psr\Http\Client\ClientInterface;
 class Client implements ClientInterface
 {
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * @param array $config
+     *   Configuration provided to \GuzzleHttp\Client::__construct
+     */
+    public function __construct(array $config = [])
+    {
+        $this->config = array_merge(
+            [
+                'timeout' => 30,
+            ],
+            $config
+        );
+    }
+
+    /**
      * @inheritDoc
      */
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        return (new \GuzzleHttp\Client())->send($request);
+        return (new \GuzzleHttp\Client($this->config))->send($request);
     }
 }
