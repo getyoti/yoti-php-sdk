@@ -130,7 +130,6 @@ class YotiClientTest extends TestCase
      * @covers ::getActivityDetails
      * @covers ::decryptConnectToken
      * @covers ::setHttpClient
-     * @covers ::sendRequest
      * @covers ::sendConnectRequest
      * @covers ::getReceipt
      * @covers ::processJsonResponse
@@ -227,7 +226,6 @@ class YotiClientTest extends TestCase
     /**
      * @covers ::performAmlCheck
      * @covers ::setHttpClient
-     * @covers ::sendRequest
      * @covers ::sendConnectRequest
      * @covers ::processJsonResponse
      * @covers ::validateAmlResult
@@ -306,7 +304,6 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::__construct
-     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
@@ -327,7 +324,6 @@ class YotiClientTest extends TestCase
      * Test invalid http header value for X-Yoti-SDK
      *
      * @covers ::setSdkIdentifier
-     * @covers ::sendRequest
      *
      * @expectedException \Yoti\Exception\RequestException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
