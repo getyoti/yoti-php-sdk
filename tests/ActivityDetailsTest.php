@@ -8,6 +8,8 @@ use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
 use Yoti\Entity\Image;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Entity\AttributeIssuanceDetails;
+use Yoti\Entity\ExtraData;
 
 /**
  * @coversDefaultClass \Yoti\ActivityDetails
@@ -47,20 +49,30 @@ class ActivityDetailsTest extends TestCase
             new Receipt($this->receiptArr),
             $this->pem
         );
-        $this->profile = $this->activityDetails->getProfile();
-        $this->applicationProfile = $this->activityDetails->getApplicationProfile();
     }
 
     /**
-     * Test getting ActivityDetails Instance.
+     * Test creation of ActivityDetails with test data.
+     *
+     * @covers ::__construct
      */
     public function testActivityDetailsInstance()
     {
         $this->assertInstanceOf(ActivityDetails::class, $this->activityDetails);
+
+        $profile = $this->activityDetails->getProfile();
+        $this->assertNull($profile->getFamilyName());
+        $this->assertNull($profile->getFullName());
+        $this->assertNull($profile->getDateOfBirth());
+        $this->assertNull($profile->getEmailAddress());
+        $this->assertEquals('+447474747474', $profile->getPhoneNumber()->getValue());
+        $this->assertInstanceOf(Attribute::class, $profile->getSelfie());
+        $this->assertInstanceOf(Image::class, $profile->getSelfie()->getValue());
     }
 
     /**
      * @covers ::getRememberMeId
+     * @covers ::setRememberMeId
      */
     public function testGetRememberMeId()
     {
@@ -70,6 +82,7 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getRememberMeId
+     * @covers ::setRememberMeId
      */
     public function testGetRememberMeIdNotPresent()
     {
@@ -83,6 +96,7 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getRememberMeId
+     * @covers ::setRememberMeId
      */
     public function testGetRememberMeIdEmpty()
     {
@@ -96,6 +110,7 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getParentRememberMeId
+     * @covers ::setParentRememberMeId
      */
     public function testGetParentRememberMeIdExists()
     {
@@ -105,6 +120,9 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getProfile
+     * @covers ::setProfile
+     * @covers ::processUserProfileAttributes
+     * @covers ::appendAgeVerifications
      */
     public function testGetProfile()
     {
@@ -113,6 +131,7 @@ class ActivityDetailsTest extends TestCase
 
     /**
      * @covers ::getApplicationProfile
+     * @covers ::setApplicationProfile
      */
     public function testGetApplicationProfile()
     {
@@ -123,58 +142,8 @@ class ActivityDetailsTest extends TestCase
     }
 
     /**
-     * @covers \Yoti\Entity\Profile::getFamilyName
-     */
-    public function testGetFamilyName()
-    {
-        $this->assertNull($this->profile->getFamilyName());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Profile::getFullName
-     */
-    public function testGetFullName()
-    {
-        $this->assertNull($this->profile->getFullName());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Profile::getDateOfBirth
-     */
-    public function testGetDateOfBirth()
-    {
-        $this->assertNull($this->profile->getDateOfBirth());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Profile::getPhoneNumber
-     * @covers \Yoti\Entity\Attribute::getValue
-     */
-    public function testGetPhoneNumber()
-    {
-        $this->assertEquals('+447474747474', $this->profile->getPhoneNumber()->getValue());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Profile::getEmailAddress
-     */
-    public function testGetEmailAddress()
-    {
-        $this->assertNull($this->profile->getEmailAddress());
-    }
-
-    /**
-     * @covers \Yoti\Entity\Profile::getSelfie
-     * @covers \Yoti\Entity\Attribute::getValue
-     */
-    public function testGetSelfie()
-    {
-        $this->assertInstanceOf(Attribute::class, $this->profile->getSelfie());
-        $this->assertInstanceOf(Image::class, $this->profile->getSelfie()->getValue());
-    }
-
-    /**
      * @covers ::getTimestamp
+     * @covers ::setTimestamp
      */
     public function testGetTimestamp()
     {
@@ -192,5 +161,17 @@ class ActivityDetailsTest extends TestCase
     {
         $receiptId = '9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl';
         $this->assertEquals($receiptId, $this->activityDetails->getReceiptId());
+    }
+
+    /**
+     * @covers ::getExtraData
+     * @covers ::setExtraData
+     */
+    public function testGetExtraData()
+    {
+        $extraData = $this->activityDetails->getExtraData();
+
+        $this->assertInstanceOf(ExtraData::class, $extraData);
+        $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());
     }
 }

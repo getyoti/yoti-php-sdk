@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiTest\Entity;
 
 use YotiTest\TestCase;
@@ -39,6 +40,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getName
+     * @covers ::__construct
      */
     public function testAttributeName()
     {
@@ -47,6 +49,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getValue
+     * @covers ::__construct
      */
     public function testAttributeValue()
     {
@@ -55,6 +58,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getSources
+     * @covers ::__construct
      */
     public function testGetSources()
     {
@@ -74,6 +78,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getVerifiers
+     * @covers ::__construct
      */
     public function testVerifiers()
     {
@@ -90,6 +95,11 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getAnchors
+     * @covers ::setSources
+     * @covers ::setVerifiers
+     * @covers ::setAnchors
+     * @covers ::getAnchorType
+     * @covers ::__construct
      */
     public function testGetAnchors()
     {

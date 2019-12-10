@@ -1,17 +1,31 @@
 language: php
 
-php:
-    - 5.6
-    - 7.2
-    - 7.3
-
 git:
   depth: 1
 
-install:
-    - travis_retry composer self-update
-    - travis_retry composer install --no-interaction --prefer-source --dev
-
-script:
-    - composer test
-    - composer lint
+jobs:
+  include:
+    - &test
+      stage: Test
+      php: "7.3"
+      os: linux
+      install:
+        - travis_retry composer self-update
+        - travis_retry composer install --no-interaction --prefer-source --dev
+      script:
+        - composer test
+        - composer lint
+    - &compatibility
+      <<: *test
+      stage: Compatibility
+      php: "5.6"
+    - <<: *compatibility
+      php: "7.2"
+    - <<: *compatibility
+      php: "7.1"
+    - <<: *test
+      stage: Coverage
+      name: Coveralls
+      if: type = pull_request OR branch = master
+      script:
+        - composer coveralls

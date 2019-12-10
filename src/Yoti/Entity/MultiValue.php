@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Entity;
 
 class MultiValue extends \ArrayObject

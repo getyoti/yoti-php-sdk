@@ -83,6 +83,20 @@ class Validation
     }
 
     /**
+     * @param mixed $value
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function notEmptyString($value, $name)
+    {
+        Validation::isString($value, $name);
+        if (strlen($value) === 0) {
+            throw new \InvalidArgumentException("{$name} cannot be empty");
+        }
+    }
+
+    /**
      * @param int|float $value
      * @param int|float $limit
      * @param string $name
@@ -138,6 +152,24 @@ class Validation
             if (!is_integer($value)) {
                 throw new \InvalidArgumentException(sprintf(
                     '%s must be array of integers',
+                    $name
+                ));
+            }
+        }
+    }
+
+    /**
+     * @param array $values
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function isArrayOfStrings(array $values, $name)
+    {
+        foreach ($values as $value) {
+            if (!is_string($value)) {
+                throw new \InvalidArgumentException(sprintf(
+                    '%s must be array of strings',
                     $name
                 ));
             }

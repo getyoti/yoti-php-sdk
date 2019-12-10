@@ -1,7 +1,7 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "keywords": [
     "yoti",
     "sdk"
@@ -18,6 +18,7 @@
     "psr-4": {
       "Attrpubapi\\": "src/Attrpubapi",
       "Compubapi\\": "src/Compubapi",
+      "Sharepubapi\\": "src/Sharepubapi",
       "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
       "GPBMetadata\\": "src/protobuflib/GPBMetadata",
       "phpseclib\\": "src/phpseclib/",
@@ -30,7 +31,8 @@
     "phpunit/phpunit": "^5.7",
     "squizlabs/php_codesniffer": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.15",
-    "brainmaestro/composer-git-hooks": "^2.8"
+    "brainmaestro/composer-git-hooks": "^2.8",
+    "php-coveralls/php-coveralls": "^2.1"
   },
   "autoload-dev": {
     "psr-4": {
@@ -43,6 +45,10 @@
     "test": "phpunit",
     "coverage-clover": "phpunit --coverage-clover ./coverage/coverage.xml",
     "coverage-html": "phpunit --coverage-html ./coverage/report",
+    "coveralls": [
+      "@coverage-clover",
+      "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
+    ],
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi"
@@ -52,10 +58,7 @@
   },
   "extra": {
     "hooks": {
-        "pre-commit": [
-          "composer test",
-          "composer lint"
-        ]
+        "pre-commit": "composer test && composer lint"
     }
   }
 }

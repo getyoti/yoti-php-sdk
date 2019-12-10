@@ -28,28 +28,29 @@ use Yoti\Util\Validation;
  */
 class YotiClient
 {
-    /**
-     * Request successful outcome
-     */
+    /** Request successful outcome */
     const OUTCOME_SUCCESS = 'SUCCESS';
 
-    // Default url for api (is passed in via constructor)
+    /** Default url for api (is passed in via constructor) */
     const DEFAULT_CONNECT_API = 'https://api.yoti.com:443/api/v1';
 
-    // Base url for connect page (user will be redirected to this page eg. baseurl/app-id)
+    /** Base url for connect page (user will be redirected to this page eg. baseurl/app-id) */
     const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
 
-    // Yoti Hub login
+    /** Yoti Hub login */
     const DASHBOARD_URL = 'https://hub.yoti.com';
 
-    // Aml check endpoint
+    /** Aml check endpoint */
     const AML_CHECK_ENDPOINT = '/aml-check';
 
-    // Profile sharing endpoint
+    /** Profile sharing endpoint */
     const PROFILE_REQUEST_ENDPOINT = '/profile/%s';
 
-    // Share URL endpoint
+    /** Share URL endpoint */
     const SHARE_URL_ENDPOINT = '/qrcodes/apps/%s';
+
+    /** Auth HTTP header key */
+    const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
 
     /**
      * @var \Yoti\Util\PemFile
@@ -258,7 +259,7 @@ class YotiClient
      *
      * @throws \Yoti\Exception\RequestException
      */
-    private function sendConnectRequest($endpoint, $httpMethod, Payload $payload = null)
+    private function sendConnectRequest($endpoint, $httpMethod, Payload $payload = null, $headers = [])
     {
         $requestBuilder = (new RequestBuilder())
             ->withBaseUrl($this->connectApi)
@@ -283,6 +284,10 @@ class YotiClient
             $requestBuilder->withHandler($this->requestHandler);
         }
 
+        foreach ($headers as $name => $value) {
+            $requestBuilder->withHeader($name, $value);
+        }
+
         return $requestBuilder->build()->execute();
     }
 
@@ -300,9 +305,9 @@ class YotiClient
      *
      * @throws \Yoti\Exception\RequestException
      */
-    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null)
+    protected function sendRequest($endpoint, $httpMethod, Payload $payload = null, $headers = [])
     {
-        $response = $this->sendConnectRequest($endpoint, $httpMethod, $payload);
+        $response = $this->sendConnectRequest($endpoint, $httpMethod, $payload, $headers);
 
         return [
             'response' => $response->getBody(),
@@ -357,8 +362,6 @@ class YotiClient
      * Decrypt and return receipt data.
      *
      * @param string $encryptedConnectToken
-     * @param string $httpMethod
-     * @param Payload|null $payload
      *
      * @return \Yoti\Entity\Receipt
      *
@@ -366,7 +369,7 @@ class YotiClient
      * @throws \Yoti\Exception\ReceiptException
      * @throws \Yoti\Exception\RequestException
      */
-    private function getReceipt($encryptedConnectToken, $httpMethod = Request::METHOD_GET, $payload = null)
+    private function getReceipt($encryptedConnectToken)
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -376,7 +379,12 @@ class YotiClient
 
         // Request endpoint
         $endpoint = sprintf(self::PROFILE_REQUEST_ENDPOINT, $token);
-        $response = $this->sendRequest($endpoint, $httpMethod, $payload);
+        $response = $this->sendRequest(
+            $endpoint,
+            Request::METHOD_GET,
+            null,
+            [self::YOTI_AUTH_HEADER_KEY => $this->pemFile->getAuthKey()]
+        );
 
         $httpCode = (int) $response['http_code'];
         if (!$this->isResponseSuccess($httpCode)) {

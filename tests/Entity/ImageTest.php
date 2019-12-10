@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiTest\Entity;
 
 use Yoti\Entity\Image;
@@ -9,6 +10,8 @@ use YotiTest\TestCase;
  */
 class ImageTest extends TestCase
 {
+    const SOME_IMAGE_DATA = 'dummyImageData';
+
     /**
      * @var \Yoti\Entity\Image
      */
@@ -16,7 +19,7 @@ class ImageTest extends TestCase
 
     public function setup()
     {
-        $this->dummyImage = new Image('dummyImageData', 'png');
+        $this->dummyImage = new Image(self::SOME_IMAGE_DATA, 'png');
     }
 
     /**
@@ -29,10 +32,12 @@ class ImageTest extends TestCase
 
     /**
      * @covers ::getContent
+     * @covers ::__toString
      */
     public function testGetContent()
     {
-        $this->assertEquals('dummyImageData', $this->dummyImage->getContent());
+        $this->assertEquals(self::SOME_IMAGE_DATA, $this->dummyImage->getContent());
+        $this->assertEquals(self::SOME_IMAGE_DATA, (string) $this->dummyImage);
     }
 
     /**
@@ -46,10 +51,12 @@ class ImageTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::imageTypeToMimeType
+     * @covers ::validateImageExtension
      */
     public function testShouldThrowExceptionForUnsupportedExtension()
     {
         $this->expectException("\Yoti\Exception\AttributeException");
-        $image = new Image('dummyImageData', 'bmp');
+        new Image(self::SOME_IMAGE_DATA, 'bmp');
     }
 }

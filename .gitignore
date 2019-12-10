@@ -2,13 +2,6 @@
 composer.lock
 /vendor
 
-examples/.env
-examples/selfie.jpeg
-examples/vendor
-examples/*.pem
-examples/keys/*.pem
-examples/sdk
-
 .phpcs.xml
 phpcs.xml
 

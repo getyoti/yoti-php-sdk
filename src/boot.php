@@ -10,7 +10,6 @@ require_once __DIR__ . '/phpseclib/bootstrap.php';
 // Autoload Yoti classes and other dependencies
 spl_autoload_register(function($className) {
     if (strpos($className, 'Google\Protobuf') !== false || strpos($className, 'GPBMetadata') !== false) {
-
         $className = 'protobuflib\\' .  $className;
     }
     $file = __DIR__ . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $className).'.php';

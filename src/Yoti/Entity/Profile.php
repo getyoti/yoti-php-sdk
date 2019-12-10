@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti\Entity;
 
 /**
@@ -227,7 +228,8 @@ class Profile extends BaseProfile
         $structuredPostalAddress = $this->getStructuredPostalAddress();
         if (null !== $structuredPostalAddress) {
             $valueArr = $structuredPostalAddress->getValue();
-            if (is_array($valueArr)
+            if (
+                is_array($valueArr)
                 && isset($valueArr['formatted_address'])
             ) {
                 $postalAddressValue = $valueArr['formatted_address'];

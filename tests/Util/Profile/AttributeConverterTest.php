@@ -2,6 +2,7 @@
 
 namespace YotiTest\Util\Profile;
 
+use Compubapi\EncryptedData;
 use YotiTest\TestCase;
 use Yoti\Entity\Image;
 use Yoti\Entity\Receipt;
@@ -182,6 +183,7 @@ class AttributeConverterTest extends TestCase
      *
      * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnAttributeName
+     * @covers ::imageTypeToExtension
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
@@ -388,6 +390,37 @@ class AttributeConverterTest extends TestCase
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
         $this->assertInstanceOf(Attribute::class, $attr);
         $this->assertEquals('', $attr->getValue()[3]);
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testThirdPartyAttribute()
+    {
+        $protobufAttribute = new \Attrpubapi\Attribute();
+        $protobufAttribute->mergeFromString(base64_decode(THIRD_PARTY_ATTRIBUTE));
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+
+        $this->assertEquals('test-third-party-attribute-0', $attr->getValue());
+        $this->assertEquals('com.thirdparty.id', $attr->getName());
+
+        $this->assertEquals('THIRD_PARTY', $attr->getSources()[0]->getValue());
+        $this->assertEquals('orgName', $attr->getSources()[0]->getSubType());
+
+        $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
+        $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
+    }
+
+    /**
+     * @covers ::getEncryptedData
+     */
+    public function testGetEncryptedData()
+    {
+        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $encryptedData = AttributeConverter::getEncryptedData($receiptArr['receipt']['profile_content']);
+
+        $this->assertInstanceOf(EncryptedData::class, $encryptedData);
     }
 
     /**

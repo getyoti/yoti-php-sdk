@@ -35,12 +35,14 @@ class WantedAttribute implements \JsonSerializable
      * @param boolean $acceptSelfAsserted
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      */
-    public function __construct($name, $derivation = '', $acceptSelfAsserted = null, Constraints $constraints = null)
+    public function __construct($name, $derivation = null, $acceptSelfAsserted = null, Constraints $constraints = null)
     {
-        Validation::isString($name, 'name');
+        Validation::notEmptyString($name, 'name');
         $this->name = $name;
 
-        Validation::isString($derivation, 'derivation');
+        if ($derivation !== null) {
+            Validation::isString($derivation, 'derivation');
+        }
         $this->derivation = $derivation;
 
         if ($acceptSelfAsserted !== null) {
@@ -105,9 +107,12 @@ class WantedAttribute implements \JsonSerializable
     {
         $json = [
             'name' => $this->getName(),
-            'derivation' => $this->getDerivation(),
             'optional' => false,
         ];
+
+        if ($this->getDerivation() !== null) {
+            $json['derivation'] = $this->getDerivation();
+        }
 
         if ($this->getConstraints() !== null) {
             $json['constraints'] = $this->getConstraints();

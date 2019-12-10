@@ -36,6 +36,7 @@ class RequestHandler implements RequestHandlerInterface
         }
 
         $ch = curl_init($request->getUrl());
+
         curl_setopt_array($ch, [
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_RETURNTRANSFER => true,
@@ -54,10 +55,22 @@ class RequestHandler implements RequestHandlerInterface
             curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPayload()->getPayloadJSON());
         }
 
-        // Set response data
+        // Get response headers.
+        $responseHeaders = [];
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($ch, $header) use (&$responseHeaders) {
+            // Handle multi-line headers - see RFC2616 section 4.
+            if ($header[0] == ' ' || $header[0] == "\t") {
+                $responseHeaders[] = array_pop($responseHeaders) . ' ' . trim($header);
+            } else {
+                $responseHeaders[] = trim($header);
+            }
+            return strlen($header);
+        });
+
+        // Get response data.
         $response = curl_exec($ch);
 
-        // Set response code
+        // Get response code.
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         // Check if any related Curl error occurred.
@@ -65,7 +78,7 @@ class RequestHandler implements RequestHandlerInterface
             $error = curl_error($ch);
         }
 
-        // Close the session
+        // Close the session.
         curl_close($ch);
 
         // Throw if there was an error.
@@ -73,7 +86,29 @@ class RequestHandler implements RequestHandlerInterface
             throw new RequestException($error);
         }
 
-        return new Response($response, $statusCode);
+        return new Response($response, $statusCode, $this->createResponseHeadersMap($responseHeaders));
+    }
+
+    /**
+     * Create headers map from array of headers.
+     *
+     * @param string[]
+     *
+     * @return string[]
+     */
+    private function createResponseHeadersMap($headers)
+    {
+        $headersMap = [];
+
+        foreach ($headers as $header) {
+            $parts = array_map('trim', explode(':', $header));
+            if (count($parts) === 2) {
+                list($key, $value) = $parts;
+                $headersMap[$key] = $value;
+            }
+        }
+
+        return $headersMap;
     }
 
     /**

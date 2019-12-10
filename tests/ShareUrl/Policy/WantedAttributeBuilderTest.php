@@ -34,8 +34,8 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => $someDerivation,
             'optional' => false,
+            'derivation' => $someDerivation,
         ];
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($wantedAttribute));
@@ -43,7 +43,36 @@ class WantedAttributeBuilderTest extends TestCase
     }
 
     /**
+     * @covers ::build
+     * @covers ::withName
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage name cannot be empty
+     */
+    public function testEmptyName()
+    {
+        (new WantedAttributeBuilder())
+            ->withName('')
+            ->build();
+    }
+
+    /**
+     * @covers ::build
+     * @covers ::withName
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage name must be a string
+     */
+    public function testNonStringName()
+    {
+        (new WantedAttributeBuilder())
+            ->withName(['some array'])
+            ->build();
+    }
+
+    /**
      * @covers ::withAcceptSelfAsserted
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::__construct
      * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
      * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getAcceptSelfAsserted
      */
@@ -53,7 +82,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'accept_self_asserted' => true,
         ];
@@ -77,6 +105,7 @@ class WantedAttributeBuilderTest extends TestCase
 
     /**
      * @covers ::withAcceptSelfAsserted
+     * @covers \Yoti\ShareUrl\Policy\WantedAttribute::__construct
      * @covers \Yoti\ShareUrl\Policy\WantedAttribute::jsonSerialize
      * @covers \Yoti\ShareUrl\Policy\WantedAttribute::getAcceptSelfAsserted
      */
@@ -86,7 +115,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'accept_self_asserted' => false,
         ];
@@ -124,7 +152,6 @@ class WantedAttributeBuilderTest extends TestCase
 
         $expectedJsonData = [
             'name' => $someName,
-            'derivation' => '',
             'optional' => false,
             'constraints' => [
                 [

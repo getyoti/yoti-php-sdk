@@ -28,10 +28,12 @@ class ValidationTest extends TestCase
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage some_name must be a string
+     *
+     * @dataProvider nonStringDataProvider
      */
-    public function testIsStringInvalid()
+    public function testIsStringInvalid($nonStringValue)
     {
-        Validation::isString(['some array'], self::SOME_NAME);
+        Validation::isString($nonStringValue, self::SOME_NAME);
     }
 
     /**
@@ -287,6 +289,27 @@ class ValidationTest extends TestCase
     }
 
     /**
+     * @covers ::isArrayOfStrings
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testIsArrayOfStrings()
+    {
+        Validation::isArrayOfStrings(['', self::SOME_STRING], self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::isArrayOfStrings
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage some_name must be array of strings
+     */
+    public function testIsArrayOfStringsInvalid()
+    {
+        Validation::isArrayOfStrings([1, [], self::SOME_STRING], self::SOME_NAME);
+    }
+
+    /**
      * @covers ::isArrayOfType
      * @covers ::isOneOfType
      *
@@ -323,5 +346,54 @@ class ValidationTest extends TestCase
             \DateTime::class,
         ];
         Validation::isArrayOfType($arrayOfTypes, $allowedTypes, self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::notEmptyString
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testNotEmptyString()
+    {
+        Validation::notEmptyString(self::SOME_STRING, self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::notEmptyString
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage some_name cannot be empty
+     */
+    public function testNotEmptyStringWithEmptyValue()
+    {
+        Validation::notEmptyString('', self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::notEmptyString
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage some_name must be a string
+     *
+     * @dataProvider nonStringDataProvider
+     */
+    public function testNotEmptyStringWithNonStringValue($nonStringValue)
+    {
+        Validation::notEmptyString($nonStringValue, self::SOME_NAME);
+    }
+
+    /**
+     * Provides non-string values.
+     */
+    public function nonStringDataProvider()
+    {
+        return [
+            [ [] ],
+            [ false ],
+            [ true ],
+            [ 1 ],
+            [ 0 ],
+            [ (object)[] ],
+        ];
     }
 }

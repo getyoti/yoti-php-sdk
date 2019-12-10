@@ -1,7 +1,7 @@
 <?php
 
 // Load dependent packages and env data
-require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 ?>
 <!DOCTYPE html>
 <html class="yoti-html">

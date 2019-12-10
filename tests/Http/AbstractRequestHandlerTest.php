@@ -43,7 +43,6 @@ class AbstractRequestHandlerTest extends TestCase
         $expectedHeaders = [
           "X-Yoti-SDK-Version: PHP-{$version}",
           'X-Yoti-SDK: PHP',
-          'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
           'Content-Type: application/json',
           'Accept: application/json',
         ];
@@ -79,8 +78,6 @@ class AbstractRequestHandlerTest extends TestCase
         $expectedHeaders = [
           "X-Yoti-SDK-Version: Drupal-{$version}",
           'X-Yoti-SDK: Drupal',
-          'X-Yoti-Auth-Key: ' . PEM_AUTH_KEY,
-          'Content-Type: application/json',
           'Accept: application/json',
         ];
 

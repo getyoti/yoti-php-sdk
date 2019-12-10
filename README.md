@@ -1,6 +1,7 @@
 # Yoti PHP SDK
 
 [![Build Status](https://travis-ci.com/getyoti/yoti-php-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-php-sdk)
+[![Coverage Status](https://coveralls.io/repos/github/getyoti/yoti-php-sdk/badge.svg?branch=master)](https://coveralls.io/github/getyoti/yoti-php-sdk?branch=master)
 
 Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly integrate your PHP back-end with Yoti, so that your users can share their identity details with your application in a secure and trusted way.
 
@@ -268,9 +269,9 @@ Please note all our examples work with [Docker](https://docs.docker.com/).
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
 * Copy `.env.dist` to `.env`
-* Open `.env` file and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+* Open `.env` file and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
-* Run the `docker-compose up -d` command and navigate to [https://localhost:4002](https://localhost:4002)
+* Run the `docker-compose up -d --build` command and navigate to [https://localhost:4002](https://localhost:4002)
 * Run the `docker-compose stop` command to stop the containers.
 
 ### AML Check
@@ -278,17 +279,15 @@ Please note all our examples work with [Docker](https://docs.docker.com/).
 * Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
-* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_APPLICATION_ID`, `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
 * Run the following commands:
 
 ```console
-$ docker exec -it {container_name} bash
-$ cd /usr/share/nginx/html/examples
-$ php scripts/aml-check-usa.php // for AML check within the USA
-$ php scripts/aml-check.php // for AML check outside the USA
-```    
-    
+$ docker-compose exec web php /usr/share/nginx/html/scripts/aml-check-usa.php // for AML check within the USA
+$ docker-compose exec web php /usr/share/nginx/html/scripts/aml-check.php // for AML check outside the USA
+```
+
 ## Running the tests
 
 PHPUnit requires `PHP 5.6` or above.

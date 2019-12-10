@@ -36,7 +36,8 @@ class AgeVerificationConverter
         foreach ($this->profileAttributesMap as $attrName => $attributeObj) {
             foreach ($this->getAgeProcessors() as $ageProcessorClass) {
                 $abstractAgeProcessorClass = '\\Yoti\\Util\\Age\\AbstractAgeProcessor';
-                if (null !== $attrName
+                if (
+                    null !== $attrName
                     && null !== $attributeObj
                     && is_subclass_of($ageProcessorClass, $abstractAgeProcessorClass)
                 ) {

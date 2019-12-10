@@ -1,14 +1,14 @@
 <?php
 
 // Load dependent packages and env data
-require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 // Get the token
 $token = isset($_GET['token']) ? $_GET['token'] : '';
 $profileAttributes = [];
 
 try {
-    $yotiClient = new Yoti\YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
+    $yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 
@@ -87,13 +87,6 @@ try {
     }
 
     $fullName = $profile->getFullName();
-    $selfie = $profile->getSelfie();
-    $selfieFileName = 'selfie.jpeg';
-
-    // Create selfie image file.
-    if ($selfie && is_writable(__DIR__)) {
-        file_put_contents($selfieFileName, $selfie->getValue()->getContent(), LOCK_EX);
-    }
 } catch(\Exception $e) {
     header('Location: /error.php?msg='.$e->getMessage());
     exit;

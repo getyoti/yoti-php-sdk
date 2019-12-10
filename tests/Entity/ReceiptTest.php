@@ -1,10 +1,13 @@
 <?php
+
 namespace YotiTest\Entity;
 
 use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Entity\AttributeIssuanceDetails;
+use Yoti\Entity\ExtraData;
 use Yoti\Util\Profile\AttributeListConverter;
 
 /**
@@ -36,6 +39,7 @@ class ReceiptTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::validateReceipt
      */
     public function testShouldThrowExceptionForInvalidReceipt()
     {
@@ -52,12 +56,49 @@ class ReceiptTest extends TestCase
     }
 
     /**
+     * @covers ::getAttribute
+     */
+    public function testGetAttribute()
+    {
+        $someKey = 'some key';
+        $someValue = 'some value';
+
+        $receipt = new Receipt([
+            'wrapped_receipt_key' => '',
+            $someKey => $someValue,
+        ]);
+
+        $this->assertEquals($someValue, $receipt->getAttribute($someKey));
+    }
+
+    /**
+     * @covers ::getAttribute
+     */
+    public function testGetAttributeNull()
+    {
+        $receipt = new Receipt([
+            'wrapped_receipt_key' => '',
+        ]);
+
+        $this->assertNull($receipt->getAttribute('some key'));
+    }
+
+    /**
      * @covers ::getRememberMeId
      */
     public function testGetRememberMeId()
     {
         $expectedRememberMeId = 'Hig2yAT79cWvseSuXcIuCLa5lNkAPy70rxetUaeHlTJGmiwc/g1MWdYWYrexWvPU';
         $this->assertEquals($expectedRememberMeId, $this->receipt->getRememberMeId());
+    }
+
+    /**
+     * @covers ::getParentRememberMeId
+     */
+    public function testGetParentRememberMeId()
+    {
+        $parentRememberMeId = 'f5RjVQMyoKOvO/hkv43Ik+t6d6mGfP2tdrNijH4k4qafTG0FSNUgQIvd2Z3Nx1j8';
+        $this->assertEquals($parentRememberMeId, $this->receipt->getParentRememberMeId());
     }
 
     /**
@@ -102,6 +143,7 @@ class ReceiptTest extends TestCase
 
     /**
      * @covers ::parseAttribute
+     * @covers ::getWrappedReceiptKey
      */
     public function testShouldParseOtherPartyProfileContent()
     {
@@ -134,5 +176,16 @@ class ReceiptTest extends TestCase
         $this->assertEquals('https://example.com', $applicationProfile->getApplicationUrl()->getValue());
         $this->assertEquals('Node SDK Test', $applicationProfile->getApplicationName()->getValue());
         $this->assertEquals('#ffffff', $applicationProfile->getApplicationReceiptBgColor()->getValue());
+    }
+
+    /**
+     * @covers ::parseExtraData
+     */
+    public function testParseExtraData()
+    {
+        $extraData = $this->receipt->parseExtraData(file_get_contents(PEM_FILE));
+
+        $this->assertInstanceOf(ExtraData::class, $extraData);
+        $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());
     }
 }

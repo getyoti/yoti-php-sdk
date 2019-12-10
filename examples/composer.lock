@@ -65,11 +65,11 @@
         },
         {
             "name": "yoti/yoti-php-sdk",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "2cf12e4c8b9f86c60d301d160e3afe61714310c4"
+                "reference": "828e896870bbfb4ec77739494cf5414e471142e3"
             },
             "require": {
                 "php": ">=5.5.19"
@@ -78,16 +78,14 @@
                 "brainmaestro/composer-git-hooks": "^2.8",
                 "friendsofphp/php-cs-fixer": "^2.15",
                 "php": ">=5.6.0",
-                "phpunit/phpunit": "5.7.*",
-                "squizlabs/php_codesniffer": "3.*"
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.4"
             },
             "type": "library",
             "extra": {
                 "hooks": {
-                    "pre-commit": [
-                        "composer test",
-                        "composer lint"
-                    ]
+                    "pre-commit": "composer test && composer lint"
                 }
             },
             "autoload": {
@@ -97,6 +95,7 @@
                 "psr-4": {
                     "Attrpubapi\\": "src/Attrpubapi",
                     "Compubapi\\": "src/Compubapi",
+                    "Sharepubapi\\": "src/Sharepubapi",
                     "Google\\Protobuf\\": "src/protobuflib/Google/Protobuf",
                     "GPBMetadata\\": "src/protobuflib/GPBMetadata",
                     "phpseclib\\": "src/phpseclib/",
@@ -116,6 +115,16 @@
                 ],
                 "test": [
                     "phpunit"
+                ],
+                "coverage-clover": [
+                    "phpunit --coverage-clover ./coverage/coverage.xml"
+                ],
+                "coverage-html": [
+                    "phpunit --coverage-html ./coverage/report"
+                ],
+                "coveralls": [
+                    "@coverage-clover",
+                    "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
                 ],
                 "lint": [
                     "phpcs",

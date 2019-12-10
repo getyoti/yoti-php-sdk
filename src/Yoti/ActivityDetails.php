@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoti;
 
 use Yoti\Entity\Profile;
@@ -53,6 +54,11 @@ class ActivityDetails
     private $pem;
 
     /**
+     * @var \Yoti\Entity\ExtraData
+     */
+    private $extraData;
+
+    /**
      * ActivityDetails constructor.
      *
      * @param array $attributes
@@ -68,6 +74,7 @@ class ActivityDetails
         $this->setRememberMeId();
         $this->setParentRememberMeId();
         $this->setApplicationProfile();
+        $this->setExtraData();
     }
 
     private function setRememberMeId()
@@ -183,5 +190,21 @@ class ActivityDetails
     public function getParentRememberMeId()
     {
         return $this->parentRememberMeId;
+    }
+
+    /**
+     * Set extra data from receipt.
+     */
+    private function setExtraData()
+    {
+        $this->extraData = $this->receipt->parseExtraData($this->pem);
+    }
+
+    /**
+     * @return \Yoti\Entity\ExtraData
+     */
+    public function getExtraData()
+    {
+        return $this->extraData;
     }
 }
