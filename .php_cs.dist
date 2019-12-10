@@ -2,6 +2,7 @@
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src/Yoti')
     ->in(__DIR__ . '/tests')
+    ->in(__DIR__ . '/sandbox')
 ;
 
 return PhpCsFixer\Config::create()

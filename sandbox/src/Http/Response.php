@@ -65,8 +65,7 @@ class Response
      */
     private function checkJsonError()
     {
-        if(json_last_error() !== JSON_ERROR_NONE)
-        {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             throw new ResponseException('JSON response was invalid', 502);
         }
     }
@@ -79,8 +78,7 @@ class Response
     private function checkResponseStatus($httpCode)
     {
         $httpCode = (int) $httpCode;
-        if ($httpCode !== 201)
-        {
+        if ($httpCode !== 201) {
             throw new ResponseException("Server responded with {$httpCode}", $httpCode);
         }
     }

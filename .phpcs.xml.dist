@@ -15,4 +15,5 @@
   </rule>
   <file>src/Yoti</file>
   <file>tests</file>
+  <file>sandbox</file>
 </ruleset>
