@@ -160,13 +160,10 @@ class YotiClient
      */
     public function performAmlCheck(AmlProfile $amlProfile)
     {
-        // Get payload data from amlProfile
-        $amlPayload = new Payload($amlProfile);
-
         $response = $this->sendConnectRequest(
             self::AML_CHECK_ENDPOINT,
             Request::METHOD_POST,
-            $amlPayload
+            Payload::fromJsonData($amlProfile)
         );
 
         // Get response data array
@@ -194,7 +191,7 @@ class YotiClient
         $response = $this->sendConnectRequest(
             sprintf(self::SHARE_URL_ENDPOINT, $this->sdkId),
             Request::METHOD_POST,
-            new Payload($dynamicScenario)
+            Payload::fromJsonData($dynamicScenario)
         );
 
         $httpCode = $response->getStatusCode();
