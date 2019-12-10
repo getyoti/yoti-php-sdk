@@ -5,8 +5,8 @@ namespace YotiSandbox;
 use Yoti\YotiClient;
 use YotiSandbox\Http\Response;
 use Yoti\Http\RequestHandlerInterface;
-use YotiSandbox\Http\RequestBuilder;
-use Yoti\Http\RequestBuilder as YotiRequestBuilder;
+use YotiSandbox\Http\RequestBuilder as TokenRequestBuilder;
+use Yoti\Http\RequestBuilder;
 use YotiSandbox\Http\SandboxPathManager;
 
 class SandboxClient
@@ -100,7 +100,7 @@ class SandboxClient
      * @throws Exception\ResponseException
      * @throws \Yoti\Exception\RequestException
      */
-    public function getToken(RequestBuilder $requestBuilder, $httpMethod)
+    public function getToken(TokenRequestBuilder $requestBuilder, $httpMethod)
     {
         // Request endpoint
         $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
@@ -119,11 +119,11 @@ class SandboxClient
      *
      * @throws \Yoti\Exception\RequestException
      */
-    protected function sendRequest(RequestBuilder $requestBuilder, $endpoint, $httpMethod)
+    protected function sendRequest(TokenRequestBuilder $requestBuilder, $endpoint, $httpMethod)
     {
         $payload = $requestBuilder->createRequest()->getPayload();
 
-        $requestBuilder = (new YotiRequestBuilder())
+        $requestBuilder = (new RequestBuilder())
             ->withBaseUrl($this->sandboxPathManager->getTokenApiPath())
             ->withEndpoint($endpoint)
             ->withMethod($httpMethod)
