@@ -15,6 +15,10 @@ use Yoti\Util\PemFile;
  */
 class RequestSignerTest extends TestCase
 {
+    const SOME_PATH = '/some-path';
+
+    const SOME_METHOD = 'POST';
+
     /**
      * @var \Yoti\Http\Payload
      */
@@ -39,27 +43,49 @@ class RequestSignerTest extends TestCase
 
     /**
      * @covers ::sign
-     * @covers ::generateEndPointPath
      * @covers ::validateSignedMessage
-     * @covers ::generateNonce
      */
     public function testSign()
     {
-        $signedData = RequestSigner::sign(
+        $signedMessage = RequestSigner::sign(
             PemFile::fromString($this->pem),
-            '/aml-check',
-            'POST',
+            self::SOME_PATH,
+            self::SOME_METHOD,
             $this->payload
         );
-        $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
-        $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];
-        $messageToSign = 'POST&' . $endpointPath . '&' . $this->payload->getBase64Payload();
+        $messageToSign = self::SOME_METHOD . '&' . self::SOME_PATH . '&' . $this->payload->toBase64();
 
         $publicKey = openssl_pkey_get_public($this->publicKey);
 
         $verify = openssl_verify($messageToSign, base64_decode($signedMessage), $publicKey, OPENSSL_ALGO_SHA256);
 
         $this->assertEquals(1, $verify);
+    }
+
+    /**
+     * @covers ::sign
+     * @covers ::validateSignedMessage
+     *
+     * @expectedException \Yoti\Exception\RequestException
+     * @expectedExceptionMessage Could not sign request
+     */
+    public function testValidateSignedMessage()
+    {
+        $this->captureExpectedLogs();
+
+        $somePemFile = $this->createMock(PemFile::class);
+        $somePemFile
+            ->method('__toString')
+            ->willReturn(INVALID_PEM_FILE);
+
+        RequestSigner::sign(
+            $somePemFile,
+            self::SOME_PATH,
+            self::SOME_METHOD,
+            $this->payload
+        );
+
+        $this->assertLogContains('supplied key param cannot be coerced into a private key');
     }
 
     /**
@@ -71,6 +97,6 @@ class RequestSignerTest extends TestCase
     {
         $amlAddress = new AmlAddress(new Country('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        return new Payload($amlProfile);
+        return Payload::fromJsonData($amlProfile);
     }
 }

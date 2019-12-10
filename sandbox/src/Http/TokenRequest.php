@@ -34,10 +34,9 @@ class TokenRequest
 
     public function getPayload()
     {
-        $payloadData = [
+        return Payload::fromJsonData([
             'remember_me_id' => $this->rememberMeId,
             'profile_attributes' => $this->sandboxAttributes,
-        ];
-        return new Payload($payloadData);
+        ]);
     }
 }

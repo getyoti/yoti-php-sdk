@@ -11,6 +11,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         parent::teardown();
         ini_restore('error_log');
+        ini_restore('display_errors');
     }
 
     /**
@@ -22,6 +23,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             mkdir('./logs');
         }
         ini_set('error_log', './logs/' . uniqid('error_', true) . '.log');
+        ini_set('display_errors', 'off');
     }
 
     /**

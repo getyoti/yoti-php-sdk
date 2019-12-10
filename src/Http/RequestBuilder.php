@@ -9,8 +9,6 @@ use Yoti\Exception\RequestException;
 use Yoti\Util\Constants;
 use Yoti\Util\PemFile;
 
-use function GuzzleHttp\Psr7\stream_for;
-
 class RequestBuilder
 {
     /**
@@ -158,7 +156,7 @@ class RequestBuilder
      */
     public function withGet()
     {
-        return $this->withMethod('GET');
+        return $this->withMethod(Request::METHOD_GET);
     }
 
     /**
@@ -166,7 +164,7 @@ class RequestBuilder
      */
     public function withPost()
     {
-        return $this->withMethod('POST');
+        return $this->withMethod(Request::METHOD_POST);
     }
 
     /**
@@ -248,23 +246,20 @@ class RequestBuilder
     }
 
     /**
-     * Return the request headers including the signed message.
-     *
-     * @param string $signedMessage
+     * Return the request headers including defaults.
      *
      * @return array
      */
-    private function getHeaders($signedMessage)
+    private function getHeaders()
     {
         // Prepare request Http Headers
-        $requestHeaders = [
-            self::YOTI_DIGEST_HEADER_KEY => $signedMessage,
+        $defaultHeaders = [
             self::YOTI_SDK_IDENTIFIER_KEY => $this->sdkIdentifier,
             'Accept' => 'application/json',
         ];
 
         if (isset($this->payload)) {
-            $requestHeaders['Content-Type'] = 'application/json';
+            $defaultHeaders['Content-Type'] = 'application/json';
         }
 
         if (is_null($this->sdkVersion)) {
@@ -272,10 +267,10 @@ class RequestBuilder
         }
 
         if (isset($this->sdkVersion)) {
-            $requestHeaders[self::YOTI_SDK_VERSION] =  "{$this->sdkIdentifier}-{$this->sdkVersion}";
+            $defaultHeaders[self::YOTI_SDK_VERSION] =  "{$this->sdkIdentifier}-{$this->sdkVersion}";
         }
 
-        return $requestHeaders;
+        return array_merge($defaultHeaders, $this->headers);
     }
 
     /**
@@ -291,11 +286,11 @@ class RequestBuilder
             !in_array(
                 $this->method,
                 [
-                Request::METHOD_GET,
-                Request::METHOD_POST,
-                Request::METHOD_PUT,
-                Request::METHOD_PATCH,
-                Request::METHOD_DELETE,
+                    Request::METHOD_GET,
+                    Request::METHOD_POST,
+                    Request::METHOD_PUT,
+                    Request::METHOD_PATCH,
+                    Request::METHOD_DELETE,
                 ],
                 true
             )
@@ -317,6 +312,32 @@ class RequestBuilder
     }
 
     /**
+     * @return string
+     */
+    private static function generateNonce()
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+            // 48 bits for "node"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
+    }
+
+    /**
      * @return \Yoti\Http\Request
      *
      * @throws \Yoti\Exception\RequestException
@@ -334,23 +355,27 @@ class RequestBuilder
         $this->validateMethod();
         $this->validateHeaders();
 
-        $signedDataArr = RequestSigner::sign(
+        // Add nonce and timestamp to the URL.
+        $this
+            ->withQueryParam('nonce', self::generateNonce())
+            ->withQueryParam('timestamp', round(microtime(true) * 1000));
+
+        $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
+
+        $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
             $this->pemFile,
-            $this->endpoint,
+            $endpointWithParams,
             $this->method,
-            $this->payload,
-            $this->queryParams
-        );
+            $this->payload
+        ));
 
-        $defaultHeaders = $this->getHeaders($signedDataArr[RequestSigner::SIGNED_MESSAGE_KEY]);
-
-        $url = $this->baseUrl . $signedDataArr[RequestSigner::END_POINT_PATH_KEY];
+        $url = $this->baseUrl . $endpointWithParams;
 
         $message = new RequestMessage(
             $this->method,
             new Uri($url),
-            array_merge($defaultHeaders, $this->headers),
-            $this->payload ? stream_for($this->payload->getPayloadJSON()) : null
+            $this->getHeaders(),
+            $this->payload ? $this->payload->toStream() : null
         );
 
         $request = new Request($message);
