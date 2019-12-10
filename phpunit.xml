@@ -9,10 +9,14 @@
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>
         </testsuite>
+        <testsuite name="Yoti Sandbox Test Suite">
+            <directory>sandbox/tests/</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/Yoti/</directory>
+            <directory suffix=".php">sandbox/src/</directory>
         </whitelist>
     </filter>
     <logging>

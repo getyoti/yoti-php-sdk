@@ -69,7 +69,7 @@ class RequestBuilder
     {
         $this->addAttribute($this->createAttribute(
             Profile::ATTR_DATE_OF_BIRTH,
-            $dateTime->format('d-m-Y'),
+            $dateTime->format('Y-m-d'),
             '',
             $optional,
             $anchors
