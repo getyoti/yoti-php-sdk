@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiSandbox;
 
 use Yoti\YotiClient;
@@ -60,8 +61,7 @@ class SandboxClient
         SandboxPathManager $sandboxPathManager,
         $sdkIdentifier = 'PHP',
         RequestHandlerInterface $requestHandler = null
-    )
-    {
+    ) {
         $this->sdkId = $sdkId;
         $this->sdkIdentifier = $sdkIdentifier;
         $this->pem = $this->includePemWrapper($pem);
@@ -142,7 +142,7 @@ class SandboxClient
     private function includePemWrapper($pem)
     {
         if (strpos($pem, 'PRIVATE') === false) {
-$pem = <<<EOF
+            $pem = <<<EOF
 -----BEGIN RSA PRIVATE KEY-----
 {$pem}
 -----END RSA PRIVATE KEY-----

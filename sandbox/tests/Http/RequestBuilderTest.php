@@ -1,4 +1,5 @@
 <?php
+
 namespace SandboxTest\Http;
 
 use YotiTest\TestCase;

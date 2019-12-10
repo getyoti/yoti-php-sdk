@@ -1,4 +1,5 @@
 <?php
+
 namespace YotiSandbox\Http;
 
 use Yoti\Entity\Profile;
