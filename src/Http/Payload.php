@@ -2,52 +2,82 @@
 
 namespace Yoti\Http;
 
+use Psr\Http\Message\StreamInterface;
+
+use function GuzzleHttp\Psr7\stream_for;
+
 class Payload
 {
     /**
-     * @var mixed
+     * @var \Psr\Http\Message\StreamInterface
      */
-    private $data;
+    private $stream;
 
-    public function __construct($data = '')
+    /**
+     * @param \Psr\Http\Message\StreamInterface $stream
+     */
+    public function __construct(StreamInterface $stream = null)
     {
-        $this->data = $data;
+        $this->stream = $stream;
     }
 
     /**
-     * Get Base64 encoded of payload json string.
+     * Get Base64 encoded of payload string.
      *
      * @return string
      */
-    public function getBase64Payload()
+    public function toBase64()
     {
-        return base64_encode($this->getPayloadJSON());
+        return base64_encode($this->stream);
     }
 
     /**
-     * Get payload as a JSON string.
+     * @param mixed $jsonData
      *
-     * @return string
+     * @return \Yoti\Http\Payload
      */
-    public function getPayloadJSON()
+    public static function fromJsonData($jsonData)
     {
-        $data = is_string($this->data) ? mb_convert_encoding($this->data, 'UTF-8') : $this->data;
-        return json_encode($data);
+        return static::fromString(json_encode($jsonData));
     }
 
     /**
-     * @return mixed
+     * @param string $string
+     *
+     * @return \Yoti\Http\Payload
      */
-    public function getRawData()
+    public static function fromString(string $string)
     {
-        return $this->data;
+        return static::fromStream(stream_for($string));
     }
 
     /**
+     * @param \Psr\Http\Message\StreamInterface $stream
+     *
+     * @return \Yoti\Http\Payload
+     */
+    public static function fromStream(StreamInterface $stream)
+    {
+        return new static($stream);
+    }
+
+    /**
+     * Get payload as stream.
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    public function toStream()
+    {
+        return $this->stream;
+    }
+
+    /**
+     * Get payload as string.
+     *
      * @return string
      */
     public function __toString()
     {
-        return json_encode($this->getRawData());
+        return (string) $this->stream;
     }
 }

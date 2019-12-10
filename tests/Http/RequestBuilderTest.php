@@ -39,7 +39,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuild()
     {
-        $expectedPayload = new Payload('SOME PAYLOAD');
+        $expectedPayload = Payload::fromString('SOME PAYLOAD');
 
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
@@ -64,7 +64,7 @@ class RequestBuilderTest extends TestCase
         $this->assertNotEmpty($message->getHeader('X-Yoti-Auth-Digest')[0]);
         $this->assertEquals('application/json', $message->getHeader('Content-Type')[0]);
         $this->assertEquals('application/json', $message->getHeader('Accept')[0]);
-        $this->assertEquals($expectedPayload->getPayloadJSON(), $message->getBody());
+        $this->assertEquals($expectedPayload->toStream(), $message->getBody());
     }
 
     /**
@@ -251,7 +251,7 @@ class RequestBuilderTest extends TestCase
      */
     public function testWithPayload()
     {
-        $expectedPayload = new Payload('some content');
+        $expectedPayload = Payload::fromString('some content');
 
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
@@ -260,7 +260,7 @@ class RequestBuilderTest extends TestCase
           ->withPost()
           ->build();
 
-        $this->assertSame($expectedPayload->getPayloadJSON(), (string) $request->getMessage()->getBody());
+        $this->assertSame($expectedPayload->toStream(), $request->getMessage()->getBody());
     }
 
     /**
@@ -396,6 +396,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withQueryParam
+     * @covers ::generateNonce
      */
     public function testWithQueryParam()
     {
