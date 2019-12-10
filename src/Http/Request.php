@@ -49,7 +49,7 @@ class Request
     /**
      * @return \Psr\Http\Client\ClientInterface
      */
-    private function getClient()
+    public function getClient()
     {
         if (is_null($this->client)) {
             $this->client = new Client();

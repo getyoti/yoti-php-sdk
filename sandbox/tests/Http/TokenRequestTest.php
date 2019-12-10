@@ -73,11 +73,11 @@ class TokenRequestTest extends TestCase
     public function testGetPayload()
     {
         $this->assertEquals(
-            new Payload([
+            (string) Payload::fromJsonData([
                 'remember_me_id' => self::SOME_REMEMBER_ME_ID,
                 'profile_attributes' => $this->someSandboxAttributes,
             ]),
-            $this->tokenRequest->getPayload()
+            (string) $this->tokenRequest->getPayload()
         );
     }
 }
