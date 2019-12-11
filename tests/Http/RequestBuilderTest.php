@@ -141,7 +141,7 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withSdkIdentifier
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testBuildWithInvalidSdkIdentifier()
@@ -157,8 +157,8 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withSdkVersion
      *
-     * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Yoti SDK version must be a string
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage SDK version must be a string
      */
     public function testBuildWithInvalidSdkVersion()
     {
@@ -267,7 +267,7 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      * @covers ::validateMethod
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage HTTP Method must be specified
      */
     public function testWithoutMethod()
@@ -283,7 +283,7 @@ class RequestBuilderTest extends TestCase
      * @covers ::withMethod
      * @covers ::validateMethod
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unsupported HTTP Method SOME_METHOD
      */
     public function testWithUnsupportedMethod()
@@ -300,7 +300,7 @@ class RequestBuilderTest extends TestCase
      * @covers ::withHeader
      * @covers ::validateHeaders
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Header value for 'Custom' must be a string
      */
     public function testWithHeaderInvalidValue()
@@ -316,7 +316,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Base URL must be provided to Yoti\Http\RequestBuilder
      */
     public function testBuildWithoutBaseUrl()
@@ -329,7 +329,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Pem file must be provided to Yoti\Http\RequestBuilder
      */
     public function testBuildWithoutPem()
