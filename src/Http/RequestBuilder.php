@@ -5,9 +5,9 @@ namespace Yoti\Http;
 use GuzzleHttp\Psr7\Request as RequestMessage;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Client\ClientInterface;
-use Yoti\Exception\RequestException;
 use Yoti\Util\Constants;
 use Yoti\Util\PemFile;
+use Yoti\Util\Validation;
 
 class RequestBuilder
 {
@@ -197,7 +197,7 @@ class RequestBuilder
     public function withSdkIdentifier($sdkIdentifier)
     {
         if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new RequestException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 "'%s' is not in the list of accepted identifiers: %s",
                 $sdkIdentifier,
                 implode(', ', $this->acceptedsdkIdentifiers)
@@ -214,9 +214,7 @@ class RequestBuilder
      */
     public function withSdkVersion($sdkVersion)
     {
-        if (!is_string($sdkVersion)) {
-            throw new RequestException("Yoti SDK version must be a string");
-        }
+        Validation::isString($sdkVersion, 'SDK version');
         $this->sdkVersion = $sdkVersion;
         return $this;
     }
@@ -274,12 +272,12 @@ class RequestBuilder
     }
 
     /**
-     * @throws \Yoti\Exception\RequestException
+     * @throws \InvalidArgumentException
      */
     private function validateMethod()
     {
         if (empty($this->method)) {
-            throw new RequestException('HTTP Method must be specified');
+            throw new \InvalidArgumentException('HTTP Method must be specified');
         }
 
         if (
@@ -295,18 +293,18 @@ class RequestBuilder
                 true
             )
         ) {
-            throw new RequestException("Unsupported HTTP Method {$this->method}", 400);
+            throw new \InvalidArgumentException("Unsupported HTTP Method {$this->method}", 400);
         }
     }
 
     /**
-     * @throws \Yoti\Exception\RequestException
+     * @throws \InvalidArgumentException
      */
     private function validateHeaders()
     {
         foreach ($this->headers as $name => $value) {
             if (!is_string($value)) {
-                throw new RequestException("Header value for '{$name}' must be a string");
+                throw new \InvalidArgumentException("Header value for '{$name}' must be a string");
             }
         }
     }
@@ -345,11 +343,11 @@ class RequestBuilder
     public function build()
     {
         if (empty($this->baseUrl)) {
-            throw new RequestException('Base URL must be provided to ' . __CLASS__);
+            throw new \InvalidArgumentException('Base URL must be provided to ' . __CLASS__);
         }
 
         if (!$this->pemFile instanceof PemFile) {
-            throw new RequestException('Pem file must be provided to ' . __CLASS__);
+            throw new \InvalidArgumentException('Pem file must be provided to ' . __CLASS__);
         }
 
         $this->validateMethod();
