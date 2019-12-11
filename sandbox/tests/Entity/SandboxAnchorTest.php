@@ -5,6 +5,9 @@ namespace SandboxTest\Entity;
 use YotiTest\TestCase;
 use YotiSandbox\Entity\SandboxAnchor;
 
+/**
+ * @coversDefaultClass \YotiSandbox\Entity\SandboxAnchor
+ */
 class SandboxAnchorTest extends TestCase
 {
     /**
@@ -22,21 +25,37 @@ class SandboxAnchorTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getType
+     * @covers ::__construct
+     */
     public function testGetType()
     {
         $this->assertEquals('Source', $this->anchor->getType());
     }
 
+    /**
+     * @covers ::getValue
+     * @covers ::__construct
+     */
     public function testGetValue()
     {
         $this->assertEquals('PASSPORT', $this->anchor->getValue());
     }
 
+    /**
+     * @covers ::getSubtype
+     * @covers ::__construct
+     */
     public function testGetSubtype()
     {
         $this->assertEquals('OCR', $this->anchor->getSubtype());
     }
 
+    /**
+     * @covers ::getTimestamp
+     * @covers ::__construct
+     */
     public function testGetTimestamp()
     {
         $this->assertEquals(1544624701, $this->anchor->getTimestamp());

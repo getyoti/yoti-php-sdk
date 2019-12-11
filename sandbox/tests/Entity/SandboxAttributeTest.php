@@ -6,6 +6,9 @@ use YotiTest\TestCase;
 use Yoti\Entity\Profile;
 use YotiSandbox\Entity\SandboxAttribute;
 
+/**
+ * @coversDefaultClass \YotiSandbox\Entity\SandboxAttribute
+ */
 class SandboxAttributeTest extends TestCase
 {
     /**
@@ -22,21 +25,37 @@ class SandboxAttributeTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getName
+     * @covers ::__construct
+     */
     public function testGetName()
     {
         $this->assertEquals(Profile::ATTR_FAMILY_NAME, $this->attribute->getName());
     }
 
+    /**
+     * @covers ::getValue
+     * @covers ::__construct
+     */
     public function testGetValue()
     {
         $this->assertEquals('Fake_Family_Name', $this->attribute->getValue());
     }
 
+    /**
+     * @covers ::getDerivation
+     * @covers ::__construct
+     */
     public function testGetDerivation()
     {
         $this->assertEmpty($this->attribute->getDerivation());
     }
 
+    /**
+     * @covers ::getOptional
+     * @covers ::__construct
+     */
     public function testGetOptional()
     {
         $this->assertEquals(
@@ -46,6 +65,10 @@ class SandboxAttributeTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getAnchors
+     * @covers ::__construct
+     */
     public function testGetAnchors()
     {
         $this->assertEquals(
