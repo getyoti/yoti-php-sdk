@@ -2,7 +2,7 @@
 
 namespace Yoti\Http;
 
-use Yoti\Exception\RequestException;
+use Yoti\Http\Exception\RequestSignerException;
 use Yoti\Util\PemFile;
 
 class RequestSigner
@@ -18,7 +18,7 @@ class RequestSigner
      * @return string
      *   The base64 encoded signed message
      *
-     * @throws RequestException
+     * @throws \Yoti\Http\Exception\RequestSignerException
      */
     public static function sign(
         PemFile $pemFile,
@@ -41,13 +41,13 @@ class RequestSigner
     /**
      * @param string $signedMessage
      *
-     * @throws RequestException
+     * @throws \Yoti\Http\Exception\RequestSignerException
      */
     private static function validateSignedMessage($signedMessage)
     {
         // Check signed message
         if (!$signedMessage) {
-            throw new RequestException('Could not sign request.', 401);
+            throw new RequestSignerException('Could not sign request.', 401);
         }
     }
 }
