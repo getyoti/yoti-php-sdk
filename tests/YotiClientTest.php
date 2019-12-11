@@ -305,7 +305,7 @@ class YotiClientTest extends TestCase
      *
      * @covers ::__construct
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifierConstructor()
@@ -325,7 +325,7 @@ class YotiClientTest extends TestCase
      *
      * @covers ::setSdkIdentifier
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
      */
     public function testInvalidSdkIdentifier()
@@ -346,8 +346,8 @@ class YotiClientTest extends TestCase
      *
      * @covers ::setSdkVersion
      *
-     * @expectedException \Yoti\Exception\RequestException
-     * @expectedExceptionMessage Yoti SDK version must be a string
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage SDK version must be a string
      */
     public function testInvalidSdkVersion()
     {

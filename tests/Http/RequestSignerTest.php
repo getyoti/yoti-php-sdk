@@ -66,7 +66,7 @@ class RequestSignerTest extends TestCase
      * @covers ::sign
      * @covers ::validateSignedMessage
      *
-     * @expectedException \Yoti\Exception\RequestException
+     * @expectedException \Yoti\Http\Exception\RequestSignerException
      * @expectedExceptionMessage Could not sign request
      */
     public function testValidateSignedMessage()
