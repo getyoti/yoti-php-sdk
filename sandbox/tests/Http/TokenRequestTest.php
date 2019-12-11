@@ -7,6 +7,9 @@ use Yoti\Entity\Profile;
 use Yoti\Http\Payload;
 use YotiSandbox\Http\TokenRequest;
 
+/**
+ * @coversDefaultClass \YotiSandbox\Http\TokenRequest
+ */
 class TokenRequestTest extends TestCase
 {
     const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
@@ -22,6 +25,9 @@ class TokenRequestTest extends TestCase
      */
     private $someSandboxAttributes;
 
+    /**
+     * Setup TokenRequest
+     */
     public function setUp()
     {
         $this->someSandboxAttributes = [
@@ -36,6 +42,22 @@ class TokenRequestTest extends TestCase
         $this->tokenRequest = new TokenRequest(self::SOME_REMEMBER_ME_ID, $this->someSandboxAttributes);
     }
 
+    /**
+     * @covers ::getRememberMeId
+     * @covers ::__construct
+     */
+    public function testGetRememberMeId()
+    {
+        $this->assertEquals(
+            self::SOME_REMEMBER_ME_ID,
+            $this->tokenRequest->getRememberMeId()
+        );
+    }
+
+    /**
+     * @covers ::getSandboxAttributes
+     * @covers ::__construct
+     */
     public function testGetSandboxAttributes()
     {
         $this->assertEquals(
@@ -44,6 +66,10 @@ class TokenRequestTest extends TestCase
         );
     }
 
+    /**
+     * @covers ::getPayload
+     * @covers ::__construct
+     */
     public function testGetPayload()
     {
         $this->assertEquals(
