@@ -47,9 +47,8 @@ class Response
         // Get decoded response data
         $responseJSON = $response->getBody();
 
-        $this->checkJsonError();
-
         $responseArr = json_decode($responseJSON, true);
+        $this->checkJsonError();
 
         if (!isset($responseArr['token'])) {
             throw new ResponseException('Token key is missing', 404);
