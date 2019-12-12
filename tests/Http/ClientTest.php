@@ -3,11 +3,14 @@
 namespace YotiTest\Http;
 
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\SeekException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Yoti\Http\Client;
 use YotiTest\TestCase;
 
@@ -43,7 +46,7 @@ class ClientTest extends TestCase
      * @expectedException \Yoti\Http\Exception\NetworkException
      * @expectedExceptionMessage some network exception
      */
-    public function testSendRequestNetworkException()
+    public function testSendRequestThrowsNetworkException()
     {
         $someHandler = new MockHandler([
             new ConnectException(
@@ -63,13 +66,14 @@ class ClientTest extends TestCase
      * @covers ::__construct
      *
      * @expectedException \Yoti\Http\Exception\RequestException
-     * @expectedExceptionMessage some runtime exception
+     *
+     * @dataProvider requestExceptionDataProvider
      */
-    public function testSendRequestRuntimeException()
+    public function testSendRequestThrowsRequestException(\Exception $someRequestException)
     {
-        $someHandler = new MockHandler([
-            new \RuntimeException('some runtime exception'),
-        ]);
+        $this->expectExceptionMessage($someRequestException->getMessage());
+
+        $someHandler = new MockHandler([$someRequestException]);
         $someHandlerStack = HandlerStack::create($someHandler);
 
         $client = new Client(['handler' => $someHandlerStack]);
@@ -77,23 +81,16 @@ class ClientTest extends TestCase
         $client->sendRequest(new Request('GET', '/'));
     }
 
-
     /**
-     * @covers ::sendRequest
-     * @covers ::__construct
+     * Provides request exceptions.
      *
-     * @expectedException \Yoti\Http\Exception\ClientException
-     * @expectedExceptionMessage some exception
+     * @return array
      */
-    public function testSendRequestException()
+    public function requestExceptionDataProvider()
     {
-        $someHandler = new MockHandler([
-            new \Exception('some exception'),
-        ]);
-        $someHandlerStack = HandlerStack::create($someHandler);
-
-        $client = new Client(['handler' => $someHandlerStack]);
-
-        $client->sendRequest(new Request('GET', '/'));
+        return [
+            [new TransferException('some request exception')],
+            [new SeekException($this->createMock(StreamInterface::class), 0, 'some seek exception')],
+        ];
     }
 }

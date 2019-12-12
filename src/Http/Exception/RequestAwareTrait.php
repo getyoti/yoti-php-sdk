@@ -12,7 +12,7 @@ trait RequestAwareTrait
     private $request;
 
     /**
-     * @inheritDoc
+     * @param \Psr\Http\Message\RequestInterface $request
      */
     private function setRequest(RequestInterface $request)
     {
