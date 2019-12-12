@@ -7,13 +7,13 @@ use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxDocumentDetails;
 use YotiTest\TestCase;
-use YotiSandbox\Http\RequestBuilder;
+use YotiSandbox\Http\TokenRequestBuilder;
 use YotiSandbox\Http\TokenRequest;
 
 /**
- * @coversDefaultClass \YotiSandbox\Http\RequestBuilder
+ * @coversDefaultClass \YotiSandbox\Http\TokenRequestBuilder
  */
-class RequestBuilderTest extends TestCase
+class TokenRequestBuilderTest extends TestCase
 {
     const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
     const SOME_NAME = 'some name';
@@ -29,15 +29,15 @@ class RequestBuilderTest extends TestCase
 
     public function setUp()
     {
-        $this->requestBuilder = new RequestBuilder();
+        $this->requestBuilder = new TokenRequestBuilder();
     }
 
     /**
-     * @covers ::createRequest
+     * @covers ::build
      */
-    public function testCreateRequest()
+    public function testBuild()
     {
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
 
         $this->assertInstanceOf(TokenRequest::class, $tokenRequest);
     }
@@ -48,7 +48,7 @@ class RequestBuilderTest extends TestCase
     public function testGetRememberMeId()
     {
         $this->requestBuilder->setRememberMeId(self::SOME_REMEMBER_ME_ID);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
 
         $this->assertEquals(self::SOME_REMEMBER_ME_ID, $tokenRequest->getRememberMeId());
     }
@@ -74,7 +74,7 @@ class RequestBuilderTest extends TestCase
     public function testStringAttributeSetters($setterMethod, $name)
     {
         $this->requestBuilder->{$setterMethod}(self::SOME_STRING_VALUE);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['name'], $name);
@@ -111,7 +111,7 @@ class RequestBuilderTest extends TestCase
     {
         $someDOB = new \DateTime();
         $this->requestBuilder->setDateOfBirth($someDOB);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['name'], 'date_of_birth');
@@ -124,7 +124,7 @@ class RequestBuilderTest extends TestCase
     public function testSetSelfie()
     {
         $this->requestBuilder->setSelfie(self::SOME_STRING_VALUE);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['name'], 'selfie');
@@ -140,7 +140,7 @@ class RequestBuilderTest extends TestCase
         $someDocumentDetails->method('getValue')->willReturn(self::SOME_STRING_VALUE);
 
         $this->requestBuilder->setDocumentDetails($someDocumentDetails);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['name'], 'document_details');
@@ -158,7 +158,7 @@ class RequestBuilderTest extends TestCase
         $someAgeVerification->method('getAnchors')->willReturn([]);
 
         $this->requestBuilder->setAgeVerification($someAgeVerification);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['name'], self::SOME_NAME);
@@ -180,7 +180,7 @@ class RequestBuilderTest extends TestCase
         $someAttribute->method('getAnchors')->willReturn([$someAnchor]);
 
         $this->requestBuilder->addAttribute($someAttribute);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['anchors'], [
@@ -202,7 +202,7 @@ class RequestBuilderTest extends TestCase
         $someAttribute->method('getAnchors')->willReturn(['invalid anchor']);
 
         $this->requestBuilder->addAttribute($someAttribute);
-        $tokenRequest = $this->requestBuilder->createRequest();
+        $tokenRequest = $this->requestBuilder->build();
         $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
         $this->assertEquals($sandboxAttribute['anchors'], []);

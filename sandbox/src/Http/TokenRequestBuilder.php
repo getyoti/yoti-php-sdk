@@ -8,7 +8,7 @@ use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxAgeVerification;
 use YotiSandbox\Entity\SandboxDocumentDetails;
 
-class RequestBuilder
+class TokenRequestBuilder
 {
     /**
      * @var string
@@ -245,9 +245,9 @@ class RequestBuilder
     }
 
     /**
-     * @return TokenRequest
+     * @return \YotiSandbox\Http\TokenRequest
      */
-    public function createRequest()
+    public function build()
     {
         return new TokenRequest($this->rememberMeId, $this->sandboxAttributes);
     }

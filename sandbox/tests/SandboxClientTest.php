@@ -5,8 +5,9 @@ namespace SandboxTest;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\ActivityDetails;
-use YotiSandbox\Http\RequestBuilder;
+use Yoti\Http\Payload;
 use YotiSandbox\Http\SandboxPathManager;
+use YotiSandbox\Http\TokenRequest;
 use YotiSandbox\SandboxClient;
 use YotiTest\TestCase;
 
@@ -47,7 +48,12 @@ class SandboxClientTest extends TestCase
             $mockHttpClient
         );
 
-        $token = $sandboxClient->getToken(new RequestBuilder(), 'POST');
+        $mockTokenRequest = $this->createMock(TokenRequest::class);
+        $mockTokenRequest
+            ->method('getPayload')
+            ->willReturn($this->createMock(Payload::class));
+
+        $token = $sandboxClient->getToken($mockTokenRequest);
 
         $this->assertEquals(YOTI_CONNECT_TOKEN, $token);
     }
