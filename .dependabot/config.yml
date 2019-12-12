@@ -1,0 +1,12 @@
+version: 1
+update_configs:
+  - package_manager: "php:composer"
+    directory: "/"
+    update_schedule: "live"
+    target_branch: "development"
+
+    default_reviewers:
+      - "echarrod"
+      - "davidgrayston"
+      - "emmas-yoti"
+      - "MrBurtyyy"
