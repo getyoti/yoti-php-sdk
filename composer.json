@@ -13,7 +13,8 @@
     "google/protobuf": "^3.10",
     "phpseclib/phpseclib": "^2.0",
     "guzzlehttp/guzzle": "^6.4",
-    "psr/http-client": "^1.0"
+    "psr/http-client": "^1.0",
+    "psr/http-message": "^1.0"
   },
   "autoload": {
     "psr-4": {
