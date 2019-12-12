@@ -5,7 +5,7 @@ namespace YotiSandbox\Http;
 use YotiSandbox\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 
-class Response
+class TokenResponse
 {
     /**
      * @var string
