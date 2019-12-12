@@ -8,7 +8,7 @@ use YotiSandbox\Entity\SandboxDocumentDetails;
 /**
  * @coversDefaultClass \YotiSandbox\Entity\SandboxDocumentDetails
  */
-class SandboxDocumetnDetailsTest extends TestCase
+class SandboxDocumentDetailsTest extends TestCase
 {
     /**
      * @covers ::getValue
