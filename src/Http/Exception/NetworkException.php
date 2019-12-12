@@ -5,7 +5,7 @@ namespace Yoti\Http\Exception;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 
-class NetworkException extends ClientException implements NetworkExceptionInterface
+class NetworkException extends \Exception implements NetworkExceptionInterface
 {
     use RequestAwareTrait;
 
