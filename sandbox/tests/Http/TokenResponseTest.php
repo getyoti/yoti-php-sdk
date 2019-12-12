@@ -3,13 +3,13 @@
 namespace SandboxTest\Http;
 
 use Psr\Http\Message\ResponseInterface;
-use YotiSandbox\Http\Response as TokenResponse;
+use YotiSandbox\Http\TokenResponse;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Http\Response
+ * @coversDefaultClass \YotiSandbox\Http\TokenResponse
  */
-class ResponseTest extends TestCase
+class TokenResponseTest extends TestCase
 {
     /**
      * @covers ::getToken
