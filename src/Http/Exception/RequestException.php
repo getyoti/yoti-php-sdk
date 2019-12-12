@@ -5,7 +5,7 @@ namespace Yoti\Http\Exception;
 use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 
-class RequestException extends ClientException implements RequestExceptionInterface
+class RequestException extends \Exception implements RequestExceptionInterface
 {
     use RequestAwareTrait;
 
