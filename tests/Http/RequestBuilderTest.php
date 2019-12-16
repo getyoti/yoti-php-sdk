@@ -142,14 +142,14 @@ class RequestBuilderTest extends TestCase
      * @covers ::withSdkIdentifier
      *
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
+     * @expectedExceptionMessage SDK identifier must be a string
      */
     public function testBuildWithInvalidSdkIdentifier()
     {
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(PEM_FILE)
-          ->withSdkIdentifier('Invalid')
+          ->withSdkIdentifier(['Invalid'])
           ->build();
     }
 
