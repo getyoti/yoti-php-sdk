@@ -17,9 +17,9 @@ use Yoti\Http\Exception\RequestException;
 class Client implements ClientInterface
 {
     /**
-     * @var array
+     * @var \GuzzleHttp\Client
      */
-    private $config;
+    private $httpClient;
 
     /**
      * @param array $config
@@ -27,13 +27,13 @@ class Client implements ClientInterface
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge(
+        $this->httpClient = new \GuzzleHttp\Client(array_merge(
             [
                 RequestOptions::TIMEOUT => 30,
                 RequestOptions::HTTP_ERRORS => false,
             ],
             $config
-        );
+        ));
     }
 
     /**
@@ -42,7 +42,7 @@ class Client implements ClientInterface
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
         try {
-            return (new \GuzzleHttp\Client($this->config))->send($request);
+            return $this->httpClient->send($request);
         } catch (ConnectException $e) {
             throw new NetworkException($e->getMessage(), $request);
         } catch (GuzzleException $e) {
