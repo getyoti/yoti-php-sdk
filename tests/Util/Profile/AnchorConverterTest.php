@@ -24,7 +24,7 @@ class AnchorConverterTest extends TestCase
     {
         $anchor = $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR);
 
-        $this->assertEquals('Source', $anchor->getType());
+        $this->assertEquals('SOURCE', $anchor->getType());
         $this->assertEquals('OCR', $anchor->getSubtype());
         $this->assertEquals(
             '2018-04-12 13:14:32.835537',
@@ -49,7 +49,7 @@ class AnchorConverterTest extends TestCase
     {
         $anchor = $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
 
-        $this->assertEquals('Verifier', $anchor->getType());
+        $this->assertEquals('VERIFIER', $anchor->getType());
         $this->assertEquals('', $anchor->getSubtype());
         $this->assertEquals(
             '2018-04-11 12:13:04.095238',
