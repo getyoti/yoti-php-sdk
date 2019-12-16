@@ -11,18 +11,6 @@ use Yoti\Util\Validation;
 
 class RequestBuilder
 {
-    /**
-     * Accepted HTTP header values for X-Yoti-SDK-Integration header.
-     *
-     * @var array
-     */
-    private $acceptedsdkIdentifiers = [
-        'PHP',
-        'WordPress',
-        'Drupal',
-        'Joomla',
-    ];
-
     /** Digest HTTP header key. */
     const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
 
@@ -196,13 +184,7 @@ class RequestBuilder
      */
     public function withSdkIdentifier($sdkIdentifier)
     {
-        if (!in_array($sdkIdentifier, $this->acceptedsdkIdentifiers, true)) {
-            throw new \InvalidArgumentException(sprintf(
-                "'%s' is not in the list of accepted identifiers: %s",
-                $sdkIdentifier,
-                implode(', ', $this->acceptedsdkIdentifiers)
-            ));
-        }
+        Validation::isString($sdkIdentifier, 'SDK identifier');
         $this->sdkIdentifier = $sdkIdentifier;
         return $this;
     }

@@ -303,30 +303,10 @@ class YotiClientTest extends TestCase
     /**
      * Test invalid http header value for X-Yoti-SDK
      *
-     * @covers ::__construct
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
-     */
-    public function testInvalidSdkIdentifierConstructor()
-    {
-        $yotiClient = new YotiClient(
-            SDK_ID,
-            $this->pem,
-            YotiClient::DEFAULT_CONNECT_API,
-            'Invalid'
-        );
-        $amlProfile = $this->createMock(AmlProfile::class);
-        $yotiClient->performAmlCheck($amlProfile);
-    }
-
-    /**
-     * Test invalid http header value for X-Yoti-SDK
-     *
      * @covers ::setSdkIdentifier
      *
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage 'Invalid' is not in the list of accepted identifiers: PHP, WordPress, Drupal, Joomla
+     * @expectedExceptionMessage SDK identifier must be a string
      */
     public function testInvalidSdkIdentifier()
     {
@@ -335,7 +315,7 @@ class YotiClientTest extends TestCase
             $this->pem,
             YotiClient::DEFAULT_CONNECT_API
         );
-        $yotiClient->setSdkIdentifier('Invalid');
+        $yotiClient->setSdkIdentifier(['Invalid']);
 
         $amlProfile = $this->createMock(AmlProfile::class);
         $yotiClient->performAmlCheck($amlProfile);

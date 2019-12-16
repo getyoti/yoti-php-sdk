@@ -91,8 +91,6 @@ class YotiClient
      *   PEM file path or string
      * @param string $connectApi (optional)
      *   Connect API address
-     * @param string $sdkIdentifier (optional)
-     *   SDK or Plugin identifier - deprecated - use ::setSdkIdentifier() instead.
      *
      * @throws \Yoti\Exception\RequestException
      * @throws \Yoti\Exception\YotiClientException
@@ -100,18 +98,13 @@ class YotiClient
     public function __construct(
         $sdkId,
         $pem,
-        $connectApi = self::DEFAULT_CONNECT_API,
-        $sdkIdentifier = null
+        $connectApi = self::DEFAULT_CONNECT_API
     ) {
         $this->checkRequiredModules();
         $this->extractPemContent($pem);
         $this->setSdkId($sdkId);
 
         $this->connectApi = $connectApi;
-
-        if (isset($sdkIdentifier)) {
-            $this->sdkIdentifier = $sdkIdentifier;
-        }
     }
 
     /**
