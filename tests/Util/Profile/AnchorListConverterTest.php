@@ -41,11 +41,11 @@ class AnchorListConverterTest extends TestCase
         ]));
 
         $anchorSource = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
-        $this->assertEquals('Source', $anchorSource->getType());
+        $this->assertEquals('SOURCE', $anchorSource->getType());
         $this->assertEquals('DRIVING_LICENCE', $anchorSource->getValue());
 
         $anchorVerifier = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
-        $this->assertEquals('Verifier', $anchorVerifier->getType());
+        $this->assertEquals('VERIFIER', $anchorVerifier->getType());
         $this->assertEquals('YOTI_ADMIN', $anchorVerifier->getValue());
 
         $anchorUnknown = $anchorsData[Anchor::TYPE_UNKNOWN_NAME][0];
