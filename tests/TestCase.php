@@ -36,4 +36,21 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->assertFileExists(ini_get('error_log'));
         $this->assertContains($str, file_get_contents(ini_get('error_log')));
     }
+
+
+    /**
+     * Provides HTTP error status codes.
+     */
+    public function httpErrorStatusCodeProvider()
+    {
+        $clientCodes = [400, 401, 402, 403, 404];
+        $serverCodes = [500, 501, 502, 503, 504];
+
+        return array_map(
+            function ($code) {
+                return [$code];
+            },
+            $clientCodes + $serverCodes
+        );
+    }
 }

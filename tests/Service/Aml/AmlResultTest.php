@@ -1,24 +1,24 @@
 <?php
 
-namespace YotiTest\Http;
+namespace YotiTest\Service\Aml;
 
-use Yoti\Http\AmlResult;
+use Yoti\Service\Aml\AmlResult;
+use Yoti\Util\Json;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Http\AmlResult
+ * @coversDefaultClass \Yoti\Service\Aml\AmlResult
  */
 class AmlResultTest extends TestCase
 {
     /**
-     * @var \Yoti\Http\AmlResult
+     * @var \Yoti\Service\Aml\AmlResult
      */
     public $amlResult;
 
     public function setup()
     {
-        $resultArr = json_decode(file_get_contents(AML_CHECK_RESULT_JSON), true);
-        $this->amlResult = new AmlResult($resultArr);
+        $this->amlResult = new AmlResult(Json::decode(file_get_contents(AML_CHECK_RESULT_JSON)));
     }
 
     /**
@@ -52,5 +52,25 @@ class AmlResultTest extends TestCase
     public function testIsOnWatchList()
     {
         $this->assertFalse($this->amlResult->isOnWatchList());
+    }
+
+    /**
+     * @expectedException \Yoti\Exception\AmlException
+     * @expectedExceptionMessage Missing attributes from the result: on_pep_list,on_watch_list,on_watch_list
+     */
+    public function testMissingAttributes()
+    {
+        new AmlResult([]);
+    }
+
+    /**
+     * @covers ::__toString
+     */
+    public function testToString()
+    {
+        $this->assertJsonStringEqualsJsonString(
+            file_get_contents(AML_CHECK_RESULT_JSON),
+            (string) $this->amlResult
+        );
     }
 }

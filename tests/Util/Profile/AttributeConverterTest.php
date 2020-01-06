@@ -6,7 +6,7 @@ use Yoti\Protobuf\Compubapi\EncryptedData;
 use YotiTest\TestCase;
 use Yoti\Entity\Image;
 use Yoti\Entity\Receipt;
-use Yoti\ActivityDetails;
+use Yoti\Service\Profile\ActivityDetails;
 use Yoti\Util\Profile\AttributeConverter;
 use Yoti\Entity\MultiValue;
 use Yoti\Entity\Attribute;
@@ -51,16 +51,6 @@ class AttributeConverterTest extends TestCase
             ->willReturn($contentType);
 
         return $protobufAttribute;
-    }
-
-    /**
-     * @covers ::convertTimestampToDate
-     */
-    public function testDateTypeShouldReturnDateTime()
-    {
-        $dateTime = AttributeConverter::convertTimestampToDate('1980/12/01');
-        $this->assertInstanceOf(\DateTime::class, $dateTime);
-        $this->assertEquals('01-12-1980', $dateTime->format('d-m-Y'));
     }
 
     /**

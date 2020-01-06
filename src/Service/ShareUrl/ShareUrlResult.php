@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoti\Http;
+namespace Yoti\Service\ShareUrl;
 
 use Yoti\Exception\ShareUrlException;
 use Yoti\Util\Validation;
@@ -37,7 +37,7 @@ class ShareUrlResult
      *
      * @throws \Yoti\Exception\ShareUrlException
      */
-    private function getResultValue(array $result, $key)
+    private function getResultValue(array $result, string $key): string
     {
         if (empty($result[$key])) {
             throw new ShareUrlException("JSON result does not contain '{$key}'");
@@ -51,7 +51,7 @@ class ShareUrlResult
      *
      * @return string The share URL
      */
-    public function getShareUrl()
+    public function getShareUrl(): string
     {
         return $this->shareUrl;
     }
@@ -61,7 +61,7 @@ class ShareUrlResult
      *
      * @return string reference id for the share
      */
-    public function getRefId()
+    public function getRefId(): string
     {
         return $this->refId;
     }

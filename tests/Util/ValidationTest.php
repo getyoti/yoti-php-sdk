@@ -15,12 +15,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isString
-     *
-     * @doesNotPerformAssertions
      */
     public function testIsString()
     {
-        Validation::isString(self::SOME_STRING, self::SOME_NAME);
+        $this->assertNull(Validation::isString(self::SOME_STRING, self::SOME_NAME));
     }
 
     /**
@@ -39,13 +37,11 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isBoolean
      *
-     * @doesNotPerformAssertions
-     *
      * @dataProvider booleanDataProvider
      */
     public function testIsBoolean($boolean)
     {
-        Validation::isBoolean($boolean, self::SOME_NAME);
+        $this->assertNull(Validation::isBoolean($boolean, self::SOME_NAME));
     }
 
     /**
@@ -75,13 +71,11 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isInteger
      *
-     * @doesNotPerformAssertions
-     *
      * @dataProvider integerDataProvider
      */
     public function testIsInteger($integer)
     {
-        Validation::isInteger($integer, self::SOME_NAME);
+        $this->assertNull(Validation::isInteger($integer, self::SOME_NAME));
     }
 
     /**
@@ -112,13 +106,11 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isFloat
      *
-     * @doesNotPerformAssertions
-     *
      * @dataProvider floatDataProvider
      */
     public function testIsFloat($float)
     {
-        Validation::isFloat($float, self::SOME_NAME);
+        $this->assertNull(Validation::isFloat($float, self::SOME_NAME));
     }
 
     /**
@@ -149,14 +141,12 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isNumeric
      *
-     * @doesNotPerformAssertions
-     *
      * @dataProvider floatDataProvider
      * @dataProvider integerDataProvider
      */
     public function testIsNumeric($number)
     {
-        Validation::isNumeric($number, self::SOME_NAME);
+        $this->assertNull(Validation::isNumeric($number, self::SOME_NAME));
     }
 
     /**
@@ -172,12 +162,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notNull
-     *
-     * @doesNotPerformAssertions
      */
     public function testNotNull()
     {
-        Validation::notNull(self::SOME_STRING, self::SOME_NAME);
+        $this->assertNull(Validation::notNull(self::SOME_STRING, self::SOME_NAME));
     }
 
     /**
@@ -193,13 +181,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notGreaterThan
-     *
-     * @doesNotPerformAssertions
      */
     public function testNotGreaterThan()
     {
-        Validation::notGreaterThan(1, 2, self::SOME_NAME);
-        Validation::notGreaterThan(2, 2, self::SOME_NAME);
+        $this->assertNull(Validation::notGreaterThan(1, 2, self::SOME_NAME));
+        $this->assertNull(Validation::notGreaterThan(2, 2, self::SOME_NAME));
     }
 
     /**
@@ -215,13 +201,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notLessThan
-     *
-     * @doesNotPerformAssertions
      */
     public function testNotLessThan()
     {
-        Validation::notLessThan(2, 1, self::SOME_NAME);
-        Validation::notLessThan(2, 2, self::SOME_NAME);
+        $this->assertNull(Validation::notLessThan(2, 1, self::SOME_NAME));
+        $this->assertNull(Validation::notLessThan(2, 2, self::SOME_NAME));
     }
 
     /**
@@ -237,12 +221,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::withinRange
-     *
-     * @doesNotPerformAssertions
      */
     public function testWithinRangeThan()
     {
-        Validation::withinRange(2, 1, 3, self::SOME_NAME);
+        $this->assertNull(Validation::withinRange(2, 1, 3, self::SOME_NAME));
     }
 
     /**
@@ -269,12 +251,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isArrayOfIntegers
-     *
-     * @doesNotPerformAssertions
      */
     public function testIsArrayOfIntegers()
     {
-        Validation::isArrayOfIntegers([-1, 0, 1, 3, 100], self::SOME_NAME);
+        $this->assertNull(Validation::isArrayOfIntegers([-1, 0, 1, 3, 100], self::SOME_NAME));
     }
 
     /**
@@ -290,12 +270,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isArrayOfStrings
-     *
-     * @doesNotPerformAssertions
      */
     public function testIsArrayOfStrings()
     {
-        Validation::isArrayOfStrings(['', self::SOME_STRING], self::SOME_NAME);
+        $this->assertNull(Validation::isArrayOfStrings(['', self::SOME_STRING], self::SOME_NAME));
     }
 
     /**
@@ -312,8 +290,6 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isArrayOfType
      * @covers ::isOneOfType
-     *
-     * @doesNotPerformAssertions
      */
     public function testIsArrayOfType()
     {
@@ -325,7 +301,7 @@ class ValidationTest extends TestCase
             \stdClass::class,
             \DateTime::class,
         ];
-        Validation::isArrayOfType($arrayOfTypes, $allowedTypes, self::SOME_NAME);
+        $this->assertNull(Validation::isArrayOfType($arrayOfTypes, $allowedTypes, self::SOME_NAME));
     }
 
     /**
@@ -350,12 +326,10 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notEmptyString
-     *
-     * @doesNotPerformAssertions
      */
     public function testNotEmptyString()
     {
-        Validation::notEmptyString(self::SOME_STRING, self::SOME_NAME);
+        $this->assertNull(Validation::notEmptyString(self::SOME_STRING, self::SOME_NAME));
     }
 
     /**

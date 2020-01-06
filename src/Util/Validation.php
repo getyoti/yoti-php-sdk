@@ -10,7 +10,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isString($value, $name)
+    public static function isString($value, $name): void
     {
         if (!is_string($value)) {
             throw new \InvalidArgumentException("{$name} must be a string");
@@ -23,7 +23,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isBoolean($value, $name)
+    public static function isBoolean($value, $name): void
     {
         if (!is_bool($value)) {
             throw new \InvalidArgumentException("{$name} must be a boolean");
@@ -36,7 +36,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isInteger($value, $name)
+    public static function isInteger($value, $name): void
     {
         if (!is_integer($value)) {
             throw new \InvalidArgumentException("{$name} must be an integer");
@@ -49,7 +49,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isFloat($value, $name)
+    public static function isFloat($value, $name): void
     {
         if (!is_float($value)) {
             throw new \InvalidArgumentException("{$name} must be a float");
@@ -62,7 +62,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isNumeric($value, $name)
+    public static function isNumeric($value, $name): void
     {
         if (!is_numeric($value)) {
             throw new \InvalidArgumentException("{$name} must be numeric");
@@ -75,7 +75,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function notNull($value, $name)
+    public static function notNull($value, $name): void
     {
         if (is_null($value)) {
             throw new \InvalidArgumentException("{$name} cannot be null");
@@ -88,7 +88,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function notEmptyString($value, $name)
+    public static function notEmptyString($value, $name): void
     {
         Validation::isString($value, $name);
         if (strlen($value) === 0) {
@@ -103,7 +103,7 @@ class Validation
      *
      * @throws \RangeException
      */
-    public static function notGreaterThan($value, $limit, $name)
+    public static function notGreaterThan($value, $limit, $name): void
     {
         self::isNumeric($value, $name);
         if ($value > $limit) {
@@ -118,7 +118,7 @@ class Validation
      *
      * @throws \RangeException
      */
-    public static function notLessThan($value, $limit, $name)
+    public static function notLessThan($value, $limit, $name): void
     {
         self::isNumeric($value, $name);
         if ($value < $limit) {
@@ -134,7 +134,7 @@ class Validation
      *
      * @throws \RangeException
      */
-    public static function withinRange($value, $minLimit, $maxLimit, $name)
+    public static function withinRange($value, $minLimit, $maxLimit, $name): void
     {
         self::notLessThan($value, $minLimit, $name);
         self::notGreaterThan($value, $maxLimit, $name);
@@ -146,7 +146,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfIntegers(array $values, $name)
+    public static function isArrayOfIntegers(array $values, $name): void
     {
         foreach ($values as $value) {
             if (!is_integer($value)) {
@@ -164,7 +164,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfStrings(array $values, $name)
+    public static function isArrayOfStrings(array $values, $name): void
     {
         foreach ($values as $value) {
             if (!is_string($value)) {
@@ -183,7 +183,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfType(array $values, array $types, $name)
+    public static function isArrayOfType(array $values, array $types, $name): void
     {
         foreach ($values as $value) {
             if (!self::isOneOfType($value, $types)) {
@@ -202,7 +202,7 @@ class Validation
      *
      * @return boolean
      */
-    private static function isOneOfType($value, array $types)
+    private static function isOneOfType($value, array $types): bool
     {
         foreach ($types as $type) {
             if ($value instanceof $type) {

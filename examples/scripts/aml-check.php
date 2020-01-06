@@ -11,11 +11,9 @@ use Yoti\YotiClient;
 
 
 try {
-  $connectAPI = getenv('YOTI_CONNECT_API') ?: YotiClient::DEFAULT_CONNECT_API;
-
   $amlAddress = new AmlAddress(new Country('GBR'));
   $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-  $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH, $connectAPI);
+  $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
   $amlResult = $yotiClient->performAmlCheck($amlProfile);
 } catch(\Exception $e) {
   die("Error - {$e->getMessage()}");

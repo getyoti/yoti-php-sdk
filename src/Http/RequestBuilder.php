@@ -3,25 +3,22 @@
 namespace Yoti\Http;
 
 use GuzzleHttp\Psr7\Request as RequestMessage;
-use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Client\ClientInterface;
-use Yoti\Util\Constants;
+use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-use Yoti\Util\Validation;
+
+use function GuzzleHttp\Psr7\uri_for;
 
 class RequestBuilder
 {
     /** Digest HTTP header key. */
-    const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
+    const YOTI_DIGEST_HEADER = 'X-Yoti-Auth-Digest';
 
     /** SDK Identifier HTTP header key. */
-    const YOTI_SDK_IDENTIFIER_KEY = 'X-Yoti-SDK';
+    const YOTI_SDK_IDENTIFIER_HEADER = 'X-Yoti-SDK';
 
     /** SDK Version HTTP header key. */
-    const YOTI_SDK_VERSION = 'X-Yoti-SDK-Version';
-
-    /** Default SDK Identifier. */
-    const YOTI_SDK_IDENTIFIER = 'PHP';
+    const YOTI_SDK_VERSION_HEADER = 'X-Yoti-SDK-Version';
 
     /**
      * @var string
@@ -32,16 +29,6 @@ class RequestBuilder
      * @var \Yoti\Util\PemFile
      */
     private $pemFile;
-
-    /**
-     * @var string
-     */
-    private $sdkIdentifier = self::YOTI_SDK_IDENTIFIER;
-
-    /**
-     * @var string
-     */
-    private $sdkVersion = null;
 
     /**
      * @var array
@@ -74,6 +61,19 @@ class RequestBuilder
     private $client;
 
     /**
+     * @var \Yoti\Util\Config
+     */
+    private $config;
+
+    /**
+     * @param Yoti\Util\Config $config
+     */
+    public function __construct(Config $config = null)
+    {
+        $this->config = $config ?? new Config();
+    }
+
+    /**
      * @param string $baseUrl
      *   Base URL with no trailing slashes.
      *
@@ -102,7 +102,7 @@ class RequestBuilder
      *
      * @return RequestBuilder
      */
-    private function withPemFile(PemFile $pemFile)
+    public function withPemFile(PemFile $pemFile)
     {
         $this->pemFile = $pemFile;
         return $this;
@@ -178,30 +178,6 @@ class RequestBuilder
     }
 
     /**
-     * @param string $sdkIdentifier
-     *
-     * @return \Yoti\Http\RequestBuilder
-     */
-    public function withSdkIdentifier($sdkIdentifier)
-    {
-        Validation::isString($sdkIdentifier, 'SDK identifier');
-        $this->sdkIdentifier = $sdkIdentifier;
-        return $this;
-    }
-
-    /**
-     * @param string $sdkVersion
-     *
-     * @return \Yoti\Http\RequestBuilder
-     */
-    public function withSdkVersion($sdkVersion)
-    {
-        Validation::isString($sdkVersion, 'SDK version');
-        $this->sdkVersion = $sdkVersion;
-        return $this;
-    }
-
-    /**
      * @param string $name
      * @param string $value
      *
@@ -232,22 +208,18 @@ class RequestBuilder
      */
     private function getHeaders()
     {
+        $sdkIdentifier = $this->config->getSdkIdentifier();
+        $sdkVersion = $this->config->getSdkVersion();
+
         // Prepare request Http Headers
         $defaultHeaders = [
-            self::YOTI_SDK_IDENTIFIER_KEY => $this->sdkIdentifier,
+            self::YOTI_SDK_IDENTIFIER_HEADER => $sdkIdentifier,
+            self::YOTI_SDK_VERSION_HEADER => "{$sdkIdentifier}-{$sdkVersion}",
             'Accept' => 'application/json',
         ];
 
         if (isset($this->payload)) {
             $defaultHeaders['Content-Type'] = 'application/json';
-        }
-
-        if (is_null($this->sdkVersion)) {
-            $this->sdkVersion = Constants::SDK_VERSION;
-        }
-
-        if (isset($this->sdkVersion)) {
-            $defaultHeaders[self::YOTI_SDK_VERSION] =  "{$this->sdkIdentifier}-{$this->sdkVersion}";
         }
 
         return array_merge($defaultHeaders, $this->headers);
@@ -342,7 +314,7 @@ class RequestBuilder
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 
-        $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
+        $this->withHeader(self::YOTI_DIGEST_HEADER, RequestSigner::sign(
             $this->pemFile,
             $endpointWithParams,
             $this->method,
@@ -353,17 +325,13 @@ class RequestBuilder
 
         $message = new RequestMessage(
             $this->method,
-            new Uri($url),
+            uri_for($url),
             $this->getHeaders(),
             $this->payload ? $this->payload->toStream() : null
         );
 
-        $request = new Request($message);
+        $client = $this->client ?? $this->config->getHttpClient() ?? new Client();
 
-        if (isset($this->client)) {
-            $request->setClient($this->client);
-        }
-
-        return $request;
+        return new Request($message, $client);
     }
 }
