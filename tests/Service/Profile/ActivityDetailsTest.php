@@ -1,8 +1,7 @@
 <?php
 
-namespace YotiTest;
+namespace YotiTest\Service\Profile;
 
-use Yoti\ActivityDetails;
 use Yoti\Entity\Attribute;
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;
@@ -10,9 +9,11 @@ use Yoti\Entity\Image;
 use Yoti\Entity\ApplicationProfile;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Entity\ExtraData;
+use Yoti\Service\Profile\ActivityDetails;
+use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\ActivityDetails
+ * @coversDefaultClass \Yoti\Service\Profile\ActivityDetails
  */
 class ActivityDetailsTest extends TestCase
 {
@@ -152,6 +153,22 @@ class ActivityDetailsTest extends TestCase
         $timestamp->setTimezone(new \DateTimeZone('UTC'));
         $this->assertEquals('19-07-2016 08:55:38', $timestamp->format('d-m-Y H:i:s'));
         $this->assertEquals(1468918538, $timestamp->getTimestamp());
+    }
+
+    /**
+     * @covers ::setTimestamp
+     * @covers ::getTimestamp
+     */
+    public function testMissingTimestamp()
+    {
+        $this->captureExpectedLogs();
+
+        $this->receiptArr['timestamp'] = 'some-invalid-time';
+        $receipt = new Receipt($this->receiptArr);
+        $activityDetails = new ActivityDetails($receipt, $this->pem);
+
+        $this->assertNull($activityDetails->getTimestamp());
+        $this->assertLogContains('Warning: Could not parse string to DateTime');
     }
 
     /**

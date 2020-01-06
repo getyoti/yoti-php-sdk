@@ -1,12 +1,11 @@
 <?php
 
-namespace YotiTest\Util;
+namespace YotiTest;
 
-use YotiTest\TestCase;
-use Yoti\Util\Constants;
+use Yoti\Constants;
 
 /**
- * @coversDefaultClass \Yoti\Util\Constants
+ * @coversDefaultClass \Yoti\Constants
  */
 class ConstantsTest extends TestCase
 {
@@ -15,7 +14,7 @@ class ConstantsTest extends TestCase
      */
     public function testSDKVersionMatchesComposer()
     {
-        $composerJson = json_decode(file_get_contents(__DIR__ . '/../../composer.json'));
+        $composerJson = json_decode(file_get_contents(__DIR__ . '/../composer.json'));
 
         $this->assertEquals($composerJson->version, Constants::SDK_VERSION);
     }

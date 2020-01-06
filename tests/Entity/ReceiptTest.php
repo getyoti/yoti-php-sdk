@@ -144,6 +144,7 @@ class ReceiptTest extends TestCase
     /**
      * @covers ::parseAttribute
      * @covers ::getWrappedReceiptKey
+     * @covers ::decryptAttribute
      */
     public function testShouldParseOtherPartyProfileContent()
     {
@@ -160,6 +161,7 @@ class ReceiptTest extends TestCase
 
     /**
      * @covers ::parseAttribute
+     * @covers ::decryptAttribute
      */
     public function testShouldParseProfileContent()
     {
@@ -180,6 +182,7 @@ class ReceiptTest extends TestCase
 
     /**
      * @covers ::parseExtraData
+     * @covers ::decryptAttribute
      */
     public function testParseExtraData()
     {

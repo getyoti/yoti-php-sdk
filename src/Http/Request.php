@@ -2,6 +2,7 @@
 
 namespace Yoti\Http;
 
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Yoti\Exception\RequestException;
 
@@ -28,33 +29,14 @@ class Request
      * Request constructor.
      *
      * @param \Psr\Http\Message\RequestInterface $message
+     * @param \Psr\Http\Client\ClientInterface $client
      *
      * @throws RequestException
      */
-    public function __construct(RequestInterface $message)
+    public function __construct(RequestInterface $message, ClientInterface $client)
     {
         $this->message = $message;
-    }
-
-    /**
-     * @param \Psr\Http\Client\ClientInterface $client
-     *
-     * @return \Yoti\Http\RequestBuilder
-     */
-    public function setClient(\Psr\Http\Client\ClientInterface $client)
-    {
         $this->client = $client;
-    }
-
-    /**
-     * @return \Psr\Http\Client\ClientInterface
-     */
-    public function getClient()
-    {
-        if (is_null($this->client)) {
-            $this->client = new Client();
-        }
-        return $this->client;
     }
 
     /**
@@ -72,6 +54,6 @@ class Request
      */
     public function execute()
     {
-        return $this->getClient()->sendRequest($this->getMessage());
+        return $this->client->sendRequest($this->getMessage());
     }
 }

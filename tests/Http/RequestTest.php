@@ -5,7 +5,6 @@ namespace YotiTest\Http;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\Http\Client;
 use Yoti\Http\Request;
 use YotiTest\TestCase;
 
@@ -16,8 +15,7 @@ class RequestTest extends TestCase
 {
     /**
      * @covers ::execute
-     * @covers ::setClient
-     * @covers ::getClient
+     * @covers ::__construct
      */
     public function testExecute()
     {
@@ -30,20 +28,8 @@ class RequestTest extends TestCase
             ->with($someRequestMessage)
             ->willReturn($someResponseMessage);
 
-        $request = new Request($someRequestMessage);
-        $request->setClient($someClient);
+        $request = new Request($someRequestMessage, $someClient);
 
         $this->assertSame($someResponseMessage, $request->execute());
-    }
-
-    /**
-     * @covers ::getClient
-     */
-    public function testDefaultClient()
-    {
-        $someRequestMessage = $this->createMock(RequestInterface::class);
-        $request = new Request($someRequestMessage);
-
-        $this->assertInstanceOf(Client::class, $request->getClient());
     }
 }

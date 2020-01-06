@@ -15,8 +15,10 @@ class DateTime
      * @param $value
      *
      * @return \DateTime
+     *
+     * @throws \Yoti\Exception\DateTimeException
      */
-    public static function stringToDateTime($value)
+    public static function stringToDateTime($value): \DateTime
     {
         Validation::notEmptyString($value, 'value');
 

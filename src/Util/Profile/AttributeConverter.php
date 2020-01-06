@@ -79,7 +79,7 @@ class AttributeConverter
                 return $value;
 
             case self::CONTENT_TYPE_DATE:
-                return self::convertTimestampToDate($value);
+                return DateTime::stringToDateTime($value);
 
             case self::CONTENT_TYPE_MULTI_VALUE:
                 return self::convertMultiValue($value);
@@ -203,17 +203,5 @@ class AttributeConverter
         }
 
         return $yotiAttribute;
-    }
-
-    /**
-     * @deprecated 3.0.0 Replaced by \Yoti\Util\DateTime::stringToDateTime
-     *
-     * @param $value
-     *
-     * @return \DateTime
-     */
-    public static function convertTimestampToDate($value)
-    {
-        return DateTime::stringToDateTime($value);
     }
 }
