@@ -1,12 +1,12 @@
 <?php
 
-namespace YotiTest\Http;
+namespace YotiTest\Service\ShareUrl;
 
-use Yoti\Http\ShareUrlResult;
+use Yoti\Service\ShareUrl\ShareUrlResult;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Http\ShareUrlResult
+ * @coversDefaultClass \Yoti\Service\ShareUrl\ShareUrlResult
  */
 class ShareUrlResultTest extends TestCase
 {

@@ -62,16 +62,6 @@ class Receipt
         return $this->getAttribute(self::ATTR_WRAPPED_RECEIPT_KEY);
     }
 
-    public function getProfileContent()
-    {
-        return $this->getAttribute(self::ATTR_PROFILE_CONTENT);
-    }
-
-    public function getOtherPartyProfileContent()
-    {
-        return $this->getAttribute(self::ATTR_OTHER_PARTY_PROFILE_CONTENT);
-    }
-
     public function getTimestamp()
     {
         return $this->getAttribute(self::ATTR_TIMESTAMP);

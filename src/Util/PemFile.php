@@ -15,15 +15,15 @@ class PemFile
 
     /**
      * @param string $content
+     *
+     * @throws Yoti\Exception\PemFileException
      */
-    public function __construct($content)
+    public function __construct(string $content)
     {
-        if (empty($content)) {
-            throw new PemFileException('PEM content is required', 400);
-        }
+        Validation::notEmptyString($content, 'content');
 
         if (!openssl_get_privatekey($content)) {
-            throw new PemFileException('PEM content is invalid', 400);
+            throw new PemFileException('PEM content is invalid');
         }
 
         $this->content = $content;
@@ -34,9 +34,11 @@ class PemFile
      *
      * @param string $content
      *
-     * @return PemFile
+     * @return \Yoti\Util\PemFile
+     *
+     * @throws Yoti\Exception\PemFileException
      */
-    public static function fromString($content)
+    public static function fromString(string $content): PemFile
     {
         return new static($content);
     }
@@ -46,29 +48,60 @@ class PemFile
      *
      * @param string $filePath
      *
-     * @return PemFile
+     * @return \Yoti\Util\PemFile
+     *
+     * @throws Yoti\Exception\PemFileException
      */
-    public static function fromFilePath($filePath)
+    public static function fromFilePath(string $filePath): PemFile
     {
         if (!is_file($filePath)) {
             throw new PemFileException('PEM file was not found.');
         }
 
-        return new static(file_get_contents($filePath));
+        return static::fromString(file_get_contents($filePath));
+    }
+
+    /**
+     * @param string $pem
+     *   PEM file path or string
+     *
+     * @return \Yoti\Util\PemFile
+     *
+     * @throws Yoti\Exception\PemFileException
+     */
+    public static function resolveFromString(string $pem): PemFile
+    {
+        Validation::notEmptyString($pem, 'pem');
+
+        if (self::isPemString($pem)) {
+            return static::fromString($pem);
+        }
+
+        return static::fromFilePath($pem);
+    }
+
+    /**
+     * @param string $pem
+     *
+     * @return boolean
+     */
+    private static function isPemString(string $pem): bool
+    {
+        return strpos(trim($pem), '-----BEGIN') === 0;
     }
 
     /**
      * Extracts the auth key from the pem file contents.
      *
-     * @return string|null
+     * @return string
      *
-     * @throws PemFileException
+     * @throws \Yoti\Exception\PemFileException
      */
-    public function getAuthKey()
+    public function getAuthKey(): string
     {
         $details = openssl_pkey_get_details(openssl_pkey_get_private($this->content));
         if (!array_key_exists('key', $details)) {
-            return null;
+            throw new PemFileException('PEM content does not contain a key.');
         }
 
         // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
@@ -92,7 +125,7 @@ class PemFile
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->content;
     }

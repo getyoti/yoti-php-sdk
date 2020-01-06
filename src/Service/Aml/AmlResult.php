@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoti\Http;
+namespace Yoti\Service\Aml;
 
 use Yoti\Exception\AmlException;
 
@@ -56,7 +56,7 @@ class AmlResult
      *
      * @return bool
      */
-    public function isOnPepList()
+    public function isOnPepList(): bool
     {
         return $this->onPepList;
     }
@@ -66,7 +66,7 @@ class AmlResult
      *
      * @return bool
      */
-    public function isOnFraudList()
+    public function isOnFraudList(): bool
     {
         return $this->onFraudList;
     }
@@ -76,7 +76,7 @@ class AmlResult
      *
      * @return bool
      */
-    public function isOnWatchList()
+    public function isOnWatchList(): bool
     {
         return $this->onWatchList;
     }
@@ -86,11 +86,11 @@ class AmlResult
      *
      * @throws \Yoti\Exception\AmlException
      */
-    private function setAttributes()
+    private function setAttributes(): void
     {
         $result = $this->rawResult;
         // Check if no attribute is missing from the result
-        AmlResult::checkAttributes($result);
+        self::checkAttributes($result);
 
         $this->onPepList = (bool) $result[self::ON_PEP_LIST_KEY];
         $this->onFraudList = (bool) $result[self::ON_FRAUD_LIST_KEY];
@@ -104,7 +104,7 @@ class AmlResult
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public static function checkAttributes(array $result)
+    public static function checkAttributes(array $result): void
     {
         $expectedAttributes = [
             self::ON_PEP_LIST_KEY,
@@ -125,7 +125,7 @@ class AmlResult
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this->rawResult);
     }

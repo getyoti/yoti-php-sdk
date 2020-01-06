@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoti;
+namespace Yoti\Service\Profile;
 
 use Yoti\Entity\Profile;
 use Yoti\Entity\Receipt;

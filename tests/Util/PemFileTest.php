@@ -56,6 +56,56 @@ class PemFileTest extends TestCase
     }
 
     /**
+     * @covers ::resolveFromString
+     * @covers ::isPemString
+     * @covers ::__toString
+     */
+    public function testResolveFromStringWithPemStringContent()
+    {
+        $pemFile = PemFile::resolveFromString($this->pemContent);
+        $this->assertInstanceOf(PemFile::class, $pemFile);
+        $this->assertEquals($pemFile, $this->pemContent);
+    }
+
+    /**
+     * @covers ::resolveFromString
+     * @covers ::isPemString
+     * @covers ::__toString
+     */
+    public function testResolveFromStringWithFilePath()
+    {
+        $pemFile = PemFile::resolveFromString(PEM_FILE);
+        $this->assertInstanceOf(PemFile::class, $pemFile);
+        $this->assertEquals($pemFile, $this->pemContent);
+    }
+
+    /**
+     * @covers ::resolveFromString
+     * @covers ::isPemString
+     * @covers ::__toString
+     *
+     * @expectedException \Yoti\Exception\PemFileException
+     * @expectedExceptionMessage PEM file was not found
+     */
+    public function testResolveFromStringWithInvalidFilePath()
+    {
+        PemFile::resolveFromString('file://invalid_file_path.pem');
+    }
+
+    /**
+     * @covers ::resolveFromString
+     * @covers ::isPemString
+     * @covers ::__toString
+     *
+     * @expectedException \Yoti\Exception\PemFileException
+     * @expectedExceptionMessage PEM content is invalid
+     */
+    public function testResolveFromStringWithInvalidStringContent()
+    {
+        PemFile::resolveFromString(file_get_contents(INVALID_PEM_FILE));
+    }
+
+    /**
      * Test passing invalid pem file path with file:// stream wrapper
      *
      * @covers ::__construct

@@ -7,8 +7,9 @@ require_once __DIR__ . '/../bootstrap.php';
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\YotiClient;
 
-$yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+$yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
 
 $locationConstraint = (new LocationConstraintExtensionBuilder())
     ->withLatitude(50.8169)
