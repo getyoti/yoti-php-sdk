@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Profile\Attribute;
+namespace Yoti\Media;
 
 use Yoti\Exception\AttributeException;
 
 /**
  * Image entity class.
  *
- * @package Yoti\Profile\Attribute
+ * @package Yoti\Media
  */
 class Image
 {

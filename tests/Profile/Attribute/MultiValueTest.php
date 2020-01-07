@@ -4,7 +4,7 @@ namespace YotiTest\Profile\Attribute;
 
 use YotiTest\TestCase;
 use Yoti\Profile\Attribute\MultiValue;
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\MultiValue

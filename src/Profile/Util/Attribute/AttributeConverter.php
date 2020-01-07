@@ -4,7 +4,7 @@ namespace Yoti\Profile\Util\Attribute;
 
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\DocumentDetails;
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 use Yoti\Profile\Profile;
 use Yoti\Protobuf\Compubapi\EncryptedData;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
