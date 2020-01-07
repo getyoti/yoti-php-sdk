@@ -2,7 +2,7 @@
 
 namespace YotiSandbox\Entity;
 
-use Yoti\Entity\DocumentDetails;
+use Yoti\Profile\Attribute\DocumentDetails;
 
 class SandboxDocumentDetails extends DocumentDetails
 {

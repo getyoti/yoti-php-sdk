@@ -2,7 +2,7 @@
 
 namespace Yoti\ShareUrl\Extension;
 
-use Yoti\Entity\AttributeDefinition;
+use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Util\DateTime;
 use Yoti\Util\Validation;
 
@@ -12,7 +12,7 @@ use Yoti\Util\Validation;
 class ThirdPartyAttributeContent implements \JsonSerializable
 {
     /**
-     * @var \Yoti\Entity\AttributeDefinition[]
+     * @var \Yoti\Profile\ExtraData\AttributeDefinition[]
      */
     private $definitions = [];
 
@@ -23,7 +23,7 @@ class ThirdPartyAttributeContent implements \JsonSerializable
 
     /**
      * @param \DateTime $expiryDate
-     * @param \Yoti\Entity\AttributeDefinition[] $definitions
+     * @param \Yoti\Profile\ExtraData\AttributeDefinition[] $definitions
      */
     public function __construct(\DateTime $expiryDate, array $definitions)
     {

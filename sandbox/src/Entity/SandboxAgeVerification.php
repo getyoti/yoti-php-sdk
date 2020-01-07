@@ -2,7 +2,7 @@
 
 namespace YotiSandbox\Entity;
 
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 
 class SandboxAgeVerification extends SandboxAttribute
 {

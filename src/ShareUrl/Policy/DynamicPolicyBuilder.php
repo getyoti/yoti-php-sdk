@@ -2,7 +2,7 @@
 
 namespace Yoti\ShareUrl\Policy;
 
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 use Yoti\Util\Validation;
 
 /**

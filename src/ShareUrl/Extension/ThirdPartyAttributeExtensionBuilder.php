@@ -2,7 +2,7 @@
 
 namespace Yoti\ShareUrl\Extension;
 
-use Yoti\Entity\AttributeDefinition;
+use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Util\Validation;
 
 /**
@@ -16,7 +16,7 @@ class ThirdPartyAttributeExtensionBuilder
     const THIRD_PARTY_ATTRIBUTE = 'THIRD_PARTY_ATTRIBUTE';
 
     /**
-     * @var \Yoti\Entity\AttributeDefinition[]
+     * @var \Yoti\Profile\ExtraData\AttributeDefinition[]
      */
     private $definitions = [];
 
