@@ -4,9 +4,9 @@ namespace YotiTest\Http;
 
 use YotiTest\TestCase;
 use Yoti\Http\Payload;
-use Yoti\Entity\Country;
-use Yoti\Entity\AmlAddress;
-use Yoti\Entity\AmlProfile;
+use Yoti\Aml\Address;
+use Yoti\Aml\Country;
+use Yoti\Aml\Profile;
 use Yoti\Http\RequestSigner;
 use Yoti\Util\PemFile;
 
@@ -95,8 +95,8 @@ class RequestSignerTest extends TestCase
      */
     public function getDummyPayload()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
-        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+        $amlAddress = new Address(new Country('GBR'));
+        $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
         return Payload::fromJsonData($amlProfile);
     }
 }

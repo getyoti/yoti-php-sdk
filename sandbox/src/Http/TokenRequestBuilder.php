@@ -2,7 +2,7 @@
 
 namespace YotiSandbox\Http;
 
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxAgeVerification;

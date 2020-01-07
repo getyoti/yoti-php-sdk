@@ -31,7 +31,7 @@ $scenario = (new DynamicScenarioBuilder())
     ->withExtension($locationConstraint)
     ->build();
 
-$shareUrlResult = $yotiClient->createShareUrl($scenario);
+$result = $yotiClient->createShareUrl($scenario);
 ?>
 <!DOCTYPE html>
 <html class="yoti-html">
@@ -101,7 +101,7 @@ $shareUrlResult = $yotiClient->createShareUrl($scenario);
             "elements": [{
                 "domId": "yoti-share-button",
                 "clientSdkId": "<?php echo htmlspecialchars(getenv('YOTI_SDK_ID')); ?>",
-                "shareUrl": "<?php echo htmlspecialchars($shareUrlResult->getShareUrl()); ?>",
+                "shareUrl": "<?php echo htmlspecialchars($result->getShareUrl()); ?>",
                 "button": {
                     "label": "Use Yoti"
                 }

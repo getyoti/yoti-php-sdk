@@ -5,12 +5,12 @@ namespace YotiTest;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\YotiClient;
-use Yoti\Entity\Country;
-use Yoti\Entity\AmlAddress;
-use Yoti\Entity\AmlProfile;
-use Yoti\Service\Aml\AmlResult;
-use Yoti\Service\Profile\ActivityDetails;
-use Yoti\Service\ShareUrl\ShareUrlResult;
+use Yoti\Aml\Country as AmlCountry;
+use Yoti\Aml\Address as AmlAddress;
+use Yoti\Aml\Profile as AmlProfile;
+use Yoti\Aml\Result as AmlResult;
+use Yoti\Profile\ActivityDetails;
+use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use Yoti\Util\Config;
@@ -66,7 +66,7 @@ class YotiClientTest extends TestCase
      */
     public function testPerformAmlCheck()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
+        $amlAddress = new AmlAddress(new AmlCountry('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 
         $response = $this->createMock(ResponseInterface::class);
@@ -117,8 +117,8 @@ class YotiClientTest extends TestCase
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $shareUrlResult = $yotiClient->createShareUrl($dynamicScenario);
-        $this->assertInstanceOf(ShareUrlResult::class, $shareUrlResult);
+        $result = $yotiClient->createShareUrl($dynamicScenario);
+        $this->assertInstanceOf(ShareUrlResult::class, $result);
     }
 
     public function testGetLoginUrl()
