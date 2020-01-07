@@ -1,19 +1,19 @@
 <?php
 
-namespace YotiTest\Profile\Attribute;
+namespace YotiTest\Media;
 
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Profile\Attribute\Image
+ * @coversDefaultClass \Yoti\Media\Image
  */
 class ImageTest extends TestCase
 {
     const SOME_IMAGE_DATA = 'dummyImageData';
 
     /**
-     * @var \Yoti\Profile\Attribute\Image
+     * @var \Yoti\Media\Image
      */
     public $dummyImage;
 

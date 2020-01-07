@@ -4,7 +4,7 @@ namespace YotiTest\Profile\Util\Attribute;
 
 use Yoti\Protobuf\Compubapi\EncryptedData;
 use YotiTest\TestCase;
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
@@ -225,7 +225,7 @@ class AttributeConverterTest extends TestCase
     /**
      * Asserts that provided image is expected.
      *
-     * @param \Yoti\Profile\Attribute\Image $image
+     * @param \Yoti\Media\Image $image
      * @param string $mimeType
      * @param string $base64last10
      */

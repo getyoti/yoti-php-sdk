@@ -135,7 +135,7 @@ $nationality        = $profile->getNationality()->getValue();
 
 $phoneNumber        = $profile->getPhoneNumber()->getValue();
 
-$selfie             = $profile->getSelfie()->getValue(); // Yoti\Profile\Attribute\Image Object
+$selfie             = $profile->getSelfie()->getValue(); // Yoti\Media\Image Object
 
 $emailAddress       = $profile->getEmailAddress()->getValue();
 
@@ -311,7 +311,7 @@ $ ./vendor/bin/phpunit tests
       * [X] Logo `getApplicationLogo()->getValue()`
       * [X] Receipt Bg Color `getApplicationReceiptBgColor()->getValue()`
     * [X] Profile `getProfile()`
-      * [X] Photo `getSelfie()->getValue()` // Yoti\Profile\Attribute\Image Object
+      * [X] Photo `getSelfie()->getValue()` // Yoti\Media\Image Object
         * [X] Image Data `getContent()`
         * [X] MimeType `getMimeType()`
         * [X] Base64Uri `getBase64Content()`      
