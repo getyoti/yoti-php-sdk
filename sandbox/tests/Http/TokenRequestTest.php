@@ -3,7 +3,7 @@
 namespace SandboxTest\Http;
 
 use YotiTest\TestCase;
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 use Yoti\Http\Payload;
 use YotiSandbox\Http\TokenRequest;
 

@@ -135,7 +135,7 @@ $nationality        = $profile->getNationality()->getValue();
 
 $phoneNumber        = $profile->getPhoneNumber()->getValue();
 
-$selfie             = $profile->getSelfie()->getValue(); // Yoti\Entity\Image Object
+$selfie             = $profile->getSelfie()->getValue(); // Yoti\Profile\Attribute\Image Object
 
 $emailAddress       = $profile->getEmailAddress()->getValue();
 
@@ -236,13 +236,13 @@ Given a YotiClient initialised with your SDK ID and KeyPair (see [Client Initial
 
 ```php
 <?php
-use Yoti\Entity\Country;
-use Yoti\Entity\AmlAddress;
-use Yoti\Entity\AmlProfile;
+use Yoti\Aml\Country;
+use Yoti\Aml\Address;
+use Yoti\Aml\Profile;
 
 // Address of the user profile to check
-$amlAddress = new AmlAddress(new Country('GBR'));
-$amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
+$amlAddress = new Address(new Country('GBR'));
+$amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
 // Perform the check
 $amlResult = $client->performAmlCheck($amlProfile);
 
@@ -311,7 +311,7 @@ $ ./vendor/bin/phpunit tests
       * [X] Logo `getApplicationLogo()->getValue()`
       * [X] Receipt Bg Color `getApplicationReceiptBgColor()->getValue()`
     * [X] Profile `getProfile()`
-      * [X] Photo `getSelfie()->getValue()` // Yoti\Entity\Image Object
+      * [X] Photo `getSelfie()->getValue()` // Yoti\Profile\Attribute\Image Object
         * [X] Image Data `getContent()`
         * [X] MimeType `getMimeType()`
         * [X] Base64Uri `getBase64Content()`      
@@ -324,12 +324,12 @@ $ ./vendor/bin/phpunit tests
         * [X] Date `format('d-m-Y')`
       * [X] Age / Age Verifications `getAgeVerifications()` // array of AgeVerification Object
         * [X] Age Over 50 `['age_over:50']` // AgeVerification Object, this depends on your settings on Yoti Hub
-      * [X] Age Under Verification `findAgeUnderVerification($xx)` // Yoti\Entity\AgeVerification Object  
-      * [X] Age Over Verification `findAgeOverVerification($xx)` // Yoti\Entity\AgeVerification Object, see details below
+      * [X] Age Under Verification `findAgeUnderVerification($xx)` // Yoti\Profile\Attribute\AgeVerification Object  
+      * [X] Age Over Verification `findAgeOverVerification($xx)` // Yoti\Profile\Attribute\AgeVerification Object, see details below
         * [X] Age `getAge()` // int, e.g 50  
         * [X] Check Type `getCheckType()` // string, e.g 'age_over'
         * [X] Result `getResult()` // boolean
-        * [X] Attribute `getAttribute()` // Yoti\Entity\Attribute Object  
+        * [X] Attribute `getAttribute()` // Yoti\Profile\Attribute\Attribute Object  
       * [X] Address `getPostalAddress()->getValue()`
       * [X] Structured Postal Address `getStructuredPostalAddress()->getValue()`
       * [X] Gender `getGender()->getValue()`

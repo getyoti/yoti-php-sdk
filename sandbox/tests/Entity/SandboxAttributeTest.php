@@ -3,7 +3,7 @@
 namespace SandboxTest\Entity;
 
 use YotiTest\TestCase;
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 use YotiSandbox\Entity\SandboxAttribute;
 
 /**

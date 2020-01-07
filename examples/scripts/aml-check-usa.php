@@ -4,17 +4,17 @@
 // Load dependent packages and env data
 require_once __DIR__ . '/../bootstrap.php';
 
-use Yoti\Entity\Country;
-use Yoti\Entity\AmlAddress;
-use Yoti\Entity\AmlProfile;
+use Yoti\Aml\Country;
+use Yoti\Aml\Address;
+use Yoti\Aml\Profile;
 use Yoti\YotiClient;
 
 $zipCode = '12345';
 $ssn = '170206773';
 
 try {
-    $amlAddress = new AmlAddress(new Country('USA'), $zipCode);
-    $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress, $ssn);
+    $amlAddress = new Address(new Country('USA'), $zipCode);
+    $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress, $ssn);
     $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
     $amlResult = $yotiClient->performAmlCheck($amlProfile);
 } catch(\Exception $e) {

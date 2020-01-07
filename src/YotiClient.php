@@ -2,13 +2,13 @@
 
 namespace Yoti;
 
-use Yoti\Entity\AmlProfile;
-use Yoti\Service\Aml\AmlResult;
-use Yoti\Service\Aml\AmlService;
-use Yoti\Service\Profile\ActivityDetails;
-use Yoti\Service\Profile\ProfileService;
-use Yoti\Service\ShareUrl\DynamicSharingService;
-use Yoti\Service\ShareUrl\ShareUrlResult;
+use Yoti\Aml\Profile as AmlProfile;
+use Yoti\Aml\Result as AmlResult;
+use Yoti\Aml\Service as AmlService;
+use Yoti\Profile\ActivityDetails;
+use Yoti\Profile\Service as ProfileService;
+use Yoti\ShareUrl\Service as ShareUrlService;
+use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\ShareUrl\DynamicScenario;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
@@ -31,6 +31,21 @@ class YotiClient
      * @var string
      */
     private $sdkId;
+
+    /**
+     * @var \Yoti\Aml\Service
+     */
+    private $amlService;
+
+    /**
+     * @var \Yoti\Profile\Service
+     */
+    private $profileService;
+
+    /**
+     * @var \Yoti\ShareUrl\Service
+     */
+    private $shareUrlService;
 
     /**
      * YotiClient constructor.
@@ -56,7 +71,7 @@ class YotiClient
         $config = new Config($options);
         $this->profileService = new ProfileService($config);
         $this->amlService = new AmlService($config);
-        $this->dynamicSharingService = new DynamicSharingService($config);
+        $this->shareUrlService = new ShareUrlService($config);
     }
 
     /**
@@ -76,7 +91,7 @@ class YotiClient
      *
      * @param string $encryptedConnectToken
      *
-     * @return \Yoti\Service\Profile\ActivityDetails
+     * @return \Yoti\Profile\ActivityDetails
      *
      * @throws \Yoti\Exception\ActivityDetailsException
      * @throws \Yoti\Exception\ReceiptException
@@ -89,9 +104,9 @@ class YotiClient
     /**
      * Perform AML profile check.
      *
-     * @param \Yoti\Entity\AmlProfile $amlProfile
+     * @param \Yoti\Aml\Profile $amlProfile
      *
-     * @return \Yoti\Service\Aml\AmlResult
+     * @return \Yoti\Aml\Result
      *
      * @throws \Yoti\Exception\AmlException
      * @throws \Yoti\Exception\RequestException
@@ -106,13 +121,13 @@ class YotiClient
      *
      * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
      *
-     * @return \Yoti\Service\ShareUrl\ShareUrlResult
+     * @return \Yoti\ShareUrl\Result
      *
      * @throws \Yoti\Exception\ShareUrlException
      * @throws \Yoti\Exception\RequestException
      */
     public function createShareUrl(DynamicScenario $dynamicScenario): ShareUrlResult
     {
-        return $this->dynamicSharingService->createShareUrl($dynamicScenario, $this->pemFile, $this->sdkId);
+        return $this->shareUrlService->createShareUrl($dynamicScenario, $this->pemFile, $this->sdkId);
     }
 }

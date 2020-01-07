@@ -2,7 +2,7 @@
 
 namespace SandboxTest\Entity;
 
-use Yoti\Entity\Profile;
+use Yoti\Profile\Profile;
 use YotiTest\TestCase;
 use YotiSandbox\Entity\SandboxAgeVerification;
 

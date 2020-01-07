@@ -2,7 +2,7 @@
 
 namespace YotiTest\ShareUrl\Extension;
 
-use Yoti\Entity\AttributeDefinition;
+use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\ShareUrl\Extension\ThirdPartyAttributeContent;
 use YotiTest\TestCase;
 
