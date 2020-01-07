@@ -5,7 +5,7 @@ namespace YotiTest\Profile;
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;

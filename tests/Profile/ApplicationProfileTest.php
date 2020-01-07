@@ -3,7 +3,7 @@
 namespace YotiTest\Profile;
 
 use Yoti\Profile\Attribute\Attribute;
-use Yoti\Profile\Attribute\Image;
+use Yoti\Media\Image;
 use YotiTest\TestCase;
 use Yoti\Profile\ApplicationProfile;
 
@@ -63,7 +63,7 @@ class ApplicationProfileTest extends TestCase
 
     /**
      * @covers ::getApplicationLogo
-     * @covers \Yoti\Profile\Attribute\Image::getContent
+     * @covers \Yoti\Media\Image::getContent
      */
     public function testGetApplicationLogoImageData()
     {
@@ -75,7 +75,7 @@ class ApplicationProfileTest extends TestCase
 
     /**
      * @covers ::getApplicationLogo
-     * @covers \Yoti\Profile\Attribute\Image::getMimeType
+     * @covers \Yoti\Media\Image::getMimeType
      */
     public function testGetApplicationLogoImageType()
     {

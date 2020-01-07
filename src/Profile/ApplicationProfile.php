@@ -36,7 +36,7 @@ class ApplicationProfile extends BaseProfile
      * The logo of the application that will be displayed to users that perform a share with it.
      *
      * @return null|Attribute
-     *   The Attribute value will be of type Yoti\Profile\Attribute\Image
+     *   The Attribute value will be of type Yoti\Media\Image
      */
     public function getApplicationLogo()
     {
