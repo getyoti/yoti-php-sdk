@@ -11,6 +11,7 @@ use Compubapi\EncryptedData;
 use Yoti\Exception\AttributeException;
 use Yoti\Entity\MultiValue;
 use Yoti\Entity\ApplicationProfile;
+use Yoti\Util\DateTime;
 
 class AttributeConverter
 {
@@ -205,12 +206,14 @@ class AttributeConverter
     }
 
     /**
+     * @deprecated 3.0.0 Replaced by \Yoti\Util\DateTime::stringToDateTime
+     *
      * @param $value
      *
      * @return \DateTime
      */
     public static function convertTimestampToDate($value)
     {
-        return (new \DateTime())->setTimestamp(strtotime($value));
+        return DateTime::stringToDateTime($value);
     }
 }
