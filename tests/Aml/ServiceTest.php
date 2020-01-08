@@ -57,11 +57,15 @@ class ServiceTest extends TestCase
             )
             ->willReturn($response);
 
-        $amlService = new Service(new Config([
-            Config::HTTP_CLIENT => $httpClient,
-        ]));
+        $amlService = new Service(
+            SDK_ID,
+            PemFile::fromFilePath(PEM_FILE),
+            new Config([
+                Config::HTTP_CLIENT => $httpClient,
+            ])
+        );
 
-        $result = $amlService->performCheck($amlProfile, PemFile::fromFilePath(PEM_FILE), SDK_ID);
+        $result = $amlService->performCheck($amlProfile);
 
         $this->assertInstanceOf(Result::class, $result);
     }
@@ -79,11 +83,7 @@ class ServiceTest extends TestCase
     {
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $amlService = $this->createServiceWithErrorResponse($statusCode);
-        $amlService->performCheck(
-            $this->createMock(Profile::class),
-            PemFile::fromFilePath(PEM_FILE),
-            SDK_ID
-        );
+        $amlService->performCheck($this->createMock(Profile::class));
     }
 
     /**
@@ -110,11 +110,7 @@ class ServiceTest extends TestCase
             ])
         );
 
-        $amlService->performCheck(
-            $this->createMock(Profile::class),
-            PemFile::fromFilePath(PEM_FILE),
-            SDK_ID
-        );
+        $amlService->performCheck($this->createMock(Profile::class));
     }
 
     /**
@@ -133,10 +129,12 @@ class ServiceTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $yotiClient = new Service(new Config([
-            Config::HTTP_CLIENT => $httpClient,
-        ]));
-
-        return $yotiClient;
+        return new Service(
+            SDK_ID,
+            PemFile::fromFilePath(PEM_FILE),
+            new Config([
+                Config::HTTP_CLIENT => $httpClient,
+            ])
+        );
     }
 }

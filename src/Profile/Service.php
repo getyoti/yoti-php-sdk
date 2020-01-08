@@ -18,15 +18,29 @@ class Service
     const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
 
     /**
+     * @var string
+     */
+    private $sdkId;
+
+    /**
+     * @var \Yoti\Util\PemFile
+     */
+    private $pemFile;
+
+    /**
      * @var \Yoti\Util\Config
      */
     private $config;
 
     /**
-     * @param Yoti\Util\Config $config
+     * @param string $sdkId
+     * @param \Yoti\Util\PemFile $pemFile
+     * @param \Yoti\Util\Config $config
      */
-    public function __construct(Config $config)
+    public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
+        $this->sdkId = $sdkId;
+        $this->pemFile = $pemFile;
         $this->config = $config;
     }
 
@@ -40,10 +54,10 @@ class Service
      * @throws \Yoti\Exception\ActivityDetailsException
      * @throws \Yoti\Exception\ReceiptException
      */
-    public function getActivityDetails($encryptedConnectToken, PemFile $pemFile, string $sdkId): ActivityDetails
+    public function getActivityDetails($encryptedConnectToken): ActivityDetails
     {
         // Decrypt connect token
-        $token = $this->decryptConnectToken($encryptedConnectToken, $pemFile);
+        $token = $this->decryptConnectToken($encryptedConnectToken);
         if (!$token) {
             throw new ActivityDetailsException('Could not decrypt connect token.');
         }
@@ -52,10 +66,10 @@ class Service
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getConnectApiUrl())
             ->withEndpoint(sprintf('/profile/%s', $token))
-            ->withQueryParam('appId', $sdkId)
-            ->withHeader(self::YOTI_AUTH_HEADER_KEY, $pemFile->getAuthKey())
+            ->withQueryParam('appId', $this->sdkId)
+            ->withHeader(self::YOTI_AUTH_HEADER_KEY, $this->pemFile->getAuthKey())
             ->withGet()
-            ->withPemFile($pemFile)
+            ->withPemFile($this->pemFile)
             ->build()
             ->execute();
 
@@ -75,7 +89,7 @@ class Service
             throw new ActivityDetailsException('Outcome was unsuccessful');
         }
 
-        return new ActivityDetails($receipt, $pemFile);
+        return new ActivityDetails($receipt, $this->pemFile);
     }
 
     /**
@@ -85,10 +99,10 @@ class Service
      *
      * @return string|null
      */
-    private function decryptConnectToken($encryptedConnectToken, PemFile $pemFile)
+    private function decryptConnectToken($encryptedConnectToken)
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
-        openssl_private_decrypt($tok, $token, (string) $pemFile);
+        openssl_private_decrypt($tok, $token, (string) $this->pemFile);
 
         return $token;
     }
