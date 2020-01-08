@@ -13,15 +13,29 @@ use Yoti\Util\PemFile;
 class Service
 {
     /**
+     * @var string
+     */
+    private $sdkId;
+
+    /**
+     * @var \Yoti\Util\PemFile
+     */
+    private $pemFile;
+
+    /**
      * @var \Yoti\Util\Config
      */
     private $config;
 
     /**
+     * @param string $sdkId
+     * @param \Yoti\Util\PemFile $pemFile
      * @param \Yoti\Util\Config $config
      */
-    public function __construct(Config $config)
+    public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
+        $this->sdkId = $sdkId;
+        $this->pemFile = $pemFile;
         $this->config = $config;
     }
 
@@ -32,15 +46,15 @@ class Service
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function performCheck(Profile $amlProfile, PemFile $pemFile, string $sdkId): Result
+    public function performCheck(Profile $amlProfile): Result
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getConnectApiUrl())
             ->withEndpoint('/aml-check')
-            ->withQueryParam('appId', $sdkId)
+            ->withQueryParam('appId', $this->sdkId)
             ->withPost()
             ->withPayload(Payload::fromJsonData($amlProfile))
-            ->withPemFile($pemFile)
+            ->withPemFile($this->pemFile)
             ->build()
             ->execute();
 

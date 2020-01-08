@@ -12,15 +12,29 @@ use Yoti\Util\Json;
 class Service
 {
     /**
+     * @var string
+     */
+    private $sdkId;
+
+    /**
+     * @var \Yoti\Util\PemFile
+     */
+    private $pemFile;
+
+    /**
      * @var \Yoti\Util\Config
      */
     private $config;
 
     /**
+     * @param string $sdkId
+     * @param \Yoti\Util\PemFile $pemFile
      * @param \Yoti\Util\Config $config
      */
-    public function __construct(Config $config)
+    public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
+        $this->sdkId = $sdkId;
+        $this->pemFile = $pemFile;
         $this->config = $config;
     }
 
@@ -31,15 +45,15 @@ class Service
      *
      * @throws \Yoti\Exception\ShareUrlException
      */
-    public function createShareUrl(DynamicScenario $dynamicScenario, PemFile $pemFile, string $sdkId): Result
+    public function createShareUrl(DynamicScenario $dynamicScenario): Result
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getConnectApiUrl())
-            ->withEndpoint(sprintf('/qrcodes/apps/%s', $sdkId))
-            ->withQueryParam('appId', $sdkId)
+            ->withEndpoint(sprintf('/qrcodes/apps/%s', $this->sdkId))
+            ->withQueryParam('appId', $this->sdkId)
             ->withPost()
             ->withPayload(Payload::fromJsonData($dynamicScenario))
-            ->withPemFile($pemFile)
+            ->withPemFile($this->pemFile)
             ->build()
             ->execute();
 
