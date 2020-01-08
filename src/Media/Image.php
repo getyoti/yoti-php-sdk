@@ -3,6 +3,7 @@
 namespace Yoti\Media;
 
 use Yoti\Exception\AttributeException;
+use Yoti\Media\Exception\InvalidImageTypeException;
 
 /**
  * Image entity class.
@@ -95,7 +96,7 @@ class Image
     private function validateImageExtension($imageExtension)
     {
         if (!isset($this->imageTypeMap[$imageExtension])) {
-            throw new AttributeException("Image extension {$imageExtension} not supported");
+            throw new InvalidImageTypeException("{$imageExtension} extension not supported");
         }
     }
 
