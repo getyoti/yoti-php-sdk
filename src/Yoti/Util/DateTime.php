@@ -2,6 +2,8 @@
 
 namespace Yoti\Util;
 
+use Yoti\Exception\DateTimeException;
+
 class DateTime
 {
     /**
@@ -18,9 +20,13 @@ class DateTime
     {
         Validation::notEmptyString($value, 'value');
 
-        return new \DateTime(
-            $value,
-            new \DateTimeZone("UTC")
-        );
+        try {
+            return new \DateTime(
+                $value,
+                new \DateTimeZone("UTC")
+            );
+        } catch (\Exception $e) {
+            throw new DateTimeException('Could not parse string to DateTime', null, $e);
+        }
     }
 }
