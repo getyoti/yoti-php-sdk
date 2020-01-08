@@ -53,10 +53,12 @@ class ImageTest extends TestCase
      * @covers ::__construct
      * @covers ::imageTypeToMimeType
      * @covers ::validateImageExtension
+     *
+     * @expectedException \Yoti\Media\Exception\InvalidImageTypeException
+     * @expectedExceptionMessage bmp extension not supported
      */
     public function testShouldThrowExceptionForUnsupportedExtension()
     {
-        $this->expectException("\Yoti\Exception\AttributeException");
         new Image(self::SOME_IMAGE_DATA, 'bmp');
     }
 }
