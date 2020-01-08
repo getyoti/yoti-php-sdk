@@ -20,6 +20,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
+     * @covers ::parseToken
      */
     public function testConvertValue()
     {
@@ -116,9 +117,6 @@ class ThirdPartyAttributeConverterTest extends TestCase
             [ '' ],
             [ 1 ],
             [ 'invalid date' ],
-            [ '2019-12-02' ],
-            [ '2019-12-02' ],
-            [ '2019-12-02T12:00:00Z' ],
         ];
     }
 

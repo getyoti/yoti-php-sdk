@@ -5,9 +5,9 @@ namespace Yoti\Util\ExtraData;
 use Yoti\Entity\AttributeDefinition;
 use Yoti\Entity\AttributeIssuanceDetails;
 use Yoti\Exception\ExtraDataException;
-use Yoti\Util\Constants;
 use Sharepubapi\IssuingAttributes;
 use Sharepubapi\ThirdPartyAttribute as ThirdPartyAttributeProto;
+use Yoti\Util\DateTime;
 
 class ThirdPartyAttributeConverter
 {
@@ -28,15 +28,9 @@ class ThirdPartyAttributeConverter
         $issuingAttributesProto = $thirdPartyAttributeProto->getIssuingAttributes();
 
         if ($issuingAttributesProto instanceof IssuingAttributes) {
-            $parsedDateTime = \DateTime::createFromFormat(
-                Constants::DATE_FORMAT_RFC3339,
-                $issuingAttributesProto->getExpiryDate(),
-                new \DateTimeZone("UTC")
-            );
-
-            if ($parsedDateTime !== false) {
-                $expiryDate = $parsedDateTime;
-            } else {
+            try {
+                $expiryDate = DateTime::stringToDateTime($issuingAttributesProto->getExpiryDate());
+            } catch (\Exception $e) {
                 error_log("Failed to parse expiry date from ThirdPartyAttribute", 0);
             }
 

@@ -7,7 +7,7 @@ use Yoti\Entity\Receipt;
 use Attrpubapi\AttributeList;
 use Yoti\Entity\ApplicationProfile;
 use Yoti\Util\Age\AgeVerificationConverter;
-use Yoti\Util\Profile\AttributeConverter;
+use Yoti\Util\DateTime;
 use Yoti\Util\Profile\AttributeListConverter;
 
 /**
@@ -91,7 +91,7 @@ class ActivityDetails
     {
         try {
             $timestamp = $this->receipt->getTimestamp();
-            $this->timestamp = AttributeConverter::convertTimestampToDate($timestamp);
+            $this->timestamp = DateTime::stringToDateTime($timestamp);
         } catch (\Exception $e) {
             $this->timestamp = null;
             error_log("Warning: {$e->getMessage()}", 0);

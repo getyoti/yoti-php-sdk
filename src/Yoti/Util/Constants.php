@@ -7,8 +7,7 @@ class Constants
     /**
      * RFC3339 format with microseconds.
      *
-     * This will be replaced by \DateTime::RFC3339_EXTENDED
-     * once PHP 5.6 is no longer supported.
+     * @deprecated 3.0.0 Replaced by \Yoti\Util\DateTime::RFC3339
      */
-    const DATE_FORMAT_RFC3339 = 'Y-m-d\TH:i:s.uP';
+    const DATE_FORMAT_RFC3339 = DateTime::RFC3339;
 }
