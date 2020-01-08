@@ -47,8 +47,8 @@ class DateTimeTest extends TestCase
     /**
      * @covers ::stringToDateTime
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Failed to parse time string (some-invalid-date)
+     * @expectedException \Yoti\Exception\DateTimeException
+     * @expectedExceptionMessage Could not parse string to DateTime
      */
     public function testInvalidTimestamp()
     {
