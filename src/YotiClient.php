@@ -23,16 +23,6 @@ use Yoti\Util\Validation;
 class YotiClient
 {
     /**
-     * @var \Yoti\Util\PemFile
-     */
-    private $pemFile;
-
-    /**
-     * @var string
-     */
-    private $sdkId;
-
-    /**
      * @var \Yoti\Aml\Service
      */
     private $amlService;
@@ -65,13 +55,12 @@ class YotiClient
         array $options = []
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
-        $this->sdkId = $sdkId;
-        $this->pemFile = Pemfile::resolveFromString($pem);
-
+        $pemFile = Pemfile::resolveFromString($pem);
         $config = new Config($options);
-        $this->profileService = new ProfileService($config);
-        $this->amlService = new AmlService($config);
-        $this->shareUrlService = new ShareUrlService($config);
+
+        $this->profileService = new ProfileService($sdkId, $pemFile, $config);
+        $this->amlService = new AmlService($sdkId, $pemFile, $config);
+        $this->shareUrlService = new ShareUrlService($sdkId, $pemFile, $config);
     }
 
     /**
@@ -98,7 +87,7 @@ class YotiClient
      */
     public function getActivityDetails($encryptedConnectToken): ActivityDetails
     {
-        return $this->profileService->getActivityDetails($encryptedConnectToken, $this->pemFile, $this->sdkId);
+        return $this->profileService->getActivityDetails($encryptedConnectToken);
     }
 
     /**
@@ -113,7 +102,7 @@ class YotiClient
      */
     public function performAmlCheck(AmlProfile $amlProfile): AmlResult
     {
-        return $this->amlService->performCheck($amlProfile, $this->pemFile, $this->sdkId);
+        return $this->amlService->performCheck($amlProfile);
     }
 
     /**
@@ -128,6 +117,6 @@ class YotiClient
      */
     public function createShareUrl(DynamicScenario $dynamicScenario): ShareUrlResult
     {
-        return $this->shareUrlService->createShareUrl($dynamicScenario, $this->pemFile, $this->sdkId);
+        return $this->shareUrlService->createShareUrl($dynamicScenario);
     }
 }

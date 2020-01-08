@@ -56,15 +56,15 @@ class ServiceTest extends TestCase
             }))
             ->willReturn($response);
 
-        $service = new Service(new Config([
-            Config::HTTP_CLIENT => $httpClient,
-        ]));
-
-        $result = $service->createShareUrl(
-            $dynamicScenario,
+        $service = new Service(
+            SDK_ID,
             PemFile::fromFilePath(PEM_FILE),
-            SDK_ID
+            new Config([
+                Config::HTTP_CLIENT => $httpClient,
+            ])
         );
+
+        $result = $service->createShareUrl($dynamicScenario);
 
         $this->assertEquals($expectedQrCode, $result->getShareUrl());
         $this->assertEquals($expectedRefId, $result->getRefId());
@@ -81,11 +81,7 @@ class ServiceTest extends TestCase
     {
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $yotiClient = $this->createServiceWithErrorResponse($statusCode);
-        $yotiClient->createShareUrl(
-            $this->createMock(DynamicScenario::class),
-            PemFile::fromFilePath(PEM_FILE),
-            SDK_ID
-        );
+        $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));
     }
 
     /**
@@ -104,8 +100,12 @@ class ServiceTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        return new Service(new Config([
-            Config::HTTP_CLIENT => $httpClient,
-        ]));
+        return new Service(
+            SDK_ID,
+            PemFile::fromFilePath(PEM_FILE),
+            new Config([
+                Config::HTTP_CLIENT => $httpClient,
+            ])
+        );
     }
 }
