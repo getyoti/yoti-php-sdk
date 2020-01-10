@@ -91,6 +91,40 @@ class AttributeConverterTest extends TestCase
      * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnContentType
      */
+    public function testConvertDate()
+    {
+        $someTimeStamp = '2016-07-19T08:55:38Z';
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            $someTimeStamp,
+            self::CONTENT_TYPE_DATE
+        ));
+        $this->assertEquals(
+            $someTimeStamp,
+            $attr->getValue()->format('Y-m-d\Th:i:s\Z')
+        );
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
+     */
+    public function testConvertDateInvalid()
+    {
+        $this->captureExpectedLogs();
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            'some-invalid-date',
+            self::CONTENT_TYPE_DATE
+        ));
+        $this->assertNull($attr);
+        $this->assertLogContains('Could not parse string to DateTime');
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
+     */
     public function testConvertUndefinedContentType()
     {
         $this->captureExpectedLogs();
