@@ -12,13 +12,13 @@ use function GuzzleHttp\Psr7\uri_for;
 class RequestBuilder
 {
     /** Digest HTTP header key. */
-    const YOTI_DIGEST_HEADER = 'X-Yoti-Auth-Digest';
+    const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
 
     /** SDK Identifier HTTP header key. */
-    const YOTI_SDK_IDENTIFIER_HEADER = 'X-Yoti-SDK';
+    const YOTI_SDK_IDENTIFIER_HEADER_KEY = 'X-Yoti-SDK';
 
     /** SDK Version HTTP header key. */
-    const YOTI_SDK_VERSION_HEADER = 'X-Yoti-SDK-Version';
+    const YOTI_SDK_VERSION_HEADER_KEY = 'X-Yoti-SDK-Version';
 
     /**
      * @var string
@@ -213,8 +213,8 @@ class RequestBuilder
 
         // Prepare request Http Headers
         $defaultHeaders = [
-            self::YOTI_SDK_IDENTIFIER_HEADER => $sdkIdentifier,
-            self::YOTI_SDK_VERSION_HEADER => "{$sdkIdentifier}-{$sdkVersion}",
+            self::YOTI_SDK_IDENTIFIER_HEADER_KEY => $sdkIdentifier,
+            self::YOTI_SDK_VERSION_HEADER_KEY => "{$sdkIdentifier}-{$sdkVersion}",
             'Accept' => 'application/json',
         ];
 
@@ -314,7 +314,7 @@ class RequestBuilder
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 
-        $this->withHeader(self::YOTI_DIGEST_HEADER, RequestSigner::sign(
+        $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
             $this->pemFile,
             $endpointWithParams,
             $this->method,
