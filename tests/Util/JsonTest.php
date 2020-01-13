@@ -36,12 +36,11 @@ class JsonTest extends TestCase
 
     /**
      * @covers ::decode
-     *
-     * @expectedException \Yoti\Exception\JsonException
-     * @expectedExceptionMessage Syntax error
      */
     public function testDecodeExceptionSyntax()
     {
+        $this->expectException(\Yoti\Exception\JsonException::class, 'Syntax error');
+
         Json::decode('some invalid json');
     }
 }

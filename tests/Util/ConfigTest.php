@@ -117,12 +117,14 @@ class ConfigTest extends TestCase
 
     /**
      * @covers ::setHttpClient
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage http.client configuration value must be of type Psr\Http\Client\ClientInterface
      */
     public function testInvalidHttpClient()
     {
+        $this->expectException(
+            \InvalidArgumentException::class,
+            'http.client configuration value must be of type Psr\\Http\\Client\\ClientInterface'
+        );
+
         new Config([
             self::HTTP_CLIENT_KEY => 'some invalid http client',
         ]);
@@ -139,12 +141,14 @@ class ConfigTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::validateKeys
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following configuration keys are not allowed: some.invalid.key
      */
     public function testValidateKeys()
     {
+        $this->expectException(
+            \InvalidArgumentException::class,
+            'The following configuration keys are not allowed: some.invalid.key'
+        );
+
         new Config([
             'some.invalid.key' => 'some string',
         ]);

@@ -33,12 +33,11 @@ class ResultTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getResultValue
-     *
-     * @expectedException \Yoti\Exception\ShareUrlException
-     * @expectedExceptionMessage JSON result does not contain 'qrcode'
      */
     public function testInvalidResponseNoQr()
     {
+        $this->expectException(\Yoti\Exception\ShareUrlException::class, 'JSON result does not contain \'qrcode\'');
+
         new Result([
             'ref_id' => self::SOME_REF_ID,
         ]);
@@ -47,12 +46,11 @@ class ResultTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getResultValue
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage qrcode must be a string
      */
     public function testInvalidResponseInvalidQr()
     {
+        $this->expectException(\InvalidArgumentException::class, 'qrcode must be a string');
+
         new Result([
             'qrcode' => [self::SOME_SHARE_URL],
         ]);
@@ -61,12 +59,11 @@ class ResultTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getResultValue
-     *
-     * @expectedException \Yoti\Exception\ShareUrlException
-     * @expectedExceptionMessage JSON result does not contain 'ref_id'
      */
     public function testInvalidResponseNoRefId()
     {
+        $this->expectException(\Yoti\Exception\ShareUrlException::class, 'JSON result does not contain \'ref_id\'');
+
         new Result([
             'qrcode' => self::SOME_SHARE_URL,
         ]);
@@ -75,12 +72,11 @@ class ResultTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getResultValue
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ref_id must be a string
      */
     public function testInvalidResponseInvalidRefId()
     {
+        $this->expectException(\InvalidArgumentException::class, 'ref_id must be a string');
+
         new Result([
             'qrcode' => self::SOME_SHARE_URL,
             'ref_id' => [self::SOME_REF_ID],

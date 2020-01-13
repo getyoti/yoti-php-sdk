@@ -31,12 +31,11 @@ class DataEntryConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
-     *
-     * @expectedException \Yoti\Exception\ExtraDataException
-     * @expectedExceptionMessage Value is empty
      */
     public function testConvertValueThirdPartyAttributeEmptyValue()
     {
+        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Value is empty');
+
         $thirdPartyAttribute = DataEntryConverter::convertValue(
             self::TYPE_THIRD_PARTY_ATTRIBUTE,
             (new ThirdPartyAttribute())->serializeToString()
@@ -47,12 +46,11 @@ class DataEntryConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
-     *
-     * @expectedException \Yoti\Exception\ExtraDataException
-     * @expectedExceptionMessage Value is empty
      */
     public function testConvertValueEmpty()
     {
+        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Value is empty');
+
         DataEntryConverter::convertValue(
             self::TYPE_THIRD_PARTY_ATTRIBUTE,
             ''
@@ -61,12 +59,11 @@ class DataEntryConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
-     *
-     * @expectedException \Yoti\Exception\ExtraDataException
-     * @expectedExceptionMessage Unsupported data entry
      */
     public function testConvertValueUnknown()
     {
+        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Unsupported data entry');
+
         DataEntryConverter::convertValue(
             'Some unknown type',
             'Some value'

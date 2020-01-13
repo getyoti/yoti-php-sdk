@@ -42,12 +42,11 @@ class ClientTest extends TestCase
     /**
      * @covers ::sendRequest
      * @covers ::__construct
-     *
-     * @expectedException \Yoti\Http\Exception\NetworkException
-     * @expectedExceptionMessage some network exception
      */
     public function testSendRequestThrowsNetworkException()
     {
+        $this->expectException(\Yoti\Http\Exception\NetworkException::class, 'some network exception');
+
         $someHandler = new MockHandler([
             new ConnectException(
                 'some network exception',
@@ -65,12 +64,13 @@ class ClientTest extends TestCase
      * @covers ::sendRequest
      * @covers ::__construct
      *
-     * @expectedException \Yoti\Http\Exception\RequestException
      *
      * @dataProvider requestExceptionDataProvider
      */
     public function testSendRequestThrowsRequestException(\Exception $someRequestException)
     {
+        $this->expectException(\Yoti\Http\Exception\RequestException::class);
+
         $this->expectExceptionMessage($someRequestException->getMessage());
 
         $someHandler = new MockHandler([$someRequestException]);

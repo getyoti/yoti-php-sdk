@@ -17,7 +17,7 @@ class AttributeDefinitionTest extends TestCase
      */
     private $attributeDefinition;
 
-    public function setup()
+    public function setup(): void
     {
         $this->attributeDefinition = new AttributeDefinition(self::SOME_NAME);
     }
@@ -35,12 +35,11 @@ class AttributeDefinitionTest extends TestCase
      * @covers ::__construct
      *
      * @dataProvider invalidNameDataProvider
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage name must be a string
      */
     public function testInvalidName($invalidName)
     {
+        $this->expectException(\InvalidArgumentException::class, 'name must be a string');
+
         new AttributeDefinition($invalidName);
     }
 

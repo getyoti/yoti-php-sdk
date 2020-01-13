@@ -102,11 +102,11 @@ class ServiceTest extends TestCase
      * @covers ::getActivityDetails
      *
      * @dataProvider httpErrorStatusCodeProvider
-     *
-     * @expectedException \Yoti\Exception\ActivityDetailsException
      */
     public function testGetActivityDetailsFailure($statusCode)
     {
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
+
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $profileService = $this->createProfileServiceWithResponse($statusCode);
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
@@ -116,12 +116,11 @@ class ServiceTest extends TestCase
      * Test invalid Token
      *
      * @covers ::getActivityDetails
-     *
-     * @expectedException \Yoti\Exception\ActivityDetailsException
-     * @expectedExceptionMessage Could not decrypt connect token
      */
     public function testInvalidConnectToken()
     {
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class, 'Could not decrypt connect token');
+
         $profileService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
@@ -133,12 +132,11 @@ class ServiceTest extends TestCase
 
     /**
      * @covers ::getActivityDetails
-     *
-     * @expectedException \Yoti\Exception\ActivityDetailsException
-     * @expectedExceptionMessage Outcome was unsuccessful
      */
     public function testSharingOutcomeFailure()
     {
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class, 'Outcome was unsuccessful');
+
         $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $json['receipt']['sharing_outcome'] = 'FAILURE';
 
@@ -149,12 +147,11 @@ class ServiceTest extends TestCase
     /**
      * @covers ::getActivityDetails
      * @covers ::checkForReceipt
-     *
-     * @expectedException \Yoti\Exception\ReceiptException
-     * @expectedExceptionMessage Receipt not found in response
      */
     public function testMissingReceipt()
     {
+        $this->expectException(\Yoti\Exception\ReceiptException::class, 'Receipt not found in response');
+
         $profileService = $this->createProfileServiceWithResponse(200);
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }

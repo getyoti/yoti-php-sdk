@@ -45,12 +45,11 @@ class WantedAttributeBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withName
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage name cannot be empty
      */
     public function testEmptyName()
     {
+        $this->expectException(\InvalidArgumentException::class, 'name cannot be empty');
+
         (new WantedAttributeBuilder())
             ->withName('')
             ->build();
@@ -59,12 +58,11 @@ class WantedAttributeBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withName
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage name must be a string
      */
     public function testNonStringName()
     {
+        $this->expectException(\InvalidArgumentException::class, 'name must be a string');
+
         (new WantedAttributeBuilder())
             ->withName(['some array'])
             ->build();

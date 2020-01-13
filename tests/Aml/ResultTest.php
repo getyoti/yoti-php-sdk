@@ -17,7 +17,7 @@ class ResultTest extends TestCase
      */
     public $amlResult;
 
-    public function setup()
+    public function setup(): void
     {
         $this->amlResult = new Result(Json::decode(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
     }
@@ -56,11 +56,14 @@ class ResultTest extends TestCase
     }
 
     /**
-     * @expectedException \Yoti\Exception\AmlException
-     * @expectedExceptionMessage Missing attributes from the result: on_pep_list,on_watch_list,on_watch_list
      */
     public function testMissingAttributes()
     {
+        $this->expectException(
+            \Yoti\Exception\AmlException::class,
+            'Missing attributes from the result: on_pep_list,on_watch_list,on_watch_list'
+        );
+
         new Result([]);
     }
 
