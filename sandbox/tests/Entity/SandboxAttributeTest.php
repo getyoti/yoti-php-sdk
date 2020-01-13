@@ -16,7 +16,7 @@ class SandboxAttributeTest extends TestCase
      */
     public $attribute;
 
-    public function setUp()
+    public function setup(): void
     {
         $this->attribute = new SandboxAttribute(
             Profile::ATTR_FAMILY_NAME,

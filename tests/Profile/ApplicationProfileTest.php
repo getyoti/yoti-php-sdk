@@ -17,7 +17,7 @@ class ApplicationProfileTest extends TestCase
      */
     private $dummyProfile;
 
-    public function setup()
+    public function setup(): void
     {
         $dummyData = [
             'application_name' => new Attribute('application_name', 'Test PHP SDK', []),

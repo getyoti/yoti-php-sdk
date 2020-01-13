@@ -50,24 +50,24 @@ class DateTimeTest extends TestCase
 
     /**
      * @covers ::stringToDateTime
-     *
-     * @expectedException \Yoti\Exception\DateTimeException
-     * @expectedExceptionMessage Could not parse string to DateTime
      */
     public function testInvalidTimestamp()
     {
+        $this->expectException(\Yoti\Exception\DateTimeException::class, 'Could not parse string to DateTime');
+
         DateTime::stringToDateTime('some-invalid-date');
     }
 
     /**
      * @covers ::stringToDateTime
      *
-     * @expectedException \InvalidArgumentException
      *
      * @dataProvider emptyTimestampProvider
      */
     public function testEmptyTimestamp($emptyDateString, $exceptionMessage)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->expectExceptionMessage($exceptionMessage);
         DateTime::stringToDateTime($emptyDateString);
     }

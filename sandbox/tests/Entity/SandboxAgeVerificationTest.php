@@ -16,7 +16,7 @@ class SandboxAgeVerificationTest extends TestCase
      */
     public $ageVerification;
 
-    public function setUp()
+    public function setup(): void
     {
         $dateTime = (new \DateTime())->setTimestamp(1171502725);
         $this->ageVerification = new SandboxAgeVerification(

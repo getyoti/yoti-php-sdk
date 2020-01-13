@@ -20,7 +20,7 @@ class AttributeIssuanceDetailsTest extends TestCase
      */
     private $attributeIssuanceDetails;
 
-    public function setup()
+    public function setup(): void
     {
         $mockAttributeDefinition = $this->createMock(AttributeDefinition::class);
         $mockAttributeDefinition
@@ -73,13 +73,13 @@ class AttributeIssuanceDetailsTest extends TestCase
     /**
      * @covers ::__construct
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage token must be a string
      *
      * @dataProvider invalidTokenDataProvider
      */
     public function testInvalidToken($invalidToken)
     {
+        $this->expectException(\InvalidArgumentException::class, 'token must be a string');
+
         new AttributeIssuanceDetails($invalidToken);
     }
 
@@ -99,12 +99,14 @@ class AttributeIssuanceDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage issuingAttributes must be array of Yoti\Profile\ExtraData\AttributeDefinition
      */
     public function testInvalidIssuingAttributes()
     {
+        $this->expectException(
+            \InvalidArgumentException::class,
+            'issuingAttributes must be array of Yoti\\Profile\\ExtraData\\AttributeDefinition'
+        );
+
         new AttributeIssuanceDetails(
             'some token',
             new \DateTime(),

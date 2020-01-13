@@ -31,7 +31,7 @@ class ReceiptTest extends TestCase
      */
     public $receipt;
 
-    public function setup()
+    public function setup(): void
     {
         $this->pem = file_get_contents(TestData::PEM_FILE);
         $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
@@ -41,11 +41,11 @@ class ReceiptTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::validateReceipt
-     *
-     * @expectedException \Yoti\Exception\ReceiptException
      */
     public function testShouldThrowExceptionForInvalidReceipt()
     {
+        $this->expectException(\Yoti\Exception\ReceiptException::class);
+
         new Receipt([]);
     }
 

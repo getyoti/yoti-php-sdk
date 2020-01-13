@@ -25,7 +25,7 @@ class SignedTimeStampTest extends TestCase
     /**
      * Create SignedTimeStamp.
      */
-    public function setup()
+    public function setup(): void
     {
         $this->timestamp = new \DateTime();
         $this->signedTimestamp =  new SignedTimeStamp(

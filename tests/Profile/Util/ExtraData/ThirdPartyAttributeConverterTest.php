@@ -53,11 +53,12 @@ class ThirdPartyAttributeConverterTest extends TestCase
      *
      * @dataProvider invalidTokenProvider
      *
-     * @expectedException \Yoti\Exception\ExtraDataException
      * @expectedExceptionMessafe Failed to retrieve token from ThirdPartyAttribute
      */
     public function testConvertValueEmptyToken($invalidToken)
     {
+        $this->expectException(\Yoti\Exception\ExtraDataException::class);
+
         ThirdPartyAttributeConverter::convertValue(
             $this->createThirdPartyAttribute(
                 $invalidToken,

@@ -15,7 +15,7 @@ class SandboxAnchorTest extends TestCase
      */
     public $anchor;
 
-    public function setUp()
+    public function setup(): void
     {
         $this->anchor = new SandboxAnchor(
             'Source',

@@ -2,12 +2,14 @@
 
 namespace YotiTest;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+
+class TestCase extends PHPUnitTestCase
 {
     /**
      * Restores ini settings after tests run.
      */
-    public function teardown()
+    public function teardown(): void
     {
         parent::teardown();
         ini_restore('error_log');
@@ -34,7 +36,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function assertLogContains($str)
     {
         $this->assertFileExists(ini_get('error_log'));
-        $this->assertContains($str, file_get_contents(ini_get('error_log')));
+        $this->assertStringContainsString($str, file_get_contents(ini_get('error_log')));
     }
 
 

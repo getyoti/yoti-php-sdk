@@ -88,12 +88,11 @@ class DynamicScenarioBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers \Yoti\ShareUrl\DynamicScenario::__construct
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage callbackEndpoint must be a string
      */
     public function testBuildWithoutCallback()
     {
+        $this->expectException(\InvalidArgumentException::class, 'callbackEndpoint must be a string');
+
         (new DynamicScenarioBuilder())
             ->withPolicy($this->createMock(DynamicPolicy::class))
             ->build();

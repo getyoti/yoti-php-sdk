@@ -259,12 +259,11 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::validateMethod
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage HTTP Method must be specified
      */
     public function testWithoutMethod()
     {
+        $this->expectException(\InvalidArgumentException::class, 'HTTP Method must be specified');
+
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(TestData::PEM_FILE)
@@ -275,12 +274,11 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withMethod
      * @covers ::validateMethod
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported HTTP Method SOME_METHOD
      */
     public function testWithUnsupportedMethod()
     {
+        $this->expectException(\InvalidArgumentException::class, 'Unsupported HTTP Method SOME_METHOD');
+
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(TestData::PEM_FILE)
@@ -292,12 +290,11 @@ class RequestBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withHeader
      * @covers ::validateHeaders
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Header value for 'Custom' must be a string
      */
     public function testWithHeaderInvalidValue()
     {
+        $this->expectException(\InvalidArgumentException::class, 'Header value for \'Custom\' must be a string');
+
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withPemFilePath(TestData::PEM_FILE)
@@ -308,12 +305,14 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Base URL must be provided to Yoti\Http\RequestBuilder
      */
     public function testBuildWithoutBaseUrl()
     {
+        $this->expectException(
+            \InvalidArgumentException::class,
+            'Base URL must be provided to Yoti\\Http\\RequestBuilder'
+        );
+
         (new RequestBuilder())
           ->withPemFilePath(TestData::PEM_FILE)
           ->build();
@@ -321,12 +320,14 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Pem file must be provided to Yoti\Http\RequestBuilder
      */
     public function testBuildWithoutPem()
     {
+        $this->expectException(
+            \InvalidArgumentException::class,
+            'Pem file must be provided to Yoti\\Http\\RequestBuilder'
+        );
+
         (new RequestBuilder())
             ->withBaseUrl(self::SOME_BASE_URL)
             ->build();
@@ -347,7 +348,10 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
+        $this->assertStringContainsString(
+            self::SOME_BASE_URL . self::SOME_ENDPOINT,
+            (string) $request->getMessage()->getUri()
+        );
     }
 
     /**
@@ -365,7 +369,10 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
+        $this->assertStringContainsString(
+            self::SOME_BASE_URL . self::SOME_ENDPOINT,
+            (string) $request->getMessage()->getUri()
+        );
     }
 
     /**
@@ -383,7 +390,10 @@ class RequestBuilderTest extends TestCase
           ->withMethod('GET')
           ->build();
 
-        $this->assertContains(self::SOME_BASE_URL . self::SOME_ENDPOINT, (string) $request->getMessage()->getUri());
+        $this->assertStringContainsString(
+            self::SOME_BASE_URL . self::SOME_ENDPOINT,
+            (string) $request->getMessage()->getUri()
+        );
     }
 
     /**

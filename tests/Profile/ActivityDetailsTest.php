@@ -43,7 +43,7 @@ class ActivityDetailsTest extends TestCase
      */
     private $receiptArr;
 
-    public function setUp()
+    public function setup(): void
     {
         $this->pem = file_get_contents(TestData::PEM_FILE);
         $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];

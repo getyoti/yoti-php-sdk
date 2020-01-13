@@ -77,11 +77,11 @@ class ServiceTest extends TestCase
      * @covers ::getErrorMessage
      *
      * @dataProvider httpErrorStatusCodeProvider
-     *
-     * @expectedException \Yoti\Exception\AmlException
      */
     public function testPerformAmlCheckFailure($statusCode)
     {
+        $this->expectException(\Yoti\Exception\AmlException::class);
+
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $amlService = $this->createServiceWithErrorResponse($statusCode);
         $amlService->performCheck($this->createMock(Profile::class));
@@ -93,12 +93,11 @@ class ServiceTest extends TestCase
      * @covers ::getErrorMessage
      *
      * @dataProvider httpErrorStatusCodeProvider
-     *
-     * @expectedException \Yoti\Exception\AmlException
-     * @expectedExceptionMessage Error - some property: some message
      */
     public function testPerformAmlCheckFailureWithErrorMessage($statusCode)
     {
+        $this->expectException(\Yoti\Exception\AmlException::class, 'Error - some property: some message');
+
         $amlService = $this->createServiceWithErrorResponse(
             $statusCode,
             json_encode([

@@ -35,7 +35,7 @@ class RequestSignerTest extends TestCase
      */
     private $publicKey;
 
-    public function setup()
+    public function setup(): void
     {
         $this->pem = file_get_contents(TestData::AML_PRIVATE_KEY);
         $this->publicKey = file_get_contents(TestData::AML_PUBLIC_KEY);
@@ -66,12 +66,11 @@ class RequestSignerTest extends TestCase
     /**
      * @covers ::sign
      * @covers ::validateSignedMessage
-     *
-     * @expectedException \Yoti\Http\Exception\RequestSignerException
-     * @expectedExceptionMessage Could not sign request
      */
     public function testValidateSignedMessage()
     {
+        $this->expectException(\Yoti\Http\Exception\RequestSignerException::class, 'Could not sign request');
+
         $this->captureExpectedLogs();
 
         $somePemFile = $this->createMock(PemFile::class);
