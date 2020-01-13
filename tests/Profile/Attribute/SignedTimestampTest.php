@@ -2,8 +2,8 @@
 
 namespace YotiTest\Profile\Attribute;
 
-use YotiTest\TestCase;
 use Yoti\Profile\Attribute\SignedTimestamp;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\SignedTimestamp

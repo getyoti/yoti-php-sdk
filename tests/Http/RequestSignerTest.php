@@ -2,13 +2,14 @@
 
 namespace YotiTest\Http;
 
-use YotiTest\TestCase;
-use Yoti\Http\Payload;
 use Yoti\Aml\Address;
 use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
+use Yoti\Http\Payload;
 use Yoti\Http\RequestSigner;
 use Yoti\Util\PemFile;
+use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestSigner
@@ -36,8 +37,8 @@ class RequestSignerTest extends TestCase
 
     public function setup()
     {
-        $this->pem = file_get_contents(AML_PRIVATE_KEY);
-        $this->publicKey = file_get_contents(AML_PUBLIC_KEY);
+        $this->pem = file_get_contents(TestData::AML_PRIVATE_KEY);
+        $this->publicKey = file_get_contents(TestData::AML_PUBLIC_KEY);
         $this->payload = $this->getDummyPayload();
     }
 
@@ -76,7 +77,7 @@ class RequestSignerTest extends TestCase
         $somePemFile = $this->createMock(PemFile::class);
         $somePemFile
             ->method('__toString')
-            ->willReturn(INVALID_PEM_FILE);
+            ->willReturn(TestData::INVALID_PEM_FILE);
 
         RequestSigner::sign(
             $somePemFile,

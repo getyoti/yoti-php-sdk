@@ -2,11 +2,10 @@
 
 namespace YotiTest\Profile\Attribute;
 
-use ArrayObject;
 use Yoti\Profile\Attribute\Anchor;
-use YotiTest\TestCase;
-use YotiTest\Profile\Util\Attribute\TestAnchors;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
+use YotiTest\Profile\Util\Attribute\TestAnchors;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\Anchor
@@ -33,7 +32,7 @@ class AnchorTest extends TestCase
     {
         $dlAnchor = new \Yoti\Protobuf\Attrpubapi\Anchor();
         $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
-        $collection = new ArrayObject([$dlAnchor]);
+        $collection = new \ArrayObject([$dlAnchor]);
         $anchorList = AnchorListConverter::convert($collection);
 
         /**

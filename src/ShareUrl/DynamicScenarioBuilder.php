@@ -2,8 +2,8 @@
 
 namespace Yoti\ShareUrl;
 
-use Yoti\ShareUrl\Policy\DynamicPolicy;
 use Yoti\ShareUrl\Extension\Extension;
+use Yoti\ShareUrl\Policy\DynamicPolicy;
 
 /**
  * Builder for DynamicScenario.

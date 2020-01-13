@@ -2,8 +2,8 @@
 
 namespace Yoti\Profile\Util\Age;
 
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\AgeVerification;
+use Yoti\Profile\Attribute\Attribute;
 
 abstract class AbstractAgeProcessor
 {

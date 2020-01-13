@@ -3,8 +3,8 @@
 namespace YotiTest\Aml;
 
 use Yoti\Aml\Address;
-use YotiTest\TestCase;
 use Yoti\Aml\Country;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Address

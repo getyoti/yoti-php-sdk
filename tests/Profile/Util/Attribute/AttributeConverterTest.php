@@ -2,14 +2,15 @@
 
 namespace YotiTest\Profile\Util\Attribute;
 
+use Yoti\Media\Image;
+use Yoti\Profile\ActivityDetails;
+use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute\MultiValue;
+use Yoti\Profile\Receipt;
+use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Protobuf\Compubapi\EncryptedData;
 use YotiTest\TestCase;
-use Yoti\Media\Image;
-use Yoti\Profile\Receipt;
-use Yoti\Profile\ActivityDetails;
-use Yoti\Profile\Util\Attribute\AttributeConverter;
-use Yoti\Profile\Attribute\MultiValue;
-use Yoti\Profile\Attribute\Attribute;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AttributeConverter
@@ -58,8 +59,8 @@ class AttributeConverterTest extends TestCase
      */
     public function testSelfieValueShouldReturnImageObject()
     {
-        $pem = file_get_contents(PEM_FILE);
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $pem = file_get_contents(TestData::PEM_FILE);
+        $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $receipt = new Receipt($receiptArr['receipt']);
 
         $this->activityDetails = new ActivityDetails($receipt, $pem);
@@ -211,8 +212,10 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
+        $decodedProtoString = base64_decode(file_get_contents(TestData::MULTI_VALUE_ATTRIBUTE));
+
         $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
-        $protobufAttribute->mergeFromString(base64_decode(MULTI_VALUE_ATTRIBUTE));
+        $protobufAttribute->mergeFromString(base64_decode(file_get_contents(TestData::MULTI_VALUE_ATTRIBUTE)));
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
         $this->assertCount(2, $attr->getValue());
@@ -421,8 +424,10 @@ class AttributeConverterTest extends TestCase
      */
     public function testThirdPartyAttribute()
     {
+        $decodedProtoString = base64_decode(file_get_contents(TestData::THIRD_PARTY_ATTRIBUTE));
+
         $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
-        $protobufAttribute->mergeFromString(base64_decode(THIRD_PARTY_ATTRIBUTE));
+        $protobufAttribute->mergeFromString(base64_decode(file_get_contents(TestData::THIRD_PARTY_ATTRIBUTE)));
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
 
@@ -441,7 +446,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testGetEncryptedData()
     {
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $encryptedData = AttributeConverter::getEncryptedData($receiptArr['receipt']['profile_content']);
 
         $this->assertInstanceOf(EncryptedData::class, $encryptedData);

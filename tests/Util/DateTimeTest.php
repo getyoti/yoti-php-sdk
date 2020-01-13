@@ -2,8 +2,8 @@
 
 namespace YotiTest\Util;
 
-use YotiTest\TestCase;
 use Yoti\Util\DateTime;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Util\DateTime

@@ -2,8 +2,8 @@
 
 namespace YotiTest\Aml;
 
-use YotiTest\TestCase;
 use Yoti\Aml\Country;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Country

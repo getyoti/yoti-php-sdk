@@ -10,6 +10,13 @@ return PhpCsFixer\Config::create()
     ->setRules([
         'array_syntax' => ['syntax' => 'short'],
         'no_unused_imports' => true,
+        'ordered_imports' => [
+            'imports_order' => [
+                'const',
+                'class',
+                'function',
+            ],
+        ],
         'php_unit_fqcn_annotation' => true,
     ])
     ->setFinder($finder)

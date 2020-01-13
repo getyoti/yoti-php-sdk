@@ -2,10 +2,10 @@
 
 namespace Yoti\Profile;
 
-use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Profile\Util\Age\AgeVerificationConverter;
-use Yoti\Util\DateTime;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Util\DateTime;
 
 /**
  * Class ActivityDetails

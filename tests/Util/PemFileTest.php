@@ -2,8 +2,9 @@
 
 namespace YotiTest\Util;
 
-use YotiTest\TestCase;
 use Yoti\Util\PemFile;
+use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Util\PemFile
@@ -20,7 +21,7 @@ class PemFileTest extends TestCase
      */
     public function setup()
     {
-        $this->pemContent = file_get_contents(PEM_FILE);
+        $this->pemContent = file_get_contents(TestData::PEM_FILE);
     }
 
     /**
@@ -39,7 +40,7 @@ class PemFileTest extends TestCase
      */
     public function testFromFilePath()
     {
-        $pemFile = PemFile::fromFilePath(PEM_FILE);
+        $pemFile = PemFile::fromFilePath(TestData::PEM_FILE);
         $this->assertInstanceOf(PemFile::class, $pemFile);
         $this->assertEquals($pemFile, $this->pemContent);
     }
@@ -74,7 +75,7 @@ class PemFileTest extends TestCase
      */
     public function testResolveFromStringWithFilePath()
     {
-        $pemFile = PemFile::resolveFromString(PEM_FILE);
+        $pemFile = PemFile::resolveFromString(TestData::PEM_FILE);
         $this->assertInstanceOf(PemFile::class, $pemFile);
         $this->assertEquals($pemFile, $this->pemContent);
     }
@@ -102,7 +103,7 @@ class PemFileTest extends TestCase
      */
     public function testResolveFromStringWithInvalidStringContent()
     {
-        PemFile::resolveFromString(file_get_contents(INVALID_PEM_FILE));
+        PemFile::resolveFromString(file_get_contents(TestData::INVALID_PEM_FILE));
     }
 
     /**
@@ -130,7 +131,7 @@ class PemFileTest extends TestCase
      */
     public function testInvalidPemFileContents()
     {
-        PemFile::fromFilePath(INVALID_PEM_FILE);
+        PemFile::fromFilePath(TestData::INVALID_PEM_FILE);
     }
 
     /**
@@ -155,6 +156,6 @@ class PemFileTest extends TestCase
     public function testPemFileAuthKey()
     {
         $pemFile = new PemFile($this->pemContent);
-        $this->assertEquals($pemFile->getAuthKey(), PEM_AUTH_KEY);
+        $this->assertEquals($pemFile->getAuthKey(), file_get_contents(TestData::PEM_AUTH_KEY));
     }
 }

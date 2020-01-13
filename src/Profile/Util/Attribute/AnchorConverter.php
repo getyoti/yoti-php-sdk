@@ -2,7 +2,6 @@
 
 namespace Yoti\Profile\Util\Attribute;
 
-use Traversable;
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
 use Yoti\Profile\Attribute\Anchor;
@@ -99,11 +98,11 @@ class AnchorConverter
     }
 
     /**
-     * @param Traversable $certificateList
+     * @param \Traversable $certificateList
      *
      * @return array
      */
-    private static function convertCertsListToX509(Traversable $certificateList)
+    private static function convertCertsListToX509(\Traversable $certificateList)
     {
         $certsList = [];
         foreach ($certificateList as $certificate) {

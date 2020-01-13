@@ -2,11 +2,11 @@
 
 namespace YotiTest\Profile\Util\ExtraData;
 
-use YotiTest\TestCase;
 use Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter;
 use Yoti\Protobuf\Sharepubapi\Definition;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter

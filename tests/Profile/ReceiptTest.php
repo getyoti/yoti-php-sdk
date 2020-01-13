@@ -2,13 +2,14 @@
 
 namespace YotiTest\Profile;
 
-use YotiTest\TestCase;
-use Yoti\Profile\Profile;
-use Yoti\Profile\Receipt;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
+use Yoti\Profile\Profile;
+use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
+use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Receipt
@@ -32,19 +33,20 @@ class ReceiptTest extends TestCase
 
     public function setup()
     {
-        $this->pem = file_get_contents(PEM_FILE);
-        $this->receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true)['receipt'];
+        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
         $this->receipt = new Receipt($this->receiptArr);
     }
 
     /**
      * @covers ::__construct
      * @covers ::validateReceipt
+     *
+     * @expectedException \Yoti\Exception\ReceiptException
      */
     public function testShouldThrowExceptionForInvalidReceipt()
     {
-        $this->expectException('\Yoti\Exception\ReceiptException');
-        $receipt = new Receipt([]);
+        new Receipt([]);
     }
 
     /**
@@ -186,7 +188,7 @@ class ReceiptTest extends TestCase
      */
     public function testParseExtraData()
     {
-        $extraData = $this->receipt->parseExtraData(file_get_contents(PEM_FILE));
+        $extraData = $this->receipt->parseExtraData(file_get_contents(TestData::PEM_FILE));
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());

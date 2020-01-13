@@ -2,8 +2,8 @@
 
 namespace SandboxTest\Entity;
 
-use YotiTest\TestCase;
 use YotiSandbox\Entity\SandboxAnchor;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Entity\SandboxAnchor

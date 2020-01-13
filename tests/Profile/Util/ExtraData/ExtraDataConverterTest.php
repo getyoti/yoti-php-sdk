@@ -5,11 +5,12 @@ namespace YotiTest\Profile\Util\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
-use YotiTest\TestCase;
 use Yoti\Protobuf\Sharepubapi\DataEntry;
-use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Protobuf\Sharepubapi\ExtraData as ExtraDataProto;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
+use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
+use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\ExtraData\ExtraDataConverter
@@ -23,7 +24,7 @@ class ExtraDataConverterTest extends TestCase
      */
     public function testConvertValue()
     {
-        $extraData = ExtraDataConverter::convertValue(base64_decode(EXTRA_DATA_CONTENT));
+        $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
         $this->assertInstanceOf(ExtraData::class, $extraData);
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();

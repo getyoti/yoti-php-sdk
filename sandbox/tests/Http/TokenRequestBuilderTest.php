@@ -6,9 +6,9 @@ use YotiSandbox\Entity\SandboxAgeVerification;
 use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxDocumentDetails;
-use YotiTest\TestCase;
-use YotiSandbox\Http\TokenRequestBuilder;
 use YotiSandbox\Http\TokenRequest;
+use YotiSandbox\Http\TokenRequestBuilder;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Http\TokenRequestBuilder

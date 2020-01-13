@@ -2,8 +2,8 @@
 
 namespace YotiTest\Util;
 
-use YotiTest\TestCase;
 use Yoti\Util\Json;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Util\Json

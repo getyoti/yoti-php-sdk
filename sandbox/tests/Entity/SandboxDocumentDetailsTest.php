@@ -2,8 +2,8 @@
 
 namespace SandboxTest\Entity;
 
-use YotiTest\TestCase;
 use YotiSandbox\Entity\SandboxDocumentDetails;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Entity\SandboxDocumentDetails

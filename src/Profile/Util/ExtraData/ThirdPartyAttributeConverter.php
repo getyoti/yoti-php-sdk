@@ -2,9 +2,9 @@
 
 namespace Yoti\Profile\Util\ExtraData;
 
+use Yoti\Exception\ExtraDataException;
 use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
-use Yoti\Exception\ExtraDataException;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Util\DateTime;
