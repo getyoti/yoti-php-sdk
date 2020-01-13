@@ -4,8 +4,8 @@
 // Load dependent packages and env data
 require_once __DIR__ . '/../bootstrap.php';
 
-use Yoti\Aml\Country;
 use Yoti\Aml\Address;
+use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\YotiClient;
 

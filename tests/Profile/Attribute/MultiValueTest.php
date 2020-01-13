@@ -2,9 +2,9 @@
 
 namespace YotiTest\Profile\Attribute;
 
-use YotiTest\TestCase;
-use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Media\Image;
+use Yoti\Profile\Attribute\MultiValue;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\MultiValue

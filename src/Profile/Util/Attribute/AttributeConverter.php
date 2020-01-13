@@ -2,15 +2,15 @@
 
 namespace Yoti\Profile\Util\Attribute;
 
+use Yoti\Exception\AttributeException;
+use Yoti\Media\Image;
+use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\DocumentDetails;
-use Yoti\Media\Image;
-use Yoti\Profile\Profile;
-use Yoti\Protobuf\Compubapi\EncryptedData;
-use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
-use Yoti\Exception\AttributeException;
 use Yoti\Profile\Attribute\MultiValue;
-use Yoti\Profile\ApplicationProfile;
+use Yoti\Profile\Profile;
+use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
+use Yoti\Protobuf\Compubapi\EncryptedData;
 use Yoti\Util\DateTime;
 
 class AttributeConverter

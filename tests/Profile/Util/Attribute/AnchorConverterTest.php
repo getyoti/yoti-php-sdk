@@ -3,8 +3,8 @@
 namespace YotiTest\Profile\Util\Attribute;
 
 use Yoti\Profile\Attribute\Anchor;
-use YotiTest\TestCase;
 use Yoti\Profile\Util\Attribute\AnchorConverter;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AnchorConverter

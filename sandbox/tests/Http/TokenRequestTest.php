@@ -2,10 +2,10 @@
 
 namespace SandboxTest\Http;
 
-use YotiTest\TestCase;
-use Yoti\Profile\Profile;
 use Yoti\Http\Payload;
+use Yoti\Profile\Profile;
 use YotiSandbox\Http\TokenRequest;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Http\TokenRequest

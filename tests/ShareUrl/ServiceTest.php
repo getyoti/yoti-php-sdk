@@ -5,13 +5,14 @@ namespace YotiTest\Service\ShareUrl;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
-use Yoti\ShareUrl\Service;
 use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Service;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -26,7 +27,12 @@ class ServiceTest extends TestCase
      */
     public function testCreateShareUrl()
     {
-        $expectedUrl = Constants::CONNECT_API_URL . sprintf('/qrcodes/apps/%s', SDK_ID) . '?appId=' . SDK_ID;
+        $expectedUrl = sprintf(
+            '%s/qrcodes/apps/%s?appId=%s',
+            Constants::CONNECT_API_URL,
+            TestData::SDK_ID,
+            TestData::SDK_ID
+        );
         $expectedUrlPattern = sprintf('~%s.*?nonce=.*?&timestamp=.*?~', preg_quote($expectedUrl));
         $expectedQrCode = 'https://dynamic-code.yoti.com/CAEaJDRjNTQ3M2IxLTNiNzktNDg3My1iMmM4LThiMTQxZDYwMjM5ODAC';
         $expectedRefId = '4c5473b1-3b79-4873-b2c8-8b141d602398';
@@ -57,8 +63,8 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         $service = new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])
@@ -101,8 +107,8 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         return new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])

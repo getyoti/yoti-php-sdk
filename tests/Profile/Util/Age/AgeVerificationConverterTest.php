@@ -2,11 +2,11 @@
 
 namespace YotiTest\Profile\Util\Age;
 
-use YotiTest\TestCase;
-use Yoti\Profile\Profile;
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\AgeVerification;
+use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Profile;
 use Yoti\Profile\Util\Age\AgeVerificationConverter;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Age\AgeVerificationConverter

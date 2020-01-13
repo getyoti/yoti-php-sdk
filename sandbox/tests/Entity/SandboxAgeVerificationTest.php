@@ -3,8 +3,8 @@
 namespace SandboxTest\Entity;
 
 use Yoti\Profile\Profile;
-use YotiTest\TestCase;
 use YotiSandbox\Entity\SandboxAgeVerification;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Entity\SandboxAgeVerification

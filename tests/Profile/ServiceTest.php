@@ -9,6 +9,7 @@ use Yoti\Profile\Service;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -24,27 +25,29 @@ class ServiceTest extends TestCase
      */
     public function testGetActivityDetails()
     {
-        $expectedPathPattern = sprintf(
-            '~^%s/profile/%s\?appId=%s&nonce=.*?&timestamp=.*?~',
-            CONNECT_BASE_URL,
-            YOTI_CONNECT_TOKEN_DECRYPTED,
-            SDK_ID
-        );
-
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
             ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) use ($expectedPathPattern) {
+            ->with($this->callback(function ($requestMessage) {
+                $expectedPathPattern = sprintf(
+                    '~^%s/profile/%s\?appId=%s&nonce=.*?&timestamp=.*?~',
+                    TestData::CONNECT_BASE_URL,
+                    TestData::YOTI_CONNECT_TOKEN_DECRYPTED,
+                    TestData::SDK_ID
+                );
+
+                $expectedAuthKey = file_get_contents(TestData::PEM_AUTH_KEY);
+
                 $this->assertEquals('GET', $requestMessage->getMethod());
                 $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
-                $this->assertEquals(PEM_AUTH_KEY, $requestMessage->getHeader('X-Yoti-Auth-Key')[0]);
+                $this->assertEquals($expectedAuthKey, $requestMessage->getHeader('X-Yoti-Auth-Key')[0]);
                 return true;
             }))
-            ->willReturn($this->createResponse(200, file_get_contents(RECEIPT_JSON)));
+            ->willReturn($this->createResponse(200, file_get_contents(TestData::RECEIPT_JSON)));
 
         $profileService = new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])
@@ -52,7 +55,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             ActivityDetails::class,
-            $profileService->getActivityDetails(YOTI_CONNECT_TOKEN)
+            $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN))
         );
     }
 
@@ -64,7 +67,7 @@ class ServiceTest extends TestCase
         $expectedSdkIdentifier = 'Drupal';
         $expectedSdkVersion = '1.2.3';
 
-        $response = $this->createResponse(200, file_get_contents(RECEIPT_JSON));
+        $response = $this->createResponse(200, file_get_contents(TestData::RECEIPT_JSON));
 
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
@@ -83,8 +86,8 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         $profileService = new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
                 Config::SDK_IDENTIFIER => $expectedSdkIdentifier,
@@ -92,7 +95,7 @@ class ServiceTest extends TestCase
             ])
         );
 
-        $profileService->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 
     /**
@@ -106,7 +109,7 @@ class ServiceTest extends TestCase
     {
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $profileService = $this->createProfileServiceWithResponse($statusCode);
-        $profileService->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 
     /**
@@ -120,12 +123,12 @@ class ServiceTest extends TestCase
     public function testInvalidConnectToken()
     {
         $profileService = new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config()
         );
 
-        $profileService->getActivityDetails(INVALID_YOTI_CONNECT_TOKEN);
+        $profileService->getActivityDetails(TestData::INVALID_YOTI_CONNECT_TOKEN);
     }
 
     /**
@@ -136,11 +139,11 @@ class ServiceTest extends TestCase
      */
     public function testSharingOutcomeFailure()
     {
-        $json = json_decode(file_get_contents(RECEIPT_JSON), true);
+        $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $json['receipt']['sharing_outcome'] = 'FAILURE';
 
         $profileService = $this->createProfileServiceWithResponse(200, json_encode($json));
-        $profileService->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 
     /**
@@ -153,7 +156,7 @@ class ServiceTest extends TestCase
     public function testMissingReceipt()
     {
         $profileService = $this->createProfileServiceWithResponse(200);
-        $profileService->getActivityDetails(YOTI_CONNECT_TOKEN);
+        $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 
     /**
@@ -182,8 +185,8 @@ class ServiceTest extends TestCase
             ->willReturn($this->createResponse($statusCode, $body));
 
         return new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])

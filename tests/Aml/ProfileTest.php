@@ -2,10 +2,10 @@
 
 namespace YotiTest\Aml;
 
-use YotiTest\TestCase;
 use Yoti\Aml\Address;
-use Yoti\Aml\Profile;
 use Yoti\Aml\Country;
+use Yoti\Aml\Profile;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Profile

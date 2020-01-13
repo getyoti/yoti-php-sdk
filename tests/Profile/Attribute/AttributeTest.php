@@ -2,13 +2,12 @@
 
 namespace YotiTest\Profile\Attribute;
 
-use YotiTest\TestCase;
-use ArrayObject;
 use Yoti\Profile\Attribute\Anchor as YotiAnchor;
-use Yoti\Profile\Profile;
 use Yoti\Profile\Attribute\Attribute;
-use YotiTest\Profile\Util\Attribute\TestAnchors;
+use Yoti\Profile\Profile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
+use YotiTest\Profile\Util\Attribute\TestAnchors;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\Attribute
@@ -28,7 +27,7 @@ class AttributeTest extends TestCase
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::SOURCE_PP_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::UNKNOWN_ANCHOR);
-        $collection = new ArrayObject($protobufAnchors);
+        $collection = new \ArrayObject($protobufAnchors);
         $yotiAnchorsMap = AnchorListConverter::convert($collection);
 
         $this->dummyAttribute = new Attribute(

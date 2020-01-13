@@ -10,6 +10,7 @@ use YotiSandbox\Http\SandboxPathManager;
 use YotiSandbox\Http\TokenRequest;
 use YotiSandbox\SandboxClient;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \YotiSandbox\SandboxClient
@@ -23,11 +24,13 @@ class SandboxClientTest extends TestCase
      */
     public function testGetToken()
     {
+        $expectedConnectToken = file_get_contents(TestData::YOTI_CONNECT_TOKEN);
+
         $mockResponse = $this->createMock(ResponseInterface::class);
         $mockResponse
             ->method('getBody')
             ->willReturn(json_encode([
-                'token' => YOTI_CONNECT_TOKEN
+                'token' => $expectedConnectToken
             ]));
         $mockResponse
             ->method('getStatusCode')
@@ -40,8 +43,8 @@ class SandboxClientTest extends TestCase
         $mockSandboxPathManager->method('getTokenApiPath')->willReturn('/some-token-api-path');
 
         $sandboxClient = new SandboxClient(
-            SDK_ID,
-            PEM_FILE,
+            TestData::SDK_ID,
+            TestData::PEM_FILE,
             $mockSandboxPathManager,
             [
                 Config::HTTP_CLIENT => $mockHttpClient,
@@ -55,6 +58,6 @@ class SandboxClientTest extends TestCase
 
         $token = $sandboxClient->getToken($mockTokenRequest);
 
-        $this->assertEquals(YOTI_CONNECT_TOKEN, $token);
+        $this->assertEquals($expectedConnectToken, $token);
     }
 }

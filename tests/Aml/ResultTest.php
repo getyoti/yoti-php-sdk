@@ -5,6 +5,7 @@ namespace YotiTest\Aml;
 use Yoti\Aml\Result;
 use Yoti\Util\Json;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Result
@@ -18,7 +19,7 @@ class ResultTest extends TestCase
 
     public function setup()
     {
-        $this->amlResult = new Result(Json::decode(file_get_contents(AML_CHECK_RESULT_JSON)));
+        $this->amlResult = new Result(Json::decode(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
     }
 
     /**
@@ -69,7 +70,7 @@ class ResultTest extends TestCase
     public function testToString()
     {
         $this->assertJsonStringEqualsJsonString(
-            file_get_contents(AML_CHECK_RESULT_JSON),
+            file_get_contents(TestData::AML_CHECK_RESULT_JSON),
             (string) $this->amlResult
         );
     }

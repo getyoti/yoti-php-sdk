@@ -4,16 +4,16 @@ namespace YotiTest;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\YotiClient;
-use Yoti\Aml\Country as AmlCountry;
 use Yoti\Aml\Address as AmlAddress;
+use Yoti\Aml\Country as AmlCountry;
 use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Profile\ActivityDetails;
-use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\Util\Config;
+use Yoti\YotiClient;
 
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -32,7 +32,7 @@ class YotiClientTest extends TestCase
      */
     public function testEmptySdkId()
     {
-        new YotiClient('', PEM_FILE);
+        new YotiClient('', TestData::PEM_FILE);
     }
 
     /**
@@ -42,7 +42,7 @@ class YotiClientTest extends TestCase
     public function testGetActivityDetails()
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(RECEIPT_JSON));
+        $response->method('getBody')->willReturn(file_get_contents(TestData::RECEIPT_JSON));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -50,13 +50,13 @@ class YotiClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $yotiClient = new YotiClient(SDK_ID, PEM_FILE, [
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             ActivityDetails::class,
-            $yotiClient->getActivityDetails(YOTI_CONNECT_TOKEN)
+            $yotiClient->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN))
         );
     }
 
@@ -70,7 +70,7 @@ class YotiClientTest extends TestCase
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(AML_CHECK_RESULT_JSON)));
+        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -78,7 +78,7 @@ class YotiClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $yotiClient = new YotiClient(SDK_ID, PEM_FILE, [
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
@@ -113,11 +113,12 @@ class YotiClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $yotiClient = new YotiClient(SDK_ID, PEM_FILE, [
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $result = $yotiClient->createShareUrl($dynamicScenario);
+
         $this->assertInstanceOf(ShareUrlResult::class, $result);
     }
 

@@ -2,10 +2,10 @@
 
 namespace YotiTest\Profile;
 
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Media\Image;
-use YotiTest\TestCase;
 use Yoti\Profile\ApplicationProfile;
+use Yoti\Profile\Attribute\Attribute;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ApplicationProfile

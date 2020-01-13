@@ -3,9 +3,9 @@
 namespace YotiTest\Util;
 
 use Psr\Http\Client\ClientInterface;
-use YotiTest\TestCase;
-use Yoti\Util\Config;
 use Yoti\Constants;
+use Yoti\Util\Config;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Util\Config
