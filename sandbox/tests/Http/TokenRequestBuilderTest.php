@@ -27,7 +27,7 @@ class TokenRequestBuilderTest extends TestCase
      */
     private $requestBuilder;
 
-    public function setUp()
+    public function setup(): void
     {
         $this->requestBuilder = new TokenRequestBuilder();
     }

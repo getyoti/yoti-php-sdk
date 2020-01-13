@@ -80,11 +80,11 @@ class ServiceTest extends TestCase
      * @covers ::createShareUrl
      *
      * @dataProvider httpErrorStatusCodeProvider
-     *
-     * @expectedException \Yoti\Exception\ShareUrlException
      */
     public function testCreateShareUrlFailure($statusCode)
     {
+        $this->expectException(\Yoti\Exception\ShareUrlException::class);
+
         $this->expectExceptionMessage("Server responded with {$statusCode}");
         $yotiClient = $this->createServiceWithErrorResponse($statusCode);
         $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));

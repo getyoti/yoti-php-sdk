@@ -19,7 +19,7 @@ class PemFileTest extends TestCase
     /**
      * Setup tests.
      */
-    public function setup()
+    public function setup(): void
     {
         $this->pemContent = file_get_contents(TestData::PEM_FILE);
     }
@@ -84,12 +84,11 @@ class PemFileTest extends TestCase
      * @covers ::resolveFromString
      * @covers ::isPemString
      * @covers ::__toString
-     *
-     * @expectedException \Yoti\Exception\PemFileException
-     * @expectedExceptionMessage PEM file was not found
      */
     public function testResolveFromStringWithInvalidFilePath()
     {
+        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM file was not found');
+
         PemFile::resolveFromString('file://invalid_file_path.pem');
     }
 
@@ -97,12 +96,11 @@ class PemFileTest extends TestCase
      * @covers ::resolveFromString
      * @covers ::isPemString
      * @covers ::__toString
-     *
-     * @expectedException \Yoti\Exception\PemFileException
-     * @expectedExceptionMessage PEM content is invalid
      */
     public function testResolveFromStringWithInvalidStringContent()
     {
+        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+
         PemFile::resolveFromString(file_get_contents(TestData::INVALID_PEM_FILE));
     }
 
@@ -111,12 +109,11 @@ class PemFileTest extends TestCase
      *
      * @covers ::__construct
      * @covers ::fromFilePath
-     *
-     * @expectedException \Yoti\Exception\PemFileException
-     * @expectedExceptionMessage PEM file was not found
      */
     public function testInvalidPemFileStreamWrapperPath()
     {
+        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM file was not found');
+
         PemFile::fromFilePath('file://invalid_file_path.pem');
     }
 
@@ -125,12 +122,11 @@ class PemFileTest extends TestCase
      *
      * @covers ::__construct
      * @covers ::fromFilePath
-     *
-     * @expectedException \Yoti\Exception\PemFileException
-     * @expectedExceptionMessage PEM content is invalid
      */
     public function testInvalidPemFileContents()
     {
+        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+
         PemFile::fromFilePath(TestData::INVALID_PEM_FILE);
     }
 
@@ -139,12 +135,11 @@ class PemFileTest extends TestCase
      *
      * @covers ::__construct
      * @covers ::fromString
-     *
-     * @expectedException \Yoti\Exception\PemFileException
-     * @expectedExceptionMessage PEM content is invalid
      */
     public function testInvalidPemString()
     {
+        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+
         PemFile::fromString('invalid_pem_string');
     }
 

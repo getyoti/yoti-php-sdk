@@ -36,12 +36,11 @@ class TransactionalFlowExtensionBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withContent
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage content cannot be null
      */
     public function testNullContent()
     {
+        $this->expectException(\InvalidArgumentException::class, 'content cannot be null');
+
         (new TransactionalFlowExtensionBuilder())
             ->withContent(null)
             ->build();

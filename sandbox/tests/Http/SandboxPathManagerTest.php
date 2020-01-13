@@ -20,7 +20,7 @@ class SandboxPathManagerTest extends TestCase
     /**
      * Setup SandboxPathManager
      */
-    public function setup()
+    public function setup(): void
     {
         $this->sandboxPathManager = new SandboxPathManager(
             self::SOME_TOKEN_PATH

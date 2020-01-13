@@ -26,12 +26,11 @@ class YotiClientTest extends TestCase
      * Test empty SDK ID
      *
      * @covers ::__construct
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage SDK ID cannot be empty
      */
     public function testEmptySdkId()
     {
+        $this->expectException(\InvalidArgumentException::class, 'SDK ID cannot be empty');
+
         new YotiClient('', TestData::PEM_FILE);
     }
 

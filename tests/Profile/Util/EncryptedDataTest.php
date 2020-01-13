@@ -26,7 +26,7 @@ class EncrypedDataTest extends TestCase
     /**
      * Setup test data.
      */
-    public function setup()
+    public function setup(): void
     {
         $this->pem = file_get_contents(TestData::PEM_FILE);
         $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);

@@ -21,7 +21,7 @@ class AttributeTest extends TestCase
      */
     public $dummyAttribute;
 
-    public function setup()
+    public function setup(): void
     {
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::SOURCE_DL_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::SOURCE_PP_ANCHOR);

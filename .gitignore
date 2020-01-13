@@ -5,6 +5,8 @@ composer.lock
 .phpcs.xml
 phpcs.xml
 
+.phpunit.result.cache
+
 logs
 
 coverage

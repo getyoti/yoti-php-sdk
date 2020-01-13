@@ -16,12 +16,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withLatitude
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'latitude' value '-91' is less than '-90'
      */
     public function testLatitudeTooLow()
     {
+        $this->expectException(\RangeException::class, '\'latitude\' value \'-91\' is less than \'-90\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(-91)
             ->withLongitude(0)
@@ -30,12 +29,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withLatitude
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'latitude' value '91' is greater than '90'
      */
     public function testLatitudeTooHigh()
     {
+        $this->expectException(\RangeException::class, '\'latitude\' value \'91\' is greater than \'90\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(91)
             ->withLongitude(0)
@@ -44,12 +42,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withLongitude
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'longitude' value '-181' is less than '-180'
      */
     public function testLongitudeTooLow()
     {
+        $this->expectException(\RangeException::class, '\'longitude\' value \'-181\' is less than \'-180\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(0)
             ->withLongitude(-181)
@@ -58,12 +55,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withLongitude
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'longitude' value '181' is greater than '180'
      */
     public function testLongitudeTooHigh()
     {
+        $this->expectException(\RangeException::class, '\'longitude\' value \'181\' is greater than \'180\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(0)
             ->withLongitude(181)
@@ -72,12 +68,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withRadius
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'radius' value '-1' is less than '0'
      */
     public function testRadiusLessThanZero()
     {
+        $this->expectException(\RangeException::class, '\'radius\' value \'-1\' is less than \'0\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(0)
             ->withLongitude(0)
@@ -87,12 +82,11 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::withMaxUncertainty
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'maxUncertainty' value '-1' is less than '0'
      */
     public function testMaxUncertaintyLessThanZero()
     {
+        $this->expectException(\RangeException::class, '\'maxUncertainty\' value \'-1\' is less than \'0\'');
+
         (new LocationConstraintExtensionBuilder())
             ->withLatitude(0)
             ->withLongitude(0)

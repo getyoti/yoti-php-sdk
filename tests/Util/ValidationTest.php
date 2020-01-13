@@ -24,13 +24,13 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isString
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be a string
      *
      * @dataProvider nonStringDataProvider
      */
     public function testIsStringInvalid($nonStringValue)
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be a string');
+
         Validation::isString($nonStringValue, self::SOME_NAME);
     }
 
@@ -46,12 +46,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isBoolean
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be a boolean
      */
     public function testIsBooleanInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be a boolean');
+
         Validation::isBoolean(self::SOME_STRING, self::SOME_NAME);
     }
 
@@ -80,12 +79,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isInteger
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be an integer
      */
     public function testIsIntegerInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be an integer');
+
         Validation::isInteger(self::SOME_STRING, self::SOME_NAME);
     }
 
@@ -115,12 +113,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isFloat
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be a float
      */
     public function testIsFloatInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be a float');
+
         Validation::isFloat(self::SOME_STRING, self::SOME_NAME);
     }
 
@@ -151,12 +148,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isNumeric
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be numeric
      */
     public function testIsNumericInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be numeric');
+
         Validation::isNumeric(self::SOME_STRING, self::SOME_NAME);
     }
 
@@ -170,12 +166,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notNull
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name cannot be null
      */
     public function testNotNullInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name cannot be null');
+
         Validation::notNull(null, self::SOME_NAME);
     }
 
@@ -190,12 +185,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notGreaterThan
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'some_name' value '2' is greater than '1'
      */
     public function testNotGreaterThanInvalid()
     {
+        $this->expectException(\RangeException::class, '\'some_name\' value \'2\' is greater than \'1\'');
+
         Validation::notGreaterThan(2, 1, self::SOME_NAME);
     }
 
@@ -210,12 +204,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notLessThan
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'some_name' value '1' is less than '2'
      */
     public function testNotLessThanInvalid()
     {
+        $this->expectException(\RangeException::class, '\'some_name\' value \'1\' is less than \'2\'');
+
         Validation::notLessThan(1, 2, self::SOME_NAME);
     }
 
@@ -229,23 +222,21 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::withinRange
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'some_name' value '4' is greater than '3'
      */
     public function testWithinRangeGreaterThan()
     {
+        $this->expectException(\RangeException::class, '\'some_name\' value \'4\' is greater than \'3\'');
+
         Validation::withinRange(4, 1, 3, self::SOME_NAME);
     }
 
     /**
      * @covers ::withinRange
-     *
-     * @expectedException \RangeException
-     * @expectedExceptionMessage 'some_name' value '1' is less than '2'
      */
     public function testWithinRangeLessThan()
     {
+        $this->expectException(\RangeException::class, '\'some_name\' value \'1\' is less than \'2\'');
+
         Validation::withinRange(1, 2, 4, self::SOME_NAME);
     }
 
@@ -259,12 +250,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isArrayOfIntegers
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be array of integers
      */
     public function testIsArrayOfIntegersInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of integers');
+
         Validation::isArrayOfIntegers([1, self::SOME_STRING], self::SOME_NAME);
     }
 
@@ -278,12 +268,11 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::isArrayOfStrings
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be array of strings
      */
     public function testIsArrayOfStringsInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of strings');
+
         Validation::isArrayOfStrings([1, [], self::SOME_STRING], self::SOME_NAME);
     }
 
@@ -307,12 +296,11 @@ class ValidationTest extends TestCase
     /**
      * @covers ::isArrayOfType
      * @covers ::isOneOfType
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be array of ArrayObject, DateTime
      */
     public function testIsArrayOfTypeInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of ArrayObject, DateTime');
+
         $arrayOfTypes = [
             new \stdClass(),
             new \ArrayObject(),
@@ -334,25 +322,24 @@ class ValidationTest extends TestCase
 
     /**
      * @covers ::notEmptyString
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name cannot be empty
      */
     public function testNotEmptyStringWithEmptyValue()
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name cannot be empty');
+
         Validation::notEmptyString('', self::SOME_NAME);
     }
 
     /**
      * @covers ::notEmptyString
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage some_name must be a string
      *
      * @dataProvider nonStringDataProvider
      */
     public function testNotEmptyStringWithNonStringValue($nonStringValue)
     {
+        $this->expectException(\InvalidArgumentException::class, 'some_name must be a string');
+
         Validation::notEmptyString($nonStringValue, self::SOME_NAME);
     }
 

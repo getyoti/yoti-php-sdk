@@ -28,7 +28,7 @@ class TokenRequestTest extends TestCase
     /**
      * Setup TokenRequest
      */
-    public function setUp()
+    public function setup(): void
     {
         $this->someSandboxAttributes = [
             [

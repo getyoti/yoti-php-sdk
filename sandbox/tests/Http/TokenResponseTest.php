@@ -41,12 +41,11 @@ class TokenResponseTest extends TestCase
      * @covers ::__construct
      * @covers ::processData
      * @covers ::checkJsonError
-     *
-     * @expectedException \YotiSandbox\Exception\ResponseException
-     * @expectedExceptionMessage Token key is missing
      */
     public function testGetTokenEmpty()
     {
+        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'Token key is missing');
+
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
         $someResponse->method('getBody')->willReturn('{}');
@@ -56,12 +55,11 @@ class TokenResponseTest extends TestCase
 
     /**
      * @covers ::checkResponseStatus
-     *
-     * @expectedException \YotiSandbox\Exception\ResponseException
-     * @expectedExceptionMessage Server responded with 500
      */
     public function testBadResponseStatusCode()
     {
+        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'Server responded with 500');
+
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(500);
         $someResponse->method('getBody')->willReturn('{}');
@@ -71,12 +69,11 @@ class TokenResponseTest extends TestCase
 
     /**
      * @covers ::checkJsonError
-     *
-     * @expectedException \YotiSandbox\Exception\ResponseException
-     * @expectedExceptionMessage JSON response was invalid
      */
     public function testInvalidJson()
     {
+        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'JSON response was invalid');
+
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
         $someResponse->method('getBody')->willReturn('invalid json');

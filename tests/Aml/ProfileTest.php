@@ -36,7 +36,7 @@ class ProfileTest extends TestCase
     /**
      * Create test Aml Profile.
      */
-    public function setup()
+    public function setup(): void
     {
         $this->country = new Country(self::SOME_COUNTRY_CODE);
         $this->amlAddress = new Address($this->country, self::SOME_POSTCODE);

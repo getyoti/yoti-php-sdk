@@ -186,12 +186,11 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeOver
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeOverIntegersOnly()
     {
+        $this->expectException(\InvalidArgumentException::class, 'age must be an integer');
+
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
             ->withAgeOver('18')
@@ -200,12 +199,11 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeUnder
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage age must be an integer
      */
     public function testWithAgeUnderIntegersOnly()
     {
+        $this->expectException(\InvalidArgumentException::class, 'age must be an integer');
+
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
             ->withAgeUnder('18')
@@ -409,12 +407,11 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withWantedAuthType
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage wantedAuthType must be an integer
      */
     public function testWithNonIntegerAuthType()
     {
+        $this->expectException(\InvalidArgumentException::class, 'wantedAuthType must be an integer');
+
         (new DynamicPolicyBuilder())
             ->withWantedAuthType('99')
             ->build();

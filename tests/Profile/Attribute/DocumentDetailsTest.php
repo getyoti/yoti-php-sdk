@@ -15,7 +15,7 @@ class DocumentDetailsTest extends TestCase
      */
     public $dummyDocumentDetails;
 
-    public function setup()
+    public function setup(): void
     {
         $dummyValue = 'PASSPORT GBR 01234567 2020-01-01';
         $this->dummyDocumentDetails = new DocumentDetails($dummyValue);
