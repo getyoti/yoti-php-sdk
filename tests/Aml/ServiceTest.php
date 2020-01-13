@@ -4,14 +4,15 @@ namespace YotiTest\Aml;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\Aml\Country;
 use Yoti\Aml\Address;
+use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\Aml\Result;
 use Yoti\Aml\Service;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -32,15 +33,15 @@ class ServiceTest extends TestCase
     {
         $expectedPathPattern = sprintf(
             '~^%s/aml-check\?appId=%s&nonce=.*?&timestamp=.*?~',
-            CONNECT_BASE_URL,
-            SDK_ID
+            TestData::CONNECT_BASE_URL,
+            TestData::SDK_ID
         );
 
         $amlAddress = new Address(new Country('GBR'));
         $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(AML_CHECK_RESULT_JSON)));
+        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -58,8 +59,8 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         $amlService = new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])
@@ -130,8 +131,8 @@ class ServiceTest extends TestCase
             ->willReturn($response);
 
         return new Service(
-            SDK_ID,
-            PemFile::fromFilePath(PEM_FILE),
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
             new Config([
                 Config::HTTP_CLIENT => $httpClient,
             ])

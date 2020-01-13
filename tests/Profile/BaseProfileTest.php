@@ -2,9 +2,9 @@
 
 namespace YotiTest\Profile;
 
-use YotiTest\TestCase;
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\BaseProfile;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\BaseProfile

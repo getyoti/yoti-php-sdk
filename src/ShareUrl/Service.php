@@ -4,10 +4,10 @@ namespace Yoti\ShareUrl;
 
 use Yoti\Exception\ShareUrlException;
 use Yoti\Http\Payload;
-use Yoti\Util\PemFile;
 use Yoti\Http\RequestBuilder;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
+use Yoti\Util\PemFile;
 
 class Service
 {

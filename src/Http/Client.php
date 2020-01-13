@@ -5,9 +5,9 @@ namespace Yoti\Http;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Client\ClientInterface;
 use Yoti\Http\Exception\NetworkException;
 use Yoti\Http\Exception\RequestException;
 

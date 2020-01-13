@@ -4,9 +4,9 @@ namespace YotiTest\ShareUrl;
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
+use Yoti\ShareUrl\Policy\DynamicPolicy;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use YotiTest\TestCase;
-use Yoti\ShareUrl\Policy\DynamicPolicy;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\DynamicScenarioBuilder

@@ -2,8 +2,8 @@
 
 namespace YotiTest\Profile\ExtraData;
 
-use YotiTest\TestCase;
 use Yoti\Profile\ExtraData\AttributeDefinition;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ExtraData\AttributeDefinition

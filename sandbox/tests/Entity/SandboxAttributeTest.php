@@ -2,9 +2,9 @@
 
 namespace SandboxTest\Entity;
 
-use YotiTest\TestCase;
 use Yoti\Profile\Profile;
 use YotiSandbox\Entity\SandboxAttribute;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \YotiSandbox\Entity\SandboxAttribute

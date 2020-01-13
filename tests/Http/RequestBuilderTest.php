@@ -3,11 +3,12 @@
 namespace YotiTest\Http;
 
 use Psr\Http\Client\ClientInterface;
-use YotiTest\TestCase;
+use Yoti\Http\Payload;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
-use Yoti\Http\Payload;
 use Yoti\Util\Config;
+use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder
@@ -42,7 +43,7 @@ class RequestBuilderTest extends TestCase
 
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('POST')
           ->withEndpoint('/some-endpoint')
           ->withPayload($expectedPayload)
@@ -77,7 +78,7 @@ class RequestBuilderTest extends TestCase
 
         $request = (new RequestBuilder($config))
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withGet()
           ->build();
 
@@ -94,7 +95,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withGet()
           ->build();
 
@@ -111,7 +112,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withPost()
           ->build();
 
@@ -127,7 +128,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withGet()
           ->build();
 
@@ -145,7 +146,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->build();
 
@@ -166,7 +167,7 @@ class RequestBuilderTest extends TestCase
         $request = (new RequestBuilder($config))
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint('/some-endpoint')
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->build();
 
@@ -188,7 +189,7 @@ class RequestBuilderTest extends TestCase
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint('/some-endpoint')
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->withClient($client)
           ->build();
@@ -209,7 +210,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemString(file_get_contents(PEM_FILE))
+          ->withPemString(file_get_contents(TestData::PEM_FILE))
           ->withMethod('GET')
           ->build();
 
@@ -224,7 +225,7 @@ class RequestBuilderTest extends TestCase
     {
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withHeader('Custom', 'custom header value')
           ->withHeader('Custom-2', 'a second custom header value')
           ->withMethod('GET')
@@ -247,7 +248,7 @@ class RequestBuilderTest extends TestCase
 
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withPayload($expectedPayload)
           ->withPost()
           ->build();
@@ -266,7 +267,7 @@ class RequestBuilderTest extends TestCase
     {
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->build();
     }
 
@@ -282,7 +283,7 @@ class RequestBuilderTest extends TestCase
     {
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('SOME_METHOD')
           ->build();
     }
@@ -299,7 +300,7 @@ class RequestBuilderTest extends TestCase
     {
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withHeader('Custom', ['invalid value'])
           ->withMethod('GET')
           ->build();
@@ -314,7 +315,7 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithoutBaseUrl()
     {
         (new RequestBuilder())
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->build();
     }
 
@@ -342,7 +343,7 @@ class RequestBuilderTest extends TestCase
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL . $trailingSlashes)
           ->withEndpoint(self::SOME_ENDPOINT)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->build();
 
@@ -360,7 +361,7 @@ class RequestBuilderTest extends TestCase
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint($endpointLeadingSlashes)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->build();
 
@@ -378,7 +379,7 @@ class RequestBuilderTest extends TestCase
         $request = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint($endpointNoSlashes)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withMethod('GET')
           ->build();
 
@@ -399,7 +400,7 @@ class RequestBuilderTest extends TestCase
         $requestBuilder = (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
           ->withEndpoint(self::SOME_ENDPOINT)
-          ->withPemFilePath(PEM_FILE)
+          ->withPemFilePath(TestData::PEM_FILE)
           ->withGet();
         foreach ($expectedQueryParams as $key => $value) {
             $requestBuilder->withQueryParam($key, $value);

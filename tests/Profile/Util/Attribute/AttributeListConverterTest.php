@@ -2,12 +2,13 @@
 
 namespace YotiTest\Profile\Util\Attribute;
 
+use Yoti\Profile\Util\Attribute\AttributeConverter;
+use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Protobuf\Compubapi\EncryptedData;
-use Yoti\Profile\Util\Attribute\AttributeConverter;
-use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AttributeListConverter
@@ -55,7 +56,7 @@ class AttributeListConverterTest extends TestCase
      */
     public function testConvertToProtobufAttributeList()
     {
-        $receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true)['receipt'];
+        $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
 
         $encryptedData = new EncryptedData();
         $encryptedData->mergeFromString(base64_decode($receiptArr['profile_content']));
@@ -63,7 +64,7 @@ class AttributeListConverterTest extends TestCase
         $protoAttributeList = AttributeListConverter::convertToProtobufAttributeList(
             $encryptedData,
             $receiptArr['wrapped_receipt_key'],
-            file_get_contents(PEM_FILE)
+            file_get_contents(TestData::PEM_FILE)
         );
 
         $this->assertInstanceOf(AttributeList::class, $protoAttributeList);

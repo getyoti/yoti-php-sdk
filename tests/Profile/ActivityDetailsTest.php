@@ -2,15 +2,16 @@
 
 namespace YotiTest\Profile;
 
-use Yoti\Profile\Attribute\Attribute;
-use Yoti\Profile\Profile;
-use Yoti\Profile\Receipt;
 use Yoti\Media\Image;
+use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\ApplicationProfile;
+use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
-use Yoti\Profile\ActivityDetails;
+use Yoti\Profile\Profile;
+use Yoti\Profile\Receipt;
 use YotiTest\TestCase;
+use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ActivityDetails
@@ -44,8 +45,8 @@ class ActivityDetailsTest extends TestCase
 
     public function setUp()
     {
-        $this->pem = file_get_contents(PEM_FILE);
-        $this->receiptArr = json_decode(file_get_contents(RECEIPT_JSON), true)['receipt'];
+        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
         $this->activityDetails = new ActivityDetails(
             new Receipt($this->receiptArr),
             $this->pem

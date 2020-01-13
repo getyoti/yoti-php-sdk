@@ -2,8 +2,8 @@
 
 namespace YotiSandbox\Http;
 
-use YotiSandbox\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
+use YotiSandbox\Exception\ResponseException;
 
 class TokenResponse
 {

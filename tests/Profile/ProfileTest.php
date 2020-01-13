@@ -2,13 +2,13 @@
 
 namespace YotiTest\Profile;
 
-use YotiTest\TestCase;
-use Yoti\Profile\Profile;
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
+use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Profile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Profile

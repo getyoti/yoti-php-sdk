@@ -2,10 +2,9 @@
 
 namespace YotiTest\Profile\Util\Attribute;
 
-use ArrayObject;
 use Yoti\Profile\Attribute\Anchor;
-use YotiTest\TestCase;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
+use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AnchorListConverter
@@ -17,7 +16,7 @@ class AnchorListConverterTest extends TestCase
      */
     public function testConvertingTwoSources()
     {
-        $anchorsData = AnchorListConverter::convert(new ArrayObject([
+        $anchorsData = AnchorListConverter::convert(new \ArrayObject([
             $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR),
             $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
         ]));
@@ -34,7 +33,7 @@ class AnchorListConverterTest extends TestCase
      */
     public function testConvertingAnyAnchor()
     {
-        $anchorsData = AnchorListConverter::convert(new ArrayObject([
+        $anchorsData = AnchorListConverter::convert(new \ArrayObject([
             $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
             $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
             $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR),
