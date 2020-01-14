@@ -47,7 +47,7 @@ class RequestSigner
     {
         // Check signed message
         if (!$signedMessage) {
-            throw new RequestSignerException('Could not sign request.', 401);
+            throw new RequestSignerException('Could not sign request.');
         }
     }
 }
