@@ -3,14 +3,16 @@
 namespace YotiTest\Http;
 
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\SeekException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\NetworkExceptionInterface;
+use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Yoti\Http\Client;
 use YotiTest\TestCase;
 
@@ -42,55 +44,97 @@ class ClientTest extends TestCase
     /**
      * @covers ::sendRequest
      * @covers ::__construct
+     *
+     * @dataProvider clientExceptionDataProvider
      */
-    public function testSendRequestThrowsNetworkException()
+    public function testSendRequestThrowsClientException($guzzleException, $expectedException)
     {
-        $this->expectException(\Yoti\Http\Exception\NetworkException::class, 'some network exception');
-
-        $someHandler = new MockHandler([
-            new ConnectException(
-                'some network exception',
-                $this->createMock(RequestInterface::class)
-            ),
-        ]);
-        $someHandlerStack = HandlerStack::create($someHandler);
-
-        $client = new Client(['handler' => $someHandlerStack]);
-
-        $client->sendRequest(new Request('GET', '/'));
+        try {
+            $this->sendRequestAndThrow($guzzleException);
+            $this->fail('Exception was not thrown');
+        } catch (ClientExceptionInterface $e) {
+            $this->assertInstanceOf($expectedException, $e);
+            $this->assertSame($guzzleException, $e->getPrevious());
+            $this->assertEquals($guzzleException->getMessage(), $e->getMessage());
+        }
     }
 
     /**
      * @covers ::sendRequest
      * @covers ::__construct
      *
-     *
-     * @dataProvider requestExceptionDataProvider
+     * @dataProvider requestAwareExceptionDataProvider
      */
-    public function testSendRequestThrowsRequestException(\Exception $someRequestException)
+    public function testSendRequestThrowsRequestAwareException($guzzleException, $expectedException)
     {
-        $this->expectException(\Yoti\Http\Exception\RequestException::class);
+        try {
+            $this->sendRequestAndThrow($guzzleException);
+            $this->fail('Exception was not thrown');
+        } catch (NetworkExceptionInterface | RequestExceptionInterface $e) {
+            $this->assertInstanceOf($expectedException, $e);
+            $this->assertInstanceOf(RequestInterface::class, $e->getRequest());
+        }
+    }
 
-        $this->expectExceptionMessage($someRequestException->getMessage());
+    /**
+     * @covers ::sendRequest
+     * @covers ::__construct
+     *
+     * @dataProvider clientExceptionDataProvider
+     */
+    public function testSendRequestThrowsException($guzzleException, $expectedException)
+    {
+        $this->expectException($expectedException, $guzzleException->getMessage());
+        $this->sendRequestAndThrow($guzzleException);
+    }
 
-        $someHandler = new MockHandler([$someRequestException]);
+    /**
+     * Request aware exception data provider.
+     */
+    public function requestAwareExceptionDataProvider(): array
+    {
+        $someRequest = $this->createMock(Request::class);
+
+        return [
+            [
+                new ConnectException('some network exception', $someRequest),
+                \Yoti\Http\Exception\NetworkException::class
+            ],
+            [
+                new RequestException('some request exception', $someRequest),
+                \Yoti\Http\Exception\RequestException::class
+            ]
+        ];
+    }
+
+    /**
+     * HTTP Client exception data provider.
+     */
+    public function clientExceptionDataProvider(): array
+    {
+        return array_merge(
+            $this->requestAwareExceptionDataProvider(),
+            [
+                [
+                    new TransferException('some client exception'),
+                    \Yoti\Http\Exception\ClientException::class
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param \Throwable $exception
+     *
+     * @throws \Throwable
+     */
+    private function sendRequestAndThrow(\Throwable $exception)
+    {
+        $someHandler = new MockHandler([$exception]);
         $someHandlerStack = HandlerStack::create($someHandler);
 
         $client = new Client(['handler' => $someHandlerStack]);
 
         $client->sendRequest(new Request('GET', '/'));
-    }
-
-    /**
-     * Provides request exceptions.
-     *
-     * @return array
-     */
-    public function requestExceptionDataProvider()
-    {
-        return [
-            [new TransferException('some request exception')],
-            [new SeekException($this->createMock(StreamInterface::class), 0, 'some seek exception')],
-        ];
     }
 }
