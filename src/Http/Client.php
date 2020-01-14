@@ -2,12 +2,14 @@
 
 namespace Yoti\Http;
 
-use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ConnectException as GuzzleConnectException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Yoti\Http\Exception\ClientException;
 use Yoti\Http\Exception\NetworkException;
 use Yoti\Http\Exception\RequestException;
 
@@ -43,10 +45,12 @@ class Client implements ClientInterface
     {
         try {
             return $this->httpClient->send($request);
-        } catch (ConnectException $e) {
-            throw new NetworkException($e->getMessage(), $request);
+        } catch (GuzzleConnectException $e) {
+            throw new NetworkException($e->getMessage(), $request, null, $e);
+        } catch (GuzzleRequestException $e) {
+            throw new RequestException($e->getMessage(), $request, null, $e);
         } catch (GuzzleException $e) {
-            throw new RequestException($e->getMessage(), $request);
+            throw new ClientException($e->getMessage(), null, $e);
         }
     }
 }
