@@ -247,7 +247,7 @@ class RequestBuilder
                 true
             )
         ) {
-            throw new \InvalidArgumentException("Unsupported HTTP Method {$this->method}", 400);
+            throw new \InvalidArgumentException("Unsupported HTTP Method {$this->method}");
         }
     }
 

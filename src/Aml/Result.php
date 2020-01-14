@@ -116,7 +116,7 @@ class Result
 
         // Throw an error if any expected attribute is missing.
         if (!empty($missingAttr)) {
-            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr), 106);
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr));
         }
     }
 
