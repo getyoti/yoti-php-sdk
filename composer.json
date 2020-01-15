@@ -20,7 +20,10 @@
     "psr-4": {
       "Yoti\\": "src",
       "YotiSandbox\\": "sandbox/src"
-    }
+    },
+    "files": [
+      "autoload.php"
+    ]
   },
   "require-dev": {
     "ext-json": "*",
