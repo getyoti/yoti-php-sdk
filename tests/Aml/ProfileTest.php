@@ -40,7 +40,7 @@ class ProfileTest extends TestCase
     {
         $this->country = new Country(self::SOME_COUNTRY_CODE);
         $this->amlAddress = new Address($this->country, self::SOME_POSTCODE);
-        $this->amlProfile =  new Profile(
+        $this->amlProfile = new Profile(
             self::SOME_GIVEN_NAMES,
             self::SOME_FAMILY_NAME,
             $this->amlAddress,
@@ -59,33 +59,11 @@ class ProfileTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::setGivenNames
-     */
-    public function testSetGivenNames()
-    {
-        $someGivenNames = 'some given names';
-        $this->amlProfile->setGivenNames($someGivenNames);
-        $this->assertEquals($someGivenNames, $this->amlProfile->getGivenNames());
-    }
-
-    /**
-     * @covers ::__construct
      * @covers ::getFamilyName
      */
     public function testGetFamilyName()
     {
         $this->assertEquals(self::SOME_FAMILY_NAME, $this->amlProfile->getFamilyName());
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::setFamilyName
-     */
-    public function testSetFamilyName()
-    {
-        $someFamilyName = 'some family name';
-        $this->amlProfile->setFamilyName($someFamilyName);
-        $this->assertEquals($someFamilyName, $this->amlProfile->getFamilyName());
     }
 
     /**
@@ -99,13 +77,16 @@ class ProfileTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::setSsn
+     * @covers ::getSsn
      */
-    public function testSetSsn()
+    public function testGetSsnNull()
     {
-        $someSsn = 'some ssn';
-        $this->amlProfile->setSsn($someSsn);
-        $this->assertEquals($someSsn, $this->amlProfile->getSsn());
+        $amlProfile = new Profile(
+            self::SOME_GIVEN_NAMES,
+            self::SOME_FAMILY_NAME,
+            $this->amlAddress
+        );
+        $this->assertNull($amlProfile->getSsn());
     }
 
     /**
@@ -115,17 +96,6 @@ class ProfileTest extends TestCase
     public function testGetAmlAddress()
     {
         $this->assertSame($this->amlAddress, $this->amlProfile->getAmlAddress());
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::setAmlAddress
-     */
-    public function testSetAmlAddress()
-    {
-        $someAmlAddress = $this->createMock(Address::class);
-        $this->amlProfile->setAmlAddress($someAmlAddress);
-        $this->assertSame($someAmlAddress, $this->amlProfile->getAmlAddress());
     }
 
     /**
