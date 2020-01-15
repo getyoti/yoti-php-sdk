@@ -23,40 +23,24 @@ class Address implements \JsonSerializable
      * @param \Yoti\Aml\Country $country
      * @param null|string $postcode
      */
-    public function __construct(Country $country, $postcode = null)
+    public function __construct(Country $country, string $postcode = null)
     {
         $this->country = $country;
         $this->postcode = $postcode;
     }
 
     /**
-     * @param Country $country
+     * @return Yoti\Aml\Country
      */
-    public function setCountry(Country $country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
+    public function getCountry(): Country
     {
         return $this->country;
     }
 
     /**
-     * @param $postcode
-     */
-    public function setPostcode($postcode)
-    {
-        $this->postcode = $postcode;
-    }
-
-    /**
      * @return null|string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
@@ -66,7 +50,7 @@ class Address implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             self::POSTCODE_ATTR => $this->postcode,
@@ -77,7 +61,7 @@ class Address implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

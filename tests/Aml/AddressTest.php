@@ -27,18 +27,6 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @covers ::setCountry
-     */
-    public function testSetCountry()
-    {
-        $amlAddress = new Address($this->createMock(Country::class));
-        $someCountry = $this->createMock(Country::class);
-        $amlAddress->setCountry($someCountry);
-
-        $this->assertSame($someCountry, $amlAddress->getCountry());
-    }
-
-    /**
      * @covers ::__construct
      * @covers ::getPostcode
      */
@@ -48,17 +36,6 @@ class AddressTest extends TestCase
             $this->createMock(Country::class),
             self::SOME_POSTCODE
         );
-
-        $this->assertEquals(self::SOME_POSTCODE, $amlAddress->getPostcode());
-    }
-
-    /**
-     * @covers ::setPostcode
-     */
-    public function testSetPostcode()
-    {
-        $amlAddress = new Address($this->createMock(Country::class));
-        $amlAddress->setPostcode(self::SOME_POSTCODE);
 
         $this->assertEquals(self::SOME_POSTCODE, $amlAddress->getPostcode());
     }

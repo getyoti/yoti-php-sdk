@@ -45,7 +45,7 @@ class Profile implements \JsonSerializable
      * @param \Yoti\Aml\Address $amlAddress
      * @param null|string $ssn
      */
-    public function __construct($givenNames, $familyName, Address $amlAddress, $ssn = null)
+    public function __construct($givenNames, $familyName, Address $amlAddress, string $ssn = null)
     {
         $this->givenNames = $givenNames;
         $this->familyName = $familyName;
@@ -56,7 +56,7 @@ class Profile implements \JsonSerializable
     /**
      * @return string
      */
-    public function getGivenNames()
+    public function getGivenNames(): string
     {
         return $this->givenNames;
     }
@@ -64,57 +64,25 @@ class Profile implements \JsonSerializable
     /**
      * @return string
      */
-    public function getFamilyName()
+    public function getFamilyName(): string
     {
         return $this->familyName;
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
-    public function getSsn()
+    public function getSsn(): ?string
     {
         return $this->ssn;
     }
 
     /**
-     * @return AmlAddress
+     * @return Yoti\Aml\Address
      */
-    public function getAmlAddress()
+    public function getAmlAddress(): Address
     {
         return $this->amlAddress;
-    }
-
-    /**
-     * @param $givenNames
-     */
-    public function setGivenNames($givenNames)
-    {
-        $this->givenNames = $givenNames;
-    }
-
-    /**
-     * @param $familyName
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-    }
-
-    /**
-     * @param $ssn
-     */
-    public function setSsn($ssn)
-    {
-        $this->ssn = $ssn;
-    }
-
-    /**
-     * @param AmlAddress $amlAddress
-     */
-    public function setAmlAddress(Address $amlAddress)
-    {
-        $this->amlAddress = $amlAddress;
     }
 
     /**
@@ -122,7 +90,7 @@ class Profile implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             self::GIVEN_NAMES_ATTR  => $this->givenNames,
@@ -135,7 +103,7 @@ class Profile implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

@@ -11,15 +11,10 @@ class Country
      */
     private $code;
 
-    public function __construct($code)
-    {
-        $this->code = $code;
-    }
-
     /**
-     * @param $code
+     * @param string $code
      */
-    public function setCode($code)
+    public function __construct(string $code)
     {
         $this->code = $code;
     }
@@ -27,7 +22,7 @@ class Country
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
