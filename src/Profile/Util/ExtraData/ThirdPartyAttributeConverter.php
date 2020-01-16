@@ -37,7 +37,7 @@ class ThirdPartyAttributeConverter
             }
 
             $issuingAttributes = array_map(
-                function ($definition) {
+                function ($definition): AttributeDefinition {
                     return new AttributeDefinition($definition->getName());
                 },
                 iterator_to_array($issuingAttributesProto->getDefinitions())
@@ -60,11 +60,12 @@ class ThirdPartyAttributeConverter
      *
      * @throws \Yoti\Exception\ExtraDataException
      */
-    private static function parseToken(string $token)
+    private static function parseToken(string $token): string
     {
-        if (empty($token)) {
+        if (strlen($token) === 0) {
             throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');
         }
+
         return base64_encode($token);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -40,6 +41,6 @@ class Constraints implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

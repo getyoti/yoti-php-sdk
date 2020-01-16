@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Attribute;
 
+/**
+ * @extends \ArrayObject<int, mixed>
+ */
 class MultiValue extends \ArrayObject
 {
     /**
-     * @var array Original unfiltered Items.
+     * @var mixed[] Original unfiltered Items.
      */
     private $originalItems = [];
 
     /**
-     * @var boolean Flag to make MultiValue immutable.
+     * @var bool Flag to make MultiValue immutable.
      */
     private $isImmutable = false;
 
@@ -24,7 +27,7 @@ class MultiValue extends \ArrayObject
     /**
      * MultiValue Constructor.
      *
-     * @param array $items
+     * @param mixed[] $items
      */
     public function __construct(array $items)
     {
@@ -37,7 +40,7 @@ class MultiValue extends \ArrayObject
      *
      * @param callable $callback
      *
-     * @return $this
+     * @return self<mixed>
      */
     public function filter(callable $callback): self
     {
@@ -64,7 +67,7 @@ class MultiValue extends \ArrayObject
         if (count($this->filters) > 0) {
             $filtered_array = array_filter(
                 $this->getArrayCopy(),
-                function ($item) {
+                function ($item): bool {
                     foreach ($this->filters as $callback) {
                         if (call_user_func($callback, $item) === true) {
                             return true;
@@ -91,11 +94,11 @@ class MultiValue extends \ArrayObject
      *
      * @param string $type
      *
-     * @return $this
+     * @return self<mixed>
      */
     public function allowInstance(string $type): self
     {
-        return $this->filter(function ($item) use ($type) {
+        return $this->filter(function ($item) use ($type): bool {
             return $item instanceof $type;
         });
     }
@@ -105,11 +108,11 @@ class MultiValue extends \ArrayObject
      *
      * @param string $type
      *
-     * @return $this
+     * @return self<mixed>
      */
     public function allowType(string $type): self
     {
-        return $this->filter(function ($item) use ($type) {
+        return $this->filter(function ($item) use ($type): bool {
             return gettype($item) === $type;
         });
     }
@@ -117,7 +120,7 @@ class MultiValue extends \ArrayObject
     /**
      * Make this MultiValue Immutable.
      *
-     * @return $this
+     * @return self<mixed>
      */
     public function immutable(): self
     {
@@ -133,7 +136,7 @@ class MultiValue extends \ArrayObject
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $value
      *
      * @throws \LogicException
      */
@@ -144,18 +147,21 @@ class MultiValue extends \ArrayObject
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $input
+     *
+     * @return mixed[]
      *
      * @throws \LogicException
      */
-    public function exchangeArray($input): void
+    public function exchangeArray($input): array
     {
         $this->assertMutable('Attempting to change immutable array');
-        parent::exchangeArray($input);
+        return parent::exchangeArray($input);
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $index
+     * @param mixed $newval
      *
      * @throws \LogicException
      */
@@ -166,7 +172,7 @@ class MultiValue extends \ArrayObject
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $index
      *
      * @throws \LogicException
      */
@@ -184,7 +190,7 @@ class MultiValue extends \ArrayObject
      *
      * @throws \LogicException
      */
-    private function assertMutable(string $message)
+    private function assertMutable(string $message): void
     {
         if ($this->isImmutable) {
             throw new \LogicException($message);

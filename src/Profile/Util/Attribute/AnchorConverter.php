@@ -6,18 +6,20 @@ namespace Yoti\Profile\Util\Attribute;
 
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
+use Yoti\Exception\AttributeException;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\SignedTimeStamp;
 use Yoti\Protobuf\Attrpubapi\Anchor as ProtobufAnchor;
+use Yoti\Util\Json;
 
 class AnchorConverter
 {
     /**
      * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
      *
-     * @param \Yoti\Protobuf\Attrpubapi\Anchor $anchor
+     * @param \Yoti\Protobuf\Attrpubapi\Anchor $protobufAnchor
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public static function convert(ProtobufAnchor $protobufAnchor): array
     {
@@ -58,9 +60,9 @@ class AnchorConverter
     /**
      * @param string $extEncodedValue
      *
-     * @return null|string
+     * @return string
      */
-    private static function decodeAnchorValue(string $extEncodedValue): ?string
+    private static function decodeAnchorValue(string $extEncodedValue): string
     {
         $X509 = new X509();
         $ASN1 = new ASN1();
@@ -69,15 +71,15 @@ class AnchorConverter
         if (isset($decodedValArr[0]['content'][0]['content'])) {
             return $decodedValArr[0]['content'][0]['content'];
         }
-        return null;
+        return '';
     }
 
     /**
      * @param \Yoti\Protobuf\Attrpubapi\Anchor $anchor
      *
-     * @return \Yoti\Profile\Attribute\SignedTimestamp
+     * @return \Yoti\Profile\Attribute\SignedTimeStamp
      */
-    private static function convertToYotiSignedTimestamp(ProtobufAnchor $anchor): SignedTimestamp
+    private static function convertToYotiSignedTimestamp(ProtobufAnchor $anchor): SignedTimeStamp
     {
         $signedTimeStamp = new \Yoti\Protobuf\Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
@@ -91,26 +93,26 @@ class AnchorConverter
             new \DateTimeZone('UTC')
         );
 
-        $yotiSignedTimeStamp = new SignedTimeStamp(
+        if ($dateTime === false) {
+            throw new AttributeException('Could not parse anchor timestamp');
+        }
+
+        return new SignedTimeStamp(
             $signedTimeStamp->getVersion(),
             $dateTime
         );
-
-        return $yotiSignedTimeStamp;
     }
 
     /**
-     * @param \Traversable $certificateList
+     * @param \Traversable<string> $certificateList
      *
-     * @return array
+     * @return \stdClass[]
      */
     private static function convertCertsListToX509(\Traversable $certificateList): array
     {
         $certsList = [];
         foreach ($certificateList as $certificate) {
-            if ($X509CertObj = self::convertCertToX509($certificate)) {
-                $certsList[] = $X509CertObj;
-            }
+            $certsList[] = self::convertCertToX509($certificate);
         }
         return $certsList;
     }
@@ -126,7 +128,7 @@ class AnchorConverter
     {
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
-        $decodedX509Data = json_decode(json_encode($X509Data), false);
+        $decodedX509Data = Json::decode(Json::encode($X509Data), false);
 
         // Ensure serial number is cast to string.
         // @see \phpseclib\Math\BigInteger::__toString()
@@ -152,7 +154,7 @@ class AnchorConverter
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     private static function getAnchorTypesMap(): array
     {

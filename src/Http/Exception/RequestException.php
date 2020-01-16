@@ -13,7 +13,7 @@ class RequestException extends ClientException implements RequestExceptionInterf
 
     /**
      * @param string $message
-     * @param \Psr\Http\Client\RequestExceptionInterface $request
+     * @param \Psr\Http\Message\RequestInterface $request
      * @param \Throwable $previous
      */
     public function __construct(

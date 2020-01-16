@@ -26,7 +26,7 @@ class Client implements ClientInterface
     private $httpClient;
 
     /**
-     * @param array $config
+     * @param array<string, mixed> $config
      *   Configuration provided to \GuzzleHttp\Client::__construct
      */
     public function __construct(array $config = [])

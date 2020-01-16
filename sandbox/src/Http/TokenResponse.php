@@ -18,9 +18,9 @@ class TokenResponse
     /**
      * Response constructor.
      *
-     * @param \Yoti\Http\Response $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @throws ResponseException
+     * @throws \YotiSandbox\Exception\ResponseException
      */
     public function __construct(ResponseInterface $response)
     {
@@ -37,9 +37,9 @@ class TokenResponse
     }
 
     /**
-     * @param \Yoti\Http\Response $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return mixed
+     * @return array<string, mixed>
      *
      * @throws ResponseException
      */
@@ -58,7 +58,7 @@ class TokenResponse
     }
 
     /**
-     * @param string $httpCode
+     * @param int $httpCode
      *
      * @throws ResponseException
      */

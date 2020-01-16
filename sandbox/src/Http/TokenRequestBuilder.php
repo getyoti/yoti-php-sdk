@@ -6,7 +6,6 @@ namespace YotiSandbox\Http;
 
 use Yoti\Profile\Profile;
 use YotiSandbox\Entity\SandboxAgeVerification;
-use YotiSandbox\Entity\SandboxAnchor;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxDocumentDetails;
 
@@ -18,7 +17,7 @@ class TokenRequestBuilder
     private $rememberMeId;
 
     /**
-     * @var array
+     * @var array[]
      */
     private $sandboxAttributes = [];
 
@@ -31,6 +30,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setFullName(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -43,6 +49,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setFamilyName(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -55,6 +68,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setGivenNames(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -67,6 +87,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param \DateTime $dateTime
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setDateOfBirth(\DateTime $dateTime, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -79,6 +106,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setGender(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -91,6 +125,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setNationality(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -103,6 +144,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setPhoneNumber(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -115,12 +163,26 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setSelfie(string $value, string $optional = 'false', array $anchors = []): self
     {
         $base64Selfie = base64_encode($value);
         return $this->setBase64Selfie($base64Selfie, $optional, $anchors);
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setBase64Selfie(string $value, string $optional = 'true', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -133,6 +195,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setEmailAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -145,6 +214,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setPostalAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -157,6 +233,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setStructuredPostalAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -169,6 +252,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param \YotiSandbox\Entity\SandboxDocumentDetails $documentDetails
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setDocumentDetails(
         SandboxDocumentDetails $documentDetails,
         string $optional = 'true',
@@ -184,6 +274,13 @@ class TokenRequestBuilder
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @param string $optional
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return $this
+     */
     public function setDocumentDetailsWithString(string $value, string $optional = 'true', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
@@ -214,20 +311,21 @@ class TokenRequestBuilder
         return $this;
     }
 
-    private function formatAnchors(array $anchors)
+    /**
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     *
+     * @return array[]
+     */
+    private function formatAnchors(array $anchors): array
     {
         $anchorsList = [];
         $tsMultiplier = 1000000;
         foreach ($anchors as $anchor) {
-            /** @var SandboxAnchor $anchor */
-            if (!($anchor instanceof SandboxAnchor)) {
-                continue;
-            }
             $anchorsList[] = [
                 'type' => strtoupper($anchor->getType()),
                 'value' => $anchor->getValue(),
                 'sub_type' => $anchor->getSubtype(),
-                'timestamp' => (int) $anchor->getTimestamp() * $tsMultiplier
+                'timestamp' => $anchor->getTimestamp() * $tsMultiplier
             ];
         }
         return $anchorsList;
@@ -240,7 +338,7 @@ class TokenRequestBuilder
      *  Empty value means there is no derivation for this attribute
      * @param string $optional
      *  'false' value means this attribute is required
-     * @param array $anchors
+     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
      *
      * @return SandboxAttribute
      */

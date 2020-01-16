@@ -25,7 +25,7 @@ class WantedAttributeBuilder
     private $constraints;
 
     /**
-     * @var boolean
+     * @var bool|null
      */
     private $acceptSelfAsserted;
 
@@ -63,7 +63,7 @@ class WantedAttributeBuilder
     }
 
     /**
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -75,8 +75,6 @@ class WantedAttributeBuilder
 
     /**
      * @return \Yoti\ShareUrl\Policy\WantedAttribute
-     *
-     * @return $this
      */
     public function build(): WantedAttribute
     {

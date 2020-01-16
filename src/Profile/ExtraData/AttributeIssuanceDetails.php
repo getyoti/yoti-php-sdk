@@ -9,6 +9,21 @@ use Yoti\Util\Validation;
 class AttributeIssuanceDetails
 {
     /**
+     * @var string
+     */
+    private $token;
+
+    /**
+     * @var \DateTime|null
+     */
+    private $expiryDate;
+
+    /**
+     * @var \Yoti\Profile\ExtraData\AttributeDefinition[]
+     */
+    private $issuingAttributes;
+
+    /**
      * @param string $token
      * @param \DateTime $expiryDate
      * @param \Yoti\Profile\ExtraData\AttributeDefinition[] $issuingAttributes

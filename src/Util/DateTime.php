@@ -14,13 +14,13 @@ class DateTime
     const RFC3339 = 'Y-m-d\TH:i:s.uP';
 
     /**
-     * @param $value
+     * @param string $value
      *
      * @return \DateTime
      *
      * @throws \Yoti\Exception\DateTimeException
      */
-    public static function stringToDateTime($value): \DateTime
+    public static function stringToDateTime(string $value): \DateTime
     {
         Validation::notEmptyString($value, 'value');
 

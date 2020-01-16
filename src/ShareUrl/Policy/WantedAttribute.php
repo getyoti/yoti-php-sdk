@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -17,24 +18,24 @@ class WantedAttribute implements \JsonSerializable
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $derivation;
 
     /**
-     * @var \Yoti\ShareUrl\Policy\Constraints
+     * @var \Yoti\ShareUrl\Policy\Constraints|null
      */
     private $constraints;
 
     /**
-     * @var boolean
+     * @var bool|null
      */
     private $acceptSelfAsserted;
 
     /**
      * @param string $name
      * @param string $derivation
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      */
     public function __construct(
@@ -89,7 +90,7 @@ class WantedAttribute implements \JsonSerializable
      *
      * These are attributes that have been self-declared, and not verified by Yoti.
      *
-     * @return boolean|null
+     * @return bool|null
      */
     public function getAcceptSelfAsserted(): ?bool
     {
@@ -99,7 +100,7 @@ class WantedAttribute implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -128,6 +129,6 @@ class WantedAttribute implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

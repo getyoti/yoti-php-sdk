@@ -17,17 +17,17 @@ class Attribute
     private $value;
 
     /**
-     * @var array
+     * @var \Yoti\Profile\Attribute\Anchor[]
      */
     private $sources;
 
     /**
-     * @var array
+     * @var \Yoti\Profile\Attribute\Anchor[]
      */
     private $verifiers;
 
     /**
-     * @var array
+     * @var \Yoti\Profile\Attribute\Anchor[]
      */
     private $anchors;
 
@@ -36,8 +36,7 @@ class Attribute
      *
      * @param string $name
      * @param mixed $value
-     *
-     * @param array $anchorsMap
+     * @param array<string, array> $anchorsMap
      */
     public function __construct(string $name, $value, array $anchorsMap)
     {
@@ -66,7 +65,7 @@ class Attribute
     }
 
     /**
-     * @return array
+     * @return \Yoti\Profile\Attribute\Anchor[]
      */
     public function getSources(): array
     {
@@ -74,7 +73,7 @@ class Attribute
     }
 
     /**
-     * @return array
+     * @return \Yoti\Profile\Attribute\Anchor[]
      */
     public function getVerifiers(): array
     {
@@ -89,13 +88,16 @@ class Attribute
      *  ...
      * ]
      *
-     * @return array
+     * @return \Yoti\Profile\Attribute\Anchor[]
      */
     public function getAnchors(): array
     {
         return $this->anchors;
     }
 
+    /**
+     * @param array<string, array> $anchorsMap
+     */
     private function setSources(array $anchorsMap): void
     {
         $this->sources = $this->getAnchorType(
@@ -104,6 +106,9 @@ class Attribute
         );
     }
 
+    /**
+     * @param array<string, array> $anchorsMap
+     */
     private function setVerifiers(array $anchorsMap): void
     {
         $this->verifiers = $this->getAnchorType(
@@ -112,22 +117,26 @@ class Attribute
         );
     }
 
+    /**
+     * @param array<string, array> $anchorsMap
+     */
     private function setAnchors(array $anchorsMap): void
     {
         // Remove Oids from the anchorsMap
         $anchors = [];
-        array_walk($anchorsMap, function ($val) use (&$anchors) {
+        array_walk($anchorsMap, function ($val) use (&$anchors): void {
             $anchors = array_merge($anchors, array_values($val));
         });
         $this->anchors = $anchors;
     }
 
     /**
+     * @param array<string, array> $anchorsMap
      * @param string $anchorType
      *
-     * @return array
+     * @return \Yoti\Profile\Attribute\Anchor[]
      */
-    private function getAnchorType($anchorsMap, $anchorType): array
+    private function getAnchorType(array $anchorsMap, string $anchorType): array
     {
         return isset($anchorsMap[$anchorType]) ? $anchorsMap[$anchorType] : [];
     }

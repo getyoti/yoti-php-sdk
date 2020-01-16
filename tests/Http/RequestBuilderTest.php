@@ -35,7 +35,6 @@ class RequestBuilderTest extends TestCase
      * @covers ::withEndpoint
      * @covers ::getHeaders
      * @covers ::validateMethod
-     * @covers ::validateHeaders
      * @covers \Yoti\Http\Request::__construct
      * @covers \Yoti\Http\Request::getMessage
      */
@@ -293,7 +292,6 @@ class RequestBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withHeader
-     * @covers ::validateHeaders
      */
     public function testWithHeaderInvalidValue()
     {

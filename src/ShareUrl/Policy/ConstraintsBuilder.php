@@ -15,7 +15,7 @@ class ConstraintsBuilder
     private $constraints = [];
 
     /**
-     * @param \Yoti\ShareUrl\Policy\SourceConstraint $constraint
+     * @param \Yoti\ShareUrl\Policy\SourceConstraint $sourceConstraint
      *
      * @return $this
      */

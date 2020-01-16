@@ -25,19 +25,21 @@ class Config
     const HTTP_CLIENT = 'http.client';
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $options = [];
 
     /**
-     * Configuration settings include the following options:
+     * @param array<string, mixed> $options
      *
-     * - Config::HTTP_CLIENT 'http.client' (\Psr\Http\Client\ClientInterface)
-     * - Config::CONNECT_API_URL 'connect.api.url' (string)
-     * - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
-     * - Config::SDK_VERSION 'sdk.version' (string)
+     *   Configuration settings include the following options:
      *
-     * Example of creating config:
+     *   - Config::HTTP_CLIENT 'http.client' (\Psr\Http\Client\ClientInterface)
+     *   - Config::CONNECT_API_URL 'connect.api.url' (string)
+     *   - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
+     *   - Config::SDK_VERSION 'sdk.version' (string)
+     *
+     *   Example of creating config:
      *
      *     $config = new Config([
      *         Config::HTTP_CLIENT => new \Yoti\Http\Client(),
@@ -53,7 +55,7 @@ class Config
     }
 
     /**
-     * @param array $options
+     * @param array<string, mixed> $options
      *
      * @throws \InvalidArgumentException
      */
@@ -80,7 +82,7 @@ class Config
      * Set string configuration value.
      *
      * @param string $key
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     private function setStringValue(string $key, array $options): void
     {
@@ -94,8 +96,6 @@ class Config
     /**
      * @param string $key
      * @param mixed $value
-     *
-     * @return mixed
      */
     private function set(string $key, $value): void
     {
@@ -138,7 +138,7 @@ class Config
     }
 
     /**
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     private function setHttpClient(array $options): void
     {

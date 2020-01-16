@@ -13,13 +13,13 @@ class AttributeListConverter
      *
      * @param AttributeList $attributeList
      *
-     * @return array
+     * @return array<string, \Yoti\Profile\Attribute\Attribute|null>
      */
     public static function convertToYotiAttributesMap(AttributeList $attributeList): array
     {
         $yotiAttributes = [];
 
-        foreach ($attributeList->getAttributes() as $attr) { /** @var Yoti\Protobuf\Attrpubapi\Attribute $attr */
+        foreach ($attributeList->getAttributes() as $attr) { /** @var \Yoti\Protobuf\Attrpubapi\Attribute $attr */
             $attrName = $attr->getName();
             if (null === $attrName) {
                 continue;

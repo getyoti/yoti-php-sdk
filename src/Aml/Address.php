@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
+use Yoti\Util\Json;
+
 class Address implements \JsonSerializable
 {
     const POSTCODE_ATTR = 'post_code';
     const COUNTRY_ATTR = 'country';
 
     /**
-     * @var string
+     * @var ?string
      */
     private $postcode;
 
@@ -32,7 +34,7 @@ class Address implements \JsonSerializable
     }
 
     /**
-     * @return Yoti\Aml\Country
+     * @return \Yoti\Aml\Country
      */
     public function getCountry(): Country
     {
@@ -50,7 +52,7 @@ class Address implements \JsonSerializable
     /**
      * Get address data.
      *
-     * @return array
+     * @return array<string, string|null>
      */
     public function jsonSerialize(): array
     {
@@ -65,6 +67,6 @@ class Address implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

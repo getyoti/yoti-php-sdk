@@ -24,14 +24,14 @@ class Receipt
     const ATTR_EXTRA_DATA_CONTENT = 'extra_data_content';
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $receiptData;
 
     /**
      * Receipt constructor.
      *
-     * @param array $receiptData
+     * @param array<string, mixed> $receiptData
      *
      * @throws ReceiptException
      */
@@ -72,34 +72,38 @@ class Receipt
         return $this->getAttribute(self::ATTR_TIMESTAMP);
     }
 
+    /**
+     * @param string $attributeName
+     *
+     * @return mixed
+     */
     public function getAttribute(string $attributeName)
     {
-        if (!empty($attributeName) && isset($this->receiptData[$attributeName])) {
-            return $this->receiptData[$attributeName];
-        }
-        return null;
+        return $this->receiptData[$attributeName] ?? null;
     }
 
     /**
      * Return Protobuf Attributes List.
      *
      * @param string $attributeName
-     * @param \Yoti\Util\PemFile $pem
+     * @param \Yoti\Util\PemFile $pemFile
      *
      * @return \Yoti\Protobuf\Attrpubapi\AttributeList
      */
     public function parseAttribute(string $attributeName, PemFile $pemFile): AttributeList
     {
         $attributeList = new AttributeList();
-        $attributeList->mergeFromString(
-            $this->decryptAttribute($attributeName, $pemFile)
-        );
+
+        $decryptedData = $this->decryptAttribute($attributeName, $pemFile);
+        if ($decryptedData !== null) {
+            $attributeList->mergeFromString($decryptedData);
+        }
 
         return $attributeList;
     }
 
     /**
-     * @param \Yoti\Util\PemFile $pem
+     * @param \Yoti\Util\PemFile $pemFile
      *
      * @return \Yoti\Profile\ExtraData\ExtraData
      */
@@ -114,7 +118,7 @@ class Receipt
      * Decrypt receipt attribute.
      *
      * @param string $attributeName
-     * @param string $pem
+     * @param \Yoti\Util\PemFile $pemFile
      *
      * @return string|null
      *
@@ -137,6 +141,8 @@ class Receipt
 
     /**
      * Check Wrapped_receipt_key exists and is not NULL.
+     *
+     * @param array<string, mixed> $receiptData
      *
      * @throws ReceiptException
      */

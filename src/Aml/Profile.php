@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
+use Yoti\Util\Json;
+
 class Profile implements \JsonSerializable
 {
     const GIVEN_NAMES_ATTR  = 'given_names';
@@ -80,7 +82,7 @@ class Profile implements \JsonSerializable
     }
 
     /**
-     * @return Yoti\Aml\Address
+     * @return \Yoti\Aml\Address
      */
     public function getAmlAddress(): Address
     {
@@ -90,7 +92,7 @@ class Profile implements \JsonSerializable
     /**
      * Get Aml profile data.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -107,6 +109,6 @@ class Profile implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }
