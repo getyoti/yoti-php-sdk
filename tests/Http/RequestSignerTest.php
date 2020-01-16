@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Http;
 
 use Yoti\Aml\Address;
@@ -44,7 +46,6 @@ class RequestSignerTest extends TestCase
 
     /**
      * @covers ::sign
-     * @covers ::validateSignedMessage
      */
     public function testSign()
     {
@@ -65,11 +66,11 @@ class RequestSignerTest extends TestCase
 
     /**
      * @covers ::sign
-     * @covers ::validateSignedMessage
      */
     public function testValidateSignedMessage()
     {
-        $this->expectException(\Yoti\Http\Exception\RequestSignerException::class, 'Could not sign request');
+        $this->expectException(\Yoti\Http\Exception\RequestSignerException::class);
+        $this->expectExceptionMessage('Could not sign request');
 
         $this->captureExpectedLogs();
 

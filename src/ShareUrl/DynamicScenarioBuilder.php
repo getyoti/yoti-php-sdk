@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl;
 
 use Yoti\ShareUrl\Extension\Extension;
@@ -28,9 +30,9 @@ class DynamicScenarioBuilder
     /**
      * @param string $callbackEndpoint
      *
-     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
+     * @return $this
      */
-    public function withCallbackEndpoint($callbackEndpoint)
+    public function withCallbackEndpoint(string $callbackEndpoint): self
     {
         $this->callbackEndpoint = $callbackEndpoint;
         return $this;
@@ -39,9 +41,9 @@ class DynamicScenarioBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\DynamicPolicy $dynamicPolicy
      *
-     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
+     * @return $this
      */
-    public function withPolicy(DynamicPolicy $dynamicPolicy)
+    public function withPolicy(DynamicPolicy $dynamicPolicy): self
     {
         $this->dynamicPolicy = $dynamicPolicy;
         return $this;
@@ -50,9 +52,9 @@ class DynamicScenarioBuilder
     /**
      * @param \Yoti\ShareUrl\Extension\Extension $extension
      *
-     * @return \Yoti\ShareUrl\DynamicScenarioBuilder
+     * @return $this
      */
-    public function withExtension(Extension $extension)
+    public function withExtension(Extension $extension): self
     {
         $this->extensions[] = $extension;
         return $this;
@@ -61,7 +63,7 @@ class DynamicScenarioBuilder
     /**
      * @return \Yoti\ShareUrl\DynamicScenario
      */
-    public function build()
+    public function build(): DynamicScenario
     {
         return new DynamicScenario($this->callbackEndpoint, $this->dynamicPolicy, $this->extensions);
     }

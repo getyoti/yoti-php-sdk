@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Util;
 
 use Psr\Http\Client\ClientInterface;
@@ -55,7 +57,7 @@ class Config
      *
      * @throws \InvalidArgumentException
      */
-    private function validateKeys($options)
+    private function validateKeys($options): void
     {
         $invalidKeys = array_diff(
             array_keys($options),
@@ -138,7 +140,7 @@ class Config
     /**
      * @param array $options
      */
-    private function setHttpClient(array $options)
+    private function setHttpClient(array $options): void
     {
         if (isset($options[self::HTTP_CLIENT])) {
             $value = $options[self::HTTP_CLIENT];
@@ -156,7 +158,7 @@ class Config
     /**
      * @return \Psr\Http\Client\ClientInterface|null
      */
-    public function getHttpClient()
+    public function getHttpClient(): ?ClientInterface
     {
         return $this->get(self::HTTP_CLIENT);
     }

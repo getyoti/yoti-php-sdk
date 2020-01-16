@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Util\Attribute;
 
 use phpseclib\File\ASN1;
@@ -17,7 +19,7 @@ class AnchorConverter
      *
      * @return array
      */
-    public static function convert(ProtobufAnchor $protobufAnchor)
+    public static function convert(ProtobufAnchor $protobufAnchor): array
     {
         $anchorSubType = $protobufAnchor->getSubType();
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
@@ -54,11 +56,11 @@ class AnchorConverter
     }
 
     /**
-     * @param $extEncodedValue
+     * @param string $extEncodedValue
      *
      * @return null|string
      */
-    private static function decodeAnchorValue($extEncodedValue)
+    private static function decodeAnchorValue(string $extEncodedValue): ?string
     {
         $X509 = new X509();
         $ASN1 = new ASN1();
@@ -75,7 +77,7 @@ class AnchorConverter
      *
      * @return \Yoti\Profile\Attribute\SignedTimestamp
      */
-    private static function convertToYotiSignedTimestamp(ProtobufAnchor $anchor)
+    private static function convertToYotiSignedTimestamp(ProtobufAnchor $anchor): SignedTimestamp
     {
         $signedTimeStamp = new \Yoti\Protobuf\Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
@@ -102,7 +104,7 @@ class AnchorConverter
      *
      * @return array
      */
-    private static function convertCertsListToX509(\Traversable $certificateList)
+    private static function convertCertsListToX509(\Traversable $certificateList): array
     {
         $certsList = [];
         foreach ($certificateList as $certificate) {
@@ -116,11 +118,11 @@ class AnchorConverter
     /**
      * Return X509 Cert Object.
      *
-     * @param $certificate
+     * @param string $certificate
      *
      * @return \stdClass
      */
-    private static function convertCertToX509($certificate)
+    private static function convertCertToX509(string $certificate): \stdClass
     {
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
@@ -143,7 +145,7 @@ class AnchorConverter
      *
      * @return string
      */
-    private static function getAnchorTypeByOid($oid)
+    private static function getAnchorTypeByOid(string $oid): string
     {
         $anchorTypesMap = self::getAnchorTypesMap();
         return isset($anchorTypesMap[$oid]) ? $anchorTypesMap[$oid] : Anchor::TYPE_UNKNOWN_NAME;
@@ -152,7 +154,7 @@ class AnchorConverter
     /**
      * @return array
      */
-    private static function getAnchorTypesMap()
+    private static function getAnchorTypesMap(): array
     {
         return [
             Anchor::TYPE_SOURCE_OID => Anchor::TYPE_SOURCE_NAME,

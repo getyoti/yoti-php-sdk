@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Util\Validation;
@@ -35,21 +37,17 @@ class WantedAttribute implements \JsonSerializable
      * @param boolean $acceptSelfAsserted
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      */
-    public function __construct($name, $derivation = null, $acceptSelfAsserted = null, Constraints $constraints = null)
-    {
+    public function __construct(
+        string $name,
+        string $derivation = null,
+        bool $acceptSelfAsserted = null,
+        Constraints $constraints = null
+    ) {
         Validation::notEmptyString($name, 'name');
         $this->name = $name;
 
-        if ($derivation !== null) {
-            Validation::isString($derivation, 'derivation');
-        }
         $this->derivation = $derivation;
-
-        if ($acceptSelfAsserted !== null) {
-            Validation::isBoolean($acceptSelfAsserted, 'acceptSelfAsserted');
-        }
         $this->acceptSelfAsserted = $acceptSelfAsserted;
-
         $this->constraints = $constraints;
     }
 
@@ -58,7 +56,7 @@ class WantedAttribute implements \JsonSerializable
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -68,7 +66,7 @@ class WantedAttribute implements \JsonSerializable
      *
      * @return string
      */
-    public function getDerivation()
+    public function getDerivation(): ?string
     {
         return $this->derivation;
     }
@@ -79,9 +77,9 @@ class WantedAttribute implements \JsonSerializable
      * If you do not provide any particular constraints, Yoti will provide you with the
      * information from the most recently added source.
      *
-     * @return \Yoti\ShareUrl\Policy\Constraints
+     * @return \Yoti\ShareUrl\Policy\Constraints|null
      */
-    public function getConstraints()
+    public function getConstraints(): ?Constraints
     {
         return $this->constraints;
     }
@@ -91,9 +89,9 @@ class WantedAttribute implements \JsonSerializable
      *
      * These are attributes that have been self-declared, and not verified by Yoti.
      *
-     * @return boolean
+     * @return boolean|null
      */
-    public function getAcceptSelfAsserted()
+    public function getAcceptSelfAsserted(): ?bool
     {
         return $this->acceptSelfAsserted;
     }
@@ -103,7 +101,7 @@ class WantedAttribute implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [
             'name' => $this->getName(),
@@ -128,7 +126,7 @@ class WantedAttribute implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

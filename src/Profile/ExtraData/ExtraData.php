@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\ExtraData;
 
 use Yoti\Util\Validation;
@@ -23,7 +25,7 @@ class ExtraData
     /**
      * @param mixed[] $dataEntryList
      */
-    private function setAttributeIssuanceDetails($dataEntryList)
+    private function setAttributeIssuanceDetails(array $dataEntryList): void
     {
         $attributeIssuanceDetailsList = array_filter(
             $dataEntryList,
@@ -38,7 +40,7 @@ class ExtraData
     /**
      * @return \Yoti\Profile\ExtraData\AttributeIssuanceDetails|null
      */
-    public function getAttributeIssuanceDetails()
+    public function getAttributeIssuanceDetails(): ?AttributeIssuanceDetails
     {
         return $this->attributeIssuanceDetails;
     }

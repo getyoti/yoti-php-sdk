@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
@@ -189,7 +191,8 @@ class DynamicPolicyBuilderTest extends TestCase
      */
     public function testWithAgeOverIntegersOnly()
     {
-        $this->expectException(\InvalidArgumentException::class, 'age must be an integer');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -202,7 +205,8 @@ class DynamicPolicyBuilderTest extends TestCase
      */
     public function testWithAgeUnderIntegersOnly()
     {
-        $this->expectException(\InvalidArgumentException::class, 'age must be an integer');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -410,7 +414,8 @@ class DynamicPolicyBuilderTest extends TestCase
      */
     public function testWithNonIntegerAuthType()
     {
-        $this->expectException(\InvalidArgumentException::class, 'wantedAuthType must be an integer');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
 
         (new DynamicPolicyBuilder())
             ->withWantedAuthType('99')

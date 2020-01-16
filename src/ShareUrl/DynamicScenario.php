@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl;
 
 use Yoti\ShareUrl\Extension\Extension;
@@ -36,11 +38,9 @@ class DynamicScenario implements \JsonSerializable
      * @param \Yoti\ShareUrl\Extension\Extension[] $extensions
      *   List of Extension to be activated for the application.
      */
-    public function __construct($callbackEndpoint, DynamicPolicy $dynamicPolicy, $extensions)
+    public function __construct(string $callbackEndpoint, DynamicPolicy $dynamicPolicy, array $extensions)
     {
-        Validation::isString($callbackEndpoint, 'callbackEndpoint');
         $this->callbackEndpoint = $callbackEndpoint;
-
         $this->dynamicPolicy = $dynamicPolicy;
 
         Validation::isArrayOfType($extensions, [Extension::class], 'extensions');
@@ -52,7 +52,7 @@ class DynamicScenario implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'callback_endpoint' => $this->callbackEndpoint,
@@ -64,7 +64,7 @@ class DynamicScenario implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

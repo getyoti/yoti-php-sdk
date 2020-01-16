@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Aml;
 
 use Yoti\Aml\Result;
@@ -59,10 +61,8 @@ class ResultTest extends TestCase
      */
     public function testMissingAttributes()
     {
-        $this->expectException(
-            \Yoti\Exception\AmlException::class,
-            'Missing attributes from the result: on_pep_list,on_watch_list,on_watch_list'
-        );
+        $this->expectException(\Yoti\Exception\AmlException::class);
+        $this->expectExceptionMessage('Missing attributes from the result: on_pep_list,on_watch_list,on_watch_list');
 
         new Result([]);
     }

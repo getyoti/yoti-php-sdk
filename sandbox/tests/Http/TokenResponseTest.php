@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SandboxTest\Http;
 
 use Psr\Http\Message\ResponseInterface;
@@ -15,7 +17,6 @@ class TokenResponseTest extends TestCase
      * @covers ::getToken
      * @covers ::__construct
      * @covers ::processData
-     * @covers ::checkJsonError
      * @covers ::checkResponseStatus
      */
     public function testGetToken()
@@ -40,7 +41,6 @@ class TokenResponseTest extends TestCase
      * @covers ::getToken
      * @covers ::__construct
      * @covers ::processData
-     * @covers ::checkJsonError
      */
     public function testGetTokenEmpty()
     {
@@ -68,11 +68,11 @@ class TokenResponseTest extends TestCase
     }
 
     /**
-     * @covers ::checkJsonError
+     * @covers ::processData
      */
     public function testInvalidJson()
     {
-        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'JSON response was invalid');
+        $this->expectException(\Yoti\Exception\JsonException::class, 'Syntax error');
 
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);

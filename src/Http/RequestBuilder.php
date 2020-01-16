@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http;
 
 use GuzzleHttp\Psr7\Request as RequestMessage;
@@ -79,7 +81,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withBaseUrl($baseUrl)
+    public function withBaseUrl(string $baseUrl): self
     {
         $this->baseUrl = rtrim($baseUrl, '/');
         return $this;
@@ -91,7 +93,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withEndpoint($endpoint)
+    public function withEndpoint(string $endpoint): self
     {
         $this->endpoint = '/' . ltrim($endpoint, '/');
         return $this;
@@ -102,7 +104,7 @@ class RequestBuilder
      *
      * @return RequestBuilder
      */
-    public function withPemFile(PemFile $pemFile)
+    public function withPemFile(PemFile $pemFile): self
     {
         $this->pemFile = $pemFile;
         return $this;
@@ -113,7 +115,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withPemFilePath($filePath)
+    public function withPemFilePath(string $filePath): self
     {
         return $this->withPemFile(PemFile::fromFilePath($filePath));
     }
@@ -123,7 +125,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withPemString($content)
+    public function withPemString(string $content): self
     {
         return $this->withPemFile(PemFile::fromString($content));
     }
@@ -133,7 +135,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withMethod($method)
+    public function withMethod(string $method): self
     {
         $this->method = $method;
         return $this;
@@ -142,7 +144,7 @@ class RequestBuilder
     /**
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withGet()
+    public function withGet(): self
     {
         return $this->withMethod(Request::METHOD_GET);
     }
@@ -150,7 +152,7 @@ class RequestBuilder
     /**
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withPost()
+    public function withPost(): self
     {
         return $this->withMethod(Request::METHOD_POST);
     }
@@ -160,7 +162,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withPayload(Payload $payload)
+    public function withPayload(Payload $payload): self
     {
         $this->payload = $payload;
         return $this;
@@ -171,7 +173,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withClient(ClientInterface $client)
+    public function withClient(ClientInterface $client): self
     {
         $this->client = $client;
         return $this;
@@ -183,7 +185,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withHeader($name, $value)
+    public function withHeader(string $name, string $value): self
     {
         $this->headers[$name] = $value;
         return $this;
@@ -195,7 +197,7 @@ class RequestBuilder
      *
      * @return \Yoti\Http\RequestBuilder
      */
-    public function withQueryParam($name, $value)
+    public function withQueryParam(string $name, string $value): self
     {
         $this->queryParams[$name] = $value;
         return $this;
@@ -206,7 +208,7 @@ class RequestBuilder
      *
      * @return array
      */
-    private function getHeaders()
+    private function getHeaders(): array
     {
         $sdkIdentifier = $this->config->getSdkIdentifier();
         $sdkVersion = $this->config->getSdkVersion();
@@ -228,7 +230,7 @@ class RequestBuilder
     /**
      * @throws \InvalidArgumentException
      */
-    private function validateMethod()
+    private function validateMethod(): void
     {
         if (empty($this->method)) {
             throw new \InvalidArgumentException('HTTP Method must be specified');
@@ -254,7 +256,7 @@ class RequestBuilder
     /**
      * @throws \InvalidArgumentException
      */
-    private function validateHeaders()
+    private function validateHeaders(): void
     {
         foreach ($this->headers as $name => $value) {
             if (!is_string($value)) {
@@ -266,7 +268,7 @@ class RequestBuilder
     /**
      * @return string
      */
-    private static function generateNonce()
+    private static function generateNonce(): string
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -294,7 +296,7 @@ class RequestBuilder
      *
      * @throws \Yoti\Exception\RequestException
      */
-    public function build()
+    public function build(): Request
     {
         if (empty($this->baseUrl)) {
             throw new \InvalidArgumentException('Base URL must be provided to ' . __CLASS__);
@@ -310,7 +312,7 @@ class RequestBuilder
         // Add nonce and timestamp to the URL.
         $this
             ->withQueryParam('nonce', self::generateNonce())
-            ->withQueryParam('timestamp', round(microtime(true) * 1000));
+            ->withQueryParam('timestamp', (string) (round(microtime(true) * 1000)));
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 

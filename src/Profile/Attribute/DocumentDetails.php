@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 use Yoti\Exception\AttributeException;
@@ -58,9 +60,9 @@ class DocumentDetails
     /**
      * Return document type.
      *
-     * @return null|string
+     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -68,9 +70,9 @@ class DocumentDetails
     /**
      * Return 3 digit country code
      *
-     * @return null|string
+     * @return string
      */
-    public function getIssuingCountry()
+    public function getIssuingCountry(): string
     {
         return $this->issuingCountry;
     }
@@ -78,9 +80,9 @@ class DocumentDetails
     /**
      * Return document number, may contain letters.
      *
-     * @return null|string
+     * @return string
      */
-    public function getDocumentNumber()
+    public function getDocumentNumber(): string
     {
         return $this->documentNumber;
     }
@@ -90,7 +92,7 @@ class DocumentDetails
      *
      * @return  null|\DateTime
      */
-    public function getExpirationDate()
+    public function getExpirationDate(): ?\DateTime
     {
         return $this->expirationDate;
     }
@@ -100,16 +102,17 @@ class DocumentDetails
      *
      * @return null|string
      */
-    public function getIssuingAuthority()
+    public function getIssuingAuthority(): ?string
     {
         return $this->issuingAuthority;
     }
 
     /**
      * @param $value
+     *
      * @throws AttributeException
      */
-    private function parseFromValue($value)
+    private function parseFromValue(string $value): void
     {
         $parsedValues = explode(' ', $value);
         $this->setType($parsedValues);
@@ -119,17 +122,17 @@ class DocumentDetails
         $this->setIssuingAuthority($parsedValues);
     }
 
-    private function setType(array $parsedValues)
+    private function setType(array $parsedValues): void
     {
         $this->type = $parsedValues[self::TYPE_INDEX];
     }
 
-    private function setIssuingCountry(array $parsedValues)
+    private function setIssuingCountry(array $parsedValues): void
     {
         $this->issuingCountry = $parsedValues[self::COUNTRY_INDEX];
     }
 
-    private function setDocumentNumber(array $parsedValues)
+    private function setDocumentNumber(array $parsedValues): void
     {
         $this->documentNumber = $parsedValues[self::NUMBER_INDEX];
     }
@@ -141,7 +144,7 @@ class DocumentDetails
      *
      * @throws AttributeException
      */
-    private function setExpirationDate(array $parsedValues)
+    private function setExpirationDate(array $parsedValues): void
     {
         $expirationDate = null;
         if (isset($parsedValues[self::EXPIRATION_INDEX])) {
@@ -159,7 +162,7 @@ class DocumentDetails
         $this->expirationDate = $expirationDate;
     }
 
-    private function setIssuingAuthority(array $parsedValues)
+    private function setIssuingAuthority(array $parsedValues): void
     {
         $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : null;
         $this->issuingAuthority = $value;

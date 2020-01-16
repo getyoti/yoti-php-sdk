@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiSandbox;
 
+use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
 use Yoti\Util\Config;
@@ -68,7 +71,7 @@ class SandboxClient
      * @throws Exception\ResponseException
      * @throws \Yoti\Exception\RequestException
      */
-    public function getToken(TokenRequest $tokenRequest)
+    public function getToken(TokenRequest $tokenRequest): string
     {
         // Request endpoint
         $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
@@ -87,7 +90,7 @@ class SandboxClient
      *
      * @throws \Yoti\Exception\RequestException
      */
-    private function sendRequest(Payload $payload, $endpoint, $httpMethod)
+    private function sendRequest(Payload $payload, string $endpoint, string $httpMethod): ResponseInterface
     {
         $requestBuilder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->sandboxPathManager->getTokenApiPath())

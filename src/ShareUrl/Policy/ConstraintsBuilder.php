@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 /**
@@ -15,9 +17,9 @@ class ConstraintsBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\SourceConstraint $constraint
      *
-     * @return \Yoti\ShareUrl\Policy\ConstraintsBuilder
+     * @return $this
      */
-    public function withSourceConstraint(SourceConstraint $sourceConstraint)
+    public function withSourceConstraint(SourceConstraint $sourceConstraint): self
     {
         $this->constraints[] = $sourceConstraint;
         return $this;
@@ -26,7 +28,7 @@ class ConstraintsBuilder
     /**
      * @return \Yoti\ShareUrl\Policy\Constraints
      */
-    public function build()
+    public function build(): Constraints
     {
         return new Constraints($this->constraints);
     }

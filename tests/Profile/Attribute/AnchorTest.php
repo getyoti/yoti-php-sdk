@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Attribute;
 
 use Yoti\Profile\Attribute\Anchor;

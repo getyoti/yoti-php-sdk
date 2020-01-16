@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Util\Validation;
@@ -24,8 +26,10 @@ class TransactionalFlowExtensionBuilder
      * in the TRANSACTIONAL_FLOW extension.
      *
      * @param mixed $content
+     *
+     * @return $this
      */
-    public function withContent($content)
+    public function withContent($content): self
     {
         Validation::notNull($content, 'content');
         $this->content = $content;
@@ -36,7 +40,7 @@ class TransactionalFlowExtensionBuilder
      * @return \Yoti\ShareUrl\Extension\Extension
      *   Extension with TRANSACTIONAL_FLOW type
      */
-    public function build()
+    public function build(): Extension
     {
         return new Extension(self::TRANSACTIONAL_FLOW, $this->content);
     }

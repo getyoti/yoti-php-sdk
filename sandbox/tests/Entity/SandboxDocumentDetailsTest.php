@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SandboxTest\Entity;
 
 use YotiSandbox\Entity\SandboxDocumentDetails;

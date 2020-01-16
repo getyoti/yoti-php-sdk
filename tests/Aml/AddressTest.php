@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Aml;
 
 use Yoti\Aml\Address;
@@ -38,6 +40,17 @@ class AddressTest extends TestCase
         );
 
         $this->assertEquals(self::SOME_POSTCODE, $amlAddress->getPostcode());
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getPostcode
+     */
+    public function testGetPostcodeNull()
+    {
+        $amlAddress = new Address($this->createMock(Country::class));
+
+        $this->assertNull($amlAddress->getPostcode());
     }
 
     /**

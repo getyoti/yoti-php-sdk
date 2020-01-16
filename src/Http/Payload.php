@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http;
 
 use Psr\Http\Message\StreamInterface;
@@ -26,9 +28,9 @@ class Payload
      *
      * @return string
      */
-    public function toBase64()
+    public function toBase64(): string
     {
-        return base64_encode($this->stream);
+        return base64_encode((string) $this->stream);
     }
 
     /**
@@ -36,7 +38,7 @@ class Payload
      *
      * @return \Yoti\Http\Payload
      */
-    public static function fromJsonData($jsonData)
+    public static function fromJsonData($jsonData): self
     {
         return static::fromString(json_encode($jsonData));
     }
@@ -46,7 +48,7 @@ class Payload
      *
      * @return \Yoti\Http\Payload
      */
-    public static function fromString(string $string)
+    public static function fromString(string $string): self
     {
         return static::fromStream(stream_for($string));
     }
@@ -56,7 +58,7 @@ class Payload
      *
      * @return \Yoti\Http\Payload
      */
-    public static function fromStream(StreamInterface $stream)
+    public static function fromStream(StreamInterface $stream): self
     {
         return new static($stream);
     }
@@ -66,7 +68,7 @@ class Payload
      *
      * @return \Psr\Http\Message\StreamInterface
      */
-    public function toStream()
+    public function toStream(): StreamInterface
     {
         return $this->stream;
     }
@@ -76,7 +78,7 @@ class Payload
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->stream;
     }

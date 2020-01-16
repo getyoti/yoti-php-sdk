@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Http\Exception;
 
 use Psr\Http\Message\RequestInterface;

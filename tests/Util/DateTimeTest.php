@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Util;
 
 use Yoti\Util\DateTime;
@@ -53,7 +55,8 @@ class DateTimeTest extends TestCase
      */
     public function testInvalidTimestamp()
     {
-        $this->expectException(\Yoti\Exception\DateTimeException::class, 'Could not parse string to DateTime');
+        $this->expectException(\Yoti\Exception\DateTimeException::class);
+        $this->expectExceptionMessage('Could not parse string to DateTime');
 
         DateTime::stringToDateTime('some-invalid-date');
     }
@@ -61,14 +64,13 @@ class DateTimeTest extends TestCase
     /**
      * @covers ::stringToDateTime
      *
-     *
      * @dataProvider emptyTimestampProvider
      */
-    public function testEmptyTimestamp($emptyDateString, $exceptionMessage)
+    public function testEmptyTimestamp($emptyDateString, $exceptionMessage, $type)
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException($type);
         $this->expectExceptionMessage($exceptionMessage);
+
         DateTime::stringToDateTime($emptyDateString);
     }
 
@@ -78,8 +80,8 @@ class DateTimeTest extends TestCase
     public function emptyTimestampProvider()
     {
         return [
-            [ null, 'value must be a string' ],
-            [ '', 'value cannot be empty' ],
+            [ null, 'must be of the type string, null given', \TypeError::class ],
+            [ '', 'value cannot be empty', \InvalidArgumentException::class ],
         ];
     }
 }

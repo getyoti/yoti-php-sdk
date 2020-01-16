@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Attribute;
 
 use Yoti\Profile\Attribute\DocumentDetails;
@@ -66,8 +68,8 @@ class DocumentDetailsTest extends TestCase
      */
     public function testShouldThrowExceptionWhenValueIsEmpty()
     {
-        $this->expectException('Yoti\Exception\AttributeException');
-        $document = new DocumentDetails('');
+        $this->expectException(\Yoti\Exception\AttributeException::class);
+        new DocumentDetails('');
     }
 
     /**
@@ -76,8 +78,8 @@ class DocumentDetailsTest extends TestCase
      */
     public function testShouldThrowExceptionForInvalidCountry()
     {
-        $this->expectException('Yoti\Exception\AttributeException');
-        $document = new DocumentDetails('PASSPORT 13 1234abc 2016-05-01');
+        $this->expectException(\Yoti\Exception\AttributeException::class);
+        new DocumentDetails('PASSPORT 13 1234abc 2016-05-01');
     }
 
     /**
@@ -86,7 +88,7 @@ class DocumentDetailsTest extends TestCase
      */
     public function testShouldThrowExceptionForInvalidNumber()
     {
-        $this->expectException('Yoti\Exception\AttributeException');
+        $this->expectException(\Yoti\Exception\AttributeException::class);
         new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
     }
 
@@ -112,7 +114,7 @@ class DocumentDetailsTest extends TestCase
      */
     public function testWhenTheValueIsLessThanThreeWords()
     {
-        $this->expectException('Yoti\Exception\AttributeException');
+        $this->expectException(\Yoti\Exception\AttributeException::class);
         new DocumentDetails('PASS_CARD GBR');
     }
 
@@ -121,7 +123,7 @@ class DocumentDetailsTest extends TestCase
      */
     public function testShouldThrowExceptionForInvalidDate()
     {
-        $this->expectException('Yoti\Exception\AttributeException');
+        $this->expectException(\Yoti\Exception\AttributeException::class);
         new DocumentDetails('PASSPORT GBR 1234abc X016-05-01');
     }
 

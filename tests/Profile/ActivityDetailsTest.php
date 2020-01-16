@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile;
 
 use Yoti\Media\Image;
@@ -10,6 +12,7 @@ use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
+use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
@@ -34,9 +37,9 @@ class ActivityDetailsTest extends TestCase
     public $applicationProfile;
 
     /**
-     * @var string Pem file contents.
+     * @var \Yoti\Util\PemFile
      */
-    private $pem;
+    private $pemFile;
 
     /**
      * @var array Receipt array.
@@ -45,11 +48,11 @@ class ActivityDetailsTest extends TestCase
 
     public function setup(): void
     {
-        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $this->pemFile = PemFile::fromFilePath(TestData::PEM_FILE);
         $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
         $this->activityDetails = new ActivityDetails(
             new Receipt($this->receiptArr),
-            $this->pem
+            $this->pemFile
         );
     }
 
@@ -92,7 +95,7 @@ class ActivityDetailsTest extends TestCase
         unset($this->receiptArr['remember_me_id']);
         $receipt = new Receipt($this->receiptArr);
 
-        $activityDetails = new ActivityDetails($receipt, $this->pem);
+        $activityDetails = new ActivityDetails($receipt, $this->pemFile);
         $this->assertNull($activityDetails->getRememberMeId());
     }
 
@@ -106,7 +109,7 @@ class ActivityDetailsTest extends TestCase
         $this->receiptArr['remember_me_id'] = '';
         $receipt = new Receipt($this->receiptArr);
 
-        $activityDetails = new ActivityDetails($receipt, $this->pem);
+        $activityDetails = new ActivityDetails($receipt, $this->pemFile);
         $this->assertEquals('', $activityDetails->getRememberMeId());
     }
 
@@ -166,7 +169,7 @@ class ActivityDetailsTest extends TestCase
 
         $this->receiptArr['timestamp'] = 'some-invalid-time';
         $receipt = new Receipt($this->receiptArr);
-        $activityDetails = new ActivityDetails($receipt, $this->pem);
+        $activityDetails = new ActivityDetails($receipt, $this->pemFile);
 
         $this->assertNull($activityDetails->getTimestamp());
         $this->assertLogContains('Warning: Could not parse string to DateTime');

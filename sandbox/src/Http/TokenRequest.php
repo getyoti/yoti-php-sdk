@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiSandbox\Http;
 
 use Yoti\Http\Payload;
@@ -16,23 +18,23 @@ class TokenRequest
      */
     private $sandboxAttributes;
 
-    public function __construct($rememberMeId, array $sandboxAttrs)
+    public function __construct(?string $rememberMeId, array $sandboxAttrs)
     {
         $this->rememberMeId = $rememberMeId;
         $this->sandboxAttributes = $sandboxAttrs;
     }
 
-    public function getRememberMeId()
+    public function getRememberMeId(): string
     {
         return $this->rememberMeId;
     }
 
-    public function getSandboxAttributes()
+    public function getSandboxAttributes(): array
     {
         return $this->sandboxAttributes;
     }
 
-    public function getPayload()
+    public function getPayload(): Payload
     {
         return Payload::fromJsonData([
             'remember_me_id' => $this->rememberMeId,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Util;
 
 use Yoti\Exception\PemFileException;
@@ -34,11 +36,11 @@ class PemFile
      *
      * @param string $content
      *
-     * @return \Yoti\Util\PemFile
+     * @return self
      *
      * @throws Yoti\Exception\PemFileException
      */
-    public static function fromString(string $content): PemFile
+    public static function fromString(string $content): self
     {
         return new static($content);
     }
@@ -48,11 +50,11 @@ class PemFile
      *
      * @param string $filePath
      *
-     * @return \Yoti\Util\PemFile
+     * @return self
      *
      * @throws Yoti\Exception\PemFileException
      */
-    public static function fromFilePath(string $filePath): PemFile
+    public static function fromFilePath(string $filePath): self
     {
         if (!is_file($filePath)) {
             throw new PemFileException('PEM file was not found.');
@@ -65,11 +67,11 @@ class PemFile
      * @param string $pem
      *   PEM file path or string
      *
-     * @return \Yoti\Util\PemFile
+     * @return self
      *
      * @throws Yoti\Exception\PemFileException
      */
-    public static function resolveFromString(string $pem): PemFile
+    public static function resolveFromString(string $pem): self
     {
         Validation::notEmptyString($pem, 'pem');
 

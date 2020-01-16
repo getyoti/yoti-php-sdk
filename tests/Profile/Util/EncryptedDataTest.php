@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Util;
 
+use Yoti\Exception\EncryptedDataException;
 use Yoti\Profile\Util\EncryptedData;
+use Yoti\Protobuf\Compubapi\EncryptedData as EncryptedDataProto;
+use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
@@ -14,9 +19,9 @@ class EncrypedDataTest extends TestCase
     const SOME_DATA = 'some data';
 
     /**
-     * @var string
+     * @var \Yoti\Util\PemFile
      */
-    private $pem;
+    private $pemFile;
 
     /**
      * @var string
@@ -28,7 +33,7 @@ class EncrypedDataTest extends TestCase
      */
     public function setup(): void
     {
-        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $this->pemFile = PemFile::fromFilePath(TestData::PEM_FILE);
         $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $this->wrappedKey = $receiptArr['receipt']['wrapped_receipt_key'];
         $this->encryptedDataProto = $this->createEncryptedDataProto();
@@ -42,30 +47,36 @@ class EncrypedDataTest extends TestCase
         $decryptedData = EncryptedData::decrypt(
             base64_encode($this->encryptedDataProto->serializeToString()),
             $this->wrappedKey,
-            $this->pem
+            $this->pemFile
         );
 
         $this->assertEquals(self::SOME_DATA, $decryptedData);
     }
 
     /**
-     * @covers ::decryptFromProto
+     * @covers ::decrypt
      */
-    public function testDecryptFromProto()
+    public function testDecryptInvalid()
     {
-        $decryptedData = EncryptedData::decryptFromProto(
-            $this->encryptedDataProto,
-            $this->wrappedKey,
-            $this->pem
-        );
+        $this->expectException(EncryptedDataException::class);
+        $this->expectExceptionMessage('Could not decrypt data');
 
-        $this->assertEquals(self::SOME_DATA, $decryptedData);
+        EncryptedData::decrypt(
+            base64_encode(
+                (new EncryptedDataProto([
+                    'cipher_text' => 'some-invalid-text',
+                    'iv' => random_bytes(16),
+                ]))->serializeToString()
+            ),
+            $this->wrappedKey,
+            $this->pemFile
+        );
     }
 
     /**
      * @return \Yoti\Protobuf\Compubapi\EncryptedData
      */
-    private function createEncryptedDataProto()
+    private function createEncryptedDataProto(): EncryptedDataProto
     {
         openssl_private_decrypt(
             base64_decode($this->wrappedKey),
@@ -75,7 +86,7 @@ class EncrypedDataTest extends TestCase
 
         $iv = random_bytes(16);
 
-        return new \Yoti\Protobuf\Compubapi\EncryptedData([
+        return new EncryptedDataProto([
             'cipher_text' => openssl_encrypt(
                 self::SOME_DATA,
                 'aes-256-cbc',

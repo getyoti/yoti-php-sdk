@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl\Extension;
 
 use Yoti\ShareUrl\Extension\TransactionalFlowExtensionBuilder;
@@ -39,7 +41,8 @@ class TransactionalFlowExtensionBuilderTest extends TestCase
      */
     public function testNullContent()
     {
-        $this->expectException(\InvalidArgumentException::class, 'content cannot be null');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('content cannot be null');
 
         (new TransactionalFlowExtensionBuilder())
             ->withContent(null)

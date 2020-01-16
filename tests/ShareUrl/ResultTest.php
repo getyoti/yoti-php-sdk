@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Service\ShareUrl;
 
 use Yoti\ShareUrl\Result;
@@ -36,7 +38,8 @@ class ResultTest extends TestCase
      */
     public function testInvalidResponseNoQr()
     {
-        $this->expectException(\Yoti\Exception\ShareUrlException::class, 'JSON result does not contain \'qrcode\'');
+        $this->expectException(\Yoti\Exception\ShareUrlException::class);
+        $this->expectExceptionMessage('JSON result does not contain \'qrcode\'');
 
         new Result([
             'ref_id' => self::SOME_REF_ID,
@@ -49,7 +52,8 @@ class ResultTest extends TestCase
      */
     public function testInvalidResponseInvalidQr()
     {
-        $this->expectException(\InvalidArgumentException::class, 'qrcode must be a string');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('qrcode must be a string');
 
         new Result([
             'qrcode' => [self::SOME_SHARE_URL],
@@ -62,7 +66,8 @@ class ResultTest extends TestCase
      */
     public function testInvalidResponseNoRefId()
     {
-        $this->expectException(\Yoti\Exception\ShareUrlException::class, 'JSON result does not contain \'ref_id\'');
+        $this->expectException(\Yoti\Exception\ShareUrlException::class);
+        $this->expectExceptionMessage('JSON result does not contain \'ref_id\'');
 
         new Result([
             'qrcode' => self::SOME_SHARE_URL,
@@ -75,7 +80,8 @@ class ResultTest extends TestCase
      */
     public function testInvalidResponseInvalidRefId()
     {
-        $this->expectException(\InvalidArgumentException::class, 'ref_id must be a string');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('ref_id must be a string');
 
         new Result([
             'qrcode' => self::SOME_SHARE_URL,

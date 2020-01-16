@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Media;
 
 use Yoti\Media\Image;
@@ -56,7 +58,8 @@ class ImageTest extends TestCase
      */
     public function testShouldThrowExceptionForUnsupportedExtension()
     {
-        $this->expectException(\Yoti\Media\Exception\InvalidImageTypeException::class, 'bmp extension not supported');
+        $this->expectException(\Yoti\Media\Exception\InvalidImageTypeException::class);
+        $this->expectExceptionMessage('bmp extension not supported');
 
         new Image(self::SOME_IMAGE_DATA, 'bmp');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\ConstraintsBuilder;
@@ -48,7 +50,8 @@ class WantedAttributeBuilderTest extends TestCase
      */
     public function testEmptyName()
     {
-        $this->expectException(\InvalidArgumentException::class, 'name cannot be empty');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('name cannot be empty');
 
         (new WantedAttributeBuilder())
             ->withName('')
@@ -61,7 +64,8 @@ class WantedAttributeBuilderTest extends TestCase
      */
     public function testNonStringName()
     {
-        $this->expectException(\InvalidArgumentException::class, 'name must be a string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
 
         (new WantedAttributeBuilder())
             ->withName(['some array'])

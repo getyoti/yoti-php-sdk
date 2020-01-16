@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Util\Validation;
@@ -32,9 +34,9 @@ class DynamicPolicy implements \JsonSerializable
      * @param boolean $wantedRememberMe
      */
     public function __construct(
-        $wantedAttributes,
-        $wantedAuthTypes,
-        $wantedRememberMe = false
+        array $wantedAttributes,
+        array $wantedAuthTypes,
+        bool $wantedRememberMe = false
     ) {
         Validation::isArrayOfType($wantedAttributes, [WantedAttribute::class], 'wantedAttributes');
         $this->wantedAttributes = $wantedAttributes;
@@ -46,7 +48,6 @@ class DynamicPolicy implements \JsonSerializable
             $this->wantedAuthTypes = [];
         }
 
-        Validation::isBoolean($wantedRememberMe, 'wantedRememberMe');
         $this->wantedRememberMe = $wantedRememberMe;
     }
 
@@ -55,7 +56,7 @@ class DynamicPolicy implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'wanted' => $this->wantedAttributes,
@@ -68,7 +69,7 @@ class DynamicPolicy implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

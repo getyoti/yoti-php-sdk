@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 /**
@@ -37,9 +39,9 @@ class LocationConstraintExtensionBuilder
      *
      * @param int|float $latitude
      *
-     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
+     * @return $this
      */
-    public function withLatitude($latitude)
+    public function withLatitude(float $latitude): self
     {
         $this->latitude = $latitude;
         return $this;
@@ -50,9 +52,9 @@ class LocationConstraintExtensionBuilder
      *
      * @param int|float $longitude
      *
-     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
+     * @return $this
      */
-    public function withLongitude($longitude)
+    public function withLongitude(float $longitude): self
     {
         $this->longitude = $longitude;
         return $this;
@@ -67,9 +69,9 @@ class LocationConstraintExtensionBuilder
      * @param int|float $radius
      *   The allowable distance, in metres, from the given lat/long location
      *
-     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
+     * @return $this
      */
-    public function withRadius($radius)
+    public function withRadius(float $radius): self
     {
         $this->radius = $radius;
         return $this;
@@ -84,9 +86,9 @@ class LocationConstraintExtensionBuilder
      * @param int|float $maxUncertainty
      *   Maximum allowed measurement uncertainty, in metres
      *
-     * @return \Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder
+     * @return $this
      */
-    public function withMaxUncertainty($maxUncertainty)
+    public function withMaxUncertainty(float $maxUncertainty): self
     {
         $this->maxUncertainty = $maxUncertainty;
         return $this;
@@ -96,7 +98,7 @@ class LocationConstraintExtensionBuilder
      * @return \Yoti\ShareUrl\Extension\Extension
      *   Extension with LocationConstraintExtensionContent content
      */
-    public function build()
+    public function build(): Extension
     {
         $content = new LocationConstraintContent(
             $this->latitude,

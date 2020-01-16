@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Http;
 
 use Psr\Http\Client\ClientInterface;

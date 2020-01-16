@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Util;
 
 use Psr\Http\Client\ClientInterface;
@@ -120,10 +122,11 @@ class ConfigTest extends TestCase
      */
     public function testInvalidHttpClient()
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            'http.client configuration value must be of type Psr\\Http\\Client\\ClientInterface'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'http.client configuration value must be of type %s',
+            \Psr\Http\Client\ClientInterface::class
+        ));
 
         new Config([
             self::HTTP_CLIENT_KEY => 'some invalid http client',
@@ -144,10 +147,8 @@ class ConfigTest extends TestCase
      */
     public function testValidateKeys()
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            'The following configuration keys are not allowed: some.invalid.key'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The following configuration keys are not allowed: some.invalid.key');
 
         new Config([
             'some.invalid.key' => 'some string',

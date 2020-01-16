@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
@@ -38,7 +40,7 @@ class ThirdPartyAttributeContent implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'expiry_date' => $this->expiryDate
@@ -51,7 +53,7 @@ class ThirdPartyAttributeContent implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile;
 
 use Yoti\Profile\Attribute\AgeVerification;
@@ -21,7 +23,6 @@ class ProfileTest extends TestCase
      * @covers ::getGivenNames
      * @covers ::getFullName
      * @covers ::getDateOfBirth
-     * @covers ::getAgeVerifications
      * @covers ::getGender
      * @covers ::getNationality
      * @covers ::getPhoneNumber
@@ -57,7 +58,6 @@ class ProfileTest extends TestCase
             [ 'given_names' , 'getGivenNames' ],
             [ 'full_name', 'getFullName' ],
             [ 'date_of_birth', 'getDateOfBirth' ],
-            [ 'age_verifications', 'getAgeVerifications' ],
             [ 'gender', 'getGender' ],
             [ 'nationality', 'getNationality' ],
             [ 'phone_number', 'getPhoneNumber' ],
@@ -135,6 +135,19 @@ class ProfileTest extends TestCase
         $profile = new Profile($profileData);
 
         $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
+    }
+
+    /**
+     * @covers ::getAgeVerifications
+     *
+     * @dataProvider getDummyProfileDataWithAgeVerifications
+     */
+    public function testGetAgeVerifications($profileData)
+    {
+        $profile = new Profile($profileData);
+        $ageVerifications = $profile->getAgeVerifications();
+        $this->assertCount(2, $ageVerifications);
+        $this->assertContainsOnlyInstancesOf(AgeVerification::class, $ageVerifications);
     }
 
     /**

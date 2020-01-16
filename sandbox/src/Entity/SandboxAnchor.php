@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiSandbox\Entity;
 
 class SandboxAnchor
@@ -24,7 +26,7 @@ class SandboxAnchor
      */
     private $timestamp;
 
-    public function __construct($type, $value, $subType, $timestamp)
+    public function __construct(string $type, string $value, string $subType, int $timestamp)
     {
         $this->type = $type;
         $this->value = $value;
@@ -32,22 +34,22 @@ class SandboxAnchor
         $this->timestamp = $timestamp;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function getSubtype()
+    public function getSubtype(): string
     {
         return $this->subtype;
     }
 
-    public function getTimestamp()
+    public function getTimestamp(): int
     {
         return $this->timestamp;
     }

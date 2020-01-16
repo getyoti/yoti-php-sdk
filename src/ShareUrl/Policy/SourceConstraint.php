@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Util\Validation;
@@ -28,7 +30,7 @@ class SourceConstraint implements \JsonSerializable
      * @param \Yoti\ShareUrl\Policy\WantedAnchor[] $anchors
      * @param boolean $softPreference
      */
-    public function __construct($anchors, $softPreference = false)
+    public function __construct(array $anchors, bool $softPreference = false)
     {
         Validation::isArrayOfType($anchors, [WantedAnchor::class], 'anchors');
         $this->anchors = $anchors;
@@ -42,7 +44,7 @@ class SourceConstraint implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'type' => self::TYPE,
@@ -56,7 +58,7 @@ class SourceConstraint implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

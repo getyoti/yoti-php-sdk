@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 /**
@@ -52,9 +54,9 @@ class Anchor
      * @param array $originServerCerts
      */
     public function __construct(
-        $value,
-        $type,
-        $subType,
+        string $value,
+        string $type,
+        string $subType,
         SignedTimeStamp $signedTimeStamp,
         array $originServerCerts
     ) {
@@ -77,7 +79,7 @@ class Anchor
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -87,7 +89,7 @@ class Anchor
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -102,7 +104,7 @@ class Anchor
      *
      * @return string
      */
-    public function getSubtype()
+    public function getSubtype(): string
     {
         return $this->subType;
     }
@@ -112,7 +114,7 @@ class Anchor
      *
      * @return \Yoti\Profile\Attribute\SignedTimestamp
      */
-    public function getSignedTimeStamp()
+    public function getSignedTimeStamp(): SignedTimestamp
     {
         return $this->signedTimeStamp;
     }
@@ -123,7 +125,7 @@ class Anchor
      *
      * @return array of X509 certs
      */
-    public function getOriginServerCerts()
+    public function getOriginServerCerts(): array
     {
         return  $this->originServerCerts;
     }

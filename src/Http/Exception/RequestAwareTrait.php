@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http\Exception;
 
 use Psr\Http\Message\RequestInterface;
@@ -14,7 +16,7 @@ trait RequestAwareTrait
     /**
      * @param \Psr\Http\Message\RequestInterface $request
      */
-    private function setRequest(RequestInterface $request)
+    private function setRequest(RequestInterface $request): void
     {
         $this->request = $request;
     }

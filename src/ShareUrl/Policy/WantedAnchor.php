@@ -1,8 +1,8 @@
 <?php
 
-namespace Yoti\ShareUrl\Policy;
+declare(strict_types=1);
 
-use Yoti\Util\Validation;
+namespace Yoti\ShareUrl\Policy;
 
 /**
  * Defines the wanted anchor value and sub type.
@@ -43,12 +43,9 @@ class WantedAnchor implements \JsonSerializable
      * @param string $value
      * @param string $subType
      */
-    public function __construct($value, $subType = '')
+    public function __construct(string $value, string $subType = '')
     {
-        Validation::isString($value, 'value');
         $this->value = $value;
-
-        Validation::isString($subType, 'subType');
         $this->subType = $subType;
     }
 
@@ -57,7 +54,7 @@ class WantedAnchor implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'name' => $this->value,
@@ -68,7 +65,7 @@ class WantedAnchor implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

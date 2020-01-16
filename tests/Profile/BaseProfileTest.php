@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile;
 
 use Yoti\Profile\Attribute\Attribute;

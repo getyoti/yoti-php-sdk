@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Util;
 
 use Yoti\Util\Json;
@@ -39,7 +41,8 @@ class JsonTest extends TestCase
      */
     public function testDecodeExceptionSyntax()
     {
-        $this->expectException(\Yoti\Exception\JsonException::class, 'Syntax error');
+        $this->expectException(\Yoti\Exception\JsonException::class);
+        $this->expectExceptionMessage('Syntax error');
 
         Json::decode('some invalid json');
     }

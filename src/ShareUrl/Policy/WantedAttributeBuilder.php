@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 /**
@@ -30,9 +32,9 @@ class WantedAttributeBuilder
     /**
      * @param string $name
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
+     * @return $this
      */
-    public function withName($name)
+    public function withName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -41,9 +43,9 @@ class WantedAttributeBuilder
     /**
      * @param string $derivation
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
+     * @return $this
      */
-    public function withDerivation($derivation)
+    public function withDerivation(string $derivation): self
     {
         $this->derivation = $derivation;
         return $this;
@@ -52,9 +54,9 @@ class WantedAttributeBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
+     * @return $this
      */
-    public function withConstraints(Constraints $constraints)
+    public function withConstraints(Constraints $constraints): self
     {
         $this->constraints = $constraints;
         return $this;
@@ -63,9 +65,9 @@ class WantedAttributeBuilder
     /**
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
+     * @return $this
      */
-    public function withAcceptSelfAsserted($acceptSelfAsserted = true)
+    public function withAcceptSelfAsserted(?bool $acceptSelfAsserted = true): self
     {
         $this->acceptSelfAsserted = $acceptSelfAsserted;
         return $this;
@@ -74,9 +76,9 @@ class WantedAttributeBuilder
     /**
      * @return \Yoti\ShareUrl\Policy\WantedAttribute
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAttributeBuilder
+     * @return $this
      */
-    public function build()
+    public function build(): WantedAttribute
     {
         return new WantedAttribute(
             $this->name,
