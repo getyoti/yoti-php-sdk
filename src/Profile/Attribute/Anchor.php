@@ -37,12 +37,12 @@ class Anchor
     private $subType;
 
     /**
-     * @var \Yoti\Profile\Attribute\SignedTimestamp
+     * @var \Yoti\Profile\Attribute\SignedTimeStamp
      */
     private $signedTimeStamp;
 
     /**
-     * @var array
+     * @var \stdClass[]
      */
     private $originServerCerts;
 
@@ -50,8 +50,8 @@ class Anchor
      * @param string $value
      * @param string $type
      * @param string $subType
-     * @param \Yoti\Profile\Attribute\SignedTimestamp $signedTimeStamp
-     * @param array $originServerCerts
+     * @param \Yoti\Profile\Attribute\SignedTimeStamp $signedTimeStamp
+     * @param \stdClass[] $originServerCerts
      */
     public function __construct(
         string $value,
@@ -112,9 +112,9 @@ class Anchor
     /**
      * Timestamp applied at the time of Anchor creation.
      *
-     * @return \Yoti\Profile\Attribute\SignedTimestamp
+     * @return \Yoti\Profile\Attribute\SignedTimeStamp
      */
-    public function getSignedTimeStamp(): SignedTimestamp
+    public function getSignedTimeStamp(): SignedTimeStamp
     {
         return $this->signedTimeStamp;
     }
@@ -123,7 +123,7 @@ class Anchor
      * Certificate chain generated when this Anchor was created (attribute value was
      * sourced or verified). Securely encodes the Anchor type and value.
      *
-     * @return array of X509 certs
+     * @return \stdClass[] of X509 certs
      */
     public function getOriginServerCerts(): array
     {

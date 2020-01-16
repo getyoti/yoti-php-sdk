@@ -70,8 +70,7 @@ class Service
     /**
      * Handle request result.
      *
-     * @param array $responseArr
-     * @param int $httpCode
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @throws \Yoti\Exception\AmlException
      */
@@ -90,7 +89,7 @@ class Service
         $errorCode = isset($responseArr['code']) ? $responseArr['code'] : 'Error';
 
         // Throw the error message that's included in the response
-        if (!empty($errorMessage)) {
+        if (strlen($errorMessage) > 0) {
             throw new AmlException("$errorCode - {$errorMessage}");
         }
 
@@ -101,7 +100,7 @@ class Service
     /**
      * Get error message from the response array.
      *
-     * @param array $result
+     * @param array<string, array> $result
      *
      * @return string
      */

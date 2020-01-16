@@ -6,6 +6,7 @@ namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Util\DateTime;
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -38,7 +39,7 @@ class ThirdPartyAttributeContent implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -55,6 +56,6 @@ class ThirdPartyAttributeContent implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

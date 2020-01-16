@@ -19,7 +19,7 @@ class AttributeIssuanceDetails
     private $expiryDate;
 
     /**
-     * @var \Yoti\Entity\AttributeDefinition[]
+     * @var \Yoti\Profile\ExtraData\AttributeDefinition[]
      */
     private $issuingAttributes;
 

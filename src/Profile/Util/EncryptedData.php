@@ -13,19 +13,29 @@ class EncryptedData
     /**
      * @param string $data
      * @param string $wrappedKey
-     * @param Yoti\Util\PemFile $pem
+     * @param \Yoti\Util\PemFile $pemFile
      *
      * @return string
      */
-    public static function decrypt(string $data, string $wrappedKey, PemFile $pem): string
+    public static function decrypt(string $data, string $wrappedKey, PemFile $pemFile): string
     {
+        $decodedProto = base64_decode($data, true);
+        if ($decodedProto === false) {
+            throw new EncryptedDataException('Could not decode data');
+        }
+
         $encryptedDataProto = new EncryptedDataProto();
-        $encryptedDataProto->mergeFromString(base64_decode($data));
+        $encryptedDataProto->mergeFromString($decodedProto);
+
+        $decodedWrappedKey = base64_decode($wrappedKey, true);
+        if ($decodedWrappedKey === false) {
+            throw new EncryptedDataException('Could not decode wrapped key');
+        }
 
         openssl_private_decrypt(
-            base64_decode($wrappedKey),
+            $decodedWrappedKey,
             $unwrappedKey,
-            $pem
+            (string) $pemFile
         );
 
         $decrypted = openssl_decrypt(

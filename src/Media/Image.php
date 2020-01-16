@@ -29,7 +29,7 @@ class Image
     /**
      * Map image extension to the type enum which is an integer.
      *
-     * @var array
+     * @var array<string, int>
      */
     private $imageTypeMap = [
         'jpeg' => IMAGETYPE_JPEG,
@@ -91,11 +91,11 @@ class Image
     }
 
     /**
-     * @param $imageExtension
+     * @param string $imageExtension
      *
      * @throws \Yoti\Exception\AttributeException
      */
-    private function validateImageExtension($imageExtension): void
+    private function validateImageExtension(string $imageExtension): void
     {
         if (!isset($this->imageTypeMap[$imageExtension])) {
             throw new InvalidImageTypeException("{$imageExtension} extension not supported");

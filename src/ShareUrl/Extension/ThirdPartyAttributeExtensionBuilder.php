@@ -50,7 +50,7 @@ class ThirdPartyAttributeExtensionBuilder
     }
 
     /**
-     * @param string $definition
+     * @param string[] $definitions
      *
      * @return $this
      */
@@ -58,7 +58,7 @@ class ThirdPartyAttributeExtensionBuilder
     {
         Validation::isArrayOfStrings($definitions, 'definitions');
         $this->definitions = array_map(
-            function ($definition) {
+            function ($definition): AttributeDefinition {
                 return new AttributeDefinition($definition);
             },
             $definitions

@@ -30,7 +30,7 @@ class DocumentDetails
     private $issuingCountry;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     private $expirationDate;
 
@@ -40,18 +40,18 @@ class DocumentDetails
     private $documentNumber;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $issuingAuthority;
 
     /**
      * DocumentDetails constructor.
      *
-     * @param $value
+     * @param string $value
      *
-     * @throws AttributeException
+     * @throws \Yoti\Exception\AttributeException
      */
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->validateValue($value);
         $this->parseFromValue($value);
@@ -108,9 +108,9 @@ class DocumentDetails
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @throws AttributeException
+     * @throws \Yoti\Exception\AttributeException
      */
     private function parseFromValue(string $value): void
     {
@@ -122,16 +122,25 @@ class DocumentDetails
         $this->setIssuingAuthority($parsedValues);
     }
 
+    /**
+     * @param string[] $parsedValues
+     */
     private function setType(array $parsedValues): void
     {
         $this->type = $parsedValues[self::TYPE_INDEX];
     }
 
+    /**
+     * @param string[] $parsedValues
+     */
     private function setIssuingCountry(array $parsedValues): void
     {
         $this->issuingCountry = $parsedValues[self::COUNTRY_INDEX];
     }
 
+    /**
+     * @param string[] $parsedValues
+     */
     private function setDocumentNumber(array $parsedValues): void
     {
         $this->documentNumber = $parsedValues[self::NUMBER_INDEX];
@@ -140,9 +149,9 @@ class DocumentDetails
     /**
      * Set expirationDate to DateTime object or NULL if the value is '-'
      *
-     * @param array $parsedValues
+     * @param string[] $parsedValues
      *
-     * @throws AttributeException
+     * @throws \Yoti\Exception\AttributeException
      */
     private function setExpirationDate(array $parsedValues): void
     {
@@ -153,7 +162,7 @@ class DocumentDetails
             if ($dateStr !== '-') {
                 $expirationDate = \DateTime::createFromFormat('Y-m-d', $dateStr);
 
-                if (!$expirationDate) {
+                if ($expirationDate === false) {
                     throw new AttributeException('Invalid Date provided');
                 }
             }
@@ -162,6 +171,9 @@ class DocumentDetails
         $this->expirationDate = $expirationDate;
     }
 
+    /**
+     * @param string[] $parsedValues
+     */
     private function setIssuingAuthority(array $parsedValues): void
     {
         $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : null;
@@ -169,13 +181,13 @@ class DocumentDetails
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @throws AttributeException
+     * @throws \Yoti\Exception\AttributeException
      */
-    private function validateValue($value)
+    private function validateValue($value): void
     {
-        if (!preg_match(self::VALIDATION_PATTERN, $value)) {
+        if (!(preg_match(self::VALIDATION_PATTERN, $value) === 1)) {
             throw new AttributeException('Invalid value for DocumentDetails');
         }
     }

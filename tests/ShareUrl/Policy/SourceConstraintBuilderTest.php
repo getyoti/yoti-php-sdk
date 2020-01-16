@@ -301,7 +301,7 @@ class SourceConstraintBuilderTest extends TestCase
      * @param \Yoti\ShareUrl\Policy\SourceConstraint $sourceConstraint
      * @param string $expectValue
      * @param string $expectSubType
-     * @param boolean $expectSoftPreference
+     * @param bool $expectSoftPreference
      */
     private function assertSourceConstraint(
         $sourceConstraint,

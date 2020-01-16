@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Extension;
 
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -12,34 +13,34 @@ use Yoti\Util\Validation;
 class LocationConstraintContent implements \JsonSerializable
 {
     /**
-     * @var int|float
+     * @var float
      */
     private $latitude;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $longitude;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $radius;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $maxUncertainty;
 
     /**
-     * @param int|float $latitude
+     * @param float $latitude
      *   Latitude of the user's expected location
-     * @param int|float $longitude
+     * @param float $longitude
      *   Longitude of the user's expected location
-     * @param int|float $radius
+     * @param float $radius
      *   Radius of the circle, centred on the specified location
      *   coordinates, where the device is allowed to perform the share
-     * @param int|float $maxUncertainty
+     * @param float $maxUncertainty
      *   Maximum acceptable distance, in metres, of the area of
      *   uncertainty associated with the device location coordinates.
      */
@@ -61,7 +62,7 @@ class LocationConstraintContent implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -80,6 +81,6 @@ class LocationConstraintContent implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

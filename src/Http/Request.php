@@ -7,7 +7,6 @@ namespace Yoti\Http;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\Exception\RequestException;
 
 class Request
 {
@@ -33,8 +32,6 @@ class Request
      *
      * @param \Psr\Http\Message\RequestInterface $message
      * @param \Psr\Http\Client\ClientInterface $client
-     *
-     * @throws RequestException
      */
     public function __construct(RequestInterface $message, ClientInterface $client)
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -22,13 +23,13 @@ class SourceConstraint implements \JsonSerializable
     private $anchors = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $softPreference;
 
     /**
      * @param \Yoti\ShareUrl\Policy\WantedAnchor[] $anchors
-     * @param boolean $softPreference
+     * @param bool $softPreference
      */
     public function __construct(array $anchors, bool $softPreference = false)
     {
@@ -42,7 +43,7 @@ class SourceConstraint implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -60,6 +61,6 @@ class SourceConstraint implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

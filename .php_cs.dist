@@ -18,6 +18,8 @@ return PhpCsFixer\Config::create()
             ],
         ],
         'php_unit_fqcn_annotation' => true,
+        'phpdoc_return_self_reference' => true,
+        'phpdoc_scalar' => true,
     ])
     ->setFinder($finder)
 ;

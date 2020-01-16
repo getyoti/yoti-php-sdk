@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
-use Yoti\Media\Image;
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\Attribute;
@@ -162,7 +161,7 @@ class Profile extends BaseProfile
     /**
      * Return a list of document images.
      *
-     * @return array
+     * @return Attribute|null
      */
     public function getDocumentImages(): ?Attribute
     {
@@ -173,7 +172,7 @@ class Profile extends BaseProfile
      * Return all derived attributes from the DOB e.g 'Age Over', 'Age Under'
      * As a list of AgeVerification
      *
-     * @return array
+     * @return \Yoti\Profile\Attribute\AgeVerification[]
      * e.g [
      *      'age_under:18' => new AgeVerification(...),
      *      'age_over:50' => new AgeVerification(...),
@@ -195,7 +194,7 @@ class Profile extends BaseProfile
      */
     public function findAgeOverVerification(int $age): ?AgeVerification
     {
-        $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, (int) $age);
+        $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, $age);
         return $this->getAgeVerificationByAttribute($ageOverAttr);
     }
 
@@ -208,7 +207,7 @@ class Profile extends BaseProfile
      */
     public function findAgeUnderVerification(int $age): ?AgeVerification
     {
-        $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, (int) $age);
+        $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, $age);
         return $this->getAgeVerificationByAttribute($ageUnderAttr);
     }
 
@@ -256,12 +255,12 @@ class Profile extends BaseProfile
      *
      * @param Attribute $attribute
      *
-     * @return array attribute map
+     * @return array<string, array> attribute map
      */
     private function getAttributeAnchorMap(Attribute $attribute): array
     {
         return [
-            Anchor::TYPE_UNKNOWN_NAME => array_filter($attribute->getAnchors(), function ($anchor) {
+            Anchor::TYPE_UNKNOWN_NAME => array_filter($attribute->getAnchors(), function ($anchor): bool {
                 return $anchor->getType() == Anchor::TYPE_UNKNOWN_NAME;
             }),
             Anchor::TYPE_VERIFIER_OID => $attribute->getVerifiers(),

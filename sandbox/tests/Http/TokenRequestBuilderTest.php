@@ -194,19 +194,4 @@ class TokenRequestBuilderTest extends TestCase
             ],
         ]);
     }
-
-   /**
-     * @covers ::formatAnchors
-     */
-    public function testFormatAnchorsSkipsInvalid()
-    {
-        $someAttribute = $this->createMock(SandboxAttribute::class);
-        $someAttribute->method('getAnchors')->willReturn(['invalid anchor']);
-
-        $this->requestBuilder->addAttribute($someAttribute);
-        $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
-
-        $this->assertEquals($sandboxAttribute['anchors'], []);
-    }
 }

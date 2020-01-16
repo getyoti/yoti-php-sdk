@@ -8,12 +8,15 @@ use Yoti\Profile\Attribute\Attribute;
 
 class BaseProfile
 {
+    /**
+     * @var mixed[]
+     */
     protected $profileData;
 
     /**
      * Profile constructor.
      *
-     * @param array $profileData
+     * @param mixed[] $profileData
      */
     public function __construct(array $profileData)
     {
@@ -21,7 +24,7 @@ class BaseProfile
     }
 
     /**
-     * @param $attributeName.
+     * @param string $attributeName.
      *
      * @return null|Attribute
      */
@@ -34,6 +37,9 @@ class BaseProfile
         return null;
     }
 
+    /**
+     * @return \Yoti\Profile\Attribute\Attribute[]
+     */
     public function getAttributes(): array
     {
         $attributesMap = $this->profileData;

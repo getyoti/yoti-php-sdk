@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\ExtraData;
 
+use Yoti\Util\Json;
+
 class AttributeDefinition implements \JsonSerializable
 {
     /**
@@ -30,7 +32,7 @@ class AttributeDefinition implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -44,6 +46,6 @@ class AttributeDefinition implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }
