@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest;
 
 use Psr\Http\Client\ClientInterface;
@@ -29,7 +31,8 @@ class YotiClientTest extends TestCase
      */
     public function testEmptySdkId()
     {
-        $this->expectException(\InvalidArgumentException::class, 'SDK ID cannot be empty');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('SDK ID cannot be empty');
 
         new YotiClient('', TestData::PEM_FILE);
     }

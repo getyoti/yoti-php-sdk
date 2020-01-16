@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
 
+use Yoti\Media\Image;
+use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\Attribute;
 
@@ -31,9 +35,9 @@ class Profile extends BaseProfile
     /**
      * The full name attribute.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getFullName()
+    public function getFullName(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_FULL_NAME);
     }
@@ -41,9 +45,9 @@ class Profile extends BaseProfile
     /**
      * Corresponds to primary name in passport, and surname in English.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getFamilyName()
+    public function getFamilyName(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_FAMILY_NAME);
     }
@@ -51,9 +55,9 @@ class Profile extends BaseProfile
     /**
      * Corresponds to secondary names in passport, and first/middle names in English.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getGivenNames()
+    public function getGivenNames(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_GIVEN_NAMES);
     }
@@ -61,9 +65,9 @@ class Profile extends BaseProfile
     /**
      * Date of birth.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getDateOfBirth()
+    public function getDateOfBirth(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_DATE_OF_BIRTH);
     }
@@ -72,9 +76,9 @@ class Profile extends BaseProfile
      * Corresponds to the gender in the passport; will be one of the strings
      * "MALE", "FEMALE", "TRANSGENDER" or "OTHER".
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getGender()
+    public function getGender(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_GENDER);
     }
@@ -82,9 +86,9 @@ class Profile extends BaseProfile
     /**
      * Corresponds to the nationality in the passport.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getNationality()
+    public function getNationality(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_NATIONALITY);
     }
@@ -93,9 +97,9 @@ class Profile extends BaseProfile
      * The user's phone number, as verified at registration time. This will be a number with + for
      * international prefix and no spaces, e.g. "+447777123456".
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getPhoneNumber()
+    public function getPhoneNumber(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_PHONE_NUMBER);
     }
@@ -103,9 +107,9 @@ class Profile extends BaseProfile
     /**
      * Photograph of user, encoded as a JPEG image.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getSelfie()
+    public function getSelfie(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_SELFIE);
     }
@@ -113,9 +117,9 @@ class Profile extends BaseProfile
     /**
      * The user's verified email address.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getEmailAddress()
+    public function getEmailAddress(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_EMAIL_ADDRESS);
     }
@@ -123,9 +127,9 @@ class Profile extends BaseProfile
     /**
      * The user's postal address as a string.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getPostalAddress()
+    public function getPostalAddress(): ?Attribute
     {
         $postalAddress = $this->getProfileAttribute(self::ATTR_POSTAL_ADDRESS);
         if (null === $postalAddress) {
@@ -138,9 +142,9 @@ class Profile extends BaseProfile
     /**
      * The user's structured postal address as a JSON.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getStructuredPostalAddress()
+    public function getStructuredPostalAddress(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_STRUCTURED_POSTAL_ADDRESS);
     }
@@ -148,9 +152,9 @@ class Profile extends BaseProfile
     /**
      * Document details.
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public function getDocumentDetails()
+    public function getDocumentDetails(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_DETAILS);
     }
@@ -160,7 +164,7 @@ class Profile extends BaseProfile
      *
      * @return array
      */
-    public function getDocumentImages()
+    public function getDocumentImages(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_IMAGES);
     }
@@ -176,7 +180,7 @@ class Profile extends BaseProfile
      *      ...
      * ]
      */
-    public function getAgeVerifications()
+    public function getAgeVerifications(): array
     {
         return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
             ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : [];
@@ -187,9 +191,9 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return null|AgeVerification
+     * @return AgeVerification|null
      */
-    public function findAgeOverVerification($age)
+    public function findAgeOverVerification(int $age): ?AgeVerification
     {
         $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, (int) $age);
         return $this->getAgeVerificationByAttribute($ageOverAttr);
@@ -200,9 +204,9 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return null|AgeVerification
+     * @return AgeVerification|null
      */
-    public function findAgeUnderVerification($age)
+    public function findAgeUnderVerification(int $age): ?AgeVerification
     {
         $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, (int) $age);
         return $this->getAgeVerificationByAttribute($ageUnderAttr);
@@ -213,18 +217,18 @@ class Profile extends BaseProfile
      *
      * @param string $ageAttr
      *
-     * @return mixed|null
+     * @return AgeVerification|null
      */
-    private function getAgeVerificationByAttribute($ageAttr)
+    private function getAgeVerificationByAttribute($ageAttr): ?AgeVerification
     {
         $ageVerifications = $this->getAgeVerifications();
         return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : null;
     }
 
     /**
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    private function getFormattedAddress()
+    private function getFormattedAddress(): ?Attribute
     {
         $postalAddress = null;
         // Get it from structured_postal_address.formatted_address
@@ -251,9 +255,10 @@ class Profile extends BaseProfile
      * Get anchor map for provided anchor.
      *
      * @param Attribute $attribute
+     *
      * @return array attribute map
      */
-    private function getAttributeAnchorMap(Attribute $attribute)
+    private function getAttributeAnchorMap(Attribute $attribute): array
     {
         return [
             Anchor::TYPE_UNKNOWN_NAME => array_filter($attribute->getAnchors(), function ($anchor) {

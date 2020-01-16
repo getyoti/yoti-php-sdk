@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Util\Attribute;
 
 use Traversable;
 
 class AnchorListConverter
 {
-    public static function convert(Traversable $anchorList)
+    public static function convert(Traversable $anchorList): array
     {
         $yotiAnchorsMap = [];
 

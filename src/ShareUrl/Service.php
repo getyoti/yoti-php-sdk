@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl;
 
 use Yoti\Exception\ShareUrlException;
@@ -62,6 +64,6 @@ class Service
             throw new ShareUrlException("Server responded with {$httpCode}");
         }
 
-        return new Result(Json::decode($response->getBody()));
+        return new Result(Json::decode((string) $response->getBody()));
     }
 }

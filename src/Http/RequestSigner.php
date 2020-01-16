@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http;
 
 use Yoti\Http\Exception\RequestSignerException;
@@ -22,10 +24,10 @@ class RequestSigner
      */
     public static function sign(
         PemFile $pemFile,
-        $endpoint,
-        $httpMethod,
+        string $endpoint,
+        string $httpMethod,
         Payload $payload = null
-    ) {
+    ): string {
         $messageToSign = "{$httpMethod}&$endpoint";
         if ($payload instanceof Payload) {
             $messageToSign .= "&{$payload->toBase64()}";
@@ -33,21 +35,10 @@ class RequestSigner
 
         openssl_sign($messageToSign, $signedMessage, (string) $pemFile, OPENSSL_ALGO_SHA256);
 
-        self::validateSignedMessage($signedMessage);
-
-        return base64_encode($signedMessage);
-    }
-
-    /**
-     * @param string $signedMessage
-     *
-     * @throws \Yoti\Http\Exception\RequestSignerException
-     */
-    private static function validateSignedMessage($signedMessage)
-    {
-        // Check signed message
         if (!$signedMessage) {
             throw new RequestSignerException('Could not sign request.');
         }
+
+        return base64_encode($signedMessage);
     }
 }

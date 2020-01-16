@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl\Extension;
 
 use Yoti\ShareUrl\Extension\ExtensionBuilder;

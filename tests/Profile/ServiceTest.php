@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile;
 
 use Psr\Http\Client\ClientInterface;
@@ -106,8 +108,8 @@ class ServiceTest extends TestCase
     public function testGetActivityDetailsFailure($statusCode)
     {
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-
         $this->expectExceptionMessage("Server responded with {$statusCode}");
+
         $profileService = $this->createProfileServiceWithResponse($statusCode);
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
@@ -119,7 +121,8 @@ class ServiceTest extends TestCase
      */
     public function testInvalidConnectToken()
     {
-        $this->expectException(\Yoti\Exception\ActivityDetailsException::class, 'Could not decrypt connect token');
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
+        $this->expectExceptionMessage('Could not decrypt connect token');
 
         $profileService = new Service(
             TestData::SDK_ID,
@@ -135,7 +138,8 @@ class ServiceTest extends TestCase
      */
     public function testSharingOutcomeFailure()
     {
-        $this->expectException(\Yoti\Exception\ActivityDetailsException::class, 'Outcome was unsuccessful');
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
+        $this->expectExceptionMessage('Outcome was unsuccessful');
 
         $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $json['receipt']['sharing_outcome'] = 'FAILURE';
@@ -150,7 +154,8 @@ class ServiceTest extends TestCase
      */
     public function testMissingReceipt()
     {
-        $this->expectException(\Yoti\Exception\ReceiptException::class, 'Receipt not found in response');
+        $this->expectException(\Yoti\Exception\ReceiptException::class);
+        $this->expectExceptionMessage('Receipt not found in response');
 
         $profileService = $this->createProfileServiceWithResponse(200);
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));

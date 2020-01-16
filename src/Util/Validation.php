@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Util;
 
 class Validation
@@ -36,46 +38,7 @@ class Validation
      *
      * @throws \InvalidArgumentException
      */
-    public static function isInteger($value, $name): void
-    {
-        if (!is_integer($value)) {
-            throw new \InvalidArgumentException("{$name} must be an integer");
-        }
-    }
-
-    /**
-     * @param mixed $value
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     */
-    public static function isFloat($value, $name): void
-    {
-        if (!is_float($value)) {
-            throw new \InvalidArgumentException("{$name} must be a float");
-        }
-    }
-
-    /**
-     * @param mixed $value
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     */
-    public static function isNumeric($value, $name): void
-    {
-        if (!is_numeric($value)) {
-            throw new \InvalidArgumentException("{$name} must be numeric");
-        }
-    }
-
-    /**
-     * @param mixed $value
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     */
-    public static function notNull($value, $name): void
+    public static function notNull($value, string $name): void
     {
         if (is_null($value)) {
             throw new \InvalidArgumentException("{$name} cannot be null");
@@ -83,14 +46,13 @@ class Validation
     }
 
     /**
-     * @param mixed $value
+     * @param string $value
      * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public static function notEmptyString($value, $name): void
+    public static function notEmptyString(string $value, string $name): void
     {
-        Validation::isString($value, $name);
         if (strlen($value) === 0) {
             throw new \InvalidArgumentException("{$name} cannot be empty");
         }
@@ -103,9 +65,8 @@ class Validation
      *
      * @throws \RangeException
      */
-    public static function notGreaterThan($value, $limit, $name): void
+    public static function notGreaterThan(float $value, float $limit, string $name): void
     {
-        self::isNumeric($value, $name);
         if ($value > $limit) {
             throw new \RangeException("'{$name}' value '{$value}' is greater than '{$limit}'");
         }
@@ -118,9 +79,8 @@ class Validation
      *
      * @throws \RangeException
      */
-    public static function notLessThan($value, $limit, $name): void
+    public static function notLessThan(float $value, float $limit, string $name): void
     {
-        self::isNumeric($value, $name);
         if ($value < $limit) {
             throw new \RangeException("'{$name}' value '{$value}' is less than '{$limit}'");
         }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Service\ShareUrl;
 
 use Psr\Http\Client\ClientInterface;
@@ -84,8 +86,8 @@ class ServiceTest extends TestCase
     public function testCreateShareUrlFailure($statusCode)
     {
         $this->expectException(\Yoti\Exception\ShareUrlException::class);
-
         $this->expectExceptionMessage("Server responded with {$statusCode}");
+
         $yotiClient = $this->createServiceWithErrorResponse($statusCode);
         $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));
     }

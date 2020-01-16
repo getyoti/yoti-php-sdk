@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
 
 use Yoti\Profile\Attribute\Attribute;
@@ -23,7 +25,7 @@ class BaseProfile
      *
      * @return null|Attribute
      */
-    public function getProfileAttribute($attributeName)
+    public function getProfileAttribute(string $attributeName): ?Attribute
     {
         if (isset($this->profileData[$attributeName])) {
             $attributeObj = $this->profileData[$attributeName];
@@ -32,7 +34,7 @@ class BaseProfile
         return null;
     }
 
-    public function getAttributes()
+    public function getAttributes(): array
     {
         $attributesMap = $this->profileData;
         // Remove age_verifications

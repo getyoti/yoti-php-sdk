@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 class Attribute
@@ -33,11 +35,11 @@ class Attribute
      * Attribute constructor.
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      *
      * @param array $anchorsMap
      */
-    public function __construct($name, $value, array $anchorsMap)
+    public function __construct(string $name, $value, array $anchorsMap)
     {
         $this->name = $name;
         $this->value = $value;
@@ -50,13 +52,13 @@ class Attribute
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return null|string
+     * @return mixed
      */
     public function getValue()
     {
@@ -66,7 +68,7 @@ class Attribute
     /**
      * @return array
      */
-    public function getSources()
+    public function getSources(): array
     {
         return $this->sources;
     }
@@ -74,7 +76,7 @@ class Attribute
     /**
      * @return array
      */
-    public function getVerifiers()
+    public function getVerifiers(): array
     {
         return $this->verifiers;
     }
@@ -89,12 +91,12 @@ class Attribute
      *
      * @return array
      */
-    public function getAnchors()
+    public function getAnchors(): array
     {
         return $this->anchors;
     }
 
-    private function setSources(array $anchorsMap)
+    private function setSources(array $anchorsMap): void
     {
         $this->sources = $this->getAnchorType(
             $anchorsMap,
@@ -102,7 +104,7 @@ class Attribute
         );
     }
 
-    private function setVerifiers(array $anchorsMap)
+    private function setVerifiers(array $anchorsMap): void
     {
         $this->verifiers = $this->getAnchorType(
             $anchorsMap,
@@ -110,7 +112,7 @@ class Attribute
         );
     }
 
-    private function setAnchors(array $anchorsMap)
+    private function setAnchors(array $anchorsMap): void
     {
         // Remove Oids from the anchorsMap
         $anchors = [];
@@ -122,9 +124,10 @@ class Attribute
 
     /**
      * @param string $anchorType
+     *
      * @return array
      */
-    private function getAnchorType($anchorsMap, $anchorType)
+    private function getAnchorType($anchorsMap, $anchorType): array
     {
         return isset($anchorsMap[$anchorType]) ? $anchorsMap[$anchorType] : [];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 class MultiValue extends \ArrayObject
@@ -24,7 +26,7 @@ class MultiValue extends \ArrayObject
      *
      * @param array $items
      */
-    public function __construct($items)
+    public function __construct(array $items)
     {
         $this->originalItems = array_values($items);
         parent::__construct($this->originalItems);
@@ -34,9 +36,10 @@ class MultiValue extends \ArrayObject
      * Filters Items using callback.
      *
      * @param callable $callback
-     * @return MultiValue
+     *
+     * @return $this
      */
-    public function filter($callback)
+    public function filter(callable $callback): self
     {
         $this->assertMutable('Attempting to filter immutable array');
         $this->filters[] = $callback;
@@ -47,7 +50,7 @@ class MultiValue extends \ArrayObject
     /**
      * Apply all filters.
      */
-    private function applyFilters()
+    private function applyFilters(): void
     {
         // Only apply filters if this is mutable.
         if ($this->isImmutable) {
@@ -88,9 +91,9 @@ class MultiValue extends \ArrayObject
      *
      * @param string $type
      *
-     * @return MultiValue
+     * @return $this
      */
-    public function allowInstance($type)
+    public function allowInstance(string $type): self
     {
         return $this->filter(function ($item) use ($type) {
             return $item instanceof $type;
@@ -102,9 +105,9 @@ class MultiValue extends \ArrayObject
      *
      * @param string $type
      *
-     * @return MultiValue
+     * @return $this
      */
-    public function allowType($type)
+    public function allowType(string $type): self
     {
         return $this->filter(function ($item) use ($type) {
             return gettype($item) === $type;
@@ -114,9 +117,9 @@ class MultiValue extends \ArrayObject
     /**
      * Make this MultiValue Immutable.
      *
-     * @return MultiValue
+     * @return $this
      */
-    public function immutable()
+    public function immutable(): self
     {
         $this->isImmutable = true;
 
@@ -130,36 +133,44 @@ class MultiValue extends \ArrayObject
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws \LogicException
      */
-    public function append($value)
+    public function append($value): void
     {
         $this->assertMutable('Attempting to append to immutable array');
         parent::append($value);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws \LogicException
      */
-    public function exchangeArray($input)
+    public function exchangeArray($input): void
     {
         $this->assertMutable('Attempting to change immutable array');
         parent::exchangeArray($input);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws \LogicException
      */
-    public function offsetSet($index, $newval)
+    public function offsetSet($index, $newval): void
     {
         $this->assertMutable('Attempting to add to immutable array');
         parent::offsetSet($index, $newval);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws \LogicException
      */
-    public function offsetUnset($index)
+    public function offsetUnset($index): void
     {
         $this->assertMutable('Attempting to remove from immutable array');
         parent::offsetUnset($index);
@@ -173,7 +184,7 @@ class MultiValue extends \ArrayObject
      *
      * @throws \LogicException
      */
-    private function assertMutable($message)
+    private function assertMutable(string $message)
     {
         if ($this->isImmutable) {
             throw new \LogicException($message);

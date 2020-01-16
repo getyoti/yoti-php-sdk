@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\ExtraData;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
@@ -38,7 +40,8 @@ class AttributeDefinitionTest extends TestCase
      */
     public function testInvalidName($invalidName)
     {
-        $this->expectException(\InvalidArgumentException::class, 'name must be a string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
 
         new AttributeDefinition($invalidName);
     }

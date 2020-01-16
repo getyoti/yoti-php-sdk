@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 /**
@@ -20,9 +22,9 @@ class SourceConstraintBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\WantedAnchor anchor
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withAnchor(WantedAnchor $anchor)
+    public function withAnchor(WantedAnchor $anchor): self
     {
         $this->anchors[] = $anchor;
         return $this;
@@ -31,9 +33,9 @@ class SourceConstraintBuilder
     /**
      * @param boolean $softPreference
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withSoftPreference($softPreference = true)
+    public function withSoftPreference(bool $softPreference = true): self
     {
         $this->softPreference = $softPreference;
         return $this;
@@ -43,9 +45,9 @@ class SourceConstraintBuilder
      * @param string $value
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withAnchorByValue($value, $subType = '')
+    public function withAnchorByValue(string $value, string $subType = ''): self
     {
         $this->anchors[] = (new WantedAnchorBuilder())
             ->withValue($value)
@@ -57,9 +59,9 @@ class SourceConstraintBuilder
     /**
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withPassport($subType = '')
+    public function withPassport(string $subType = ''): self
     {
         return $this->withAnchorByValue(WantedAnchor::VALUE_PASSPORT, $subType);
     }
@@ -67,9 +69,9 @@ class SourceConstraintBuilder
     /**
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withDrivingLicence($subType = '')
+    public function withDrivingLicence(string $subType = ''): self
     {
         return $this->withAnchorByValue(WantedAnchor::VALUE_DRIVING_LICENSE, $subType);
     }
@@ -77,9 +79,9 @@ class SourceConstraintBuilder
     /**
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withNationalId($subType = '')
+    public function withNationalId(string $subType = ''): self
     {
         return $this->withAnchorByValue(WantedAnchor::VALUE_NATIONAL_ID, $subType);
     }
@@ -87,9 +89,9 @@ class SourceConstraintBuilder
     /**
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\SourceConstraintBuilder
+     * @return $this
      */
-    public function withPasscard($subType = '')
+    public function withPasscard(string $subType = ''): self
     {
         return $this->withAnchorByValue(WantedAnchor::VALUE_PASSCARD, $subType);
     }
@@ -97,7 +99,7 @@ class SourceConstraintBuilder
     /**
      * @return \Yoti\ShareUrl\Policy\SourceConstraint
      */
-    public function build()
+    public function build(): SourceConstraint
     {
         return new SourceConstraint($this->anchors, $this->softPreference);
     }

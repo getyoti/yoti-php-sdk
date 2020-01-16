@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Attribute;
 
 use Yoti\Profile\Attribute\SignedTimestamp;
@@ -10,7 +12,7 @@ use YotiTest\TestCase;
  */
 class SignedTimeStampTest extends TestCase
 {
-    const SOME_VERSION = 'some_version';
+    const SOME_VERSION = 123;
 
     /**
      * @var Yoti\Profile\Attribute\SignedTimestamp

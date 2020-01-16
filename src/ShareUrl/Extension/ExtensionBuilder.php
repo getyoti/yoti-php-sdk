@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 /**
@@ -20,9 +22,9 @@ class ExtensionBuilder
     /**
      * @param string $type
      *
-     * @return \Yoti\ShareUrl\Extension\ExtensionBuilder
+     * @return $this
      */
-    public function withType($type)
+    public function withType(string $type): self
     {
         $this->type = $type;
         return $this;
@@ -31,18 +33,18 @@ class ExtensionBuilder
     /**
      * @param mixed $content
      *
-     * @return \Yoti\ShareUrl\Extension\ExtensionBuilder
+     * @return $this
      */
-    public function withContent($content)
+    public function withContent($content): self
     {
         $this->content = $content;
         return $this;
     }
 
     /**
-     * @return \Yoti\ShareUrl\Extension\Extension
+     * @return $this
      */
-    public function build()
+    public function build(): Extension
     {
         return new Extension($this->type, $this->content);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 class SignedTimeStamp
@@ -21,10 +23,10 @@ class SignedTimeStamp
     /**
      * SignedTimeStamp constructor.
      *
-     * @param $version
+     * @param int $version
      * @param \DateTime $timestamp
      */
-    public function __construct($version, \DateTime $timestamp)
+    public function __construct(int $version, \DateTime $timestamp)
     {
         $this->version = $version;
         $this->timestamp = $timestamp;
@@ -35,7 +37,7 @@ class SignedTimeStamp
      *
      * @return \DateTime
      */
-    public function getTimestamp()
+    public function getTimestamp(): \DateTime
     {
         return $this->timestamp;
     }
@@ -43,7 +45,7 @@ class SignedTimeStamp
     /**
      * @return int
      */
-    public function getVersion()
+    public function getVersion(): int
     {
         return $this->version;
     }

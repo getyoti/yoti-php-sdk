@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Util;
 
 use Yoti\Exception\JsonException;
@@ -9,6 +11,8 @@ class Json
     /**
      * @param string $json
      * @param bool $assoc
+     *
+     * @return mixed
      */
     public static function decode($json, $assoc = true)
     {

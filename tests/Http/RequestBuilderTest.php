@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Http;
 
 use Psr\Http\Client\ClientInterface;
@@ -55,7 +57,7 @@ class RequestBuilderTest extends TestCase
         $expectedEndpointPattern = "~{$baseUrlPattern}/some-endpoint.*?nonce=.*?&timestamp=.*?~";
 
         $message = $request->getMessage();
-        $this->assertRegExp($expectedEndpointPattern, $message->getUri());
+        $this->assertRegExp($expectedEndpointPattern, (string) $message->getUri());
         $this->assertEquals('POST', $message->getMethod());
         $this->assertEquals('PHP', $message->getHeader('X-Yoti-SDK')[0]);
         $this->assertRegExp('~PHP-\d+\.\d+\.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
@@ -262,7 +264,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testWithoutMethod()
     {
-        $this->expectException(\InvalidArgumentException::class, 'HTTP Method must be specified');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('HTTP Method must be specified');
 
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
@@ -277,7 +280,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testWithUnsupportedMethod()
     {
-        $this->expectException(\InvalidArgumentException::class, 'Unsupported HTTP Method SOME_METHOD');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported HTTP Method SOME_METHOD');
 
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
@@ -293,7 +297,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testWithHeaderInvalidValue()
     {
-        $this->expectException(\InvalidArgumentException::class, 'Header value for \'Custom\' must be a string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
 
         (new RequestBuilder())
           ->withBaseUrl(self::SOME_BASE_URL)
@@ -308,10 +313,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithoutBaseUrl()
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            'Base URL must be provided to Yoti\\Http\\RequestBuilder'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Base URL must be provided to Yoti\\Http\\RequestBuilder');
 
         (new RequestBuilder())
           ->withPemFilePath(TestData::PEM_FILE)
@@ -323,10 +326,8 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildWithoutPem()
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            'Pem file must be provided to Yoti\\Http\\RequestBuilder'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Pem file must be provided to Yoti\\Http\\RequestBuilder');
 
         (new RequestBuilder())
             ->withBaseUrl(self::SOME_BASE_URL)
@@ -417,7 +418,7 @@ class RequestBuilderTest extends TestCase
         }
         $request = $requestBuilder->build();
 
-        parse_str(parse_url($request->getMessage()->getUri(), PHP_URL_QUERY), $queryParams);
+        parse_str(parse_url((string) $request->getMessage()->getUri(), PHP_URL_QUERY), $queryParams);
 
         foreach ($expectedQueryParams as $key => $value) {
             $this->assertEquals($expectedQueryParams[$key], $queryParams[$key]);

@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
 
 use Yoti\Exception\ReceiptException;
+use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\EncryptedData;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Util\PemFile;
 
 class Receipt
 {
@@ -37,37 +42,37 @@ class Receipt
         $this->receiptData = $receiptData;
     }
 
-    public function getReceiptId()
+    public function getReceiptId(): string
     {
         return $this->getAttribute(self::ATTR_RECEIPT_ID);
     }
 
-    public function getRememberMeId()
+    public function getRememberMeId(): ?string
     {
         return $this->getAttribute(self::ATTR_REMEMBER_ME_ID);
     }
 
-    public function getParentRememberMeId()
+    public function getParentRememberMeId(): ?string
     {
         return $this->getAttribute(self::ATTR_PARENT_REMEMBER_ME_ID);
     }
 
-    public function getSharingOutcome()
+    public function getSharingOutcome(): string
     {
         return $this->getAttribute(self::ATTR_SHARING_OUT_COME);
     }
 
-    public function getWrappedReceiptKey()
+    public function getWrappedReceiptKey(): string
     {
         return $this->getAttribute(self::ATTR_WRAPPED_RECEIPT_KEY);
     }
 
-    public function getTimestamp()
+    public function getTimestamp(): string
     {
         return $this->getAttribute(self::ATTR_TIMESTAMP);
     }
 
-    public function getAttribute($attributeName)
+    public function getAttribute(string $attributeName)
     {
         if (!empty($attributeName) && isset($this->receiptData[$attributeName])) {
             return $this->receiptData[$attributeName];
@@ -78,28 +83,30 @@ class Receipt
     /**
      * Return Protobuf Attributes List.
      *
-     * @param $attributeName
-     * @param $pem
+     * @param string $attributeName
+     * @param \Yoti\Util\PemFile $pem
      *
      * @return \Yoti\Protobuf\Attrpubapi\AttributeList
      */
-    public function parseAttribute($attributeName, $pem)
+    public function parseAttribute(string $attributeName, PemFile $pemFile): AttributeList
     {
-        $attributeList = new \Yoti\Protobuf\Attrpubapi\AttributeList();
+        $attributeList = new AttributeList();
         $attributeList->mergeFromString(
-            $this->decryptAttribute($attributeName, $pem)
+            $this->decryptAttribute($attributeName, $pemFile)
         );
 
         return $attributeList;
     }
 
     /**
+     * @param \Yoti\Util\PemFile $pem
+     *
      * @return \Yoti\Profile\ExtraData\ExtraData
      */
-    public function parseExtraData($pem)
+    public function parseExtraData(PemFile $pemFile): ExtraData
     {
         return ExtraDataConverter::convertValue(
-            $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pem)
+            $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pemFile)
         );
     }
 
@@ -109,14 +116,22 @@ class Receipt
      * @param string $attributeName
      * @param string $pem
      *
-     * @return string
+     * @return string|null
+     *
+     * @throws \Yoti\Exception\EncryptedDataException
      */
-    private function decryptAttribute($attributeName, $pem)
+    private function decryptAttribute(string $attributeName, PemFile $pemFile): ?string
     {
+        $encryptedData = $this->getAttribute($attributeName);
+
+        if ($encryptedData == null) {
+            return null;
+        }
+
         return EncryptedData::decrypt(
-            $this->getAttribute($attributeName),
+            $encryptedData,
             $this->getWrappedReceiptKey(),
-            $pem
+            $pemFile
         );
     }
 
@@ -125,7 +140,7 @@ class Receipt
      *
      * @throws ReceiptException
      */
-    private function validateReceipt(array $receiptData)
+    private function validateReceipt(array $receiptData): void
     {
         if (!isset($receiptData[self::ATTR_WRAPPED_RECEIPT_KEY])) {
             throw new ReceiptException('Wrapped Receipt key attr is missing');

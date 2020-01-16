@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl;
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
@@ -91,7 +93,8 @@ class DynamicScenarioBuilderTest extends TestCase
      */
     public function testBuildWithoutCallback()
     {
-        $this->expectException(\InvalidArgumentException::class, 'callbackEndpoint must be a string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
 
         (new DynamicScenarioBuilder())
             ->withPolicy($this->createMock(DynamicPolicy::class))

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
@@ -28,9 +30,9 @@ class ThirdPartyAttributeExtensionBuilder
     /**
      * @param \DateTime $expiryDate
      *
-     * @return \Yoti\ShareUrl\Extension\ThirdPartyAttributeExtensionBuilder
+     * @return $this
      */
-    public function withExpiryDate($expiryDate)
+    public function withExpiryDate(\DateTime $expiryDate): self
     {
         $this->expiryDate = $expiryDate;
         return $this;
@@ -39,11 +41,10 @@ class ThirdPartyAttributeExtensionBuilder
     /**
      * @param string $definition
      *
-     * @return \Yoti\ShareUrl\Extension\ThirdPartyAttributeExtensionBuilder
+     * @return $this
      */
-    public function withDefinition($definition)
+    public function withDefinition(string $definition): self
     {
-        Validation::isString($definition, 'definition');
         $this->definitions[] = new AttributeDefinition($definition);
         return $this;
     }
@@ -51,9 +52,9 @@ class ThirdPartyAttributeExtensionBuilder
     /**
      * @param string $definition
      *
-     * @return \Yoti\ShareUrl\Extension\ThirdPartyAttributeExtensionBuilder
+     * @return $this
      */
-    public function withDefinitions($definitions)
+    public function withDefinitions(array $definitions): self
     {
         Validation::isArrayOfStrings($definitions, 'definitions');
         $this->definitions = array_map(
@@ -68,7 +69,7 @@ class ThirdPartyAttributeExtensionBuilder
     /**
      * @return \Yoti\ShareUrl\Extension\Extension
      */
-    public function build()
+    public function build(): Extension
     {
         return new Extension(
             self::THIRD_PARTY_ATTRIBUTE,

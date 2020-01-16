@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\ExtraData;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
@@ -78,7 +80,7 @@ class AttributeIssuanceDetailsTest extends TestCase
      */
     public function testInvalidToken($invalidToken)
     {
-        $this->expectException(\InvalidArgumentException::class, 'token must be a string');
+        $this->expectException(\TypeError::class, 'must be of the type string');
 
         new AttributeIssuanceDetails($invalidToken);
     }

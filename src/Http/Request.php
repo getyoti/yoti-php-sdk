@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Yoti\Exception\RequestException;
 
 class Request
@@ -42,7 +45,7 @@ class Request
     /**
      * @return \Psr\Http\Message\RequestInterface
      */
-    public function getMessage()
+    public function getMessage(): RequestInterface
     {
         return $this->message;
     }
@@ -52,7 +55,7 @@ class Request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function execute()
+    public function execute(): ResponseInterface
     {
         return $this->client->sendRequest($this->getMessage());
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Util;
 
 use Yoti\Exception\DateTimeException;
@@ -28,7 +30,7 @@ class DateTime
                 new \DateTimeZone("UTC")
             );
         } catch (\Exception $e) {
-            throw new DateTimeException('Could not parse string to DateTime', null, $e);
+            throw new DateTimeException('Could not parse string to DateTime', 0, $e);
         }
     }
 }

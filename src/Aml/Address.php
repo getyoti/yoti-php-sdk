@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Aml;
 
 class Address implements \JsonSerializable
@@ -23,7 +25,7 @@ class Address implements \JsonSerializable
      * @param \Yoti\Aml\Country $country
      * @param null|string $postcode
      */
-    public function __construct(Country $country, string $postcode = null)
+    public function __construct(Country $country, ?string $postcode = null)
     {
         $this->country = $country;
         $this->postcode = $postcode;
@@ -40,7 +42,7 @@ class Address implements \JsonSerializable
     /**
      * @return null|string
      */
-    public function getPostcode(): string
+    public function getPostcode(): ?string
     {
         return $this->postcode;
     }

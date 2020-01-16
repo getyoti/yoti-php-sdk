@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Util\ExtraData;
 
 use Yoti\Exception\ExtraDataException;
@@ -16,7 +18,7 @@ class ThirdPartyAttributeConverter
      *
      * @return \Yoti\Profile\ExtraData\AttributeIssuanceDetails
      */
-    public static function convertValue($value)
+    public static function convertValue(string $value): AttributeIssuanceDetails
     {
         $thirdPartyAttributeProto = new ThirdPartyAttribute();
         $thirdPartyAttributeProto->mergeFromString($value);
@@ -58,7 +60,7 @@ class ThirdPartyAttributeConverter
      *
      * @throws \Yoti\Exception\ExtraDataException
      */
-    private static function parseToken($token)
+    private static function parseToken(string $token)
     {
         if (empty($token)) {
             throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Media;
 
 use Yoti\Exception\AttributeException;
@@ -40,20 +42,20 @@ class Image
      * @param string $content
      * @param string $imageExtension
      */
-    public function __construct($content, $imageExtension)
+    public function __construct(string $content, string $imageExtension)
     {
         $this->content = $content;
         $this->mimeType = $this->imageTypeToMimeType(strtolower($imageExtension));
     }
 
     /**
-     * @param $imageExtension
+     * @param string $imageExtension
      *
      * @return string
      *
      * @throws AttributeException
      */
-    private function imageTypeToMimeType($imageExtension)
+    private function imageTypeToMimeType(string $imageExtension): string
     {
         $this->validateImageExtension($imageExtension);
         $imageTypeEnum = $this->imageTypeMap[$imageExtension];
@@ -66,7 +68,7 @@ class Image
      *
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -74,15 +76,15 @@ class Image
     /**
      * @return string
      */
-    public function getMimeType()
+    public function getMimeType(): string
     {
         return $this->mimeType;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getBase64Content()
+    public function getBase64Content(): string
     {
         $data = base64_encode($this->content);
         return "data:{$this->mimeType};base64,{$data}";
@@ -91,9 +93,9 @@ class Image
     /**
      * @param $imageExtension
      *
-     * @throws AttributeException
+     * @throws \Yoti\Exception\AttributeException
      */
-    private function validateImageExtension($imageExtension)
+    private function validateImageExtension($imageExtension): void
     {
         if (!isset($this->imageTypeMap[$imageExtension])) {
             throw new InvalidImageTypeException("{$imageExtension} extension not supported");
@@ -105,7 +107,7 @@ class Image
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->content;
     }
