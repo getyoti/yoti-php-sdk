@@ -11,6 +11,8 @@
 /.travis.yml export-ignore
 /sonar-project.properties export-ignore
 /.dependabot export-ignore
+/phpstan.neon.dist export-ignore
+/phpstan-ignore.neon export-ignore
 
 # Auto detect text files and perform LF normalization
 * text=auto
