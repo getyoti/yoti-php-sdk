@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -22,7 +23,7 @@ class DynamicPolicy implements \JsonSerializable
     private $wantedAuthTypes;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $wantedRememberMe;
 
@@ -31,7 +32,7 @@ class DynamicPolicy implements \JsonSerializable
      *   Array of attributes to be requested.
      * @param int[] $wantedAuthTypes
      *   Auth types represents the authentication type to be used.
-     * @param boolean $wantedRememberMe
+     * @param bool $wantedRememberMe
      */
     public function __construct(
         array $wantedAttributes,
@@ -41,12 +42,8 @@ class DynamicPolicy implements \JsonSerializable
         Validation::isArrayOfType($wantedAttributes, [WantedAttribute::class], 'wantedAttributes');
         $this->wantedAttributes = $wantedAttributes;
 
-        if ($wantedAuthTypes) {
-            Validation::isArrayOfIntegers($wantedAuthTypes, 'wantedAuthTypes');
-            $this->wantedAuthTypes = $wantedAuthTypes;
-        } else {
-            $this->wantedAuthTypes = [];
-        }
+        Validation::isArrayOfIntegers($wantedAuthTypes, 'wantedAuthTypes');
+        $this->wantedAuthTypes = $wantedAuthTypes;
 
         $this->wantedRememberMe = $wantedRememberMe;
     }
@@ -54,7 +51,7 @@ class DynamicPolicy implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -71,6 +68,6 @@ class DynamicPolicy implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

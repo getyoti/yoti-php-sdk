@@ -20,12 +20,12 @@ use Yoti\Util\PemFile;
 class ActivityDetails
 {
     /**
-     * @var string receipt identifier
+     * @var string|null receipt identifier
      */
     private $rememberMeId;
 
     /**
-     * @var string parent receipt identifier
+     * @var string|null parent receipt identifier
      */
     private $parentRememberMeId;
 
@@ -119,6 +119,11 @@ class ActivityDetails
         );
     }
 
+    /**
+     * @param \Yoti\Protobuf\Attrpubapi\AttributeList $protobufAttributesList
+     *
+     * @return array<string, \Yoti\Profile\Attribute\Attribute>
+     */
     private function processUserProfileAttributes(AttributeList $protobufAttributesList): array
     {
         $attributesMap = AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList);
@@ -130,7 +135,7 @@ class ActivityDetails
     /**
      * Add age_verifications data to the attributesMap
      *
-     * @param array $attributesMap
+     * @param array<string, \Yoti\Profile\Attribute\Attribute> $attributesMap
      */
     private function appendAgeVerifications(array &$attributesMap): void
     {

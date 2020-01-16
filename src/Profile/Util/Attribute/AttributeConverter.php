@@ -13,6 +13,7 @@ use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\Profile;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Util\DateTime;
+use Yoti\Util\Json;
 
 class AttributeConverter
 {
@@ -26,9 +27,10 @@ class AttributeConverter
     const CONTENT_TYPE_INT = 7;
 
     /**
-     * @param mixed $attribute
+     * @param mixed $value
+     * @param string $attrName
      *
-     * @return string|int|DocumentDetails|Image|MultiValue
+     * @return mixed
      *
      * @throws \Yoti\Exception\AttributeException
      */
@@ -55,7 +57,7 @@ class AttributeConverter
      * @param string $value
      * @param int $contentType
      *
-     * @return string|int|DocumentDetails|Image|MultiValue
+     * @return mixed
      *
      * @throws AttributeException
      */
@@ -73,11 +75,7 @@ class AttributeConverter
 
             case self::CONTENT_TYPE_JSON:
                 // Convert JSON string to an array
-                $value = json_decode($value, true);
-                if (json_last_error()) {
-                    throw new AttributeException("Error converting attr to a JSON Object");
-                }
-                return $value;
+                return Json::decode($value);
 
             case self::CONTENT_TYPE_DATE:
                 return DateTime::stringToDateTime($value);
@@ -127,8 +125,6 @@ class AttributeConverter
      */
     private static function imageTypeToExtension(int $type): string
     {
-        $type = (int)$type;
-
         switch ($type) {
             case 2:
                 $format = 'JPEG';
@@ -158,7 +154,7 @@ class AttributeConverter
         // Application Logo can be empty, return NULL when this occurs.
         if (
             $protobufAttribute->getName() == ApplicationProfile::ATTR_APPLICATION_LOGO &&
-            empty($protobufAttribute->getValue())
+            strlen($protobufAttribute->getValue()) === 0
         ) {
             return $yotiAttribute;
         }

@@ -6,6 +6,7 @@ namespace Yoti\ShareUrl;
 
 use Yoti\ShareUrl\Extension\Extension;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
+use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
 /**
@@ -50,7 +51,7 @@ class DynamicScenario implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -66,6 +67,6 @@ class DynamicScenario implements \JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode($this);
+        return Json::encode($this);
     }
 }

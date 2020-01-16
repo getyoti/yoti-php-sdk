@@ -46,10 +46,8 @@ class SandboxClient
      *   PEM file path or string
      * @param \YotiSandbox\Http\SandboxPathManager $sandboxPathManager
      *   Sandbox path configuration
-     * @param array $options (optional)
+     * @param array<string, mixed> $options (optional)
      *   SDK configuration options - {@see \Yoti\Util\Config} for available options.
-     *
-     * @throws \Yoti\Exception\RequestException
      */
     public function __construct(
         string $sdkId,
@@ -67,9 +65,6 @@ class SandboxClient
      * @param \YotiSandbox\Http\TokenRequest $tokenRequest
      *
      * @return string
-     *
-     * @throws Exception\ResponseException
-     * @throws \Yoti\Exception\RequestException
      */
     public function getToken(TokenRequest $tokenRequest): string
     {
@@ -86,9 +81,7 @@ class SandboxClient
      * @param string $endpoint
      * @param string $httpMethod
      *
-     * @return array
-     *
-     * @throws \Yoti\Exception\RequestException
+     * @return \Psr\Http\Message\ResponseInterface
      */
     private function sendRequest(Payload $payload, string $endpoint, string $httpMethod): ResponseInterface
     {

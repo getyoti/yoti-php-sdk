@@ -12,7 +12,7 @@ class AgeVerification
     private $age;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $result;
 
@@ -58,7 +58,7 @@ class AgeVerification
     /**
      * Whether or not the profile passed the age check.
      *
-     * @return boolean $result
+     * @return bool $result
      */
     public function getResult(): bool
     {

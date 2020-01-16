@@ -42,7 +42,7 @@ class ExtensionBuilder
     }
 
     /**
-     * @return $this
+     * @return \Yoti\ShareUrl\Extension\Extension
      */
     public function build(): Extension
     {

@@ -32,19 +32,19 @@ class DynamicPolicyBuilder
     private $wantedAuthTypes = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $wantedRememberMe = false;
 
     /**
-     * @param \Yoti\ShareUrl\Policy\WantedAttribute wantedAttribute
+     * @param \Yoti\ShareUrl\Policy\WantedAttribute $wantedAttribute
      *
      * @return $this
      */
     public function withWantedAttribute(WantedAttribute $wantedAttribute): self
     {
         $key = $wantedAttribute->getName();
-        if ($wantedAttribute->getDerivation()) {
+        if ($wantedAttribute->getDerivation() !== null) {
             $key = $wantedAttribute->getDerivation();
         }
 
@@ -55,7 +55,7 @@ class DynamicPolicyBuilder
     /**
      * @param string $name
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -80,7 +80,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -95,7 +95,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return self
      */
@@ -110,7 +110,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return self
      */
@@ -125,7 +125,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -141,7 +141,7 @@ class DynamicPolicyBuilder
     /**
      * @param int $age
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -157,7 +157,7 @@ class DynamicPolicyBuilder
     /**
      * @param int $age
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -173,7 +173,7 @@ class DynamicPolicyBuilder
     /**
      * @param string $derivation
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -196,7 +196,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -211,7 +211,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -226,7 +226,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -241,7 +241,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -256,7 +256,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -271,7 +271,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -286,7 +286,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -301,7 +301,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -316,7 +316,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
-     * @param boolean $acceptSelfAsserted
+     * @param bool $acceptSelfAsserted
      *
      * @return $this
      */
@@ -330,7 +330,7 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return $this
      */
@@ -340,7 +340,7 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return $this
      */
@@ -351,7 +351,7 @@ class DynamicPolicyBuilder
 
     /**
      * @param int $wantedAuthType
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return $this
      */
@@ -367,7 +367,7 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * @param boolean $wantedRememberMe
+     * @param bool $wantedRememberMe
      *
      * @return $this
      */
@@ -385,8 +385,7 @@ class DynamicPolicyBuilder
         return new DynamicPolicy(
             array_values($this->wantedAttributes),
             array_values($this->wantedAuthTypes),
-            $this->wantedRememberMe,
-            false
+            $this->wantedRememberMe
         );
     }
 }

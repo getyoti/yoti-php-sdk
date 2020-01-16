@@ -29,12 +29,13 @@ class ExtraData
     {
         $attributeIssuanceDetailsList = array_filter(
             $dataEntryList,
-            function ($dataEntry) {
+            function ($dataEntry): bool {
                 return $dataEntry instanceof AttributeIssuanceDetails;
             }
         );
 
-        $this->attributeIssuanceDetails = reset($attributeIssuanceDetailsList) ?: null;
+        $firstItem = reset($attributeIssuanceDetailsList);
+        $this->attributeIssuanceDetails = $firstItem === false ? null : $firstItem;
     }
 
     /**

@@ -33,12 +33,12 @@ class RequestBuilder
     private $pemFile;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $headers = [];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $queryParams = [];
 
@@ -68,7 +68,7 @@ class RequestBuilder
     private $config;
 
     /**
-     * @param Yoti\Util\Config $config
+     * @param \Yoti\Util\Config $config
      */
     public function __construct(Config $config = null)
     {
@@ -206,7 +206,7 @@ class RequestBuilder
     /**
      * Return the request headers including defaults.
      *
-     * @return array
+     * @return array<string, string>
      */
     private function getHeaders(): array
     {
@@ -232,7 +232,7 @@ class RequestBuilder
      */
     private function validateMethod(): void
     {
-        if (empty($this->method)) {
+        if (!isset($this->method)) {
             throw new \InvalidArgumentException('HTTP Method must be specified');
         }
 
@@ -250,18 +250,6 @@ class RequestBuilder
             )
         ) {
             throw new \InvalidArgumentException("Unsupported HTTP Method {$this->method}");
-        }
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    private function validateHeaders(): void
-    {
-        foreach ($this->headers as $name => $value) {
-            if (!is_string($value)) {
-                throw new \InvalidArgumentException("Header value for '{$name}' must be a string");
-            }
         }
     }
 
@@ -294,20 +282,19 @@ class RequestBuilder
     /**
      * @return \Yoti\Http\Request
      *
-     * @throws \Yoti\Exception\RequestException
+     * @throws \InvalidArgumentException
      */
     public function build(): Request
     {
-        if (empty($this->baseUrl)) {
+        if (!isset($this->baseUrl)) {
             throw new \InvalidArgumentException('Base URL must be provided to ' . __CLASS__);
         }
 
-        if (!$this->pemFile instanceof PemFile) {
+        if (!isset($this->pemFile)) {
             throw new \InvalidArgumentException('Pem file must be provided to ' . __CLASS__);
         }
 
         $this->validateMethod();
-        $this->validateHeaders();
 
         // Add nonce and timestamp to the URL.
         $this
@@ -329,7 +316,7 @@ class RequestBuilder
             $this->method,
             uri_for($url),
             $this->getHeaders(),
-            $this->payload ? $this->payload->toStream() : null
+            isset($this->payload) ? $this->payload->toStream() : null
         );
 
         $client = $this->client ?? $this->config->getHttpClient() ?? new Client();

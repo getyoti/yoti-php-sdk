@@ -60,9 +60,6 @@ class Service
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
-        if (!$token) {
-            throw new ActivityDetailsException('Could not decrypt connect token.');
-        }
 
         // Request endpoint
         $response = (new RequestBuilder($this->config))
@@ -99,18 +96,26 @@ class Service
      *
      * @param string $encryptedConnectToken
      *
-     * @return string|null
+     * @return string
      */
-    private function decryptConnectToken(string $encryptedConnectToken): ?string
+    private function decryptConnectToken(string $encryptedConnectToken): string
     {
-        $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
+        $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='), true);
+        if ($tok === false) {
+            throw new ActivityDetailsException('Could not decode encrypted token.');
+        }
+
         openssl_private_decrypt($tok, $token, (string) $this->pemFile);
+
+        if (!isset($token) || strlen($token) === 0) {
+            throw new ActivityDetailsException('Could not decrypt connect token.');
+        }
 
         return $token;
     }
 
     /**
-     * @param array $response
+     * @param array<string, mixed> $responseArr
      *
      * @throws \Yoti\Exception\ReceiptException
      */

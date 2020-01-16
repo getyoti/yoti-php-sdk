@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Aml;
 
 use Yoti\Exception\AmlException;
+use Yoti\Util\Json;
 
 class Result
 {
@@ -36,14 +37,14 @@ class Result
     /**
      * Raw result.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     private $rawResult;
 
     /**
      * AmlResult constructor.
      *
-     * @param array $result
+     * @param array<string, bool> $result
      *
      * @throws \Yoti\Exception\AmlException
      */
@@ -102,7 +103,7 @@ class Result
     /**
      * Check if all the attributes are included in the result.
      *
-     * @param array $result
+     * @param array<string, bool> $result
      *
      * @throws \Yoti\Exception\AmlException
      */
@@ -117,7 +118,7 @@ class Result
         $missingAttr = array_diff($expectedAttributes, $providedAttributes);
 
         // Throw an error if any expected attribute is missing.
-        if (!empty($missingAttr)) {
+        if (count($missingAttr) > 0) {
             throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr));
         }
     }
@@ -129,6 +130,6 @@ class Result
      */
     public function __toString(): string
     {
-        return json_encode($this->rawResult);
+        return Json::encode($this->rawResult);
     }
 }

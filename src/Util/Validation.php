@@ -59,8 +59,8 @@ class Validation
     }
 
     /**
-     * @param int|float $value
-     * @param int|float $limit
+     * @param float $value
+     * @param float $limit
      * @param string $name
      *
      * @throws \RangeException
@@ -73,8 +73,8 @@ class Validation
     }
 
     /**
-     * @param int|float $value
-     * @param int|float $limit
+     * @param float $value
+     * @param float $limit
      * @param string $name
      *
      * @throws \RangeException
@@ -87,9 +87,9 @@ class Validation
     }
 
     /**
-     * @param int|float $value
-     * @param int|float $minLimit
-     * @param int|float $maxLimit
+     * @param float $value
+     * @param float $minLimit
+     * @param float $maxLimit
      * @param string $name
      *
      * @throws \RangeException
@@ -101,12 +101,12 @@ class Validation
     }
 
     /**
-     * @param array $values
+     * @param mixed[] $values
      * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfIntegers(array $values, $name): void
+    public static function isArrayOfIntegers(array $values, string $name): void
     {
         foreach ($values as $value) {
             if (!is_integer($value)) {
@@ -119,12 +119,12 @@ class Validation
     }
 
     /**
-     * @param array $values
+     * @param mixed[] $values
      * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfStrings(array $values, $name): void
+    public static function isArrayOfStrings(array $values, string $name): void
     {
         foreach ($values as $value) {
             if (!is_string($value)) {
@@ -137,13 +137,13 @@ class Validation
     }
 
     /**
-     * @param array $values
-     * @param array $types
+     * @param mixed[] $values
+     * @param string[] $types
      * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public static function isArrayOfType(array $values, array $types, $name): void
+    public static function isArrayOfType(array $values, array $types, string $name): void
     {
         foreach ($values as $value) {
             if (!self::isOneOfType($value, $types)) {
@@ -158,9 +158,9 @@ class Validation
 
     /**
      * @param mixed $value
-     * @param array $types
+     * @param string[] $types
      *
-     * @return boolean
+     * @return bool
      */
     private static function isOneOfType($value, array $types): bool
     {

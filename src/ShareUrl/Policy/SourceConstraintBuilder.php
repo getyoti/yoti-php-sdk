@@ -15,12 +15,12 @@ class SourceConstraintBuilder
     private $anchors = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $softPreference = false;
 
     /**
-     * @param \Yoti\ShareUrl\Policy\WantedAnchor anchor
+     * @param \Yoti\ShareUrl\Policy\WantedAnchor $anchor
      *
      * @return $this
      */
@@ -31,7 +31,7 @@ class SourceConstraintBuilder
     }
 
     /**
-     * @param boolean $softPreference
+     * @param bool $softPreference
      *
      * @return $this
      */

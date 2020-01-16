@@ -15,29 +15,29 @@ class LocationConstraintExtensionBuilder
     const LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
 
     /**
-     * @var int|float
+     * @var float
      */
     private $latitude;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $longitude;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $radius = 150;
 
     /**
-     * @var int|float
+     * @var float
      */
     private $maxUncertainty = 150;
 
     /**
      * Allows you to specify the Latitude of the user's expected location
      *
-     * @param int|float $latitude
+     * @param float $latitude
      *
      * @return $this
      */
@@ -50,7 +50,7 @@ class LocationConstraintExtensionBuilder
     /**
      * Allows you to specify the Longitude of the user's expected location
      *
-     * @param int|float $longitude
+     * @param float $longitude
      *
      * @return $this
      */
@@ -66,7 +66,7 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param int|float $radius
+     * @param float $radius
      *   The allowable distance, in metres, from the given lat/long location
      *
      * @return $this
@@ -83,7 +83,7 @@ class LocationConstraintExtensionBuilder
      *
      * If not provided, a default value of 150m will be used.
      *
-     * @param int|float $maxUncertainty
+     * @param float $maxUncertainty
      *   Maximum allowed measurement uncertainty, in metres
      *
      * @return $this

@@ -122,7 +122,7 @@ class ServiceTest extends TestCase
     public function testInvalidConnectToken()
     {
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage('Could not decrypt connect token');
+        $this->expectExceptionMessage('Could not decode encrypted token');
 
         $profileService = new Service(
             TestData::SDK_ID,

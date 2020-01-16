@@ -23,7 +23,7 @@ class Result
     private $refId;
 
     /**
-     * @param array $result
+     * @param array<string, string> $result
      */
     public function __construct(array $result)
     {
@@ -32,7 +32,7 @@ class Result
     }
 
     /**
-     * @param array $result
+     * @param array<string, string> $result
      * @param string $key
      *
      * @return string
@@ -41,7 +41,7 @@ class Result
      */
     private function getResultValue(array $result, string $key): string
     {
-        if (empty($result[$key])) {
+        if (!isset($result[$key])) {
             throw new ShareUrlException("JSON result does not contain '{$key}'");
         }
         Validation::isString($result[$key], $key);
