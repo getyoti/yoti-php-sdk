@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Attribute;
 
 use Yoti\Media\Image;
@@ -128,7 +130,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableFilter()
     {
-        $this->expectException(\LogicException::class, 'Attempting to filter immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to filter immutable array');
 
         $this->multiValue->immutable()->filter(function ($item) {
             return $item instanceof MultiValue;
@@ -143,7 +146,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableAllowType()
     {
-        $this->expectException(\LogicException::class, 'Attempting to filter immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to filter immutable array');
 
         $this->multiValue->immutable()->allowType('string');
     }
@@ -156,7 +160,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableAllowInstance()
     {
-        $this->expectException(\LogicException::class, 'Attempting to filter immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to filter immutable array');
 
         $this->multiValue->immutable()->allowInstance(Image::class);
     }
@@ -169,7 +174,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableAppend()
     {
-        $this->expectException(\LogicException::class, 'Attempting to append to immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to append to immutable array');
 
         $this->multiValue->append('allowed');
         $this->assertEquals('allowed', $this->multiValue[8]);
@@ -184,7 +190,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableExchangeArray()
     {
-        $this->expectException(\LogicException::class, 'Attempting to change immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to change immutable array');
 
         $this->multiValue->exchangeArray([]);
         $this->assertEquals([], $this->multiValue->getArrayCopy());
@@ -198,7 +205,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableOffsetSet()
     {
-        $this->expectException(\LogicException::class, 'Attempting to add to immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to add to immutable array');
 
         $this->multiValue[0] = 'allowed';
         $this->assertEquals('allowed', $this->multiValue[0]);
@@ -213,7 +221,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableOffsetUnset()
     {
-        $this->expectException(\LogicException::class, 'Attempting to remove from immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to remove from immutable array');
 
         unset($this->multiValue[0]);
         $this->assertFalse(isset($this->multiValue[0]));
@@ -228,7 +237,8 @@ class MultiValueTest extends TestCase
      */
     public function testImmutableOffsetUnsetNested()
     {
-        $this->expectException(\LogicException::class, 'Attempting to remove from immutable array');
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Attempting to remove from immutable array');
 
         unset($this->multiValue->immutable()[6][0]);
     }

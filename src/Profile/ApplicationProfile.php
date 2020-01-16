@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
+
+use Yoti\Profile\Attribute\Attribute;
 
 /**
  * Profile of an application with convenience methods to access well-known attributes.
@@ -17,7 +21,7 @@ class ApplicationProfile extends BaseProfile
      *
      * @return null|Attribute
      */
-    public function getApplicationName()
+    public function getApplicationName(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_APPLICATION_NAME);
     }
@@ -27,7 +31,7 @@ class ApplicationProfile extends BaseProfile
      *
      * @return null|Attribute
      */
-    public function getApplicationUrl()
+    public function getApplicationUrl(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_APPLICATION_URL);
     }
@@ -38,7 +42,7 @@ class ApplicationProfile extends BaseProfile
      * @return null|Attribute
      *   The Attribute value will be of type Yoti\Media\Image
      */
-    public function getApplicationLogo()
+    public function getApplicationLogo(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_APPLICATION_LOGO);
     }
@@ -49,7 +53,7 @@ class ApplicationProfile extends BaseProfile
      *
      * @return null|Attribute
      */
-    public function getApplicationReceiptBgColor()
+    public function getApplicationReceiptBgColor(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_APPLICATION_RECEIPT_BG_COLOR);
     }

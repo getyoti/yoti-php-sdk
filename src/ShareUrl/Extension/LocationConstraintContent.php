@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Util\Validation;
@@ -41,7 +43,7 @@ class LocationConstraintContent implements \JsonSerializable
      *   Maximum acceptable distance, in metres, of the area of
      *   uncertainty associated with the device location coordinates.
      */
-    public function __construct($latitude, $longitude, $radius, $maxUncertainty)
+    public function __construct(float $latitude, float $longitude, float $radius, float $maxUncertainty)
     {
         Validation::withinRange($latitude, -90, 90, 'latitude');
         $this->latitude = $latitude;
@@ -61,7 +63,7 @@ class LocationConstraintContent implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'expected_device_location' => [
@@ -76,7 +78,7 @@ class LocationConstraintContent implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

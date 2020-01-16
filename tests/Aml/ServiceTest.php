@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Aml;
 
 use Psr\Http\Client\ClientInterface;
@@ -81,8 +83,8 @@ class ServiceTest extends TestCase
     public function testPerformAmlCheckFailure($statusCode)
     {
         $this->expectException(\Yoti\Exception\AmlException::class);
-
         $this->expectExceptionMessage("Server responded with {$statusCode}");
+
         $amlService = $this->createServiceWithErrorResponse($statusCode);
         $amlService->performCheck($this->createMock(Profile::class));
     }
@@ -96,7 +98,8 @@ class ServiceTest extends TestCase
      */
     public function testPerformAmlCheckFailureWithErrorMessage($statusCode)
     {
-        $this->expectException(\Yoti\Exception\AmlException::class, 'Error - some property: some message');
+        $this->expectException(\Yoti\Exception\AmlException::class);
+        $this->expectExceptionMessage('Error - some property: some message');
 
         $amlService = $this->createServiceWithErrorResponse(
             $statusCode,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Attribute;
 
 class AgeVerification
@@ -24,7 +26,7 @@ class AgeVerification
      */
     private $derivedAttribute;
 
-    public function __construct(Attribute $derivedAttribute, $checkType, $age, $result)
+    public function __construct(Attribute $derivedAttribute, string $checkType, int $age, bool $result)
     {
         $this->age = $age;
         $this->result = $result;
@@ -38,7 +40,7 @@ class AgeVerification
      *
      * @return string $checkType
      */
-    public function getCheckType()
+    public function getCheckType(): string
     {
         return $this->checkType;
     }
@@ -48,7 +50,7 @@ class AgeVerification
      *
      * @return int $age
      */
-    public function getAge()
+    public function getAge(): int
     {
         return $this->age;
     }
@@ -58,7 +60,7 @@ class AgeVerification
      *
      * @return boolean $result
      */
-    public function getResult()
+    public function getResult(): bool
     {
         return $this->result;
     }
@@ -68,7 +70,7 @@ class AgeVerification
      *
      * @return \Yoti\Profile\Attribute\Attribute
      */
-    public function getAttribute()
+    public function getAttribute(): Attribute
     {
         return $this->derivedAttribute;
     }

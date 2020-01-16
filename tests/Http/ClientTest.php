@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Http;
 
 use GuzzleHttp\Exception\ConnectException;
@@ -84,7 +86,8 @@ class ClientTest extends TestCase
      */
     public function testSendRequestThrowsException($guzzleException, $expectedException)
     {
-        $this->expectException($expectedException, $guzzleException->getMessage());
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($guzzleException->getMessage());
         $this->sendRequestAndThrow($guzzleException);
     }
 

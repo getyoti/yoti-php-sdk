@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Http;
 
 use GuzzleHttp\Exception\ConnectException as GuzzleConnectException;
@@ -46,11 +48,11 @@ class Client implements ClientInterface
         try {
             return $this->httpClient->send($request);
         } catch (GuzzleConnectException $e) {
-            throw new NetworkException($e->getMessage(), $request, null, $e);
+            throw new NetworkException($e->getMessage(), $request, $e);
         } catch (GuzzleRequestException $e) {
-            throw new RequestException($e->getMessage(), $request, null, $e);
+            throw new RequestException($e->getMessage(), $request, $e);
         } catch (GuzzleException $e) {
-            throw new ClientException($e->getMessage(), null, $e);
+            throw new ClientException($e->getMessage(), 0, $e);
         }
     }
 }

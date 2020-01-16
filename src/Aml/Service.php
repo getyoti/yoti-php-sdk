@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Aml;
 
 use Psr\Http\Message\ResponseInterface;
@@ -62,7 +64,7 @@ class Service
         $this->validateAmlResult($response);
 
         // Set and return result
-        return new Result(Json::decode($response->getBody()));
+        return new Result(Json::decode((string) $response->getBody()));
     }
 
     /**
@@ -82,7 +84,7 @@ class Service
             return;
         }
 
-        $responseArr = Json::decode($response->getBody());
+        $responseArr = Json::decode((string) $response->getBody());
 
         $errorMessage = $this->getErrorMessage($responseArr);
         $errorCode = isset($responseArr['code']) ? $responseArr['code'] : 'Error';

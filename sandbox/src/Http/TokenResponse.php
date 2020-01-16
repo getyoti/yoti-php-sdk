@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiSandbox\Http;
 
 use Psr\Http\Message\ResponseInterface;
+use Yoti\Util\Json;
 use YotiSandbox\Exception\ResponseException;
 
 class TokenResponse
@@ -28,7 +31,7 @@ class TokenResponse
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -40,15 +43,12 @@ class TokenResponse
      *
      * @throws ResponseException
      */
-    private function processData(ResponseInterface $response)
+    private function processData(ResponseInterface $response): array
     {
         $this->checkResponseStatus($response->getStatusCode());
 
-        // Get decoded response data
-        $responseJSON = $response->getBody();
-
-        $responseArr = json_decode($responseJSON, true);
-        $this->checkJsonError();
+        // Get decoded response data.
+        $responseArr = Json::decode((string) $response->getBody(), true);
 
         if (!isset($responseArr['token'])) {
             throw new ResponseException('Token key is missing', 404);
@@ -58,25 +58,12 @@ class TokenResponse
     }
 
     /**
-     * Check if any error occurred during JSON decode.
-     *
-     * @throws ResponseException
-     */
-    private function checkJsonError()
-    {
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new ResponseException('JSON response was invalid', 502);
-        }
-    }
-
-    /**
      * @param string $httpCode
      *
      * @throws ResponseException
      */
-    private function checkResponseStatus($httpCode)
+    private function checkResponseStatus(int $httpCode): void
     {
-        $httpCode = (int) $httpCode;
         if ($httpCode !== 201) {
             throw new ResponseException("Server responded with {$httpCode}", $httpCode);
         }

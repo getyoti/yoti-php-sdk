@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Util\ExtraData;
 
 use Yoti\Profile\ExtraData\ExtraData;
@@ -8,13 +10,17 @@ use Yoti\Protobuf\Sharepubapi\ExtraData as ExtraDataProto;
 class ExtraDataConverter
 {
     /**
-     * @param string $data
+     * @param string|null $data
      *   Base64 encoded data.
      *
      * @return \Yoti\Profile\ExtraData\ExtraData
      */
-    public static function convertValue($data)
+    public static function convertValue(?string $data): ExtraData
     {
+        if ($data === null) {
+            return new ExtraData([]);
+        }
+
         $extraDataProto = new ExtraDataProto();
 
         try {

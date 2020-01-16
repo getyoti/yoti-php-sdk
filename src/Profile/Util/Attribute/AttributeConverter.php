@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\Util\Attribute;
 
 use Yoti\Exception\AttributeException;
@@ -10,7 +12,6 @@ use Yoti\Profile\Attribute\DocumentDetails;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\Profile;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
-use Yoti\Protobuf\Compubapi\EncryptedData;
 use Yoti\Util\DateTime;
 
 class AttributeConverter
@@ -25,13 +26,13 @@ class AttributeConverter
     const CONTENT_TYPE_INT = 7;
 
     /**
-     * @param ProtobufAttribute $attribute
+     * @param mixed $attribute
      *
-     * @return false|\Protobuf\Stream|string|DocumentDetails|Image
+     * @return string|int|DocumentDetails|Image|MultiValue
      *
      * @throws \Yoti\Exception\AttributeException
      */
-    private static function convertValueBasedOnAttributeName($value, $attrName)
+    private static function convertValueBasedOnAttributeName($value, string $attrName)
     {
         switch ($attrName) {
             case Profile::ATTR_DOCUMENT_DETAILS:
@@ -51,14 +52,14 @@ class AttributeConverter
     }
 
     /**
-     * @param $value
-     * @param $contentType
+     * @param string $value
+     * @param int $contentType
      *
-     * @return \DateTime|Image
+     * @return string|int|DocumentDetails|Image|MultiValue
      *
      * @throws AttributeException
      */
-    private static function convertValueBasedOnContentType($value, $contentType)
+    private static function convertValueBasedOnContentType(string $value, int $contentType)
     {
         if (strlen($value) === 0 && ($contentType !== self::CONTENT_TYPE_STRING)) {
             throw new AttributeException("Warning: Value is NULL");
@@ -100,9 +101,10 @@ class AttributeConverter
      * Convert attribute value to MultiValue.
      *
      * @param string $value
+     *
      * @return MultiValue
      */
-    private static function convertMultiValue($value)
+    private static function convertMultiValue($value): MultiValue
     {
         $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->mergeFromString($value);
@@ -123,7 +125,7 @@ class AttributeConverter
      *
      * @return string
      */
-    private static function imageTypeToExtension($type)
+    private static function imageTypeToExtension(int $type): string
     {
         $type = (int)$type;
 
@@ -143,30 +145,13 @@ class AttributeConverter
     }
 
     /**
-     * Parses a protobuf binary contained in a string.
-     *
-     * @deprecated 3.0.0 No longer in use.
-     *
-     * @param @param string $data Binary protobuf data.
-     *
-     * @return \oti\Protobuf\Compubapi\EncryptedData
-     */
-    public static function getEncryptedData($data)
-    {
-        // Get cipher_text and iv
-        $encryptedData = new EncryptedData();
-        $encryptedData->mergeFromString(base64_decode($data));
-        return $encryptedData;
-    }
-
-    /**
      * Return a Yoti Attribute.
      *
      * @param ProtobufAttribute $protobufAttribute
      *
-     * @return null|Attribute
+     * @return Attribute|null
      */
-    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute)
+    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute): ?Attribute
     {
         $yotiAttribute = null;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile\ExtraData;
 
 use Yoti\Util\Validation;
@@ -26,9 +28,8 @@ class AttributeIssuanceDetails
      * @param \DateTime $expiryDate
      * @param \Yoti\Profile\ExtraData\AttributeDefinition[] $issuingAttributes
      */
-    public function __construct($token, \DateTime $expiryDate = null, array $issuingAttributes = [])
+    public function __construct(string $token, \DateTime $expiryDate = null, array $issuingAttributes = [])
     {
-        Validation::isString($token, 'token');
         $this->token = $token;
 
         $this->expiryDate = $expiryDate;
@@ -40,7 +41,7 @@ class AttributeIssuanceDetails
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -48,7 +49,7 @@ class AttributeIssuanceDetails
     /**
      * @return \DateTime|null
      */
-    public function getExpiryDate()
+    public function getExpiryDate(): ?\DateTime
     {
         return $this->expiryDate;
     }
@@ -56,7 +57,7 @@ class AttributeIssuanceDetails
     /**
      * @return \Yoti\Profile\ExtraData\AttributeDefinition[]
      */
-    public function getIssuingAttributes()
+    public function getIssuingAttributes(): array
     {
         return $this->issuingAttributes;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Util\Validation;
@@ -23,9 +25,8 @@ class Extension implements \JsonSerializable
      * @param string $type
      * @param mixed $content
      */
-    public function __construct($type, $content)
+    public function __construct(string $type, $content)
     {
-        Validation::isString($type, 'type');
         $this->type = $type;
 
         Validation::notNull($type, 'content');
@@ -37,7 +38,7 @@ class Extension implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'type' => $this->type,
@@ -48,7 +49,7 @@ class Extension implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Util\Age;
 
 use Yoti\Profile\Attribute\AgeVerification;

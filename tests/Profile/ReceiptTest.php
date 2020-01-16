@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile;
 
 use Yoti\Profile\ApplicationProfile;
@@ -8,6 +10,7 @@ use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
+use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
@@ -17,9 +20,9 @@ use YotiTest\TestData;
 class ReceiptTest extends TestCase
 {
     /**
-     * @var string Pem file contents.
+     * @var \Yoti\Util\PemFile
      */
-    public $pem;
+    public $pemFile;
 
     /**
      * @var array Receipt array.
@@ -33,7 +36,7 @@ class ReceiptTest extends TestCase
 
     public function setup(): void
     {
-        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $this->pemFile = PemFile::fromFilePath(TestData::PEM_FILE);
         $this->receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true)['receipt'];
         $this->receipt = new Receipt($this->receiptArr);
     }
@@ -152,7 +155,7 @@ class ReceiptTest extends TestCase
     {
         $protobufAttributesList = $this->receipt->parseAttribute(
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
-            $this->pem
+            $this->pemFile
         );
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
             $protobufAttributesList
@@ -169,7 +172,7 @@ class ReceiptTest extends TestCase
     {
         $protobufAttributesList = $this->receipt->parseAttribute(
             Receipt::ATTR_PROFILE_CONTENT,
-            $this->pem
+            $this->pemFile
         );
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
             $protobufAttributesList
@@ -188,7 +191,7 @@ class ReceiptTest extends TestCase
      */
     public function testParseExtraData()
     {
-        $extraData = $this->receipt->parseExtraData(file_get_contents(TestData::PEM_FILE));
+        $extraData = $this->receipt->parseExtraData(PemFile::fromFilePath(TestData::PEM_FILE));
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());

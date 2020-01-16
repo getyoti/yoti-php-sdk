@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiSandbox\Entity;
 
 class SandboxAttribute
@@ -10,8 +12,13 @@ class SandboxAttribute
     protected $optional;
     protected $anchors;
 
-    public function __construct($name, $value, $derivation = '', $optional = 'false', array $anchors = [])
-    {
+    public function __construct(
+        string $name,
+        string $value,
+        string $derivation = '',
+        string $optional = 'false',
+        array $anchors = []
+    ) {
         $this->name = $name;
         $this->value = $value;
         $this->derivation = $derivation;
@@ -19,27 +26,27 @@ class SandboxAttribute
         $this->anchors = $anchors;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function getDerivation()
+    public function getDerivation(): string
     {
         return $this->derivation;
     }
 
-    public function getOptional()
+    public function getOptional(): string
     {
         return $this->optional;
     }
 
-    public function getAnchors()
+    public function getAnchors(): array
     {
         return $this->anchors;
     }

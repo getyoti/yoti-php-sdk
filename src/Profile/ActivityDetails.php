@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
 
+use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\Age\AgeVerificationConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\DateTime;
+use Yoti\Util\PemFile;
 
 /**
  * Class ActivityDetails
@@ -41,14 +45,14 @@ class ActivityDetails
     private $applicationProfile;
 
     /**
-     * @var Receipt
+     * @var \Yoti\Profile\Receipt
      */
     private $receipt;
 
     /**
-     * @var string
+     * @var \Yoti\Util\PemFile
      */
-    private $pem;
+    private $pemFile;
 
     /**
      * @var \Yoti\Profile\ExtraData\ExtraData
@@ -58,13 +62,13 @@ class ActivityDetails
     /**
      * ActivityDetails constructor.
      *
-     * @param array $attributes
-     * @param $rememberMeId
+     * @param \Yoti\Profile\Receipt $receipt
+     * @param \Yoti\Util\PemFile $pemFile
      */
-    public function __construct(Receipt $receipt, $pem)
+    public function __construct(Receipt $receipt, PemFile $pemFile)
     {
         $this->receipt = $receipt;
-        $this->pem = $pem;
+        $this->pemFile = $pemFile;
 
         $this->setProfile();
         $this->setTimestamp();
@@ -74,17 +78,17 @@ class ActivityDetails
         $this->setExtraData();
     }
 
-    private function setRememberMeId()
+    private function setRememberMeId(): void
     {
         $this->rememberMeId = $this->receipt->getRememberMeId();
     }
 
-    private function setParentRememberMeId()
+    private function setParentRememberMeId(): void
     {
         $this->parentRememberMeId = $this->receipt->getParentRememberMeId();
     }
 
-    private function setTimestamp()
+    private function setTimestamp(): void
     {
         try {
             $timestamp = $this->receipt->getTimestamp();
@@ -95,27 +99,27 @@ class ActivityDetails
         }
     }
 
-    private function setProfile()
+    private function setProfile(): void
     {
         $protobufAttrList = $this->receipt->parseAttribute(
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
-            $this->pem
+            $this->pemFile
         );
         $this->userProfile = new Profile($this->processUserProfileAttributes($protobufAttrList));
     }
 
-    private function setApplicationProfile()
+    private function setApplicationProfile(): void
     {
         $protobufAttributesList = $this->receipt->parseAttribute(
             Receipt::ATTR_PROFILE_CONTENT,
-            $this->pem
+            $this->pemFile
         );
         $this->applicationProfile = new ApplicationProfile(
             AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList)
         );
     }
 
-    private function processUserProfileAttributes(AttributeList $protobufAttributesList)
+    private function processUserProfileAttributes(AttributeList $protobufAttributesList): array
     {
         $attributesMap = AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList);
         $this->appendAgeVerifications($attributesMap);
@@ -128,7 +132,7 @@ class ActivityDetails
      *
      * @param array $attributesMap
      */
-    private function appendAgeVerifications(array &$attributesMap)
+    private function appendAgeVerifications(array &$attributesMap): void
     {
         $ageVerificationConverter = new AgeVerificationConverter($attributesMap);
         $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
@@ -138,7 +142,7 @@ class ActivityDetails
     /**
      * @return string|null
      */
-    public function getReceiptId()
+    public function getReceiptId(): ?string
     {
         return $this->receipt->getReceiptId();
     }
@@ -146,7 +150,7 @@ class ActivityDetails
     /**
      * @return \DateTime|null
      */
-    public function getTimestamp()
+    public function getTimestamp(): ?\DateTime
     {
         return $this->timestamp;
     }
@@ -154,7 +158,7 @@ class ActivityDetails
     /**
      * @return ApplicationProfile
      */
-    public function getApplicationProfile()
+    public function getApplicationProfile(): ApplicationProfile
     {
         return $this->applicationProfile;
     }
@@ -164,7 +168,7 @@ class ActivityDetails
      *
      * @return Profile
      */
-    public function getProfile()
+    public function getProfile(): Profile
     {
         return $this->userProfile;
     }
@@ -174,7 +178,7 @@ class ActivityDetails
      *
      * @return null|string
      */
-    public function getRememberMeId()
+    public function getRememberMeId(): ?string
     {
         return $this->rememberMeId;
     }
@@ -184,7 +188,7 @@ class ActivityDetails
      *
      * @return null|string
      */
-    public function getParentRememberMeId()
+    public function getParentRememberMeId(): ?string
     {
         return $this->parentRememberMeId;
     }
@@ -192,15 +196,15 @@ class ActivityDetails
     /**
      * Set extra data from receipt.
      */
-    private function setExtraData()
+    private function setExtraData(): void
     {
-        $this->extraData = $this->receipt->parseExtraData($this->pem);
+        $this->extraData = $this->receipt->parseExtraData($this->pemFile);
     }
 
     /**
      * @return \Yoti\Profile\ExtraData\ExtraData
      */
-    public function getExtraData()
+    public function getExtraData(): ExtraData
     {
         return $this->extraData;
     }

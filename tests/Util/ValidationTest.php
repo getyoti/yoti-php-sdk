@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Util;
 
 use Yoti\Util\Validation;
@@ -29,7 +31,8 @@ class ValidationTest extends TestCase
      */
     public function testIsStringInvalid($nonStringValue)
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be a string');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be a string');
 
         Validation::isString($nonStringValue, self::SOME_NAME);
     }
@@ -49,7 +52,8 @@ class ValidationTest extends TestCase
      */
     public function testIsBooleanInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be a boolean');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be a boolean');
 
         Validation::isBoolean(self::SOME_STRING, self::SOME_NAME);
     }
@@ -68,95 +72,6 @@ class ValidationTest extends TestCase
     }
 
     /**
-     * @covers ::isInteger
-     *
-     * @dataProvider integerDataProvider
-     */
-    public function testIsInteger($integer)
-    {
-        $this->assertNull(Validation::isInteger($integer, self::SOME_NAME));
-    }
-
-    /**
-     * @covers ::isInteger
-     */
-    public function testIsIntegerInvalid()
-    {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be an integer');
-
-        Validation::isInteger(self::SOME_STRING, self::SOME_NAME);
-    }
-
-    /**
-     * Provides valid integers.
-     *
-     * @return array
-     */
-    public function integerDataProvider()
-    {
-        return [
-            [ -20 ],
-            [ 1 ],
-            [ 50 ],
-        ];
-    }
-
-    /**
-     * @covers ::isFloat
-     *
-     * @dataProvider floatDataProvider
-     */
-    public function testIsFloat($float)
-    {
-        $this->assertNull(Validation::isFloat($float, self::SOME_NAME));
-    }
-
-    /**
-     * @covers ::isFloat
-     */
-    public function testIsFloatInvalid()
-    {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be a float');
-
-        Validation::isFloat(self::SOME_STRING, self::SOME_NAME);
-    }
-
-    /**
-     * Provides valid floats.
-     *
-     * @return array
-     */
-    public function floatDataProvider()
-    {
-        return [
-            [ -20.000 ],
-            [ 1.6 ],
-            [ 5000.1 ],
-        ];
-    }
-
-    /**
-     * @covers ::isNumeric
-     *
-     * @dataProvider floatDataProvider
-     * @dataProvider integerDataProvider
-     */
-    public function testIsNumeric($number)
-    {
-        $this->assertNull(Validation::isNumeric($number, self::SOME_NAME));
-    }
-
-    /**
-     * @covers ::isNumeric
-     */
-    public function testIsNumericInvalid()
-    {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be numeric');
-
-        Validation::isNumeric(self::SOME_STRING, self::SOME_NAME);
-    }
-
-    /**
      * @covers ::notNull
      */
     public function testNotNull()
@@ -169,7 +84,8 @@ class ValidationTest extends TestCase
      */
     public function testNotNullInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name cannot be null');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name cannot be null');
 
         Validation::notNull(null, self::SOME_NAME);
     }
@@ -188,7 +104,8 @@ class ValidationTest extends TestCase
      */
     public function testNotGreaterThanInvalid()
     {
-        $this->expectException(\RangeException::class, '\'some_name\' value \'2\' is greater than \'1\'');
+        $this->expectException(\RangeException::class);
+        $this->expectExceptionMessage('\'some_name\' value \'2\' is greater than \'1\'');
 
         Validation::notGreaterThan(2, 1, self::SOME_NAME);
     }
@@ -207,7 +124,8 @@ class ValidationTest extends TestCase
      */
     public function testNotLessThanInvalid()
     {
-        $this->expectException(\RangeException::class, '\'some_name\' value \'1\' is less than \'2\'');
+        $this->expectException(\RangeException::class);
+        $this->expectExceptionMessage('\'some_name\' value \'1\' is less than \'2\'');
 
         Validation::notLessThan(1, 2, self::SOME_NAME);
     }
@@ -225,7 +143,8 @@ class ValidationTest extends TestCase
      */
     public function testWithinRangeGreaterThan()
     {
-        $this->expectException(\RangeException::class, '\'some_name\' value \'4\' is greater than \'3\'');
+        $this->expectException(\RangeException::class);
+        $this->expectExceptionMessage('\'some_name\' value \'4\' is greater than \'3\'');
 
         Validation::withinRange(4, 1, 3, self::SOME_NAME);
     }
@@ -235,7 +154,8 @@ class ValidationTest extends TestCase
      */
     public function testWithinRangeLessThan()
     {
-        $this->expectException(\RangeException::class, '\'some_name\' value \'1\' is less than \'2\'');
+        $this->expectException(\RangeException::class);
+        $this->expectExceptionMessage('\'some_name\' value \'1\' is less than \'2\'');
 
         Validation::withinRange(1, 2, 4, self::SOME_NAME);
     }
@@ -253,7 +173,8 @@ class ValidationTest extends TestCase
      */
     public function testIsArrayOfIntegersInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of integers');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be array of integers');
 
         Validation::isArrayOfIntegers([1, self::SOME_STRING], self::SOME_NAME);
     }
@@ -271,7 +192,8 @@ class ValidationTest extends TestCase
      */
     public function testIsArrayOfStringsInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of strings');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be array of strings');
 
         Validation::isArrayOfStrings([1, [], self::SOME_STRING], self::SOME_NAME);
     }
@@ -299,7 +221,8 @@ class ValidationTest extends TestCase
      */
     public function testIsArrayOfTypeInvalid()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be array of ArrayObject, DateTime');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be array of ArrayObject, DateTime');
 
         $arrayOfTypes = [
             new \stdClass(),
@@ -325,7 +248,8 @@ class ValidationTest extends TestCase
      */
     public function testNotEmptyStringWithEmptyValue()
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name cannot be empty');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name cannot be empty');
 
         Validation::notEmptyString('', self::SOME_NAME);
     }
@@ -338,7 +262,8 @@ class ValidationTest extends TestCase
      */
     public function testNotEmptyStringWithNonStringValue($nonStringValue)
     {
-        $this->expectException(\InvalidArgumentException::class, 'some_name must be a string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
 
         Validation::notEmptyString($nonStringValue, self::SOME_NAME);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\WantedAnchorBuilder;

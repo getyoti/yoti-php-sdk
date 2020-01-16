@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Util\Attribute;
 
 use Yoti\Media\Image;
@@ -8,7 +10,7 @@ use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
-use Yoti\Protobuf\Compubapi\EncryptedData;
+use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
@@ -59,11 +61,10 @@ class AttributeConverterTest extends TestCase
      */
     public function testSelfieValueShouldReturnImageObject()
     {
-        $pem = file_get_contents(TestData::PEM_FILE);
         $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $receipt = new Receipt($receiptArr['receipt']);
 
-        $this->activityDetails = new ActivityDetails($receipt, $pem);
+        $this->activityDetails = new ActivityDetails($receipt, PemFile::fromFilePath(TestData::PEM_FILE));
         $this->profile = $this->activityDetails->getProfile();
         $this->assertInstanceOf(Image::class, $this->profile->getSelfie()->getValue());
     }
@@ -189,7 +190,7 @@ class AttributeConverterTest extends TestCase
     {
         $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
             'test_attr',
-            $int,
+            (string) $int,
             self::CONTENT_TYPE_INT
         ));
         $this->assertSame($int, $attr->getValue());
@@ -427,7 +428,7 @@ class AttributeConverterTest extends TestCase
         $decodedProtoString = base64_decode(file_get_contents(TestData::THIRD_PARTY_ATTRIBUTE));
 
         $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
-        $protobufAttribute->mergeFromString(base64_decode(file_get_contents(TestData::THIRD_PARTY_ATTRIBUTE)));
+        $protobufAttribute->mergeFromString($decodedProtoString);
 
         $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
 
@@ -439,17 +440,6 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
         $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
-    }
-
-    /**
-     * @covers ::getEncryptedData
-     */
-    public function testGetEncryptedData()
-    {
-        $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
-        $encryptedData = AttributeConverter::getEncryptedData($receiptArr['receipt']['profile_content']);
-
-        $this->assertInstanceOf(EncryptedData::class, $encryptedData);
     }
 
     /**

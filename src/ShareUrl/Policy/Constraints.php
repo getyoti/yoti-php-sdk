@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Util\Validation;
@@ -28,7 +30,7 @@ class Constraints implements \JsonSerializable
      *
      * @return \JsonSerializable[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->constraints;
     }
@@ -36,7 +38,7 @@ class Constraints implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

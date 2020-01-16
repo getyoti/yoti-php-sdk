@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Util;
 
 use Yoti\Util\PemFile;
@@ -87,7 +89,8 @@ class PemFileTest extends TestCase
      */
     public function testResolveFromStringWithInvalidFilePath()
     {
-        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM file was not found');
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('PEM file was not found');
 
         PemFile::resolveFromString('file://invalid_file_path.pem');
     }
@@ -99,7 +102,8 @@ class PemFileTest extends TestCase
      */
     public function testResolveFromStringWithInvalidStringContent()
     {
-        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('PEM content is invalid');
 
         PemFile::resolveFromString(file_get_contents(TestData::INVALID_PEM_FILE));
     }
@@ -112,7 +116,8 @@ class PemFileTest extends TestCase
      */
     public function testInvalidPemFileStreamWrapperPath()
     {
-        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM file was not found');
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('PEM file was not found');
 
         PemFile::fromFilePath('file://invalid_file_path.pem');
     }
@@ -125,7 +130,8 @@ class PemFileTest extends TestCase
      */
     public function testInvalidPemFileContents()
     {
-        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('PEM content is invalid');
 
         PemFile::fromFilePath(TestData::INVALID_PEM_FILE);
     }
@@ -138,7 +144,8 @@ class PemFileTest extends TestCase
      */
     public function testInvalidPemString()
     {
-        $this->expectException(\Yoti\Exception\PemFileException::class, 'PEM content is invalid');
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('PEM content is invalid');
 
         PemFile::fromString('invalid_pem_string');
     }

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Profile\Profile;
-use Yoti\Util\Validation;
 
 /**
  * Builder for DynamicPolicy.
@@ -38,9 +39,9 @@ class DynamicPolicyBuilder
     /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute wantedAttribute
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withWantedAttribute(WantedAttribute $wantedAttribute)
+    public function withWantedAttribute(WantedAttribute $wantedAttribute): self
     {
         $key = $wantedAttribute->getName();
         if ($wantedAttribute->getDerivation()) {
@@ -56,10 +57,13 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withWantedAttributeByName($name, $constraints = null, $acceptSelfAsserted = null)
-    {
+    public function withWantedAttributeByName(
+        string $name,
+        Constraints $constraints = null,
+        bool $acceptSelfAsserted = null
+    ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName($name);
 
@@ -78,9 +82,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withFamilyName($constraints = null, $acceptSelfAsserted = null)
+    public function withFamilyName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_FAMILY_NAME,
@@ -93,9 +97,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return self
      */
-    public function withGivenNames(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withGivenNames(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_GIVEN_NAMES,
@@ -108,9 +112,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return self
      */
-    public function withFullName(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withFullName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_FULL_NAME,
@@ -123,9 +127,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withDateOfBirth(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withDateOfBirth(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_DATE_OF_BIRTH,
@@ -139,11 +143,10 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withAgeOver($age, Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withAgeOver(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
-        Validation::isInteger($age, 'age');
         return $this->withAgeDerivedAttribute(
             sprintf(Profile::AGE_OVER_FORMAT, $age),
             $constraints,
@@ -156,11 +159,10 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withAgeUnder($age, Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withAgeUnder(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
-        Validation::isInteger($age, 'age');
         return $this->withAgeDerivedAttribute(
             sprintf(Profile::AGE_UNDER_FORMAT, $age),
             $constraints,
@@ -173,10 +175,13 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withAgeDerivedAttribute($derivation, Constraints $constraints = null, $acceptSelfAsserted = null)
-    {
+    public function withAgeDerivedAttribute(
+        string $derivation,
+        Constraints $constraints = null,
+        bool $acceptSelfAsserted = null
+    ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName(Profile::ATTR_DATE_OF_BIRTH)
             ->withDerivation($derivation)
@@ -193,9 +198,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withGender(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withGender(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_GENDER,
@@ -208,9 +213,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withPostalAddress(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_POSTAL_ADDRESS,
@@ -223,9 +228,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withStructuredPostalAddress(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withStructuredPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
@@ -238,9 +243,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withNationality(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withNationality(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_NATIONALITY,
@@ -253,9 +258,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withPhoneNumber(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withPhoneNumber(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_PHONE_NUMBER,
@@ -268,9 +273,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withSelfie(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withSelfie(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_SELFIE,
@@ -283,9 +288,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withDocumentDetails(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withDocumentDetails(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_DOCUMENT_DETAILS,
@@ -298,9 +303,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withDocumentImages(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withDocumentImages(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_DOCUMENT_IMAGES,
@@ -313,9 +318,9 @@ class DynamicPolicyBuilder
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
      * @param boolean $acceptSelfAsserted
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withEmail(Constraints $constraints = null, $acceptSelfAsserted = null)
+    public function withEmail(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             Profile::ATTR_EMAIL_ADDRESS,
@@ -327,9 +332,9 @@ class DynamicPolicyBuilder
     /**
      * @param boolean $enabled
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withSelfieAuthentication($enabled = true)
+    public function withSelfieAuthentication(bool $enabled = true): self
     {
         return $this->withWantedAuthType(self::SELFIE_AUTH_TYPE, $enabled);
     }
@@ -337,9 +342,9 @@ class DynamicPolicyBuilder
     /**
      * @param boolean $enabled
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withPinAuthentication($enabled = true)
+    public function withPinAuthentication(bool $enabled = true): self
     {
         return $this->withWantedAuthType(self::PIN_AUTH_TYPE, $enabled);
     }
@@ -348,11 +353,10 @@ class DynamicPolicyBuilder
      * @param int $wantedAuthType
      * @param boolean $enabled
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withWantedAuthType($wantedAuthType, $enabled = true)
+    public function withWantedAuthType(int $wantedAuthType, bool $enabled = true): self
     {
-        Validation::isInteger($wantedAuthType, 'wantedAuthType');
         if ($enabled) {
             $this->wantedAuthTypes[$wantedAuthType] = $wantedAuthType;
         } else {
@@ -365,9 +369,9 @@ class DynamicPolicyBuilder
     /**
      * @param boolean $wantedRememberMe
      *
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
+     * @return $this
      */
-    public function withWantedRememberMe($wantedRememberMe)
+    public function withWantedRememberMe(bool $wantedRememberMe): self
     {
         $this->wantedRememberMe = $wantedRememberMe;
         return $this;
@@ -376,7 +380,7 @@ class DynamicPolicyBuilder
     /**
      * @return \Yoti\ShareUrl\Policy\DynamicPolicy
      */
-    public function build()
+    public function build(): DynamicPolicy
     {
         return new DynamicPolicy(
             array_values($this->wantedAttributes),

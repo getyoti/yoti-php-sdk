@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace YotiTest\Profile\Util\ExtraData;
 
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
@@ -34,7 +36,8 @@ class DataEntryConverterTest extends TestCase
      */
     public function testConvertValueThirdPartyAttributeEmptyValue()
     {
-        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Value is empty');
+        $this->expectException(\Yoti\Exception\ExtraDataException::class);
+        $this->expectExceptionMessage('Value is empty');
 
         $thirdPartyAttribute = DataEntryConverter::convertValue(
             self::TYPE_THIRD_PARTY_ATTRIBUTE,
@@ -49,7 +52,8 @@ class DataEntryConverterTest extends TestCase
      */
     public function testConvertValueEmpty()
     {
-        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Value is empty');
+        $this->expectException(\Yoti\Exception\ExtraDataException::class);
+        $this->expectExceptionMessage('Value is empty');
 
         DataEntryConverter::convertValue(
             self::TYPE_THIRD_PARTY_ATTRIBUTE,
@@ -62,10 +66,11 @@ class DataEntryConverterTest extends TestCase
      */
     public function testConvertValueUnknown()
     {
-        $this->expectException(\Yoti\Exception\ExtraDataException::class, 'Unsupported data entry');
+        $this->expectException(\Yoti\Exception\ExtraDataException::class);
+        $this->expectExceptionMessage('Unsupported data entry');
 
         DataEntryConverter::convertValue(
-            'Some unknown type',
+            100,
             'Some value'
         );
     }

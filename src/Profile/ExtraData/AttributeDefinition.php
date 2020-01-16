@@ -1,8 +1,8 @@
 <?php
 
-namespace Yoti\Profile\ExtraData;
+declare(strict_types=1);
 
-use Yoti\Util\Validation;
+namespace Yoti\Profile\ExtraData;
 
 class AttributeDefinition implements \JsonSerializable
 {
@@ -14,16 +14,15 @@ class AttributeDefinition implements \JsonSerializable
     /**
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
-        Validation::isString($name, 'name');
         $this->name = $name;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -33,7 +32,7 @@ class AttributeDefinition implements \JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'name' => $this->getName(),
@@ -43,7 +42,7 @@ class AttributeDefinition implements \JsonSerializable
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this);
     }

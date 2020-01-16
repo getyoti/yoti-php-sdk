@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\Profile;
 
 use Yoti\Exception\ActivityDetailsException;
@@ -54,7 +56,7 @@ class Service
      * @throws \Yoti\Exception\ActivityDetailsException
      * @throws \Yoti\Exception\ReceiptException
      */
-    public function getActivityDetails($encryptedConnectToken): ActivityDetails
+    public function getActivityDetails(string $encryptedConnectToken): ActivityDetails
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
@@ -78,7 +80,7 @@ class Service
             throw new ActivityDetailsException("Server responded with {$httpCode}");
         }
 
-        $result = Json::decode($response->getBody());
+        $result = Json::decode((string) $response->getBody());
 
         $this->checkForReceipt($result);
 
@@ -99,7 +101,7 @@ class Service
      *
      * @return string|null
      */
-    private function decryptConnectToken($encryptedConnectToken)
+    private function decryptConnectToken(string $encryptedConnectToken): ?string
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='));
         openssl_private_decrypt($tok, $token, (string) $this->pemFile);
@@ -112,7 +114,7 @@ class Service
      *
      * @throws \Yoti\Exception\ReceiptException
      */
-    private function checkForReceipt(array $responseArr)
+    private function checkForReceipt(array $responseArr): void
     {
         // Check receipt is in response
         if (!array_key_exists('receipt', $responseArr)) {

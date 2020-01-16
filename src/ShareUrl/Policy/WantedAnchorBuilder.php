@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yoti\ShareUrl\Policy;
 
 /**
@@ -20,9 +22,9 @@ class WantedAnchorBuilder
     /**
      * @param string $value
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAnchorBuilder
+     * @return $this
      */
-    public function withValue($value)
+    public function withValue(string $value): self
     {
         $this->value = $value;
         return $this;
@@ -31,9 +33,9 @@ class WantedAnchorBuilder
     /**
      * @param string $subType
      *
-     * @return \Yoti\ShareUrl\Policy\WantedAnchorBuilder
+     * @return $this
      */
-    public function withSubType($subType)
+    public function withSubType(string $subType): self
     {
         $this->subType = $subType;
         return $this;
@@ -42,7 +44,7 @@ class WantedAnchorBuilder
     /**
      * @return \Yoti\ShareUrl\Policy\WantedAnchor
      */
-    public function build()
+    public function build(): WantedAnchor
     {
         return new WantedAnchor($this->value, $this->subType);
     }
