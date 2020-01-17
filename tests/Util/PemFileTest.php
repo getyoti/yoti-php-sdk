@@ -23,6 +23,7 @@ class PemFileTest extends TestCase
      */
     public function setup(): void
     {
+        parent::setup();
         $this->pemContent = file_get_contents(TestData::PEM_FILE);
     }
 
@@ -160,4 +161,49 @@ class PemFileTest extends TestCase
         $pemFile = new PemFile($this->pemContent);
         $this->assertEquals($pemFile->getAuthKey(), file_get_contents(TestData::PEM_AUTH_KEY));
     }
+
+    /**
+     * @covers ::getAuthKey
+     */
+    public function testPublicKeyMissing()
+    {
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('Could not extract public key');
+
+        self::mockFunction('openssl_pkey_get_details', function () {
+            return [];
+        });
+
+        PemFile::fromFilePath(TestData::PEM_FILE)->getAuthKey();
+    }
+
+    /**
+     * @covers ::getAuthKey
+     */
+    public function testPublicKeyInvalid()
+    {
+        $this->expectException(\Yoti\Exception\PemFileException::class);
+        $this->expectExceptionMessage('Could not retrieve Auth key from PEM content.');
+
+        self::mockFunction('openssl_pkey_get_details', function () {
+            return [
+                'key' => 'some-invalid-key',
+            ];
+        });
+
+        PemFile::fromFilePath(TestData::PEM_FILE)->getAuthKey();
+    }
+}
+
+/**
+ * Mock functions in the Util namespace.
+ */
+namespace Yoti\Util;
+
+/**
+ * Mocks \openssl_pkey_get_details()
+ */
+function openssl_pkey_get_details()
+{
+    return \YotiTest\TestCase::callMockFunction(__FUNCTION__, func_get_args());
 }

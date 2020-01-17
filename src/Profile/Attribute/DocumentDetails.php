@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yoti\Profile\Attribute;
 
 use Yoti\Exception\AttributeException;
+use Yoti\Exception\DateTimeException;
+use Yoti\Util\DateTime;
 
 class DocumentDetails
 {
@@ -160,10 +162,10 @@ class DocumentDetails
             $dateStr = $parsedValues[self::EXPIRATION_INDEX];
 
             if ($dateStr !== '-') {
-                $expirationDate = \DateTime::createFromFormat('Y-m-d', $dateStr);
-
-                if ($expirationDate === false) {
-                    throw new AttributeException('Invalid Date provided');
+                try {
+                    $expirationDate = DateTime::createFromFormat('Y-m-d', $dateStr);
+                } catch (DateTimeException $e) {
+                    throw new AttributeException('Invalid Date provided', 0, $e);
                 }
             }
         }

@@ -161,6 +161,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withDateOfBirth
      * @covers ::withAgeOver
      * @covers ::withAgeUnder
+     * @covers ::withAgeDerivedAttribute
      */
     public function testWithAgeDerivedAttributes()
     {
@@ -188,6 +189,8 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeOver
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithAgeOverIntegersOnly()
     {
@@ -202,6 +205,8 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeUnder
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithAgeUnderIntegersOnly()
     {
@@ -216,6 +221,8 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeUnder
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithDuplicateAgeDerivedAttributes()
     {

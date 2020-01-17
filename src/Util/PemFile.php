@@ -16,6 +16,13 @@ class PemFile
     private $content;
 
     /**
+     * Private Key.
+     *
+     * @var resource
+     */
+    private $privateKey;
+
+    /**
      * @param string $content
      *
      * @throws \Yoti\Exception\PemFileException
@@ -24,10 +31,12 @@ class PemFile
     {
         Validation::notEmptyString($content, 'content');
 
-        if (openssl_get_privatekey($content) === false) {
+        $privateKey = openssl_get_privatekey($content);
+        if ($privateKey === false) {
             throw new PemFileException('PEM content is invalid');
         }
 
+        $this->privateKey = $privateKey;
         $this->content = $content;
     }
 
@@ -56,17 +65,14 @@ class PemFile
      */
     public static function fromFilePath(string $filePath): self
     {
-        if (!is_file($filePath)) {
-            throw new PemFileException('PEM file was not found.');
+        if (
+            is_file($filePath) &&
+            ($fileContents = file_get_contents($filePath)) !== false
+        ) {
+            return static::fromString($fileContents);
         }
 
-        $fileContents = file_get_contents($filePath);
-
-        if ($fileContents === false) {
-            throw new PemFileException('PEM file could not be read');
-        }
-
-        return static::fromString($fileContents);
+        throw new PemFileException('PEM file was not found.');
     }
 
     /**
@@ -107,37 +113,23 @@ class PemFile
      */
     public function getAuthKey(): string
     {
-        $resource = openssl_pkey_get_private($this->content);
-        if ($resource === false) {
-            throw new PemFileException('Could not get private key.');
-        }
-
-        $details = openssl_pkey_get_details($resource);
+        $details = openssl_pkey_get_details($this->privateKey);
         if (!is_array($details) || !array_key_exists('key', $details)) {
-            throw new PemFileException('PEM content does not contain a key.');
+            throw new PemFileException('Could not extract public key');
         }
-
-        // Remove BEGIN RSA PRIVATE KEY / END RSA PRIVATE KEY lines
-        $KeyStr = trim($details['key']);
+        $publicKey = trim($details['key']);
 
         // Support line break on *nix systems, OS, older OS, and Microsoft
-        $keyArr = preg_split('/\r\n|\r|\n/', $KeyStr);
-        if (!is_array($keyArr)) {
-            throw new PemFileException('PEM content does not contain new lines');
-        }
+        $keyArr = preg_split('/\r\n|\r|\n/', $publicKey);
 
-        if (strpos($KeyStr, 'BEGIN') !== false) {
+        if ((strpos($publicKey, 'BEGIN') !== false) && is_array($keyArr)) {
+            // Remove BEGIN PUBLIC KEY / END PUBLIC KEY lines
             array_shift($keyArr);
             array_pop($keyArr);
-        }
-        $authKey = implode('', $keyArr);
-
-        // Check auth key is not empty
-        if (strlen($authKey) === 0) {
-            throw new PemFileException('Could not retrieve Auth key from PEM content.');
+            return implode('', $keyArr);
         }
 
-        return $authKey;
+        throw new PemFileException('Could not retrieve Auth key from PEM content.');
     }
 
     /**

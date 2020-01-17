@@ -13,6 +13,29 @@ use YotiTest\TestCase;
 class DateTimeTest extends TestCase
 {
     /**
+     * @covers ::timestampToDateTime
+     * @covers ::createFromFormat
+     */
+    public function testTimestampToDateTime()
+    {
+        $this->assertEquals(
+            '2018-04-12T13:14:32.835537+00:00',
+            DateTime::timestampToDateTime(1523538872835537)->format(DateTime::RFC3339)
+        );
+    }
+
+    /**
+     * @covers ::createFromFormat
+     */
+    public function testCreateFromFormatInvalid()
+    {
+        $this->expectException(\Yoti\Exception\DateTimeException::class);
+        $this->expectExceptionMessage('Could not parse from format');
+
+        DateTime::createFromFormat('some-invalid-format', 'some-invalid-time');
+    }
+
+    /**
      * @covers ::stringToDateTime
      *
      * @dataProvider validDateStringProvider
