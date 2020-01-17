@@ -33,4 +33,42 @@ class DateTime
             throw new DateTimeException('Could not parse string to DateTime', 0, $e);
         }
     }
+
+    /**
+     * @param int $timestamp
+     *
+     * @return \DateTime
+     */
+    public static function timestampToDateTime(int $timestamp): \DateTime
+    {
+        // Format DateTime to include microseconds and timezone
+        $timeIncMicroSeconds = number_format($timestamp / 1000000, 6, '.', '');
+        return static::createFromFormat('U.u', $timeIncMicroSeconds);
+    }
+
+    /**
+     * @param string $format
+     * @param string $time
+     *
+     * @uses \DateTime::createFromFormat() throws exception on failure.
+     *
+     * @return \DateTime
+     *
+     * @throws \Yoti\Exception\DateTimeException
+     */
+    public static function createFromFormat(string $format, string $time): \DateTime
+    {
+        // Format DateTime to include microseconds and timezone
+        $dateTime = \DateTime::createFromFormat(
+            $format,
+            $time,
+            new \DateTimeZone('UTC')
+        );
+
+        if ($dateTime === false) {
+            throw new DateTimeException('Could not parse from format');
+        }
+
+        return $dateTime;
+    }
 }

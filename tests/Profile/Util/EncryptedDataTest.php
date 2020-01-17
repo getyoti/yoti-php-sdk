@@ -74,6 +74,36 @@ class EncrypedDataTest extends TestCase
     }
 
     /**
+     * @covers ::decrypt
+     */
+    public function testDecryptDecodeError()
+    {
+        $this->expectException(EncryptedDataException::class);
+        $this->expectExceptionMessage('Could not decode data');
+
+        EncryptedData::decrypt(
+            'some-invalid-string',
+            $this->wrappedKey,
+            $this->pemFile
+        );
+    }
+
+    /**
+     * @covers ::decrypt
+     */
+    public function testDecryptDecodeWrappedKeyError()
+    {
+        $this->expectException(EncryptedDataException::class);
+        $this->expectExceptionMessage('Could not decode wrapped key');
+
+        EncryptedData::decrypt(
+            base64_encode($this->encryptedDataProto->serializeToString()),
+            'some-invalid-key',
+            $this->pemFile
+        );
+    }
+
+    /**
      * @return \Yoti\Protobuf\Compubapi\EncryptedData
      */
     private function createEncryptedDataProto(): EncryptedDataProto

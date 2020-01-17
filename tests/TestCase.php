@@ -9,13 +9,61 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 class TestCase extends PHPUnitTestCase
 {
     /**
-     * Restores ini settings after tests run.
+     * @var callable[]
      */
+    private static $mockFunctions;
+
+    public function setup(): void
+    {
+        parent::setup();
+
+        self::$mockFunctions = [];
+    }
+
     public function teardown(): void
     {
         parent::teardown();
+
+        // Restores ini settings.
         ini_restore('error_log');
         ini_restore('display_errors');
+
+        self::$mockFunctions = [];
+    }
+
+    /**
+     * Mock a global function with provided callback function.
+     *
+     * The function being mocked must be implemented in the same namespace as the class
+     * being tested and must return ::callMockFunction(__FUNCTION__, func_get_args());
+     *
+     * @param string $function
+     * @param callable $callback
+     *
+     * @return callable|null
+     */
+    protected static function mockFunction($function, $callback)
+    {
+        return self::$mockFunctions[$function] = $callback;
+    }
+
+    /**
+     * @param string $function
+     * @param array $args
+     *
+     * @return mixed
+     */
+    public static function callMockFunction($function, $args = [])
+    {
+        $function_name_parts = explode('\\', $function);
+        $function_name = array_pop($function_name_parts);
+        $function = self::$mockFunctions[$function_name] ?? null;
+
+        if ($function !== null) {
+            return $function(...$args);
+        }
+
+        return call_user_func_array("\\{$function_name}", $args);
     }
 
     /**
