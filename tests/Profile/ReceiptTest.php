@@ -10,6 +10,7 @@ use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
+use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
@@ -195,5 +196,19 @@ class ReceiptTest extends TestCase
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $extraData->getAttributeIssuanceDetails());
+    }
+
+    /**
+     * @covers ::parseAttribute
+     * @covers ::decryptAttribute
+     */
+    public function testParseAttributeNull()
+    {
+        $someReceiptAttribute = $this->receipt->parseAttribute(
+            'some-unknown-property',
+            PemFile::fromFilePath(TestData::PEM_FILE)
+        );
+
+        $this->assertInstanceOf(AttributeList::class, $someReceiptAttribute);
     }
 }

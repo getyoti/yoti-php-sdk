@@ -118,6 +118,7 @@ class ServiceTest extends TestCase
      * Test invalid Token
      *
      * @covers ::getActivityDetails
+     * @covers ::decryptConnectToken
      */
     public function testInvalidConnectToken()
     {
@@ -131,6 +132,29 @@ class ServiceTest extends TestCase
         );
 
         $profileService->getActivityDetails(TestData::INVALID_YOTI_CONNECT_TOKEN);
+    }
+
+    /**
+     * Test invalid Token
+     *
+     * @covers ::getActivityDetails
+     * @covers ::decryptConnectToken
+     */
+    public function testWrongPemFile()
+    {
+        $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
+        $this->expectExceptionMessage('Could not decrypt connect token');
+
+        $res = openssl_pkey_new([]);
+        openssl_pkey_export($res, $someKey);
+
+        $profileService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromString($someKey),
+            new Config()
+        );
+
+        $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 
     /**

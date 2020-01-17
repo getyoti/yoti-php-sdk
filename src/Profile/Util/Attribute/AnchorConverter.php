@@ -6,10 +6,10 @@ namespace Yoti\Profile\Util\Attribute;
 
 use phpseclib\File\ASN1;
 use phpseclib\File\X509;
-use Yoti\Exception\AttributeException;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\SignedTimeStamp;
 use Yoti\Protobuf\Attrpubapi\Anchor as ProtobufAnchor;
+use Yoti\Util\DateTime;
 use Yoti\Util\Json;
 
 class AnchorConverter
@@ -84,22 +84,9 @@ class AnchorConverter
         $signedTimeStamp = new \Yoti\Protobuf\Compubapi\SignedTimestamp();
         $signedTimeStamp->mergeFromString($anchor->getSignedTimeStamp());
 
-        $timestamp = $signedTimeStamp->getTimestamp() / 1000000;
-        $timeIncMicroSeconds = number_format($timestamp, 6, '.', '');
-        // Format DateTime to include microseconds and timezone
-        $dateTime = \DateTime::createFromFormat(
-            'U.u',
-            $timeIncMicroSeconds,
-            new \DateTimeZone('UTC')
-        );
-
-        if ($dateTime === false) {
-            throw new AttributeException('Could not parse anchor timestamp');
-        }
-
         return new SignedTimeStamp(
             $signedTimeStamp->getVersion(),
-            $dateTime
+            DateTime::timestampToDateTime((int) $signedTimeStamp->getTimestamp())
         );
     }
 

@@ -116,4 +116,16 @@ class AnchorConverterTest extends TestCase
         $this->assertEquals($type, $issuer->rdnSequence[0][0]->type);
         $this->assertEquals($value, $issuer->rdnSequence[0][0]->value->printableString);
     }
+
+    /**
+     * @covers ::convert
+     * @covers ::decodeAnchorValue
+     */
+    public function testEmptyAnchorValue()
+    {
+        $anchor = $this->parseFromBase64String(TestAnchors::ANCHOR_NO_VALUE);
+
+        $this->assertEquals('', $anchor->getValue());
+        $this->assertEquals('SOURCE', $anchor->getType());
+    }
 }
