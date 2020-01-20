@@ -123,7 +123,7 @@ class ServiceTest extends TestCase
     public function testInvalidConnectToken()
     {
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage('Could not decode encrypted token');
+        $this->expectExceptionMessage('Could not decode one time use token');
 
         $profileService = new Service(
             TestData::SDK_ID,
@@ -143,7 +143,7 @@ class ServiceTest extends TestCase
     public function testWrongPemFile()
     {
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage('Could not decrypt connect token');
+        $this->expectExceptionMessage('Could not decrypt one time use token');
 
         $res = openssl_pkey_new([]);
         openssl_pkey_export($res, $someKey);
