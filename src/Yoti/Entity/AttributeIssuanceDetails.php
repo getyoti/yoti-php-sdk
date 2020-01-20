@@ -7,6 +7,21 @@ use Yoti\Util\Validation;
 class AttributeIssuanceDetails
 {
     /**
+     * @var string
+     */
+    private $token;
+
+    /**
+     * @var \DateTime|null
+     */
+    private $expiryDate;
+
+    /**
+     * @var \Yoti\Entity\AttributeDefinition[]
+     */
+    private $issuingAttributes;
+
+    /**
      * @param string $token
      * @param \DateTime $expiryDate
      * @param \Yoti\Entity\AttributeDefinition[] $issuingAttributes

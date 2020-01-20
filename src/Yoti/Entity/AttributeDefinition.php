@@ -7,6 +7,11 @@ use Yoti\Util\Validation;
 class AttributeDefinition implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
