@@ -102,13 +102,13 @@ class Service
     {
         $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='), true);
         if ($tok === false) {
-            throw new ActivityDetailsException('Could not decode encrypted token.');
+            throw new ActivityDetailsException('Could not decode one time use token.');
         }
 
         openssl_private_decrypt($tok, $token, (string) $this->pemFile);
 
         if (!isset($token) || strlen($token) === 0) {
-            throw new ActivityDetailsException('Could not decrypt connect token.');
+            throw new ActivityDetailsException('Could not decrypt one time use token.');
         }
 
         return $token;
