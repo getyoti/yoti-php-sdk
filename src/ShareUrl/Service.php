@@ -50,7 +50,7 @@ class Service
     public function createShareUrl(DynamicScenario $dynamicScenario): Result
     {
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getConnectApiUrl())
+            ->withBaseUrl($this->config->getApiUrl())
             ->withEndpoint(sprintf('/qrcodes/apps/%s', $this->sdkId))
             ->withQueryParam('appId', $this->sdkId)
             ->withPost()

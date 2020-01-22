@@ -21,6 +21,8 @@ class AttributeListConverterTest extends TestCase
      */
     public function testConvertToYotiAttributesList()
     {
+        $this->captureExpectedLogs();
+
         $someName = 'some name';
         $someValue = 'some value';
 
@@ -43,17 +45,17 @@ class AttributeListConverterTest extends TestCase
             ->method('getName')
             ->willReturn(null);
 
-        $someUnknownAttribute = $this->createMock(AttributeProto::class);
-        $someUnknownAttribute
+        $someEmptyNonStringAttribute = $this->createMock(AttributeProto::class);
+        $someEmptyNonStringAttribute
             ->method('getName')
-            ->willReturn('');
-        $someUnknownAttribute
+            ->willReturn('some-attribute');
+        $someEmptyNonStringAttribute
             ->method('getValue')
             ->willReturn('');
-        $someUnknownAttribute
+        $someEmptyNonStringAttribute
             ->method('getContentType')
             ->willReturn(100);
-        $someUnknownAttribute
+        $someEmptyNonStringAttribute
             ->method('getAnchors')
             ->willReturn($this->createMock(\Traversable::class));
 
@@ -63,12 +65,13 @@ class AttributeListConverterTest extends TestCase
             ->willReturn([
                 $someAttribute,
                 $someNullNameAttribute,
-                $someUnknownAttribute,
+                $someEmptyNonStringAttribute,
             ]);
 
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList($someAttributeList);
 
         $this->assertCount(1, $yotiAttributesList);
         $this->assertContainsOnlyInstancesOf(Attribute::class, $yotiAttributesList);
+        $this->assertLogContains('Warning: Value is NULL (Attribute: some-attribute)');
     }
 }

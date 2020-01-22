@@ -31,7 +31,7 @@ class ServiceTest extends TestCase
     {
         $expectedUrl = sprintf(
             '%s/qrcodes/apps/%s?appId=%s',
-            Constants::CONNECT_API_URL,
+            Constants::API_URL,
             TestData::SDK_ID,
             TestData::SDK_ID
         );

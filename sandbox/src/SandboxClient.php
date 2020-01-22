@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Sandbox;
 
+use Yoti\Constants;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Sandbox\Profile\Service as ProfileService;
 use Yoti\Util\Config;
@@ -11,6 +12,11 @@ use Yoti\Util\PemFile;
 
 class SandboxClient
 {
+    /**
+     * Default sandbox API URL.
+     */
+    const SANDBOX_URL = Constants::API_BASE_URL . '/sandbox/v1';
+
     /**
      * @var \Yoti\Sandbox\Profile\Service
      */
@@ -32,7 +38,10 @@ class SandboxClient
         array $options = []
     ) {
         $pemFile = Pemfile::resolveFromString($pem);
+
+        $options[Config::API_URL] = $options[Config::API_URL] ?? self::SANDBOX_URL;
         $config = new Config($options);
+
         $this->profileService = new ProfileService($sdkId, $pemFile, $config);
     }
 
@@ -41,8 +50,8 @@ class SandboxClient
      *
      * @return string
      */
-    public function getToken(TokenRequest $tokenRequest): string
+    public function setupSharingProfile(TokenRequest $tokenRequest): string
     {
-        return $this->profileService->getToken($tokenRequest);
+        return $this->profileService->setupSharingProfile($tokenRequest);
     }
 }

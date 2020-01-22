@@ -51,7 +51,7 @@ class Service
     public function performCheck(Profile $amlProfile): Result
     {
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getConnectApiUrl())
+            ->withBaseUrl($this->config->getApiUrl())
             ->withEndpoint('/aml-check')
             ->withQueryParam('appId', $this->sdkId)
             ->withPost()
