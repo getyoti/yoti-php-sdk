@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Attribute;
 
+use Yoti\Util\Validation;
+
 class AgeVerification
 {
     /**
@@ -24,14 +26,17 @@ class AgeVerification
     /**
      * @var Attribute
      */
-    private $derivedAttribute;
+    private $attribute;
 
-    public function __construct(Attribute $derivedAttribute, string $checkType, int $age, bool $result)
+    public function __construct(Attribute $attribute)
     {
-        $this->age = $age;
-        $this->result = $result;
-        $this->checkType = $checkType;
-        $this->derivedAttribute = $derivedAttribute;
+        Validation::matchesPattern($attribute->getName(), '/^[^:]+:(?!.*:)[0-9]+$/', 'attribute.name');
+        $ageCheckArr = explode(':', $attribute->getName());
+
+        $this->attribute = $attribute;
+        $this->result = $attribute->getValue() === 'true';
+        $this->checkType = $ageCheckArr[0];
+        $this->age = (int) $ageCheckArr[1];
     }
 
     /**
@@ -72,6 +77,6 @@ class AgeVerification
      */
     public function getAttribute(): Attribute
     {
-        return $this->derivedAttribute;
+        return $this->attribute;
     }
 }

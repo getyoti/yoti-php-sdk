@@ -5,46 +5,75 @@ declare(strict_types=1);
 namespace Yoti\Profile;
 
 use Yoti\Profile\Attribute\Attribute;
+use Yoti\Util\Validation;
 
 class BaseProfile
 {
     /**
-     * @var mixed[]
+     * @var \Yoti\Profile\Attribute\Attribute[]
      */
-    protected $profileData;
+    private $attributesList;
+
+    /**
+     * @var \Yoti\Profile\Attribute\Attribute[][] keyed by attribute name.
+     */
+    private $attributesMap;
 
     /**
      * Profile constructor.
      *
-     * @param mixed[] $profileData
+     * @param \Yoti\Profile\Attribute\Attribute[] $attributesList
      */
-    public function __construct(array $profileData)
+    public function __construct(array $attributesList)
     {
-        $this->profileData = $profileData;
+        Validation::isArrayOfType($attributesList, [Attribute::class], 'attributesList');
+        $this->attributesList = $attributesList;
+        $this->setAttributesMap();
+    }
+
+    /**
+     * Set attributes map keyed by attribute name.
+     */
+    private function setAttributesMap(): void
+    {
+        $this->attributesMap = array_reduce(
+            $this->getAttributesList(),
+            function ($carry, Attribute $attr) {
+                $carry[$attr->getName()][] = $attr;
+                return $carry;
+            },
+            []
+        );
     }
 
     /**
      * @param string $attributeName.
      *
-     * @return null|Attribute
+     * @return \Yoti\Profile\Attribute\Attribute[]
      */
-    public function getProfileAttribute(string $attributeName): ?Attribute
+    private function getAttributesByName(string $attributeName): array
     {
-        if (isset($this->profileData[$attributeName])) {
-            $attributeObj = $this->profileData[$attributeName];
-            return $attributeObj instanceof Attribute ? $attributeObj : null;
-        }
-        return null;
+        return $this->attributesMap[$attributeName] ?? [];
     }
 
     /**
+     * @param string $attributeName.
+     *
+     * @return \Yoti\Profile\Attribute\Attribute|null
+     */
+    public function getProfileAttribute(string $attributeName): ?Attribute
+    {
+        $attributes = $this->getAttributesByName($attributeName);
+        return count($attributes) > 0 ? $attributes[0] : null;
+    }
+
+    /**
+     * Get all attributes.
+     *
      * @return \Yoti\Profile\Attribute\Attribute[]
      */
-    public function getAttributes(): array
+    public function getAttributesList(): array
     {
-        $attributesMap = $this->profileData;
-        // Remove age_verifications
-        unset($attributesMap[Profile::ATTR_AGE_VERIFICATIONS]);
-        return $attributesMap;
+        return $this->attributesList;
     }
 }

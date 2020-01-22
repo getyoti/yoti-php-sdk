@@ -282,4 +282,27 @@ class ValidationTest extends TestCase
             [ (object)[] ],
         ];
     }
+
+    /**
+     * @covers ::matchesPattern
+     */
+    public function testMatchesPatternValid()
+    {
+        $this->assertNull(Validation::matchesPattern(
+            'some-6',
+            '/\s*-\s*/',
+            'match'
+        ));
+    }
+
+    /**
+     * @covers ::matchesPattern
+     */
+    public function testMatchesPatternInvalid()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("'match' value 'some-value' does not match format '/\d+/'");
+
+        Validation::matchesPattern('some-value', '/\d+/', 'match');
+    }
 }

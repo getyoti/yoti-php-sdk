@@ -55,11 +55,6 @@ class MultiValue extends \ArrayObject
      */
     private function applyFilters(): void
     {
-        // Only apply filters if this is mutable.
-        if ($this->isImmutable) {
-            return;
-        }
-
         // Reset to original items before filtering.
         $this->exchangeArray($this->originalItems);
 

@@ -120,6 +120,7 @@ class DocumentDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::setExpirationDate
      */
     public function testShouldThrowExceptionForInvalidDate()
     {

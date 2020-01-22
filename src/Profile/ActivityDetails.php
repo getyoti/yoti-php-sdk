@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Profile;
 
 use Yoti\Profile\ExtraData\ExtraData;
-use Yoti\Profile\Util\Age\AgeVerificationConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
-use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\DateTime;
 use Yoti\Util\PemFile;
 
@@ -105,43 +103,20 @@ class ActivityDetails
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pemFile
         );
-        $this->userProfile = new Profile($this->processUserProfileAttributes($protobufAttrList));
+        $this->userProfile = new Profile(
+            AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
+        );
     }
 
     private function setApplicationProfile(): void
     {
-        $protobufAttributesList = $this->receipt->parseAttribute(
+        $protobufAttrList = $this->receipt->parseAttribute(
             Receipt::ATTR_PROFILE_CONTENT,
             $this->pemFile
         );
         $this->applicationProfile = new ApplicationProfile(
-            AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList)
+            AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
         );
-    }
-
-    /**
-     * @param \Yoti\Protobuf\Attrpubapi\AttributeList $protobufAttributesList
-     *
-     * @return array<string, \Yoti\Profile\Attribute\Attribute>
-     */
-    private function processUserProfileAttributes(AttributeList $protobufAttributesList): array
-    {
-        $attributesMap = AttributeListConverter::convertToYotiAttributesMap($protobufAttributesList);
-        $this->appendAgeVerifications($attributesMap);
-
-        return $attributesMap;
-    }
-
-    /**
-     * Add age_verifications data to the attributesMap
-     *
-     * @param array<string, \Yoti\Profile\Attribute\Attribute> $attributesMap
-     */
-    private function appendAgeVerifications(array &$attributesMap): void
-    {
-        $ageVerificationConverter = new AgeVerificationConverter($attributesMap);
-        $ageVerifications = $ageVerificationConverter->getAgeVerificationsFromAttrsMap();
-        $attributesMap[Profile::ATTR_AGE_VERIFICATIONS] = $ageVerifications;
     }
 
     /**

@@ -158,7 +158,7 @@ class ReceiptTest extends TestCase
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pemFile
         );
-        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
+        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList(
             $protobufAttributesList
         );
         $profile = new Profile($yotiAttributesList);
@@ -175,7 +175,7 @@ class ReceiptTest extends TestCase
             Receipt::ATTR_PROFILE_CONTENT,
             $this->pemFile
         );
-        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap(
+        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList(
             $protobufAttributesList
         );
         $applicationProfile = new ApplicationProfile($yotiAttributesList);

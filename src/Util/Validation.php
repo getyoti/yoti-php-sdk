@@ -171,4 +171,18 @@ class Validation
         }
         return false;
     }
+
+    /**
+     * @param mixed $value
+     * @param string $pattern
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function matchesPattern($value, $pattern, $name): void
+    {
+        if (preg_match($pattern, $value) !== 1) {
+            throw new \InvalidArgumentException("'{$name}' value '{$value}' does not match format '{$pattern}'");
+        }
+    }
 }
