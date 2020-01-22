@@ -24,6 +24,9 @@ class Config
     /** HTTP client key */
     const HTTP_CLIENT = 'http.client';
 
+    /** Sandbox API URL key */
+    const SANDBOX_API_URL = 'sandbox.api.url';
+
     /**
      * @var array<string, mixed>
      */
@@ -38,6 +41,7 @@ class Config
      *   - Config::CONNECT_API_URL 'connect.api.url' (string)
      *   - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
      *   - Config::SDK_VERSION 'sdk.version' (string)
+     *   - Config::SANDBOX_API_URL 'sandbox.api.url' (string)
      *
      *   Example of creating config:
      *
@@ -51,6 +55,7 @@ class Config
         $this->setStringValue(self::CONNECT_API_URL, $options);
         $this->setStringValue(self::SDK_IDENTIFIER, $options);
         $this->setStringValue(self::SDK_VERSION, $options);
+        $this->setStringValue(self::SANDBOX_API_URL, $options);
         $this->setHttpClient($options);
     }
 
@@ -65,6 +70,7 @@ class Config
             array_keys($options),
             [
                 self::CONNECT_API_URL,
+                self::SANDBOX_API_URL,
                 self::SDK_IDENTIFIER,
                 self::SDK_VERSION,
                 self::HTTP_CLIENT,
@@ -135,6 +141,14 @@ class Config
     public function getConnectApiUrl(): string
     {
         return $this->get(self::CONNECT_API_URL, Constants::CONNECT_API_URL);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSandboxApiUrl(): string
+    {
+        return $this->get(self::SANDBOX_API_URL);
     }
 
     /**

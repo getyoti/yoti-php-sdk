@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Http;
+namespace Yoti\Sandbox\Test\Profile\Response;
 
 use Psr\Http\Message\ResponseInterface;
-use YotiSandbox\Http\TokenResponse;
+use Yoti\Sandbox\Profile\Response\TokenResponse;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Http\TokenResponse
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Response\TokenResponse
  */
 class TokenResponseTest extends TestCase
 {
@@ -44,7 +44,7 @@ class TokenResponseTest extends TestCase
      */
     public function testGetTokenEmpty()
     {
-        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'Token key is missing');
+        $this->expectException(\Yoti\Sandbox\Exception\ResponseException::class, 'Token key is missing');
 
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(201);
@@ -58,7 +58,7 @@ class TokenResponseTest extends TestCase
      */
     public function testBadResponseStatusCode()
     {
-        $this->expectException(\YotiSandbox\Exception\ResponseException::class, 'Server responded with 500');
+        $this->expectException(\Yoti\Sandbox\Exception\ResponseException::class, 'Server responded with 500');
 
         $someResponse = $this->createMock(ResponseInterface::class);
         $someResponse->method('getStatusCode')->willReturn(500);

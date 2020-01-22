@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Entity;
+namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
-use YotiSandbox\Entity\SandboxDocumentDetails;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Entity\SandboxDocumentDetails
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails
  */
 class SandboxDocumentDetailsTest extends TestCase
 {

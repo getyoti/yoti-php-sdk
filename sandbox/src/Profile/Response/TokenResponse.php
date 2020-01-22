@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Http;
+namespace Yoti\Sandbox\Profile\Response;
 
 use Psr\Http\Message\ResponseInterface;
+use Yoti\Sandbox\Exception\ResponseException;
 use Yoti\Util\Json;
-use YotiSandbox\Exception\ResponseException;
 
 class TokenResponse
 {
@@ -20,7 +20,7 @@ class TokenResponse
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @throws \YotiSandbox\Exception\ResponseException
+     * @throws \Yoti\Sandbox\Exception\ResponseException
      */
     public function __construct(ResponseInterface $response)
     {

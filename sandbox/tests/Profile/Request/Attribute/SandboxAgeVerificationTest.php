@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Entity;
+namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
 use Yoti\Profile\UserProfile;
-use YotiSandbox\Entity\SandboxAgeVerification;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Entity\SandboxAgeVerification
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification
  */
 class SandboxAgeVerificationTest extends TestCase
 {

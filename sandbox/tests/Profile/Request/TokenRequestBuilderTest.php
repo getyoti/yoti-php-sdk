@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Http;
+namespace Yoti\Sandbox\Test\Profile\Request;
 
-use YotiSandbox\Entity\SandboxAgeVerification;
-use YotiSandbox\Entity\SandboxAnchor;
-use YotiSandbox\Entity\SandboxAttribute;
-use YotiSandbox\Entity\SandboxDocumentDetails;
-use YotiSandbox\Http\TokenRequest;
-use YotiSandbox\Http\TokenRequestBuilder;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
+use Yoti\Sandbox\Profile\Request\TokenRequest;
+use Yoti\Sandbox\Profile\Request\TokenRequestBuilder;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Http\TokenRequestBuilder
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Request\TokenRequestBuilder
  */
 class TokenRequestBuilderTest extends TestCase
 {
@@ -25,7 +25,7 @@ class TokenRequestBuilderTest extends TestCase
     const SOME_TIMESTAMP = 1575998454;
 
     /**
-     * @var \YotiSandbox\Http\RequestBuilders
+     * @var \Yoti\Sandbox\Profile\RequestBuilders
      */
     private $requestBuilder;
 

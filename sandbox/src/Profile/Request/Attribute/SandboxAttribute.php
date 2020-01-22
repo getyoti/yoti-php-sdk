@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Entity;
+namespace Yoti\Sandbox\Profile\Request\Attribute;
 
 use Yoti\Util\Validation;
 
@@ -20,7 +20,7 @@ class SandboxAttribute
     /** @var string */
     protected $optional;
 
-    /** @var \YotiSandbox\Entity\SandboxAnchor[] */
+    /** @var \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] */
     protected $anchors;
 
     /**
@@ -28,7 +28,7 @@ class SandboxAttribute
      * @param string $value
      * @param string $derivation
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      */
     public function __construct(
         string $name,
@@ -42,7 +42,7 @@ class SandboxAttribute
         $this->derivation = $derivation;
         $this->optional = $optional;
 
-        Validation::isArrayOfType($anchors, [\YotiSandbox\Entity\SandboxAnchor::class], 'anchors');
+        Validation::isArrayOfType($anchors, [\Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor::class], 'anchors');
         $this->anchors = $anchors;
     }
 
@@ -67,7 +67,7 @@ class SandboxAttribute
     }
 
     /**
-     * @return \YotiSandbox\Entity\SandboxAnchor[]
+     * @return \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[]
      */
     public function getAnchors(): array
     {
