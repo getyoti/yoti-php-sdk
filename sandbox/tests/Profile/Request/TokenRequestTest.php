@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Http;
+namespace Yoti\Sandbox\Test\Profile\Request;
 
 use Yoti\Http\Payload;
 use Yoti\Profile\UserProfile;
-use YotiSandbox\Http\TokenRequest;
+use Yoti\Sandbox\Profile\Request\TokenRequest;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Http\TokenRequest
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Request\TokenRequest
  */
 class TokenRequestTest extends TestCase
 {

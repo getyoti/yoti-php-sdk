@@ -329,7 +329,7 @@ $ ./vendor/bin/phpunit tests
         * [X] Age `getAge()` // int, e.g 50  
         * [X] Check Type `getCheckType()` // string, e.g 'age_over'
         * [X] Result `getResult()` // boolean
-        * [X] Attribute `getAttribute()` // Yoti\Profile\Attribute\Attribute Object  
+        * [X] Attribute `getAttribute()` // Yoti\Profile\Attribute Object
       * [X] Address `getPostalAddress()->getValue()`
       * [X] Structured Postal Address `getStructuredPostalAddress()->getValue()`
       * [X] Gender `getGender()->getValue()`

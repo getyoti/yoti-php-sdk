@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Http;
+namespace Yoti\Sandbox\Profile\Request;
 
 use Yoti\Http\Payload;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Entity;
+namespace Yoti\Sandbox\Profile\Request\Attribute;
 
 class SandboxAnchor
 {

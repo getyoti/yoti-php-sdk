@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Http;
+namespace Yoti\Sandbox\Profile\Request;
 
 use Yoti\Profile\UserProfile;
-use YotiSandbox\Entity\SandboxAgeVerification;
-use YotiSandbox\Entity\SandboxAttribute;
-use YotiSandbox\Entity\SandboxDocumentDetails;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
 
 class TokenRequestBuilder
 {
@@ -33,7 +33,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -52,7 +52,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -90,7 +90,7 @@ class TokenRequestBuilder
     /**
      * @param \DateTime $dateTime
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -109,7 +109,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -128,7 +128,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -147,7 +147,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -166,7 +166,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -179,7 +179,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -198,7 +198,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -217,7 +217,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -236,7 +236,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -253,9 +253,9 @@ class TokenRequestBuilder
     }
 
     /**
-     * @param \YotiSandbox\Entity\SandboxDocumentDetails $documentDetails
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails $documentDetails
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -277,7 +277,7 @@ class TokenRequestBuilder
     /**
      * @param string $value
      * @param string $optional
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return $this
      */
@@ -312,7 +312,7 @@ class TokenRequestBuilder
     }
 
     /**
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return array[]
      */
@@ -338,7 +338,7 @@ class TokenRequestBuilder
      *  Empty value means there is no derivation for this attribute
      * @param string $optional
      *  'false' value means this attribute is required
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      *
      * @return SandboxAttribute
      */
@@ -353,7 +353,7 @@ class TokenRequestBuilder
     }
 
     /**
-     * @return \YotiSandbox\Http\TokenRequest
+     * @return \Yoti\Sandbox\Profile\Request\TokenRequest
      */
     public function build(): TokenRequest
     {
