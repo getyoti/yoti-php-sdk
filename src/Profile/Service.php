@@ -63,7 +63,7 @@ class Service
 
         // Request endpoint
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getConnectApiUrl())
+            ->withBaseUrl($this->config->getApiUrl())
             ->withEndpoint(sprintf('/profile/%s', $token))
             ->withQueryParam('appId', $this->sdkId)
             ->withHeader(self::YOTI_AUTH_HEADER_KEY, $this->pemFile->getAuthKey())

@@ -54,12 +54,12 @@ class Service
      *
      * @return string
      */
-    public function getToken(TokenRequest $tokenRequest): string
+    public function setupSharingProfile(TokenRequest $tokenRequest): string
     {
         // Request endpoint
         $endpoint = sprintf(self::TOKEN_REQUEST_ENDPOINT_FORMAT, $this->sdkId);
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getSandboxApiUrl())
+            ->withBaseUrl($this->config->getApiUrl())
             ->withEndpoint($endpoint)
             ->withPost()
             ->withPemFile($this->pemFile)

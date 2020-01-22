@@ -6,8 +6,11 @@ namespace Yoti;
 
 class Constants
 {
-    /** Default Connect API URL */
-    const CONNECT_API_URL = 'https://api.yoti.com/api/v1';
+    /** Default API base URL */
+    const API_BASE_URL = 'https://api.yoti.com';
+
+    /** Default API URL */
+    const API_URL = self::API_BASE_URL . '/api/v1';
 
     /** Default SDK identifier */
     const SDK_IDENTIFIER = 'PHP';
