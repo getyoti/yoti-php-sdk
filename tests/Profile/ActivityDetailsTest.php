@@ -126,8 +126,6 @@ class ActivityDetailsTest extends TestCase
     /**
      * @covers ::getProfile
      * @covers ::setProfile
-     * @covers ::processUserProfileAttributes
-     * @covers ::appendAgeVerifications
      */
     public function testGetProfile()
     {

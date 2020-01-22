@@ -13,14 +13,13 @@ use Yoti\Profile\Attribute\Attribute;
  */
 class Profile extends BaseProfile
 {
-    const AGE_OVER_FORMAT = 'age_over:%d';
-    const AGE_UNDER_FORMAT = 'age_under:%d';
+    const AGE_OVER = 'age_over:';
+    const AGE_UNDER = 'age_under:';
 
     const ATTR_FAMILY_NAME = 'family_name';
     const ATTR_GIVEN_NAMES = 'given_names';
     const ATTR_FULL_NAME = 'full_name';
     const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_AGE_VERIFICATIONS = 'age_verifications';
     const ATTR_GENDER = 'gender';
     const ATTR_NATIONALITY = 'nationality';
     const ATTR_PHONE_NUMBER = 'phone_number';
@@ -30,6 +29,9 @@ class Profile extends BaseProfile
     const ATTR_DOCUMENT_DETAILS = "document_details";
     const ATTR_DOCUMENT_IMAGES = 'document_images';
     const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
+
+    /** @var \Yoti\Profile\Attribute\AgeVerification[] */
+    private $ageVerifications;
 
     /**
      * The full name attribute.
@@ -181,8 +183,8 @@ class Profile extends BaseProfile
      */
     public function getAgeVerifications(): array
     {
-        return isset($this->profileData[self::ATTR_AGE_VERIFICATIONS])
-            ? $this->profileData[self::ATTR_AGE_VERIFICATIONS] : [];
+        $this->findAllAgeVerifications();
+        return $this->ageVerifications;
     }
 
     /**
@@ -190,12 +192,11 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return AgeVerification|null
+     * @return \Yoti\Profile\Attribute\AgeVerification|null
      */
     public function findAgeOverVerification(int $age): ?AgeVerification
     {
-        $ageOverAttr = sprintf(self::AGE_OVER_FORMAT, $age);
-        return $this->getAgeVerificationByAttribute($ageOverAttr);
+        return $this->getAgeVerification(self::AGE_OVER, $age);
     }
 
     /**
@@ -203,29 +204,60 @@ class Profile extends BaseProfile
      *
      * @param int $age
      *
-     * @return AgeVerification|null
+     * @return \Yoti\Profile\Attribute\AgeVerification|null
      */
     public function findAgeUnderVerification(int $age): ?AgeVerification
     {
-        $ageUnderAttr = sprintf(self::AGE_UNDER_FORMAT, $age);
-        return $this->getAgeVerificationByAttribute($ageUnderAttr);
+        return $this->getAgeVerification(self::AGE_UNDER, $age);
     }
 
     /**
      * Return AgeVerification.
      *
-     * @param string $ageAttr
+     * @param string $type
+     * @param int $age
      *
-     * @return AgeVerification|null
+     * @return \Yoti\Profile\Attribute\AgeVerification|null
      */
-    private function getAgeVerificationByAttribute($ageAttr): ?AgeVerification
+    private function getAgeVerification(string $type, int $age): ?AgeVerification
     {
+        $attrName = $type . (string) $age;
         $ageVerifications = $this->getAgeVerifications();
-        return isset($ageVerifications[$ageAttr]) ? $ageVerifications[$ageAttr] : null;
+        return $ageVerifications[$attrName] ?? null;
     }
 
     /**
-     * @return Attribute|null
+     * @param string $name
+     *
+     * @return \Yoti\Profile\Attribute\Attribute[]
+     */
+    private function findAttributesStartingWith($name): array
+    {
+        return array_filter(
+            $this->getAttributesList(),
+            function (Attribute $attr) use ($name): bool {
+                return strpos($attr->getName(), $name) === 0;
+            }
+        );
+    }
+
+    /**
+     * Finds and sets all age verifications.
+     */
+    private function findAllAgeVerifications(): void
+    {
+        if (!isset($this->ageVerifications)) {
+            $this->ageVerifications = [];
+            foreach ([self::AGE_OVER, self::AGE_UNDER] as $format) {
+                foreach ($this->findAttributesStartingWith($format) as $attr) {
+                    $this->ageVerifications[$attr->getName()] = new AgeVerification($attr);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return \Yoti\Profile\Attribute\Attribute|null
      */
     private function getFormattedAddress(): ?Attribute
     {
@@ -253,7 +285,7 @@ class Profile extends BaseProfile
     /**
      * Get anchor map for provided anchor.
      *
-     * @param Attribute $attribute
+     * @param \Yoti\Profile\Attribute\Attribute $attribute
      *
      * @return array<string, array> attribute map
      */

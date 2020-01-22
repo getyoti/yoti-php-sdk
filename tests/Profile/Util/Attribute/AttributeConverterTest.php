@@ -27,7 +27,7 @@ class AttributeConverterTest extends TestCase
     const CONTENT_TYPE_JPEG = 2;
     const CONTENT_TYPE_DATE = 3;
     const CONTENT_TYPE_PNG = 4;
-    const CONTENT_TYPE_BYTES = 5;
+    const CONTENT_TYPE_JSON = 5;
     const CONTENT_TYPE_MULTI_VALUE = 6;
     const CONTENT_TYPE_INT = 7;
 
@@ -99,6 +99,19 @@ class AttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertToYotiAttribute
+     */
+    public function testEmptyApplicationLogo()
+    {
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'application_logo',
+            '',
+            self::CONTENT_TYPE_PNG
+        ));
+        $this->assertNull($attr);
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnContentType
      */
     public function testConvertDateInvalid()
@@ -111,6 +124,38 @@ class AttributeConverterTest extends TestCase
         ));
         $this->assertNull($attr);
         $this->assertLogContains('Could not parse string to DateTime');
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     * @covers ::convertValueBasedOnContentType
+     */
+    public function testConvertJson()
+    {
+        $someJsonData = ['some' => 'json'];
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'test_attr',
+            json_encode($someJsonData),
+            self::CONTENT_TYPE_JSON
+        ));
+        $this->assertEquals($someJsonData, $attr->getValue());
+    }
+
+    /**
+     * @covers ::convertValueBasedOnAttributeName
+     */
+    public function testConvertDocumentDetails()
+    {
+        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+            'document_details',
+            'PASSPORT GBR 01234567 2020-01-01',
+            self::CONTENT_TYPE_STRING
+        ));
+        $document = $attr->getValue();
+        $this->assertEquals('PASSPORT', $document->getType());
+        $this->assertEquals('GBR', $document->getIssuingCountry());
+        $this->assertEquals('01234567', $document->getDocumentNumber());
+        $this->assertEquals('2020-01-01', $document->getExpirationDate()->format('Y-m-d'));
     }
 
     /**
@@ -133,6 +178,7 @@ class AttributeConverterTest extends TestCase
     /**
      * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnContentType
+     * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertUnknownContentType()
     {
@@ -209,7 +255,6 @@ class AttributeConverterTest extends TestCase
      *
      * @covers ::convertToYotiAttribute
      * @covers ::convertValueBasedOnAttributeName
-     * @covers ::imageTypeToExtension
      */
     public function testConvertToYotiAttributeDocumentImages()
     {
@@ -502,7 +547,7 @@ class AttributeConverterTest extends TestCase
             [ self::CONTENT_TYPE_JPEG ],
             [ self::CONTENT_TYPE_DATE ],
             [ self::CONTENT_TYPE_PNG ],
-            [ self::CONTENT_TYPE_BYTES ],
+            [ self::CONTENT_TYPE_JSON ],
             [ self::CONTENT_TYPE_MULTI_VALUE ],
             [ self::CONTENT_TYPE_INT ],
         ];

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\Util\Attribute;
 
+use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
-use Yoti\Protobuf\Attrpubapi\Attribute;
+use Yoti\Protobuf\Attrpubapi\Attribute as AttributeProto;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
 use YotiTest\TestCase;
 
@@ -16,14 +17,14 @@ use YotiTest\TestCase;
 class AttributeListConverterTest extends TestCase
 {
     /**
-     * @covers ::convertToYotiAttributesMap
+     * @covers ::convertToYotiAttributesList
      */
-    public function testConvertToYotiAttributesMap()
+    public function testConvertToYotiAttributesList()
     {
         $someName = 'some name';
         $someValue = 'some value';
 
-        $someAttribute = $this->createMock(Attribute::class);
+        $someAttribute = $this->createMock(AttributeProto::class);
         $someAttribute
             ->method('getName')
             ->willReturn($someName);
@@ -37,17 +38,37 @@ class AttributeListConverterTest extends TestCase
             ->method('getAnchors')
             ->willReturn($this->createMock(\Traversable::class));
 
+        $someNullNameAttribute = $this->createMock(AttributeProto::class);
+        $someNullNameAttribute
+            ->method('getName')
+            ->willReturn(null);
+
+        $someUnknownAttribute = $this->createMock(AttributeProto::class);
+        $someUnknownAttribute
+            ->method('getName')
+            ->willReturn('');
+        $someUnknownAttribute
+            ->method('getValue')
+            ->willReturn('');
+        $someUnknownAttribute
+            ->method('getContentType')
+            ->willReturn(100);
+        $someUnknownAttribute
+            ->method('getAnchors')
+            ->willReturn($this->createMock(\Traversable::class));
+
         $someAttributeList = $this->createMock(AttributeList::class);
         $someAttributeList
             ->method('getAttributes')
             ->willReturn([
                 $someAttribute,
-                $this->createMock(Attribute::class),
+                $someNullNameAttribute,
+                $someUnknownAttribute,
             ]);
 
-        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesMap($someAttributeList);
+        $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList($someAttributeList);
 
         $this->assertCount(1, $yotiAttributesList);
-        $this->assertEquals($someValue, $yotiAttributesList[$someName]->getValue());
+        $this->assertContainsOnlyInstancesOf(Attribute::class, $yotiAttributesList);
     }
 }

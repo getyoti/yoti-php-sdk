@@ -148,7 +148,7 @@ class DynamicPolicyBuilder
     public function withAgeOver(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
-            sprintf(Profile::AGE_OVER_FORMAT, $age),
+            Profile::AGE_OVER . (string) $age,
             $constraints,
             $acceptSelfAsserted
         );
@@ -164,7 +164,7 @@ class DynamicPolicyBuilder
     public function withAgeUnder(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
-            sprintf(Profile::AGE_UNDER_FORMAT, $age),
+            Profile::AGE_UNDER . (string) $age,
             $constraints,
             $acceptSelfAsserted
         );
