@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiSandbox\Entity;
+namespace Yoti\Sandbox\Profile\Request\Attribute;
 
 use Yoti\Profile\UserProfile;
 
@@ -14,7 +14,7 @@ class SandboxAgeVerification extends SandboxAttribute
     /**
      * @param \DateTime $dateObj
      * @param string $derivation
-     * @param \YotiSandbox\Entity\SandboxAnchor[] $anchors
+     * @param \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor[] $anchors
      */
     public function __construct(\DateTime $dateObj, string $derivation = '', array $anchors = [])
     {

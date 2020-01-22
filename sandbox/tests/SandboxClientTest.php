@@ -2,26 +2,24 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest;
+namespace Yoti\Sandbox\Test;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Payload;
+use Yoti\Sandbox\Profile\Request\TokenRequest;
+use Yoti\Sandbox\SandboxClient;
 use Yoti\Util\Config;
-use YotiSandbox\Http\SandboxPathManager;
-use YotiSandbox\Http\TokenRequest;
-use YotiSandbox\SandboxClient;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
 /**
- * @coversDefaultClass \YotiSandbox\SandboxClient
+ * @coversDefaultClass \Yoti\Sandbox\SandboxClient
  */
 class SandboxClientTest extends TestCase
 {
     /**
      * @covers ::getToken
-     * @covers ::sendRequest
      * @covers ::__construct
      */
     public function testGetToken()
@@ -41,15 +39,12 @@ class SandboxClientTest extends TestCase
         $mockHttpClient = $this->createMock(ClientInterface::class);
         $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
-        $mockSandboxPathManager = $this->createMock(SandboxPathManager::class);
-        $mockSandboxPathManager->method('getTokenApiPath')->willReturn('/some-token-api-path');
-
         $sandboxClient = new SandboxClient(
             TestData::SDK_ID,
             TestData::PEM_FILE,
-            $mockSandboxPathManager,
             [
                 Config::HTTP_CLIENT => $mockHttpClient,
+                Config::SANDBOX_API_URL => '/some-sandbox-path',
             ]
         );
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SandboxTest\Entity;
+namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
-use YotiSandbox\Entity\SandboxAnchor;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \YotiSandbox\Entity\SandboxAnchor
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor
  */
 class SandboxAnchorTest extends TestCase
 {
