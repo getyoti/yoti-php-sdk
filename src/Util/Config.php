@@ -12,8 +12,8 @@ use Yoti\Constants;
  */
 class Config
 {
-    /** Connect API URL key */
-    const CONNECT_API_URL = 'connect.api.url';
+    /** API URL key */
+    const API_URL = 'api.url';
 
     /** SDK identifier key */
     const SDK_IDENTIFIER = 'sdk.identifier';
@@ -23,9 +23,6 @@ class Config
 
     /** HTTP client key */
     const HTTP_CLIENT = 'http.client';
-
-    /** Sandbox API URL key */
-    const SANDBOX_API_URL = 'sandbox.api.url';
 
     /**
      * @var array<string, mixed>
@@ -38,10 +35,9 @@ class Config
      *   Configuration settings include the following options:
      *
      *   - Config::HTTP_CLIENT 'http.client' (\Psr\Http\Client\ClientInterface)
-     *   - Config::CONNECT_API_URL 'connect.api.url' (string)
+     *   - Config::API_URL 'api.url' (string)
      *   - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
      *   - Config::SDK_VERSION 'sdk.version' (string)
-     *   - Config::SANDBOX_API_URL 'sandbox.api.url' (string)
      *
      *   Example of creating config:
      *
@@ -52,10 +48,9 @@ class Config
     public function __construct(array $options = [])
     {
         $this->validateKeys($options);
-        $this->setStringValue(self::CONNECT_API_URL, $options);
+        $this->setStringValue(self::API_URL, $options);
         $this->setStringValue(self::SDK_IDENTIFIER, $options);
         $this->setStringValue(self::SDK_VERSION, $options);
-        $this->setStringValue(self::SANDBOX_API_URL, $options);
         $this->setHttpClient($options);
     }
 
@@ -69,8 +64,7 @@ class Config
         $invalidKeys = array_diff(
             array_keys($options),
             [
-                self::CONNECT_API_URL,
-                self::SANDBOX_API_URL,
+                self::API_URL,
                 self::SDK_IDENTIFIER,
                 self::SDK_VERSION,
                 self::HTTP_CLIENT,
@@ -138,17 +132,9 @@ class Config
     /**
      * @return string
      */
-    public function getConnectApiUrl(): string
+    public function getApiUrl(): string
     {
-        return $this->get(self::CONNECT_API_URL, Constants::CONNECT_API_URL);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSandboxApiUrl(): string
-    {
-        return $this->get(self::SANDBOX_API_URL);
+        return $this->get(self::API_URL, Constants::API_URL);
     }
 
     /**

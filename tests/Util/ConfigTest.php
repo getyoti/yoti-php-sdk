@@ -16,12 +16,12 @@ class ConfigTest extends TestCase
 {
     const SDK_IDENTIFIER_KEY = 'sdk.identifier';
     const SDK_VERSION_KEY = 'sdk.version';
-    const CONNECT_API_URL_KEY = 'connect.api.url';
+    const API_URL_KEY = 'api.url';
     const HTTP_CLIENT_KEY = 'http.client';
 
     const SOME_SDK_IDENTIFIER = 'some identifier';
     const SOME_SDK_VERSION = 'some version';
-    const SOME_CONNECT_API_URL = 'http://example.com/api';
+    const SOME_API_URL = 'http://example.com/api';
 
     /**
      * @covers ::getSdkIdentifier
@@ -74,28 +74,28 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @covers ::getConnectApiUrl
+     * @covers ::getApiUrl
      * @covers ::__construct
      * @covers ::validateKeys
      * @covers ::get
      * @covers ::set
      * @covers ::setStringValue
      */
-    public function testGetConnectApiUrl()
+    public function testGetApiUrl()
     {
         $config = new Config([
-            self::CONNECT_API_URL_KEY => self::SOME_CONNECT_API_URL
+            self::API_URL_KEY => self::SOME_API_URL
         ]);
 
-        $this->assertEquals(self::SOME_CONNECT_API_URL, $config->getConnectApiUrl());
+        $this->assertEquals(self::SOME_API_URL, $config->getApiUrl());
     }
 
     /**
-     * @covers ::getConnectApiUrl
+     * @covers ::getApiUrl
      */
-    public function testGetConnectApiUrlDefault()
+    public function testGetApiUrlDefault()
     {
-        $this->assertEquals(Constants::CONNECT_API_URL, (new Config())->getConnectApiUrl());
+        $this->assertEquals(Constants::API_URL, (new Config())->getApiUrl());
     }
 
     /**

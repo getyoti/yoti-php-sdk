@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Sandbox\Test;
+namespace Yoti\Sandbox\Test\Profile;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Payload;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
-use Yoti\Sandbox\SandboxClient;
+use Yoti\Sandbox\Profile\Service;
 use Yoti\Util\Config;
+use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
 
 /**
- * @coversDefaultClass \Yoti\Sandbox\SandboxClient
+ * @coversDefaultClass \Yoti\Sandbox\Profile\Service
  */
-class SandboxClientTest extends TestCase
+class ServiceTest extends TestCase
 {
     /**
      * @covers ::setupSharingProfile
@@ -39,12 +40,12 @@ class SandboxClientTest extends TestCase
         $mockHttpClient = $this->createMock(ClientInterface::class);
         $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
-        $sandboxClient = new SandboxClient(
+        $service = new Service(
             TestData::SDK_ID,
-            TestData::PEM_FILE,
-            [
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config([
                 Config::HTTP_CLIENT => $mockHttpClient,
-            ]
+            ])
         );
 
         $mockTokenRequest = $this->createMock(TokenRequest::class);
@@ -52,7 +53,7 @@ class SandboxClientTest extends TestCase
             ->method('getPayload')
             ->willReturn($this->createMock(Payload::class));
 
-        $token = $sandboxClient->setupSharingProfile($mockTokenRequest);
+        $token = $service->setupSharingProfile($mockTokenRequest);
 
         $this->assertEquals($expectedConnectToken, $token);
     }
