@@ -69,10 +69,9 @@ class AttributeConverter
 
         switch ($contentType) {
             case self::CONTENT_TYPE_JPEG:
+                return new Image($value, 'JPEG');
             case self::CONTENT_TYPE_PNG:
-                $imageExtension = self::imageTypeToExtension($contentType);
-                return new Image($value, $imageExtension);
-
+                return new Image($value, 'PNG');
             case self::CONTENT_TYPE_JSON:
                 // Convert JSON string to an array
                 return Json::decode($value);
@@ -114,30 +113,6 @@ class AttributeConverter
             );
         }
         return new MultiValue($items);
-    }
-
-    /**
-     * Convert Protobuf Image type to an image extension.
-     *
-     * @param int $type
-     *
-     * @return string
-     */
-    private static function imageTypeToExtension(int $type): string
-    {
-        switch ($type) {
-            case 2:
-                $format = 'JPEG';
-                break;
-
-            case 4:
-                $format = 'PNG';
-                break;
-
-            default:
-                $format = 'UNSUPPORTED';
-        }
-        return $format;
     }
 
     /**

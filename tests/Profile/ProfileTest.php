@@ -124,23 +124,9 @@ class ProfileTest extends TestCase
     }
 
     /**
-     * Should not return age_verifications in the array
-     *
-     * @covers ::getAttributes
-     *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
-     */
-    public function testGetAttributes($profileData)
-    {
-        $profile = new Profile($profileData);
-
-        $this->assertArrayNotHasKey(Profile::ATTR_AGE_VERIFICATIONS, $profile->getAttributes());
-    }
-
-    /**
      * @covers ::getAgeVerifications
      *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
     public function testGetAgeVerifications($profileData)
     {
@@ -152,12 +138,11 @@ class ProfileTest extends TestCase
 
     /**
      * @covers ::findAgeOverVerification
-     * @covers ::getAgeVerificationByAttribute
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getCheckType
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getAge
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getResult
+     * @covers ::getAgeVerification
+     * @covers ::findAttributesStartingWith
+     * @covers ::findAllAgeVerifications
      *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
     public function testFindAgeOverVerification($profileData)
     {
@@ -168,16 +153,16 @@ class ProfileTest extends TestCase
         $this->assertEquals('age_over', $ageOver35->getCheckType());
         $this->assertEquals(35, $ageOver35->getAge());
         $this->assertTrue($ageOver35->getResult());
+        $this->assertInstanceOf(Attribute::class, $ageOver35->getAttribute());
     }
 
     /**
      * @covers ::findAgeUnderVerification
-     * @covers ::getAgeVerificationByAttribute
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getCheckType
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getAge
-     * @covers \Yoti\Profile\Attribute\AgeVerification::getResult
+     * @covers ::getAgeVerification
+     * @covers ::findAttributesStartingWith
+     * @covers ::findAllAgeVerifications
      *
-     * @dataProvider getDummyProfileDataWithAgeVerifications
+     * @dataProvider profileDataWithAgeVerificationsDataProvider
      */
     public function testFindAgeUnderVerification($profileData)
     {
@@ -187,43 +172,31 @@ class ProfileTest extends TestCase
         $this->assertInstanceOf(AgeVerification::class, $ageUnder18);
         $this->assertEquals('age_under', $ageUnder18->getCheckType());
         $this->assertEquals(18, $ageUnder18->getAge());
-        $this->assertFalse($ageUnder18->getResult());
+        $this->assertInstanceOf(Attribute::class, $ageUnder18->getAttribute());
     }
 
     /**
      * Profile data provider with age verifications.
      */
-    public function getDummyProfileDataWithAgeVerifications()
+    public function profileDataWithAgeVerificationsDataProvider()
     {
         $profileData = [
-            Profile::ATTR_AGE_VERIFICATIONS => [
-                'age_under:18' => new AgeVerification(
-                    new Attribute(
-                        'age_under:18',
-                        'false',
-                        []
-                    ),
-                    'age_under',
-                    18,
-                    false
-                ),
-                'age_over:35' => new AgeVerification(
-                    new Attribute(
-                        'age_over:35',
-                        'true',
-                        []
-                    ),
-                    'age_over',
-                    35,
-                    true
-                ),
-            ],
-            Profile::ATTR_GIVEN_NAMES => new Attribute(
+            new Attribute(
+                Profile::AGE_UNDER . '18',
+                'false',
+                []
+            ),
+            new Attribute(
+                Profile::AGE_OVER . '35',
+                'true',
+                []
+            ),
+            new Attribute(
                 Profile::ATTR_GIVEN_NAMES,
                 'TEST GIVEN NAMES',
                 []
             ),
-            Profile::ATTR_FAMILY_NAME => new Attribute(
+            new Attribute(
                 Profile::ATTR_FAMILY_NAME,
                 'TEST FAMILY NAME',
                 []
@@ -237,12 +210,15 @@ class ProfileTest extends TestCase
      */
     public function testGetDocumentImages()
     {
-        $mockAttr = $this->getMockBuilder(\Yoti\Profile\Attribute\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeName = 'document_images';
+
+        $someAttribute = $this->createMock(\Yoti\Profile\Attribute\Attribute::class);
+        $someAttribute
+            ->method('getName')
+            ->willReturn($attributeName);
 
         $profileData = [
-            'document_images' => $mockAttr,
+            $attributeName => $someAttribute,
         ];
         $profile = new Profile($profileData);
         $this->assertSame($profileData['document_images'], $profile->getDocumentImages());

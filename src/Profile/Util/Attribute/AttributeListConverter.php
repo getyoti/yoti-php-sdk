@@ -9,13 +9,13 @@ use Yoti\Protobuf\Attrpubapi\AttributeList;
 class AttributeListConverter
 {
     /**
-     * Convert Protobuf AttributeList to Yoti Attributes map.
+     * Convert Protobuf AttributeList to array of Yoti Attributes.
      *
-     * @param AttributeList $attributeList
+     * @param \Yoti\Protobuf\Attrpubapi\AttributeList $attributeList
      *
-     * @return array<string, \Yoti\Profile\Attribute\Attribute|null>
+     * @return \Yoti\Profile\Attribute\Attribute[]
      */
-    public static function convertToYotiAttributesMap(AttributeList $attributeList): array
+    public static function convertToYotiAttributesList(AttributeList $attributeList): array
     {
         $yotiAttributes = [];
 
@@ -24,7 +24,10 @@ class AttributeListConverter
             if (null === $attrName) {
                 continue;
             }
-            $yotiAttributes[$attr->getName()] = AttributeConverter::convertToYotiAttribute($attr);
+            $yotiAttribute = AttributeConverter::convertToYotiAttribute($attr);
+            if ($yotiAttribute !== null) {
+                $yotiAttributes[] = $yotiAttribute;
+            }
         }
         return $yotiAttributes;
     }
