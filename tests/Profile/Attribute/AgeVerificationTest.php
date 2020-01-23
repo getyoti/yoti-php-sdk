@@ -6,7 +6,7 @@ namespace YotiTest\Profile\Attribute;
 
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Attribute;
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use YotiTest\TestCase;
 
 /**
@@ -41,7 +41,7 @@ class AgeVerificationTest extends TestCase
         return [
             [
                 new Attribute(
-                    Profile::AGE_UNDER . '18',
+                    UserProfile::AGE_UNDER . '18',
                     'false',
                     []
                 ),
@@ -51,7 +51,7 @@ class AgeVerificationTest extends TestCase
             ],
             [
                 new Attribute(
-                    Profile::AGE_OVER . '35',
+                    UserProfile::AGE_OVER . '35',
                     'true',
                     []
                 ),

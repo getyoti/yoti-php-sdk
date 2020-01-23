@@ -6,7 +6,7 @@ namespace YotiTest\Profile\Attribute;
 
 use Yoti\Profile\Attribute\Anchor as YotiAnchor;
 use Yoti\Profile\Attribute\Attribute;
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
 use YotiTest\TestCase;
@@ -33,7 +33,7 @@ class AttributeTest extends TestCase
         $yotiAnchorsMap = AnchorListConverter::convert($collection);
 
         $this->dummyAttribute = new Attribute(
-            Profile::ATTR_FULL_NAME,
+            UserProfile::ATTR_FULL_NAME,
             self::ATTR_VALUE,
             $yotiAnchorsMap
         );
@@ -45,7 +45,7 @@ class AttributeTest extends TestCase
      */
     public function testAttributeName()
     {
-        $this->assertEquals(Profile::ATTR_FULL_NAME, $this->dummyAttribute->getName());
+        $this->assertEquals(UserProfile::ATTR_FULL_NAME, $this->dummyAttribute->getName());
     }
 
     /**

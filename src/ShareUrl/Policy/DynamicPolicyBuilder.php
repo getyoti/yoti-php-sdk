@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 
 /**
  * Builder for DynamicPolicy.
@@ -87,7 +87,7 @@ class DynamicPolicyBuilder
     public function withFamilyName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_FAMILY_NAME,
+            UserProfile::ATTR_FAMILY_NAME,
             $constraints,
             $acceptSelfAsserted
         );
@@ -102,7 +102,7 @@ class DynamicPolicyBuilder
     public function withGivenNames(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_GIVEN_NAMES,
+            UserProfile::ATTR_GIVEN_NAMES,
             $constraints,
             $acceptSelfAsserted
         );
@@ -117,7 +117,7 @@ class DynamicPolicyBuilder
     public function withFullName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_FULL_NAME,
+            UserProfile::ATTR_FULL_NAME,
             $constraints,
             $acceptSelfAsserted
         );
@@ -132,7 +132,7 @@ class DynamicPolicyBuilder
     public function withDateOfBirth(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_DATE_OF_BIRTH,
+            UserProfile::ATTR_DATE_OF_BIRTH,
             $constraints,
             $acceptSelfAsserted
         );
@@ -148,7 +148,7 @@ class DynamicPolicyBuilder
     public function withAgeOver(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
-            Profile::AGE_OVER . (string) $age,
+            UserProfile::AGE_OVER . (string) $age,
             $constraints,
             $acceptSelfAsserted
         );
@@ -164,7 +164,7 @@ class DynamicPolicyBuilder
     public function withAgeUnder(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
-            Profile::AGE_UNDER . (string) $age,
+            UserProfile::AGE_UNDER . (string) $age,
             $constraints,
             $acceptSelfAsserted
         );
@@ -183,7 +183,7 @@ class DynamicPolicyBuilder
         bool $acceptSelfAsserted = null
     ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
-            ->withName(Profile::ATTR_DATE_OF_BIRTH)
+            ->withName(UserProfile::ATTR_DATE_OF_BIRTH)
             ->withDerivation($derivation)
             ->withAcceptSelfAsserted($acceptSelfAsserted);
 
@@ -203,7 +203,7 @@ class DynamicPolicyBuilder
     public function withGender(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_GENDER,
+            UserProfile::ATTR_GENDER,
             $constraints,
             $acceptSelfAsserted
         );
@@ -218,7 +218,7 @@ class DynamicPolicyBuilder
     public function withPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_POSTAL_ADDRESS,
+            UserProfile::ATTR_POSTAL_ADDRESS,
             $constraints,
             $acceptSelfAsserted
         );
@@ -233,7 +233,7 @@ class DynamicPolicyBuilder
     public function withStructuredPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
+            UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $constraints,
             $acceptSelfAsserted
         );
@@ -248,7 +248,7 @@ class DynamicPolicyBuilder
     public function withNationality(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_NATIONALITY,
+            UserProfile::ATTR_NATIONALITY,
             $constraints,
             $acceptSelfAsserted
         );
@@ -263,7 +263,7 @@ class DynamicPolicyBuilder
     public function withPhoneNumber(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_PHONE_NUMBER,
+            UserProfile::ATTR_PHONE_NUMBER,
             $constraints,
             $acceptSelfAsserted
         );
@@ -278,7 +278,7 @@ class DynamicPolicyBuilder
     public function withSelfie(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_SELFIE,
+            UserProfile::ATTR_SELFIE,
             $constraints,
             $acceptSelfAsserted
         );
@@ -293,7 +293,7 @@ class DynamicPolicyBuilder
     public function withDocumentDetails(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_DOCUMENT_DETAILS,
+            UserProfile::ATTR_DOCUMENT_DETAILS,
             $constraints,
             $acceptSelfAsserted
         );
@@ -308,7 +308,7 @@ class DynamicPolicyBuilder
     public function withDocumentImages(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_DOCUMENT_IMAGES,
+            UserProfile::ATTR_DOCUMENT_IMAGES,
             $constraints,
             $acceptSelfAsserted
         );
@@ -323,7 +323,7 @@ class DynamicPolicyBuilder
     public function withEmail(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
-            Profile::ATTR_EMAIL_ADDRESS,
+            UserProfile::ATTR_EMAIL_ADDRESS,
             $constraints,
             $acceptSelfAsserted
         );
