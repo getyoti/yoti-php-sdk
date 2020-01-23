@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Profile\ExtraData;
+namespace Yoti\Profile;
 
+use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Util\Validation;
 
 class ExtraData

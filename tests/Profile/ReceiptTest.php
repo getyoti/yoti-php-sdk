@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace YotiTest\Profile;
 
 use Yoti\Profile\ApplicationProfile;
+use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
-use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;

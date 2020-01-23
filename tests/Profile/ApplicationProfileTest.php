@@ -6,7 +6,7 @@ namespace YotiTest\Profile;
 
 use Yoti\Media\Image;
 use Yoti\Profile\ApplicationProfile;
-use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute;
 use YotiTest\TestCase;
 
 /**

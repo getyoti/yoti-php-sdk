@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Attribute;
 
+use Yoti\Profile\Attribute;
 use Yoti\Util\Validation;
 
 class AgeVerification
@@ -73,7 +74,7 @@ class AgeVerification
     /**
      * The wrapped profile attribute. Use this if you need access to the underlying List of {@link Anchor}s
      *
-     * @return \Yoti\Profile\Attribute\Attribute
+     * @return \Yoti\Profile\Attribute
      */
     public function getAttribute(): Attribute
     {

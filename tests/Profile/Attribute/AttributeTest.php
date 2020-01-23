@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\Attribute;
 
+use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\Anchor as YotiAnchor;
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Profile\Attribute\Attribute
+ * @coversDefaultClass \Yoti\Profile\Attribute
  */
 class AttributeTest extends TestCase
 {
     const ATTR_VALUE = 'Test FullName';
 
     /**
-     * @var \Yoti\Profile\Attribute\Attribute
+     * @var \Yoti\Profile\Attribute
      */
     public $dummyAttribute;
 

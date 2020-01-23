@@ -6,7 +6,7 @@ namespace YotiTest\Profile\Util\Attribute;
 
 use Yoti\Media\Image;
 use Yoti\Profile\ActivityDetails;
-use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
