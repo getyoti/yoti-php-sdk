@@ -10,7 +10,7 @@ use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\Attribute\DocumentDetails;
 use Yoti\Profile\Attribute\MultiValue;
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Util\DateTime;
 use Yoti\Util\Json;
@@ -37,10 +37,10 @@ class AttributeConverter
     private static function convertValueBasedOnAttributeName($value, string $attrName)
     {
         switch ($attrName) {
-            case Profile::ATTR_DOCUMENT_DETAILS:
+            case UserProfile::ATTR_DOCUMENT_DETAILS:
                 return new DocumentDetails($value);
 
-            case Profile::ATTR_DOCUMENT_IMAGES:
+            case UserProfile::ATTR_DOCUMENT_IMAGES:
                 if (!($value instanceof MultiValue)) {
                     throw new AttributeException('Document Images could not be decoded');
                 }

@@ -10,8 +10,8 @@ use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
-use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
+use Yoti\Profile\UserProfile;
 use Yoti\Util\PemFile;
 use YotiTest\TestCase;
 use YotiTest\TestData;
@@ -129,7 +129,7 @@ class ActivityDetailsTest extends TestCase
      */
     public function testGetProfile()
     {
-        $this->assertInstanceOf(Profile::class, $this->activityDetails->getProfile());
+        $this->assertInstanceOf(UserProfile::class, $this->activityDetails->getProfile());
     }
 
     /**

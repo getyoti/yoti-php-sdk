@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandboxTest\Entity;
 
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use YotiSandbox\Entity\SandboxAgeVerification;
 use YotiTest\TestCase;
 
@@ -34,7 +34,7 @@ class SandboxAgeVerificationTest extends TestCase
     public function testGetName()
     {
         $this->assertEquals(
-            Profile::ATTR_DATE_OF_BIRTH,
+            UserProfile::ATTR_DATE_OF_BIRTH,
             $this->ageVerification->getName()
         );
     }

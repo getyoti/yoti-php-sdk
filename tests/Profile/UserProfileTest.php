@@ -7,13 +7,13 @@ namespace YotiTest\Profile;
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\Attribute;
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Profile\Profile
+ * @coversDefaultClass \Yoti\Profile\UserProfile
  */
 class ProfileTest extends TestCase
 {
@@ -38,7 +38,7 @@ class ProfileTest extends TestCase
     public function testAttributeGetters($name, $method)
     {
         $expectedValue = 'some value';
-        $profile = new Profile([
+        $profile = new UserProfile([
             $name => new Attribute($name, $expectedValue, []),
         ]);
         $attribute = $profile->{$method}();
@@ -97,13 +97,13 @@ class ProfileTest extends TestCase
         ]));
 
         $structuredPostalAddress = new Attribute(
-            Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
+            UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $expectedPostalAddress,
             $anchorsMap
         );
 
-        $profile = new Profile([
-            Profile::ATTR_STRUCTURED_POSTAL_ADDRESS => $structuredPostalAddress,
+        $profile = new UserProfile([
+            UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS => $structuredPostalAddress,
         ]);
         $this->assertEquals(
             json_encode($expectedPostalAddress),
@@ -130,7 +130,7 @@ class ProfileTest extends TestCase
      */
     public function testGetAgeVerifications($profileData)
     {
-        $profile = new Profile($profileData);
+        $profile = new UserProfile($profileData);
         $ageVerifications = $profile->getAgeVerifications();
         $this->assertCount(2, $ageVerifications);
         $this->assertContainsOnlyInstancesOf(AgeVerification::class, $ageVerifications);
@@ -146,7 +146,7 @@ class ProfileTest extends TestCase
      */
     public function testFindAgeOverVerification($profileData)
     {
-        $profile = new Profile($profileData);
+        $profile = new UserProfile($profileData);
         $ageOver35 = $profile->findAgeOverVerification(35);
 
         $this->assertInstanceOf(AgeVerification::class, $ageOver35);
@@ -166,7 +166,7 @@ class ProfileTest extends TestCase
      */
     public function testFindAgeUnderVerification($profileData)
     {
-        $profile = new Profile($profileData);
+        $profile = new UserProfile($profileData);
         $ageUnder18 = $profile->findAgeUnderVerification(18);
 
         $this->assertInstanceOf(AgeVerification::class, $ageUnder18);
@@ -182,22 +182,22 @@ class ProfileTest extends TestCase
     {
         $profileData = [
             new Attribute(
-                Profile::AGE_UNDER . '18',
+                UserProfile::AGE_UNDER . '18',
                 'false',
                 []
             ),
             new Attribute(
-                Profile::AGE_OVER . '35',
+                UserProfile::AGE_OVER . '35',
                 'true',
                 []
             ),
             new Attribute(
-                Profile::ATTR_GIVEN_NAMES,
+                UserProfile::ATTR_GIVEN_NAMES,
                 'TEST GIVEN NAMES',
                 []
             ),
             new Attribute(
-                Profile::ATTR_FAMILY_NAME,
+                UserProfile::ATTR_FAMILY_NAME,
                 'TEST FAMILY NAME',
                 []
             ),
@@ -220,7 +220,7 @@ class ProfileTest extends TestCase
         $profileData = [
             $attributeName => $someAttribute,
         ];
-        $profile = new Profile($profileData);
+        $profile = new UserProfile($profileData);
         $this->assertSame($profileData['document_images'], $profile->getDocumentImages());
     }
 

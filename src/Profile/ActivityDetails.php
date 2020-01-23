@@ -28,7 +28,7 @@ class ActivityDetails
     private $parentRememberMeId;
 
     /**
-     * @var \Yoti\Profile\Profile
+     * @var \Yoti\Profile\UserProfile
      */
     private $userProfile;
 
@@ -103,7 +103,7 @@ class ActivityDetails
             Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
             $this->pemFile
         );
-        $this->userProfile = new Profile(
+        $this->userProfile = new UserProfile(
             AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
         );
     }
@@ -146,9 +146,9 @@ class ActivityDetails
     /**
      * Get user profile object.
      *
-     * @return Profile
+     * @return UserProfile
      */
-    public function getProfile(): Profile
+    public function getProfile(): UserProfile
     {
         return $this->userProfile;
     }

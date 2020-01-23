@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SandboxTest\Http;
 
 use Yoti\Http\Payload;
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use YotiSandbox\Http\TokenRequest;
 use YotiTest\TestCase;
 
@@ -34,7 +34,7 @@ class TokenRequestTest extends TestCase
     {
         $this->someSandboxAttributes = [
             [
-                'name' => Profile::ATTR_FAMILY_NAME,
+                'name' => UserProfile::ATTR_FAMILY_NAME,
                 'value' => 'fake_family_name',
                 'derivation' => '',
                 'optional' => 'false',

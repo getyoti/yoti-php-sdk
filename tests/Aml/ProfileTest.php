@@ -26,7 +26,7 @@ class ProfileTest extends TestCase
     private $amlProfile;
 
     /**
-     * @var Yoti\AmlAddress
+     * @var Yoti\Aml\Address
      */
     private $amlAddress;
 

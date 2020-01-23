@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace YotiSandbox\Http;
 
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use YotiSandbox\Entity\SandboxAgeVerification;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiSandbox\Entity\SandboxDocumentDetails;
@@ -40,7 +40,7 @@ class TokenRequestBuilder
     public function setFullName(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_FULL_NAME,
+            UserProfile::ATTR_FULL_NAME,
             $value,
             '',
             $optional,
@@ -59,7 +59,7 @@ class TokenRequestBuilder
     public function setFamilyName(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_FAMILY_NAME,
+            UserProfile::ATTR_FAMILY_NAME,
             $value,
             '',
             $optional,
@@ -78,7 +78,7 @@ class TokenRequestBuilder
     public function setGivenNames(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_GIVEN_NAMES,
+            UserProfile::ATTR_GIVEN_NAMES,
             $value,
             '',
             $optional,
@@ -97,7 +97,7 @@ class TokenRequestBuilder
     public function setDateOfBirth(\DateTime $dateTime, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_DATE_OF_BIRTH,
+            UserProfile::ATTR_DATE_OF_BIRTH,
             $dateTime->format('Y-m-d'),
             '',
             $optional,
@@ -116,7 +116,7 @@ class TokenRequestBuilder
     public function setGender(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_GENDER,
+            UserProfile::ATTR_GENDER,
             $value,
             '',
             $optional,
@@ -135,7 +135,7 @@ class TokenRequestBuilder
     public function setNationality(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_NATIONALITY,
+            UserProfile::ATTR_NATIONALITY,
             $value,
             '',
             $optional,
@@ -154,7 +154,7 @@ class TokenRequestBuilder
     public function setPhoneNumber(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_PHONE_NUMBER,
+            UserProfile::ATTR_PHONE_NUMBER,
             $value,
             '',
             $optional,
@@ -186,7 +186,7 @@ class TokenRequestBuilder
     public function setBase64Selfie(string $value, string $optional = 'true', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_SELFIE,
+            UserProfile::ATTR_SELFIE,
             $value,
             '',
             $optional,
@@ -205,7 +205,7 @@ class TokenRequestBuilder
     public function setEmailAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_EMAIL_ADDRESS,
+            UserProfile::ATTR_EMAIL_ADDRESS,
             $value,
             '',
             $optional,
@@ -224,7 +224,7 @@ class TokenRequestBuilder
     public function setPostalAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_POSTAL_ADDRESS,
+            UserProfile::ATTR_POSTAL_ADDRESS,
             $value,
             '',
             $optional,
@@ -243,7 +243,7 @@ class TokenRequestBuilder
     public function setStructuredPostalAddress(string $value, string $optional = 'false', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_STRUCTURED_POSTAL_ADDRESS,
+            UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $value,
             '',
             $optional,
@@ -265,7 +265,7 @@ class TokenRequestBuilder
         array $anchors = []
     ): self {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_DOCUMENT_DETAILS,
+            UserProfile::ATTR_DOCUMENT_DETAILS,
             $documentDetails->getValue(),
             '',
             $optional,
@@ -284,7 +284,7 @@ class TokenRequestBuilder
     public function setDocumentDetailsWithString(string $value, string $optional = 'true', array $anchors = []): self
     {
         $this->addAttribute($this->createAttribute(
-            Profile::ATTR_DOCUMENT_DETAILS,
+            UserProfile::ATTR_DOCUMENT_DETAILS,
             $value,
             '',
             $optional,
