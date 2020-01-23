@@ -11,7 +11,7 @@ use Yoti\Profile\Attribute\Attribute;
 /**
  * Profile of a human user with convenience methods to access well-known attributes.
  */
-class Profile extends BaseProfile
+class UserProfile extends BaseProfile
 {
     const AGE_OVER = 'age_over:';
     const AGE_UNDER = 'age_under:';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SandboxTest\Entity;
 
-use Yoti\Profile\Profile;
+use Yoti\Profile\UserProfile;
 use YotiSandbox\Entity\SandboxAttribute;
 use YotiTest\TestCase;
 
@@ -21,7 +21,7 @@ class SandboxAttributeTest extends TestCase
     public function setup(): void
     {
         $this->attribute = new SandboxAttribute(
-            Profile::ATTR_FAMILY_NAME,
+            UserProfile::ATTR_FAMILY_NAME,
             'Fake_Family_Name',
             ''
         );
@@ -33,7 +33,7 @@ class SandboxAttributeTest extends TestCase
      */
     public function testGetName()
     {
-        $this->assertEquals(Profile::ATTR_FAMILY_NAME, $this->attribute->getName());
+        $this->assertEquals(UserProfile::ATTR_FAMILY_NAME, $this->attribute->getName());
     }
 
     /**

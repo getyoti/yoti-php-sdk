@@ -7,8 +7,8 @@ namespace YotiTest\Profile;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\ExtraData\ExtraData;
-use Yoti\Profile\Profile;
 use Yoti\Profile\Receipt;
+use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\PemFile;
@@ -161,7 +161,7 @@ class ReceiptTest extends TestCase
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList(
             $protobufAttributesList
         );
-        $profile = new Profile($yotiAttributesList);
+        $profile = new UserProfile($yotiAttributesList);
         $this->assertEquals('+447474747474', $profile->getPhoneNumber()->getValue());
     }
 
