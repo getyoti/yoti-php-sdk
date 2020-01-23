@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Profile;
 
 use Yoti\Exception\ReceiptException;
-use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\EncryptedData;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
@@ -105,7 +104,7 @@ class Receipt
     /**
      * @param \Yoti\Util\PemFile $pemFile
      *
-     * @return \Yoti\Profile\ExtraData\ExtraData
+     * @return \Yoti\Profile\ExtraData
      */
     public function parseExtraData(PemFile $pemFile): ExtraData
     {

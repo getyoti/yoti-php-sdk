@@ -7,7 +7,7 @@ namespace Yoti\Profile\Util\Attribute;
 use Yoti\Exception\AttributeException;
 use Yoti\Media\Image;
 use Yoti\Profile\ApplicationProfile;
-use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\DocumentDetails;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\UserProfile;

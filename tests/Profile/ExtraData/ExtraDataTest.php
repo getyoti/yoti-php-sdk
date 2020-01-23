@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\ExtraData;
 
+use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
-use Yoti\Profile\ExtraData\ExtraData;
 use YotiTest\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Profile\ExtraData\ExtraData
+ * @coversDefaultClass \Yoti\Profile\ExtraData
  */
 class ExtraDataTest extends TestCase
 {

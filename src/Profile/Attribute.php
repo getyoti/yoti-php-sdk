@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Profile\Attribute;
+namespace Yoti\Profile;
+
+use Yoti\Profile\Attribute\Anchor;
 
 class Attribute
 {

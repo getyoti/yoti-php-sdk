@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\Util\Attribute;
 
-use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute as AttributeProto;

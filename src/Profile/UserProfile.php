@@ -6,7 +6,6 @@ namespace Yoti\Profile;
 
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
-use Yoti\Profile\Attribute\Attribute;
 
 /**
  * Profile of a human user with convenience methods to access well-known attributes.
@@ -229,7 +228,7 @@ class UserProfile extends BaseProfile
     /**
      * @param string $name
      *
-     * @return \Yoti\Profile\Attribute\Attribute[]
+     * @return \Yoti\Profile\Attribute[]
      */
     private function findAttributesStartingWith($name): array
     {
@@ -257,7 +256,7 @@ class UserProfile extends BaseProfile
     }
 
     /**
-     * @return \Yoti\Profile\Attribute\Attribute|null
+     * @return \Yoti\Profile\Attribute|null
      */
     private function getFormattedAddress(): ?Attribute
     {
@@ -285,7 +284,7 @@ class UserProfile extends BaseProfile
     /**
      * Get anchor map for provided anchor.
      *
-     * @param \Yoti\Profile\Attribute\Attribute $attribute
+     * @param \Yoti\Profile\Attribute $attribute
      *
      * @return array<string, array> attribute map
      */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
-use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Util\DateTime;
 use Yoti\Util\PemFile;
@@ -53,7 +52,7 @@ class ActivityDetails
     private $pemFile;
 
     /**
-     * @var \Yoti\Profile\ExtraData\ExtraData
+     * @var \Yoti\Profile\ExtraData
      */
     private $extraData;
 
@@ -182,7 +181,7 @@ class ActivityDetails
     }
 
     /**
-     * @return \Yoti\Profile\ExtraData\ExtraData
+     * @return \Yoti\Profile\ExtraData
      */
     public function getExtraData(): ExtraData
     {
