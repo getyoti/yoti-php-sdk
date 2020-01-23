@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile;
 
+use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\AgeVerification;
 use Yoti\Profile\Attribute\Anchor;
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
@@ -212,7 +212,7 @@ class ProfileTest extends TestCase
     {
         $attributeName = 'document_images';
 
-        $someAttribute = $this->createMock(\Yoti\Profile\Attribute\Attribute::class);
+        $someAttribute = $this->createMock(\Yoti\Profile\Attribute::class);
         $someAttribute
             ->method('getName')
             ->willReturn($attributeName);

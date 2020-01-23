@@ -4,25 +4,24 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
-use Yoti\Profile\Attribute\Attribute;
 use Yoti\Util\Validation;
 
 class BaseProfile
 {
     /**
-     * @var \Yoti\Profile\Attribute\Attribute[]
+     * @var \Yoti\Profile\Attribute[]
      */
     private $attributesList;
 
     /**
-     * @var \Yoti\Profile\Attribute\Attribute[][] keyed by attribute name.
+     * @var \Yoti\Profile\Attribute[][] keyed by attribute name.
      */
     private $attributesMap;
 
     /**
      * Profile constructor.
      *
-     * @param \Yoti\Profile\Attribute\Attribute[] $attributesList
+     * @param \Yoti\Profile\Attribute[] $attributesList
      */
     public function __construct(array $attributesList)
     {
@@ -49,7 +48,7 @@ class BaseProfile
     /**
      * @param string $attributeName.
      *
-     * @return \Yoti\Profile\Attribute\Attribute[]
+     * @return \Yoti\Profile\Attribute[]
      */
     private function getAttributesByName(string $attributeName): array
     {
@@ -59,7 +58,7 @@ class BaseProfile
     /**
      * @param string $attributeName.
      *
-     * @return \Yoti\Profile\Attribute\Attribute|null
+     * @return \Yoti\Profile\Attribute|null
      */
     public function getProfileAttribute(string $attributeName): ?Attribute
     {
@@ -70,7 +69,7 @@ class BaseProfile
     /**
      * Get all attributes.
      *
-     * @return \Yoti\Profile\Attribute\Attribute[]
+     * @return \Yoti\Profile\Attribute[]
      */
     public function getAttributesList(): array
     {

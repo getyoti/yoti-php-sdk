@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
-use Yoti\Profile\Attribute\Attribute;
-
 /**
  * Profile of an application with convenience methods to access well-known attributes.
  */

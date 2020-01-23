@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile;
 
-use Yoti\Profile\Attribute\Attribute;
+use Yoti\Profile\Attribute;
 use Yoti\Profile\BaseProfile;
 use YotiTest\TestCase;
 

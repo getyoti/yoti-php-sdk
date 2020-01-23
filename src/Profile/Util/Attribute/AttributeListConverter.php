@@ -13,7 +13,7 @@ class AttributeListConverter
      *
      * @param \Yoti\Protobuf\Attrpubapi\AttributeList $attributeList
      *
-     * @return \Yoti\Profile\Attribute\Attribute[]
+     * @return \Yoti\Profile\Attribute[]
      */
     public static function convertToYotiAttributesList(AttributeList $attributeList): array
     {

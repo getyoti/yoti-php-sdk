@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\Util\ExtraData;
 
+use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
-use Yoti\Profile\ExtraData\ExtraData;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
 use Yoti\Protobuf\Sharepubapi\DataEntry;
 use Yoti\Protobuf\Sharepubapi\ExtraData as ExtraDataProto;
