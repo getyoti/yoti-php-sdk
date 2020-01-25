@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace YotiTest\Profile\Util\Attribute;
 
-use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\TestCase;
 
@@ -18,13 +17,13 @@ class AnchorListConverterTest extends TestCase
      */
     public function testConvertingTwoSources()
     {
-        $anchorsData = AnchorListConverter::convert(new \ArrayObject([
+        $anchors = AnchorListConverter::convert(new \ArrayObject([
             $this->parseFromBase64String(TestAnchors::SOURCE_PP_ANCHOR),
             $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
         ]));
 
-        $anchorSource1 = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
-        $anchorSource2 = $anchorsData[Anchor::TYPE_SOURCE_OID][1];
+        $anchorSource1 = $anchors[0];
+        $anchorSource2 = $anchors[1];
 
         $this->assertEquals('PASSPORT', $anchorSource1->getValue());
         $this->assertEquals('DRIVING_LICENCE', $anchorSource2->getValue());
@@ -35,21 +34,21 @@ class AnchorListConverterTest extends TestCase
      */
     public function testConvertingAnyAnchor()
     {
-        $anchorsData = AnchorListConverter::convert(new \ArrayObject([
+        $anchors = AnchorListConverter::convert(new \ArrayObject([
             $this->parseFromBase64String(TestAnchors::SOURCE_DL_ANCHOR),
             $this->parseFromBase64String(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
             $this->parseFromBase64String(TestAnchors::UNKNOWN_ANCHOR),
         ]));
 
-        $anchorSource = $anchorsData[Anchor::TYPE_SOURCE_OID][0];
+        $anchorSource = $anchors[0];
         $this->assertEquals('SOURCE', $anchorSource->getType());
         $this->assertEquals('DRIVING_LICENCE', $anchorSource->getValue());
 
-        $anchorVerifier = $anchorsData[Anchor::TYPE_VERIFIER_OID][0];
+        $anchorVerifier = $anchors[1];
         $this->assertEquals('VERIFIER', $anchorVerifier->getType());
         $this->assertEquals('YOTI_ADMIN', $anchorVerifier->getValue());
 
-        $anchorUnknown = $anchorsData[Anchor::TYPE_UNKNOWN_NAME][0];
+        $anchorUnknown = $anchors[2];
         $this->assertEquals('UNKNOWN', $anchorUnknown->getType());
         $this->assertEquals('', $anchorUnknown->getValue());
     }

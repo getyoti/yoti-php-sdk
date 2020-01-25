@@ -21,16 +21,6 @@ class Attribute
     /**
      * @var \Yoti\Profile\Attribute\Anchor[]
      */
-    private $sources;
-
-    /**
-     * @var \Yoti\Profile\Attribute\Anchor[]
-     */
-    private $verifiers;
-
-    /**
-     * @var \Yoti\Profile\Attribute\Anchor[]
-     */
     private $anchors;
 
     /**
@@ -38,16 +28,13 @@ class Attribute
      *
      * @param string $name
      * @param mixed $value
-     * @param array<string, array> $anchorsMap
+     * @param \Yoti\Profile\Attribute\Anchor[] $anchors
      */
-    public function __construct(string $name, $value, array $anchorsMap)
+    public function __construct(string $name, $value, array $anchors)
     {
         $this->name = $name;
         $this->value = $value;
-
-        $this->setSources($anchorsMap);
-        $this->setVerifiers($anchorsMap);
-        $this->setAnchors($anchorsMap);
+        $this->anchors = $anchors;
     }
 
     /**
@@ -71,7 +58,7 @@ class Attribute
      */
     public function getSources(): array
     {
-        return $this->sources;
+        return $this->filterAnchors(Anchor::TYPE_SOURCE_NAME);
     }
 
     /**
@@ -79,7 +66,7 @@ class Attribute
      */
     public function getVerifiers(): array
     {
-        return $this->verifiers;
+        return $this->filterAnchors(Anchor::TYPE_VERIFIER_NAME);
     }
 
     /**
@@ -98,48 +85,19 @@ class Attribute
     }
 
     /**
-     * @param array<string, array> $anchorsMap
-     */
-    private function setSources(array $anchorsMap): void
-    {
-        $this->sources = $this->getAnchorType(
-            $anchorsMap,
-            Anchor::TYPE_SOURCE_OID
-        );
-    }
-
-    /**
-     * @param array<string, array> $anchorsMap
-     */
-    private function setVerifiers(array $anchorsMap): void
-    {
-        $this->verifiers = $this->getAnchorType(
-            $anchorsMap,
-            Anchor::TYPE_VERIFIER_OID
-        );
-    }
-
-    /**
-     * @param array<string, array> $anchorsMap
-     */
-    private function setAnchors(array $anchorsMap): void
-    {
-        // Remove Oids from the anchorsMap
-        $anchors = [];
-        array_walk($anchorsMap, function ($val) use (&$anchors): void {
-            $anchors = array_merge($anchors, array_values($val));
-        });
-        $this->anchors = $anchors;
-    }
-
-    /**
-     * @param array<string, array> $anchorsMap
-     * @param string $anchorType
+     * @param string $type
      *
      * @return \Yoti\Profile\Attribute\Anchor[]
      */
-    private function getAnchorType(array $anchorsMap, string $anchorType): array
+    private function filterAnchors(string $type): array
     {
-        return isset($anchorsMap[$anchorType]) ? $anchorsMap[$anchorType] : [];
+        return array_values(
+            array_filter(
+                $this->anchors,
+                function (Anchor $anchor) use ($type): bool {
+                    return $anchor->getType() === $type;
+                }
+            )
+        );
     }
 }

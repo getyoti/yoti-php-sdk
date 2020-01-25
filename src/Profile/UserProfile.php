@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Profile;
 
 use Yoti\Profile\Attribute\AgeVerification;
-use Yoti\Profile\Attribute\Anchor;
 
 /**
  * Profile of a human user with convenience methods to access well-known attributes.
@@ -274,28 +273,10 @@ class UserProfile extends BaseProfile
                 $postalAddress = new Attribute(
                     self::ATTR_POSTAL_ADDRESS,
                     $postalAddressValue,
-                    $this->getAttributeAnchorMap($structuredPostalAddress)
+                    $structuredPostalAddress->getAnchors()
                 );
             }
         }
         return $postalAddress;
-    }
-
-    /**
-     * Get anchor map for provided anchor.
-     *
-     * @param \Yoti\Profile\Attribute $attribute
-     *
-     * @return array<string, array> attribute map
-     */
-    private function getAttributeAnchorMap(Attribute $attribute): array
-    {
-        return [
-            Anchor::TYPE_UNKNOWN_NAME => array_filter($attribute->getAnchors(), function ($anchor): bool {
-                return $anchor->getType() == Anchor::TYPE_UNKNOWN_NAME;
-            }),
-            Anchor::TYPE_VERIFIER_OID => $attribute->getVerifiers(),
-            Anchor::TYPE_SOURCE_OID => $attribute->getSources(),
-        ];
     }
 }

@@ -135,7 +135,7 @@ class AttributeConverter
         }
 
         try {
-            $yotiAnchorsMap = AnchorListConverter::convert(
+            $yotiAnchors = AnchorListConverter::convert(
                 $protobufAttribute->getAnchors()
             );
             $attrValue = AttributeConverter::convertValueBasedOnContentType(
@@ -150,7 +150,7 @@ class AttributeConverter
             $yotiAttribute = new Attribute(
                 $attrName,
                 $attrValue,
-                $yotiAnchorsMap
+                $yotiAnchors
             );
         } catch (AttributeException $e) {
             error_log("{$e->getMessage()} (Attribute: {$protobufAttribute->getName()})", 0);

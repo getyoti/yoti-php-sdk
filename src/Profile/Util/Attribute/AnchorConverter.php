@@ -15,13 +15,13 @@ use Yoti\Util\Json;
 class AnchorConverter
 {
     /**
-     * Convert Protobuf Anchor to a map of oid -> Yoti Anchor
+     * Convert Protobuf Anchor to Yoti Anchor
      *
      * @param \Yoti\Protobuf\Attrpubapi\Anchor $protobufAnchor
      *
-     * @return array<string, mixed>
+     * @return \Yoti\Profile\Attribute\Anchor
      */
-    public static function convert(ProtobufAnchor $protobufAnchor): array
+    public static function convert(ProtobufAnchor $protobufAnchor): Anchor
     {
         $anchorSubType = $protobufAnchor->getSubType();
         $yotiSignedTimeStamp = self::convertToYotiSignedTimestamp($protobufAnchor);
@@ -31,30 +31,24 @@ class AnchorConverter
             foreach ($certX509Obj->tbsCertificate->extensions as $extObj) {
                 $anchorType = self::getAnchorTypeByOid($extObj->extnId);
                 if ($anchorType !== Anchor::TYPE_UNKNOWN_NAME) {
-                    return [
-                        'oid' => $extObj->extnId,
-                        'yoti_anchor' => new Anchor(
-                            self::decodeAnchorValue($extObj->extnValue),
-                            $anchorType,
-                            $anchorSubType,
-                            $yotiSignedTimeStamp,
-                            $X509CertsList
-                        ),
-                    ];
+                    return new Anchor(
+                        self::decodeAnchorValue($extObj->extnValue),
+                        $anchorType,
+                        $anchorSubType,
+                        $yotiSignedTimeStamp,
+                        $X509CertsList
+                    );
                 }
             }
         }
 
-        return [
-            'oid' => Anchor::TYPE_UNKNOWN_NAME,
-            'yoti_anchor' => new Anchor(
-                '',
-                Anchor::TYPE_UNKNOWN_NAME,
-                $anchorSubType,
-                $yotiSignedTimeStamp,
-                $X509CertsList
-            ),
-        ];
+        return new Anchor(
+            '',
+            Anchor::TYPE_UNKNOWN_NAME,
+            $anchorSubType,
+            $yotiSignedTimeStamp,
+            $X509CertsList
+        );
     }
 
     /**
