@@ -46,13 +46,14 @@ class Validation
     }
 
     /**
-     * @param string $value
+     * @param mixed $value
      * @param string $name
      *
      * @throws \InvalidArgumentException
      */
-    public static function notEmptyString(string $value, string $name): void
+    public static function notEmptyString($value, string $name): void
     {
+        Validation::isString($value, $name);
         if (strlen($value) === 0) {
             throw new \InvalidArgumentException("{$name} cannot be empty");
         }

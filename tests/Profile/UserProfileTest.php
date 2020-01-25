@@ -6,7 +6,6 @@ namespace YotiTest\Profile;
 
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\AgeVerification;
-use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
 use YotiTest\Profile\Util\Attribute\TestAnchors;
@@ -15,7 +14,7 @@ use YotiTest\TestCase;
 /**
  * @coversDefaultClass \Yoti\Profile\UserProfile
  */
-class ProfileTest extends TestCase
+class UserProfileTest extends TestCase
 {
     /**
      * @covers ::getGivenNames
@@ -73,7 +72,6 @@ class ProfileTest extends TestCase
     /**
      * @covers ::getPostalAddress
      * @covers ::getFormattedAddress
-     * @covers ::getAttributeAnchorMap
      * @covers ::getGivenNames
      * @covers ::getStructuredPostalAddress
      */
@@ -90,7 +88,7 @@ class ProfileTest extends TestCase
             "formatted_address" => "15a North Street CARSHALTON SM5 2HW UK"
         ];
 
-        $anchorsMap = AnchorListConverter::convert(new \ArrayObject([
+        $anchors = AnchorListConverter::convert(new \ArrayObject([
             $this->parseAnchor(TestAnchors::UNKNOWN_ANCHOR),
             $this->parseAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR),
             $this->parseAnchor(TestAnchors::SOURCE_DL_ANCHOR),
@@ -99,7 +97,7 @@ class ProfileTest extends TestCase
         $structuredPostalAddress = new Attribute(
             UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $expectedPostalAddress,
-            $anchorsMap
+            $anchors
         );
 
         $profile = new UserProfile([
@@ -113,13 +111,9 @@ class ProfileTest extends TestCase
         $postalAddress = $profile->getPostalAddress();
 
         $this->assertEquals('15a North Street CARSHALTON SM5 2HW UK', $postalAddress->getValue());
-        $this->assertEquals($anchorsMap[Anchor::TYPE_SOURCE_OID], $postalAddress->getSources());
-        $this->assertEquals($anchorsMap[Anchor::TYPE_VERIFIER_OID], $postalAddress->getVerifiers());
-
-        $anchors = [];
-        array_walk($anchorsMap, function ($val) use (&$anchors) {
-            $anchors = array_merge($anchors, array_values($val));
-        });
+        $this->assertEquals($anchors[1], $postalAddress->getVerifiers()[0]);
+        $this->assertEquals($anchors[2], $postalAddress->getSources()[0]);
+        $this->assertCount(3, $postalAddress->getAnchors());
         $this->assertEquals($anchors, $postalAddress->getAnchors());
     }
 

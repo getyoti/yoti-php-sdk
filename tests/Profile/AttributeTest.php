@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Attribute;
+namespace YotiTest\Profile;
 
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\Anchor as YotiAnchor;
@@ -30,12 +30,12 @@ class AttributeTest extends TestCase
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::VERIFIER_YOTI_ADMIN_ANCHOR);
         $protobufAnchors[] = $this->convertToProtobufAnchor(TestAnchors::UNKNOWN_ANCHOR);
         $collection = new \ArrayObject($protobufAnchors);
-        $yotiAnchorsMap = AnchorListConverter::convert($collection);
+        $anchors = AnchorListConverter::convert($collection);
 
         $this->dummyAttribute = new Attribute(
             UserProfile::ATTR_FULL_NAME,
             self::ATTR_VALUE,
-            $yotiAnchorsMap
+            $anchors
         );
     }
 
@@ -59,6 +59,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getSources
+     * @covers ::filterAnchors
      * @covers ::__construct
      */
     public function testGetSources()
@@ -79,6 +80,7 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getVerifiers
+     * @covers ::filterAnchors
      * @covers ::__construct
      */
     public function testVerifiers()
@@ -96,10 +98,6 @@ class AttributeTest extends TestCase
 
     /**
      * @covers ::getAnchors
-     * @covers ::setSources
-     * @covers ::setVerifiers
-     * @covers ::setAnchors
-     * @covers ::getAnchorType
      * @covers ::__construct
      */
     public function testGetAnchors()

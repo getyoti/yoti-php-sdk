@@ -30,17 +30,14 @@ class AnchorTest extends TestCase
      * @covers ::getOriginServerCerts
      * @covers ::__construct
      */
-    public function testYotiAnchorEndpoints()
+    public function testAnchorGetters()
     {
         $dlAnchor = new \Yoti\Protobuf\Attrpubapi\Anchor();
         $dlAnchor->mergeFromString(base64_decode(TestAnchors::SOURCE_DL_ANCHOR));
         $collection = new \ArrayObject([$dlAnchor]);
         $anchorList = AnchorListConverter::convert($collection);
 
-        /**
-         * @var Anchor $sourceAnchor
-         */
-        $sourceAnchor = $anchorList[Anchor::TYPE_SOURCE_OID][0];
+        $sourceAnchor = $anchorList[0];
 
         $this->assertEquals(Anchor::TYPE_SOURCE_NAME, $sourceAnchor->getType());
         $this->assertEquals('', $sourceAnchor->getSubtype());
