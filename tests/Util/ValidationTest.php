@@ -262,8 +262,8 @@ class ValidationTest extends TestCase
      */
     public function testNotEmptyStringWithNonStringValue($nonStringValue)
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type string');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name must be a string');
 
         Validation::notEmptyString($nonStringValue, self::SOME_NAME);
     }

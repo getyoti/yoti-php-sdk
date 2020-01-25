@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Util\Attribute;
 
-use Traversable;
-
 class AnchorListConverter
 {
     /**
-     * @param Traversable<\Yoti\Protobuf\Attrpubapi\Anchor> $anchorList
+     * @param \Traversable<\Yoti\Protobuf\Attrpubapi\Anchor> $protobufAnchors
      *
-     * @return array<string, array<int, mixed>>.
+     * @return \Yoti\Profile\Attribute\Anchor[]
      */
-    public static function convert(Traversable $anchorList): array
+    public static function convert(\Traversable $protobufAnchors): array
     {
-        $yotiAnchorsMap = [];
+        $yotiAnchors = [];
 
-        foreach ($anchorList as $protobufAnchor) {
-            $parsedAnchor = AnchorConverter::convert($protobufAnchor);
-            $yotiAnchorsMap[(string) $parsedAnchor['oid']][] = $parsedAnchor['yoti_anchor'];
+        foreach ($protobufAnchors as $protobufAnchor) {
+            $yotiAnchors[] = AnchorConverter::convert($protobufAnchor);
         }
 
-        return $yotiAnchorsMap;
+        return $yotiAnchors;
     }
 }
