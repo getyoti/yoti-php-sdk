@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest;
+namespace Yoti\Test;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;

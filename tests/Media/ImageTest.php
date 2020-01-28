@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Media;
+namespace Yoti\Test\Media;
 
 use Yoti\Media\Image;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Media\Image

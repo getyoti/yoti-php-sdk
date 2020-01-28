@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Service\ShareUrl;
+namespace Yoti\Test\Service\ShareUrl;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,10 +11,10 @@ use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use Yoti\ShareUrl\Service;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 

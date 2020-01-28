@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\Attribute;
+namespace Yoti\Test\Profile\Util\Attribute;
 
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Util\Attribute\AnchorConverter;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AnchorConverter

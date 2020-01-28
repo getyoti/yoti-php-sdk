@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Attribute;
+namespace Yoti\Test\Profile\Attribute;
 
 use Yoti\Media\Image;
 use Yoti\Profile\Attribute\MultiValue;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\MultiValue

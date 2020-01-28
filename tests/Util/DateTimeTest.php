@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Util;
+namespace Yoti\Test\Util;
 
+use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
-use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Util\DateTime

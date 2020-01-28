@@ -34,7 +34,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "YotiTest\\": "tests/",
+      "Yoti\\Test\\": "tests/",
       "Yoti\\Sandbox\\Test\\": "sandbox/tests/"
     }
   },

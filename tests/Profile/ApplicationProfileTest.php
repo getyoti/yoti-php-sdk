@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Yoti\Media\Image;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ApplicationProfile

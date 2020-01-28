@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Aml;
+namespace Yoti\Test\Aml;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -11,10 +11,10 @@ use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\Aml\Result;
 use Yoti\Aml\Service;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 

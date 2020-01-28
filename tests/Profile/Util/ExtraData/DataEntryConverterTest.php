@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\ExtraData;
+namespace Yoti\Test\Profile\Util\ExtraData;
 
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\Util\ExtraData\DataEntryConverter;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\ExtraData\DataEntryConverter

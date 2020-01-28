@@ -9,10 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Payload;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Sandbox\Profile\Service;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Service

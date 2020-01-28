@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\ShareUrl;
+namespace Yoti\Test\ShareUrl;
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\DynamicScenarioBuilder

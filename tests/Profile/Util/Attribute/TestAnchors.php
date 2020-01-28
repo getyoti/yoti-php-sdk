@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\Attribute;
+namespace Yoti\Test\Profile\Util\Attribute;
 
 class TestAnchors
 {

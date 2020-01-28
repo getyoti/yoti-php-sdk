@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Aml;
+namespace Yoti\Test\Aml;
 
 use Yoti\Aml\Result;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Json;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Result

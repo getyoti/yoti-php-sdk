@@ -10,7 +10,7 @@ use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Sandbox\Profile\Request\TokenRequestBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Request\TokenRequestBuilder

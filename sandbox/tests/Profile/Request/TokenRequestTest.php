@@ -7,7 +7,7 @@ namespace Yoti\Sandbox\Test\Profile\Request;
 use Yoti\Http\Payload;
 use Yoti\Profile\UserProfile;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Request\TokenRequest

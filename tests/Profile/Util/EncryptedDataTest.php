@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util;
+namespace Yoti\Test\Profile\Util;
 
 use Yoti\Exception\EncryptedDataException;
 use Yoti\Profile\Util\EncryptedData;
 use Yoti\Protobuf\Compubapi\EncryptedData as EncryptedDataProto;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\EncryptedData

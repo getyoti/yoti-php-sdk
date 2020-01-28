@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http\Exception;
+namespace Yoti\Test\Http\Exception;
 
 use Psr\Http\Message\RequestInterface;
 use Yoti\Http\Exception\RequestException;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Http\Exception\RequestException
