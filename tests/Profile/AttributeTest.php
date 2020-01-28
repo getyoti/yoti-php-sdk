@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\Anchor as YotiAnchor;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
-use YotiTest\Profile\Util\Attribute\TestAnchors;
-use YotiTest\TestCase;
+use Yoti\Test\Profile\Util\Attribute\TestAnchors;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute

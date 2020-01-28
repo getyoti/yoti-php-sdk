@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\ExtraData;
+namespace Yoti\Test\Profile\ExtraData;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ExtraData\AttributeIssuanceDetails

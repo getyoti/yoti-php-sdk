@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http;
+namespace Yoti\Test\Http;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Request;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Http\Request

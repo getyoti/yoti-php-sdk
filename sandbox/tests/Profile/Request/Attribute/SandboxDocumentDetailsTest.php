@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails

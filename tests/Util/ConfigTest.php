@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Util;
+namespace Yoti\Test\Util;
 
 use Psr\Http\Client\ClientInterface;
 use Yoti\Constants;
+use Yoti\Test\TestCase;
 use Yoti\Util\Config;
-use YotiTest\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Util\Config

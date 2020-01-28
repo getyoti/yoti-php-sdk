@@ -6,7 +6,7 @@ namespace Yoti\Sandbox\Test\Profile\Response;
 
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Sandbox\Profile\Response\TokenResponse;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Response\TokenResponse

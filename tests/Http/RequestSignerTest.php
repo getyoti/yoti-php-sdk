@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http;
+namespace Yoti\Test\Http;
 
 use Yoti\Aml\Address;
 use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestSigner;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestSigner

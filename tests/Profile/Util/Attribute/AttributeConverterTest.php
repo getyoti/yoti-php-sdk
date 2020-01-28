@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\Attribute;
+namespace Yoti\Test\Profile\Util\Attribute;
 
 use Yoti\Media\Image;
 use Yoti\Profile\ActivityDetails;
@@ -10,9 +10,9 @@ use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AttributeConverter

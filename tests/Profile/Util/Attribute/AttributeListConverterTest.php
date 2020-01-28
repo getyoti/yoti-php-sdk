@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\Attribute;
+namespace Yoti\Test\Profile\Util\Attribute;
 
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute as AttributeProto;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AttributeListConverter

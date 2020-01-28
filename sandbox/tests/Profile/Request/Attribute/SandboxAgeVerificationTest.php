@@ -6,7 +6,7 @@ namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
 use Yoti\Profile\UserProfile;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification

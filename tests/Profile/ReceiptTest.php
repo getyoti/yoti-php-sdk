@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\ExtraData;
@@ -11,9 +11,9 @@ use Yoti\Profile\Receipt;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Receipt
