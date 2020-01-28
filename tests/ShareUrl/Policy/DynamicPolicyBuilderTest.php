@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\Test\ShareUrl\Policy;
 
+use Yoti\Profile\UserProfile;
+use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 use Yoti\ShareUrl\Policy\WantedAttributeBuilder;
 use Yoti\Test\TestCase;
 
@@ -76,6 +79,58 @@ class DynamicPolicyBuilderTest extends TestCase
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
         $this->assertEquals(json_encode($expectedWantedAttributeData), $dynamicPolicy);
+    }
+
+    /**
+     * @covers ::withWantedAttributeByName
+     */
+    public function testWithWantedAttributeByName()
+    {
+        $someAttributeName = 'some_attribute_name';
+
+        $constraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withDrivingLicence()
+                    ->build()
+            )
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttributeByName($someAttributeName, $constraints, true)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => $someAttributeName,
+                    'optional' => false,
+                    "constraints" => [
+                        [
+                            "type" => "SOURCE",
+                            "preferred_sources" => [
+                                "anchors" => [
+                                    [
+                                        "name" => "DRIVING_LICENCE",
+                                        "sub_type" => "",
+                                    ]
+                                ],
+                                "soft_preference" => false,
+                            ],
+                        ],
+                    ],
+                    "accept_self_asserted" => true,
+                ],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedWantedAttributeData),
+            json_encode($dynamicPolicy)
+        );
     }
 
     /**
@@ -185,6 +240,56 @@ class DynamicPolicyBuilderTest extends TestCase
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::withAgeDerivedAttribute
+     */
+    public function testWithAgeDerivedAttributesWithConstraints()
+    {
+        $constraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withDrivingLicence()
+                    ->build()
+            )
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withAgeDerivedAttribute(UserProfile::AGE_OVER . '18', $constraints)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => 'date_of_birth',
+                    'optional' => false,
+                    'derivation' => 'age_over:18',
+                    "constraints" => [
+                        [
+                            "type" => "SOURCE",
+                            "preferred_sources" => [
+                                "anchors" => [
+                                    [
+                                        "name" => "DRIVING_LICENCE",
+                                        "sub_type" => "",
+                                    ]
+                                ],
+                                "soft_preference" => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedWantedAttributeData),
+            json_encode($dynamicPolicy)
+        );
     }
 
     /**

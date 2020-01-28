@@ -91,13 +91,12 @@ class Attribute
      */
     private function filterAnchors(string $type): array
     {
-        return array_values(
-            array_filter(
-                $this->anchors,
-                function (Anchor $anchor) use ($type): bool {
-                    return $anchor->getType() === $type;
-                }
-            )
+        $filteredAnchors = array_filter(
+            $this->anchors,
+            function (Anchor $anchor) use ($type): bool {
+                return $anchor->getType() === $type;
+            }
         );
+        return array_values($filteredAnchors);
     }
 }
