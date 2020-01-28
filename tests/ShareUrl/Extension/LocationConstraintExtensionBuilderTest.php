@@ -137,8 +137,6 @@ class LocationConstraintExtensionBuilderTest extends TestCase
 
     /**
      * @covers ::build
-     * @covers \Yoti\ShareUrl\Extension\LocationConstraintContent::__construct
-     * @covers \Yoti\ShareUrl\Extension\LocationConstraintContent::jsonSerialize
      */
     public function testBuildDefaultValues()
     {
