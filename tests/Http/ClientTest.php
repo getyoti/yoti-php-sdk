@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http;
+namespace Yoti\Test\Http;
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -16,7 +16,7 @@ use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Http\Client;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Http\Client

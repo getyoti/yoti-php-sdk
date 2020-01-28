@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Service;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 use function GuzzleHttp\Psr7\stream_for;
 

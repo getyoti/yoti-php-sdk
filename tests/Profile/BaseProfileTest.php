@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Yoti\Profile\Attribute;
 use Yoti\Profile\BaseProfile;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\BaseProfile

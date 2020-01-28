@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\ShareUrl\Policy;
+namespace Yoti\Test\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\WantedAnchorBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Policy\WantedAnchorBuilder

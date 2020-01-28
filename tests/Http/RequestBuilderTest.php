@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http;
+namespace Yoti\Test\Http;
 
 use Psr\Http\Client\ClientInterface;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\Config;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Http\RequestBuilder

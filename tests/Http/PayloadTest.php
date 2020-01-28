@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Http;
+namespace Yoti\Test\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Yoti\Http\Payload;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 use function GuzzleHttp\Psr7\stream_for;
 

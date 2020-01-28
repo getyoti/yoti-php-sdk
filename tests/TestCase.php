@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest;
+namespace Yoti\Test;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 

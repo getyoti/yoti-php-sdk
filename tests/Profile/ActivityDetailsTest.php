@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile;
+namespace Yoti\Test\Profile;
 
 use Yoti\Media\Image;
 use Yoti\Profile\ActivityDetails;
@@ -12,9 +12,9 @@ use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\Receipt;
 use Yoti\Profile\UserProfile;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Profile\ActivityDetails

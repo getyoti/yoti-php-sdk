@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Attribute;
+namespace Yoti\Test\Profile\Attribute;
 
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
-use YotiTest\Profile\Util\Attribute\TestAnchors;
-use YotiTest\TestCase;
+use Yoti\Test\Profile\Util\Attribute\TestAnchors;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Attribute\Anchor

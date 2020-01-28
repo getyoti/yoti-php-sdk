@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Profile\Util\Attribute;
+namespace Yoti\Test\Profile\Util\Attribute;
 
 use Yoti\Profile\Util\Attribute\AnchorListConverter;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AnchorListConverter

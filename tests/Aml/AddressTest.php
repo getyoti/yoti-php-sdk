@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Aml;
+namespace Yoti\Test\Aml;
 
 use Yoti\Aml\Address;
 use Yoti\Aml\Country;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Address

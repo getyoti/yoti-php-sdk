@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Service\ShareUrl;
+namespace Yoti\Test\Service\ShareUrl;
 
 use Yoti\ShareUrl\Result;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Result

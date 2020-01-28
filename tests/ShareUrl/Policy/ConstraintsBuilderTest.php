@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\ShareUrl\Policy;
+namespace Yoti\Test\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Policy\ConstraintsBuilder

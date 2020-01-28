@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace YotiTest\Util;
+namespace Yoti\Test\Util;
 
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
-use YotiTest\TestCase;
-use YotiTest\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Util\PemFile
@@ -205,5 +205,5 @@ namespace Yoti\Util;
  */
 function openssl_pkey_get_details()
 {
-    return \YotiTest\TestCase::callMockFunction(__FUNCTION__, func_get_args());
+    return \Yoti\Test\TestCase::callMockFunction(__FUNCTION__, func_get_args());
 }
