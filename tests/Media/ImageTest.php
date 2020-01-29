@@ -12,7 +12,7 @@ use Yoti\Test\TestCase;
  */
 class ImageTest extends TestCase
 {
-    const SOME_IMAGE_DATA = 'dummyImageData';
+    private const SOME_IMAGE_DATA = 'dummyImageData';
 
     /**
      * @var \Yoti\Media\Image

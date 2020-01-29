@@ -12,7 +12,7 @@ use Yoti\Test\TestCase;
  */
 class TransactionalFlowExtensionBuilderTest extends TestCase
 {
-    const TYPE_TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
+    private const TYPE_TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
 
     /**
      * @covers ::build

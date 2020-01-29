@@ -12,8 +12,8 @@ use Yoti\Util\Validation;
  */
 class ValidationTest extends TestCase
 {
-    const SOME_NAME = 'some_name';
-    const SOME_STRING = 'some string';
+    private const SOME_NAME = 'some_name';
+    private const SOME_STRING = 'some string';
 
     /**
      * @covers ::isString

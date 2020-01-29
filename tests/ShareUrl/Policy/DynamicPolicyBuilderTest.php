@@ -16,8 +16,8 @@ use Yoti\Test\TestCase;
  */
 class DynamicPolicyBuilderTest extends TestCase
 {
-    const SELFIE_AUTH_TYPE = 1;
-    const PIN_AUTH_TYPE = 2;
+    private const SELFIE_AUTH_TYPE = 1;
+    private const PIN_AUTH_TYPE = 2;
 
     /**
      * @covers ::build

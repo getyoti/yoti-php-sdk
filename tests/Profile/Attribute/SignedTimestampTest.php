@@ -12,7 +12,7 @@ use Yoti\Test\TestCase;
  */
 class SignedTimeStampTest extends TestCase
 {
-    const SOME_VERSION = 123;
+    private const SOME_VERSION = 123;
 
     /**
      * @var Yoti\Profile\Attribute\SignedTimestamp

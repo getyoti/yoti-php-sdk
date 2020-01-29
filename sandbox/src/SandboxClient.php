@@ -15,7 +15,7 @@ class SandboxClient
     /**
      * Default sandbox API URL.
      */
-    const SANDBOX_URL = Constants::API_BASE_URL . '/sandbox/v1';
+    private const SANDBOX_URL = Constants::API_BASE_URL . '/sandbox/v1';
 
     /**
      * @var \Yoti\Sandbox\Profile\Service

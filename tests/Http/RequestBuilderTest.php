@@ -20,12 +20,12 @@ class RequestBuilderTest extends TestCase
     /**
      * Test Base URL.
      */
-    const SOME_BASE_URL = 'http://www.example.com/api/v1';
+    private const SOME_BASE_URL = 'http://www.example.com/api/v1';
 
     /**
      * Test endpoint.
      */
-    const SOME_ENDPOINT = '/some-endpoint';
+    private const SOME_ENDPOINT = '/some-endpoint';
 
     /**
      * @covers ::build

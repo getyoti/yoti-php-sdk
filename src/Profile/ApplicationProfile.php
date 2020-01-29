@@ -9,10 +9,10 @@ namespace Yoti\Profile;
  */
 class ApplicationProfile extends BaseProfile
 {
-    const ATTR_APPLICATION_LOGO = 'application_logo';
-    const ATTR_APPLICATION_NAME = 'application_name';
-    const ATTR_APPLICATION_URL = 'application_url';
-    const ATTR_APPLICATION_RECEIPT_BG_COLOR = 'application_receipt_bgcolor';
+    public const ATTR_APPLICATION_LOGO = 'application_logo';
+    public const ATTR_APPLICATION_NAME = 'application_name';
+    public const ATTR_APPLICATION_URL = 'application_url';
+    public const ATTR_APPLICATION_RECEIPT_BG_COLOR = 'application_receipt_bgcolor';
 
     /**
      * The name of the application.

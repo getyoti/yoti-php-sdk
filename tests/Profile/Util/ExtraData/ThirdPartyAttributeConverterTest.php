@@ -15,10 +15,10 @@ use Yoti\Test\TestCase;
  */
 class ThirdPartyAttributeConverterTest extends TestCase
 {
-    const SOME_ISSUANCE_TOKEN = 'some issuance token';
-    const SOME_OTHER_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.other_id';
-    const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
-    const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.123Z';
+    private const SOME_ISSUANCE_TOKEN = 'some issuance token';
+    private const SOME_OTHER_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.other_id';
+    private const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
+    private const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.123Z';
 
     /**
      * @covers ::convertValue

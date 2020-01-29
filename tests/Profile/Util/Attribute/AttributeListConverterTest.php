@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Test\Profile\Util\Attribute;
 
 use Yoti\Profile\Attribute;
-use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute as AttributeProto;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
@@ -16,6 +15,8 @@ use Yoti\Test\TestCase;
  */
 class AttributeListConverterTest extends TestCase
 {
+    private const CONTENT_TYPE_STRING = 1;
+
     /**
      * @covers ::convertToYotiAttributesList
      */
@@ -35,7 +36,7 @@ class AttributeListConverterTest extends TestCase
             ->willReturn($someValue);
         $someAttribute
             ->method('getContentType')
-            ->willReturn(AttributeConverter::CONTENT_TYPE_STRING);
+            ->willReturn(self::CONTENT_TYPE_STRING);
         $someAttribute
             ->method('getAnchors')
             ->willReturn($this->createMock(\Traversable::class));

@@ -15,7 +15,7 @@ class SourceConstraint implements \JsonSerializable
     /**
      * Constraint Type.
      */
-    const TYPE = 'SOURCE';
+    private const TYPE = 'SOURCE';
 
     /**
      * @var \Yoti\ShareUrl\Policy\WantedAnchor[]

@@ -14,14 +14,14 @@ use Yoti\Util\Config;
  */
 class ConfigTest extends TestCase
 {
-    const SDK_IDENTIFIER_KEY = 'sdk.identifier';
-    const SDK_VERSION_KEY = 'sdk.version';
-    const API_URL_KEY = 'api.url';
-    const HTTP_CLIENT_KEY = 'http.client';
+    private const SDK_IDENTIFIER_KEY = 'sdk.identifier';
+    private const SDK_VERSION_KEY = 'sdk.version';
+    private const API_URL_KEY = 'api.url';
+    private const HTTP_CLIENT_KEY = 'http.client';
 
-    const SOME_SDK_IDENTIFIER = 'some identifier';
-    const SOME_SDK_VERSION = 'some version';
-    const SOME_API_URL = 'http://example.com/api';
+    private const SOME_SDK_IDENTIFIER = 'some identifier';
+    private const SOME_SDK_VERSION = 'some version';
+    private const SOME_API_URL = 'http://example.com/api';
 
     /**
      * @covers ::getSdkIdentifier

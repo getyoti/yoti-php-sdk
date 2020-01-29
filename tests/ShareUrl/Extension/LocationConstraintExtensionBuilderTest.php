@@ -12,9 +12,9 @@ use Yoti\Test\TestCase;
  */
 class LocationConstraintExtensionBuilderTest extends TestCase
 {
-    const TYPE_LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
-    const SOME_LATITUDE = 50.8169;
-    const SOME_LONGITUDE = -0.1367;
+    private const TYPE_LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
+    private const SOME_LATITUDE = 50.8169;
+    private const SOME_LONGITUDE = -0.1367;
 
     /**
      * @covers ::withLatitude

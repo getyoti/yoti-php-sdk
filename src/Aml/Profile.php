@@ -8,10 +8,10 @@ use Yoti\Util\Json;
 
 class Profile implements \JsonSerializable
 {
-    const GIVEN_NAMES_ATTR  = 'given_names';
-    const FAMILY_NAME_ATTR  = 'family_name';
-    const SSN_ATTR          = 'ssn';
-    const ADDRESS_ATTR      = 'address';
+    private const GIVEN_NAMES_ATTR  = 'given_names';
+    private const FAMILY_NAME_ATTR  = 'family_name';
+    private const SSN_ATTR          = 'ssn';
+    private const ADDRESS_ATTR      = 'address';
 
     /**
      * Given Names.

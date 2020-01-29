@@ -14,8 +14,8 @@ use Yoti\Test\TestCase;
  */
 class TokenRequestTest extends TestCase
 {
-    const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
-    const SOME_FAMILY_NAME = 'some family name';
+    private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
+    private const SOME_FAMILY_NAME = 'some family name';
 
     /**
      * @var TokenRequest

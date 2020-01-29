@@ -12,7 +12,7 @@ use Yoti\Util\PemFile;
 
 class Service
 {
-    const TOKEN_REQUEST_ENDPOINT_FORMAT = "/apps/%s/tokens";
+    private const TOKEN_REQUEST_ENDPOINT_FORMAT = "/apps/%s/tokens";
 
     /**
      * @var string

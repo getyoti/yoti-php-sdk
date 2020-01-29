@@ -14,10 +14,10 @@ use Yoti\Util\PemFile;
 class Service
 {
     /** Request successful outcome */
-    const OUTCOME_SUCCESS = 'SUCCESS';
+    private const OUTCOME_SUCCESS = 'SUCCESS';
 
     /** Auth HTTP header key */
-    const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
+    private const YOTI_AUTH_HEADER_KEY = 'X-Yoti-Auth-Key';
 
     /**
      * @var string

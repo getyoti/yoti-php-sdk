@@ -13,10 +13,10 @@ use Yoti\Test\TestCase;
  */
 class BaseProfileTest extends TestCase
 {
-    const SOME_ATTRIBUTE = 'some_attribute';
-    const SOME_OTHER_ATTRIBUTE = 'some_other_attribute';
-    const SOME_INVALID_ATTRIBUTE = 'some_invalid_attribute';
-    const SOME_MISSING_ATTRIBUTE = 'some_missing_attribute';
+    private const SOME_ATTRIBUTE = 'some_attribute';
+    private const SOME_OTHER_ATTRIBUTE = 'some_other_attribute';
+    private const SOME_INVALID_ATTRIBUTE = 'some_invalid_attribute';
+    private const SOME_MISSING_ATTRIBUTE = 'some_missing_attribute';
 
     /**
      * @var \Yoti\Profile\BaseProfile

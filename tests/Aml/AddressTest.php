@@ -13,8 +13,8 @@ use Yoti\Test\TestCase;
  */
 class AddressTest extends TestCase
 {
-    const SOME_POSTCODE = 'BN2 1TW';
-    const SOME_COUNTRY_CODE = 'GBR';
+    private const SOME_POSTCODE = 'BN2 1TW';
+    private const SOME_COUNTRY_CODE = 'GBR';
 
     /**
      * @covers ::__construct

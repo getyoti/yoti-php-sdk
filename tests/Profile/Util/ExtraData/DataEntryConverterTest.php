@@ -14,7 +14,7 @@ use Yoti\Test\TestCase;
  */
 class DataEntryConverterTest extends TestCase
 {
-    const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
+    private const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
 
     /**
      * @covers ::convertValue

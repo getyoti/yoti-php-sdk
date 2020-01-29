@@ -14,11 +14,11 @@ use Yoti\Test\TestCase;
  */
 class ProfileTest extends TestCase
 {
-    const SOME_COUNTRY_CODE = 'GBR';
-    const SOME_POSTCODE = 'BN2 1TW';
-    const SOME_GIVEN_NAMES = 'Edward Richard George';
-    const SOME_FAMILY_NAME = 'Heath';
-    const SOME_SSN = '1234';
+    private const SOME_COUNTRY_CODE = 'GBR';
+    private const SOME_POSTCODE = 'BN2 1TW';
+    private const SOME_GIVEN_NAMES = 'Edward Richard George';
+    private const SOME_FAMILY_NAME = 'Heath';
+    private const SOME_SSN = '1234';
 
     /**
      * @var Yoti\Aml\Profile

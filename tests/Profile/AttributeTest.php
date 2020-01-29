@@ -16,7 +16,7 @@ use Yoti\Test\TestCase;
  */
 class AttributeTest extends TestCase
 {
-    const ATTR_VALUE = 'Test FullName';
+    private const ATTR_VALUE = 'Test FullName';
 
     /**
      * @var \Yoti\Profile\Attribute

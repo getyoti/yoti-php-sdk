@@ -12,8 +12,8 @@ use Yoti\Test\TestCase;
  */
 class ResultTest extends TestCase
 {
-    const SOME_SHARE_URL = 'https://api.example.com/qr-code';
-    const SOME_REF_ID = 'some-ref-id';
+    private const SOME_SHARE_URL = 'https://api.example.com/qr-code';
+    private const SOME_REF_ID = 'some-ref-id';
 
     /**
      * @covers ::__construct

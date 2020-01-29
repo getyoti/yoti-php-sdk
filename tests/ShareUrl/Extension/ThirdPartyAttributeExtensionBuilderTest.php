@@ -12,9 +12,9 @@ use Yoti\Test\TestCase;
  */
 class ThirdPartyAttributeExtensionBuilderTest extends TestCase
 {
-    const THIRD_PARTY_ATTRIBUTE_TYPE = 'THIRD_PARTY_ATTRIBUTE';
-    const SOME_DEFINITION = 'some definition';
-    const SOME_OTHER_DEFINITION = 'some other definition';
+    private const THIRD_PARTY_ATTRIBUTE_TYPE = 'THIRD_PARTY_ATTRIBUTE';
+    private const SOME_DEFINITION = 'some definition';
+    private const SOME_OTHER_DEFINITION = 'some other definition';
 
     /**
      * @covers ::withExpiryDate

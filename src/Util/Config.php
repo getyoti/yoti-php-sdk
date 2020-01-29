@@ -13,16 +13,16 @@ use Yoti\Constants;
 class Config
 {
     /** API URL key */
-    const API_URL = 'api.url';
+    public const API_URL = 'api.url';
 
     /** SDK identifier key */
-    const SDK_IDENTIFIER = 'sdk.identifier';
+    public const SDK_IDENTIFIER = 'sdk.identifier';
 
     /** SDK version key */
-    const SDK_VERSION = 'sdk.version';
+    public const SDK_VERSION = 'sdk.version';
 
     /** HTTP client key */
-    const HTTP_CLIENT = 'http.client';
+    public const HTTP_CLIENT = 'http.client';
 
     /**
      * @var array<string, mixed>

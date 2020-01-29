@@ -14,12 +14,12 @@ class DynamicPolicyBuilder
     /**
      * Selfie auth type.
      */
-    const SELFIE_AUTH_TYPE = 1;
+    private const SELFIE_AUTH_TYPE = 1;
 
     /**
      * PIN auth type.
      */
-    const PIN_AUTH_TYPE = 2;
+    private const PIN_AUTH_TYPE = 2;
 
     /**
      * @var \Yoti\ShareUrl\Policy\WantedAttribute[]

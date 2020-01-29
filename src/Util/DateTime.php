@@ -11,7 +11,7 @@ class DateTime
     /**
      * RFC3339 format with microseconds.
      */
-    const RFC3339 = 'Y-m-d\TH:i:s.uP';
+    public const RFC3339 = 'Y-m-d\TH:i:s.uP';
 
     /**
      * @param string $value

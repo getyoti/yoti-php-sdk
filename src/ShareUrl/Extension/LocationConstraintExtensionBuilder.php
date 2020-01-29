@@ -12,7 +12,7 @@ class LocationConstraintExtensionBuilder
     /**
      * Location constraint extension type.
      */
-    const LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
+    private const LOCATION_CONSTRAINT = 'LOCATION_CONSTRAINT';
 
     /**
      * @var float

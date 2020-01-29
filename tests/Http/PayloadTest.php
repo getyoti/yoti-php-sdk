@@ -15,7 +15,7 @@ use function GuzzleHttp\Psr7\stream_for;
  */
 class PayloadTest extends TestCase
 {
-    const SOME_STRING = 'some string';
+    private const SOME_STRING = 'some string';
 
     /**
      * Test getting Payload data as a stream.
