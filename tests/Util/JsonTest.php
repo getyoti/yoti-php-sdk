@@ -12,7 +12,7 @@ use Yoti\Util\Json;
  */
 class JsonTest extends TestCase
 {
-    const SOME_JSON_DATA = ['some' => 'json'];
+    private const SOME_JSON_DATA = ['some' => 'json'];
 
     /**
      * @covers ::decode

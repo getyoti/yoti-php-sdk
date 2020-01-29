@@ -17,12 +17,12 @@ use Yoti\Test\TestCase;
  */
 class TokenRequestBuilderTest extends TestCase
 {
-    const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
-    const SOME_NAME = 'some name';
-    const SOME_STRING_VALUE = 'some string';
-    const SOME_TYPE = 'some type';
-    const SOME_SUB_TYPE = 'some sub type';
-    const SOME_TIMESTAMP = 1575998454;
+    private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
+    private const SOME_NAME = 'some name';
+    private const SOME_STRING_VALUE = 'some string';
+    private const SOME_TYPE = 'some type';
+    private const SOME_SUB_TYPE = 'some sub type';
+    private const SOME_TIMESTAMP = 1575998454;
 
     /**
      * @var \Yoti\Sandbox\Profile\RequestBuilders

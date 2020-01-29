@@ -17,14 +17,14 @@ use Yoti\Util\Json;
 
 class AttributeConverter
 {
-    const CONTENT_TYPE_UNDEFINED = 0;
-    const CONTENT_TYPE_STRING = 1;
-    const CONTENT_TYPE_JPEG = 2;
-    const CONTENT_TYPE_DATE = 3;
-    const CONTENT_TYPE_PNG = 4;
-    const CONTENT_TYPE_JSON = 5;
-    const CONTENT_TYPE_MULTI_VALUE = 6;
-    const CONTENT_TYPE_INT = 7;
+    private const CONTENT_TYPE_UNDEFINED = 0;
+    private const CONTENT_TYPE_STRING = 1;
+    private const CONTENT_TYPE_JPEG = 2;
+    private const CONTENT_TYPE_DATE = 3;
+    private const CONTENT_TYPE_PNG = 4;
+    private const CONTENT_TYPE_JSON = 5;
+    private const CONTENT_TYPE_MULTI_VALUE = 6;
+    private const CONTENT_TYPE_INT = 7;
 
     /**
      * @param mixed $value

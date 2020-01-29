@@ -98,10 +98,8 @@ class ActivityDetails
 
     private function setProfile(): void
     {
-        $protobufAttrList = $this->receipt->parseAttribute(
-            Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
-            $this->pemFile
-        );
+        $protobufAttrList = $this->receipt->parseOtherPartyProfileContent($this->pemFile);
+
         $this->userProfile = new UserProfile(
             AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
         );
@@ -109,10 +107,8 @@ class ActivityDetails
 
     private function setApplicationProfile(): void
     {
-        $protobufAttrList = $this->receipt->parseAttribute(
-            Receipt::ATTR_PROFILE_CONTENT,
-            $this->pemFile
-        );
+        $protobufAttrList = $this->receipt->parseProfileContent($this->pemFile);
+
         $this->applicationProfile = new ApplicationProfile(
             AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
         );

@@ -12,7 +12,7 @@ use Yoti\Test\TestCase;
  */
 class CountryTest extends TestCase
 {
-    const SOME_COUNTRY_CODE = 'GBR';
+    private const SOME_COUNTRY_CODE = 'GBR';
 
     /**
      * @covers ::__construct

@@ -18,9 +18,9 @@ use Yoti\Util\PemFile;
  */
 class RequestSignerTest extends TestCase
 {
-    const SOME_PATH = '/some-path';
+    private const SOME_PATH = '/some-path';
 
-    const SOME_METHOD = 'POST';
+    private const SOME_METHOD = 'POST';
 
     /**
      * @var \Yoti\Http\Payload

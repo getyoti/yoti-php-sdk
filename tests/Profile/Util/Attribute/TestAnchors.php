@@ -6,7 +6,7 @@ namespace Yoti\Test\Profile\Util\Attribute;
 
 class TestAnchors
 {
-    const SOURCE_PP_ANCHOR = "CjdBTkMtRE9D5oQ/YdIfjbvf1HL/HT7s/Xgse6TlNthXYyfF9knv02vq6Vxd5R"
+    public const SOURCE_PP_ANCHOR = "CjdBTkMtRE9D5oQ/YdIfjbvf1HL/HT7s/Xgse6TlNthXYyfF9knv02vq6Vxd5R"
                         . "afiJbR9xVVl+knEowIMIIECDCCAnCgAwIBAgIRANEL6idR0hcevQr4tmIIcoowDQYJKo"
                         . "ZIhvcNAQELBQAwJzElMCMGA1UEAxMccGFzc3BvcnQtcmVnaXN0cmF0aW9uLXNlcnZlcj"
                         . "AeFw0xODA0MDUxNDM1MDFaFw0xODA0MTIxNDM1MDFaMCcxJTAjBgNVBAMTHHBhc3Nwb3"
@@ -46,7 +46,7 @@ class TestAnchors
                         . "/2LTJHCAEQ0bvEyui02gIaHFIc8RKJ4U36MiJqXMjQlWXbhVu/URDuYOFXITEiHNs5Ua"
                         . "Z0Q8FPlpgca5LurwwVkP/EqVsqzc1tuK06AA==";
 
-    const SOURCE_DL_ANCHOR = "CjdBTkMtRE9Dz8qdV2DSwFJicqASUbdSRfmYOsJzswHQ4hDnfOUXtYeRlVOeQnVr3an"
+    public const SOURCE_DL_ANCHOR = "CjdBTkMtRE9Dz8qdV2DSwFJicqASUbdSRfmYOsJzswHQ4hDnfOUXtYeRlVOeQnVr3an"
                         . "ESmMH7e2HEqAIMIIEHDCCAoSgAwIBAgIQIrSqBBTTXWxgGf6OvVm5XDANBgkqhkiG9w0"
                         . "BAQsFADAuMSwwKgYDVQQDEyNkcml2aW5nLWxpY2VuY2UtcmVnaXN0cmF0aW9uLXNlcnZ"
                         . "lcjAeFw0xODA0MDUxNDI3MzZaFw0xODA0MTIxNDI3MzZaMC4xLDAqBgNVBAMTI2RyaXZ"
@@ -86,7 +86,7 @@ class TestAnchors
                         . "ASx2zgOkeIJVm5UnTC2ywMkcIARDR0uX8mLLaAhocZv/4kdenjmzEE1nkHW7ks7qh+II"
                         . "J0YbSPwVkGiIc7BbgXGE8cSGwKuul83Yy/z1InbhBl2B1drEuOjoA";
 
-    const VERIFIER_YOTI_ADMIN_ANCHOR = "CjdBTkMtRE9DJrhhgGLoPILLZozIid4Aoiw/hLolQRF95pGqqsok3x"
+    public const VERIFIER_YOTI_ADMIN_ANCHOR = "CjdBTkMtRE9DJrhhgGLoPILLZozIid4Aoiw/hLolQRF95pGqqsok3x"
                         . "facAZQ9bJQD6JVzYPutOAIEpwIMIIEGDCCAoCgAwIBAgIRAMEOn91ajjMKgwOfw//2iI"
                         . "0wDQYJKoZIhvcNAQELBQAwLjEsMCoGA1UEAxMjZHJpdmluZy1saWNlbmNlLXJlZ2lzdH"
                         . "JhdGlvbi1zZXJ2ZXIwHhcNMTgwNDA1MTQyNzM2WhcNMTgwNDEyMTQyNzM2WjAuMSwwKg"
@@ -127,7 +127,7 @@ class TestAnchors
                         . "igUHdLW56nhnGLovTMIhz+RsUWrtszSjWSim2/4vJAE8QjXJ98ou4AVzKUOg9EUklWSU"
                         . "5HX0xJQ0VOQ0U=";
 
-    const UNKNOWN_ANCHOR = "CjdBTkMtRE9DwOf29QYtr1yKzW7X/JhQ6qaukET/+bjH0ePCW6UYVccf30sZ5eZPsXY"
+    public const UNKNOWN_ANCHOR = "CjdBTkMtRE9DwOf29QYtr1yKzW7X/JhQ6qaukET/+bjH0ePCW6UYVccf30sZ5eZPsXY"
                         . "+FdUeiudqEosIMIIEBzCCAm+gAwIBAgIRAKum3TTYTSaWFxxuhW6VLIEwDQYJKoZIhvc"
                         . "NAQELBQAwJzElMCMGA1UEAxMcZG9jdW1lbnQtcmVnaXN0cmF0aW9uLXNlcnZlcjAeFw0"
                         . "xOTAzMDUxMDQ1MTBaFw0xOTAzMTIxMDQ1MTBaMCcxJTAjBgNVBAMTHGRvY3VtZW50LXJ"
@@ -167,7 +167,7 @@ class TestAnchors
                         . "6F7sB6t+JNElaEZTw6q7XMkcIARClmruK6ergAhoc+oUj7TElFOKSTLtKhZnW9xYagvq"
                         . "yFC5/yGnbPSIcsyIF51RhoBzyvJ+gsm2e6apVy8WWoW7TZ8Y5CjoA";
 
-    const ANCHOR_NO_VALUE = "CjdBTkMtRE9Dz8qdV2DSwFJicqASUbdSRfmYOsJzswHQ4hDnfOUXtYeRlVOeQnVr3a"
+    public const ANCHOR_NO_VALUE = "CjdBTkMtRE9Dz8qdV2DSwFJicqASUbdSRfmYOsJzswHQ4hDnfOUXtYeRlVOeQnVr3a"
                         . "nESmMH7e2HEpEIMIIEDTCCAnWgAwIBAgIQIrSqBBTTXWxgGf6OvVm5XDANBgkqhkiG9w"
                         . "0BAQsFADAuMSwwKgYDVQQDEyNkcml2aW5nLWxpY2VuY2UtcmVnaXN0cmF0aW9uLXNlcn"
                         . "ZlcjAeFw0xODA0MDUxNDI3MzZaFw0xODA0MTIxNDI3MzZaMC4xLDAqBgNVBAMTI2RyaX"

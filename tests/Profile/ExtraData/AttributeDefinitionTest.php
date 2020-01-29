@@ -12,7 +12,7 @@ use Yoti\Test\TestCase;
  */
 class AttributeDefinitionTest extends TestCase
 {
-    const SOME_NAME = 'some name';
+    private const SOME_NAME = 'some name';
 
     /**
      * @var \Yoti\Profile\ExtraData\AttributeDefinition

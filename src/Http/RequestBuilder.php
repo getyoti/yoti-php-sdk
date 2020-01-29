@@ -14,13 +14,13 @@ use function GuzzleHttp\Psr7\uri_for;
 class RequestBuilder
 {
     /** Digest HTTP header key. */
-    const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
+    private const YOTI_DIGEST_HEADER_KEY = 'X-Yoti-Auth-Digest';
 
     /** SDK Identifier HTTP header key. */
-    const YOTI_SDK_IDENTIFIER_HEADER_KEY = 'X-Yoti-SDK';
+    private const YOTI_SDK_IDENTIFIER_HEADER_KEY = 'X-Yoti-SDK';
 
     /** SDK Version HTTP header key. */
-    const YOTI_SDK_VERSION_HEADER_KEY = 'X-Yoti-SDK-Version';
+    private const YOTI_SDK_VERSION_HEADER_KEY = 'X-Yoti-SDK-Version';
 
     /**
      * @var string

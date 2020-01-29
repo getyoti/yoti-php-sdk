@@ -15,7 +15,7 @@ class ThirdPartyAttributeExtensionBuilder
     /**
      * Third Party Attribute Extension Type.
      */
-    const THIRD_PARTY_ATTRIBUTE = 'THIRD_PARTY_ATTRIBUTE';
+    private const THIRD_PARTY_ATTRIBUTE = 'THIRD_PARTY_ATTRIBUTE';
 
     /**
      * @var \Yoti\Profile\ExtraData\AttributeDefinition[]

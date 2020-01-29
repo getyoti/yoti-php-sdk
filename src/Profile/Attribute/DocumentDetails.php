@@ -14,12 +14,12 @@ class DocumentDetails
      * The values of the Document Details are in the format and order as defined in this pattern
      * e.g PASS_CARD GBR 22719564893 - CITIZENCARD, the last two are optionals
      */
-    const VALIDATION_PATTERN = '/^([A-Za-z_]*) ([A-Za-z]{3}) ([A-Za-z0-9]{1}).*$/';
-    const TYPE_INDEX = 0;
-    const COUNTRY_INDEX = 1;
-    const NUMBER_INDEX = 2;
-    const EXPIRATION_INDEX = 3;
-    const AUTHORITY_INDEX = 4;
+    private const VALIDATION_PATTERN = '/^([A-Za-z_]*) ([A-Za-z]{3}) ([A-Za-z0-9]{1}).*$/';
+    private const TYPE_INDEX = 0;
+    private const COUNTRY_INDEX = 1;
+    private const NUMBER_INDEX = 2;
+    private const EXPIRATION_INDEX = 3;
+    private const AUTHORITY_INDEX = 4;
 
     /**
      * @var string

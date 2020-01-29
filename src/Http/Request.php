@@ -11,11 +11,11 @@ use Psr\Http\Message\ResponseInterface;
 class Request
 {
     /** HTTP methods */
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
+    public const METHOD_GET = 'GET';
+    public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_PATCH = 'PATCH';
+    public const METHOD_DELETE = 'DELETE';
 
     /**
      * @var \Psr\Http\Message\RequestInterface

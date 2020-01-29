@@ -15,11 +15,11 @@ namespace Yoti\Profile\Attribute;
  */
 class Anchor
 {
-    const TYPE_SOURCE_NAME = 'SOURCE';
-    const TYPE_VERIFIER_NAME = 'VERIFIER';
-    const TYPE_UNKNOWN_NAME = 'UNKNOWN';
-    const TYPE_SOURCE_OID = '1.3.6.1.4.1.47127.1.1.1';
-    const TYPE_VERIFIER_OID = '1.3.6.1.4.1.47127.1.1.2';
+    public const TYPE_SOURCE_NAME = 'SOURCE';
+    public const TYPE_VERIFIER_NAME = 'VERIFIER';
+    public const TYPE_UNKNOWN_NAME = 'UNKNOWN';
+    public const TYPE_SOURCE_OID = '1.3.6.1.4.1.47127.1.1.1';
+    public const TYPE_VERIFIER_OID = '1.3.6.1.4.1.47127.1.1.2';
 
     /**
      * @var string

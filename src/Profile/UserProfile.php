@@ -11,22 +11,22 @@ use Yoti\Profile\Attribute\AgeVerification;
  */
 class UserProfile extends BaseProfile
 {
-    const AGE_OVER = 'age_over:';
-    const AGE_UNDER = 'age_under:';
+    public const AGE_OVER = 'age_over:';
+    public const AGE_UNDER = 'age_under:';
 
-    const ATTR_FAMILY_NAME = 'family_name';
-    const ATTR_GIVEN_NAMES = 'given_names';
-    const ATTR_FULL_NAME = 'full_name';
-    const ATTR_DATE_OF_BIRTH = 'date_of_birth';
-    const ATTR_GENDER = 'gender';
-    const ATTR_NATIONALITY = 'nationality';
-    const ATTR_PHONE_NUMBER = 'phone_number';
-    const ATTR_SELFIE = 'selfie';
-    const ATTR_EMAIL_ADDRESS = 'email_address';
-    const ATTR_POSTAL_ADDRESS = 'postal_address';
-    const ATTR_DOCUMENT_DETAILS = "document_details";
-    const ATTR_DOCUMENT_IMAGES = 'document_images';
-    const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
+    public const ATTR_FAMILY_NAME = 'family_name';
+    public const ATTR_GIVEN_NAMES = 'given_names';
+    public const ATTR_FULL_NAME = 'full_name';
+    public const ATTR_DATE_OF_BIRTH = 'date_of_birth';
+    public const ATTR_GENDER = 'gender';
+    public const ATTR_NATIONALITY = 'nationality';
+    public const ATTR_PHONE_NUMBER = 'phone_number';
+    public const ATTR_SELFIE = 'selfie';
+    public const ATTR_EMAIL_ADDRESS = 'email_address';
+    public const ATTR_POSTAL_ADDRESS = 'postal_address';
+    public const ATTR_DOCUMENT_DETAILS = "document_details";
+    public const ATTR_DOCUMENT_IMAGES = 'document_images';
+    public const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
 
     /** @var \Yoti\Profile\Attribute\AgeVerification[] */
     private $ageVerifications;

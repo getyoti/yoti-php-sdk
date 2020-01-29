@@ -148,16 +148,15 @@ class ReceiptTest extends TestCase
     }
 
     /**
+     * @covers ::parseOtherPartyProfileContent
      * @covers ::parseAttribute
      * @covers ::getWrappedReceiptKey
      * @covers ::decryptAttribute
      */
     public function testShouldParseOtherPartyProfileContent()
     {
-        $protobufAttributesList = $this->receipt->parseAttribute(
-            Receipt::ATTR_OTHER_PARTY_PROFILE_CONTENT,
-            $this->pemFile
-        );
+        $protobufAttributesList = $this->receipt->parseOtherPartyProfileContent($this->pemFile);
+
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList(
             $protobufAttributesList
         );
@@ -166,15 +165,14 @@ class ReceiptTest extends TestCase
     }
 
     /**
+     * @covers ::parseProfileContent
      * @covers ::parseAttribute
      * @covers ::decryptAttribute
      */
     public function testShouldParseProfileContent()
     {
-        $protobufAttributesList = $this->receipt->parseAttribute(
-            Receipt::ATTR_PROFILE_CONTENT,
-            $this->pemFile
-        );
+        $protobufAttributesList = $this->receipt->parseProfileContent($this->pemFile);
+
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList(
             $protobufAttributesList
         );

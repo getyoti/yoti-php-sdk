@@ -16,7 +16,7 @@ use Yoti\Util\PemFile;
  */
 class EncrypedDataTest extends TestCase
 {
-    const SOME_DATA = 'some data';
+    private const SOME_DATA = 'some data';
 
     /**
      * @var \Yoti\Util\PemFile

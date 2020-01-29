@@ -12,15 +12,15 @@ use Yoti\Util\PemFile;
 
 class Receipt
 {
-    const ATTR_TIMESTAMP = 'timestamp';
-    const ATTR_RECEIPT_ID = 'receipt_id';
-    const ATTR_REMEMBER_ME_ID = 'remember_me_id';
-    const ATTR_PARENT_REMEMBER_ME_ID = 'parent_remember_me_id';
-    const ATTR_PROFILE_CONTENT = 'profile_content';
-    const ATTR_SHARING_OUT_COME = 'sharing_outcome';
-    const ATTR_WRAPPED_RECEIPT_KEY = 'wrapped_receipt_key';
-    const ATTR_OTHER_PARTY_PROFILE_CONTENT = 'other_party_profile_content';
-    const ATTR_EXTRA_DATA_CONTENT = 'extra_data_content';
+    private const ATTR_TIMESTAMP = 'timestamp';
+    private const ATTR_RECEIPT_ID = 'receipt_id';
+    private const ATTR_REMEMBER_ME_ID = 'remember_me_id';
+    private const ATTR_PARENT_REMEMBER_ME_ID = 'parent_remember_me_id';
+    private const ATTR_PROFILE_CONTENT = 'profile_content';
+    private const ATTR_SHARING_OUT_COME = 'sharing_outcome';
+    private const ATTR_WRAPPED_RECEIPT_KEY = 'wrapped_receipt_key';
+    private const ATTR_OTHER_PARTY_PROFILE_CONTENT = 'other_party_profile_content';
+    private const ATTR_EXTRA_DATA_CONTENT = 'extra_data_content';
 
     /**
      * @var array<string, mixed>
@@ -81,9 +81,28 @@ class Receipt
         return $this->receiptData[$attributeName] ?? null;
     }
 
+
     /**
-     * Return Protobuf Attributes List.
+     * @param \Yoti\Util\PemFile $pemFile
      *
+     * @return \Yoti\Protobuf\Attrpubapi\AttributeList
+     */
+    public function parseProfileContent(PemFile $pemFile): AttributeList
+    {
+        return $this->parseAttribute(self::ATTR_PROFILE_CONTENT, $pemFile);
+    }
+
+    /**
+     * @param \Yoti\Util\PemFile $pemFile
+     *
+     * @return \Yoti\Protobuf\Attrpubapi\AttributeList
+     */
+    public function parseOtherPartyProfileContent(PemFile $pemFile): AttributeList
+    {
+        return $this->parseAttribute(self::ATTR_OTHER_PARTY_PROFILE_CONTENT, $pemFile);
+    }
+
+    /**
      * @param string $attributeName
      * @param \Yoti\Util\PemFile $pemFile
      *

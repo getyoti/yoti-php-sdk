@@ -19,7 +19,7 @@ class TransactionalFlowExtensionBuilder
     /**
      * Transactional flow extension type.
      */
-    const TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
+    private const TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
 
     /**
      * Allows you to provide a non-null object representing the content to be submitted

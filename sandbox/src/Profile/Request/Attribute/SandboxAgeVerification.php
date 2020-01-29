@@ -8,8 +8,8 @@ use Yoti\Profile\UserProfile;
 
 class SandboxAgeVerification extends SandboxAttribute
 {
-    const AGE_OVER_FORMAT = 'age_over:%d';
-    const AGE_UNDER_FORMAT = 'age_under:%d';
+    private const AGE_OVER_FORMAT = 'age_over:%d';
+    private const AGE_UNDER_FORMAT = 'age_under:%d';
 
     /**
      * @param \DateTime $dateObj

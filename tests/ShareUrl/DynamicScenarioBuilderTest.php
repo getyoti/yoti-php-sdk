@@ -15,7 +15,7 @@ use Yoti\Test\TestCase;
  */
 class DynamicScenarioBuilderTest extends TestCase
 {
-    const SOME_ENDPOINT = '/test-callback';
+    private const SOME_ENDPOINT = '/test-callback';
 
     /**
      * @covers ::build

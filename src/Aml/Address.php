@@ -8,8 +8,8 @@ use Yoti\Util\Json;
 
 class Address implements \JsonSerializable
 {
-    const POSTCODE_ATTR = 'post_code';
-    const COUNTRY_ATTR = 'country';
+    private const POSTCODE_ATTR = 'post_code';
+    private const COUNTRY_ATTR = 'country';
 
     /**
      * @var ?string

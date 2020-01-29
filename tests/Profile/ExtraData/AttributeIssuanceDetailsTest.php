@@ -13,9 +13,9 @@ use Yoti\Test\TestCase;
  */
 class AttributeIssuanceDetailsTest extends TestCase
 {
-    const SOME_ISSUANCE_TOKEN = 'some issuance token';
-    const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
-    const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.000Z';
+    private const SOME_ISSUANCE_TOKEN = 'some issuance token';
+    private const SOME_ISSUING_ATTRIBUTE_NAME = 'com.thirdparty.id';
+    private const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.000Z';
 
     /**
      * @var \Yoti\Profile\ExtraData\AttributeIssuanceDetails

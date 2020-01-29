@@ -9,9 +9,9 @@ use Yoti\Util\Json;
 
 class Result
 {
-    const ON_PEP_LIST_KEY = 'on_pep_list';
-    const ON_FRAUD_LIST_KEY = 'on_fraud_list';
-    const ON_WATCH_LIST_KEY = 'on_watch_list';
+    private const ON_PEP_LIST_KEY = 'on_pep_list';
+    private const ON_FRAUD_LIST_KEY = 'on_fraud_list';
+    private const ON_WATCH_LIST_KEY = 'on_watch_list';
 
     /**
      * Politically exposed person.
