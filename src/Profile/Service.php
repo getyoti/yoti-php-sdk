@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
+use Yoti\Constants;
 use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Http\RequestBuilder;
@@ -63,7 +64,7 @@ class Service
 
         // Request endpoint
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getApiUrl())
+            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
             ->withEndpoint(sprintf('/profile/%s', $token))
             ->withQueryParam('appId', $this->sdkId)
             ->withHeader(self::YOTI_AUTH_HEADER_KEY, $this->pemFile->getAuthKey())

@@ -93,9 +93,9 @@ class ConfigTest extends TestCase
     /**
      * @covers ::getApiUrl
      */
-    public function testGetApiUrlDefault()
+    public function testGetApiUrlDefaultIsNull()
     {
-        $this->assertEquals(Constants::API_URL, (new Config())->getApiUrl());
+        $this->assertNull((new Config())->getApiUrl());
     }
 
     /**

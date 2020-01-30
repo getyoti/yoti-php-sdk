@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Aml;
 
 use Psr\Http\Message\ResponseInterface;
+use Yoti\Constants;
 use Yoti\Exception\AmlException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
@@ -51,7 +52,7 @@ class Service
     public function performCheck(Profile $amlProfile): Result
     {
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getApiUrl())
+            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
             ->withEndpoint('/aml-check')
             ->withQueryParam('appId', $this->sdkId)
             ->withPost()

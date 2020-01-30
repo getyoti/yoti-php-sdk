@@ -130,11 +130,11 @@ class Config
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getApiUrl(): string
+    public function getApiUrl(): ?string
     {
-        return $this->get(self::API_URL, Constants::API_URL);
+        return $this->get(self::API_URL);
     }
 
     /**
