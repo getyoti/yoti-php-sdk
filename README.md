@@ -52,7 +52,7 @@ Yoti also allows you to enable user details verification from your mobile app by
 
 ## Requirements
 
-* PHP 5.5.19
+* PHP ^7.1
 * CURL PHP extension (must support TLSv1.2)
 
 ## Enabling the SDK
@@ -64,13 +64,13 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "2.0.*"
+    "yoti/yoti-php-sdk" : "^3.0"
 }
 ```
 
 Or run this Composer command
 ```console
-$ composer require yoti/yoti-php-sdk "2.0.*"
+$ composer require yoti/yoti-php-sdk "^3.0"
 ```
 
 ## Client Initialisation
@@ -289,8 +289,6 @@ $ docker-compose exec web php /usr/share/nginx/html/scripts/aml-check.php // for
 ```
 
 ## Running the tests
-
-PHPUnit requires `PHP 5.6` or above.
 
 Run the following commands from the root folder:
 ```console
