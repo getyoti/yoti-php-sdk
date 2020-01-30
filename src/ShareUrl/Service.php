@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl;
 
+use Yoti\Constants;
 use Yoti\Exception\ShareUrlException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
@@ -50,7 +51,7 @@ class Service
     public function createShareUrl(DynamicScenario $dynamicScenario): Result
     {
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getApiUrl())
+            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
             ->withEndpoint(sprintf('/qrcodes/apps/%s', $this->sdkId))
             ->withQueryParam('appId', $this->sdkId)
             ->withPost()
