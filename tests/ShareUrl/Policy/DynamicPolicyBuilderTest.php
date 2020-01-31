@@ -1,18 +1,23 @@
 <?php
 
-namespace YotiTest\ShareUrl\Policy;
+declare(strict_types=1);
 
+namespace Yoti\Test\ShareUrl\Policy;
+
+use Yoti\Profile\UserProfile;
+use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 use Yoti\ShareUrl\Policy\WantedAttributeBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Policy\DynamicPolicyBuilder
  */
 class DynamicPolicyBuilderTest extends TestCase
 {
-    const SELFIE_AUTH_TYPE = 1;
-    const PIN_AUTH_TYPE = 2;
+    private const SELFIE_AUTH_TYPE = 1;
+    private const PIN_AUTH_TYPE = 2;
 
     /**
      * @covers ::build
@@ -74,6 +79,58 @@ class DynamicPolicyBuilderTest extends TestCase
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
         $this->assertEquals(json_encode($expectedWantedAttributeData), $dynamicPolicy);
+    }
+
+    /**
+     * @covers ::withWantedAttributeByName
+     */
+    public function testWithWantedAttributeByName()
+    {
+        $someAttributeName = 'some_attribute_name';
+
+        $constraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withDrivingLicence()
+                    ->build()
+            )
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withWantedAttributeByName($someAttributeName, $constraints, true)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => $someAttributeName,
+                    'optional' => false,
+                    "constraints" => [
+                        [
+                            "type" => "SOURCE",
+                            "preferred_sources" => [
+                                "anchors" => [
+                                    [
+                                        "name" => "DRIVING_LICENCE",
+                                        "sub_type" => "",
+                                    ]
+                                ],
+                                "soft_preference" => false,
+                            ],
+                        ],
+                    ],
+                    "accept_self_asserted" => true,
+                ],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedWantedAttributeData),
+            json_encode($dynamicPolicy)
+        );
     }
 
     /**
@@ -159,6 +216,7 @@ class DynamicPolicyBuilderTest extends TestCase
      * @covers ::withDateOfBirth
      * @covers ::withAgeOver
      * @covers ::withAgeUnder
+     * @covers ::withAgeDerivedAttribute
      */
     public function testWithAgeDerivedAttributes()
     {
@@ -185,13 +243,65 @@ class DynamicPolicyBuilderTest extends TestCase
     }
 
     /**
+     * @covers ::withAgeDerivedAttribute
+     */
+    public function testWithAgeDerivedAttributesWithConstraints()
+    {
+        $constraints = (new ConstraintsBuilder())
+            ->withSourceConstraint(
+                (new SourceConstraintBuilder())
+                    ->withDrivingLicence()
+                    ->build()
+            )
+            ->build();
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withAgeDerivedAttribute(UserProfile::AGE_OVER . '18', $constraints)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => 'date_of_birth',
+                    'optional' => false,
+                    'derivation' => 'age_over:18',
+                    "constraints" => [
+                        [
+                            "type" => "SOURCE",
+                            "preferred_sources" => [
+                                "anchors" => [
+                                    [
+                                        "name" => "DRIVING_LICENCE",
+                                        "sub_type" => "",
+                                    ]
+                                ],
+                                "soft_preference" => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedWantedAttributeData),
+            json_encode($dynamicPolicy)
+        );
+    }
+
+    /**
      * @covers ::withAgeOver
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage age must be an integer
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithAgeOverIntegersOnly()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
+
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
             ->withAgeOver('18')
@@ -200,12 +310,14 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeUnder
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage age must be an integer
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithAgeUnderIntegersOnly()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
+
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
             ->withAgeUnder('18')
@@ -214,6 +326,8 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withAgeUnder
+     * @covers ::withAgeDerivedAttribute
+     * @covers ::withWantedAttribute
      */
     public function testWithDuplicateAgeDerivedAttributes()
     {
@@ -409,12 +523,12 @@ class DynamicPolicyBuilderTest extends TestCase
 
     /**
      * @covers ::withWantedAuthType
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage wantedAuthType must be an integer
      */
     public function testWithNonIntegerAuthType()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type int');
+
         (new DynamicPolicyBuilder())
             ->withWantedAuthType('99')
             ->build();

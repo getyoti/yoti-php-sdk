@@ -1,25 +1,27 @@
 <?php
 
-namespace YotiTest\ShareUrl\Policy;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
 use Yoti\ShareUrl\Policy\WantedAnchorBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Policy\SourceConstraintBuilder
  */
 class SourceConstraintBuilderTest extends TestCase
 {
-    const ANCHOR_TYPE_SOURCE = 'SOURCE';
-    const ANCHOR_VALUE_PASSPORT = 'PASSPORT';
-    const ANCHOR_VALUE_DRIVING_LICENSE = 'DRIVING_LICENCE';
-    const ANCHOR_VALUE_NATIONAL_ID = 'NATIONAL_ID';
-    const ANCHOR_VALUE_PASSCARD = 'PASS_CARD';
-    const ANCHOR_SUB_TYPE_NATIONAL_ID = 'NATIONAL_ID_SUB_TYPE';
-    const ANCHOR_SUB_TYPE_PASSCARD = 'PASSCARD_SUB_TYPE';
-    const SOME_VALUE = 'test value';
-    const SOME_SUB_TYPE = 'test sub type';
+    private const ANCHOR_TYPE_SOURCE = 'SOURCE';
+    private const ANCHOR_VALUE_PASSPORT = 'PASSPORT';
+    private const ANCHOR_VALUE_DRIVING_LICENSE = 'DRIVING_LICENCE';
+    private const ANCHOR_VALUE_NATIONAL_ID = 'NATIONAL_ID';
+    private const ANCHOR_VALUE_PASSCARD = 'PASS_CARD';
+    private const ANCHOR_SUB_TYPE_NATIONAL_ID = 'NATIONAL_ID_SUB_TYPE';
+    private const ANCHOR_SUB_TYPE_PASSCARD = 'PASSCARD_SUB_TYPE';
+    private const SOME_VALUE = 'test value';
+    private const SOME_SUB_TYPE = 'test sub type';
 
     /**
      * @covers ::build
@@ -299,7 +301,7 @@ class SourceConstraintBuilderTest extends TestCase
      * @param \Yoti\ShareUrl\Policy\SourceConstraint $sourceConstraint
      * @param string $expectValue
      * @param string $expectSubType
-     * @param boolean $expectSoftPreference
+     * @param bool $expectSoftPreference
      */
     private function assertSourceConstraint(
         $sourceConstraint,

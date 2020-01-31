@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Yoti">
   <rule ref="PSR12">
-    <!-- Excluding constant visibility sniff in order to support PHP 5.6 -->
-    <exclude name="PSR12.Properties.ConstantVisibility"/>
     <!--
     Windows users that have enabled `core.autocrlf` in their git configuration
     can disable the `Generic.Files.LineEndings` rule by copying this file to
@@ -13,7 +11,8 @@
     Note: This sniff will always be included on Travis CI.
     -->
   </rule>
-  <file>src/Yoti</file>
+  <file>src</file>
   <file>tests</file>
   <file>sandbox</file>
+  <exclude-pattern>src/Protobuf/*</exclude-pattern>
 </ruleset>

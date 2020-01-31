@@ -1,8 +1,10 @@
 <?php
 
-namespace YotiTest\Util;
+declare(strict_types=1);
 
-use YotiTest\TestCase;
+namespace Yoti\Test\Util;
+
+use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
@@ -10,6 +12,29 @@ use Yoti\Util\DateTime;
  */
 class DateTimeTest extends TestCase
 {
+    /**
+     * @covers ::timestampToDateTime
+     * @covers ::createFromFormat
+     */
+    public function testTimestampToDateTime()
+    {
+        $this->assertEquals(
+            '2018-04-12T13:14:32.835537+00:00',
+            DateTime::timestampToDateTime(1523538872835537)->format(DateTime::RFC3339)
+        );
+    }
+
+    /**
+     * @covers ::createFromFormat
+     */
+    public function testCreateFromFormatInvalid()
+    {
+        $this->expectException(\Yoti\Exception\DateTimeException::class);
+        $this->expectExceptionMessage('Could not parse from format');
+
+        DateTime::createFromFormat('some-invalid-format', 'some-invalid-time');
+    }
+
     /**
      * @covers ::stringToDateTime
      *
@@ -50,25 +75,25 @@ class DateTimeTest extends TestCase
 
     /**
      * @covers ::stringToDateTime
-     *
-     * @expectedException \Yoti\Exception\DateTimeException
-     * @expectedExceptionMessage Could not parse string to DateTime
      */
     public function testInvalidTimestamp()
     {
+        $this->expectException(\Yoti\Exception\DateTimeException::class);
+        $this->expectExceptionMessage('Could not parse string to DateTime');
+
         DateTime::stringToDateTime('some-invalid-date');
     }
 
     /**
      * @covers ::stringToDateTime
      *
-     * @expectedException \InvalidArgumentException
-     *
      * @dataProvider emptyTimestampProvider
      */
-    public function testEmptyTimestamp($emptyDateString, $exceptionMessage)
+    public function testEmptyTimestamp($emptyDateString, $exceptionMessage, $type)
     {
+        $this->expectException($type);
         $this->expectExceptionMessage($exceptionMessage);
+
         DateTime::stringToDateTime($emptyDateString);
     }
 
@@ -78,8 +103,8 @@ class DateTimeTest extends TestCase
     public function emptyTimestampProvider()
     {
         return [
-            [ null, 'value must be a string' ],
-            [ '', 'value cannot be empty' ],
+            [ null, 'must be of the type string, null given', \TypeError::class ],
+            [ '', 'value cannot be empty', \InvalidArgumentException::class ],
         ];
     }
 }

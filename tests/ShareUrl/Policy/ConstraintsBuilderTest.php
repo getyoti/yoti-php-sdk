@@ -1,10 +1,12 @@
 <?php
 
-namespace YotiTest\ShareUrl\Policy;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl\Policy;
 
 use Yoti\ShareUrl\Policy\ConstraintsBuilder;
 use Yoti\ShareUrl\Policy\SourceConstraintBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Policy\ConstraintsBuilder

@@ -8,6 +8,7 @@
     <testsuites>
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>
+            <directory>sandbox/</directory>
         </testsuite>
         <testsuite name="Yoti Sandbox Test Suite">
             <directory>sandbox/tests/</directory>
@@ -15,8 +16,11 @@
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/Yoti/</directory>
-            <directory suffix=".php">sandbox/src/</directory>
+            <directory suffix=".php">src</directory>
+            <directory suffix=".php">sandbox/src</directory>
+            <exclude>
+                <directory>src/Protobuf</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>

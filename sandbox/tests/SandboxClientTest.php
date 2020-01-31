@@ -1,129 +1,59 @@
 <?php
 
-namespace SandboxTest;
+declare(strict_types=1);
 
-use Yoti\ActivityDetails;
-use Yoti\Http\RequestHandlerInterface;
-use Yoti\Http\Response;
-use YotiSandbox\Http\RequestBuilder;
-use YotiSandbox\Http\SandboxPathManager;
-use YotiSandbox\SandboxClient;
-use YotiTest\TestCase;
+namespace Yoti\Sandbox\Test;
+
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
+use Yoti\Http\Payload;
+use Yoti\Sandbox\Profile\Request\TokenRequest;
+use Yoti\Sandbox\SandboxClient;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
+use Yoti\Util\Config;
 
 /**
- * @coversDefaultClass \YotiSandbox\SandboxClient
+ * @coversDefaultClass \Yoti\Sandbox\SandboxClient
  */
 class SandboxClientTest extends TestCase
 {
     /**
-     * @covers ::getToken
-     * @covers ::sendRequest
+     * @covers ::setupSharingProfile
      * @covers ::__construct
-     * @covers ::includePemWrapper
      */
-    public function testGetToken()
+    public function testSetupSharingProfile()
     {
-        $mockResponse = $this->createMock(Response::class);
+        $expectedConnectToken = file_get_contents(TestData::YOTI_CONNECT_TOKEN);
+
+        $mockResponse = $this->createMock(ResponseInterface::class);
         $mockResponse
             ->method('getBody')
             ->willReturn(json_encode([
-                'token' => YOTI_CONNECT_TOKEN
+                'token' => $expectedConnectToken
             ]));
         $mockResponse
             ->method('getStatusCode')
             ->willReturn(201);
 
-        $mockRequestHandler = $this->createMock(RequestHandlerInterface::class);
-        $mockRequestHandler->method('execute')->willReturn($mockResponse);
-
-        $mockSandboxPathManager = $this->createMock(SandboxPathManager::class);
-        $mockSandboxPathManager->method('getTokenApiPath')->willReturn('/some-api-path');
+        $mockHttpClient = $this->createMock(ClientInterface::class);
+        $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
         $sandboxClient = new SandboxClient(
-            SDK_ID,
-            file_get_contents(PEM_FILE),
-            $mockSandboxPathManager,
-            'PHP',
-            $mockRequestHandler
+            TestData::SDK_ID,
+            TestData::PEM_FILE,
+            [
+                Config::HTTP_CLIENT => $mockHttpClient,
+            ]
         );
 
-        $token = $sandboxClient->getToken(new RequestBuilder(), 'POST');
+        $mockTokenRequest = $this->createMock(TokenRequest::class);
+        $mockTokenRequest
+            ->method('getPayload')
+            ->willReturn($this->createMock(Payload::class));
 
-        $this->assertEquals(YOTI_CONNECT_TOKEN, $token);
-    }
+        $token = $sandboxClient->setupSharingProfile($mockTokenRequest);
 
-    /**
-     * @covers ::getActivityDetails
-     * @covers ::includePemWrapper
-     * @covers ::__construct
-     */
-    public function testGetActivityDetails()
-    {
-        $sandboxClient = new SandboxClient(
-            SDK_ID,
-            file_get_contents(PEM_FILE),
-            $this->createMockPathManager(),
-            'PHP',
-            $this->createMockHandlerForActivityDetails()
-        );
-        $activityDetails = $sandboxClient->getActivityDetails(YOTI_CONNECT_TOKEN);
-
-        $this->assertInstanceOf(ActivityDetails::class, $activityDetails);
-    }
-
-
-    /**
-     * @covers ::includePemWrapper
-     * @covers ::__construct
-     */
-    public function testGetActivityDetailsWithUnwrappedKey()
-    {
-        $pemLines = explode("\n", trim(file_get_contents(PEM_FILE)));
-        array_shift($pemLines);
-        array_pop($pemLines);
-        $pemWithoutWrapper = implode("\n", $pemLines);
-
-        $sandboxClient = new SandboxClient(
-            SDK_ID,
-            $pemWithoutWrapper,
-            $this->createMockPathManager(),
-            'PHP',
-            $this->createMockHandlerForActivityDetails()
-        );
-
-        $activityDetails = $sandboxClient->getActivityDetails(YOTI_CONNECT_TOKEN);
-
-        $this->assertInstanceOf(ActivityDetails::class, $activityDetails);
-    }
-
-    /**
-     * @return \YotiSandbox\Http\SandboxPathManager
-     */
-    private function createMockPathManager()
-    {
-        $mockSandboxPathManager = $this->createMock(SandboxPathManager::class);
-        $mockSandboxPathManager->method('getProfileApiPath')->willReturn('/some-profile-api-path');
-        $mockSandboxPathManager->method('getTokenApiPath')->willReturn('/some-token-api-path');
-
-        return $mockSandboxPathManager;
-    }
-
-    /**
-     * @return \Yoti\Http\RequestHandlerInterface
-     */
-    private function createMockHandlerForActivityDetails()
-    {
-        $mockResponse = $this->createMock(Response::class);
-        $mockResponse
-            ->method('getBody')
-            ->willReturn(file_get_contents(RECEIPT_JSON));
-        $mockResponse
-            ->method('getStatusCode')
-            ->willReturn(200);
-
-        $mockRequestHandler = $this->createMock(RequestHandlerInterface::class);
-        $mockRequestHandler->method('execute')->willReturn($mockResponse);
-
-        return $mockRequestHandler;
+        $this->assertEquals($expectedConnectToken, $token);
     }
 }

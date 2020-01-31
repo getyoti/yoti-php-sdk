@@ -1,6 +1,9 @@
 <?php
 
 // Load dependent packages and env data
+
+use Yoti\YotiClient;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 // Get the token
@@ -8,7 +11,8 @@ $token = isset($_GET['token']) ? $_GET['token'] : '';
 $profileAttributes = [];
 
 try {
-    $yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+    $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+
     $activityDetails = $yotiClient->getActivityDetails($token);
     $profile = $activityDetails->getProfile();
 

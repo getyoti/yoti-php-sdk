@@ -7,8 +7,9 @@ require_once __DIR__ . '/../bootstrap.php';
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\YotiClient;
 
-$yotiClient = new Yoti\YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+$yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
 
 $locationConstraint = (new LocationConstraintExtensionBuilder())
     ->withLatitude(50.8169)
@@ -30,7 +31,7 @@ $scenario = (new DynamicScenarioBuilder())
     ->withExtension($locationConstraint)
     ->build();
 
-$shareUrlResult = $yotiClient->createShareUrl($scenario);
+$result = $yotiClient->createShareUrl($scenario);
 ?>
 <!DOCTYPE html>
 <html class="yoti-html">
@@ -100,7 +101,7 @@ $shareUrlResult = $yotiClient->createShareUrl($scenario);
             "elements": [{
                 "domId": "yoti-share-button",
                 "clientSdkId": "<?php echo htmlspecialchars(getenv('YOTI_SDK_ID')); ?>",
-                "shareUrl": "<?php echo htmlspecialchars($shareUrlResult->getShareUrl()); ?>",
+                "shareUrl": "<?php echo htmlspecialchars($result->getShareUrl()); ?>",
                 "button": {
                     "label": "Use Yoti"
                 }
