@@ -13,6 +13,11 @@ class TestCase extends PHPUnitTestCase
      */
     private static $mockFunctions;
 
+    /**
+     * @var bool
+     */
+    private $isCapturingLogs = false;
+
     public function setup(): void
     {
         parent::setup();
@@ -23,6 +28,11 @@ class TestCase extends PHPUnitTestCase
     public function teardown(): void
     {
         parent::teardown();
+
+        if ($this->isCapturingLogs) {
+            unlink(ini_get('error_log'));
+            $this->isCapturingLogs = false;
+        }
 
         // Restores ini settings.
         ini_restore('error_log');
@@ -71,11 +81,15 @@ class TestCase extends PHPUnitTestCase
      */
     protected function captureExpectedLogs()
     {
-        if (!is_dir('./logs')) {
-            mkdir('./logs');
+        $logPath = realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR . 'logs';
+
+        if (!is_dir($logPath)) {
+            mkdir($logPath);
         }
-        ini_set('error_log', './logs/' . uniqid('error_', true) . '.log');
+        ini_set('error_log', $logPath . DIRECTORY_SEPARATOR . uniqid('error_', true) . '.log');
         ini_set('display_errors', 'off');
+
+        $this->isCapturingLogs = true;
     }
 
     /**

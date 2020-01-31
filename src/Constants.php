@@ -12,6 +12,9 @@ class Constants
     /** Default API URL */
     public const API_URL = self::API_BASE_URL . '/api/v1';
 
+    /** Default Doc Scan API URL */
+    public const DOC_SCAN_API_URL = self::API_BASE_URL . '/idverify/v1';
+
     /** Default SDK identifier */
     public const SDK_IDENTIFIER = 'PHP';
 

@@ -40,6 +40,10 @@
     "test": "phpunit",
     "coverage-clover": "phpunit --coverage-clover ./coverage/coverage.xml",
     "coverage-html": "phpunit --coverage-html ./coverage/report",
+    "fix": [
+      "php-cs-fixer fix --config=.php_cs.dist -v --using-cache=no --diff-format=udiff --ansi",
+      "phpcbf"
+    ],
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi",
