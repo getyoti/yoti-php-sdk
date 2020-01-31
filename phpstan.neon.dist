@@ -5,7 +5,6 @@ parameters:
         - sandbox/src
     excludes_analyse:
         - src/Protobuf/*
-        - src/Profile/Util/Age/*
 
 includes:
     - phpstan-ignore.neon
