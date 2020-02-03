@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yoti\Test\Profile\Attribute;
 
 use Yoti\Media\Image;
+use Yoti\Media\Image\Jpeg;
+use Yoti\Media\Image\Png;
 use Yoti\Profile\Attribute\MultiValue;
 use Yoti\Test\TestCase;
 
@@ -23,14 +25,14 @@ class MultiValueTest extends TestCase
         $this->multiValue = new MultiValue([
             'string 1',
             'string 2',
-            new Image('image 1', 'jpeg'),
-            new Image('image 2', 'png'),
+            new Jpeg('image 1'),
+            new Png('image 2'),
             [ 'array 1'],
             (object)[ 'object 1'],
             new MultiValue([
                 'string 3',
                 'string 4',
-                new Image('image 1', 'jpeg'),
+                new Jpeg('image 1'),
             ]),
             'longer string 5',
         ]);
