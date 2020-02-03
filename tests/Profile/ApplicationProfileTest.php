@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile;
 
-use Yoti\Media\Image;
+use Yoti\Media\Image\Png;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute;
 use Yoti\Test\TestCase;
@@ -25,7 +25,7 @@ class ApplicationProfileTest extends TestCase
             'application_name' => new Attribute('application_name', 'Test PHP SDK', []),
             'application_url' => new Attribute('application_url', 'https://localhost', []),
             'application_receipt_bgcolor' => new Attribute('application_receipt_bgcolor', '#F5F5F5', []),
-            'application_logo' => new Attribute('application_logo', new Image('dummyImageData', 'png'), []),
+            'application_logo' => new Attribute('application_logo', new Png('dummyImageData'), []),
         ];
         $this->dummyProfile = new ApplicationProfile($dummyData);
     }

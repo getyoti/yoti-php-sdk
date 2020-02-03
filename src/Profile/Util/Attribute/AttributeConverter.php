@@ -6,6 +6,8 @@ namespace Yoti\Profile\Util\Attribute;
 
 use Yoti\Exception\AttributeException;
 use Yoti\Media\Image;
+use Yoti\Media\Image\Jpeg;
+use Yoti\Media\Image\Png;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\DocumentDetails;
@@ -69,9 +71,9 @@ class AttributeConverter
 
         switch ($contentType) {
             case self::CONTENT_TYPE_JPEG:
-                return new Image($value, 'JPEG');
+                return new Jpeg($value);
             case self::CONTENT_TYPE_PNG:
-                return new Image($value, 'PNG');
+                return new Png($value);
             case self::CONTENT_TYPE_JSON:
                 // Convert JSON string to an array
                 return Json::decode($value);
