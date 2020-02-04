@@ -29,3 +29,15 @@ jobs:
       if: type = pull_request OR branch = master
       script:
         - composer coveralls
+    - <<: *test
+      stage: Analyze
+      name: Sonarcloud
+      dist: trusty
+      addons:
+        sonarcloud:
+          organization: "getyoti"
+      if: type == pull_request
+      script:
+        - composer coveralls
+        - sonar-scanner
+
