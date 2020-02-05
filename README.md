@@ -1,7 +1,10 @@
 # Yoti PHP SDK
 
 [![Build Status](https://travis-ci.com/getyoti/yoti-php-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-php-sdk)
-[![Coverage Status](https://coveralls.io/repos/github/getyoti/yoti-php-sdk/badge.svg?branch=master)](https://coveralls.io/github/getyoti/yoti-php-sdk?branch=master)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=coverage)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=bugs)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=code_smells)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
 
 Welcome to the Yoti PHP SDK. This repo contains the tools you need to quickly integrate your PHP back-end with Yoti, so that your users can share their identity details with your application in a secure and trusted way.
 
