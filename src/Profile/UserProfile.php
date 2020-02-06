@@ -220,8 +220,7 @@ class UserProfile extends BaseProfile
     private function getAgeVerification(string $type, int $age): ?AgeVerification
     {
         $attrName = $type . (string) $age;
-        $ageVerifications = $this->getAgeVerifications();
-        return $ageVerifications[$attrName] ?? null;
+        return $this->getAgeVerifications()[$attrName] ?? null;
     }
 
     /**
