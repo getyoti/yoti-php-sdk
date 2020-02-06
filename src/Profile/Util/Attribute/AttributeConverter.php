@@ -90,6 +90,7 @@ class AttributeConverter
             case self::CONTENT_TYPE_STRING:
                 return $value;
 
+            case self::CONTENT_TYPE_UNDEFINED:
             default:
                 error_log("Unknown Content Type '{$contentType}', parsing as a String", 0);
                 return $value;
