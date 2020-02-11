@@ -36,7 +36,7 @@ jobs:
       addons:
         sonarcloud:
           organization: "getyoti"
-      if: type == pull_request
+      if: type == pull_request OR branch = master
       script:
         - composer coveralls
         - sonar-scanner
