@@ -14,7 +14,6 @@ class DocumentDetails
      * The values of the Document Details are in the format and order as defined in this pattern
      * e.g PASS_CARD GBR 22719564893 - CITIZENCARD, the last two are optionals
      */
-    private const VALIDATION_PATTERN = '/^([A-Za-z_]*) ([A-Za-z]{3}) ([A-Za-z0-9]{1}).*$/';
     private const TYPE_INDEX = 0;
     private const COUNTRY_INDEX = 1;
     private const NUMBER_INDEX = 2;
@@ -55,7 +54,6 @@ class DocumentDetails
      */
     public function __construct(string $value)
     {
-        $this->validateValue($value);
         $this->parseFromValue($value);
     }
 
@@ -117,6 +115,11 @@ class DocumentDetails
     private function parseFromValue(string $value): void
     {
         $parsedValues = explode(' ', $value);
+
+        if (count($parsedValues) < 3 || in_array('', $parsedValues, true)) {
+            throw new AttributeException('Invalid value for DocumentDetails');
+        }
+
         $this->setType($parsedValues);
         $this->setIssuingCountry($parsedValues);
         $this->setDocumentNumber($parsedValues);
@@ -180,17 +183,5 @@ class DocumentDetails
     {
         $value = isset($parsedValues[self::AUTHORITY_INDEX]) ? $parsedValues[self::AUTHORITY_INDEX] : null;
         $this->issuingAuthority = $value;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @throws \Yoti\Exception\AttributeException
-     */
-    private function validateValue($value): void
-    {
-        if (!(preg_match(self::VALIDATION_PATTERN, $value) === 1)) {
-            throw new AttributeException('Invalid value for DocumentDetails');
-        }
     }
 }

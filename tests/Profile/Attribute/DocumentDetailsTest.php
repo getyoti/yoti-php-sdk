@@ -64,32 +64,69 @@ class DocumentDetailsTest extends TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::validateValue
+     * @covers ::parseFromValue
      */
     public function testShouldThrowExceptionWhenValueIsEmpty()
     {
         $this->expectException(\Yoti\Exception\AttributeException::class);
+        $this->expectExceptionMessage('Invalid value for DocumentDetails');
+
         new DocumentDetails('');
     }
 
     /**
      * @covers ::__construct
-     * @covers ::validateValue
+     * @covers ::parseFromValue
+     *
+     * @dataProvider valueWithExtraSpacesDataProvider
      */
-    public function testShouldThrowExceptionForInvalidCountry()
+    public function testShouldNotAllowExtraSpaces($value)
     {
         $this->expectException(\Yoti\Exception\AttributeException::class);
-        new DocumentDetails('PASSPORT 13 1234abc 2016-05-01');
+        $this->expectExceptionMessage('Invalid value for DocumentDetails');
+
+        new DocumentDetails($value);
+    }
+
+    /**
+     * Value with extra spaces data provider.
+     */
+    public function valueWithExtraSpacesDataProvider()
+    {
+        return [
+            [ 'some-type   some-country some-doc-number - some-authority' ],
+            [ 'some-type some-country  some-doc-number - some-authority' ],
+            [ 'some-type some-country some-doc-number  - some-authority' ],
+            [ 'some-type some-country some-doc-number -  some-authority' ],
+        ];
     }
 
     /**
      * @covers ::__construct
-     * @covers ::validateValue
+     * @covers ::getDocumentNumber
+     *
+     * @dataProvider validValueDataProvider
      */
-    public function testShouldThrowExceptionForInvalidNumber()
+    public function testShouldAllowValidDocumentNumbers($validDocumentNumber)
     {
-        $this->expectException(\Yoti\Exception\AttributeException::class);
-        new DocumentDetails("PASSPORT GBR $%^$%^£ 2016-05-01");
+        $document = new DocumentDetails("some-type some-country $validDocumentNumber - some-authority");
+        $this->assertEquals($validDocumentNumber, $document->getDocumentNumber());
+    }
+
+    /**
+     * Valid value data provider.
+     */
+    public function validValueDataProvider()
+    {
+        return [
+            [ '****' ],
+            [ '~!@#$%^&*()-_=+[]{}|;\':,./<>?' ],
+            [ '""' ],
+            [ '\\' ],
+            [ '"' ],
+            [ '\'\'' ],
+            [ '\'' ],
+        ];
     }
 
     /**
