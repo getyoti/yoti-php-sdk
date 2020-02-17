@@ -23,6 +23,12 @@ jobs:
       php: "7.2"
     - <<: *compatibility
       php: "7.3"
+    - <<: *compatibility
+      php: "7.4"
+      name: "PHP: 7.4 / Guzzle: 6"
+      script:
+        - travis_retry composer require guzzlehttp/guzzle "^6.5"
+        - composer test
     - <<: *test
       stage: Analyze
       name: Sonarcloud
