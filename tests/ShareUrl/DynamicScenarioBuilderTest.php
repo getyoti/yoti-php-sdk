@@ -1,19 +1,21 @@
 <?php
 
-namespace YotiTest\ShareUrl;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl;
 
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
-use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
-use YotiTest\TestCase;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
+use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\DynamicScenarioBuilder
  */
 class DynamicScenarioBuilderTest extends TestCase
 {
-    const SOME_ENDPOINT = '/test-callback';
+    private const SOME_ENDPOINT = '/test-callback';
 
     /**
      * @covers ::build
@@ -88,12 +90,12 @@ class DynamicScenarioBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers \Yoti\ShareUrl\DynamicScenario::__construct
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage callbackEndpoint must be a string
      */
     public function testBuildWithoutCallback()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('must be of the type string');
+
         (new DynamicScenarioBuilder())
             ->withPolicy($this->createMock(DynamicPolicy::class))
             ->build();

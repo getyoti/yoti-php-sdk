@@ -7,7 +7,7 @@ jobs:
   include:
     - &test
       stage: Test
-      php: "7.3"
+      php: "7.4"
       os: linux
       install:
         - travis_retry composer self-update
@@ -18,14 +18,26 @@ jobs:
     - &compatibility
       <<: *test
       stage: Compatibility
-      php: "5.6"
+      php: "7.1"
     - <<: *compatibility
       php: "7.2"
     - <<: *compatibility
-      php: "7.1"
+      php: "7.3"
     - <<: *test
       stage: Coverage
       name: Coveralls
       if: type = pull_request OR branch = master
       script:
         - composer coveralls
+    - <<: *test
+      stage: Analyze
+      name: Sonarcloud
+      dist: trusty
+      addons:
+        sonarcloud:
+          organization: "getyoti"
+      if: type == pull_request OR branch = master
+      script:
+        - composer coveralls
+        - sonar-scanner
+

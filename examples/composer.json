@@ -1,7 +1,7 @@
 {
   "description": "testing yoti-php-sdk",
   "require": {
-    "yoti/yoti-php-sdk": "^2.2.0",
+    "yoti/yoti-php-sdk": "^3.0",
     "symfony/dotenv": "3.3.0"
   },
   "repositories": [

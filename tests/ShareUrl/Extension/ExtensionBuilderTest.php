@@ -1,9 +1,11 @@
 <?php
 
-namespace YotiTest\ShareUrl\Extension;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl\Extension;
 
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Extension\ExtensionBuilder

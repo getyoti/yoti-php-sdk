@@ -1,16 +1,18 @@
 <?php
 
-namespace YotiTest\ShareUrl\Extension;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl\Extension;
 
 use Yoti\ShareUrl\Extension\TransactionalFlowExtensionBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Extension\TransactionalFlowExtensionBuilder
  */
 class TransactionalFlowExtensionBuilderTest extends TestCase
 {
-    const TYPE_TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
+    private const TYPE_TRANSACTIONAL_FLOW = 'TRANSACTIONAL_FLOW';
 
     /**
      * @covers ::build
@@ -36,12 +38,12 @@ class TransactionalFlowExtensionBuilderTest extends TestCase
     /**
      * @covers ::build
      * @covers ::withContent
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage content cannot be null
      */
     public function testNullContent()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('content cannot be null');
+
         (new TransactionalFlowExtensionBuilder())
             ->withContent(null)
             ->build();

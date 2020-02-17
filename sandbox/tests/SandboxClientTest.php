@@ -1,42 +1,59 @@
 <?php
 
-namespace SandboxTest;
+declare(strict_types=1);
 
-use YotiSandbox\Http\RequestBuilder;
-use YotiSandbox\Http\SandboxPathManager;
-use YotiTest\TestCase;
+namespace Yoti\Sandbox\Test;
 
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
+use Yoti\Http\Payload;
+use Yoti\Sandbox\Profile\Request\TokenRequest;
+use Yoti\Sandbox\SandboxClient;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
+use Yoti\Util\Config;
+
+/**
+ * @coversDefaultClass \Yoti\Sandbox\SandboxClient
+ */
 class SandboxClientTest extends TestCase
 {
-    public $pem;
     /**
-     * @var \YotiSandbox\SandboxClient
+     * @covers ::setupSharingProfile
+     * @covers ::__construct
      */
-    public $sandboxClient;
-
-    public function setUp()
+    public function testSetupSharingProfile()
     {
-        $this->pem = file_get_contents(PEM_FILE);
-        $sandboxPathManager = new SandboxPathManager();
+        $expectedConnectToken = file_get_contents(TestData::YOTI_CONNECT_TOKEN);
 
-        $this->sandboxClient = $this->getMockBuilder('YotiSandbox\SandboxClient')
-            ->setConstructorArgs([SDK_ID, $this->pem, $sandboxPathManager])
-            ->setMethods(['sendRequest'])
-            ->getMock();
-    }
+        $mockResponse = $this->createMock(ResponseInterface::class);
+        $mockResponse
+            ->method('getBody')
+            ->willReturn(json_encode([
+                'token' => $expectedConnectToken
+            ]));
+        $mockResponse
+            ->method('getStatusCode')
+            ->willReturn(201);
 
-    public function testGetToken()
-    {
-        $expectedToken = 'fake_token_xxx';
-        $result['response'] = json_encode([
-            'token' => $expectedToken
-        ]);
-        $result['http_code'] = 201;
+        $mockHttpClient = $this->createMock(ClientInterface::class);
+        $mockHttpClient->method('sendRequest')->willReturn($mockResponse);
 
-        // Stub the method sendRequest to return the result we want
-        $this->sandboxClient->method('sendRequest')
-            ->willReturn($result);
-        $token = $this->sandboxClient->getToken(new RequestBuilder(), 'POST');
-        $this->assertEquals($expectedToken, $token);
+        $sandboxClient = new SandboxClient(
+            TestData::SDK_ID,
+            TestData::PEM_FILE,
+            [
+                Config::HTTP_CLIENT => $mockHttpClient,
+            ]
+        );
+
+        $mockTokenRequest = $this->createMock(TokenRequest::class);
+        $mockTokenRequest
+            ->method('getPayload')
+            ->willReturn($this->createMock(Payload::class));
+
+        $token = $sandboxClient->setupSharingProfile($mockTokenRequest);
+
+        $this->assertEquals($expectedConnectToken, $token);
     }
 }

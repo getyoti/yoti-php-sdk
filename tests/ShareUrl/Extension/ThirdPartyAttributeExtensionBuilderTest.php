@@ -1,18 +1,20 @@
 <?php
 
-namespace YotiTest\ShareUrl\Extension;
+declare(strict_types=1);
+
+namespace Yoti\Test\ShareUrl\Extension;
 
 use Yoti\ShareUrl\Extension\ThirdPartyAttributeExtensionBuilder;
-use YotiTest\TestCase;
+use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Extension\ThirdPartyAttributeExtensionBuilder
  */
 class ThirdPartyAttributeExtensionBuilderTest extends TestCase
 {
-    const THIRD_PARTY_ATTRIBUTE_TYPE = 'THIRD_PARTY_ATTRIBUTE';
-    const SOME_DEFINITION = 'some definition';
-    const SOME_OTHER_DEFINITION = 'some other definition';
+    private const THIRD_PARTY_ATTRIBUTE_TYPE = 'THIRD_PARTY_ATTRIBUTE';
+    private const SOME_DEFINITION = 'some definition';
+    private const SOME_OTHER_DEFINITION = 'some other definition';
 
     /**
      * @covers ::withExpiryDate

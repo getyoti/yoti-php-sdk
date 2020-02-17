@@ -1,15 +1,16 @@
 <?php
 
-namespace YotiTest\Http;
+declare(strict_types=1);
 
-use YotiTest\TestCase;
-use Yoti\Http\CurlRequestHandler;
+namespace Yoti\Test\Http;
+
+use Yoti\Aml\Address;
+use Yoti\Aml\Country;
+use Yoti\Aml\Profile;
 use Yoti\Http\Payload;
-use Yoti\YotiClient;
-use Yoti\Entity\Country;
-use Yoti\Entity\AmlAddress;
-use Yoti\Entity\AmlProfile;
 use Yoti\Http\RequestSigner;
+use Yoti\Test\TestCase;
+use Yoti\Test\TestData;
 use Yoti\Util\PemFile;
 
 /**
@@ -17,6 +18,10 @@ use Yoti\Util\PemFile;
  */
 class RequestSignerTest extends TestCase
 {
+    private const SOME_PATH = '/some-path';
+
+    private const SOME_METHOD = 'POST';
+
     /**
      * @var \Yoti\Http\Payload
      */
@@ -32,30 +37,25 @@ class RequestSignerTest extends TestCase
      */
     private $publicKey;
 
-    public function setup()
+    public function setup(): void
     {
-        $this->pem = file_get_contents(AML_PRIVATE_KEY);
-        $this->publicKey = file_get_contents(AML_PUBLIC_KEY);
+        $this->pem = file_get_contents(TestData::AML_PRIVATE_KEY);
+        $this->publicKey = file_get_contents(TestData::AML_PUBLIC_KEY);
         $this->payload = $this->getDummyPayload();
     }
 
     /**
      * @covers ::sign
-     * @covers ::generateEndPointPath
-     * @covers ::validateSignedMessage
-     * @covers ::generateNonce
      */
     public function testSign()
     {
-        $signedData = RequestSigner::sign(
+        $signedMessage = RequestSigner::sign(
             PemFile::fromString($this->pem),
-            '/aml-check',
-            'POST',
+            self::SOME_PATH,
+            self::SOME_METHOD,
             $this->payload
         );
-        $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
-        $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];
-        $messageToSign = 'POST&' . $endpointPath . '&' . $this->payload->getBase64Payload();
+        $messageToSign = self::SOME_METHOD . '&' . self::SOME_PATH . '&' . $this->payload->toBase64();
 
         $publicKey = openssl_pkey_get_public($this->publicKey);
 
@@ -65,35 +65,28 @@ class RequestSignerTest extends TestCase
     }
 
     /**
-     * @covers ::signRequest
-     * @covers ::generateEndPointPath
-     * @covers ::validateSignedMessage
-     * @covers ::generateNonce
+     * @covers ::sign
      */
-    public function testShouldVerifySignedMessage()
+    public function testValidateSignedMessage()
     {
-        $request = new CurlRequestHandler(
-            YotiClient::DEFAULT_CONNECT_API,
-            $this->pem,
-            SDK_ID,
-            'PHP'
-        );
+        $this->expectException(\Yoti\Http\Exception\RequestSignerException::class);
+        $this->expectExceptionMessage('Could not sign request');
 
-        $signedData = RequestSigner::signRequest(
-            $request,
-            '/aml-check',
-            'POST',
+        $this->captureExpectedLogs();
+
+        $somePemFile = $this->createMock(PemFile::class);
+        $somePemFile
+            ->method('__toString')
+            ->willReturn(TestData::INVALID_PEM_FILE);
+
+        RequestSigner::sign(
+            $somePemFile,
+            self::SOME_PATH,
+            self::SOME_METHOD,
             $this->payload
         );
-        $signedMessage = $signedData[RequestSigner::SIGNED_MESSAGE_KEY];
-        $endpointPath = $signedData[RequestSigner::END_POINT_PATH_KEY];
-        $messageToSign = 'POST&' . $endpointPath . '&' . $this->payload->getBase64Payload();
 
-        $publicKey = openssl_pkey_get_public($this->publicKey);
-
-        $verify = openssl_verify($messageToSign, base64_decode($signedMessage), $publicKey, OPENSSL_ALGO_SHA256);
-
-        $this->assertEquals(1, $verify);
+        $this->assertLogContains('supplied key param cannot be coerced into a private key');
     }
 
     /**
@@ -103,8 +96,8 @@ class RequestSignerTest extends TestCase
      */
     public function getDummyPayload()
     {
-        $amlAddress = new AmlAddress(new Country('GBR'));
-        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-        return new Payload($amlProfile->getData());
+        $amlAddress = new Address(new Country('GBR'));
+        $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
+        return Payload::fromJsonData($amlProfile);
     }
 }
