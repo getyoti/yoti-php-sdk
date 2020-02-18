@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "google/protobuf",
-            "version": "v3.11.2",
+            "version": "v3.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "0864882396746542ead01fc002e1644b9490dbe8"
+                "reference": "a5001eb559dcaac0bf6d8c7edc52b3828c618185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/0864882396746542ead01fc002e1644b9490dbe8",
-                "reference": "0864882396746542ead01fc002e1644b9490dbe8",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/a5001eb559dcaac0bf6d8c7edc52b3828c618185",
+                "reference": "a5001eb559dcaac0bf6d8c7edc52b3828c618185",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
             "keywords": [
                 "proto"
             ],
-            "time": "2019-12-14T00:45:36+00:00"
+            "time": "2020-02-14T22:17:05+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -530,9 +530,10 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "effaa1696e560710205ba2059671aa097bb0ab1c"
+                "reference": "3b19a3dbe3467c1f60c776bf01acee4b11477d70"
             },
             "require": {
+                "ext-json": "*",
                 "google/protobuf": "^3.10",
                 "guzzlehttp/guzzle": "^6.4",
                 "php": "^7.1",
@@ -542,7 +543,6 @@
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.8",
-                "ext-json": "*",
                 "friendsofphp/php-cs-fixer": "^2.15",
                 "php-coveralls/php-coveralls": "^2.1",
                 "phpstan/extension-installer": "^1.0",
@@ -559,13 +559,13 @@
             "autoload": {
                 "psr-4": {
                     "Yoti\\": "src",
-                    "YotiSandbox\\": "sandbox/src"
+                    "Yoti\\Sandbox\\": "sandbox/src"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "YotiTest\\": "tests/",
-                    "SandboxTest\\": "sandbox/tests/"
+                    "Yoti\\Test\\": "tests/",
+                    "Yoti\\Sandbox\\Test\\": "sandbox/tests/"
                 }
             },
             "scripts": {
