@@ -10,6 +10,7 @@
   "license": "MIT",
   "require": {
     "php": "^7.1",
+    "ext-json": "*",
     "google/protobuf": "^3.10",
     "phpseclib/phpseclib": "^2.0",
     "guzzlehttp/guzzle": "^6.4",
@@ -23,7 +24,6 @@
     }
   },
   "require-dev": {
-    "ext-json": "*",
     "phpunit/phpunit": "^7.5 || ^8.5",
     "squizlabs/php_codesniffer": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.15",
