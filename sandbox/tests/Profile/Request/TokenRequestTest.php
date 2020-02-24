@@ -6,6 +6,8 @@ namespace Yoti\Sandbox\Test\Profile\Request;
 
 use Yoti\Http\Payload;
 use Yoti\Profile\UserProfile;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Test\TestCase;
 
@@ -15,7 +17,13 @@ use Yoti\Test\TestCase;
 class TokenRequestTest extends TestCase
 {
     private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
-    private const SOME_FAMILY_NAME = 'some family name';
+    private const SOME_VALUE = 'some-value';
+    private const SOME_ANCHOR_JSON_DATA = [
+        'type' => 'some type',
+        'sub_type' => 'some sub type',
+        'value' => 'some anchor value',
+        'timestamp' => 1575998454,
+    ];
 
     /**
      * @var TokenRequest
@@ -23,48 +31,55 @@ class TokenRequestTest extends TestCase
     private $tokenRequest;
 
     /**
-     * @var array
-     */
-    private $someSandboxAttributes;
-
-    /**
      * Setup TokenRequest
      */
     public function setup(): void
     {
-        $this->someSandboxAttributes = [
-            [
-                'name' => UserProfile::ATTR_FAMILY_NAME,
-                'value' => 'fake_family_name',
-                'derivation' => '',
-                'optional' => 'false',
-                'anchors' => []
-            ]
-        ];
-        $this->tokenRequest = new TokenRequest(self::SOME_REMEMBER_ME_ID, $this->someSandboxAttributes);
-    }
+        $someAnchor = $this->createMock(SandboxAnchor::class);
+        $someAnchor->method('jsonSerialize')->willReturn(self::SOME_ANCHOR_JSON_DATA);
 
-    /**
-     * @covers ::getRememberMeId
-     * @covers ::__construct
-     */
-    public function testGetRememberMeId()
-    {
-        $this->assertEquals(
+        $this->tokenRequest = new TokenRequest(
             self::SOME_REMEMBER_ME_ID,
-            $this->tokenRequest->getRememberMeId()
+            [
+                new SandboxAttribute(
+                    UserProfile::ATTR_FAMILY_NAME,
+                    self::SOME_VALUE,
+                    '',
+                    false,
+                    [ $someAnchor ]
+                )
+            ]
         );
     }
 
     /**
-     * @covers ::getSandboxAttributes
+     * The expected JSON data.
+     */
+    private function expectedJsonData()
+    {
+        return [
+            'remember_me_id' => self::SOME_REMEMBER_ME_ID,
+            'profile_attributes' => [
+                [
+                    'name' => UserProfile::ATTR_FAMILY_NAME,
+                    'value' => self::SOME_VALUE,
+                    'derivation' => '',
+                    'optional' => false,
+                    'anchors' => [ self::SOME_ANCHOR_JSON_DATA ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @covers ::jsonSerialize
      * @covers ::__construct
      */
-    public function testGetSandboxAttributes()
+    public function testJsonSerialize()
     {
-        $this->assertEquals(
-            json_encode($this->someSandboxAttributes),
-            json_encode($this->tokenRequest->getSandboxAttributes())
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($this->expectedJsonData()),
+            json_encode($this->tokenRequest)
         );
     }
 
@@ -75,10 +90,7 @@ class TokenRequestTest extends TestCase
     public function testGetPayload()
     {
         $this->assertEquals(
-            (string) Payload::fromJsonData([
-                'remember_me_id' => self::SOME_REMEMBER_ME_ID,
-                'profile_attributes' => $this->someSandboxAttributes,
-            ]),
+            (string) Payload::fromJsonData($this->expectedJsonData()),
             (string) $this->tokenRequest->getPayload()
         );
     }

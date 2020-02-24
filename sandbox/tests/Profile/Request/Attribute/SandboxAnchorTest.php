@@ -12,54 +12,40 @@ use Yoti\Test\TestCase;
  */
 class SandboxAnchorTest extends TestCase
 {
+    private const SOME_TYPE = 'SOURCE';
+    private const SOME_VALUE = 'PASSPORT';
+    private const SOME_SUB_TYPE = 'OCR';
+    private const SOME_TIMESTAMP = 1544624701;
+
     /**
      * @var SandboxAnchor
      */
-    public $anchor;
+    private $anchor;
 
     public function setup(): void
     {
         $this->anchor = new SandboxAnchor(
-            'Source',
-            'PASSPORT',
-            'OCR',
-            1544624701 // 12-12-2018 14:25:01
+            self::SOME_TYPE,
+            self::SOME_VALUE,
+            self::SOME_SUB_TYPE,
+            self::SOME_TIMESTAMP
         );
     }
 
     /**
-     * @covers ::getType
+     * @covers ::jsonSerialize
      * @covers ::__construct
      */
-    public function testGetType()
+    public function testJsonSerialize()
     {
-        $this->assertEquals('Source', $this->anchor->getType());
-    }
-
-    /**
-     * @covers ::getValue
-     * @covers ::__construct
-     */
-    public function testGetValue()
-    {
-        $this->assertEquals('PASSPORT', $this->anchor->getValue());
-    }
-
-    /**
-     * @covers ::getSubtype
-     * @covers ::__construct
-     */
-    public function testGetSubtype()
-    {
-        $this->assertEquals('OCR', $this->anchor->getSubtype());
-    }
-
-    /**
-     * @covers ::getTimestamp
-     * @covers ::__construct
-     */
-    public function testGetTimestamp()
-    {
-        $this->assertEquals(1544624701, $this->anchor->getTimestamp());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'type' => self::SOME_TYPE,
+                'value' => self::SOME_VALUE,
+                'sub_type' => self::SOME_SUB_TYPE,
+                'timestamp' => 1544624701 * 1000000
+            ]),
+            json_encode($this->anchor)
+        );
     }
 }
