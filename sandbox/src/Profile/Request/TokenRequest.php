@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Yoti\Sandbox\Profile\Request;
 
 use Yoti\Http\Payload;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
+use Yoti\Util\Validation;
 
-class TokenRequest
+class TokenRequest implements \JsonSerializable
 {
     /**
      * @var string|null
@@ -14,38 +16,38 @@ class TokenRequest
     private $rememberMeId;
 
     /**
-     * @var array[]
+     * @var SandboxAttribute[]
      */
     private $sandboxAttributes;
 
     /**
      * @param string|null $rememberMeId
-     * @param array[] $sandboxAttrs
+     * @param SandboxAttribute[] $sandboxAttributes
      */
-    public function __construct(?string $rememberMeId, array $sandboxAttrs)
+    public function __construct(?string $rememberMeId, array $sandboxAttributes)
     {
         $this->rememberMeId = $rememberMeId;
-        $this->sandboxAttributes = $sandboxAttrs;
-    }
 
-    public function getRememberMeId(): ?string
-    {
-        return $this->rememberMeId;
+        Validation::isArrayOfType($sandboxAttributes, [ SandboxAttribute::class ], 'sandboxAttributes');
+        $this->sandboxAttributes = $sandboxAttributes;
     }
 
     /**
-     * @return array[]
+     * @return array<string, mixed>
      */
-    public function getSandboxAttributes(): array
+    public function jsonSerialize(): array
     {
-        return $this->sandboxAttributes;
-    }
-
-    public function getPayload(): Payload
-    {
-        return Payload::fromJsonData([
+        return [
             'remember_me_id' => $this->rememberMeId,
             'profile_attributes' => $this->sandboxAttributes,
-        ]);
+        ];
+    }
+
+    /**
+     * @return Payload
+     */
+    public function getPayload(): Payload
+    {
+        return Payload::fromJsonData($this);
     }
 }

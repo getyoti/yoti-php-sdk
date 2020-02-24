@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Sandbox\Profile\Request\Attribute;
 
-class SandboxAnchor
+class SandboxAnchor implements \JsonSerializable
 {
     /**
      * @var string
@@ -34,23 +34,16 @@ class SandboxAnchor
         $this->timestamp = $timestamp;
     }
 
-    public function getType(): string
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
-        return $this->type;
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function getSubtype(): string
-    {
-        return $this->subtype;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
+        return [
+            'type' => $this->type,
+            'value' => $this->value,
+            'sub_type' => $this->subtype,
+            'timestamp' => $this->timestamp * 1000000,
+        ];
     }
 }

@@ -13,10 +13,13 @@ use Yoti\Test\TestCase;
  */
 class SandboxAgeVerificationTest extends TestCase
 {
+    private const SOME_VALUE = '2007-02-15';
+    private const SOME_DERIVATION = 'age_under:18';
+
     /**
      * @var SandboxAgeVerification
      */
-    public $ageVerification;
+    private $ageVerification;
 
     public function setup(): void
     {
@@ -28,77 +31,60 @@ class SandboxAgeVerificationTest extends TestCase
     }
 
     /**
-     * @covers ::getName
+     * @covers ::jsonSerialize
      * @covers ::__construct
      */
-    public function testGetName()
+    public function testJsonSerialize()
     {
-        $this->assertEquals(
-            UserProfile::ATTR_DATE_OF_BIRTH,
-            $this->ageVerification->getName()
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'name' => UserProfile::ATTR_DATE_OF_BIRTH,
+                'value' => self::SOME_VALUE,
+                'derivation' => self::SOME_DERIVATION,
+                'optional' => true,
+                'anchors' => [],
+            ]),
+            json_encode($this->ageVerification)
         );
     }
 
     /**
-     * @covers ::getValue
-     * @covers ::__construct
-     */
-    public function testGetValue()
-    {
-        $this->assertEquals('2007-02-15', $this->ageVerification->getValue());
-    }
-
-    /**
-     * @covers ::getDerivation
-     * @covers ::__construct
-     */
-    public function testGetDerivation()
-    {
-        $this->assertEquals('age_under:18', $this->ageVerification->getDerivation());
-    }
-
-    /**
-     * @covers ::getOptional
-     * @covers ::__construct
-     */
-    public function testGetOptional()
-    {
-        $this->assertEquals('true', $this->ageVerification->getOptional());
-    }
-
-    /**
-     * @covers ::getAnchors
-     * @covers ::__construct
-     */
-    public function testGetAnchors()
-    {
-        $this->assertEquals(
-            json_encode([]),
-            json_encode($this->ageVerification->getAnchors())
-        );
-    }
-
-    /**
-     * @covers ::getDerivation
      * @covers ::setAgeOver
      * @covers ::__construct
      */
     public function testGetAgeOver()
     {
-        $ageVerification = clone $this->ageVerification;
-        $ageVerification->setAgeOver(20);
-        $this->assertEquals('age_over:20', $ageVerification->getDerivation());
+        $this->ageVerification->setAgeOver(20);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'name' => UserProfile::ATTR_DATE_OF_BIRTH,
+                'value' => self::SOME_VALUE,
+                'derivation' => 'age_over:20',
+                'optional' => true,
+                'anchors' => [],
+            ]),
+            json_encode($this->ageVerification)
+        );
     }
 
     /**
-     * @covers ::getDerivation
      * @covers ::setAgeUnder
      * @covers ::__construct
      */
     public function testAgeUnder()
     {
-        $ageVerification = clone $this->ageVerification;
-        $ageVerification->setAgeUnder(18);
-        $this->assertEquals('age_under:18', $ageVerification->getDerivation());
+        $this->ageVerification->setAgeUnder(30);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'name' => UserProfile::ATTR_DATE_OF_BIRTH,
+                'value' => self::SOME_VALUE,
+                'derivation' => 'age_under:30',
+                'optional' => true,
+                'anchors' => [],
+            ]),
+            json_encode($this->ageVerification)
+        );
     }
 }
