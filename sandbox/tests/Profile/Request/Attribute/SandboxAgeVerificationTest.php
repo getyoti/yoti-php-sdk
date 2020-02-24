@@ -13,7 +13,8 @@ use Yoti\Test\TestCase;
  */
 class SandboxAgeVerificationTest extends TestCase
 {
-    private const SOME_VALUE = '2007-02-15';
+    private const SOME_TIMESTAMP = 1171502725;
+    private const SOME_TIMESTAMP_DATE_STRING = '2007-02-15';
     private const SOME_DERIVATION = 'age_under:18';
 
     /**
@@ -23,10 +24,9 @@ class SandboxAgeVerificationTest extends TestCase
 
     public function setup(): void
     {
-        $dateTime = (new \DateTime())->setTimestamp(1171502725);
         $this->ageVerification = new SandboxAgeVerification(
-            $dateTime,
-            'age_under:18'
+            (new \DateTime())->setTimestamp(self::SOME_TIMESTAMP),
+            self::SOME_DERIVATION
         );
     }
 
@@ -39,7 +39,7 @@ class SandboxAgeVerificationTest extends TestCase
         $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'name' => UserProfile::ATTR_DATE_OF_BIRTH,
-                'value' => self::SOME_VALUE,
+                'value' => self::SOME_TIMESTAMP_DATE_STRING,
                 'derivation' => self::SOME_DERIVATION,
                 'optional' => true,
                 'anchors' => [],
@@ -59,7 +59,7 @@ class SandboxAgeVerificationTest extends TestCase
         $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'name' => UserProfile::ATTR_DATE_OF_BIRTH,
-                'value' => self::SOME_VALUE,
+                'value' => self::SOME_TIMESTAMP_DATE_STRING,
                 'derivation' => 'age_over:20',
                 'optional' => true,
                 'anchors' => [],
@@ -79,7 +79,7 @@ class SandboxAgeVerificationTest extends TestCase
         $this->assertJsonStringEqualsJsonString(
             json_encode([
                 'name' => UserProfile::ATTR_DATE_OF_BIRTH,
-                'value' => self::SOME_VALUE,
+                'value' => self::SOME_TIMESTAMP_DATE_STRING,
                 'derivation' => 'age_under:30',
                 'optional' => true,
                 'anchors' => [],

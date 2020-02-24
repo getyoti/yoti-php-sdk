@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Sandbox\Test\Profile\Request;
 
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Sandbox\Profile\Request\TokenRequestBuilder;
@@ -18,6 +19,12 @@ class TokenRequestBuilderTest extends TestCase
     private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
     private const SOME_NAME = 'some name';
     private const SOME_STRING_VALUE = 'some string';
+    private const SOME_ANCHOR_JSON_DATA = [
+        'type' => 'some type',
+        'sub_type' => 'some sub type',
+        'value' => 'some anchor value',
+        'timestamp' => 1575998454,
+    ];
 
     /**
      * @var \Yoti\Sandbox\Profile\RequestBuilders
@@ -42,7 +49,7 @@ class TokenRequestBuilderTest extends TestCase
     /**
      * @covers ::setRememberMeId
      */
-    public function testGetRememberMeId()
+    public function testSetRememberMeId()
     {
         $this->requestBuilder->setRememberMeId(self::SOME_REMEMBER_ME_ID);
         $tokenRequest = $this->requestBuilder->build();
@@ -87,6 +94,47 @@ class TokenRequestBuilderTest extends TestCase
                         'derivation' => '',
                         'optional' => false,
                         'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
+    }
+
+    /**
+     * @covers ::setFullName
+     * @covers ::setFamilyName
+     * @covers ::setGivenNames
+     * @covers ::setGender
+     * @covers ::setNationality
+     * @covers ::setPhoneNumber
+     * @covers ::setBase64Selfie
+     * @covers ::setEmailAddress
+     * @covers ::setPostalAddress
+     * @covers ::setStructuredPostalAddress
+     * @covers ::createAttribute
+     * @covers ::addAttribute
+     *
+     * @dataProvider stringAttributeSettersDataProvider
+     */
+    public function testStringAttributeSettersWithAnchor($setterMethod, $name)
+    {
+        $someAnchor = $this->createMock(SandboxAnchor::class);
+        $someAnchor->method('jsonSerialize')->willReturn(self::SOME_ANCHOR_JSON_DATA);
+
+        $this->requestBuilder->{$setterMethod}(self::SOME_STRING_VALUE, true, [ $someAnchor ]);
+        $tokenRequest = $this->requestBuilder->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => $name,
+                        'value' => self::SOME_STRING_VALUE,
+                        'derivation' => '',
+                        'optional' => true,
+                        'anchors' => [ self::SOME_ANCHOR_JSON_DATA ],
                     ]
                 ]
             ]),
