@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Sandbox\Test\Profile\Request\Attribute;
 
-use Yoti\Profile\UserProfile;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
 use Yoti\Test\TestCase;
 
@@ -13,6 +12,7 @@ use Yoti\Test\TestCase;
  */
 class SandboxAttributeTest extends TestCase
 {
+    private const SOME_NAME = 'some-name';
     private const SOME_VALUE = 'some-value';
 
     /**
@@ -23,7 +23,7 @@ class SandboxAttributeTest extends TestCase
     public function setup(): void
     {
         $this->attribute = new SandboxAttribute(
-            UserProfile::ATTR_FAMILY_NAME,
+            self::SOME_NAME,
             self::SOME_VALUE,
             ''
         );
@@ -37,7 +37,7 @@ class SandboxAttributeTest extends TestCase
     {
         $this->assertJsonStringEqualsJsonString(
             json_encode([
-                'name' => UserProfile::ATTR_FAMILY_NAME,
+                'name' => self::SOME_NAME,
                 'value' => self::SOME_VALUE,
                 'derivation' => '',
                 'optional' => false,

@@ -43,7 +43,7 @@ class SandboxAnchorTest extends TestCase
                 'type' => self::SOME_TYPE,
                 'value' => self::SOME_VALUE,
                 'sub_type' => self::SOME_SUB_TYPE,
-                'timestamp' => 1544624701 * 1000000
+                'timestamp' => self::SOME_TIMESTAMP * 1000000,
             ]),
             json_encode($this->anchor)
         );
