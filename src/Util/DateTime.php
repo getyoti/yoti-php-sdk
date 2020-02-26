@@ -35,15 +35,49 @@ class DateTime
     }
 
     /**
+     * Extract the microseconds from provided timestamp.
+     *
+     * @param int $timestamp
+     *
+     * @return int
+     */
+    private static function extractMicrosecondsFromTimestamp(int $timestamp): int
+    {
+        $microseconds = $timestamp % 1000000;
+        if ($microseconds < 0) {
+            return $microseconds + 1000000;
+        }
+        return $microseconds;
+    }
+
+    /**
      * @param int $timestamp
      *
      * @return \DateTime
      */
     public static function timestampToDateTime(int $timestamp): \DateTime
     {
-        // Format DateTime to include microseconds and timezone
-        $timeIncMicroSeconds = number_format($timestamp / 1000000, 6, '.', '');
-        return static::createFromFormat('U.u', $timeIncMicroSeconds);
+        $seconds = floor($timestamp / 1000000);
+        $microSeconds = self::extractMicrosecondsFromTimestamp($timestamp);
+        $zeroPaddedMicroSeconds = str_pad((string) $microSeconds, 6, '0', STR_PAD_LEFT);
+
+        $formattedTimestamp = sprintf(
+            '%d.%s',
+            $seconds,
+            $zeroPaddedMicroSeconds
+        );
+
+        return static::createFromFormat('U.u', $formattedTimestamp);
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     *
+     * @return int
+     */
+    public static function dateTimeToTimestamp(\DateTime $dateTime): int
+    {
+        return ($dateTime->getTimestamp() * 1000000) + (int) $dateTime->format('u');
     }
 
     /**
