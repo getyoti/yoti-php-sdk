@@ -24,12 +24,6 @@ jobs:
     - <<: *compatibility
       php: "7.3"
     - <<: *test
-      stage: Coverage
-      name: Coveralls
-      if: type = pull_request OR branch = master
-      script:
-        - composer coveralls
-    - <<: *test
       stage: Analyze
       name: Sonarcloud
       dist: trusty
@@ -38,6 +32,5 @@ jobs:
           organization: "getyoti"
       if: type == pull_request OR branch = master
       script:
-        - composer coveralls
+        - composer coverage-clover
         - sonar-scanner
-
