@@ -6,7 +6,6 @@ namespace Yoti\Sandbox\Test\Profile\Request;
 
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxAgeVerification;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxAnchor;
-use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
 use Yoti\Sandbox\Profile\Request\Attribute\SandboxDocumentDetails;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Sandbox\Profile\Request\TokenRequestBuilder;
@@ -20,9 +19,12 @@ class TokenRequestBuilderTest extends TestCase
     private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
     private const SOME_NAME = 'some name';
     private const SOME_STRING_VALUE = 'some string';
-    private const SOME_TYPE = 'some type';
-    private const SOME_SUB_TYPE = 'some sub type';
-    private const SOME_TIMESTAMP = 1575998454;
+    private const SOME_ANCHOR_JSON_DATA = [
+        'type' => 'some type',
+        'sub_type' => 'some sub type',
+        'value' => 'some anchor value',
+        'timestamp' => 1575998454,
+    ];
 
     /**
      * @var \Yoti\Sandbox\Profile\RequestBuilders
@@ -47,12 +49,18 @@ class TokenRequestBuilderTest extends TestCase
     /**
      * @covers ::setRememberMeId
      */
-    public function testGetRememberMeId()
+    public function testSetRememberMeId()
     {
         $this->requestBuilder->setRememberMeId(self::SOME_REMEMBER_ME_ID);
         $tokenRequest = $this->requestBuilder->build();
 
-        $this->assertEquals(self::SOME_REMEMBER_ME_ID, $tokenRequest->getRememberMeId());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => self::SOME_REMEMBER_ME_ID,
+                'profile_attributes' => []
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 
     /**
@@ -66,10 +74,8 @@ class TokenRequestBuilderTest extends TestCase
      * @covers ::setEmailAddress
      * @covers ::setPostalAddress
      * @covers ::setStructuredPostalAddress
-     * @covers ::setDocumentDetailsWithString
      * @covers ::createAttribute
      * @covers ::addAttribute
-     * @covers ::formatAnchors
      *
      * @dataProvider stringAttributeSettersDataProvider
      */
@@ -77,11 +83,63 @@ class TokenRequestBuilderTest extends TestCase
     {
         $this->requestBuilder->{$setterMethod}(self::SOME_STRING_VALUE);
         $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
-        $this->assertEquals($sandboxAttribute['name'], $name);
-        $this->assertEquals($sandboxAttribute['value'], self::SOME_STRING_VALUE);
-        $this->assertEquals($sandboxAttribute['anchors'], []);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => $name,
+                        'value' => self::SOME_STRING_VALUE,
+                        'derivation' => '',
+                        'optional' => false,
+                        'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
+    }
+
+    /**
+     * @covers ::setFullName
+     * @covers ::setFamilyName
+     * @covers ::setGivenNames
+     * @covers ::setGender
+     * @covers ::setNationality
+     * @covers ::setPhoneNumber
+     * @covers ::setBase64Selfie
+     * @covers ::setEmailAddress
+     * @covers ::setPostalAddress
+     * @covers ::setStructuredPostalAddress
+     * @covers ::createAttribute
+     * @covers ::addAttribute
+     *
+     * @dataProvider stringAttributeSettersDataProvider
+     */
+    public function testStringAttributeSettersWithAnchor($setterMethod, $name)
+    {
+        $someAnchor = $this->createMock(SandboxAnchor::class);
+        $someAnchor->method('jsonSerialize')->willReturn(self::SOME_ANCHOR_JSON_DATA);
+
+        $this->requestBuilder->{$setterMethod}(self::SOME_STRING_VALUE, true, [ $someAnchor ]);
+        $tokenRequest = $this->requestBuilder->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => $name,
+                        'value' => self::SOME_STRING_VALUE,
+                        'derivation' => '',
+                        'optional' => true,
+                        'anchors' => [ self::SOME_ANCHOR_JSON_DATA ],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 
     /**
@@ -102,7 +160,6 @@ class TokenRequestBuilderTest extends TestCase
             ['setEmailAddress', 'email_address'],
             ['setPostalAddress', 'postal_address'],
             ['setStructuredPostalAddress', 'structured_postal_address'],
-            ['setDocumentDetailsWithString', 'document_details'],
         ];
     }
 
@@ -114,10 +171,22 @@ class TokenRequestBuilderTest extends TestCase
         $someDOB = new \DateTime();
         $this->requestBuilder->setDateOfBirth($someDOB);
         $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
-        $this->assertEquals($sandboxAttribute['name'], 'date_of_birth');
-        $this->assertEquals($sandboxAttribute['value'], $someDOB->format('Y-m-d'));
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => 'date_of_birth',
+                        'value' => $someDOB->format('Y-m-d'),
+                        'derivation' => '',
+                        'optional' => false,
+                        'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 
     /**
@@ -127,10 +196,22 @@ class TokenRequestBuilderTest extends TestCase
     {
         $this->requestBuilder->setSelfie(self::SOME_STRING_VALUE);
         $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
-        $this->assertEquals($sandboxAttribute['name'], 'selfie');
-        $this->assertEquals($sandboxAttribute['value'], base64_encode(self::SOME_STRING_VALUE));
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => 'selfie',
+                        'value' => base64_encode(self::SOME_STRING_VALUE),
+                        'derivation' => '',
+                        'optional' => false,
+                        'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 
     /**
@@ -143,10 +224,48 @@ class TokenRequestBuilderTest extends TestCase
 
         $this->requestBuilder->setDocumentDetails($someDocumentDetails);
         $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
-        $this->assertEquals($sandboxAttribute['name'], 'document_details');
-        $this->assertEquals($sandboxAttribute['value'], self::SOME_STRING_VALUE);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => 'document_details',
+                        'value' => self::SOME_STRING_VALUE,
+                        'derivation' => '',
+                        'optional' => true,
+                        'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
+    }
+
+
+    /**
+     * @covers ::setDocumentDetailsWithString
+     */
+    public function testSetDocumentDetailsWithString()
+    {
+        $this->requestBuilder->setDocumentDetailsWithString(self::SOME_STRING_VALUE);
+        $tokenRequest = $this->requestBuilder->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => 'document_details',
+                        'value' => self::SOME_STRING_VALUE,
+                        'derivation' => '',
+                        'optional' => true,
+                        'anchors' => [],
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 
     /**
@@ -155,43 +274,25 @@ class TokenRequestBuilderTest extends TestCase
     public function testSetAgeVerification()
     {
         $someAgeVerification  = $this->createMock(SandboxAgeVerification::class);
-        $someAgeVerification->method('getName')->willReturn(self::SOME_NAME);
-        $someAgeVerification->method('getValue')->willReturn(self::SOME_STRING_VALUE);
-        $someAgeVerification->method('getAnchors')->willReturn([]);
+        $someAgeVerification->method('jsonSerialize')->willReturn([
+            'name' => self::SOME_NAME,
+            'value' => self::SOME_STRING_VALUE,
+        ]);
 
         $this->requestBuilder->setAgeVerification($someAgeVerification);
         $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
 
-        $this->assertEquals($sandboxAttribute['name'], self::SOME_NAME);
-        $this->assertEquals($sandboxAttribute['value'], self::SOME_STRING_VALUE);
-    }
-
-    /**
-     * @covers ::formatAnchors
-     */
-    public function testFormatAnchors()
-    {
-        $someAnchor = $this->createMock(SandboxAnchor::class);
-        $someAnchor->method('getType')->willReturn(self::SOME_TYPE);
-        $someAnchor->method('getSubType')->willReturn(self::SOME_SUB_TYPE);
-        $someAnchor->method('getValue')->willReturn(self::SOME_STRING_VALUE);
-        $someAnchor->method('getTimestamp')->willReturn(self::SOME_TIMESTAMP);
-
-        $someAttribute = $this->createMock(SandboxAttribute::class);
-        $someAttribute->method('getAnchors')->willReturn([$someAnchor]);
-
-        $this->requestBuilder->addAttribute($someAttribute);
-        $tokenRequest = $this->requestBuilder->build();
-        $sandboxAttribute = $tokenRequest->getSandboxAttributes()[0];
-
-        $this->assertEquals($sandboxAttribute['anchors'], [
-            [
-                'type' => strtoupper(self::SOME_TYPE),
-                'value' => self::SOME_STRING_VALUE,
-                'sub_type' => self::SOME_SUB_TYPE,
-                'timestamp' => self::SOME_TIMESTAMP * 1000000,
-            ],
-        ]);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => null,
+                'profile_attributes' => [
+                    [
+                        'name' => self::SOME_NAME,
+                        'value' => self::SOME_STRING_VALUE,
+                    ]
+                ]
+            ]),
+            json_encode($tokenRequest)
+        );
     }
 }

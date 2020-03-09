@@ -15,13 +15,43 @@ class DateTimeTest extends TestCase
     /**
      * @covers ::timestampToDateTime
      * @covers ::createFromFormat
+     * @covers ::extractMicrosecondsFromTimestamp
+     *
+     * @dataProvider validTimestampProvider
      */
-    public function testTimestampToDateTime()
+    public function testTimestampToDateTime($timestamp, $expectedDateString)
     {
         $this->assertEquals(
-            '2018-04-12T13:14:32.835537+00:00',
-            DateTime::timestampToDateTime(1523538872835537)->format(DateTime::RFC3339)
+            $expectedDateString,
+            DateTime::timestampToDateTime($timestamp)->format(DateTime::RFC3339)
         );
+    }
+
+    /**
+     * @covers ::dateTimeToTimestamp
+     *
+     * @dataProvider validTimestampProvider
+     */
+    public function testDateTimeToTimestamp($timestamp, $expectedDateString)
+    {
+        $dateTime = new \DateTime($expectedDateString);
+
+        $this->assertEquals(
+            $timestamp,
+            DateTime::dateTimeToTimestamp($dateTime)
+        );
+    }
+
+    /**
+     * Provides valid microsecond timestamps and their expected RFC3339 representation with microseconds.
+     */
+    public function validTimestampProvider()
+    {
+        return [
+            [ 1523538872835537, '2018-04-12T13:14:32.835537+00:00' ],
+            [ -1571630945999999, '1920-03-13T19:50:54.000001+00:00' ],
+            [ 1571630945999999, '2019-10-21T04:09:05.999999+00:00' ],
+        ];
     }
 
     /**
@@ -66,10 +96,10 @@ class DateTimeTest extends TestCase
             [ '2006-01-02T22:04:05.123456Z', '2006-01-02T22:04:05.123456+00:00' ],
             [ '2002-10-02T10:00:00-05:00', '2002-10-02T10:00:00.000000-05:00' ],
             [ '2002-10-02T10:00:00+11:00', '2002-10-02T10:00:00.000000+11:00' ],
-            ['1920-03-13T19:50:53.000001Z', '1920-03-13T19:50:53.000001+00:00'],
-            ['1920-03-13T19:50:53.999999Z', '1920-03-13T19:50:53.999999+00:00'],
-            ['1920-03-13T19:50:53.000100Z', '1920-03-13T19:50:53.000100+00:00'],
-            ['1920-03-13T19:50:53.999999+04:00', '1920-03-13T19:50:53.999999+04:00'],
+            [ '1920-03-13T19:50:53.000001Z', '1920-03-13T19:50:53.000001+00:00' ],
+            [ '1920-03-13T19:50:53.999999Z', '1920-03-13T19:50:53.999999+00:00' ],
+            [ '1920-03-13T19:50:53.000100Z', '1920-03-13T19:50:53.000100+00:00'  ],
+            [ '1920-03-13T19:50:53.999999+04:00', '1920-03-13T19:50:53.999999+04:00' ],
         ];
     }
 

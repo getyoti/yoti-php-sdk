@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Sandbox\Test\Profile\Request;
 
 use Yoti\Http\Payload;
-use Yoti\Profile\UserProfile;
+use Yoti\Sandbox\Profile\Request\Attribute\SandboxAttribute;
 use Yoti\Sandbox\Profile\Request\TokenRequest;
 use Yoti\Test\TestCase;
 
@@ -15,7 +15,13 @@ use Yoti\Test\TestCase;
 class TokenRequestTest extends TestCase
 {
     private const SOME_REMEMBER_ME_ID = 'some_remember_me_id';
-    private const SOME_FAMILY_NAME = 'some family name';
+    private const SOME_ATTRIBUTE_JSON_DATA = [
+        'name' => 'some-name',
+        'value' => 'some-value',
+        'derivation' => '',
+        'optional' => false,
+        'anchors' => [],
+    ];
 
     /**
      * @var TokenRequest
@@ -23,48 +29,33 @@ class TokenRequestTest extends TestCase
     private $tokenRequest;
 
     /**
-     * @var array
-     */
-    private $someSandboxAttributes;
-
-    /**
      * Setup TokenRequest
      */
     public function setup(): void
     {
-        $this->someSandboxAttributes = [
-            [
-                'name' => UserProfile::ATTR_FAMILY_NAME,
-                'value' => 'fake_family_name',
-                'derivation' => '',
-                'optional' => 'false',
-                'anchors' => []
-            ]
-        ];
-        $this->tokenRequest = new TokenRequest(self::SOME_REMEMBER_ME_ID, $this->someSandboxAttributes);
-    }
+        $someAttribute = $this->createMock(SandboxAttribute::class);
+        $someAttribute
+            ->method('jsonSerialize')
+            ->willReturn(self::SOME_ATTRIBUTE_JSON_DATA);
 
-    /**
-     * @covers ::getRememberMeId
-     * @covers ::__construct
-     */
-    public function testGetRememberMeId()
-    {
-        $this->assertEquals(
+        $this->tokenRequest = new TokenRequest(
             self::SOME_REMEMBER_ME_ID,
-            $this->tokenRequest->getRememberMeId()
+            [ $someAttribute ]
         );
     }
 
     /**
-     * @covers ::getSandboxAttributes
+     * @covers ::jsonSerialize
      * @covers ::__construct
      */
-    public function testGetSandboxAttributes()
+    public function testJsonSerialize()
     {
-        $this->assertEquals(
-            json_encode($this->someSandboxAttributes),
-            json_encode($this->tokenRequest->getSandboxAttributes())
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'remember_me_id' => self::SOME_REMEMBER_ME_ID,
+                'profile_attributes' => [ self::SOME_ATTRIBUTE_JSON_DATA ],
+            ]),
+            json_encode($this->tokenRequest)
         );
     }
 
@@ -77,7 +68,7 @@ class TokenRequestTest extends TestCase
         $this->assertEquals(
             (string) Payload::fromJsonData([
                 'remember_me_id' => self::SOME_REMEMBER_ME_ID,
-                'profile_attributes' => $this->someSandboxAttributes,
+                'profile_attributes' => [ self::SOME_ATTRIBUTE_JSON_DATA ],
             ]),
             (string) $this->tokenRequest->getPayload()
         );

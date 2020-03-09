@@ -1,7 +1,7 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "keywords": [
     "yoti",
     "sdk"
@@ -10,6 +10,7 @@
   "license": "MIT",
   "require": {
     "php": "^7.1",
+    "ext-json": "*",
     "google/protobuf": "^3.10",
     "phpseclib/phpseclib": "^2.0",
     "guzzlehttp/guzzle": "^6.4",
@@ -23,12 +24,10 @@
     }
   },
   "require-dev": {
-    "ext-json": "*",
     "phpunit/phpunit": "^7.5 || ^8.5",
     "squizlabs/php_codesniffer": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.15",
     "brainmaestro/composer-git-hooks": "^2.8",
-    "php-coveralls/php-coveralls": "^2.1",
     "phpstan/phpstan-strict-rules": "^0.12.1",
     "phpstan/extension-installer": "^1.0"
   },
@@ -43,10 +42,6 @@
     "test": "phpunit",
     "coverage-clover": "phpunit --coverage-clover ./coverage/coverage.xml",
     "coverage-html": "phpunit --coverage-html ./coverage/report",
-    "coveralls": [
-      "@coverage-clover",
-      "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
-    ],
     "lint": [
       "phpcs",
       "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --diff-format=udiff --ansi",

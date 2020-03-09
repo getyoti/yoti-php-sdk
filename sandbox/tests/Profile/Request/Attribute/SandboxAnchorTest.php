@@ -12,54 +12,49 @@ use Yoti\Test\TestCase;
  */
 class SandboxAnchorTest extends TestCase
 {
-    /**
-     * @var SandboxAnchor
-     */
-    public $anchor;
+    private const SOME_TYPE = 'SOURCE';
+    private const SOME_VALUE = 'PASSPORT';
+    private const SOME_SUB_TYPE = 'OCR';
 
-    public function setup(): void
+    /**
+     * @covers ::jsonSerialize
+     * @covers ::__construct
+     *
+     * @dataProvider validTimestampProvider
+     */
+    public function testJsonSerialize($timestamp, $dateString)
     {
-        $this->anchor = new SandboxAnchor(
-            'Source',
-            'PASSPORT',
-            'OCR',
-            1544624701 // 12-12-2018 14:25:01
+        $anchor = new SandboxAnchor(
+            self::SOME_TYPE,
+            self::SOME_VALUE,
+            self::SOME_SUB_TYPE,
+            new \DateTime($dateString)
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'type' => self::SOME_TYPE,
+                'value' => self::SOME_VALUE,
+                'sub_type' => self::SOME_SUB_TYPE,
+                'timestamp' => $timestamp,
+            ]),
+            json_encode($anchor)
         );
     }
 
     /**
-     * @covers ::getType
-     * @covers ::__construct
+     * Provides valid microsecond timestamps and their expected RFC3339 representation with microseconds.
      */
-    public function testGetType()
+    public function validTimestampProvider()
     {
-        $this->assertEquals('Source', $this->anchor->getType());
-    }
-
-    /**
-     * @covers ::getValue
-     * @covers ::__construct
-     */
-    public function testGetValue()
-    {
-        $this->assertEquals('PASSPORT', $this->anchor->getValue());
-    }
-
-    /**
-     * @covers ::getSubtype
-     * @covers ::__construct
-     */
-    public function testGetSubtype()
-    {
-        $this->assertEquals('OCR', $this->anchor->getSubtype());
-    }
-
-    /**
-     * @covers ::getTimestamp
-     * @covers ::__construct
-     */
-    public function testGetTimestamp()
-    {
-        $this->assertEquals(1544624701, $this->anchor->getTimestamp());
+        return [
+            [ 1523538872835537, '2018-04-12T13:14:32.835537+00:00' ],
+            [ -1571630945999999, '1920-03-13T19:50:54.000001+00:00' ],
+            [ 1571630945999999, '2019-10-21T04:09:05.999999+00:00' ],
+            [ 1571630945000000, '2019-10-21T04:09:05+00:00' ],
+            [ 1571630945000000, '2019-10-21T04:09:05' ],
+            [ 1571616000000000, '2019-10-21' ],
+            [ -1571702400000000, '1920-03-13' ],
+        ];
     }
 }
