@@ -9,3 +9,5 @@ update_configs:
       - "echarrod"
       - "davidgrayston"
       - "MrBurtyyy"
+
+    default_assignees: ["davidgrayston"]
