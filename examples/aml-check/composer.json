@@ -1,4 +1,5 @@
 {
+  "name": "yoti/yoti-php-sdk-example-aml-check",
   "description": "Yoti SDK AML Check Demo",
   "require": {
     "yoti/yoti-php-sdk": "^3.0",
