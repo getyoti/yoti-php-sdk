@@ -2,7 +2,7 @@
 # AML check for USA (requires postcode and SSN)
 
 // Load dependent packages and env data
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 use Yoti\Aml\Address;
 use Yoti\Aml\Country;
@@ -15,7 +15,7 @@ $ssn = '170206773';
 try {
     $amlAddress = new Address(new Country('USA'), $zipCode);
     $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress, $ssn);
-    $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+    $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
     $amlResult = $yotiClient->performAmlCheck($amlProfile);
 } catch(\Exception $e) {
     die("Error - {$e->getMessage()}");

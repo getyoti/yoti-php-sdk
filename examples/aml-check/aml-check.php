@@ -2,7 +2,7 @@
 # AML check for outside the USA
 
 // Load dependent packages and env data
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 use Yoti\Aml\Address;
 use Yoti\Aml\Country;
@@ -13,7 +13,7 @@ use Yoti\YotiClient;
 try {
   $amlAddress = new Address(new Country('GBR'));
   $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
-  $yotiClient = new YotiClient(YOTI_SDK_ID, YOTI_KEY_FILE_PATH);
+  $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
   $amlResult = $yotiClient->performAmlCheck($amlProfile);
 } catch(\Exception $e) {
   die("Error - {$e->getMessage()}");
