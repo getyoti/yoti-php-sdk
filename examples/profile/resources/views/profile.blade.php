@@ -2,7 +2,7 @@
 <html class="yoti-html">
    <head>
        <meta charset="utf-8">
-       <title>Yoti client example</title>
+       <title>Yoti SDK profile example</title>
        <link rel="stylesheet" type="text/css" href="assets/css/profile.css">
        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
    </head>

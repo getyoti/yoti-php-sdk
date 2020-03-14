@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ShareController@show');
 
 Route::get('/profile', 'ProfileController@show');
+
+Route::get('/dynamic-share', 'DynamicShareController@show');
