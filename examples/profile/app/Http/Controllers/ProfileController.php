@@ -8,14 +8,12 @@ use Illuminate\Routing\Controller as BaseController;
 
 class ProfileController extends BaseController
 {
-    public function show(Request $request)
+    public function show(Request $request, YotiClient $client)
     {
         // Get the token
         $profileAttributes = [];
 
-        $yotiClient = new YotiClient(getenv('YOTI_SDK_ID'), getenv('YOTI_KEY_FILE_PATH'));
-
-        $activityDetails = $yotiClient->getActivityDetails($request->query('token'));
+        $activityDetails = $client->getActivityDetails($request->query('token'));
         $profile = $activityDetails->getProfile();
 
         $ageVerifications = $profile->getAgeVerifications();

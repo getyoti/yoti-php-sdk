@@ -9,16 +9,10 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "nyholm/psr7": "^1.2",
-        "symfony/psr-http-message-bridge": "^2.0",
         "yoti/yoti-php-sdk": "^3.0"
     },
     "require-dev": {
-        "facade/ignition": "^2.0",
-        "fzaninotto/faker": "^1.9.1",
-        "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^4.1",
-        "phpunit/phpunit": "^8.5"
+        "facade/ignition": "^2.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -33,15 +27,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/"
-        },
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
