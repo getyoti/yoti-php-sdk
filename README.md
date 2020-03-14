@@ -260,44 +260,11 @@ echo $amlResult;
  
 ## How to Run the Examples
 
-The examples can be found in the [examples folder](https://github.com/getyoti/php/tree/master/examples). The steps required for the setup are explained below.
+The examples can be found in the [examples folder](examples).
 
-Please note all our examples work with [Docker](https://docs.docker.com/).
-
-### Profile sharing
-
-* Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
-  * Set the application domain of your app to `localhost:4002`
-  * Set the scenario callback URL to `/profile.php`
-* Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
-* Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
-* Copy `.env.dist` to `.env`
-* Open `.env` file and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
-  * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
-* Run the `docker-compose up -d --build` command and navigate to [https://localhost:4002](https://localhost:4002)
-* Run the `docker-compose stop` command to stop the containers.
-
-### AML Check
-
-* Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
-* Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
-* Put `your-application-pem-file.pem` file inside the [examples/keys](https://github.com/getyoti/php/tree/master/examples/keys) folder. As Docker requires the `.pem` file to reside within the same location where it's run from.
-* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
-  * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
-* Run the following commands:
-
-```console
-$ docker-compose exec web php /usr/share/nginx/html/scripts/aml-check-usa.php // for AML check within the USA
-$ docker-compose exec web php /usr/share/nginx/html/scripts/aml-check.php // for AML check outside the USA
-```
-
-## Running the tests
-
-Run the following commands from the root folder:
-```console
-$ composer update
-$ ./vendor/bin/phpunit tests
-```
+The steps required for the setup are explained in the _README_ of each example:
+- [Profile](examples/profile)
+- [AML Check](examples/aml-check)
 
 ## API Coverage
 
