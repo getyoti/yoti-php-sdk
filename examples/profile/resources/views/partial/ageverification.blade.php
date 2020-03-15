@@ -9,6 +9,6 @@
     </tr>
     <tr>
         <td>Result</td>
-        <td>{{ $ageVerification->getResult() }}</td>
+        <td>{{ $ageVerification->getResult() ? 'true' : 'false' }}</td>
     </tr>
 </table>
