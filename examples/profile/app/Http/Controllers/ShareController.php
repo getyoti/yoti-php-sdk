@@ -11,13 +11,13 @@ class ShareController extends BaseController
         return view('share', [
             'title' => 'We now accept Yoti',
             'buttonConfig' => [
-                "elements" => [
+                'elements' => [
                     [
-                        "domId" => "yoti-share-button",
-                        "clientSdkId" => config('yoti')['client.sdk.id'],
-                        "scenarioId" => config('yoti')['scenario.id'],
-                        "button" => [
-                            "label" => "Use Yoti",
+                        'domId' => 'yoti-share-button',
+                        'clientSdkId' => config('yoti')['client.sdk.id'],
+                        'scenarioId' => config('yoti')['scenario.id'],
+                        'button' => [
+                            'label' => 'Use Yoti',
                         ]
                     ]
                 ]
