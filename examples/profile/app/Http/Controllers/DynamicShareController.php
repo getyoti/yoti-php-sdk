@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Yoti\YotiClient;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\LocationConstraintExtensionBuilder;
@@ -36,13 +35,13 @@ class DynamicShareController extends BaseController
         return view('share', [
             'title' => 'Dynamic Share Example',
             'buttonConfig' => [
-                "elements" => [
+                'elements' => [
                     [
-                        "domId" => "yoti-share-button",
-                        "clientSdkId" => config('yoti')['client.sdk.id'],
-                        "shareUrl" => $client->createShareUrl($scenario)->getShareUrl(),
-                        "button" => [
-                            "label" => "Use Yoti",
+                        'domId' => 'yoti-share-button',
+                        'clientSdkId' => config('yoti')['client.sdk.id'],
+                        'shareUrl' => $client->createShareUrl($scenario)->getShareUrl(),
+                        'button' => [
+                            'label' => 'Use Yoti',
                         ]
                     ]
                 ]
