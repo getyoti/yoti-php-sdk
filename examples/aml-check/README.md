@@ -4,7 +4,7 @@
 
 * Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
 * Put `your-application-pem-file.pem` file inside the [keys](keys) folder.
-* Copy `.env.dist` to `.env` and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
+* Copy `.env.dist` to `.env` and fill in the environment variable `YOTI_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
 
 ## Running the example
