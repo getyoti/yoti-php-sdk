@@ -1,7 +1,12 @@
 # AML Check Example
 
+## Requirements
+- PHP >= 7.1
+- [Composer](https://getcomposer.org/)
+
 ## Setup
 
+* Install dependencies `composer install`
 * Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
 * Put `your-application-pem-file.pem` file inside the [keys](keys) folder.
 * Copy `.env.dist` to `.env` and fill in the environment variable `YOTI_SDK_ID`
