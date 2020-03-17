@@ -19,8 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Yoti\\": "src",
-      "Yoti\\Sandbox\\": "sandbox/src"
+      "Yoti\\": "src"
     }
   },
   "require-dev": {
@@ -33,8 +32,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Yoti\\Test\\": "tests/",
-      "Yoti\\Sandbox\\Test\\": "sandbox/tests/"
+      "Yoti\\Test\\": "tests/"
     }
   },
   "scripts": {

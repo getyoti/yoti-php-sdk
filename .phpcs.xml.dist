@@ -13,6 +13,5 @@
   </rule>
   <file>src</file>
   <file>tests</file>
-  <file>sandbox</file>
   <exclude-pattern>src/Protobuf/*</exclude-pattern>
 </ruleset>
