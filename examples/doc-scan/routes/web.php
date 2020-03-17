@@ -14,3 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@show');
+
+Route::get('/success', 'SuccessController@show');
+
+Route::get('/media/{id}', 'MediaController@show');

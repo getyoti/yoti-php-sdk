@@ -169,7 +169,7 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\YotiServiceProvider::class,
+        App\Providers\YotiDocScanServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     ],
 
