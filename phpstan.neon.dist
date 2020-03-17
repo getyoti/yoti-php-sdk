@@ -2,7 +2,6 @@ parameters:
     level: max
     paths:
         - src
-        - sandbox/src
     excludes_analyse:
         - src/Protobuf/*
 
