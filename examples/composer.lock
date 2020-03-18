@@ -530,7 +530,7 @@
             "dist": {
                 "type": "path",
                 "url": "./sdk",
-                "reference": "3865e1d4428b58f971ae4ef283ef68a029ef294c"
+                "reference": "b79f7953845ba6e326fe7fafaf9fe272b2291f85"
             },
             "require": {
                 "ext-json": "*",
@@ -544,7 +544,6 @@
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.8",
                 "friendsofphp/php-cs-fixer": "^2.15",
-                "php-coveralls/php-coveralls": "^2.1",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan-strict-rules": "^0.12.1",
                 "phpunit/phpunit": "^7.5 || ^8.5",
@@ -558,14 +557,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Yoti\\": "src",
-                    "Yoti\\Sandbox\\": "sandbox/src"
+                    "Yoti\\": "src"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Yoti\\Test\\": "tests/",
-                    "Yoti\\Sandbox\\Test\\": "sandbox/tests/"
+                    "Yoti\\Test\\": "tests/"
                 }
             },
             "scripts": {
@@ -580,10 +577,6 @@
                 ],
                 "coverage-html": [
                     "phpunit --coverage-html ./coverage/report"
-                ],
-                "coveralls": [
-                    "@coverage-clover",
-                    "php-coveralls --coverage_clover ./coverage/coverage.xml --json_path ./coverage/coveralls-upload.json"
                 ],
                 "lint": [
                     "phpcs",
