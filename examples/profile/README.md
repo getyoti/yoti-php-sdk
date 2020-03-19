@@ -11,7 +11,7 @@ This example requires [Docker](https://docs.docker.com/)
   * Set the scenario callback URL to `/profile`
 * Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
 * Put `your-application-pem-file.pem` file inside the [keys](keys) folder, as Docker requires the `.pem` file to reside within the same location where it's run from.
-* Copy `.env.dist` to `.env`
+* Copy `.env.example` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
 * Run the `docker-compose up -d --build` command
