@@ -8,5 +8,6 @@ update_configs:
     default_reviewers:
       - "echarrod"
       - "davidgrayston"
-      - "emmas-yoti"
       - "MrBurtyyy"
+
+    default_assignees: ["davidgrayston"]

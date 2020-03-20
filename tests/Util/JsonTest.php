@@ -13,6 +13,10 @@ use Yoti\Util\Json;
 class JsonTest extends TestCase
 {
     private const SOME_JSON_DATA = ['some' => 'json'];
+    private const SOME_JSON_DATA_WITH_NULL = [
+        'some' => 'json',
+        'other_value' => null,
+    ];
 
     /**
      * @covers ::decode
@@ -60,5 +64,15 @@ class JsonTest extends TestCase
             json_encode(self::SOME_JSON_DATA),
             Json::encode(self::SOME_JSON_DATA)
         );
+    }
+
+    /**
+     * @covers ::withoutNullValues
+     */
+    public function testWithoutNullValues()
+    {
+        $withoutNull = Json::withoutNullValues(self::SOME_JSON_DATA_WITH_NULL);
+
+        $this->assertArrayNotHasKey('other_key', $withoutNull);
     }
 }
