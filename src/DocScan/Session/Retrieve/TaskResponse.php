@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\Util\DateTime;
 
 class TaskResponse
 {
@@ -20,12 +21,12 @@ class TaskResponse
     private $state;
 
     /**
-     * @var string|null
+     * @var \DateTime|null
      */
     private $created;
 
     /**
-     * @var string|null
+     * @var \DateTime|null
      */
     private $lastUpdated;
 
@@ -47,8 +48,12 @@ class TaskResponse
     {
         $this->id = $task['id'] ?? null;
         $this->state = $task['state'] ?? null;
-        $this->created = $task['created'] ?? null;
-        $this->lastUpdated = $task['last_updated'] ?? null;
+
+        $this->created = isset($task['created']) ?
+            DateTime::stringToDateTime($task['created']) : null;
+
+        $this->lastUpdated = isset($task['last_updated']) ?
+            DateTime::stringToDateTime($task['last_updated']) : null;
 
         if (isset($task['generated_checks'])) {
             $this->generatedChecks = $this->parseGeneratedChecks($task['generated_checks']);
@@ -109,17 +114,17 @@ class TaskResponse
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getCreated(): ?string
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getLastUpdated(): ?string
+    public function getLastUpdated(): ?\DateTime
     {
         return $this->lastUpdated;
     }
