@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Retrieve\GeneratedTextDataCheckResponse;
 use Yoti\DocScan\Session\Retrieve\TaskResponse;
 use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
 use Yoti\Test\TestCase;
+use Yoti\Util\DateTime;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\TaskResponse
@@ -56,8 +57,8 @@ class TaskResponseTest extends TestCase
 
         $this->assertEquals(self::SOME_ID, $result->getId());
         $this->assertEquals(self::SOME_STATE, $result->getState());
-        $this->assertEquals(self::SOME_CREATED, $result->getCreated());
-        $this->assertEquals(self::SOME_LAST_UPDATED, $result->getLastUpdated());
+        $this->assertEquals(DateTime::stringToDateTime(self::SOME_CREATED), $result->getCreated());
+        $this->assertEquals(DateTime::stringToDateTime(self::SOME_LAST_UPDATED), $result->getLastUpdated());
 
         $this->assertCount(1, $result->getGeneratedChecks());
         $this->assertInstanceOf(GeneratedTextDataCheckResponse::class, $result->getGeneratedChecks()[0]);
@@ -91,8 +92,8 @@ class TaskResponseTest extends TestCase
 
         $this->assertEquals(self::SOME_ID, $result->getId());
         $this->assertEquals(self::SOME_STATE, $result->getState());
-        $this->assertEquals(self::SOME_CREATED, $result->getCreated());
-        $this->assertEquals(self::SOME_LAST_UPDATED, $result->getLastUpdated());
+        $this->assertEquals(DateTime::stringToDateTime(self::SOME_CREATED), $result->getCreated());
+        $this->assertEquals(DateTime::stringToDateTime(self::SOME_LAST_UPDATED), $result->getLastUpdated());
 
         $this->assertCount(2, $result->getGeneratedMedia());
 
