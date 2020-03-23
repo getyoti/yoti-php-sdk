@@ -9,7 +9,7 @@ This example requires [Docker](https://docs.docker.com/)
 * Create your application in the [Yoti Hub](https://hub.yoti.com) (this requires having a Yoti account)
   * Set the application domain of your app to `localhost:4002`
   * Set the scenario callback URL to `/profile`
-* Do the steps below inside the [examples folder](https://github.com/getyoti/php/tree/master/examples)
+* Do the steps below inside the [examples/profile](./) folder
 * Put `your-application-pem-file.pem` file inside the [keys](keys) folder, as Docker requires the `.pem` file to reside within the same location where it's run from.
 * Copy `.env.example` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_SCENARIO_ID`, `YOTI_SDK_ID`
