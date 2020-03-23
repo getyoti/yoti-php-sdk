@@ -14,11 +14,11 @@
         </tr>
         <tr>
             <td>Created</td>
-            <td>{{ $task->getCreated() }}</td>
+            <td>{{ $task->getCreated()->format('r') }}</td>
         </tr>
         <tr>
             <td>Last Updated</td>
-            <td>{{ $task->getLastUpdated() }}</td>
+            <td>{{ $task->getLastUpdated()->format('r') }}</td>
         </tr>
     </tbody>
 </table>
