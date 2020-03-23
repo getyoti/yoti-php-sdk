@@ -4,7 +4,7 @@ services:
   web:
     build: ../docker
     ports:
-      - "4002:443"
+      - "4003:443"
     volumes:
       - ./:/usr/share/nginx/html
     links:
@@ -21,5 +21,5 @@ services:
     image: composer
     volumes:
       - ../../:/usr/share/yoti-php-sdk
-    working_dir: /usr/share/yoti-php-sdk/examples/profile
+    working_dir: /usr/share/yoti-php-sdk/examples/doc-scan
     command: update
