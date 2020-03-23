@@ -12,5 +12,6 @@
 * Copy `.env.dist` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_SDK_ID`, `YOTI_KEY_FILE_PATH`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
-* Run the `php artisan serve --port=4003` command
+* Run the `docker-compose up -d --build` command
 * Visit [https://localhost:4003](https://localhost:4003)
+* Run the `docker-compose stop` command to stop the containers.

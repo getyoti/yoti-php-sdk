@@ -47,8 +47,8 @@ class HomeController extends BaseController
                   ->withFontColour('#FFFFFF')
                   ->withLocale('en-GB')
                   ->withPresetIssuingCountry('GBR')
-                  ->withSuccessUrl('http://' . $_SERVER['HTTP_HOST'] . '/success')
-                  ->withErrorUrl('http://' . $_SERVER['HTTP_HOST'] . '/error')
+                  ->withSuccessUrl(config('app.url') . '/success')
+                  ->withErrorUrl(config('app.url') . '/error')
                   ->build()
               )
             ->build();
