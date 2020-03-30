@@ -33,12 +33,10 @@ How to integrate with Yoti's AML (Anti Money Laundering) service
 
 8) [How to run the examples](#how-to-run-the-examples)
 
-9) [Running the tests](#running-the-tests)
-
-10) [API Coverage](#api-coverage) -
+9) [API Coverage](#api-coverage) -
 Attributes defined
 
-11) [Support](#support) -
+10) [Support](#support) -
 Please feel free to reach out
 
 ## An Architectural View
