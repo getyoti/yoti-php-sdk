@@ -265,6 +265,7 @@ The examples can be found in the [examples folder](examples).
 The steps required for the setup are explained in the _README_ of each example:
 - [Profile](examples/profile)
 - [AML Check](examples/aml-check)
+- [Doc Scan](examples/doc-scan)
 
 ## API Coverage
 
