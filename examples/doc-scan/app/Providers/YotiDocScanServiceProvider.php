@@ -16,9 +16,7 @@ class YotiDocScanServiceProvider extends ServiceProvider implements DeferrablePr
         $this->app->singleton(DocScanClient::class, function ($app) {
             $config = $app['config']['yoti'];
 
-            return new DocScanClient($config['client.sdk.id'], $config['pem.file.path'], [
-                'api.url' => $config['doc.scan.api.url'],
-            ]);
+            return new DocScanClient($config['client.sdk.id'], $config['pem.file.path']);
         });
     }
 
