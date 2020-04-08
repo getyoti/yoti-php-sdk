@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan;
 
+use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
@@ -48,7 +49,13 @@ class DocScanClient
         array $options = []
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
-        $pemFile = Pemfile::resolveFromString($pem);
+        $pemFile = PemFile::resolveFromString($pem);
+
+        // Set API URL from environment variable.
+        if (getenv(Constants::ENV_DOC_SCAN_API_URL) !== false && !isset($options[Config::API_URL])) {
+            $options[Config::API_URL] = getenv(Constants::ENV_DOC_SCAN_API_URL);
+        }
+
         $config = new Config($options);
 
         $this->docScanService = new Service($sdkId, $pemFile, $config);

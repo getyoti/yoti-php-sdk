@@ -57,7 +57,13 @@ class YotiClient
         array $options = []
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
-        $pemFile = Pemfile::resolveFromString($pem);
+        $pemFile = PemFile::resolveFromString($pem);
+
+        // Set API URL from environment variable.
+        if (getenv(Constants::ENV_API_URL) !== false && !isset($options[Config::API_URL])) {
+            $options[Config::API_URL] = getenv(Constants::ENV_API_URL);
+        }
+
         $config = new Config($options);
 
         $this->profileService = new ProfileService($sdkId, $pemFile, $config);
