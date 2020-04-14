@@ -155,7 +155,8 @@ class SessionSpecificationBuilderTest extends TestCase
             'notifications' => [ 'notifications' ],
             'requested_checks' => [ [ 'requestedChecks' ] ],
             'requested_tasks' => [ [ 'requestedTasks' ] ],
-            'sdk_config' => [ 'sdkConfig' ]
+            'sdk_config' => [ 'sdkConfig' ],
+            'required_documents' => [],
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($sessionSpecification));

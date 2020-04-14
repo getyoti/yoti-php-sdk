@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
+use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
 
 class SessionSpecificationBuilder
@@ -44,6 +45,11 @@ class SessionSpecificationBuilder
      * @var SdkConfig
      */
     private $sdkConfig;
+
+    /**
+     * @var RequiredDocument[]
+     */
+    private $requiredDocuments = [];
 
     /**
      * @param int $clientSessionTokenTtl
@@ -136,6 +142,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Adds a RequiredDocument to the list documents required from the client
+     *
+     * @param RequiredDocument $requiredDocument
+     *
+     * @return $this
+     */
+    public function withRequiredDocument(RequiredDocument $requiredDocument): self
+    {
+        $this->requiredDocuments[] = $requiredDocument;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -147,7 +166,8 @@ class SessionSpecificationBuilder
             $this->notifications,
             $this->requestedChecks,
             $this->requestedTasks,
-            $this->sdkConfig
+            $this->sdkConfig,
+            $this->requiredDocuments
         );
     }
 }
