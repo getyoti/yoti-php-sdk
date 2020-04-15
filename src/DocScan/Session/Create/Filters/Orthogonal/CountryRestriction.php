@@ -36,8 +36,8 @@ class CountryRestriction implements \JsonSerializable
     public function jsonSerialize(): \stdClass
     {
         return (object) [
-            'inclusion' =>   $this->inclusion,
-            'country_codes' =>  $this->countryCodes,
+            'inclusion' => $this->inclusion,
+            'country_codes' => $this->countryCodes,
         ];
     }
 }
