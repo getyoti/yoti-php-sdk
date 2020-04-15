@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters\Orthogonal;
 
+use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
+
 class OrthogonalRestrictionsFilterBuilder
 {
     /**
@@ -41,7 +43,7 @@ class OrthogonalRestrictionsFilterBuilder
     /**
      * @return OrthogonalRestrictionsFilter
      */
-    public function build(): OrthogonalRestrictionsFilter
+    public function build(): RequiredDocumentFilter
     {
         return new OrthogonalRestrictionsFilter($this->countryRestriction, $this->typeRestriction);
     }

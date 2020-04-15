@@ -9,7 +9,7 @@ class RequiredIdentityDocumentBuilder extends RequiredDocumentBuilder
     /**
      * @inheritDoc
      */
-    public function build(): RequiredIdentityDocument
+    public function build(): RequiredDocument
     {
         return new RequiredIdentityDocument($this->filter);
     }
