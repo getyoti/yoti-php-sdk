@@ -6,7 +6,7 @@ namespace Yoti\DocScan\Session\Create\Filters\Orthogonal;
 
 use Yoti\Util\Validation;
 
-class TypeRestriction
+class TypeRestriction implements \JsonSerializable
 {
 
     /**
@@ -37,8 +37,8 @@ class TypeRestriction
     public function jsonSerialize(): \stdClass
     {
         return (object) [
-            'inclusion' =>   $this->inclusion,
-            'document_types' =>  $this->documentTypes,
+            'inclusion' => $this->inclusion,
+            'document_types' => $this->documentTypes,
         ];
     }
 }
