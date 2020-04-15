@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create\Filters\Document;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
 
 class DocumentRestrictionsFilterBuilder
 {
@@ -49,7 +50,7 @@ class DocumentRestrictionsFilterBuilder
     /**
      * @return DocumentRestrictionsFilter
      */
-    public function build(): DocumentRestrictionsFilter
+    public function build(): RequiredDocumentFilter
     {
         return new DocumentRestrictionsFilter($this->inclusion, $this->documents);
     }
