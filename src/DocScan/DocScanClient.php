@@ -8,6 +8,7 @@ use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Exception\PemFileException;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
@@ -124,5 +125,15 @@ class DocScanClient
     public function deleteMediaContent(string $sessionId, string $mediaId): void
     {
         $this->docScanService->deleteMediaContent($sessionId, $mediaId);
+    }
+
+    /**
+     * Gets a list of supported documents.
+     *
+     * @return SupportedDocumentsResponse
+     */
+    public function getSupportedDocuments(): SupportedDocumentsResponse
+    {
+        return $this->docScanService->getSupportedDocuments();
     }
 }
