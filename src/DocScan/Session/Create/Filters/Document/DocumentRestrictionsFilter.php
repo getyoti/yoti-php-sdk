@@ -28,8 +28,10 @@ class DocumentRestrictionsFilter extends RequiredDocumentFilter implements \Json
     {
         parent::__construct(Constants::DOCUMENT_RESTRICTIONS);
 
+        Validation::notEmptyString($inclusion, 'inclusion');
         $this->inclusion = $inclusion;
 
+        Validation::notEmptyArray($documents, 'documents');
         Validation::isArrayOfType($documents, [DocumentRestriction::class], 'documents');
         $this->documents = $documents;
     }

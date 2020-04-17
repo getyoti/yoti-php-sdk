@@ -12,6 +12,7 @@ use Yoti\DocScan\Service;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -30,8 +31,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::createSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function createSessionShouldReturnCreateSessionResultOnSuccessfulCall()
     {
@@ -103,8 +103,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::createSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function createSessionShouldThrowExceptionOnErrorHttpCode()
     {
@@ -156,8 +155,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::retrieveSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function retrieveSessionShouldReturnDocScanSessionOnSuccessfulCall()
     {
@@ -202,8 +200,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::retrieveSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function retrieveSessionShouldThrowExceptionOnFailedCall()
     {
@@ -248,8 +245,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function deleteSessionShouldNotThrowExceptionOnSuccessfulCall()
     {
@@ -291,8 +287,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function deleteSessionThrowExceptionOnFailedCall()
     {
@@ -337,8 +332,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getMediaContent
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function getMediaContentShouldReturnMediaObjectOnSuccessfulCall()
     {
@@ -394,8 +388,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getMediaContent
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function getMediaContentShouldThrowExceptionOnFailedCall()
     {
@@ -445,8 +438,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteMediaContent
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function deleteMediaContentShouldNotThrowExceptionOnSuccessfulCall()
     {
@@ -489,8 +481,7 @@ class ServiceTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteMediaContent
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @covers ::assertResponseIsSuccess
      */
     public function deleteMediaContentThrowExceptionOnFailedCall()
     {
@@ -530,5 +521,91 @@ class ServiceTest extends TestCase
         $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getSupportedDocuments
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getSupportedDocumentsShouldReturnSupportedDocuments()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/supported-documents.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200, json_encode((object) [])));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->assertInstanceOf(
+            SupportedDocumentsResponse::class,
+            $docScanService->getSupportedDocuments()
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getSupportedDocuments
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getSupportedDocumentsShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/supported-documents.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->getSupportedDocuments();
     }
 }

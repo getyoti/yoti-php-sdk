@@ -60,6 +60,19 @@ class Validation
     }
 
     /**
+     * @param mixed[] $value
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function notEmptyArray(array $value, string $name): void
+    {
+        if (count($value) === 0) {
+            throw new \InvalidArgumentException("{$name} cannot be empty");
+        }
+    }
+
+    /**
      * @param float $value
      * @param float $limit
      * @param string $name
