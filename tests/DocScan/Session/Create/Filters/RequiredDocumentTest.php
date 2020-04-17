@@ -38,7 +38,7 @@ class RequiredDocumentTest extends TestCase
                 'type' => self::SOME_TYPE,
                 'filter' => $requiredDocumentFilterMock,
             ]),
-            json_encode($requiredDocument),
+            json_encode($requiredDocument)
         );
     }
 }

@@ -31,7 +31,7 @@ class RequiredDocumentFilterTest extends TestCase
             json_encode((object) [
                 'type' => self::SOME_TYPE,
             ]),
-            json_encode($requiredDocumentFilter),
+            json_encode($requiredDocumentFilter)
         );
     }
 }
