@@ -6,6 +6,7 @@ namespace Yoti\DocScan\Session\Create\Filters\Document;
 
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
+use Yoti\Util\Validation;
 
 class DocumentRestrictionsFilterBuilder
 {
@@ -39,11 +40,14 @@ class DocumentRestrictionsFilterBuilder
 
 
     /**
+     * @param string[] $countryCodes
+     * @param string[] $documentTypes
+     *
      * @return $this
      */
-    public function withDocumentRestriction(DocumentRestriction $document): self
+    public function withDocumentRestriction(array $countryCodes, array $documentTypes): self
     {
-        $this->documents[] = $document;
+        $this->documents[] = new DocumentRestriction($countryCodes, $documentTypes);
         return $this;
     }
 
@@ -52,6 +56,7 @@ class DocumentRestrictionsFilterBuilder
      */
     public function build(): RequiredDocumentFilter
     {
+        Validation::notEmptyString($this->inclusion, 'inclusion');
         return new DocumentRestrictionsFilter($this->inclusion, $this->documents);
     }
 }

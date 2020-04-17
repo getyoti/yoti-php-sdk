@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters\Orthogonal;
 
+use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
 
 class OrthogonalRestrictionsFilterBuilder
@@ -19,24 +20,59 @@ class OrthogonalRestrictionsFilterBuilder
     private $typeRestriction;
 
     /**
-     * @param CountryRestriction $countryRestriction
+     * @param string[] $countryCodes
      *
      * @return $this
      */
-    public function withCountryRestriction(CountryRestriction $countryRestriction): self
+    public function withWhitelistedCountries(array $countryCodes): self
     {
-        $this->countryRestriction = $countryRestriction;
+        $this->countryRestriction = new CountryRestriction(
+            Constants::INCLUSION_WHITELIST,
+            $countryCodes
+        );
         return $this;
     }
 
     /**
-     * @param TypeRestriction $typeRestriction
+     * @param string[] $countryCodes
      *
      * @return $this
      */
-    public function withTypeRestriction(TypeRestriction $typeRestriction): self
+    public function withBlacklistedCountries(array $countryCodes): self
     {
-        $this->typeRestriction = $typeRestriction;
+        $this->countryRestriction = new CountryRestriction(
+            Constants::INCLUSION_BLACKLIST,
+            $countryCodes
+        );
+        return $this;
+    }
+
+
+    /**
+     * @param string[] $documentTypes
+     *
+     * @return $this
+     */
+    public function withWhitelistedDocumentTypes(array $documentTypes): self
+    {
+        $this->typeRestriction = new TypeRestriction(
+            Constants::INCLUSION_WHITELIST,
+            $documentTypes
+        );
+        return $this;
+    }
+
+    /**
+     * @param string[] $documentTypes
+     *
+     * @return $this
+     */
+    public function withBlacklistedDocumentTypes(array $documentTypes): self
+    {
+        $this->typeRestriction = new TypeRestriction(
+            Constants::INCLUSION_BLACKLIST,
+            $documentTypes
+        );
         return $this;
     }
 

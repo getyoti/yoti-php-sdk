@@ -19,16 +19,16 @@ class DocumentRestriction implements \JsonSerializable
     private $countryCodes;
 
     /**
-     * @param string[] $documentTypes
      * @param string[] $countryCodes
+     * @param string[] $documentTypes
      */
-    public function __construct(array $documentTypes, array $countryCodes)
+    public function __construct(array $countryCodes, array $documentTypes)
     {
-        Validation::isArrayOfStrings($documentTypes, 'documentTypes');
-        $this->documentTypes = $documentTypes;
-
         Validation::isArrayOfStrings($countryCodes, 'countryCodes');
         $this->countryCodes = $countryCodes;
+
+        Validation::isArrayOfStrings($documentTypes, 'documentTypes');
+        $this->documentTypes = $documentTypes;
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck;
 use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck;
+use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\NotificationConfig;
 use Yoti\DocScan\Session\Create\SdkConfig;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
@@ -32,6 +33,7 @@ class SessionSpecificationBuilderTest extends TestCase
      * @covers ::withRequestedCheck
      * @covers ::withRequestedTask
      * @covers ::withSdkConfig
+     * @covers ::withRequiredDocument
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getClientSessionTokenTtl
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getResourcesTtl
@@ -40,6 +42,7 @@ class SessionSpecificationBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequestedChecks
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequestedTasks
      * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSdkConfig
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequiredDocuments
      */
     public function shouldCorrectlyBuildSessionSpecification()
     {
@@ -47,7 +50,7 @@ class SessionSpecificationBuilderTest extends TestCase
         $notificationsMock = $this->createMock(NotificationConfig::class);
         $requestedCheckMock = $this->createMock(RequestedDocumentAuthenticityCheck::class);
         $requestedTaskMock = $this->createMock(RequestedTextExtractionTask::class);
-
+        $requiredDocumentMock = $this->createMock(RequiredDocument::class);
 
         $sessionSpecification = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(self::SOME_CLIENT_SESSION_TOKEN_TTL)
@@ -57,6 +60,7 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withRequestedCheck($requestedCheckMock)
             ->withRequestedTask($requestedTaskMock)
             ->withSdkConfig($sdkConfigMock)
+            ->withRequiredDocument($requiredDocumentMock)
             ->build();
 
         $this->assertEquals(self::SOME_CLIENT_SESSION_TOKEN_TTL, $sessionSpecification->getClientSessionTokenTtl());
@@ -71,6 +75,9 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->assertEquals($requestedTaskMock, $sessionSpecification->getRequestedTasks()[0]);
 
         $this->assertEquals($sdkConfigMock, $sessionSpecification->getSdkConfig());
+
+        $this->assertCount(1, $sessionSpecification->getRequiredDocuments());
+        $this->assertEquals($requiredDocumentMock, $sessionSpecification->getRequiredDocuments()[0]);
     }
 
     /**
@@ -129,14 +136,19 @@ class SessionSpecificationBuilderTest extends TestCase
     public function shouldReturnCorrectJsonString()
     {
         $sdkConfigMock = $this->createMock(SdkConfig::class);
-        $notificationsMock = $this->createMock(NotificationConfig::class);
-        $requestedCheckMock = $this->createMock(RequestedDocumentAuthenticityCheck::class);
-        $requestedTaskMock = $this->createMock(RequestedTextExtractionTask::class);
-
         $sdkConfigMock->method('jsonSerialize')->willReturn(['sdkConfig']);
+
+        $notificationsMock = $this->createMock(NotificationConfig::class);
         $notificationsMock->method('jsonSerialize')->willReturn(['notifications']);
+
+        $requestedCheckMock = $this->createMock(RequestedDocumentAuthenticityCheck::class);
         $requestedCheckMock->method('jsonSerialize')->willReturn(['requestedChecks']);
+
+        $requestedTaskMock = $this->createMock(RequestedTextExtractionTask::class);
         $requestedTaskMock->method('jsonSerialize')->willReturn(['requestedTasks']);
+
+        $requiredDocumentMock = $this->createMock(RequiredDocument::class);
+        $requiredDocumentMock->method('jsonSerialize')->willReturn((object) ['requiredDocument']);
 
         $sessionSpecification = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(self::SOME_CLIENT_SESSION_TOKEN_TTL)
@@ -146,17 +158,18 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withRequestedCheck($requestedCheckMock)
             ->withRequestedTask($requestedTaskMock)
             ->withSdkConfig($sdkConfigMock)
+            ->withRequiredDocument($requiredDocumentMock)
             ->build();
 
         $expected = [
             'client_session_token_ttl' => self::SOME_CLIENT_SESSION_TOKEN_TTL,
             'resources_ttl' => self::SOME_RESOURCES_TTL,
             'user_tracking_id' => self::SOME_USER_TRACKING_ID,
-            'notifications' => [ 'notifications' ],
-            'requested_checks' => [ [ 'requestedChecks' ] ],
-            'requested_tasks' => [ [ 'requestedTasks' ] ],
-            'sdk_config' => [ 'sdkConfig' ],
-            'required_documents' => [],
+            'notifications' => $notificationsMock,
+            'sdk_config' => $sdkConfigMock,
+            'requested_checks' => [ $requestedCheckMock ],
+            'requested_tasks' => [ $requestedTaskMock ],
+            'required_documents' => [ $requiredDocumentMock ],
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($sessionSpecification));
