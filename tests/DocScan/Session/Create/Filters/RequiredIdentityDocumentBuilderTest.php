@@ -41,7 +41,7 @@ class RequiredIdentityDocumentBuilderTest extends TestCase
                 'type' => 'ID_DOCUMENT',
                 'filter' => $filterMock,
             ]),
-            json_encode($requiredDocument),
+            json_encode($requiredDocument)
         );
     }
 }

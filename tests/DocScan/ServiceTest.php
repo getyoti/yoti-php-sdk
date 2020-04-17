@@ -539,7 +539,7 @@ class ServiceTest extends TestCase
                     function (RequestInterface $requestMessage) {
                         $expectedPathPattern = sprintf(
                             '~^%s/supported-documents.*?~',
-                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_BASE_URL
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
@@ -582,7 +582,7 @@ class ServiceTest extends TestCase
                     function (RequestInterface $requestMessage) {
                         $expectedPathPattern = sprintf(
                             '~^%s/supported-documents.*?~',
-                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_BASE_URL
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
