@@ -20,11 +20,34 @@ class RequiredIdentityDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
+     */
+    public function shouldBuildRequiredIdentityDocumentWithoutFilter()
+    {
+        $requiredDocument = (new RequiredIdentityDocumentBuilder())->build();
+
+        $this->assertInstanceOf(RequiredDocument::class, $requiredDocument);
+        $this->assertInstanceOf(RequiredIdentityDocument::class, $requiredDocument);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode((object)[
+                'type' => 'ID_DOCUMENT',
+            ]),
+            json_encode($requiredDocument)
+        );
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocumentBuilder::withFilter
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
-    public function shouldBuildRequiredIdentityDocument()
+    public function shouldBuildRequiredIdentityDocumentWithFilter()
     {
         $filterMock = $this->createMock(RequiredDocumentFilter::class);
         $filterMock->method('jsonSerialize')->willReturn((object) ['some' => 'filter']);

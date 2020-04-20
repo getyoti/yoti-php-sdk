@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters;
 
+use Yoti\Util\Json;
+
 abstract class RequiredDocument implements \JsonSerializable
 {
     /**
@@ -12,15 +14,15 @@ abstract class RequiredDocument implements \JsonSerializable
     private $type;
 
     /**
-     * @var RequiredDocumentFilter
+     * @var RequiredDocumentFilter|null
      */
     private $filter;
 
     /**
      * @param string $type
-     * @param RequiredDocumentFilter $filter
+     * @param RequiredDocumentFilter|null $filter
      */
-    public function __construct(string $type, RequiredDocumentFilter $filter)
+    public function __construct(string $type, ?RequiredDocumentFilter $filter)
     {
         $this->type = $type;
         $this->filter = $filter;
@@ -31,9 +33,9 @@ abstract class RequiredDocument implements \JsonSerializable
      */
     public function jsonSerialize(): \stdClass
     {
-        return (object) [
+        return (object) Json::withoutNullValues([
             'type' => $this->type,
             'filter' => $this->filter,
-        ];
+        ]);
     }
 }
