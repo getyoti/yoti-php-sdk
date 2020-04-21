@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters;
 
-abstract class RequiredDocumentFilter implements \JsonSerializable
+abstract class DocumentFilter implements \JsonSerializable
 {
     /**
      * @var string

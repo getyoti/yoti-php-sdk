@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create\Filters\Orthogonal;
 
 use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
+use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
 
-class OrthogonalRestrictionsFilter extends RequiredDocumentFilter
+class OrthogonalRestrictionsFilter extends DocumentFilter
 {
     /**
      * @var CountryRestriction|null

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Create\Filters;
 
+use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
-use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocumentBuilder;
 use Yoti\Test\TestCase;
@@ -51,7 +51,7 @@ class RequiredIdentityDocumentBuilderTest extends TestCase
      */
     public function shouldBuildRequiredIdentityDocumentWithFilter()
     {
-        $filterMock = $this->createMock(RequiredDocumentFilter::class);
+        $filterMock = $this->createMock(DocumentFilter::class);
         $filterMock->method('jsonSerialize')->willReturn((object) ['some' => 'filter']);
 
         $requiredDocument = (new RequiredIdentityDocumentBuilder())

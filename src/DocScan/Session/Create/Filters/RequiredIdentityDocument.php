@@ -9,14 +9,14 @@ use Yoti\DocScan\Constants;
 class RequiredIdentityDocument extends RequiredDocument
 {
     /**
-     * @var RequiredDocumentFilter|null
+     * @var DocumentFilter|null
      */
     private $filter;
 
     /**
-     * @param RequiredDocumentFilter|null $filter
+     * @param DocumentFilter|null $filter
      */
-    public function __construct(?RequiredDocumentFilter $filter)
+    public function __construct(?DocumentFilter $filter)
     {
         parent::__construct(Constants::ID_DOCUMENT);
 

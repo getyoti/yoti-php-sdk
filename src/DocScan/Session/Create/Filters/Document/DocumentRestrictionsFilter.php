@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create\Filters\Document;
 
 use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
+use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
 use Yoti\Util\Validation;
 
-class DocumentRestrictionsFilter extends RequiredDocumentFilter implements \JsonSerializable
+class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializable
 {
     /**
      * @var string
