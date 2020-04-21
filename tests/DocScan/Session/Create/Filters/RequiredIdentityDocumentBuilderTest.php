@@ -20,6 +20,7 @@ class RequiredIdentityDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::jsonSerialize
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
@@ -42,8 +43,9 @@ class RequiredIdentityDocumentBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
+     * @covers ::withFilter
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocumentBuilder::withFilter
+     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdentityDocument::jsonSerialize
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
