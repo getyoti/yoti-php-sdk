@@ -2,6 +2,7 @@
 
 namespace Yoti\Test\DocScan\Session\Create\Check\Filters\Document;
 
+use Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction;
 use Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilterBuilder;
 use Yoti\Test\TestCase;
 
@@ -10,13 +11,24 @@ use Yoti\Test\TestCase;
  */
 class DocumentRestrictionsFilterBuilderTest extends TestCase
 {
-    private const SOME_DOCUMENT_TYPE = 'some-document-type';
-    private const SOME_COUNTRY_CODE = 'some-country-code';
+    /**
+     * @var DocumentRestriction
+     */
+    private $documentRestrictionMock;
+
+    public function setup(): void
+    {
+        $this->documentRestrictionMock = $this->createMock(DocumentRestriction::class);
+        $this->documentRestrictionMock
+            ->method('jsonSerialize')
+            ->willReturn((object)['some' => 'restriction']);
+    }
 
     /**
      * @test
      *
      * @covers ::forWhitelist
+     * @covers ::withDocumentRestriction
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
@@ -25,7 +37,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
     {
         $filter = (new DocumentRestrictionsFilterBuilder())
             ->forWhitelist()
-            ->withDocumentRestriction([], [])
+            ->withDocumentRestriction($this->documentRestrictionMock)
             ->build();
 
         $this->assertJsonStringEqualsJsonString(
@@ -33,7 +45,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
                 (object) [
                     'type' => 'DOCUMENT_RESTRICTIONS',
                     'inclusion' => 'WHITELIST',
-                    'documents' => [ (object) [] ],
+                    'documents' => [ $this->documentRestrictionMock ],
                 ]
             ),
             json_encode($filter)
@@ -44,6 +56,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::forBlacklist
+     * @covers ::withDocumentRestriction
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
      * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
@@ -52,7 +65,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
     {
         $filter = (new DocumentRestrictionsFilterBuilder())
             ->forBlacklist()
-            ->withDocumentRestriction([], [])
+            ->withDocumentRestriction($this->documentRestrictionMock)
             ->build();
 
         $this->assertJsonStringEqualsJsonString(
@@ -60,104 +73,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
                 (object) [
                     'type' => 'DOCUMENT_RESTRICTIONS',
                     'inclusion' => 'BLACKLIST',
-                    'documents' => [ (object) [] ],
-                ]
-            ),
-            json_encode($filter)
-        );
-    }
-
-    /**
-     * @test
-     *
-     * @covers ::withDocumentRestriction
-     * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
-     */
-    public function shouldBuildDocumentRestrictionsFilterWithCountryAndDocument()
-    {
-        $filter = (new DocumentRestrictionsFilterBuilder())
-            ->forWhitelist()
-            ->withDocumentRestriction([self::SOME_COUNTRY_CODE], [self::SOME_DOCUMENT_TYPE])
-            ->build();
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(
-                (object) [
-                    'type' => 'DOCUMENT_RESTRICTIONS',
-                    'inclusion' => 'WHITELIST',
-                    'documents' => [
-                        (object) [
-                            'document_types' => [self::SOME_DOCUMENT_TYPE],
-                            'country_codes' => [self::SOME_COUNTRY_CODE]
-                        ]
-                    ],
-                ]
-            ),
-            json_encode($filter)
-        );
-    }
-
-    /**
-     * @test
-     *
-     * @covers ::withDocumentRestriction
-     * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
-     */
-    public function shouldBuildDocumentRestrictionsFilterWithCountryOnly()
-    {
-        $filter = (new DocumentRestrictionsFilterBuilder())
-            ->forWhitelist()
-            ->withDocumentRestriction([self::SOME_COUNTRY_CODE], [])
-            ->build();
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(
-                (object) [
-                    'type' => 'DOCUMENT_RESTRICTIONS',
-                    'inclusion' => 'WHITELIST',
-                    'documents' => [
-                        (object) [
-                            'country_codes' => [self::SOME_COUNTRY_CODE]
-                        ]
-                    ],
-                ]
-            ),
-            json_encode($filter)
-        );
-    }
-
-
-    /**
-     * @test
-     *
-     * @covers ::withDocumentRestriction
-     * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
-     */
-    public function shouldBuildDocumentRestrictionsFilterWithDocumentOnly()
-    {
-        $filter = (new DocumentRestrictionsFilterBuilder())
-            ->forWhitelist()
-            ->withDocumentRestriction([], [self::SOME_DOCUMENT_TYPE])
-            ->build();
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(
-                (object) [
-                    'type' => 'DOCUMENT_RESTRICTIONS',
-                    'inclusion' => 'WHITELIST',
-                    'documents' => [
-                        (object) [
-                            'document_types' => [self::SOME_DOCUMENT_TYPE],
-                        ]
-                    ],
+                    'documents' => [ $this->documentRestrictionMock ],
                 ]
             ),
             json_encode($filter)
