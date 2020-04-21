@@ -40,14 +40,13 @@ class DocumentRestrictionsFilterBuilder
 
 
     /**
-     * @param string[] $countryCodes
-     * @param string[] $documentTypes
+     * @param DocumentRestriction $documentRestriction
      *
      * @return $this
      */
-    public function withDocumentRestriction(array $countryCodes, array $documentTypes): self
+    public function withDocumentRestriction(DocumentRestriction $documentRestriction): self
     {
-        $this->documents[] = new DocumentRestriction($countryCodes, $documentTypes);
+        $this->documents[] = $documentRestriction;
         return $this;
     }
 
