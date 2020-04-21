@@ -6,7 +6,7 @@ namespace Yoti\DocScan\Session\Create\Filters;
 
 use Yoti\DocScan\Constants;
 
-class RequiredIdentityDocument extends RequiredDocument
+class RequiredIdDocument extends RequiredDocument
 {
     /**
      * @var DocumentFilter|null
