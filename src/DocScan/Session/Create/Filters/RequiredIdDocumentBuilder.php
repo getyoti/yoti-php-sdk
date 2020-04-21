@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters;
 
-class RequiredIdentityDocumentBuilder
+class RequiredIdDocumentBuilder
 {
     /**
      * @var DocumentFilter
@@ -23,10 +23,10 @@ class RequiredIdentityDocumentBuilder
     }
 
     /**
-     * @return RequiredIdentityDocument
+     * @return RequiredIdDocument
      */
-    public function build(): RequiredIdentityDocument
+    public function build(): RequiredIdDocument
     {
-        return new RequiredIdentityDocument($this->filter);
+        return new RequiredIdDocument($this->filter);
     }
 }
