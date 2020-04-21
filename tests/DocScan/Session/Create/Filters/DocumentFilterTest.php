@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Create\Filters;
 
-use Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter;
+use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\RequiredDocumentFilter
+ * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\DocumentFilter
  */
-class RequiredDocumentFilterTest extends TestCase
+class DocumentFilterTest extends TestCase
 {
     private const SOME_TYPE = 'some-type';
 
@@ -22,7 +22,7 @@ class RequiredDocumentFilterTest extends TestCase
      */
     public function shouldSerializeWithType()
     {
-        $requiredDocumentFilter = $this->getMockBuilder(RequiredDocumentFilter::class)
+        $documentFilter = $this->getMockBuilder(DocumentFilter::class)
             ->setConstructorArgs([self::SOME_TYPE])
             ->setMethodsExcept(['jsonSerialize'])
             ->getMock();
@@ -31,7 +31,7 @@ class RequiredDocumentFilterTest extends TestCase
             json_encode((object) [
                 'type' => self::SOME_TYPE,
             ]),
-            json_encode($requiredDocumentFilter)
+            json_encode($documentFilter)
         );
     }
 }

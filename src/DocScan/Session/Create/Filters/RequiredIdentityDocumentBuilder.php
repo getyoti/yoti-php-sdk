@@ -7,16 +7,16 @@ namespace Yoti\DocScan\Session\Create\Filters;
 class RequiredIdentityDocumentBuilder
 {
     /**
-     * @var RequiredDocumentFilter
+     * @var DocumentFilter
      */
     protected $filter;
 
     /**
-     * @param RequiredDocumentFilter $filter
+     * @param DocumentFilter $filter
      *
      * @return $this
      */
-    public function withFilter(RequiredDocumentFilter $filter): self
+    public function withFilter(DocumentFilter $filter): self
     {
         $this->filter = $filter;
         return $this;
