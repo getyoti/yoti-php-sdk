@@ -16,7 +16,7 @@ use Yoti\Util\DateTime;
  */
 class TaskResponseTest extends TestCase
 {
-
+    private const SOME_TYPE = 'someType';
     private const SOME_ID = 'someId';
     private const SOME_STATE = 'someState';
     private const SOME_CREATED = '2019-03-24T03:55:12Z';
@@ -34,6 +34,7 @@ class TaskResponseTest extends TestCase
      * @covers ::__construct
      * @covers ::parseGeneratedChecks
      * @covers ::parseGeneratedMedia
+     * @covers ::getType
      * @covers ::getId
      * @covers ::getState
      * @covers ::getCreated
@@ -50,11 +51,12 @@ class TaskResponseTest extends TestCase
             'last_updated' => self::SOME_LAST_UPDATED,
             'generated_checks' => self::SOME_GENERATED_CHECKS,
             'generated_media' => self::SOME_GENERATED_MEDIA,
-            'type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION',
+            'type' => self::SOME_TYPE,
         ];
 
         $result = new TextExtractionTaskResponse($input);
 
+        $this->assertEquals(self::SOME_TYPE, $result->getType());
         $this->assertEquals(self::SOME_ID, $result->getId());
         $this->assertEquals(self::SOME_STATE, $result->getState());
         $this->assertEquals(DateTime::stringToDateTime(self::SOME_CREATED), $result->getCreated());
@@ -85,11 +87,12 @@ class TaskResponseTest extends TestCase
                 ],
             ],
             'generated_media' => self::SOME_GENERATED_MEDIA,
-            'type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION',
+            'type' => self::SOME_TYPE,
         ];
 
         $result = new TextExtractionTaskResponse($input);
 
+        $this->assertEquals(self::SOME_TYPE, $result->getType());
         $this->assertEquals(self::SOME_ID, $result->getId());
         $this->assertEquals(self::SOME_STATE, $result->getState());
         $this->assertEquals(DateTime::stringToDateTime(self::SOME_CREATED), $result->getCreated());
@@ -123,7 +126,7 @@ class TaskResponseTest extends TestCase
                 ]
             ],
             'generated_media' => self::SOME_GENERATED_MEDIA,
-            'type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION',
+            'type' => self::SOME_TYPE,
         ];
 
         $result = new TaskResponse($input);
@@ -138,8 +141,9 @@ class TaskResponseTest extends TestCase
      */
     public function shouldNotThrowExceptionWhenAllMissingValuesExceptType()
     {
-        $result = new TextExtractionTaskResponse([ 'type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION' ]);
+        $result = new TextExtractionTaskResponse([]);
 
+        $this->assertNull($result->getType());
         $this->assertNull($result->getId());
         $this->assertNull($result->getState());
         $this->assertNull($result->getCreated());

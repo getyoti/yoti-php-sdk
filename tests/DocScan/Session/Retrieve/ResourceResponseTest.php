@@ -14,7 +14,8 @@ use Yoti\Test\TestCase;
  */
 class ResourceResponseTest extends TestCase
 {
-
+    private const ID_DOCUMENT_TEXT_DATA_EXTRACTION = 'ID_DOCUMENT_TEXT_DATA_EXTRACTION';
+    private const SOME_UNKNOWN_TASK = 'someUnknownTask';
     private const SOME_ID = 'someId';
 
     /**
@@ -28,7 +29,7 @@ class ResourceResponseTest extends TestCase
         $input = [
             'id' => self::SOME_ID,
             'tasks' => [
-                ['type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION'],
+                ['type' => self::ID_DOCUMENT_TEXT_DATA_EXTRACTION],
             ],
         ];
 
@@ -47,7 +48,7 @@ class ResourceResponseTest extends TestCase
     {
         $input = [
             'tasks' => [
-                ['type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION'],
+                ['type' => self::ID_DOCUMENT_TEXT_DATA_EXTRACTION],
             ],
         ];
 
@@ -55,6 +56,7 @@ class ResourceResponseTest extends TestCase
 
         $this->assertCount(1, $result->getTasks());
         $this->assertInstanceOf(TextExtractionTaskResponse::class, $result->getTasks()[0]);
+        $this->assertEquals(self::ID_DOCUMENT_TEXT_DATA_EXTRACTION, $result->getTasks()[0]->getType());
     }
 
     /**
@@ -66,8 +68,8 @@ class ResourceResponseTest extends TestCase
     {
         $input = [
             'tasks' => [
-                ['type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION'],
-                ['type' => 'someUnknownType'],
+                ['type' => self::ID_DOCUMENT_TEXT_DATA_EXTRACTION],
+                ['type' => self::SOME_UNKNOWN_TASK],
             ],
         ];
 
@@ -82,11 +84,11 @@ class ResourceResponseTest extends TestCase
      * @covers ::__construct
      * @covers ::createTaskFromArray
      */
-    public function shouldIgnoreUnknownTypeOfTask()
+    public function shouldCreateUnknownTypeOfTask()
     {
         $input = [
             'tasks' => [
-                ['type' => 'someUnknownType'],
+                ['type' => self::SOME_UNKNOWN_TASK],
             ],
         ];
 
@@ -94,6 +96,7 @@ class ResourceResponseTest extends TestCase
 
         $this->assertCount(1, $result->getTasks());
         $this->assertInstanceOf(TaskResponse::class, $result->getTasks()[0]);
+        $this->assertEquals(self::SOME_UNKNOWN_TASK, $result->getTasks()[0]->getType());
     }
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
-use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
@@ -15,7 +14,11 @@ use Yoti\Test\TestCase;
  */
 class GetSessionResultTest extends TestCase
 {
-
+    private const ID_DOCUMENT_AUTHENTICITY = 'ID_DOCUMENT_AUTHENTICITY';
+    private const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
+    private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
+    private const LIVENESS = 'LIVENESS';
+    private const SOME_UNKNOWN_TYPE = 'someUnknownType';
     private const SOME_STATE = 'someState';
     private const SOME_SESSION_ID = 'someSessionId';
     private const SOME_USER_TRACKING_ID = 'someUserTrackingId';
@@ -69,14 +72,16 @@ class GetSessionResultTest extends TestCase
     {
         $input = [
             'checks' => [
-                [ 'type' => 'someUnknownType' ],
+                [ 'type' => self::SOME_UNKNOWN_TYPE ],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
         $this->assertCount(1, $result->getChecks());
+
         $this->assertInstanceOf(CheckResponse::class, $result->getChecks()[0]);
+        $this->assertEquals(self::SOME_UNKNOWN_TYPE, $result->getChecks()[0]->getType());
     }
 
     /**
@@ -92,10 +97,10 @@ class GetSessionResultTest extends TestCase
     {
         $input = [
             'checks' => [
-                [ 'type' => Constants::ID_DOCUMENT_AUTHENTICITY ],
-                [ 'type' => Constants::ID_DOCUMENT_FACE_MATCH ],
-                [ 'type' => Constants::ID_DOCUMENT_TEXT_DATA_CHECK ],
-                [ 'type' => Constants::LIVENESS ],
+                [ 'type' => self::ID_DOCUMENT_AUTHENTICITY ],
+                [ 'type' => self::ID_DOCUMENT_FACE_MATCH ],
+                [ 'type' => self::ID_DOCUMENT_TEXT_DATA_CHECK ],
+                [ 'type' => self::LIVENESS ],
             ],
         ];
 
@@ -106,5 +111,10 @@ class GetSessionResultTest extends TestCase
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
+
+        $this->assertEquals(self::ID_DOCUMENT_AUTHENTICITY, $result->getAuthenticityChecks()[0]->getType());
+        $this->assertEquals(self::ID_DOCUMENT_FACE_MATCH, $result->getFaceMatchChecks()[0]->getType());
+        $this->assertEquals(self::ID_DOCUMENT_TEXT_DATA_CHECK, $result->getTextDataChecks()[0]->getType());
+        $this->assertEquals(self::LIVENESS, $result->getLivenessChecks()[0]->getType());
     }
 }
