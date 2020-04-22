@@ -9,6 +9,10 @@ use Yoti\Util\DateTime;
 
 class CheckResponse
 {
+    /**
+     * @var string|null
+     */
+    private $type;
 
     /**
      * @var string|null
@@ -52,6 +56,7 @@ class CheckResponse
      */
     public function __construct(array $checkData)
     {
+        $this->type = $checkData['type'] ?? null;
         $this->id = $checkData['id'] ?? null;
         $this->state = $checkData['state'] ?? null;
         $this->resourcesUsed = $checkData['resources_used'] ?? [];
@@ -71,6 +76,14 @@ class CheckResponse
 
         $this->lastUpdated = isset($checkData['last_updated']) ?
             DateTime::stringToDateTime($checkData['last_updated']) : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     /**
