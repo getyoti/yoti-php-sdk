@@ -6,7 +6,6 @@ use Yoti\DocScan\Constants;
 
 class ResourceResponse
 {
-
     /**
      * @var string|null
      */

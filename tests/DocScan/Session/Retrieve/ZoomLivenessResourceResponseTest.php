@@ -10,10 +10,12 @@ use Yoti\Test\TestCase;
  */
 class ZoomLivenessResourceResponseTest extends TestCase
 {
+    private const SOME_LIVENESS_TYPE = 'someLivenessType';
 
     /**
      * @test
      * @covers ::__construct
+     * @covers ::getLivenessType
      * @covers ::parseFrames
      * @covers ::getFaceMap
      * @covers ::getFrames
@@ -21,6 +23,7 @@ class ZoomLivenessResourceResponseTest extends TestCase
     public function shouldBuildCorrectly()
     {
         $input = [
+            'liveness_type' => self::SOME_LIVENESS_TYPE,
             'facemap' => [],
             'frames' => [
                 [ 'someFrameKey' => 'someFrameValue' ],
@@ -30,6 +33,7 @@ class ZoomLivenessResourceResponseTest extends TestCase
 
         $result = new ZoomLivenessResourceResponse($input);
 
+        $this->assertEquals(self::SOME_LIVENESS_TYPE, $result->getLivenessType());
         $this->assertNotNull($result->getFaceMap());
         $this->assertCount(2, $result->getFrames());
     }
@@ -42,6 +46,7 @@ class ZoomLivenessResourceResponseTest extends TestCase
     {
         $result = new ZoomLivenessResourceResponse([]);
 
+        $this->assertNull($result->getLivenessType());
         $this->assertNull($result->getFaceMap());
         $this->assertCount(0, $result->getFrames());
     }
