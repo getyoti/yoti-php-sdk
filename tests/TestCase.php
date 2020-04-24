@@ -54,12 +54,10 @@ class TestCase extends PHPUnitTestCase
      *
      * @param string $function
      * @param callable $callback
-     *
-     * @return callable|null
      */
-    protected static function mockFunction($function, $callback)
+    protected static function mockFunction($function, $callback): void
     {
-        return self::$mockFunctions[$function] = $callback;
+        self::$mockFunctions[$function] = $callback;
     }
 
     /**
