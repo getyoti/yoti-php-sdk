@@ -7,14 +7,14 @@ namespace Yoti\DocScan\Session\Create\Filters\Document;
 class DocumentRestrictionBuilder
 {
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    private $documentTypes = [];
+    private $documentTypes;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    private $countryCodes = [];
+    private $countryCodes;
 
     /**
      * @param string[] $documentTypes

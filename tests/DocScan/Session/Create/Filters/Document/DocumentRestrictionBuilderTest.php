@@ -113,4 +113,52 @@ class DocumentRestrictionBuilderTest extends TestCase
             json_encode($filter)
         );
     }
+
+    /**
+     * @test
+     *
+     * @covers ::withCountries
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     */
+    public function shouldBuildDocumentRestrictionWithEmptyCountryList()
+    {
+        $filter = (new DocumentRestrictionBuilder())
+            ->withCountries([])
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'country_codes' => [],
+                ]
+            ),
+            json_encode($filter)
+        );
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::withDocumentTypes
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     */
+    public function shouldBuildDocumentRestrictionWithEmptyDocumentTypeList()
+    {
+        $filter = (new DocumentRestrictionBuilder())
+            ->withDocumentTypes([])
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'document_types' => [],
+                ]
+            ),
+            json_encode($filter)
+        );
+    }
 }

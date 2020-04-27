@@ -9,26 +9,30 @@ use Yoti\Util\Validation;
 class DocumentRestriction implements \JsonSerializable
 {
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $documentTypes;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $countryCodes;
 
     /**
-     * @param string[] $countryCodes
-     * @param string[] $documentTypes
+     * @param string[]|null $countryCodes
+     * @param string[]|null $documentTypes
      */
-    public function __construct(array $countryCodes, array $documentTypes)
+    public function __construct(?array $countryCodes, ?array $documentTypes)
     {
-        Validation::isArrayOfStrings($countryCodes, 'countryCodes');
-        $this->countryCodes = $countryCodes;
+        if (isset($countryCodes)) {
+            Validation::isArrayOfStrings($countryCodes, 'countryCodes');
+            $this->countryCodes = $countryCodes;
+        }
 
-        Validation::isArrayOfStrings($documentTypes, 'documentTypes');
-        $this->documentTypes = $documentTypes;
+        if (isset($documentTypes)) {
+            Validation::isArrayOfStrings($documentTypes, 'documentTypes');
+            $this->documentTypes = $documentTypes;
+        }
     }
 
     /**
@@ -38,11 +42,11 @@ class DocumentRestriction implements \JsonSerializable
     {
         $jsonData = new \stdClass();
 
-        if (count($this->documentTypes) > 0) {
+        if (isset($this->documentTypes)) {
             $jsonData->document_types = $this->documentTypes;
         }
 
-        if (count($this->countryCodes) > 0) {
+        if (isset($this->countryCodes)) {
             $jsonData->country_codes = $this->countryCodes;
         }
 
