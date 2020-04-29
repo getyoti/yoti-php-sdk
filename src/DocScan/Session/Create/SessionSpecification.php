@@ -71,7 +71,7 @@ class SessionSpecification implements JsonSerializable
         array $requestedChecks,
         array $requestedTasks,
         ?SdkConfig $sdkConfig,
-        array $requiredDocuments
+        array $requiredDocuments = []
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->resourcesTtl = $resourcesTtl;
