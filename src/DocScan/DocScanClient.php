@@ -12,6 +12,7 @@ use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Exception\PemFileException;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
+use Yoti\Util\Env;
 use Yoti\Util\PemFile;
 use Yoti\Util\Validation;
 
@@ -53,8 +54,8 @@ class DocScanClient
         $pemFile = PemFile::resolveFromString($pem);
 
         // Set API URL from environment variable.
-        if (getenv(Constants::ENV_DOC_SCAN_API_URL) !== false && !isset($options[Config::API_URL])) {
-            $options[Config::API_URL] = getenv(Constants::ENV_DOC_SCAN_API_URL);
+        if (($envUrl = Env::get(Constants::ENV_DOC_SCAN_API_URL)) !== null && !isset($options[Config::API_URL])) {
+            $options[Config::API_URL] = $envUrl;
         }
 
         $config = new Config($options);
