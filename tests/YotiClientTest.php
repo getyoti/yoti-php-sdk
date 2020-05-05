@@ -69,10 +69,11 @@ class YotiClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @backupGlobals enabled
      */
     public function testApiUrlOptionOverridesEnvironmentVariable()
     {
-        putenv('YOTI_API_URL=https://example.com/env/api');
+        $_SERVER['YOTI_API_URL'] = 'https://example.com/env/api';
 
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
@@ -101,10 +102,11 @@ class YotiClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @backupGlobals enabled
      */
     public function testApiUrlEnvironmentVariable()
     {
-        putenv('YOTI_API_URL=https://example.com/env/api');
+        $_SERVER['YOTI_API_URL'] = 'https://example.com/env/api';
 
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));

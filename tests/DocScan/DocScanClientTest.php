@@ -69,10 +69,11 @@ class DocScanClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @backupGlobals enabled
      */
     public function testApiUrlOptionOverridesEnvironmentVariable()
     {
-        putenv('YOTI_DOC_SCAN_API_URL=https://example.com/env/api');
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
 
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
@@ -104,10 +105,11 @@ class DocScanClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @backupGlobals enabled
      */
     public function testApiUrlEnvironmentVariable()
     {
-        putenv('YOTI_DOC_SCAN_API_URL=https://example.com/env/api');
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
 
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Test;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Yoti\Constants;
 
 class TestCase extends PHPUnitTestCase
 {
@@ -38,10 +37,6 @@ class TestCase extends PHPUnitTestCase
         // Restores ini settings.
         ini_restore('error_log');
         ini_restore('display_errors');
-
-        // Remove environment variables.
-        putenv(Constants::ENV_API_URL);
-        putenv(Constants::ENV_DOC_SCAN_API_URL);
 
         self::$mockFunctions = [];
     }
