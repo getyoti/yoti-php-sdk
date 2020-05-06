@@ -10,6 +10,7 @@ use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Exception\PemFileException;
+use Yoti\Http\Client;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
 use Yoti\Util\Env;
@@ -52,6 +53,9 @@ class DocScanClient
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
         $pemFile = PemFile::resolveFromString($pem);
+
+        // Create default HTTP client.
+        $options[Config::HTTP_CLIENT] = $options[Config::HTTP_CLIENT] ?? new Client();
 
         // Set API URL from environment variable.
         $options[Config::API_URL] = $options[Config::API_URL] ?? Env::get(Constants::ENV_DOC_SCAN_API_URL);

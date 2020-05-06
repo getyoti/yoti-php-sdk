@@ -7,6 +7,7 @@ namespace Yoti;
 use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Aml\Service as AmlService;
+use Yoti\Http\Client;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Service as ProfileService;
 use Yoti\ShareUrl\DynamicScenario;
@@ -59,6 +60,9 @@ class YotiClient
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
         $pemFile = PemFile::resolveFromString($pem);
+
+        // Create default HTTP client.
+        $options[Config::HTTP_CLIENT] = $options[Config::HTTP_CLIENT] ?? new Client();
 
         // Set API URL from environment variable.
         $options[Config::API_URL] = $options[Config::API_URL] ?? Env::get(Constants::ENV_API_URL);
