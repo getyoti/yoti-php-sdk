@@ -61,9 +61,7 @@ class YotiClient
         $pemFile = PemFile::resolveFromString($pem);
 
         // Set API URL from environment variable.
-        if (($envUrl = Env::get(Constants::ENV_API_URL)) !== null && !isset($options[Config::API_URL])) {
-            $options[Config::API_URL] = $envUrl;
-        }
+        $options[Config::API_URL] = $options[Config::API_URL] ?? Env::get(Constants::ENV_API_URL);
 
         $config = new Config($options);
 
