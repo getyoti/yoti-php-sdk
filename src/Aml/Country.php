@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
-class Country
+class Country implements \JsonSerializable
 {
     /**
      * Country code.
@@ -27,5 +27,13 @@ class Country
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function jsonSerialize(): string
+    {
+        return $this->getCode();
     }
 }
