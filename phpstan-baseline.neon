@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Instanceof between Yoti\\\\Protobuf\\\\Sharepubapi\\\\IssuingAttributes and Yoti\\\\Protobuf\\\\Sharepubapi\\\\IssuingAttributes will always evaluate to true\\.$#"
+			count: 1
+			path: src/Profile/Util/ExtraData/ThirdPartyAttributeConverter.php
+
