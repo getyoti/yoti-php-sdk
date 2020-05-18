@@ -257,7 +257,6 @@ class ValidationTest extends TestCase
     /**
      * @covers ::notEmptyString
      *
-     *
      * @dataProvider nonStringDataProvider
      */
     public function testNotEmptyStringWithNonStringValue($nonStringValue)
@@ -266,6 +265,25 @@ class ValidationTest extends TestCase
         $this->expectExceptionMessage('some_name must be a string');
 
         Validation::notEmptyString($nonStringValue, self::SOME_NAME);
+    }
+
+    /**
+     * @covers ::notEmptyArray
+     */
+    public function testNotEmptyArray()
+    {
+        $this->assertNull(Validation::notEmptyArray([self::SOME_STRING], self::SOME_NAME));
+    }
+
+    /**
+     * @covers ::notEmptyArray
+     */
+    public function testNotEmptyArrayWithEmptyValue()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('some_name cannot be empty');
+
+        Validation::notEmptyArray([], self::SOME_NAME);
     }
 
     /**

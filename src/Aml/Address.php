@@ -52,13 +52,13 @@ class Address implements \JsonSerializable
     /**
      * Get address data.
      *
-     * @return array<string, string|null>
+     * @return array<string, string|Country|null>
      */
     public function jsonSerialize(): array
     {
         return [
-            self::POSTCODE_ATTR => $this->postcode,
-            self::COUNTRY_ATTR => $this->country->getCode(),
+            self::POSTCODE_ATTR => $this->getPostcode(),
+            self::COUNTRY_ATTR => $this->getCountry(),
         ];
     }
 

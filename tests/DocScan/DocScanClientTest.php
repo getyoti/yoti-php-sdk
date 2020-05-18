@@ -10,6 +10,7 @@ use Yoti\DocScan\DocScanClient;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -36,9 +37,110 @@ class DocScanClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     */
+    public function testDefaultApiUrl()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) {
+                $this->assertStringStartsWith(
+                    TestData::DOC_SCAN_BASE_URL,
+                    (string) $requestMessage->getUri()
+                );
+                return true;
+            }))
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
+
+        $docScanClient->createSession($sessionSpecificationMock);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testApiUrlOptionOverridesEnvironmentVariable()
+    {
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) {
+                $this->assertStringStartsWith(
+                    'https://example.com/option/api',
+                    (string) $requestMessage->getUri()
+                );
+                return true;
+            }))
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+            Config::API_URL => 'https://example.com/option/api'
+        ]);
+
+        $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
+
+        $docScanClient->createSession($sessionSpecificationMock);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testApiUrlEnvironmentVariable()
+    {
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) {
+                $this->assertStringStartsWith(
+                    'https://example.com/env/api',
+                    (string) $requestMessage->getUri()
+                );
+                return true;
+            }))
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
+
+        $docScanClient->createSession($sessionSpecificationMock);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
      * @covers ::createSession
-     * @throws \Yoti\Exception\PemFileException
-     * @throws \Yoti\DocScan\Exception\DocScanException
      */
     public function testCreateSession()
     {
@@ -72,8 +174,6 @@ class DocScanClientTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getSession
-     * @throws \Yoti\DocScan\Exception\DocScanException
-     * @throws \Yoti\Exception\PemFileException
      */
     public function testGetSession()
     {
@@ -100,8 +200,6 @@ class DocScanClientTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteSession
-     * @throws \Yoti\DocScan\Exception\DocScanException
-     * @throws \Yoti\Exception\PemFileException
      */
     public function testDeleteSessionDoesNotThrowException()
     {
@@ -124,8 +222,6 @@ class DocScanClientTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getMediaContent
-     * @throws \Yoti\DocScan\Exception\DocScanException
-     * @throws \Yoti\Exception\PemFileException
      */
     public function testGetMedia()
     {
@@ -153,8 +249,6 @@ class DocScanClientTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::deleteMediaContent
-     * @throws \Yoti\DocScan\Exception\DocScanException
-     * @throws \Yoti\Exception\PemFileException
      */
     public function testDeleteMediaDoesNotThrowException()
     {
@@ -171,5 +265,30 @@ class DocScanClientTest extends TestCase
         ]);
 
         $docScanClient->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+    }
+
+    /**
+     * @test
+     * @covers ::getSupportedDocuments
+     */
+    public function testGetSupportedDocuments()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertInstanceOf(
+            SupportedDocumentsResponse::class,
+            $docScanClient->getSupportedDocuments()
+        );
     }
 }

@@ -18,3 +18,5 @@ Route::get('/', 'HomeController@show');
 Route::get('/success', 'SuccessController@show');
 
 Route::get('/media/{id}', 'MediaController@show');
+
+Route::get('/error', 'ErrorController@show');

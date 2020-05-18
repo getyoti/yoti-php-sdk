@@ -97,10 +97,10 @@ class Profile implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            self::GIVEN_NAMES_ATTR  => $this->givenNames,
-            self::FAMILY_NAME_ATTR  => $this->familyName,
-            self::SSN_ATTR => $this->ssn,
-            self::ADDRESS_ATTR => $this->amlAddress,
+            self::GIVEN_NAMES_ATTR  => $this->getGivenNames(),
+            self::FAMILY_NAME_ATTR  => $this->getFamilyName(),
+            self::SSN_ATTR => $this->getSsn(),
+            self::ADDRESS_ATTR => $this->getAmlAddress(),
         ];
     }
 

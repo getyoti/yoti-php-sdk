@@ -17,15 +17,27 @@ class AddressTest extends TestCase
     private const SOME_COUNTRY_CODE = 'GBR';
 
     /**
+     * @var Country
+     */
+    private $countryMock;
+
+    public function setup(): void
+    {
+        $this->countryMock = $this->createMock(Country::class);
+        $this->countryMock
+            ->method('jsonSerialize')
+            ->willReturn(self::SOME_COUNTRY_CODE);
+    }
+
+    /**
      * @covers ::__construct
      * @covers ::getCountry
      */
     public function testGetCountry()
     {
-        $someCountry = $this->createMock(Country::class);
-        $amlAddress = new Address($someCountry);
+        $amlAddress = new Address($this->countryMock);
 
-        $this->assertEquals($someCountry, $amlAddress->getCountry());
+        $this->assertEquals($this->countryMock, $amlAddress->getCountry());
     }
 
     /**
@@ -35,7 +47,7 @@ class AddressTest extends TestCase
     public function testGetPostcode()
     {
         $amlAddress = new Address(
-            $this->createMock(Country::class),
+            $this->countryMock,
             self::SOME_POSTCODE
         );
 
@@ -48,7 +60,7 @@ class AddressTest extends TestCase
      */
     public function testGetPostcodeNull()
     {
-        $amlAddress = new Address($this->createMock(Country::class));
+        $amlAddress = new Address($this->countryMock);
 
         $this->assertNull($amlAddress->getPostcode());
     }
@@ -59,20 +71,23 @@ class AddressTest extends TestCase
      */
     public function testJsonSerialize()
     {
-        $someCountry = $this->createMock(Country::class);
-        $someCountry
-            ->method('getCode')
-            ->willreturn(self::SOME_COUNTRY_CODE);
-
-        $amlAddress = new Address($someCountry, self::SOME_POSTCODE);
+        $amlAddress = new Address($this->countryMock, self::SOME_POSTCODE);
 
         $expectedData = [
             'post_code' => self::SOME_POSTCODE,
-            'country' => self::SOME_COUNTRY_CODE,
+            'country' => $this->countryMock,
         ];
 
         $this->assertEquals($expectedData, $amlAddress->jsonSerialize());
-        $this->assertEquals(json_encode($expectedData), json_encode($amlAddress));
-        $this->assertEquals(json_encode($expectedData), (string) $amlAddress);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedData),
+            json_encode($amlAddress)
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedData),
+            (string) $amlAddress
+        );
     }
 }

@@ -9,6 +9,10 @@ use Yoti\Util\DateTime;
 
 class TaskResponse
 {
+    /**
+     * @var string|null
+     */
+    private $type;
 
     /**
      * @var string|null
@@ -46,6 +50,7 @@ class TaskResponse
      */
     public function __construct(array $task)
     {
+        $this->type = $task['type'] ?? null;
         $this->id = $task['id'] ?? null;
         $this->state = $task['state'] ?? null;
 
@@ -95,6 +100,14 @@ class TaskResponse
             $parsedGeneratedMedia[] = new GeneratedMedia($generatedMedia);
         }
         return $parsedGeneratedMedia;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     /**

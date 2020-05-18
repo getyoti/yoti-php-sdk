@@ -6,6 +6,7 @@ namespace Yoti\DocScan\Session\Create;
 
 use JsonSerializable;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
+use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
 
 class SessionSpecification implements JsonSerializable
@@ -42,6 +43,11 @@ class SessionSpecification implements JsonSerializable
     private $requestedTasks;
 
     /**
+     * @var RequiredDocument[]
+     */
+    private $requiredDocuments;
+
+    /**
      * @var SdkConfig|null
      */
     private $sdkConfig;
@@ -55,6 +61,7 @@ class SessionSpecification implements JsonSerializable
      * @param RequestedCheck[] $requestedChecks
      * @param RequestedTask[] $requestedTasks
      * @param SdkConfig|null $sdkConfig
+     * @param RequiredDocument[] $requiredDocuments
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -63,7 +70,8 @@ class SessionSpecification implements JsonSerializable
         ?NotificationConfig $notificationConfig,
         array $requestedChecks,
         array $requestedTasks,
-        ?SdkConfig $sdkConfig
+        ?SdkConfig $sdkConfig,
+        array $requiredDocuments = []
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->resourcesTtl = $resourcesTtl;
@@ -72,6 +80,7 @@ class SessionSpecification implements JsonSerializable
         $this->requestedChecks = $requestedChecks;
         $this->requestedTasks = $requestedTasks;
         $this->sdkConfig = $sdkConfig;
+        $this->requiredDocuments = $requiredDocuments;
     }
 
     /**
@@ -87,6 +96,7 @@ class SessionSpecification implements JsonSerializable
             'requested_checks' => $this->getRequestedChecks(),
             'requested_tasks' => $this->getRequestedTasks(),
             'sdk_config' => $this->getSdkConfig(),
+            'required_documents' => $this->getRequiredDocuments(),
         ];
     }
 
@@ -144,5 +154,13 @@ class SessionSpecification implements JsonSerializable
     public function getSdkConfig(): ?SdkConfig
     {
         return $this->sdkConfig;
+    }
+
+    /**
+     * @return RequiredDocument[]
+     */
+    public function getRequiredDocuments(): array
+    {
+        return $this->requiredDocuments;
     }
 }

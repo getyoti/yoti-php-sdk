@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Test\Aml;
 
 use Yoti\Aml\Address;
-use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\Test\TestCase;
 
@@ -14,38 +13,34 @@ use Yoti\Test\TestCase;
  */
 class ProfileTest extends TestCase
 {
-    private const SOME_COUNTRY_CODE = 'GBR';
-    private const SOME_POSTCODE = 'BN2 1TW';
     private const SOME_GIVEN_NAMES = 'Edward Richard George';
     private const SOME_FAMILY_NAME = 'Heath';
     private const SOME_SSN = '1234';
 
     /**
-     * @var Yoti\Aml\Profile
+     * @var Profile
      */
     private $amlProfile;
 
     /**
-     * @var Yoti\Aml\Address
+     * @var Address
      */
-    private $amlAddress;
-
-    /**
-     * @var Yoti\Aml\Country
-     */
-    private $country;
+    private $amlAddressMock;
 
     /**
      * Create test Aml Profile.
      */
     public function setup(): void
     {
-        $this->country = new Country(self::SOME_COUNTRY_CODE);
-        $this->amlAddress = new Address($this->country, self::SOME_POSTCODE);
+        $this->amlAddressMock = $this->createMock(Address::class);
+        $this->amlAddressMock
+            ->method('jsonSerialize')
+            ->willReturn(['some' => 'address']);
+
         $this->amlProfile = new Profile(
             self::SOME_GIVEN_NAMES,
             self::SOME_FAMILY_NAME,
-            $this->amlAddress,
+            $this->amlAddressMock,
             self::SOME_SSN
         );
     }
@@ -86,7 +81,7 @@ class ProfileTest extends TestCase
         $amlProfile = new Profile(
             self::SOME_GIVEN_NAMES,
             self::SOME_FAMILY_NAME,
-            $this->amlAddress
+            $this->amlAddressMock
         );
         $this->assertNull($amlProfile->getSsn());
     }
@@ -97,7 +92,7 @@ class ProfileTest extends TestCase
      */
     public function testGetAmlAddress()
     {
-        $this->assertSame($this->amlAddress, $this->amlProfile->getAmlAddress());
+        $this->assertSame($this->amlAddressMock, $this->amlProfile->getAmlAddress());
     }
 
     /**
@@ -111,13 +106,17 @@ class ProfileTest extends TestCase
             'given_names' => self::SOME_GIVEN_NAMES,
             'family_name' => self::SOME_FAMILY_NAME,
             'ssn' => self::SOME_SSN,
-            'address' => [
-                'post_code' => self::SOME_POSTCODE,
-                'country' => self::SOME_COUNTRY_CODE,
-            ],
+            'address' => $this->amlAddressMock,
         ];
 
-        $this->assertEquals(json_encode($expectedData), json_encode($this->amlProfile));
-        $this->assertEquals(json_encode($expectedData), (string) $this->amlProfile);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedData),
+            json_encode($this->amlProfile)
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedData),
+            (string) $this->amlProfile
+        );
     }
 }

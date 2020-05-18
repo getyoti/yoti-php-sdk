@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan;
 
+use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
 use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
@@ -76,12 +78,9 @@ class Service
             ->build()
             ->execute();
 
-        $httpCode = $response->getStatusCode();
-        if ($httpCode < 200 || $httpCode > 299) {
-            throw new DocScanException("Server responded with {$httpCode}", $response);
-        }
+        self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string)$response->getBody());
+        $result = Json::decode((string) $response->getBody());
 
         return new CreateSessionResult($result);
     }
@@ -104,12 +103,9 @@ class Service
             ->build()
             ->execute();
 
-        $httpCode = $response->getStatusCode();
-        if ($httpCode < 200 || $httpCode > 299) {
-            throw new DocScanException("Server responded with {$httpCode}", $response);
-        }
+        self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string)$response->getBody());
+        $result = Json::decode((string) $response->getBody());
 
         return new GetSessionResult($result);
     }
@@ -131,10 +127,7 @@ class Service
             ->build()
             ->execute();
 
-        $httpCode = $response->getStatusCode();
-        if ($httpCode < 200 || $httpCode > 299) {
-            throw new DocScanException("Server responded with {$httpCode}", $response);
-        }
+        self::assertResponseIsSuccess($response);
     }
 
     /**
@@ -157,12 +150,9 @@ class Service
             ->build()
             ->execute();
 
-        $httpCode = $response->getStatusCode();
-        if ($httpCode < 200 || $httpCode > 299) {
-            throw new DocScanException("Server responded with {$httpCode}", $response);
-        }
+        self::assertResponseIsSuccess($response);
 
-        $content = (string)$response->getBody();
+        $content = (string) $response->getBody();
         $mimeType = $response->getHeader("Content-Type")[0];
 
         return new Media($mimeType, $content);
@@ -187,6 +177,38 @@ class Service
             ->build()
             ->execute();
 
+        self::assertResponseIsSuccess($response);
+    }
+
+    /**
+     * Gets a list of supported documents.
+     *
+     * @return SupportedDocumentsResponse
+     */
+    public function getSupportedDocuments(): SupportedDocumentsResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withEndpoint('/supported-documents')
+            ->withPemFile($this->pemFile)
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string) $response->getBody());
+
+        return new SupportedDocumentsResponse($result);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @throws DocScanException
+     */
+    private static function assertResponseIsSuccess(ResponseInterface $response): void
+    {
         $httpCode = $response->getStatusCode();
         if ($httpCode < 200 || $httpCode > 299) {
             throw new DocScanException("Server responded with {$httpCode}", $response);

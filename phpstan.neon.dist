@@ -6,4 +6,4 @@ parameters:
         - src/Protobuf/*
 
 includes:
-    - phpstan-ignore.neon
+    - phpstan-baseline.neon
