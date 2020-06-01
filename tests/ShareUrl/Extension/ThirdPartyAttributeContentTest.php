@@ -30,7 +30,7 @@ class ThirdPartyAttributeContentTest extends TestCase
         );
 
         $expectedJson = json_encode([
-            'expiry_date' => '2019-12-02T12:00:00.123000+00:00',
+            'expiry_date' => '2019-12-02T12:00:00.123+00:00',
             'definitions' => [
                 [
                     'name' => $someDefinition,

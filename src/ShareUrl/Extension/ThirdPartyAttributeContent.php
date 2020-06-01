@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\ShareUrl\Extension;
 
 use Yoti\Profile\ExtraData\AttributeDefinition;
-use Yoti\Util\DateTime;
 use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
@@ -46,7 +45,7 @@ class ThirdPartyAttributeContent implements \JsonSerializable
         return [
             'expiry_date' => $this->expiryDate
                 ->setTimezone(new \DateTimeZone('UTC'))
-                ->format(DateTime::RFC3339),
+                ->format(\DateTime::RFC3339_EXTENDED),
             'definitions' => $this->definitions,
         ];
     }
