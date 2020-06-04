@@ -18,15 +18,36 @@ class EnvTest extends TestCase
     /**
      * @covers ::get
      * @backupGlobals enabled
+     *
+     * @dataProvider envValueDataProvider
      */
-    public function testGet()
+    public function testGet($setValue, $getValue)
     {
-        $_SERVER[self::SOME_KEY] = self::SOME_STRING;
+        $_SERVER[self::SOME_KEY] = $setValue;
 
-        $this->assertEquals(
-            self::SOME_STRING,
+        $this->assertSame(
+            $getValue,
             Env::get(self::SOME_KEY)
         );
+    }
+
+    /**
+     * Provides environment variable values and their expected return values.
+     */
+    public function envValueDataProvider()
+    {
+        return [
+            [ self::SOME_STRING, self::SOME_STRING ],
+            [ '', null ],
+            [ '0', '0' ],
+            [ '1', '1' ],
+            [ 0, '0' ],
+            [ 1, '1' ],
+            [ 'true', 'true' ],
+            [ 'false', 'false' ],
+            [ true, '1' ],
+            [ false, '' ],
+        ];
     }
 
     /**

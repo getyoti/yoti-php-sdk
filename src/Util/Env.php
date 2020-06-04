@@ -15,7 +15,13 @@ class Env
     public static function get(string $name): ?string
     {
         if (isset($_SERVER[$name])) {
-            return (string) $_SERVER[$name];
+            $value = $_SERVER[$name];
+
+            if (is_string($value) && strlen($value) === 0) {
+                return null;
+            }
+
+            return (string) $value;
         }
 
         return null;

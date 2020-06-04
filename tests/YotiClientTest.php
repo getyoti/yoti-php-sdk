@@ -24,6 +24,9 @@ use function GuzzleHttp\Psr7\stream_for;
  */
 class YotiClientTest extends TestCase
 {
+    private const SOME_ENV_URL = 'https://example.com/env/api';
+    private const SOME_OPTION_URL = 'https://example.com/option/api';
+
     /**
      * Test empty SDK ID
      *
@@ -43,27 +46,7 @@ class YotiClientTest extends TestCase
      */
     public function testDefaultApiUrl()
     {
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
-        $response->method('getStatusCode')->willReturn(200);
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects($this->exactly(1))
-            ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
-                $this->assertStringStartsWith(
-                    TestData::CONNECT_BASE_URL,
-                    (string) $requestMessage->getUri()
-                );
-                return true;
-            }))
-            ->willReturn($response);
-
-        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
-            Config::HTTP_CLIENT => $httpClient
-        ]);
-
-        $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
+        $this->assertApiUrlStartsWith(TestData::CONNECT_BASE_URL);
     }
 
     /**
@@ -73,30 +56,8 @@ class YotiClientTest extends TestCase
      */
     public function testApiUrlOptionOverridesEnvironmentVariable()
     {
-        $_SERVER['YOTI_API_URL'] = 'https://example.com/env/api';
-
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
-        $response->method('getStatusCode')->willReturn(200);
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects($this->exactly(1))
-            ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
-                $this->assertStringStartsWith(
-                    'https://example.com/option/api',
-                    (string) $requestMessage->getUri()
-                );
-                return true;
-            }))
-            ->willReturn($response);
-
-        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
-            Config::HTTP_CLIENT => $httpClient,
-            Config::API_URL => 'https://example.com/option/api',
-        ]);
-
-        $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
+        $_SERVER['YOTI_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_OPTION_URL, self::SOME_OPTION_URL);
     }
 
     /**
@@ -106,8 +67,29 @@ class YotiClientTest extends TestCase
      */
     public function testApiUrlEnvironmentVariable()
     {
-        $_SERVER['YOTI_API_URL'] = 'https://example.com/env/api';
+        $_SERVER['YOTI_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_ENV_URL);
+    }
 
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testEmptyApiUrlEnvironmentVariable()
+    {
+        $_SERVER['YOTI_API_URL'] = '';
+        $this->assertApiUrlStartsWith(TestData::CONNECT_BASE_URL);
+    }
+
+    /**
+     * Asserts API URL starts with expected URL.
+     *
+     * @param string $expectedUrl
+     * @param string $clientApiUrl
+     */
+    private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
+    {
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
         $response->method('getStatusCode')->willReturn(200);
@@ -115,9 +97,9 @@ class YotiClientTest extends TestCase
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
             ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
+            ->with($this->callback(function ($requestMessage) use ($expectedUrl) {
                 $this->assertStringStartsWith(
-                    'https://example.com/env/api',
+                    $expectedUrl,
                     (string) $requestMessage->getUri()
                 );
                 return true;
@@ -126,6 +108,7 @@ class YotiClientTest extends TestCase
 
         $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
+            Config::API_URL => $clientApiUrl,
         ]);
 
         $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
