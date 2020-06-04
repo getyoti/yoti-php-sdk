@@ -21,6 +21,8 @@ use Yoti\Util\Config;
  */
 class DocScanClientTest extends TestCase
 {
+    private const SOME_ENV_URL = 'https://example.com/env/api';
+    private const SOME_OPTION_URL = 'https://example.com/option/api';
 
     /**
      * @test
@@ -40,30 +42,7 @@ class DocScanClientTest extends TestCase
      */
     public function testDefaultApiUrl()
     {
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
-        $response->method('getStatusCode')->willReturn(200);
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects($this->exactly(1))
-            ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
-                $this->assertStringStartsWith(
-                    TestData::DOC_SCAN_BASE_URL,
-                    (string) $requestMessage->getUri()
-                );
-                return true;
-            }))
-            ->willReturn($response);
-
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
-            Config::HTTP_CLIENT => $httpClient,
-        ]);
-
-        $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
-
-        $docScanClient->createSession($sessionSpecificationMock);
+        $this->assertApiUrlStartsWith(TestData::DOC_SCAN_BASE_URL);
     }
 
     /**
@@ -73,33 +52,8 @@ class DocScanClientTest extends TestCase
      */
     public function testApiUrlOptionOverridesEnvironmentVariable()
     {
-        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
-
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
-        $response->method('getStatusCode')->willReturn(200);
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects($this->exactly(1))
-            ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
-                $this->assertStringStartsWith(
-                    'https://example.com/option/api',
-                    (string) $requestMessage->getUri()
-                );
-                return true;
-            }))
-            ->willReturn($response);
-
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
-            Config::HTTP_CLIENT => $httpClient,
-            Config::API_URL => 'https://example.com/option/api'
-        ]);
-
-        $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
-
-        $docScanClient->createSession($sessionSpecificationMock);
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_OPTION_URL, self::SOME_OPTION_URL);
     }
 
     /**
@@ -109,8 +63,29 @@ class DocScanClientTest extends TestCase
      */
     public function testApiUrlEnvironmentVariable()
     {
-        $_SERVER['YOTI_DOC_SCAN_API_URL'] = 'https://example.com/env/api';
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_ENV_URL);
+    }
 
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testEmptyApiUrlEnvironmentVariable()
+    {
+        $_SERVER['YOTI_DOC_SCAN_API_URL'] = '';
+        $this->assertApiUrlStartsWith(TestData::DOC_SCAN_BASE_URL);
+    }
+
+    /**
+     * Asserts API URL starts with expected URL.
+     *
+     * @param string $expectedUrl
+     * @param string $clientApiUrl
+     */
+    private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
+    {
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
         $response->method('getStatusCode')->willReturn(200);
@@ -118,9 +93,9 @@ class DocScanClientTest extends TestCase
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
             ->method('sendRequest')
-            ->with($this->callback(function ($requestMessage) {
+            ->with($this->callback(function ($requestMessage) use ($expectedUrl) {
                 $this->assertStringStartsWith(
-                    'https://example.com/env/api',
+                    $expectedUrl,
                     (string) $requestMessage->getUri()
                 );
                 return true;
@@ -129,6 +104,7 @@ class DocScanClientTest extends TestCase
 
         $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
+            Config::API_URL => $clientApiUrl,
         ]);
 
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
