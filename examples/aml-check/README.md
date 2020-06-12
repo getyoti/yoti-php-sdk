@@ -16,12 +16,12 @@
 
 > Run the following commands in this directory
 
-For AML check within the USA
+For [AML check within the USA](./aml-check-usa.php)
 ```console
 $ php aml-check-usa.php
 ```
 
-For AML check outside the USA
+For [AML check outside the USA](./aml-check.php)
 ```console
 $ php aml-check.php
 ```
