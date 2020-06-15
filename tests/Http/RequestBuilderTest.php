@@ -56,10 +56,10 @@ class RequestBuilderTest extends TestCase
         $expectedEndpointPattern = "~{$baseUrlPattern}/some-endpoint.*?nonce=.*?&timestamp=.*?~";
 
         $message = $request->getMessage();
-        $this->assertRegExp($expectedEndpointPattern, (string) $message->getUri());
+        $this->assertMatchesRegularExpression($expectedEndpointPattern, (string) $message->getUri());
         $this->assertEquals('POST', $message->getMethod());
         $this->assertEquals('PHP', $message->getHeader('X-Yoti-SDK')[0]);
-        $this->assertRegExp('~PHP-\d+\.\d+\.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
+        $this->assertMatchesRegularExpression('~PHP-\d+\.\d+\.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
         $this->assertNotEmpty($message->getHeader('X-Yoti-Auth-Digest')[0]);
         $this->assertEquals('application/json', $message->getHeader('Content-Type')[0]);
         $this->assertEquals('application/json', $message->getHeader('Accept')[0]);
@@ -102,7 +102,7 @@ class RequestBuilderTest extends TestCase
 
         $message = $request->getMessage();
         $this->assertEquals('PHP', $message->getHeader('X-Yoti-SDK')[0]);
-        $this->assertRegExp('~PHP-\d+.\d+.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
+        $this->assertMatchesRegularExpression('~PHP-\d+.\d+.\d+~', $message->getHeader('X-Yoti-SDK-Version')[0]);
     }
 
     /**

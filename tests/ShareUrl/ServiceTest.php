@@ -58,7 +58,7 @@ class ServiceTest extends TestCase
             ->expects($this->once())
             ->method('sendRequest')
             ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
-                $this->assertRegExp($expectedUrlPattern, (string) $request->getUri());
+                $this->assertMatchesRegularExpression($expectedUrlPattern, (string) $request->getUri());
                 $this->assertEquals(json_encode($dynamicScenario), (string) $request->getBody());
                 return true;
             }))

@@ -56,7 +56,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('POST', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -128,7 +128,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('POST', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -173,7 +173,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -218,7 +218,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -263,7 +263,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('DELETE', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -305,7 +305,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('DELETE', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -351,7 +351,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -407,7 +407,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -457,7 +457,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('DELETE', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -500,7 +500,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('DELETE', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -543,7 +543,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
@@ -586,7 +586,7 @@ class ServiceTest extends TestCase
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
-                        $this->assertRegExp($expectedPathPattern, (string)$requestMessage->getUri());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
                         return true;
                     }
                 )
