@@ -53,7 +53,7 @@ class ServiceTest extends TestCase
                 $this->callback(function ($requestMessage) use ($amlProfile, $expectedPathPattern) {
                     $this->assertEquals('POST', $requestMessage->getMethod());
                     $this->assertEquals((string) $amlProfile, (string) $requestMessage->getBody());
-                    $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                    $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
                     $this->assertEquals('application/json', $requestMessage->getHeader('Content-Type')[0]);
                     return true;
                 })
