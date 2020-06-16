@@ -16,5 +16,5 @@ This example requires [Docker](https://docs.docker.com/)
 * Visit [https://localhost:4003](https://localhost:4003)
 * Run the `docker-compose stop` command to stop the containers.
 
-> * The [default controller](./app/Http/Controllers/HomeController.php) demonstrates how to create a Doc Scan session
-> * The [success controller](./app/Http/Controllers/SuccessController.php) demonstrates how to retrieve a Doc Scan session
+* _The [default controller](./app/Http/Controllers/HomeController.php) demonstrates how to create a Doc Scan session_
+* _The [success controller](./app/Http/Controllers/SuccessController.php) demonstrates how to retrieve a Doc Scan session_
