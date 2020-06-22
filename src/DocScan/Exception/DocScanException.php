@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Exception;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Throwable;
 use Yoti\Util\Json;
 
-class DocScanException extends Exception
+class DocScanException extends \Exception
 {
     /**
      * @var ResponseInterface|null
@@ -20,9 +18,9 @@ class DocScanException extends Exception
      * DocScanException constructor.
      * @param string $message
      * @param ResponseInterface|null $response
-     * @param Throwable|null $previous
+     * @param \Throwable|null $previous
      */
-    public function __construct($message = "", ?ResponseInterface $response = null, Throwable $previous = null)
+    public function __construct($message = "", ?ResponseInterface $response = null, \Throwable $previous = null)
     {
         parent::__construct($this->formatMessage($message, $response), 0, $previous);
 
