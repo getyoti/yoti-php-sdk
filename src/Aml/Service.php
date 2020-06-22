@@ -84,33 +84,39 @@ class Service
             return;
         }
 
-        $responseArr = Json::decode((string) $response->getBody());
-
-        $errorMessage = $this->getErrorMessage($responseArr);
-        $errorCode = isset($responseArr['code']) ? $responseArr['code'] : 'Error';
-
-        // Throw the error message that's included in the response
-        if (strlen($errorMessage) > 0) {
-            throw new AmlException("$errorCode - {$errorMessage}");
-        }
-
-        // Throw a general error message
-        throw new AmlException("{$errorCode} - Server responded with {$httpCode}");
+        throw new AmlException($this->getErrorMessage($response));
     }
 
     /**
-     * Get error message from the response array.
+     * Get error message from the response.
      *
-     * @param array<string, array> $result
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return string
      */
-    private function getErrorMessage(array $result): string
+    private function getErrorMessage(ResponseInterface $response): string
     {
-        $errorMessage = '';
-        if (isset($result['errors'][0]['property']) && isset($result['errors'][0]['message'])) {
-            $errorMessage = $result['errors'][0]['property'] . ': ' . $result['errors'][0]['message'];
+        $httpCode = $response->getStatusCode();
+        $statusCodeMessage = "Server responded with {$httpCode}";
+
+        if (
+            $response->hasHeader('Content-Type') &&
+            $response->getHeader('Content-Type')[0] !== 'application/json'
+        ) {
+            return $statusCodeMessage;
         }
-        return $errorMessage;
+
+        $jsonData = Json::decode((string) $response->getBody());
+
+        $errorCode = isset($jsonData['code']) ? $jsonData['code'] : 'Error';
+
+        // Throw the error message that's included in the response.
+        if (isset($jsonData['errors'][0]['property']) && isset($jsonData['errors'][0]['message'])) {
+            $errorMessage = $jsonData['errors'][0]['property'] . ': ' . $jsonData['errors'][0]['message'];
+            return "{$errorCode} - {$errorMessage}";
+        }
+
+        // Throw a general error message.
+        return "{$errorCode} - {$statusCodeMessage}";
     }
 }
