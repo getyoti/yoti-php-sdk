@@ -76,11 +76,26 @@ class DocScanException extends \Exception
 
         $responseMessage = sprintf('%s - %s', $jsonData->code, $jsonData->message);
 
-        if (!isset($jsonData->errors) || !is_array($jsonData->errors)) {
-            return $responseMessage;
+        $propertyErrors = $this->formatPropertyErrors($jsonData);
+        if (count($propertyErrors) > 0) {
+            return sprintf('%s: %s', $responseMessage, implode(', ', $propertyErrors));
         }
 
-        $propertyErrors = array_filter(array_map(
+        return $responseMessage;
+    }
+
+    /**
+     * @param \stdClass $jsonData
+     *
+     * @return string[]
+     */
+    private function formatPropertyErrors(\stdClass $jsonData): array
+    {
+        if (!isset($jsonData->errors) || !is_array($jsonData->errors)) {
+            return [];
+        }
+
+        return array_filter(array_map(
             function ($error): ?string {
                 if (isset($error->property) && isset($error->message)) {
                     return sprintf('%s "%s"', $error->property, $error->message);
@@ -89,7 +104,5 @@ class DocScanException extends \Exception
             },
             $jsonData->errors
         ));
-
-        return sprintf('%s: %s', $responseMessage, implode(', ', $propertyErrors));
     }
 }

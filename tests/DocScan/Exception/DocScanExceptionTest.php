@@ -98,7 +98,7 @@ class DocScanExceptionTest extends TestCase
                 ),
             ],
             /**
-             * Message, code and errors with unknown items
+             * Message, code and errors with some unknown items
              */
             [
                 self::SOME_MESSAGE,
@@ -117,7 +117,7 @@ class DocScanExceptionTest extends TestCase
                         [
                             'property' => self::SOME_OTHER_PROPERTY,
                             'message' => self::SOME_OTHER_PROPERTY_MESSAGE,
-                        ]
+                        ],
                     ],
                 ],
                 sprintf(
@@ -127,6 +127,32 @@ class DocScanExceptionTest extends TestCase
                     self::SOME_RESPONSE_MESSAGE,
                     self::SOME_OTHER_PROPERTY,
                     self::SOME_OTHER_PROPERTY_MESSAGE
+                ),
+            ],
+            /**
+             * Message, code and errors with unknown items
+             */
+            [
+                self::SOME_MESSAGE,
+                [
+                    'message' => self::SOME_RESPONSE_MESSAGE,
+                    'code' => self::SOME_RESPONSE_CODE,
+                    'errors' => [
+                        [
+                            'some_unknown_item' => 'some unknown item',
+                            'message' => self::SOME_PROPERTY_MESSAGE,
+                        ],
+                        [
+                            'property' => self::SOME_PROPERTY,
+                            'some_unknown_item' => 'some unknown item',
+                        ],
+                    ],
+                ],
+                sprintf(
+                    '%s - %s - %s',
+                    self::SOME_MESSAGE,
+                    self::SOME_RESPONSE_CODE,
+                    self::SOME_RESPONSE_MESSAGE
                 ),
             ],
             /**
@@ -145,7 +171,7 @@ class DocScanExceptionTest extends TestCase
                         [
                             'property' => self::SOME_OTHER_PROPERTY,
                             'message' => self::SOME_OTHER_PROPERTY_MESSAGE,
-                        ]
+                        ],
                     ],
                 ],
                 sprintf(
