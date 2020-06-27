@@ -27,47 +27,29 @@ class AttributeListConverterTest extends TestCase
         $someName = 'some name';
         $someValue = 'some value';
 
-        $someAttribute = $this->createMock(AttributeProto::class);
-        $someAttribute
-            ->method('getName')
-            ->willReturn($someName);
-        $someAttribute
-            ->method('getValue')
-            ->willReturn($someValue);
-        $someAttribute
-            ->method('getContentType')
-            ->willReturn(self::CONTENT_TYPE_STRING);
-        $someAttribute
-            ->method('getAnchors')
-            ->willReturn($this->createMock(\Traversable::class));
+        $someAttribute = new AttributeProto([
+            'name' => $someName,
+            'value' => $someValue,
+            'content_type' => self::CONTENT_TYPE_STRING,
+            'anchors' => [],
+        ]);
 
-        $someNullNameAttribute = $this->createMock(AttributeProto::class);
-        $someNullNameAttribute
-            ->method('getName')
-            ->willReturn(null);
+        $someEmptyNameAttribute = new AttributeProto();
 
-        $someEmptyNonStringAttribute = $this->createMock(AttributeProto::class);
-        $someEmptyNonStringAttribute
-            ->method('getName')
-            ->willReturn('some-attribute');
-        $someEmptyNonStringAttribute
-            ->method('getValue')
-            ->willReturn('');
-        $someEmptyNonStringAttribute
-            ->method('getContentType')
-            ->willReturn(100);
-        $someEmptyNonStringAttribute
-            ->method('getAnchors')
-            ->willReturn($this->createMock(\Traversable::class));
+        $someEmptyNonStringAttribute = new AttributeProto([
+            'name' => 'some-attribute',
+            'value' => '',
+            'content_type' => 100,
+            'anchors' => [],
+        ]);
 
-        $someAttributeList = $this->createMock(AttributeList::class);
-        $someAttributeList
-            ->method('getAttributes')
-            ->willReturn([
+        $someAttributeList = new AttributeList([
+            'attributes' => [
                 $someAttribute,
-                $someNullNameAttribute,
+                $someEmptyNameAttribute,
                 $someEmptyNonStringAttribute,
-            ]);
+            ],
+        ]);
 
         $yotiAttributesList = AttributeListConverter::convertToYotiAttributesList($someAttributeList);
 

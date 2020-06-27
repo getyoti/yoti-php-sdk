@@ -29,6 +29,15 @@ jobs:
       script:
         - travis_retry composer require guzzlehttp/guzzle "^6.5"
         - composer test
+    - <<: *compatibility
+      php: "7.4"
+      name: "PHP: 7.4 / Protobuf C Extension"
+      install:
+        - pecl install protobuf-3.12.2
+        - travis_retry composer self-update
+        - travis_retry composer install --no-interaction --prefer-source --dev
+      script:
+        - composer test
     - <<: *test
       stage: Analyze
       name: Sonarcloud
