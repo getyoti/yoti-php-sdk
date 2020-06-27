@@ -32,28 +32,19 @@ class AttributeConverterTest extends TestCase
     private const CONTENT_TYPE_INT = 7;
 
     /**
-     * Mocks \Yoti\Protobuf\Attrpubapi\Attribute with provided name and value.
+     * Creates \Yoti\Protobuf\Attrpubapi\Attribute with provided name and value.
      */
-    private function getMockForProtobufAttribute($name, $value, $contentType = self::CONTENT_TYPE_STRING)
+    private function createProtobufAttribute($name, $value, $contentType = self::CONTENT_TYPE_STRING)
     {
-        // Setup protobuf mock.
-        $protobufAttribute = $this->getMockBuilder(\Yoti\Protobuf\Attrpubapi\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $protobufAttribute
-            ->method('getAnchors')
-            ->willReturn($this->getMockBuilder(\Traversable::class)->getMock());
-        $protobufAttribute
-            ->method('getName')
-            ->willReturn($name);
-        $protobufAttribute
-            ->method('getValue')
-            ->willReturn($value);
-        $protobufAttribute
-            ->method('getContentType')
-            ->willReturn($contentType);
-
-        return $protobufAttribute;
+        return new \Yoti\Protobuf\Attrpubapi\Attribute([
+            'name' => $name,
+            'value' => $value,
+            'content_type' => $contentType,
+            'anchors' => new \Google\Protobuf\Internal\RepeatedField(
+                \Google\Protobuf\Internal\GPBType::MESSAGE,
+                \Yoti\Protobuf\Attrpubapi\Anchor::class
+            ),
+        ]);
     }
 
     /**
@@ -74,7 +65,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttribute()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute('test_attr', 'my_value'));
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute('test_attr', 'my_value'));
         $this->assertEquals('test_attr', $attr->getName());
         $this->assertEquals('my_value', $attr->getValue());
     }
@@ -86,7 +77,7 @@ class AttributeConverterTest extends TestCase
     public function testConvertDate()
     {
         $someTimeStamp = '2016-07-19T08:55:38Z';
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             $someTimeStamp,
             self::CONTENT_TYPE_DATE
@@ -102,7 +93,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testEmptyApplicationLogo()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'application_logo',
             '',
             self::CONTENT_TYPE_PNG
@@ -117,7 +108,7 @@ class AttributeConverterTest extends TestCase
     public function testConvertDateInvalid()
     {
         $this->captureExpectedLogs();
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             'some-invalid-date',
             self::CONTENT_TYPE_DATE
@@ -133,7 +124,7 @@ class AttributeConverterTest extends TestCase
     public function testConvertJson()
     {
         $someJsonData = ['some' => 'json'];
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             json_encode($someJsonData),
             self::CONTENT_TYPE_JSON
@@ -146,7 +137,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertDocumentDetails()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'document_details',
             'PASSPORT GBR 01234567 2020-01-01',
             self::CONTENT_TYPE_STRING
@@ -167,7 +158,7 @@ class AttributeConverterTest extends TestCase
         $this->captureExpectedLogs();
 
         $attr = AttributeConverter::convertToYotiAttribute(
-            $this->getMockForProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
+            $this->createProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
         );
         $this->assertEquals('undefined_attr', $attr->getName());
         $this->assertEquals('undefined_value', $attr->getValue());
@@ -185,7 +176,7 @@ class AttributeConverterTest extends TestCase
         $this->captureExpectedLogs();
 
         $attr = AttributeConverter::convertToYotiAttribute(
-            $this->getMockForProtobufAttribute('unknown_attr', 'unknown_value', 100)
+            $this->createProtobufAttribute('unknown_attr', 'unknown_value', 100)
         );
         $this->assertEquals('unknown_attr', $attr->getName());
         $this->assertEquals('unknown_value', $attr->getValue());
@@ -198,7 +189,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeEmptyStringValue()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             '',
             self::CONTENT_TYPE_STRING
@@ -216,7 +207,7 @@ class AttributeConverterTest extends TestCase
     {
         $this->captureExpectedLogs();
 
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             '',
             $contentType
@@ -234,7 +225,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertToYotiAttributeIntegerValue($int)
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->getMockForProtobufAttribute(
+        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
             'test_attr',
             (string) $int,
             self::CONTENT_TYPE_INT
@@ -300,7 +291,7 @@ class AttributeConverterTest extends TestCase
         $protoMultiValue->setValues($this->createMultiValueValues());
 
         // Create mock Attribute that will return MultiValue as the value.
-        $protobufAttribute = $this->getMockForProtobufAttribute(
+        $protobufAttribute = $this->createProtobufAttribute(
             'document_images',
             $protoMultiValue->serializeToString(),
             self::CONTENT_TYPE_MULTI_VALUE
@@ -332,7 +323,7 @@ class AttributeConverterTest extends TestCase
         $this->captureExpectedLogs();
 
         // Create mock Attribute that will return MultiValue as the value.
-        $protobufAttribute = $this->getMockForProtobufAttribute(
+        $protobufAttribute = $this->createProtobufAttribute(
             'document_images',
             'invalid value',
             self::CONTENT_TYPE_STRING
@@ -362,7 +353,7 @@ class AttributeConverterTest extends TestCase
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
-        $protobufAttribute = $this->getMockForProtobufAttribute(
+        $protobufAttribute = $this->createProtobufAttribute(
             'test_attr',
             $protoMultiValue->serializeToString(),
             self::CONTENT_TYPE_MULTI_VALUE
@@ -425,7 +416,7 @@ class AttributeConverterTest extends TestCase
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
-        $protobufAttribute = $this->getMockForProtobufAttribute(
+        $protobufAttribute = $this->createProtobufAttribute(
             'test_attr',
             $protoMultiValue->serializeToString(),
             self::CONTENT_TYPE_MULTI_VALUE
@@ -454,7 +445,7 @@ class AttributeConverterTest extends TestCase
         $protoMultiValue->setValues($values);
 
         // Create mock Attribute that will return MultiValue as the value.
-        $protobufAttribute = $this->getMockForProtobufAttribute(
+        $protobufAttribute = $this->createProtobufAttribute(
             'test_attr',
             $protoMultiValue->serializeToString(),
             self::CONTENT_TYPE_MULTI_VALUE
