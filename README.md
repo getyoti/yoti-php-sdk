@@ -30,6 +30,9 @@ Please feel free to reach out
 * PHP ^7.1
 * CURL PHP extension (must support TLSv1.2)
 
+### Recommended (optional)
+- [Protobuf C extension](https://github.com/protocolbuffers/protobuf/tree/master/php) (PHP package will be used by default)
+
 ## Enabling the SDK
 
 To import the Yoti SDK inside your project, you can use your favourite dependency management system.
