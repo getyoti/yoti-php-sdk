@@ -29,7 +29,7 @@
     "brainmaestro/composer-git-hooks": "^2.8",
     "phpstan/phpstan-strict-rules": "^0.12.1",
     "phpstan/extension-installer": "^1.0",
-    "symfony/phpunit-bridge": "^5.0"
+    "symfony/phpunit-bridge": "^5.1"
   },
   "autoload-dev": {
     "psr-4": {
