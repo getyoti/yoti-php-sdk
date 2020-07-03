@@ -5,6 +5,9 @@
          convertWarningsToExceptions="false"
          bootstrap="tests/bootstrap.php"
          stopOnFailure="false">
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=1"/>
+    </php>
     <testsuites>
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>
