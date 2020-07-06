@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
+use Yoti\DocScan\Session\Retrieve\MediaResponse;
 use Yoti\DocScan\Session\Retrieve\PageResponse;
 use Yoti\Test\TestCase;
 
@@ -31,7 +32,7 @@ class PageInfoTest extends TestCase
         $result = new PageResponse($input);
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getCaptureMethod());
-        $this->assertNotNull($result->getMedia());
+        $this->assertInstanceOf(MediaResponse::class, $result->getMedia());
     }
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse;
+use Yoti\DocScan\Session\Retrieve\MediaResponse;
 use Yoti\Test\TestCase;
 
 /**
@@ -26,7 +27,7 @@ class DocumentIdPhotoResponseTest extends TestCase
 
         $result = new DocumentIdPhotoResponse($input);
 
-        $this->assertNotNull($result->getMedia());
+        $this->assertInstanceOf(MediaResponse::class, $result->getMedia());
     }
 
     /**

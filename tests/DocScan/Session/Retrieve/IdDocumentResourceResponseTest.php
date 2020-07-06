@@ -32,14 +32,7 @@ class IdDocumentResourceResponseTest extends TestCase
         $input = [
             'document_type' => self::SOME_DOCUMENT_TYPE,
             'issuing_country' => self::SOME_ISSUING_COUNTRY,
-            'document_id_photo' => [
-                'media' => [
-                  'id' => 'some-id',
-                  'type' => 'some-type',
-                  'created' => '2020-03-11T14:06:55.250Z',
-                  'last_updated' => '2020-03-11T14:06:55.250Z',
-                ],
-            ],
+            'document_id_photo' => [],
             'pages' => [
                 [ 'someKey' => 'someValue' ],
                 [ 'someOtherKey' => 'someOtherValue' ]
