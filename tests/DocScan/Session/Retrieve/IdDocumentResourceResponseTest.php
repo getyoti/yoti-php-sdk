@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
+use Yoti\DocScan\Session\Retrieve\DocumentFieldsResponse;
+use Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse;
 use Yoti\DocScan\Session\Retrieve\IdDocumentResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\IdDocumentResourceResponse
  */
-class DocumentResourceResponseTest extends TestCase
+class IdDocumentResourceResponseTest extends TestCase
 {
 
     private const SOME_DOCUMENT_TYPE = 'someDocumentType';
@@ -23,12 +25,21 @@ class DocumentResourceResponseTest extends TestCase
      * @covers ::getIssuingCountry
      * @covers ::getPages
      * @covers ::getDocumentFields
+     * @covers ::getDocumentIdPhoto
      */
     public function shouldBuildCorrectly()
     {
         $input = [
             'document_type' => self::SOME_DOCUMENT_TYPE,
             'issuing_country' => self::SOME_ISSUING_COUNTRY,
+            'document_id_photo' => [
+                'media' => [
+                  'id' => 'some-id',
+                  'type' => 'some-type',
+                  'created' => '2020-03-11T14:06:55.250Z',
+                  'last_updated' => '2020-03-11T14:06:55.250Z',
+                ],
+            ],
             'pages' => [
                 [ 'someKey' => 'someValue' ],
                 [ 'someOtherKey' => 'someOtherValue' ]
@@ -41,7 +52,8 @@ class DocumentResourceResponseTest extends TestCase
         $this->assertEquals(self::SOME_DOCUMENT_TYPE, $result->getDocumentType());
         $this->assertEquals(self::SOME_ISSUING_COUNTRY, $result->getIssuingCountry());
         $this->assertCount(2, $result->getPages());
-        $this->assertNotNull($result->getDocumentFields());
+        $this->assertInstanceOf(DocumentFieldsResponse::class, $result->getDocumentFields());
+        $this->assertInstanceOf(DocumentIdPhotoResponse::class, $result->getDocumentIdPhoto());
     }
 
     /**
@@ -56,5 +68,6 @@ class DocumentResourceResponseTest extends TestCase
         $this->assertNull($result->getIssuingCountry());
         $this->assertCount(0, $result->getPages());
         $this->assertNull($result->getDocumentFields());
+        $this->assertNull($result->getDocumentIdPhoto());
     }
 }
