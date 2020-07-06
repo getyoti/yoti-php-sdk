@@ -65,7 +65,7 @@ class RequestedTextExtractionTaskBuilder
      *
      * @return $this
      */
-    public function withChipData(string $chipData): self
+    private function withChipData(string $chipData): self
     {
         $this->chipData = $chipData;
         return $this;
