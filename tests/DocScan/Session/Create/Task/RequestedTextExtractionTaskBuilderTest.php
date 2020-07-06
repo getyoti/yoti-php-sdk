@@ -170,31 +170,6 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers ::withChipDataMandatory
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
-     */
-    public function shouldUseMandatoryAsValueForChipData()
-    {
-        $result = (new RequestedTextExtractionTaskBuilder())
-            ->withManualCheckAlways()
-            ->withChipDataMandatory()
-            ->build();
-
-        $expected = [
-            'type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION',
-            'config' => [
-                'manual_check' => 'ALWAYS',
-                'chip_data' => 'MANDATORY',
-            ],
-        ];
-
-        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
-    }
-
-    /**
-     * @test
      * @covers ::withChipDataIgnore
      * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
      * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType

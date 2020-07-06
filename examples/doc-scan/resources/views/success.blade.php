@@ -184,6 +184,25 @@
                 </div>
                 @endif
 
+                @if ($document->getDocumentIdPhoto())
+                <div class="card">
+                    <div class="card-header" id="document-id-photo-{{ $docNum }}">
+                        <h4 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-document-photo-{{ $docNum }}" aria-expanded="true" aria-controls="collapse-document-photo-{{ $docNum }}">
+                                Document ID Photo
+                            </button>
+                        </h4>
+                    </div>
+                    <div id="collapse-document-photo-{{ $docNum }}" class="collapse" aria-labelledby="document-photo-{{ $docNum }}">
+                        <div class="card-body">
+                            @if ($document->getDocumentIdPhoto()->getMedia())
+                            <img class="card-img-top" src="/media/{{ $document->getDocumentIdPhoto()->getMedia()->getId() }}" />
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 @if (count($document->getTextExtractionTasks()) > 0)
                 <div class="card">
                     <div class="card-header" id="text-extraction-tasks-{{ $docNum }}">

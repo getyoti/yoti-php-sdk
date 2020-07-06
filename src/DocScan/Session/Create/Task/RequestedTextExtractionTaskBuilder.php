@@ -14,7 +14,6 @@ class RequestedTextExtractionTaskBuilder
     private const NEVER = 'NEVER';
     private const DESIRED = 'DESIRED';
     private const IGNORE = 'IGNORE';
-    private const MANDATORY = 'MANDATORY';
 
     /**
      * @var string
@@ -86,14 +85,6 @@ class RequestedTextExtractionTaskBuilder
     public function withChipDataIgnore(): self
     {
         return $this->withChipData(self::IGNORE);
-    }
-
-    /**
-     * @return $this
-     */
-    public function withChipDataMandatory(): self
-    {
-        return $this->withChipData(self::MANDATORY);
     }
 
     /**
