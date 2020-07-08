@@ -31,12 +31,13 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
-                    ->withManualCheckFallback()
+                    ->withManualCheckNever()
                     ->build()
             )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckNever()
+                    ->withChipDataDesired()
                     ->build()
             )
             ->withSdkConfig(

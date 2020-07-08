@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\DocumentFieldsResponse;
+use Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse;
 use Yoti\DocScan\Session\Retrieve\MediaResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\DocumentFieldsResponse
+ * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse
  */
-class DocumentFieldsResponseTest extends TestCase
+class DocumentIdPhotoResponseTest extends TestCase
 {
 
     /**
@@ -25,7 +25,7 @@ class DocumentFieldsResponseTest extends TestCase
             'media' => [ ], // Key just needs to exist
         ];
 
-        $result = new DocumentFieldsResponse($input);
+        $result = new DocumentIdPhotoResponse($input);
 
         $this->assertInstanceOf(MediaResponse::class, $result->getMedia());
     }
@@ -39,7 +39,7 @@ class DocumentFieldsResponseTest extends TestCase
     {
         $input = [];
 
-        $result = new DocumentFieldsResponse($input);
+        $result = new DocumentIdPhotoResponse($input);
 
         $this->assertNull($result->getMedia());
     }

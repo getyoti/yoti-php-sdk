@@ -26,6 +26,11 @@ class IdDocumentResourceResponse extends ResourceResponse
     private $documentFields;
 
     /**
+     * @var DocumentIdPhotoResponse|null
+     */
+    private $documentIdPhoto;
+
+    /**
      * DocumentResourceResponse constructor.
      * @param array<string, mixed> $idDocument
      */
@@ -44,6 +49,10 @@ class IdDocumentResourceResponse extends ResourceResponse
 
         $this->documentFields = isset($idDocument['document_fields'])
             ? new DocumentFieldsResponse($idDocument['document_fields'])
+            : null;
+
+        $this->documentIdPhoto = isset($idDocument['document_id_photo'])
+            ? new DocumentIdPhotoResponse($idDocument['document_id_photo'])
             : null;
     }
 
@@ -77,5 +86,13 @@ class IdDocumentResourceResponse extends ResourceResponse
     public function getDocumentFields(): ?DocumentFieldsResponse
     {
         return $this->documentFields;
+    }
+
+    /**
+     * @return DocumentIdPhotoResponse|null
+     */
+    public function getDocumentIdPhoto(): ?DocumentIdPhotoResponse
+    {
+        return $this->documentIdPhoto;
     }
 }

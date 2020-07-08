@@ -91,7 +91,7 @@ class ExtraDataConverterTest extends TestCase
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());
-        $this->assertLogContains("Failed to parse extra data: Error occurred during parsing: Unexpected wire type");
+        $this->assertLogContains("Failed to parse extra data: Error occurred during parsing");
     }
 
     /**

@@ -130,17 +130,29 @@ class ThirdPartyAttributeConverterTest extends TestCase
      */
     private function createThirdPartyAttribute($token, $expiryDate, $definitions)
     {
-        return (new ThirdPartyAttribute([
-            'issuance_token' => $token,
-            'issuing_attributes' => new IssuingAttributes([
-                'expiry_date' => $expiryDate,
-                'definitions' => array_map(
-                    function ($definition) {
-                        return new Definition($definition);
-                    },
-                    $definitions
-                )
-            ]),
-        ]))->serializeToString();
+        $thirdPartyAttribute = new ThirdPartyAttribute();
+
+        if (isset($token)) {
+            $thirdPartyAttribute->setIssuanceToken($token);
+        }
+
+        $issuingAttributes = new IssuingAttributes();
+
+        if (isset($expiryDate)) {
+            $issuingAttributes->setExpiryDate($expiryDate);
+        }
+
+        if (isset($definitions)) {
+            $issuingAttributes->setDefinitions(array_map(
+                function ($definition) {
+                    return new Definition($definition);
+                },
+                $definitions
+            ));
+        }
+
+        $thirdPartyAttribute->setIssuingAttributes($issuingAttributes);
+
+        return $thirdPartyAttribute->serializeToString();
     }
 }

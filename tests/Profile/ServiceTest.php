@@ -41,7 +41,7 @@ class ServiceTest extends TestCase
                 $expectedAuthKey = file_get_contents(TestData::PEM_AUTH_KEY);
 
                 $this->assertEquals('GET', $requestMessage->getMethod());
-                $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
                 $this->assertEquals($expectedAuthKey, $requestMessage->getHeader('X-Yoti-Auth-Key')[0]);
                 return true;
             }))

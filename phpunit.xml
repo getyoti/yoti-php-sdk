@@ -5,6 +5,9 @@
          convertWarningsToExceptions="false"
          bootstrap="tests/bootstrap.php"
          stopOnFailure="false">
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=1"/>
+    </php>
     <testsuites>
         <testsuite name="Yoti Test Suite">
             <directory>tests/</directory>
@@ -21,4 +24,7 @@
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
     </logging>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
 </phpunit>
