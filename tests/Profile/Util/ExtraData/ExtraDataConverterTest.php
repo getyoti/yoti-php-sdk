@@ -13,6 +13,7 @@ use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
+use Yoti\Util\Base64;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\ExtraData\ExtraDataConverter
@@ -31,7 +32,7 @@ class ExtraDataConverterTest extends TestCase
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
         $this->assertInstanceOf(AttributeIssuanceDetails::class, $attributeIssuanceDetails);
-        $this->assertEquals(base64_encode('someIssuanceToken'), $attributeIssuanceDetails->getToken());
+        $this->assertEquals(Base64::urlEncode('someIssuanceToken'), $attributeIssuanceDetails->getToken());
         $this->assertEquals(
             new \DateTime('2019-10-15T22:04:05.123000+0000'),
             $attributeIssuanceDetails->getExpiryDate()
@@ -74,7 +75,7 @@ class ExtraDataConverterTest extends TestCase
 
         $extraData = ExtraDataConverter::convertValue($extraDataContent);
 
-        $this->assertEquals(base64_encode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
+        $this->assertEquals(Base64::urlEncode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
 
         $this->assertLogContains("Failed to convert data entry: Unsupported data entry '0'");
         $this->assertLogContains("Failed to convert data entry: Failed to retrieve token from ThirdPartyAttribute");

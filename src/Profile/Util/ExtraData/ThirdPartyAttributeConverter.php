@@ -9,6 +9,7 @@ use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
+use Yoti\Util\Base64;
 use Yoti\Util\DateTime;
 
 class ThirdPartyAttributeConverter
@@ -66,6 +67,6 @@ class ThirdPartyAttributeConverter
             throw new ExtraDataException('Failed to retrieve token from ThirdPartyAttribute');
         }
 
-        return base64_encode($token);
+        return Base64::urlEncode($token);
     }
 }

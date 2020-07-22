@@ -9,6 +9,7 @@ use Yoti\Protobuf\Sharepubapi\Definition;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Test\TestCase;
+use Yoti\Util\Base64;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter
@@ -37,7 +38,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
             )
         );
 
-        $this->assertEquals(base64_encode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
+        $this->assertEquals(Base64::urlEncode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
         $this->assertEquals(new \DateTime(self::SOME_EXPIRY_DATE), $thirdPartyAttribute->getExpiryDate());
         $this->assertEquals(
             self::SOME_ISSUING_ATTRIBUTE_NAME,
@@ -100,7 +101,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
             )
         );
 
-        $this->assertEquals(base64_encode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
+        $this->assertEquals(Base64::urlEncode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
         $this->assertNull($thirdPartyAttribute->getExpiryDate());
         $this->assertEquals(
             self::SOME_ISSUING_ATTRIBUTE_NAME,
