@@ -15,10 +15,10 @@ abstract class RequestedTask implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return [
+        return Json::withoutNullValues([
             'type' => $this->getType(),
             'config' => $this->getConfig()
-        ];
+        ]);
     }
 
     /**

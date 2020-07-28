@@ -39,7 +39,6 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
 
         $expected = [
             'type' => 'ID_DOCUMENT_AUTHENTICITY',
-            'config' => null
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
@@ -56,7 +55,6 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
 
         $expected = [
             'type' => 'ID_DOCUMENT_AUTHENTICITY',
-            'config' => null
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), $result->__toString());
