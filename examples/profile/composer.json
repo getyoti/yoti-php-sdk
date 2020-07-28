@@ -36,10 +36,16 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
-        "pre-install-cmd": "@copy-sdk",
-        "pre-update-cmd": "@copy-sdk",
         "post-update-cmd": "@php artisan key:generate --ansi",
-        "copy-sdk": "grep -q 'yoti-php-sdk' ../../composer.json && rm -fr ./sdk && cd ../../ && git archive --prefix=sdk/ --format=tar HEAD | (cd - && tar xf -) || echo 'Could not install SDK from parent directory'"
+        "copy-sdk": "grep -q 'yoti-php-sdk' ../../composer.json && rm -fr ./sdk && cd ../../ && git archive --prefix=sdk/ --format=tar HEAD | (cd - && tar xf -) || echo 'Could not install SDK from parent directory'",
+        "install-local": [
+            "@copy-sdk",
+            "composer install"
+        ],
+        "update-local": [
+            "@copy-sdk",
+            "composer update"
+        ]
     },
     "repositories": [
         {
