@@ -63,7 +63,6 @@ For each service you will need:
 The Yoti SDK can be used for the following products, follow the links for more information about each:
 1) [Yoti app integration](/docs/PROFILE.md) - Connect with already-verified customers.
 1) [Yoti Doc Scan](/docs/DOCSCAN.md) - Identity verification embedded in your website or app.
-1) [Yoti AML](/docs/AML.md) - Anti-Money Laundering check service to allow a deeper KYC process, preventing fraud
 
 ## Support
 
