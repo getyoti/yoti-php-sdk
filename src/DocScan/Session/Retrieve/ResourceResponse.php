@@ -48,7 +48,7 @@ class ResourceResponse
     }
 
     /**
-     * @return TextExtractionTaskResponse[]
+     * @return TaskResponse[]
      */
     public function getTextExtractionTasks(): array
     {
@@ -59,7 +59,7 @@ class ResourceResponse
      * @param string $class
      * @return mixed[]
      */
-    private function filterTasksByType(string $class): array
+    protected function filterTasksByType(string $class): array
     {
         $filtered = array_filter(
             $this->tasks,
@@ -80,6 +80,8 @@ class ResourceResponse
         switch ($task['type'] ?? null) {
             case Constants::ID_DOCUMENT_TEXT_DATA_EXTRACTION:
                 return new TextExtractionTaskResponse($task);
+            case Constants::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION:
+                return new SupplementaryDocTextExtractionTaskResponse($task);
             default:
                 return new TaskResponse($task);
         }

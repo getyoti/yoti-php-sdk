@@ -2,7 +2,7 @@
 
 namespace Yoti\DocScan\Session\Retrieve;
 
-class IdDocumentResourceResponse extends ResourceResponse
+class SupplementaryDocumentResourceResponse extends ResourceResponse
 {
     /**
      * @var string|null
@@ -25,33 +25,32 @@ class IdDocumentResourceResponse extends ResourceResponse
     private $documentFields;
 
     /**
-     * @var DocumentIdPhotoResponse|null
+     * @var FileResponse|null
      */
-    private $documentIdPhoto;
+    private $documentFile;
 
     /**
-     * DocumentResourceResponse constructor.
-     * @param array<string, mixed> $idDocument
+     * @param array<string, mixed> $document
      */
-    public function __construct(array $idDocument)
+    public function __construct(array $document)
     {
-        parent::__construct($idDocument);
+        parent::__construct($document);
 
-        $this->documentType = $idDocument['document_type'] ?? null;
-        $this->issuingCountry = $idDocument['issuing_country'] ?? null;
+        $this->documentType = $document['document_type'] ?? null;
+        $this->issuingCountry = $document['issuing_country'] ?? null;
 
-        if (isset($idDocument['pages'])) {
-            foreach ($idDocument['pages'] as $page) {
+        if (isset($document['pages'])) {
+            foreach ($document['pages'] as $page) {
                 $this->pages[] = new PageResponse($page);
             }
         }
 
-        $this->documentFields = isset($idDocument['document_fields'])
-            ? new DocumentFieldsResponse($idDocument['document_fields'])
+        $this->documentFields = isset($document['document_fields'])
+            ? new DocumentFieldsResponse($document['document_fields'])
             : null;
 
-        $this->documentIdPhoto = isset($idDocument['document_id_photo'])
-            ? new DocumentIdPhotoResponse($idDocument['document_id_photo'])
+        $this->documentFile = isset($document['file'])
+            ? new FileResponse($document['file'])
             : null;
     }
 
@@ -88,18 +87,18 @@ class IdDocumentResourceResponse extends ResourceResponse
     }
 
     /**
-     * @return DocumentIdPhotoResponse|null
+     * @return FileResponse|null
      */
-    public function getDocumentIdPhoto(): ?DocumentIdPhotoResponse
+    public function getDocumentFile(): ?FileResponse
     {
-        return $this->documentIdPhoto;
+        return $this->documentFile;
     }
 
     /**
-     * @return TextExtractionTaskResponse[]
+     * @return SupplementaryDocTextExtractionTaskResponse[]
      */
     public function getTextExtractionTasks(): array
     {
-        return $this->filterTasksByType(TextExtractionTaskResponse::class);
+        return $this->filterTasksByType(SupplementaryDocTextExtractionTaskResponse::class);
     }
 }

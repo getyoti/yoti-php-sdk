@@ -6,11 +6,15 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class ResourceContainer
 {
-
     /**
      * @var IdDocumentResourceResponse[]
      */
     private $idDocuments = [];
+
+    /**
+     * @var SupplementaryDocumentResourceResponse[]
+     */
+    private $supplementaryDocuments = [];
 
     /**
      * @var LivenessResourceResponse[]
@@ -25,6 +29,10 @@ class ResourceContainer
     {
         if (isset($resources['id_documents'])) {
             $this->idDocuments = $this->parseIdDocuments($resources['id_documents']);
+        }
+
+        if (isset($resources['supplementary_documents'])) {
+            $this->supplementaryDocuments = $this->parseSupplementaryDocuments($resources['supplementary_documents']);
         }
 
         if (isset($resources['liveness_capture'])) {
@@ -43,6 +51,19 @@ class ResourceContainer
             $parsedIdDocuments[] = new IdDocumentResourceResponse($document);
         }
         return $parsedIdDocuments;
+    }
+
+    /**
+     * @param array<array<string, mixed>> $supplementaryDocuments
+     * @return SupplementaryDocumentResourceResponse[]
+     */
+    private function parseSupplementaryDocuments(array $supplementaryDocuments): array
+    {
+        $parsedSupplementaryDocuments = [];
+        foreach ($supplementaryDocuments as $document) {
+            $parsedSupplementaryDocuments[] = new SupplementaryDocumentResourceResponse($document);
+        }
+        return $parsedSupplementaryDocuments;
     }
 
     /**
@@ -73,6 +94,14 @@ class ResourceContainer
     public function getIdDocuments(): array
     {
         return $this->idDocuments;
+    }
+
+    /**
+     * @return SupplementaryDocumentResourceResponse[]
+     */
+    public function getSupplementaryDocuments(): array
+    {
+        return $this->supplementaryDocuments;
     }
 
     /**
