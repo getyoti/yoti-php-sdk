@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse;
-use Yoti\DocScan\Session\Retrieve\GeneratedMedia;
 use Yoti\DocScan\Session\Retrieve\GeneratedTextDataCheckResponse;
-use Yoti\DocScan\Session\Retrieve\TaskResponse;
+use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\TaskResponse
+ * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse
  */
-class TaskResponseTest extends TestCase
+class TextExtractionTaskResponseTest extends TestCase
 {
     private const SOME_TYPE = 'someType';
     private const SOME_ID = 'someId';
@@ -27,13 +26,13 @@ class TaskResponseTest extends TestCase
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
 
     /**
-     * @var TaskResponse
+     * @var TextExtractionTaskResponse
      */
     private $taskResponse;
 
     public function setup(): void
     {
-         $this->taskResponse = new TaskResponse([
+         $this->taskResponse = new TextExtractionTaskResponse([
             'id' => self::SOME_ID,
             'type' => self::SOME_TYPE,
             'state' => self::SOME_STATE,
@@ -102,15 +101,10 @@ class TaskResponseTest extends TestCase
 
     /**
      * @covers ::getGeneratedMedia
-     * @covers ::parseGeneratedMedia
      */
     public function testGetGeneratedMedia()
     {
         $this->assertCount(2, $this->taskResponse->getGeneratedMedia());
-        $this->assertContainsOnlyInstancesOf(
-            GeneratedMedia::class,
-            $this->taskResponse->getGeneratedMedia()
-        );
     }
 
     /**
@@ -126,64 +120,14 @@ class TaskResponseTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers ::parseGeneratedChecks
-     * @covers ::getGeneratedChecks
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getId
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getType
-     */
-    public function shouldReturnGeneratedTextDataChecks()
-    {
-        $generatedCheck = $this->taskResponse->getGeneratedChecks()[0];
-
-        $this->assertInstanceOf(GeneratedTextDataCheckResponse::class, $generatedCheck);
-        $this->assertEquals(self::SOME_ID, $generatedCheck->getId());
-        $this->assertEquals(self::ID_DOCUMENT_TEXT_DATA_CHECK, $generatedCheck->getType());
-    }
-
-    /**
-     * @test
-     * @covers ::parseGeneratedChecks
-     * @covers ::getGeneratedChecks
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getId
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getType
-     */
-    public function shouldReturnGeneratedCheckWithUnknownType()
-    {
-        $generatedCheck = $this->taskResponse->getGeneratedChecks()[2];
-
-        $this->assertInstanceOf(GeneratedCheckResponse::class, $generatedCheck);
-        $this->assertEquals(self::SOME_OTHER_ID, $generatedCheck->getId());
-        $this->assertEquals(self::SOME_UNKNOWN_TYPE, $generatedCheck->getType());
-    }
-
-    /**
-     * @test
      * @covers ::getGeneratedTextDataChecks
-     * @covers ::filterGeneratedChecksByType
      */
-    public function shouldFilterGeneratedTextDataChecks(): void
+    public function testGetGeneratedTextDataChecks()
     {
-        $this->assertCount(3, $this->taskResponse->getGeneratedChecks());
         $this->assertCount(1, $this->taskResponse->getGeneratedTextDataChecks());
-    }
-
-    /**
-     * @test
-     * @covers ::__construct
-     */
-    public function shouldNotThrowExceptionWhenAllMissingValuesExceptType()
-    {
-        $result = new TaskResponse([]);
-
-        $this->assertNull($result->getType());
-        $this->assertNull($result->getId());
-        $this->assertNull($result->getState());
-        $this->assertNull($result->getCreated());
-        $this->assertNull($result->getLastUpdated());
-        $this->assertCount(0, $result->getGeneratedChecks());
-        $this->assertCount(0, $result->getGeneratedMedia());
+        $this->assertContainsOnlyInstancesOf(
+            GeneratedTextDataCheckResponse::class,
+            $this->taskResponse->getGeneratedTextDataChecks()
+        );
     }
 }

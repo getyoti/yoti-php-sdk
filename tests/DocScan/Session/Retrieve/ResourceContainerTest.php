@@ -21,13 +21,19 @@ class ResourceContainerTest extends TestCase
      * @covers ::parseLivenessCapture
      * @covers ::getIdDocuments
      * @covers ::getLivenessCapture
+     * @covers ::parseSupplementaryDocuments
+     * @covers ::getSupplementaryDocuments
      */
     public function shouldBuildCorrectly()
     {
         $input = [
             'id_documents' => [
-                [ 'someKey' => 'someValue' ],
-                [ 'someOtherKey' => 'someOtherValue' ]
+                [],
+                []
+            ],
+            'supplementary_documents' => [
+                [],
+                []
             ],
             'liveness_capture' => [
                 [ 'liveness_type' => 'ZOOM' ],
@@ -40,6 +46,7 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(2, $result->getIdDocuments());
         $this->assertCount(2, $result->getLivenessCapture());
         $this->assertCount(1, $result->getZoomLivenessResources());
+        $this->assertCount(2, $result->getSupplementaryDocuments());
     }
 
     /**

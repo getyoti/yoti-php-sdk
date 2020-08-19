@@ -19,6 +19,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
+    private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     private const LIVENESS = 'LIVENESS';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
     private const SOME_STATE = 'someState';
@@ -50,7 +51,7 @@ class GetSessionResultTest extends TestCase
             'client_session_token_ttl' => self::SOME_CLIENT_SESSION_TOKEN_TTL,
             'biometric_consent' => self::SOME_BIOMETRIC_CONSENT_DATE_STRING,
             'checks' => [
-                [ 'type' => 'ID_DOCUMENT_AUTHENTICITY' ]
+                [ 'type' => self::ID_DOCUMENT_AUTHENTICITY ]
             ],
             'resources' => [ ],
         ];
@@ -99,7 +100,9 @@ class GetSessionResultTest extends TestCase
      * @covers ::getAuthenticityChecks
      * @covers ::getFaceMatchChecks
      * @covers ::getTextDataChecks
+     * @covers ::getIdDocumentTextDataChecks
      * @covers ::getIdDocumentComparisonChecks
+     * @covers ::getSupplementaryDocumentTextDataChecks
      * @covers ::getLivenessChecks
      * @covers ::createCheckFromArray
      * @covers ::filterCheckByType
@@ -112,23 +115,49 @@ class GetSessionResultTest extends TestCase
                 [ 'type' => self::ID_DOCUMENT_FACE_MATCH ],
                 [ 'type' => self::ID_DOCUMENT_TEXT_DATA_CHECK ],
                 [ 'type' => self::ID_DOCUMENT_COMPARISON ],
+                [ 'type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK ],
                 [ 'type' => self::LIVENESS ],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(5, $result->getChecks());
+        $this->assertCount(6, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
+        $this->assertCount(1, $result->getIdDocumentTextDataChecks());
         $this->assertCount(1, $result->getIdDocumentComparisonChecks());
+        $this->assertCount(1, $result->getSupplementaryDocumentTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
 
-        $this->assertEquals(self::ID_DOCUMENT_AUTHENTICITY, $result->getAuthenticityChecks()[0]->getType());
-        $this->assertEquals(self::ID_DOCUMENT_FACE_MATCH, $result->getFaceMatchChecks()[0]->getType());
-        $this->assertEquals(self::ID_DOCUMENT_TEXT_DATA_CHECK, $result->getTextDataChecks()[0]->getType());
-        $this->assertEquals(self::ID_DOCUMENT_COMPARISON, $result->getIdDocumentComparisonChecks()[0]->getType());
-        $this->assertEquals(self::LIVENESS, $result->getLivenessChecks()[0]->getType());
+        $this->assertEquals(
+            self::ID_DOCUMENT_AUTHENTICITY,
+            $result->getAuthenticityChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::ID_DOCUMENT_FACE_MATCH,
+            $result->getFaceMatchChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::ID_DOCUMENT_TEXT_DATA_CHECK,
+            $result->getTextDataChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::ID_DOCUMENT_TEXT_DATA_CHECK,
+            $result->getIdDocumentTextDataChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::ID_DOCUMENT_COMPARISON,
+            $result->getIdDocumentComparisonChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK,
+            $result->getSupplementaryDocumentTextDataChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::LIVENESS,
+            $result->getLivenessChecks()[0]->getType()
+        );
     }
 }

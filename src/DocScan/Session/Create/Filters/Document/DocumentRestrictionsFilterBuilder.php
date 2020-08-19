@@ -38,7 +38,6 @@ class DocumentRestrictionsFilterBuilder
         return $this;
     }
 
-
     /**
      * @param DocumentRestriction $documentRestriction
      *

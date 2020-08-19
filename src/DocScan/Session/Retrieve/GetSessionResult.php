@@ -9,7 +9,6 @@ use Yoti\Util\DateTime;
 
 class GetSessionResult
 {
-
     /**
      * @var string|null
      */
@@ -166,11 +165,29 @@ class GetSessionResult
     }
 
     /**
+     * @deprecated replaced by ::getIdDocumentTextDataChecks()
+     *
      * @return TextDataCheckResponse[]
      */
     public function getTextDataChecks(): array
     {
+        return $this->getIdDocumentTextDataChecks();
+    }
+
+    /**
+     * @return TextDataCheckResponse[]
+     */
+    public function getIdDocumentTextDataChecks(): array
+    {
         return $this->filterCheckByType(TextDataCheckResponse::class);
+    }
+
+    /**
+     * @return SupplementaryDocTextDataCheckResponse[]
+     */
+    public function getSupplementaryDocumentTextDataChecks(): array
+    {
+        return $this->filterCheckByType(SupplementaryDocTextDataCheckResponse::class);
     }
 
     /**
@@ -197,6 +214,8 @@ class GetSessionResult
                 return new FaceMatchCheckResponse($check);
             case Constants::ID_DOCUMENT_TEXT_DATA_CHECK:
                 return new TextDataCheckResponse($check);
+            case Constants::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK:
+                return new SupplementaryDocTextDataCheckResponse($check);
             case Constants::LIVENESS:
                 return new LivenessCheckResponse($check);
             default:
