@@ -5,6 +5,7 @@ namespace Yoti\DocScan;
 class Constants
 {
     public const ID_DOCUMENT_AUTHENTICITY = 'ID_DOCUMENT_AUTHENTICITY';
+    public const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
     public const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     public const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
     public const LIVENESS = 'LIVENESS';

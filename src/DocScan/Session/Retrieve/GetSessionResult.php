@@ -132,6 +132,14 @@ class GetSessionResult
     }
 
     /**
+     * @return IdDocumentComparisonCheckResponse[]
+     */
+    public function getIdDocumentComparisonChecks(): array
+    {
+        return $this->filterCheckByType(IdDocumentComparisonCheckResponse::class);
+    }
+
+    /**
      * @return FaceMatchCheckResponse[]
      */
     public function getFaceMatchChecks(): array
@@ -165,6 +173,8 @@ class GetSessionResult
         switch ($check['type'] ?? null) {
             case Constants::ID_DOCUMENT_AUTHENTICITY:
                 return new AuthenticityCheckResponse($check);
+            case Constants::ID_DOCUMENT_COMPARISON:
+                return new IdDocumentComparisonCheckResponse($check);
             case Constants::ID_DOCUMENT_FACE_MATCH:
                 return new FaceMatchCheckResponse($check);
             case Constants::ID_DOCUMENT_TEXT_DATA_CHECK:
