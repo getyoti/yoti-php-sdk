@@ -6,6 +6,7 @@ namespace Yoti\Test;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Yoti\Aml\Address as AmlAddress;
 use Yoti\Aml\Country as AmlCountry;
 use Yoti\Aml\Profile as AmlProfile;
@@ -201,10 +202,52 @@ class YotiClientTest extends TestCase
         $this->assertInstanceOf(ShareUrlResult::class, $result);
     }
 
+    /**
+     * @covers ::getLoginUrl
+     */
     public function testGetLoginUrl()
     {
         $someAppId = 'some-app-id';
 
         $this->assertEquals("https://www.yoti.com/connect/{$someAppId}", YotiClient::getLoginUrl($someAppId));
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testCustomLogger()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+
+        $response->method('getStatusCode')->willReturn(200);
+        $response
+            ->method('getBody')
+            ->willReturn(
+                json_encode([
+                    'receipt' => [
+                        'timestamp'  => 'some invalid timestamp',
+                        'wrapped_receipt_key' => 'some receipt key',
+                        'sharing_outcome' => 'SUCCESS',
+                    ]
+                ])
+            );
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Could not parse string to DateTime');
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+            Config::LOGGER => $logger,
+        ]);
+
+        $yotiClient->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
 }

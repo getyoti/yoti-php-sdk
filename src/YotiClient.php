@@ -15,6 +15,7 @@ use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\ShareUrl\Service as ShareUrlService;
 use Yoti\Util\Config;
 use Yoti\Util\Env;
+use Yoti\Util\Logger;
 use Yoti\Util\PemFile;
 use Yoti\Util\Validation;
 
@@ -51,7 +52,7 @@ class YotiClient
      * @param array<string, mixed> $options (optional)
      *   SDK configuration options - {@see \Yoti\Util\Config} for available options.
      *
-     * @throws \Yoti\Exception\YotiClientException
+     * @throws \Yoti\Exception\PemFileException
      */
     public function __construct(
         string $sdkId,
@@ -63,6 +64,9 @@ class YotiClient
 
         // Create default HTTP client.
         $options[Config::HTTP_CLIENT] = $options[Config::HTTP_CLIENT] ?? new Client();
+
+        // Create default logger.
+        $options[Config::LOGGER] = $options[Config::LOGGER] ?? new Logger();
 
         // Set API URL from environment variable.
         $options[Config::API_URL] = $options[Config::API_URL] ?? Env::get(Constants::ENV_API_URL);

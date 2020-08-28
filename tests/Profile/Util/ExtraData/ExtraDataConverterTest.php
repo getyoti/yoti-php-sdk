@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
@@ -22,11 +23,28 @@ class ExtraDataConverterTest extends TestCase
     private const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
 
     /**
-     * @covers ::convertValue
+     * @var \Yoti\Profile\Util\ExtraData\ExtraDataConverter;
      */
-    public function testConvertValue()
+    private $extraDataConverter;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function setup(): void
     {
-        $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->extraDataConverter = new ExtraDataConverter($this->logger);
+    }
+
+    /**
+     * @covers ::convert
+     * @covers ::__construct
+     */
+    public function testConvert()
+    {
+        $extraData = $this->extraDataConverter->convert(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
         $this->assertInstanceOf(ExtraData::class, $extraData);
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
@@ -45,9 +63,27 @@ class ExtraDataConverterTest extends TestCase
     /**
      * @covers ::convertValue
      */
+    public function testConvertValue()
+    {
+        $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
+        $this->assertInstanceOf(ExtraData::class, $extraData);
+
+        $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
+        $this->assertInstanceOf(AttributeIssuanceDetails::class, $attributeIssuanceDetails);
+    }
+
+    /**
+     * @covers ::convert
+     */
     public function testConvertValueSkipInvalidDataEntries()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(2))
+            ->method('warning')
+            ->withConsecutive(
+                ['Failed to convert data entry'],
+                ['Failed to convert data entry']
+            );
 
         $someToken = 'some token';
 
@@ -72,36 +108,35 @@ class ExtraDataConverterTest extends TestCase
             ]
         ]))->serializeToString();
 
-        $extraData = ExtraDataConverter::convertValue($extraDataContent);
+        $extraData = $this->extraDataConverter->convert($extraDataContent);
 
         $this->assertEquals(base64_encode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
-
-        $this->assertLogContains("Failed to convert data entry: Unsupported data entry '0'");
-        $this->assertLogContains("Failed to convert data entry: Failed to retrieve token from ThirdPartyAttribute");
     }
 
     /**
-     * @covers ::convertValue
+     * @covers ::convert
      */
     public function testConvertValueInvalidData()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Failed to parse extra data');
 
-        $extraData = ExtraDataConverter::convertValue('some invalid data');
+        $extraData = $this->extraDataConverter->convert('some invalid data');
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());
-        $this->assertLogContains("Failed to parse extra data: Error occurred during parsing");
     }
 
     /**
-     * @covers ::convertValue
+     * @covers ::convert
      *
      * @dataProvider emptyDataProvider
      */
     public function testConvertValueEmptyData($emptyData)
     {
-        $extraData = ExtraDataConverter::convertValue($emptyData);
+        $extraData = $this->extraDataConverter->convert($emptyData);
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());

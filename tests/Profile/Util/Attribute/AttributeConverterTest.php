@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\Attribute;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Media\Image;
-use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
-use Yoti\Profile\Receipt;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
-use Yoti\Util\PemFile;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Util\Attribute\AttributeConverter
@@ -32,6 +30,22 @@ class AttributeConverterTest extends TestCase
     private const CONTENT_TYPE_INT = 7;
 
     /**
+     * @var AttributeConverter
+     */
+    private $attributeConverter;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function setup(): void
+    {
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->attributeConverter = new AttributeConverter($this->logger);
+    }
+
+    /**
      * Creates \Yoti\Protobuf\Attrpubapi\Attribute with provided name and value.
      */
     private function createProtobufAttribute($name, $value, $contentType = self::CONTENT_TYPE_STRING)
@@ -48,16 +62,14 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertValueBasedOnContentType
+     * @covers ::convert
+     * @covers ::__construct
      */
-    public function testSelfieValueShouldReturnImageObject()
+    public function testConvert()
     {
-        $receiptArr = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
-        $receipt = new Receipt($receiptArr['receipt']);
-
-        $this->activityDetails = new ActivityDetails($receipt, PemFile::fromFilePath(TestData::PEM_FILE));
-        $this->profile = $this->activityDetails->getProfile();
-        $this->assertInstanceOf(Image::class, $this->profile->getSelfie()->getValue());
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute('test_attr', 'my_value'));
+        $this->assertEquals('test_attr', $attr->getName());
+        $this->assertEquals('my_value', $attr->getValue());
     }
 
     /**
@@ -71,13 +83,13 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      */
     public function testConvertDate()
     {
         $someTimeStamp = '2016-07-19T08:55:38Z';
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             $someTimeStamp,
             self::CONTENT_TYPE_DATE
@@ -89,11 +101,11 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      */
     public function testEmptyApplicationLogo()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'application_logo',
             '',
             self::CONTENT_TYPE_PNG
@@ -102,29 +114,32 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      */
     public function testConvertDateInvalid()
     {
-        $this->captureExpectedLogs();
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Could not parse string to DateTime');
+
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             'some-invalid-date',
             self::CONTENT_TYPE_DATE
         ));
         $this->assertNull($attr);
-        $this->assertLogContains('Could not parse string to DateTime');
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      */
     public function testConvertJson()
     {
         $someJsonData = ['some' => 'json'];
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             json_encode($someJsonData),
             self::CONTENT_TYPE_JSON
@@ -137,7 +152,7 @@ class AttributeConverterTest extends TestCase
      */
     public function testConvertDocumentDetails()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'document_details',
             'PASSPORT GBR 01234567 2020-01-01',
             self::CONTENT_TYPE_STRING
@@ -150,46 +165,48 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      */
     public function testConvertUndefinedContentType()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with("Unknown Content Type '0', parsing as a String");
 
-        $attr = AttributeConverter::convertToYotiAttribute(
+        $attr = $this->attributeConverter->convert(
             $this->createProtobufAttribute('undefined_attr', 'undefined_value', self::CONTENT_TYPE_UNDEFINED)
         );
         $this->assertEquals('undefined_attr', $attr->getName());
         $this->assertEquals('undefined_value', $attr->getValue());
-
-        $this->assertLogContains("Unknown Content Type '0', parsing as a String");
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertUnknownContentType()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with("Unknown Content Type '100', parsing as a String");
 
-        $attr = AttributeConverter::convertToYotiAttribute(
+        $attr = $this->attributeConverter->convert(
             $this->createProtobufAttribute('unknown_attr', 'unknown_value', 100)
         );
         $this->assertEquals('unknown_attr', $attr->getName());
         $this->assertEquals('unknown_value', $attr->getValue());
-
-        $this->assertLogContains("Unknown Content Type '100', parsing as a String");
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      */
     public function testConvertToYotiAttributeEmptyStringValue()
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             '',
             self::CONTENT_TYPE_STRING
@@ -199,33 +216,35 @@ class AttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      *
      * @dataProvider nonStringContentTypesDataProvider
      */
     public function testConvertToYotiAttributeEmptyNonStringValue($contentType)
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Value is NULL (Attribute: test_attr)');
 
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             '',
             $contentType
         ));
 
         $this->assertNull($attr);
-        $this->assertLogContains('Warning: Value is NULL (Attribute: test_attr)');
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      *
      * @dataProvider validIntegerDataProvider
      */
     public function testConvertToYotiAttributeIntegerValue($int)
     {
-        $attr = AttributeConverter::convertToYotiAttribute($this->createProtobufAttribute(
+        $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
             (string) $int,
             self::CONTENT_TYPE_INT
@@ -244,7 +263,7 @@ class AttributeConverterTest extends TestCase
     /**
      * Check that `document_images` attribute is an array of 2 images.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertToYotiAttributeDocumentImages()
@@ -252,9 +271,9 @@ class AttributeConverterTest extends TestCase
         $decodedProtoString = base64_decode(file_get_contents(TestData::MULTI_VALUE_ATTRIBUTE));
 
         $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
-        $protobufAttribute->mergeFromString(base64_decode(file_get_contents(TestData::MULTI_VALUE_ATTRIBUTE)));
+        $protobufAttribute->mergeFromString($decodedProtoString);
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $this->assertCount(2, $attr->getValue());
         $this->assertInstanceOf(MultiValue::class, $attr->getValue());
 
@@ -280,7 +299,7 @@ class AttributeConverterTest extends TestCase
     /**
      * Check that `document_images` attribute has non-image values filtered out.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnAttributeName
      * @covers ::convertMultiValue
      */
@@ -297,7 +316,7 @@ class AttributeConverterTest extends TestCase
             self::CONTENT_TYPE_MULTI_VALUE
         );
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $multiValue = $attr->getValue();
 
         $this->assertCount(2, $multiValue);
@@ -315,12 +334,15 @@ class AttributeConverterTest extends TestCase
     /**
      * Check that `document_images` is null when not converted to a MultiValue object.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnAttributeName
      */
     public function testConvertToYotiAttributeDocumentImagesInvalid()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Document Images could not be decoded (Attribute: document_images)');
 
         // Create mock Attribute that will return MultiValue as the value.
         $protobufAttribute = $this->createProtobufAttribute(
@@ -329,16 +351,14 @@ class AttributeConverterTest extends TestCase
             self::CONTENT_TYPE_STRING
         );
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $this->assertNull($attr);
-
-        $this->assertLogContains('Document Images could not be decoded (Attribute: document_images)');
     }
 
     /**
      * Check that MultiValue object is returned for MultiValue attributes by default.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      */
     public function testConvertToYotiAttributeMultiValue()
     {
@@ -360,7 +380,7 @@ class AttributeConverterTest extends TestCase
         );
 
         // Convert the attribute.
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $multiValue = $attr->getValue();
 
         // Check top-level items.
@@ -396,14 +416,17 @@ class AttributeConverterTest extends TestCase
     /**
      * Check that empty non-string MultiValue Values result in no attribute being returned.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      * @covers ::convertValueBasedOnContentType
      *
      * @dataProvider nonStringContentTypesDataProvider
      */
     public function testEmptyNonStringAttributeMultiValueValue($contentType)
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Value is NULL (Attribute: test_attr)');
 
         // Get MultiValue values.
         $values = $this->createMultiValueValues();
@@ -422,15 +445,14 @@ class AttributeConverterTest extends TestCase
             self::CONTENT_TYPE_MULTI_VALUE
         );
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $this->assertNull($attr);
-        $this->assertLogContains('Warning: Value is NULL (Attribute: test_attr)');
     }
 
     /**
      * Check that empty string MultiValue Values are allowed.
      *
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      */
     public function testEmptyStringAttributeMultiValueValue()
     {
@@ -451,13 +473,13 @@ class AttributeConverterTest extends TestCase
             self::CONTENT_TYPE_MULTI_VALUE
         );
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
         $this->assertInstanceOf(Attribute::class, $attr);
         $this->assertEquals('', $attr->getValue()[3]);
     }
 
     /**
-     * @covers ::convertToYotiAttribute
+     * @covers ::convert
      */
     public function testThirdPartyAttribute()
     {
@@ -466,7 +488,7 @@ class AttributeConverterTest extends TestCase
         $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute();
         $protobufAttribute->mergeFromString($decodedProtoString);
 
-        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+        $attr = $this->attributeConverter->convert($protobufAttribute);
 
         $this->assertEquals('test-third-party-attribute-0', $attr->getValue());
         $this->assertEquals('com.thirdparty.id', $attr->getName());

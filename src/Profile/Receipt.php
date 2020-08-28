@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Exception\ReceiptException;
 use Yoti\Profile\Util\EncryptedData;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Util\Logger;
 use Yoti\Util\PemFile;
 
 class Receipt
@@ -28,14 +30,21 @@ class Receipt
     private $receiptData;
 
     /**
+     * @var \Yoti\Profile\Util\ExtraData\ExtraDataConverter
+     */
+    private $extraDataConverter;
+
+    /**
      * Receipt constructor.
      *
      * @param array<string, mixed> $receiptData
      *
      * @throws ReceiptException
      */
-    public function __construct(array $receiptData)
+    public function __construct(array $receiptData, ?LoggerInterface $logger = null)
     {
+        $this->extraDataConverter = new ExtraDataConverter($logger ?? new Logger());
+
         $this->validateReceipt($receiptData);
 
         $this->receiptData = $receiptData;
@@ -80,7 +89,6 @@ class Receipt
     {
         return $this->receiptData[$attributeName] ?? null;
     }
-
 
     /**
      * @param \Yoti\Util\PemFile $pemFile
@@ -127,7 +135,7 @@ class Receipt
      */
     public function parseExtraData(PemFile $pemFile): ExtraData
     {
-        return ExtraDataConverter::convertValue(
+        return $this->extraDataConverter->convert(
             $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pemFile)
         );
     }

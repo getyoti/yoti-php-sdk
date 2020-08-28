@@ -4,10 +4,22 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Util\Attribute;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
+use Yoti\Util\Logger;
 
 class AttributeListConverter
 {
+    /**
+     * @var AttributeConverter
+     */
+    private $attributeConverter;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->attributeConverter = new AttributeConverter($logger);
+    }
+
     /**
      * Convert Protobuf AttributeList to array of Yoti Attributes.
      *
@@ -15,7 +27,7 @@ class AttributeListConverter
      *
      * @return \Yoti\Profile\Attribute[]
      */
-    public static function convertToYotiAttributesList(AttributeList $attributeList): array
+    public function convert(AttributeList $attributeList): array
     {
         $yotiAttributes = [];
 
@@ -24,11 +36,25 @@ class AttributeListConverter
             if (null === $attrName || strlen($attrName) === 0) {
                 continue;
             }
-            $yotiAttribute = AttributeConverter::convertToYotiAttribute($attr);
+            $yotiAttribute = $this->attributeConverter->convert($attr);
             if ($yotiAttribute !== null) {
                 $yotiAttributes[] = $yotiAttribute;
             }
         }
         return $yotiAttributes;
+    }
+
+    /**
+     * Convert Protobuf AttributeList to array of Yoti Attributes.
+     *
+     * @deprecated replaced by AttributeListConverter::convert()
+     *
+     * @param \Yoti\Protobuf\Attrpubapi\AttributeList $attributeList
+     *
+     * @return \Yoti\Profile\Attribute[]
+     */
+    public static function convertToYotiAttributesList(AttributeList $attributeList): array
+    {
+        return (new self(new Logger()))->convert($attributeList);
     }
 }
