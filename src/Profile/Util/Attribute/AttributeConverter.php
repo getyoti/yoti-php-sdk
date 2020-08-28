@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Util\Attribute;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Exception\AttributeException;
 use Yoti\Media\Image;
 use Yoti\Media\Image\Jpeg;
@@ -16,6 +17,7 @@ use Yoti\Profile\UserProfile;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
 use Yoti\Util\DateTime;
 use Yoti\Util\Json;
+use Yoti\Util\Logger;
 
 class AttributeConverter
 {
@@ -29,6 +31,19 @@ class AttributeConverter
     private const CONTENT_TYPE_INT = 7;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
      * @param mixed $value
      * @param string $attrName
      *
@@ -36,7 +51,7 @@ class AttributeConverter
      *
      * @throws \Yoti\Exception\AttributeException
      */
-    private static function convertValueBasedOnAttributeName($value, string $attrName)
+    private function convertValueBasedOnAttributeName($value, string $attrName)
     {
         switch ($attrName) {
             case UserProfile::ATTR_DOCUMENT_DETAILS:
@@ -63,10 +78,10 @@ class AttributeConverter
      *
      * @throws AttributeException
      */
-    private static function convertValueBasedOnContentType(string $value, int $contentType)
+    private function convertValueBasedOnContentType(string $value, int $contentType)
     {
         if (strlen($value) === 0 && ($contentType !== self::CONTENT_TYPE_STRING)) {
-            throw new AttributeException("Warning: Value is NULL");
+            throw new AttributeException("Value is NULL");
         }
 
         switch ($contentType) {
@@ -82,7 +97,7 @@ class AttributeConverter
                 return DateTime::stringToDateTime($value);
 
             case self::CONTENT_TYPE_MULTI_VALUE:
-                return self::convertMultiValue($value);
+                return $this->convertMultiValue($value);
 
             case self::CONTENT_TYPE_INT:
                 return (int) $value;
@@ -92,7 +107,7 @@ class AttributeConverter
 
             case self::CONTENT_TYPE_UNDEFINED:
             default:
-                error_log("Unknown Content Type '{$contentType}', parsing as a String", 0);
+                $this->logger->warning("Unknown Content Type '{$contentType}', parsing as a String");
                 return $value;
         }
     }
@@ -104,13 +119,13 @@ class AttributeConverter
      *
      * @return MultiValue
      */
-    private static function convertMultiValue($value): MultiValue
+    private function convertMultiValue($value): MultiValue
     {
         $protoMultiValue = new \Yoti\Protobuf\Attrpubapi\MultiValue();
         $protoMultiValue->mergeFromString($value);
         $items = [];
         foreach ($protoMultiValue->getValues() as $protoValue) {
-            $items[] = self::convertValueBasedOnContentType(
+            $items[] = $this->convertValueBasedOnContentType(
                 $protoValue->getData(),
                 $protoValue->getContentType()
             );
@@ -125,7 +140,7 @@ class AttributeConverter
      *
      * @return Attribute|null
      */
-    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute): ?Attribute
+    public function convert(ProtobufAttribute $protobufAttribute): ?Attribute
     {
         $yotiAttribute = null;
 
@@ -141,12 +156,12 @@ class AttributeConverter
             $yotiAnchors = AnchorListConverter::convert(
                 $protobufAttribute->getAnchors()
             );
-            $attrValue = AttributeConverter::convertValueBasedOnContentType(
+            $attrValue = $this->convertValueBasedOnContentType(
                 $protobufAttribute->getValue(),
                 $protobufAttribute->getContentType()
             );
             $attrName = $protobufAttribute->getName();
-            $attrValue = AttributeConverter::convertValueBasedOnAttributeName(
+            $attrValue = $this->convertValueBasedOnAttributeName(
                 $attrValue,
                 $attrName
             );
@@ -156,11 +171,31 @@ class AttributeConverter
                 $yotiAnchors
             );
         } catch (AttributeException $e) {
-            error_log("{$e->getMessage()} (Attribute: {$protobufAttribute->getName()})", 0);
+            $this->logger->warning(
+                "{$e->getMessage()} (Attribute: {$protobufAttribute->getName()})",
+                ['exception' => $e]
+            );
         } catch (\Exception $e) {
-            error_log($e->getMessage(), 0);
+            $this->logger->warning(
+                $e->getMessage(),
+                ['exception' => $e]
+            );
         }
 
         return $yotiAttribute;
+    }
+
+    /**
+     * Return a Yoti Attribute.
+     *
+     * @deprecated replaced by AttributeConverter::convert()
+     *
+     * @param ProtobufAttribute $protobufAttribute
+     *
+     * @return Attribute|null
+     */
+    public static function convertToYotiAttribute(ProtobufAttribute $protobufAttribute): ?Attribute
+    {
+        return (new self(new Logger()))->convert($protobufAttribute);
     }
 }

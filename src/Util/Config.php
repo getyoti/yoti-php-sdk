@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yoti\Util;
 
 use Psr\Http\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
 use Yoti\Constants;
+use Yoti\Http\Client;
 
 /**
  * Provides SDK configuration.
@@ -24,6 +26,9 @@ class Config
     /** HTTP client key */
     public const HTTP_CLIENT = 'http.client';
 
+    /** Logger key */
+    public const LOGGER = 'logger';
+
     /**
      * @var array<string, mixed>
      */
@@ -35,6 +40,7 @@ class Config
      *   Configuration settings include the following options:
      *
      *   - Config::HTTP_CLIENT 'http.client' (\Psr\Http\Client\ClientInterface)
+     *   - Config::LOGGER 'logger' (\Psr\Log\LoggerInterface)
      *   - Config::API_URL 'api.url' (string)
      *   - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
      *   - Config::SDK_VERSION 'sdk.version' (string)
@@ -52,6 +58,7 @@ class Config
         $this->setStringValue(self::SDK_IDENTIFIER, $options);
         $this->setStringValue(self::SDK_VERSION, $options);
         $this->setHttpClient($options);
+        $this->setLogger($options);
     }
 
     /**
@@ -68,6 +75,7 @@ class Config
                 self::SDK_IDENTIFIER,
                 self::SDK_VERSION,
                 self::HTTP_CLIENT,
+                self::LOGGER,
             ]
         );
         if (count($invalidKeys) > 0) {
@@ -143,15 +151,15 @@ class Config
     private function setHttpClient(array $options): void
     {
         if (isset($options[self::HTTP_CLIENT])) {
-            $value = $options[self::HTTP_CLIENT];
-            if (!($value instanceof ClientInterface)) {
+            $client = $options[self::HTTP_CLIENT];
+            if (!($client instanceof ClientInterface)) {
                 throw new \InvalidArgumentException(sprintf(
                     '%s configuration value must be of type %s',
                     self::HTTP_CLIENT,
                     ClientInterface::class
                 ));
             }
-            $this->set(self::HTTP_CLIENT, $value);
+            $this->set(self::HTTP_CLIENT, $client);
         }
     }
 
@@ -161,5 +169,31 @@ class Config
     public function getHttpClient(): ?ClientInterface
     {
         return $this->get(self::HTTP_CLIENT);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function setLogger(array $options): void
+    {
+        if (isset($options[self::LOGGER])) {
+            $logger = $options[self::LOGGER];
+            if (!($logger instanceof LoggerInterface)) {
+                throw new \InvalidArgumentException(sprintf(
+                    '%s configuration value must be of type %s',
+                    self::LOGGER,
+                    LoggerInterface::class
+                ));
+            }
+            $this->set(self::LOGGER, $logger);
+        }
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface|null
+     */
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->get(self::LOGGER);
     }
 }

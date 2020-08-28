@@ -170,7 +170,7 @@ class ActivityDetailsTest extends TestCase
         $activityDetails = new ActivityDetails($receipt, $this->pemFile);
 
         $this->assertNull($activityDetails->getTimestamp());
-        $this->assertLogContains('Warning: Could not parse string to DateTime');
+        $this->assertLogContains('warning: Could not parse string to DateTime');
     }
 
     /**

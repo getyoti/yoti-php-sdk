@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter;
 use Yoti\Protobuf\Sharepubapi\Definition;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
@@ -21,12 +22,29 @@ class ThirdPartyAttributeConverterTest extends TestCase
     private const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.123Z';
 
     /**
-     * @covers ::convertValue
-     * @covers ::parseToken
+     * @var \Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter;
      */
-    public function testConvertValue()
+    private $thirdPartyAttributeConverter;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function setup(): void
     {
-        $thirdPartyAttribute = ThirdPartyAttributeConverter::convertValue(
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->thirdPartyAttributeConverter = new ThirdPartyAttributeConverter($this->logger);
+    }
+
+    /**
+     * @covers ::convert
+     * @covers ::parseToken
+     * @covers ::__construct
+     */
+    public function testConvert()
+    {
+        $thirdPartyAttribute = $this->thirdPartyAttributeConverter->convert(
             $this->createThirdPartyAttribute(
                 self::SOME_ISSUANCE_TOKEN,
                 self::SOME_EXPIRY_DATE,
@@ -51,6 +69,23 @@ class ThirdPartyAttributeConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
+     */
+    public function testConvertValue()
+    {
+        $thirdPartyAttribute = ThirdPartyAttributeConverter::convertValue(
+            $this->createThirdPartyAttribute(
+                self::SOME_ISSUANCE_TOKEN,
+                self::SOME_EXPIRY_DATE,
+                []
+            )
+        );
+
+        $this->assertEquals(base64_encode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
+        $this->assertEquals(new \DateTime(self::SOME_EXPIRY_DATE), $thirdPartyAttribute->getExpiryDate());
+    }
+
+    /**
+     * @covers ::convert
      * @covers ::parseToken
      *
      * @dataProvider invalidTokenProvider
@@ -60,7 +95,7 @@ class ThirdPartyAttributeConverterTest extends TestCase
         $this->expectException(\Yoti\Exception\ExtraDataException::class);
         $this->expectExceptionMessage('Failed to retrieve token from ThirdPartyAttribute');
 
-        ThirdPartyAttributeConverter::convertValue(
+        $this->thirdPartyAttributeConverter->convert(
             $this->createThirdPartyAttribute(
                 $invalidToken,
                 self::SOME_EXPIRY_DATE,
@@ -82,15 +117,18 @@ class ThirdPartyAttributeConverterTest extends TestCase
     }
 
     /**
-     * @covers ::convertValue
+     * @covers ::convert
      *
      * @dataProvider invalidDateProvider
      */
     public function testConvertValueInvalidDate($invalidExpiryDate)
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with('Failed to parse expiry date from ThirdPartyAttribute');
 
-        $thirdPartyAttribute = ThirdPartyAttributeConverter::convertValue(
+        $thirdPartyAttribute = $this->thirdPartyAttributeConverter->convert(
             $this->createThirdPartyAttribute(
                 self::SOME_ISSUANCE_TOKEN,
                 $invalidExpiryDate,
@@ -106,7 +144,6 @@ class ThirdPartyAttributeConverterTest extends TestCase
             self::SOME_ISSUING_ATTRIBUTE_NAME,
             $thirdPartyAttribute->getIssuingAttributes()[0]->getName()
         );
-        $this->assertLogContains('Failed to parse expiry date from ThirdPartyAttribute');
     }
 
     /**

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\Profile;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Util\DateTime;
+use Yoti\Util\Logger;
 use Yoti\Util\PemFile;
 
 /**
@@ -57,15 +59,28 @@ class ActivityDetails
     private $extraData;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Yoti\Profile\Util\Attribute\AttributeListConverter
+     */
+    private $attributeListConverter;
+
+    /**
      * ActivityDetails constructor.
      *
      * @param \Yoti\Profile\Receipt $receipt
      * @param \Yoti\Util\PemFile $pemFile
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(Receipt $receipt, PemFile $pemFile)
+    public function __construct(Receipt $receipt, PemFile $pemFile, ?LoggerInterface $logger = null)
     {
         $this->receipt = $receipt;
         $this->pemFile = $pemFile;
+        $this->logger = $logger ?? new Logger();
+        $this->attributeListConverter = new AttributeListConverter($this->logger);
 
         $this->setProfile();
         $this->setTimestamp();
@@ -92,7 +107,7 @@ class ActivityDetails
             $this->timestamp = DateTime::stringToDateTime($timestamp);
         } catch (\Exception $e) {
             $this->timestamp = null;
-            error_log("Warning: {$e->getMessage()}", 0);
+            $this->logger->warning($e->getMessage(), ['exception' => $e]);
         }
     }
 
@@ -101,7 +116,7 @@ class ActivityDetails
         $protobufAttrList = $this->receipt->parseOtherPartyProfileContent($this->pemFile);
 
         $this->userProfile = new UserProfile(
-            AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
+            $this->attributeListConverter->convert($protobufAttrList)
         );
     }
 
@@ -110,7 +125,7 @@ class ActivityDetails
         $protobufAttrList = $this->receipt->parseProfileContent($this->pemFile);
 
         $this->applicationProfile = new ApplicationProfile(
-            AttributeListConverter::convertToYotiAttributesList($protobufAttrList)
+            $this->attributeListConverter->convert($protobufAttrList)
         );
     }
 
