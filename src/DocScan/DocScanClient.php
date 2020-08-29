@@ -9,11 +9,9 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
-use Yoti\Http\Client;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
 use Yoti\Util\Env;
-use Yoti\Util\Logger;
 use Yoti\Util\PemFile;
 use Yoti\Util\Validation;
 
@@ -53,12 +51,6 @@ class DocScanClient
     ) {
         Validation::notEmptyString($sdkId, 'SDK ID');
         $pemFile = PemFile::resolveFromString($pem);
-
-        // Create default HTTP client.
-        $options[Config::HTTP_CLIENT] = $options[Config::HTTP_CLIENT] ?? new Client();
-
-        // Create default logger.
-        $options[Config::LOGGER] = $options[Config::LOGGER] ?? new Logger();
 
         // Set API URL from environment variable.
         $options[Config::API_URL] = $options[Config::API_URL] ?? Env::get(Constants::ENV_DOC_SCAN_API_URL);
