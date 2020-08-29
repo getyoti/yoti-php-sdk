@@ -140,7 +140,10 @@ class ConfigTest extends TestCase
      */
     public function testGetHttpClientDefault()
     {
-        $this->assertNull((new Config())->getHttpClient());
+        $this->assertInstanceOf(
+            ClientInterface::class,
+            (new Config())->getHttpClient()
+        );
     }
 
     /**
@@ -180,7 +183,10 @@ class ConfigTest extends TestCase
      */
     public function testGetLoggerDefault()
     {
-        $this->assertNull((new Config())->getLogger());
+        $this->assertInstanceOf(
+            LoggerInterface::class,
+            (new Config())->getLogger()
+        );
     }
 
     /**

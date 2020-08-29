@@ -319,6 +319,6 @@ class RequestBuilder
             isset($this->payload) ? $this->payload->toStream() : null
         );
 
-        return new Request($message, $this->client ?? $this->config->getHttpClient() ?? new Client());
+        return new Request($message, $this->client ?? $this->config->getHttpClient());
     }
 }

@@ -29,6 +29,9 @@ class Config
     /** Logger key */
     public const LOGGER = 'logger';
 
+    /** Type error message */
+    private const TYPE_ERROR_MESSAGE = '%s configuration value must be of type %s';
+
     /**
      * @var array<string, mixed>
      */
@@ -54,11 +57,23 @@ class Config
     public function __construct(array $options = [])
     {
         $this->validateKeys($options);
-        $this->setStringValue(self::API_URL, $options);
-        $this->setStringValue(self::SDK_IDENTIFIER, $options);
-        $this->setStringValue(self::SDK_VERSION, $options);
-        $this->setHttpClient($options);
-        $this->setLogger($options);
+
+        foreach ($options as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            switch ($key) {
+                case self::HTTP_CLIENT:
+                    $this->setHttpClient($value);
+                    break;
+                case self::LOGGER:
+                    $this->setLogger($value);
+                    break;
+                default:
+                    $this->setStringValue($key, $value);
+                    break;
+            }
+        }
     }
 
     /**
@@ -90,15 +105,12 @@ class Config
      * Set string configuration value.
      *
      * @param string $key
-     * @param array<string, mixed> $options
+     * @param mixed $value
      */
-    private function setStringValue(string $key, array $options): void
+    private function setStringValue(string $key, $value): void
     {
-        if (isset($options[$key])) {
-            $value = $options[$key];
-            Validation::notEmptyString($value, sprintf('%s configuration value', $key));
-            $this->set($key, $value);
-        }
+        Validation::notEmptyString($value, sprintf('%s configuration value', $key));
+        $this->set($key, $value);
     }
 
     /**
@@ -112,13 +124,12 @@ class Config
 
     /**
      * @param string $key
-     * @param mixed $default
      *
      * @return mixed
      */
-    private function get(string $key, $default = null)
+    private function get(string $key)
     {
-        return $this->options[$key] ?? $default;
+        return $this->options[$key] ?? null;
     }
 
     /**
@@ -126,7 +137,7 @@ class Config
      */
     public function getSdkIdentifier(): string
     {
-        return $this->get(self::SDK_IDENTIFIER, Constants::SDK_IDENTIFIER);
+        return $this->get(self::SDK_IDENTIFIER) ?? Constants::SDK_IDENTIFIER;
     }
 
     /**
@@ -134,7 +145,7 @@ class Config
      */
     public function getSdkVersion(): string
     {
-        return $this->get(self::SDK_VERSION, Constants::SDK_VERSION);
+        return $this->get(self::SDK_VERSION) ?? Constants::SDK_VERSION;
     }
 
     /**
@@ -146,54 +157,56 @@ class Config
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @param mixed $client
      */
-    private function setHttpClient(array $options): void
+    private function setHttpClient($client): void
     {
-        if (isset($options[self::HTTP_CLIENT])) {
-            $client = $options[self::HTTP_CLIENT];
-            if (!($client instanceof ClientInterface)) {
-                throw new \InvalidArgumentException(sprintf(
-                    '%s configuration value must be of type %s',
-                    self::HTTP_CLIENT,
-                    ClientInterface::class
-                ));
-            }
-            $this->set(self::HTTP_CLIENT, $client);
+        if (!($client instanceof ClientInterface)) {
+            throw new \InvalidArgumentException(sprintf(
+                self::TYPE_ERROR_MESSAGE,
+                self::HTTP_CLIENT,
+                ClientInterface::class
+            ));
         }
+
+        $this->set(self::HTTP_CLIENT, $client);
     }
 
     /**
-     * @return \Psr\Http\Client\ClientInterface|null
+     * @return \Psr\Http\Client\ClientInterface
      */
-    public function getHttpClient(): ?ClientInterface
+    public function getHttpClient(): ClientInterface
     {
+        if ($this->get(self::HTTP_CLIENT) === null) {
+            $this->set(self::HTTP_CLIENT, new Client());
+        }
         return $this->get(self::HTTP_CLIENT);
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @param mixed $logger
      */
-    private function setLogger(array $options): void
+    private function setLogger($logger): void
     {
-        if (isset($options[self::LOGGER])) {
-            $logger = $options[self::LOGGER];
-            if (!($logger instanceof LoggerInterface)) {
-                throw new \InvalidArgumentException(sprintf(
-                    '%s configuration value must be of type %s',
-                    self::LOGGER,
-                    LoggerInterface::class
-                ));
-            }
-            $this->set(self::LOGGER, $logger);
+        if (!($logger instanceof LoggerInterface)) {
+            throw new \InvalidArgumentException(sprintf(
+                self::TYPE_ERROR_MESSAGE,
+                self::LOGGER,
+                LoggerInterface::class
+            ));
         }
+
+        $this->set(self::LOGGER, $logger);
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface|null
+     * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger(): ?LoggerInterface
+    public function getLogger(): LoggerInterface
     {
+        if ($this->get(self::LOGGER) === null) {
+            $this->set(self::LOGGER, new Logger());
+        }
         return $this->get(self::LOGGER);
     }
 }
