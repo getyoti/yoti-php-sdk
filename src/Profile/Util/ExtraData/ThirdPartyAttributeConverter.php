@@ -16,25 +16,15 @@ use Yoti\Util\Logger;
 class ThirdPartyAttributeConverter
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
      * @param string $value
+     * @param \Psr\Log\LoggerInterface|null $logger
      *
      * @return \Yoti\Profile\ExtraData\AttributeIssuanceDetails
      */
-    public function convert(string $value): AttributeIssuanceDetails
+    public static function convertValue(string $value, ?LoggerInterface $logger = null): AttributeIssuanceDetails
     {
+        $logger = $logger ?? new Logger();
+
         $thirdPartyAttributeProto = new ThirdPartyAttribute();
         $thirdPartyAttributeProto->mergeFromString($value);
 
@@ -48,7 +38,7 @@ class ThirdPartyAttributeConverter
             try {
                 $expiryDate = DateTime::stringToDateTime($issuingAttributesProto->getExpiryDate());
             } catch (\Exception $e) {
-                $this->logger->warning(
+                $logger->warning(
                     'Failed to parse expiry date from ThirdPartyAttribute',
                     ['exception' => $e]
                 );
@@ -67,18 +57,6 @@ class ThirdPartyAttributeConverter
             $expiryDate,
             $issuingAttributes
         );
-    }
-
-    /**
-     * @deprecated replaced by ThirdPartyAttributeConverter::convert()
-     *
-     * @param string $value
-     *
-     * @return \Yoti\Profile\ExtraData\AttributeIssuanceDetails
-     */
-    public static function convertValue(string $value): AttributeIssuanceDetails
-    {
-        return (new self(new Logger()))->convert($value);
     }
 
     /**

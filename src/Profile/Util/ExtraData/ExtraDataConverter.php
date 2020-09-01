@@ -12,70 +12,41 @@ use Yoti\Util\Logger;
 class ExtraDataConverter
 {
     /**
-     * @var DataEntryConverter
-     */
-    private $dataEntryConverter;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        $this->dataEntryConverter = new DataEntryConverter($logger);
-    }
-
-    /**
      * @param string|null $data
      *   Base64 encoded data.
      *
      * @return \Yoti\Profile\ExtraData
      */
-    public function convert(?string $data): ExtraData
+    public static function convertValue(?string $data, ?LoggerInterface $logger = null): ExtraData
     {
         if ($data === null) {
             return new ExtraData([]);
         }
+
+        $logger = $logger ?? new Logger();
 
         $extraDataProto = new ExtraDataProto();
 
         try {
             $extraDataProto->mergeFromString($data);
         } catch (\Exception $e) {
-            $this->logger->warning('Failed to parse extra data', ['exception' => $e]);
+            $logger->warning('Failed to parse extra data', ['exception' => $e]);
             return new ExtraData([]);
         }
 
         $dataEntryList = [];
         foreach ($extraDataProto->getList() as $dataEntryProto) {
             try {
-                $dataEntryList[] = $this->dataEntryConverter->convert(
+                $dataEntryList[] = DataEntryConverter::convertValue(
                     $dataEntryProto->getType(),
-                    $dataEntryProto->getValue()
+                    $dataEntryProto->getValue(),
+                    $logger
                 );
             } catch (\Exception $e) {
-                $this->logger->warning('Failed to convert data entry', ['exception' => $e]);
+                $logger->warning('Failed to convert data entry', ['exception' => $e]);
             }
         }
 
         return new ExtraData($dataEntryList);
-    }
-
-    /**
-     * @deprecated replaced by ExtraDataConverter::convert()
-     *
-     * @param string|null $data
-     *   Base64 encoded data.
-     *
-     * @return \Yoti\Profile\ExtraData
-     */
-    public static function convertValue(?string $data): ExtraData
-    {
-        return (new self(new Logger()))->convert($data);
     }
 }
