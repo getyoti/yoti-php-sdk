@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
-use Google\Protobuf\Internal\GPBDecodeException;
 use Psr\Log\LoggerInterface;
 use Yoti\Exception\ExtraDataException;
 use Yoti\Profile\ExtraData;
@@ -119,7 +118,8 @@ class ExtraDataConverterTest extends TestCase
             ->with(
                 'Failed to parse extra data',
                 $this->callback(function ($context) {
-                    $this->assertInstanceOf(GPBDecodeException::class, $context['exception']);
+                    $this->assertInstanceOf(\Exception::class, $context['exception']);
+                    $this->assertStringContainsString('wire type', $context['exception']->getMessage());
                     return true;
                 })
             );
