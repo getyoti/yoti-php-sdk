@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\Profile\Util\ExtraData;
 
 use Psr\Log\LoggerInterface;
+use Yoti\Exception\DateTimeException;
 use Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter;
 use Yoti\Protobuf\Sharepubapi\Definition;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
@@ -121,12 +122,18 @@ class ThirdPartyAttributeConverterTest extends TestCase
      *
      * @dataProvider invalidDateProvider
      */
-    public function testConvertValueInvalidDate($invalidExpiryDate)
+    public function testConvertValueInvalidDate($invalidExpiryDate, $expectedException)
     {
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Failed to parse expiry date from ThirdPartyAttribute');
+            ->with(
+                'Failed to parse expiry date from ThirdPartyAttribute',
+                $this->callback(function ($context) use ($expectedException) {
+                    $this->assertInstanceOf($expectedException, $context['exception']);
+                    return true;
+                })
+            );
 
         $thirdPartyAttribute = $this->thirdPartyAttributeConverter->convert(
             $this->createThirdPartyAttribute(
@@ -152,9 +159,9 @@ class ThirdPartyAttributeConverterTest extends TestCase
     public function invalidDateProvider()
     {
         return [
-            [ '' ],
-            [ 1 ],
-            [ 'invalid date' ],
+            [ '', \InvalidArgumentException::class ],
+            [ 1, DateTimeException::class ],
+            [ 'invalid date', DateTimeException::class],
         ];
     }
 

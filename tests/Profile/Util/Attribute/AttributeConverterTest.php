@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yoti\Test\Profile\Util\Attribute;
 
 use Psr\Log\LoggerInterface;
+use Yoti\Exception\AttributeException;
+use Yoti\Exception\DateTimeException;
 use Yoti\Media\Image;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
@@ -122,7 +124,13 @@ class AttributeConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Could not parse string to DateTime');
+            ->with(
+                'Could not parse string to DateTime',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(DateTimeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
@@ -225,7 +233,13 @@ class AttributeConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Value is NULL (Attribute: test_attr)');
+            ->with(
+                'Value is NULL (Attribute: test_attr)',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(AttributeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         $attr = $this->attributeConverter->convert($this->createProtobufAttribute(
             'test_attr',
@@ -342,7 +356,13 @@ class AttributeConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Document Images could not be decoded (Attribute: document_images)');
+            ->with(
+                'Document Images could not be decoded (Attribute: document_images)',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(AttributeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         // Create mock Attribute that will return MultiValue as the value.
         $protobufAttribute = $this->createProtobufAttribute(
@@ -426,7 +446,13 @@ class AttributeConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Value is NULL (Attribute: test_attr)');
+            ->with(
+                'Value is NULL (Attribute: test_attr)',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(AttributeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         // Get MultiValue values.
         $values = $this->createMultiValueValues();

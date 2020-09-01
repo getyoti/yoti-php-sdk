@@ -11,6 +11,7 @@ use Yoti\Aml\Address as AmlAddress;
 use Yoti\Aml\Country as AmlCountry;
 use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
+use Yoti\Exception\DateTimeException;
 use Yoti\Profile\ActivityDetails;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
@@ -241,7 +242,13 @@ class YotiClientTest extends TestCase
         $logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Could not parse string to DateTime');
+            ->with(
+                'Could not parse string to DateTime',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(DateTimeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
