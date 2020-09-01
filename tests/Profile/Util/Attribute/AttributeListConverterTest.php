@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\Profile\Util\Attribute;
 
 use Psr\Log\LoggerInterface;
+use Yoti\Exception\AttributeException;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute as AttributeProto;
@@ -43,7 +44,13 @@ class AttributeListConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Value is NULL (Attribute: some-attribute)');
+            ->with(
+                'Value is NULL (Attribute: some-attribute)',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(AttributeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         $someName = 'some name';
         $someValue = 'some value';

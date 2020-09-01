@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
+use Google\Protobuf\Internal\GPBDecodeException;
 use Psr\Log\LoggerInterface;
+use Yoti\Exception\ExtraDataException;
 use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
@@ -81,8 +83,20 @@ class ExtraDataConverterTest extends TestCase
             ->expects($this->exactly(2))
             ->method('warning')
             ->withConsecutive(
-                ['Failed to convert data entry'],
-                ['Failed to convert data entry']
+                [
+                    'Failed to convert data entry',
+                    $this->callback(function ($context) {
+                        $this->assertInstanceOf(ExtraDataException::class, $context['exception']);
+                        return true;
+                    })
+                ],
+                [
+                    'Failed to convert data entry',
+                    $this->callback(function ($context) {
+                        $this->assertInstanceOf(ExtraDataException::class, $context['exception']);
+                        return true;
+                    })
+                ]
             );
 
         $someToken = 'some token';
@@ -121,7 +135,13 @@ class ExtraDataConverterTest extends TestCase
         $this->logger
             ->expects($this->exactly(1))
             ->method('warning')
-            ->with('Failed to parse extra data');
+            ->with(
+                'Failed to parse extra data',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(GPBDecodeException::class, $context['exception']);
+                    return true;
+                })
+            );
 
         $extraData = $this->extraDataConverter->convert('some invalid data');
 
