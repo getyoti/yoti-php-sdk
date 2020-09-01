@@ -30,9 +30,9 @@ class Receipt
     private $receiptData;
 
     /**
-     * @var \Yoti\Profile\Util\ExtraData\ExtraDataConverter
+     * @var \Psr\Log\LoggerInterface
      */
-    private $extraDataConverter;
+    private $logger;
 
     /**
      * Receipt constructor.
@@ -43,7 +43,7 @@ class Receipt
      */
     public function __construct(array $receiptData, ?LoggerInterface $logger = null)
     {
-        $this->extraDataConverter = new ExtraDataConverter($logger ?? new Logger());
+        $this->logger = $logger ?? new Logger();
 
         $this->validateReceipt($receiptData);
 
@@ -135,8 +135,9 @@ class Receipt
      */
     public function parseExtraData(PemFile $pemFile): ExtraData
     {
-        return $this->extraDataConverter->convert(
-            $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pemFile)
+        return ExtraDataConverter::convertValue(
+            $this->decryptAttribute(self::ATTR_EXTRA_DATA_CONTENT, $pemFile),
+            $this->logger
         );
     }
 

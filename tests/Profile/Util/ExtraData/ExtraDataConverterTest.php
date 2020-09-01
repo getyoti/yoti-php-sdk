@@ -25,11 +25,6 @@ class ExtraDataConverterTest extends TestCase
     private const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
 
     /**
-     * @var \Yoti\Profile\Util\ExtraData\ExtraDataConverter;
-     */
-    private $extraDataConverter;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -37,16 +32,14 @@ class ExtraDataConverterTest extends TestCase
     public function setup(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->extraDataConverter = new ExtraDataConverter($this->logger);
     }
 
     /**
-     * @covers ::convert
-     * @covers ::__construct
+     * @covers ::convertValue
      */
     public function testConvert()
     {
-        $extraData = $this->extraDataConverter->convert(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
+        $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
         $this->assertInstanceOf(ExtraData::class, $extraData);
 
         $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
@@ -64,18 +57,6 @@ class ExtraDataConverterTest extends TestCase
 
     /**
      * @covers ::convertValue
-     */
-    public function testConvertValue()
-    {
-        $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
-        $this->assertInstanceOf(ExtraData::class, $extraData);
-
-        $attributeIssuanceDetails = $extraData->getAttributeIssuanceDetails();
-        $this->assertInstanceOf(AttributeIssuanceDetails::class, $attributeIssuanceDetails);
-    }
-
-    /**
-     * @covers ::convert
      */
     public function testConvertValueSkipInvalidDataEntries()
     {
@@ -122,13 +103,13 @@ class ExtraDataConverterTest extends TestCase
             ]
         ]))->serializeToString();
 
-        $extraData = $this->extraDataConverter->convert($extraDataContent);
+        $extraData = ExtraDataConverter::convertValue($extraDataContent, $this->logger);
 
         $this->assertEquals(base64_encode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
     }
 
     /**
-     * @covers ::convert
+     * @covers ::convertValue
      */
     public function testConvertValueInvalidData()
     {
@@ -143,20 +124,20 @@ class ExtraDataConverterTest extends TestCase
                 })
             );
 
-        $extraData = $this->extraDataConverter->convert('some invalid data');
+        $extraData = ExtraDataConverter::convertValue('some invalid data', $this->logger);
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());
     }
 
     /**
-     * @covers ::convert
+     * @covers ::convertValue
      *
      * @dataProvider emptyDataProvider
      */
     public function testConvertValueEmptyData($emptyData)
     {
-        $extraData = $this->extraDataConverter->convert($emptyData);
+        $extraData = ExtraDataConverter::convertValue($emptyData);
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());

@@ -64,11 +64,6 @@ class ActivityDetails
     private $logger;
 
     /**
-     * @var \Yoti\Profile\Util\Attribute\AttributeListConverter
-     */
-    private $attributeListConverter;
-
-    /**
      * ActivityDetails constructor.
      *
      * @param \Yoti\Profile\Receipt $receipt
@@ -80,7 +75,6 @@ class ActivityDetails
         $this->receipt = $receipt;
         $this->pemFile = $pemFile;
         $this->logger = $logger ?? new Logger();
-        $this->attributeListConverter = new AttributeListConverter($this->logger);
 
         $this->setProfile();
         $this->setTimestamp();
@@ -116,7 +110,7 @@ class ActivityDetails
         $protobufAttrList = $this->receipt->parseOtherPartyProfileContent($this->pemFile);
 
         $this->userProfile = new UserProfile(
-            $this->attributeListConverter->convert($protobufAttrList)
+            AttributeListConverter::convertToYotiAttributesList($protobufAttrList, $this->logger)
         );
     }
 
@@ -125,7 +119,7 @@ class ActivityDetails
         $protobufAttrList = $this->receipt->parseProfileContent($this->pemFile);
 
         $this->applicationProfile = new ApplicationProfile(
-            $this->attributeListConverter->convert($protobufAttrList)
+            AttributeListConverter::convertToYotiAttributesList($protobufAttrList, $this->logger)
         );
     }
 
