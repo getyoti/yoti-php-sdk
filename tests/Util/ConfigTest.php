@@ -150,6 +150,7 @@ class ConfigTest extends TestCase
      * @covers ::setLogger
      * @covers ::getLogger
      * @covers ::validateKeys
+     * @covers ::__construct
      */
     public function testGetLogger()
     {
@@ -201,5 +202,17 @@ class ConfigTest extends TestCase
         new Config([
             'some.invalid.key' => 'some string',
         ]);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testNullValuesIgnored()
+    {
+        $config = new Config([
+            Config::SDK_IDENTIFIER => null,
+        ]);
+
+        $this->assertEquals(Constants::SDK_IDENTIFIER, $config->getSdkIdentifier());
     }
 }
