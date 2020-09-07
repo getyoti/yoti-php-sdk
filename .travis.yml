@@ -31,9 +31,18 @@ jobs:
         - composer test
     - <<: *compatibility
       php: "7.4"
-      name: "PHP: 7.4 / Protobuf C Extension"
+      name: "PHP: 7.4 / Protobuf C Extension 3.12"
       install:
         - pecl install protobuf-3.12.2
+        - travis_retry composer self-update
+        - travis_retry composer install --no-interaction --prefer-source --dev
+      script:
+        - composer test
+    - <<: *compatibility
+      php: "7.4"
+      name: "PHP: 7.4 / Protobuf C Extension 3.13"
+      install:
+        - pecl install protobuf-3.13.0
         - travis_retry composer self-update
         - travis_retry composer install --no-interaction --prefer-source --dev
       script:
