@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\Util\DateTime;
 
 class GetSessionResult
 {
@@ -45,6 +46,11 @@ class GetSessionResult
     private $clientSessionTokenTtl;
 
     /**
+     * @var \DateTime
+     */
+    private $biometricConsent;
+
+    /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
      */
@@ -55,6 +61,10 @@ class GetSessionResult
         $this->userTrackingId = $sessionData['user_tracking_id'] ?? null;
         $this->clientSessionToken = $sessionData['client_session_token'] ?? null;
         $this->clientSessionTokenTtl = $sessionData['client_session_token_ttl'] ?? null;
+
+        if (isset($sessionData['biometric_consent'])) {
+            $this->biometricConsent = DateTime::stringToDateTime($sessionData['biometric_consent']);
+        }
 
         if (isset($sessionData['checks'])) {
             foreach ($sessionData['checks'] as $check) {
@@ -121,6 +131,14 @@ class GetSessionResult
     public function getClientSessionTokenTtl(): ?int
     {
         return $this->clientSessionTokenTtl;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getBiometricConsentTimestamp(): ?\DateTime
+    {
+        return $this->biometricConsent;
     }
 
     /**

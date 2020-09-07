@@ -52,6 +52,11 @@ class SessionSpecificationBuilder
     private $requiredDocuments = [];
 
     /**
+     * @var bool|null
+     */
+    private $blockBiometricConsent;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -155,6 +160,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets whether or not to block the collection of biometric consent
+     *
+     * @param bool $blockBiometricConsent
+     *
+     * @return $this
+     */
+    public function withBlockBiometricConsent(bool $blockBiometricConsent): self
+    {
+        $this->blockBiometricConsent = $blockBiometricConsent;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -167,7 +185,8 @@ class SessionSpecificationBuilder
             $this->requestedChecks,
             $this->requestedTasks,
             $this->sdkConfig,
-            $this->requiredDocuments
+            $this->requiredDocuments,
+            $this->blockBiometricConsent
         );
     }
 }

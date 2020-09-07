@@ -8,6 +8,7 @@ use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\Test\TestCase;
+use Yoti\Util\DateTime;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\GetSessionResult
@@ -25,6 +26,7 @@ class GetSessionResultTest extends TestCase
     private const SOME_USER_TRACKING_ID = 'someUserTrackingId';
     private const SOME_CLIENT_SESSION_TOKEN = 'someClientSessionToken';
     private const SOME_CLIENT_SESSION_TOKEN_TTL = 300;
+    private const SOME_BIOMETRIC_CONSENT_DATE_STRING = '2019-12-02T12:00:00.123Z';
 
     /**
      * @test
@@ -36,6 +38,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getClientSessionTokenTtl
      * @covers ::getResources
      * @covers ::getChecks
+     * @covers ::getBiometricConsentTimestamp
      */
     public function shouldBuildCorrectly()
     {
@@ -45,6 +48,7 @@ class GetSessionResultTest extends TestCase
             'user_tracking_id' => self::SOME_USER_TRACKING_ID,
             'client_session_token' => self::SOME_CLIENT_SESSION_TOKEN,
             'client_session_token_ttl' => self::SOME_CLIENT_SESSION_TOKEN_TTL,
+            'biometric_consent' => self::SOME_BIOMETRIC_CONSENT_DATE_STRING,
             'checks' => [
                 [ 'type' => 'ID_DOCUMENT_AUTHENTICITY' ]
             ],
@@ -64,6 +68,11 @@ class GetSessionResultTest extends TestCase
         $this->assertInstanceOf(AuthenticityCheckResponse::class, $result->getChecks()[0]);
 
         $this->assertNotNull($result->getResources());
+
+        $this->assertEquals(
+            DateTime::stringToDateTime(self::SOME_BIOMETRIC_CONSENT_DATE_STRING),
+            $result->getBiometricConsentTimestamp()
+        );
     }
 
     /**
