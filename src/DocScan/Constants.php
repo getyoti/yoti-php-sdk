@@ -17,4 +17,8 @@ class Constants
     public const DOCUMENT_RESTRICTIONS = 'DOCUMENT_RESTRICTIONS';
     public const INCLUSION_WHITELIST = 'WHITELIST';
     public const INCLUSION_BLACKLIST = 'BLACKLIST';
+
+    public const ALWAYS = 'ALWAYS';
+    public const FALLBACK = 'FALLBACK';
+    public const NEVER = 'NEVER';
 }

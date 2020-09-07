@@ -8,6 +8,15 @@ use Yoti\DocScan\Constants;
 
 class RequestedDocumentAuthenticityCheck extends RequestedCheck
 {
+    /**
+     * @var RequestedDocumentAuthenticityCheckConfig|null
+     */
+    private $config;
+
+    public function __construct(?RequestedDocumentAuthenticityCheckConfig $config = null)
+    {
+        $this->config = $config;
+    }
 
     /**
      * @inheritDoc
@@ -22,6 +31,6 @@ class RequestedDocumentAuthenticityCheck extends RequestedCheck
      */
     protected function getConfig(): ?RequestedCheckConfigInterface
     {
-        return null;
+        return $this->config;
     }
 }
