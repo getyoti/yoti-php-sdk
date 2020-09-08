@@ -15,7 +15,7 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withManualCheckAlways
-     * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      */
     public function shouldCorrectlyBuildRequestedFaceMatchCheck()
@@ -31,7 +31,7 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckAlways
-     * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig
@@ -57,7 +57,7 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckFallback
-     * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig
@@ -83,7 +83,7 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckNever
-     * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig

@@ -17,6 +17,7 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::__construct
      */
