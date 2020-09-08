@@ -18,7 +18,7 @@ trait ManualCheckTrait
      *
      * @return $this
      */
-    public function withManualCheck(string $manualCheck): self
+    private function setManualCheck(string $manualCheck): self
     {
         $this->manualCheck = $manualCheck;
         return $this;
@@ -29,7 +29,7 @@ trait ManualCheckTrait
      */
     public function withManualCheckAlways(): self
     {
-        return $this->withManualCheck(Constants::ALWAYS);
+        return $this->setManualCheck(Constants::ALWAYS);
     }
 
     /**
@@ -37,7 +37,7 @@ trait ManualCheckTrait
      */
     public function withManualCheckFallback(): self
     {
-        return $this->withManualCheck(Constants::FALLBACK);
+        return $this->setManualCheck(Constants::FALLBACK);
     }
 
     /**
@@ -45,6 +45,6 @@ trait ManualCheckTrait
      */
     public function withManualCheckNever(): self
     {
-        return $this->withManualCheck(Constants::NEVER);
+        return $this->setManualCheck(Constants::NEVER);
     }
 }

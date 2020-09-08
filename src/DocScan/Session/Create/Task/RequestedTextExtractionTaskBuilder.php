@@ -47,6 +47,18 @@ class RequestedTextExtractionTaskBuilder
     }
 
     /**
+     * @deprecated custom manual check config is not supported.
+     *
+     * @param string $manualCheck
+     *
+     * @return $this
+     */
+    public function withManualCheck(string $manualCheck): self
+    {
+        return $this->setManualCheck($manualCheck);
+    }
+
+    /**
      * @return RequestedTextExtractionTask
      */
     public function build(): RequestedTextExtractionTask
