@@ -316,37 +316,6 @@
 
             <div class="accordion mt-3">
 
-                @if ($livenessResource->getFaceMap())
-                <div class="card">
-                    <div class="card-header" id="liveness-{{ $livenessNum }}-facemap">
-                        <h3 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-liveness-{{ $livenessNum }}-facemap" aria-expanded="true" aria-controls="collapse-liveness-{{ $livenessNum }}-facemap">
-                                Face Map
-                            </button>
-                        </h3>
-                    </div>
-                    <div id="collapse-liveness-{{ $livenessNum }}-facemap" class="collapse" aria-labelledby="liveness-{{ $livenessNum }}-facemap">
-                        <div class="card-body">
-                            @if ($livenessResource->getFaceMap()->getMedia())
-                            <h4>Media</h4>
-                            <table class="table table-striped">
-                                <tbody>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td>
-                                            <a href="/media/{{ $livenessResource->getFaceMap()->getMedia()->getId() }}?base64=1">
-                                                {{ $livenessResource->getFaceMap()->getMedia()->getId() }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endif
-
                 @if (count($livenessResource->getFrames()) > 0)
                 <div class="card">
                     <div class="card-header" id="liveness-{{ $livenessNum }}-frames">
