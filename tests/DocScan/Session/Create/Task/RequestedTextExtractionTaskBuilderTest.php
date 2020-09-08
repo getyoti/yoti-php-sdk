@@ -12,7 +12,6 @@ use Yoti\Test\TestCase;
 class RequestedTextExtractionTaskBuilderTest extends TestCase
 {
     private const SOME_MANUAL_CHECK = 'someManualCheck';
-    private const SOME_CHIP_DATA = 'someChipData';
 
     /**
      * @test
