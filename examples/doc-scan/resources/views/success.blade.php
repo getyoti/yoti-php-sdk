@@ -37,6 +37,14 @@
                         <td>User Tracking ID</td>
                         <td>{{ $sessionResult->getUserTrackingId() }}</td>
                     </tr>
+                    @if ($sessionResult->getBiometricConsentTimestamp())
+                    <tr>
+                        <td>Biometric Consent Timestamp</td>
+                        <td>
+                            {{ $sessionResult->getBiometricConsentTimestamp()->format('r') }}
+                        </td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
