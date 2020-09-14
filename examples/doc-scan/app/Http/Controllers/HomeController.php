@@ -7,7 +7,10 @@ use Illuminate\Routing\Controller as BaseController;
 use Yoti\DocScan\DocScanClient;
 use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
+use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
+use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\DocScan\Session\Create\SdkConfigBuilder;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
 use Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTaskBuilder;
@@ -34,6 +37,10 @@ class HomeController extends BaseController
                     ->withManualCheckNever()
                     ->build()
             )
+            ->withRequestedCheck(
+                (new RequestedIdDocumentComparisonCheckBuilder())
+                    ->build()
+            )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
                     ->withManualCheckNever()
@@ -52,6 +59,24 @@ class HomeController extends BaseController
                   ->withErrorUrl(config('app.url') . '/error')
                   ->build()
               )
+            ->withRequiredDocument(
+                (new RequiredIdDocumentBuilder())
+                    ->withFilter(
+                        (new OrthogonalRestrictionsFilterBuilder())
+                            ->withWhitelistedDocumentTypes(['PASSPORT'])
+                            ->build()
+                    )
+                    ->build()
+            )
+            ->withRequiredDocument(
+                (new RequiredIdDocumentBuilder())
+                    ->withFilter(
+                        (new OrthogonalRestrictionsFilterBuilder())
+                            ->withWhitelistedDocumentTypes(['DRIVING_LICENCE'])
+                            ->build()
+                    )
+                    ->build()
+            )
             ->build();
 
         $session = $client->createSession($sessionSpec);
