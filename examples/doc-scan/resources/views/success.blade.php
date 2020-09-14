@@ -140,6 +140,26 @@
                     </div>
                 </div>
                 @endif
+
+                @if (count($sessionResult->getIdDocumentComparisonChecks()) > 0)
+                <div class="card">
+                    <div class="card-header" id="comparison-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-comparison-checks" aria-expanded="true" aria-controls="collapse-comparison-checks">
+                                ID Document Comparison Checks
+                            </button>
+                        </h3>
+                    </div>
+
+                    <div id="collapse-comparison-checks" class="collapse" aria-labelledby="comparison-checks">
+                        <div class="card-body">
+                            @foreach($sessionResult->getIdDocumentComparisonChecks() as $check)
+                            @include('partial/check', ['check' => $check])
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>
