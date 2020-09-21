@@ -42,7 +42,11 @@ class DynamicShareController extends BaseController
                         'shareUrl' => $client->createShareUrl($scenario)->getShareUrl(),
                         'button' => [
                             'label' => 'Use Yoti',
-                        ]
+                            'align' =>  'center',
+                            'width' =>  'auto',
+                            'verticalAlign' => 'top'
+                        ],
+                        'type' => 'modal'
                     ]
                 ]
             ]
