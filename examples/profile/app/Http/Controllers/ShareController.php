@@ -18,7 +18,11 @@ class ShareController extends BaseController
                         'scenarioId' => config('yoti')['scenario.id'],
                         'button' => [
                             'label' => 'Use Yoti',
-                        ]
+                            'align' =>  'center',
+                            'width' =>  'auto',
+                            'verticalAlign' => 'top'
+                        ],
+                        'type' => 'modal'
                     ]
                 ]
             ]
