@@ -18,6 +18,11 @@ class PageResponse
     private $media;
 
     /**
+     * @var FrameResponse[]
+     */
+    private $frames = [];
+
+    /**
      * PageInfo constructor.
      * @param array<string, mixed> $page
      */
@@ -25,9 +30,15 @@ class PageResponse
     {
         $this->captureMethod = $page['capture_method'] ?? null;
 
-        $this->media = isset($page['media'])
-            ? new MediaResponse($page['media'])
-            : null;
+        if (isset($page['media'])) {
+            $this->media = new MediaResponse($page['media']);
+        }
+
+        if (isset($page['frames']) && is_array($page['frames'])) {
+            foreach ($page['frames'] as $frame) {
+                $this->frames[] = new FrameResponse($frame);
+            }
+        }
     }
 
     /**
@@ -44,5 +55,13 @@ class PageResponse
     public function getMedia(): ?MediaResponse
     {
         return $this->media;
+    }
+
+    /**
+     * @return FrameResponse[]
+     */
+    public function getFrames(): array
+    {
+        return $this->frames;
     }
 }
