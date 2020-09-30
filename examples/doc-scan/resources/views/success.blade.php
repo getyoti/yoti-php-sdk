@@ -287,31 +287,44 @@
 
 
                 @if (count($document->getPages()) > 0)
+                @foreach ($document->getPages() as $pageNum => $page)
                 <div class="card">
-                    <div class="card-header" id="document-pages-{{ $docNum }}">
+                    <div class="card-header" id="document-pages-{{ $docNum }}-{{ $pageNum }}">
                         <h4 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-document-pages-{{ $docNum }}" aria-expanded="true" aria-controls="collapse-document-pages-{{ $docNum }}">
-                                Pages
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-document-pages-{{ $docNum }}-{{ $pageNum }}" aria-expanded="true" aria-controls="collapse-document-pages-{{ $docNum }}-{{ $pageNum }}">
+                                Page {{ $pageNum + 1 }}
                             </button>
                         </h4>
                     </div>
-                    <div id="collapse-document-pages-{{ $docNum }}" class="collapse" aria-labelledby="document-pages-{{ $docNum }}">
-                        <div class="card-body">
-                            <div class="card-group">
-                                @foreach ($document->getPages() as $page)
-                                @if ($page->getMedia())
-                                <div class="card" style="width: 18rem;">
-                                    <img class="card-img-top" src="/media/{{ $page->getMedia()->getId() }}" />
-                                    <div class="card-body">
-                                        <p>Method: {{ $page->getCaptureMethod() }}</p>
-                                    </div>
+                    <div id="collapse-document-pages-{{ $docNum }}-{{ $pageNum }}" class="collapse" aria-labelledby="document-pages-{{ $docNum }}-{{ $pageNum }}">
+
+                        @if ($page->getMedia())
+                        <div class="card-group">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="/media/{{ $page->getMedia()->getId() }}" />
+                                <div class="card-body">
+                                    <p>Method: {{ $page->getCaptureMethod() }}</p>
                                 </div>
-                                @endif
-                                @endforeach
                             </div>
                         </div>
+                        @endif
+
+                        @if ($page->getFrames())
+                        <div class="card-group">
+                            @foreach ($page->getFrames() as $frame)
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="/media/{{ $frame->getMedia()->getId() }}" />
+                                <div class="card-body">
+                                    <div class="card-title">Frame</div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+
                     </div>
                 </div>
+                @endforeach
                 @endif
 
             </div>
