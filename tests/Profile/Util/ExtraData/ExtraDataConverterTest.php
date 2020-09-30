@@ -119,7 +119,10 @@ class ExtraDataConverterTest extends TestCase
                 'Failed to parse extra data',
                 $this->callback(function ($context) {
                     $this->assertInstanceOf(\Exception::class, $context['exception']);
-                    $this->assertStringContainsString('wire type', $context['exception']->getMessage());
+                    $this->assertStringContainsString(
+                        'Error occurred during parsing',
+                        $context['exception']->getMessage()
+                    );
                     return true;
                 })
             );
