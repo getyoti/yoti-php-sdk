@@ -37,6 +37,14 @@
                         <td>User Tracking ID</td>
                         <td>{{ $sessionResult->getUserTrackingId() }}</td>
                     </tr>
+                    @if ($sessionResult->getBiometricConsentTimestamp())
+                    <tr>
+                        <td>Biometric Consent Timestamp</td>
+                        <td>
+                            {{ $sessionResult->getBiometricConsentTimestamp()->format('r') }}
+                        </td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -126,6 +134,26 @@
                     <div id="collapse-liveness-checks" class="collapse" aria-labelledby="liveness-checks">
                         <div class="card-body">
                             @foreach ($sessionResult->getLivenessChecks() as $check)
+                            @include('partial/check', ['check' => $check])
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if (count($sessionResult->getIdDocumentComparisonChecks()) > 0)
+                <div class="card">
+                    <div class="card-header" id="comparison-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-comparison-checks" aria-expanded="true" aria-controls="collapse-comparison-checks">
+                                ID Document Comparison Checks
+                            </button>
+                        </h3>
+                    </div>
+
+                    <div id="collapse-comparison-checks" class="collapse" aria-labelledby="comparison-checks">
+                        <div class="card-body">
+                            @foreach($sessionResult->getIdDocumentComparisonChecks() as $check)
                             @include('partial/check', ['check' => $check])
                             @endforeach
                         </div>
@@ -315,37 +343,6 @@
             </table>
 
             <div class="accordion mt-3">
-
-                @if ($livenessResource->getFaceMap())
-                <div class="card">
-                    <div class="card-header" id="liveness-{{ $livenessNum }}-facemap">
-                        <h3 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-liveness-{{ $livenessNum }}-facemap" aria-expanded="true" aria-controls="collapse-liveness-{{ $livenessNum }}-facemap">
-                                Face Map
-                            </button>
-                        </h3>
-                    </div>
-                    <div id="collapse-liveness-{{ $livenessNum }}-facemap" class="collapse" aria-labelledby="liveness-{{ $livenessNum }}-facemap">
-                        <div class="card-body">
-                            @if ($livenessResource->getFaceMap()->getMedia())
-                            <h4>Media</h4>
-                            <table class="table table-striped">
-                                <tbody>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td>
-                                            <a href="/media/{{ $livenessResource->getFaceMap()->getMedia()->getId() }}?base64=1">
-                                                {{ $livenessResource->getFaceMap()->getMedia()->getId() }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endif
 
                 @if (count($livenessResource->getFrames()) > 0)
                 <div class="card">

@@ -8,10 +8,10 @@ use JsonSerializable;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
+use Yoti\Util\Json;
 
 class SessionSpecification implements JsonSerializable
 {
-
     /**
      * @var int|null
      */
@@ -53,6 +53,11 @@ class SessionSpecification implements JsonSerializable
     private $sdkConfig;
 
     /**
+     * @var bool|null
+     */
+    private $blockBiometricConsent;
+
+    /**
      * SessionSpecification constructor.
      * @param int|null $clientSessionTokenTtl
      * @param int|null $resourcesTtl
@@ -62,6 +67,7 @@ class SessionSpecification implements JsonSerializable
      * @param RequestedTask[] $requestedTasks
      * @param SdkConfig|null $sdkConfig
      * @param RequiredDocument[] $requiredDocuments
+     * @param bool|null $blockBiometricConsent
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -71,7 +77,8 @@ class SessionSpecification implements JsonSerializable
         array $requestedChecks,
         array $requestedTasks,
         ?SdkConfig $sdkConfig,
-        array $requiredDocuments = []
+        array $requiredDocuments = [],
+        ?bool $blockBiometricConsent = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->resourcesTtl = $resourcesTtl;
@@ -81,6 +88,7 @@ class SessionSpecification implements JsonSerializable
         $this->requestedTasks = $requestedTasks;
         $this->sdkConfig = $sdkConfig;
         $this->requiredDocuments = $requiredDocuments;
+        $this->blockBiometricConsent = $blockBiometricConsent;
     }
 
     /**
@@ -88,7 +96,7 @@ class SessionSpecification implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return [
+        return Json::withoutNullValues([
             'client_session_token_ttl' => $this->getClientSessionTokenTtl(),
             'resources_ttl' => $this->getResourcesTtl(),
             'user_tracking_id' => $this->getUserTrackingId(),
@@ -97,7 +105,8 @@ class SessionSpecification implements JsonSerializable
             'requested_tasks' => $this->getRequestedTasks(),
             'sdk_config' => $this->getSdkConfig(),
             'required_documents' => $this->getRequiredDocuments(),
-        ];
+            'block_biometric_consent' => $this->getBlockBiometricConsent(),
+        ]);
     }
 
     /**
@@ -162,5 +171,15 @@ class SessionSpecification implements JsonSerializable
     public function getRequiredDocuments(): array
     {
         return $this->requiredDocuments;
+    }
+
+    /**
+     * Whether or not to block the collection of biometric consent
+     *
+     * @return bool|null
+     */
+    public function getBlockBiometricConsent(): ?bool
+    {
+        return $this->blockBiometricConsent;
     }
 }

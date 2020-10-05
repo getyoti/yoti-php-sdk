@@ -12,11 +12,11 @@ use Yoti\Test\TestCase;
 class RequestedTextExtractionTaskBuilderTest extends TestCase
 {
     private const SOME_MANUAL_CHECK = 'someManualCheck';
-    private const SOME_CHIP_DATA = 'someChipData';
 
     /**
      * @test
      * @covers ::withManualCheck
+     * @covers ::setManualCheck
      * @covers ::build
      * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::__construct
      */

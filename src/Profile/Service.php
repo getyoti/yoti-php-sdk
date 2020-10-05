@@ -101,12 +101,12 @@ class Service
      */
     private function decryptConnectToken(string $encryptedConnectToken): string
     {
-        $tok = base64_decode(strtr($encryptedConnectToken, '-_,', '+/='), true);
-        if ($tok === false) {
+        $decodedToken = base64_decode(strtr($encryptedConnectToken, '-_', '+/'), true);
+        if ($decodedToken === false) {
             throw new ActivityDetailsException('Could not decode one time use token.');
         }
 
-        openssl_private_decrypt($tok, $token, (string) $this->pemFile);
+        openssl_private_decrypt($decodedToken, $token, (string) $this->pemFile);
 
         if (!isset($token) || strlen($token) === 0) {
             throw new ActivityDetailsException('Could not decrypt one time use token.');

@@ -8,6 +8,7 @@ use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\Test\TestCase;
+use Yoti\Util\DateTime;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\GetSessionResult
@@ -17,6 +18,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_AUTHENTICITY = 'ID_DOCUMENT_AUTHENTICITY';
     private const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
+    private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
     private const LIVENESS = 'LIVENESS';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
     private const SOME_STATE = 'someState';
@@ -24,6 +26,7 @@ class GetSessionResultTest extends TestCase
     private const SOME_USER_TRACKING_ID = 'someUserTrackingId';
     private const SOME_CLIENT_SESSION_TOKEN = 'someClientSessionToken';
     private const SOME_CLIENT_SESSION_TOKEN_TTL = 300;
+    private const SOME_BIOMETRIC_CONSENT_DATE_STRING = '2019-12-02T12:00:00.123Z';
 
     /**
      * @test
@@ -35,6 +38,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getClientSessionTokenTtl
      * @covers ::getResources
      * @covers ::getChecks
+     * @covers ::getBiometricConsentTimestamp
      */
     public function shouldBuildCorrectly()
     {
@@ -44,6 +48,7 @@ class GetSessionResultTest extends TestCase
             'user_tracking_id' => self::SOME_USER_TRACKING_ID,
             'client_session_token' => self::SOME_CLIENT_SESSION_TOKEN,
             'client_session_token_ttl' => self::SOME_CLIENT_SESSION_TOKEN_TTL,
+            'biometric_consent' => self::SOME_BIOMETRIC_CONSENT_DATE_STRING,
             'checks' => [
                 [ 'type' => 'ID_DOCUMENT_AUTHENTICITY' ]
             ],
@@ -63,6 +68,11 @@ class GetSessionResultTest extends TestCase
         $this->assertInstanceOf(AuthenticityCheckResponse::class, $result->getChecks()[0]);
 
         $this->assertNotNull($result->getResources());
+
+        $this->assertEquals(
+            DateTime::stringToDateTime(self::SOME_BIOMETRIC_CONSENT_DATE_STRING),
+            $result->getBiometricConsentTimestamp()
+        );
     }
 
     /**
@@ -89,6 +99,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getAuthenticityChecks
      * @covers ::getFaceMatchChecks
      * @covers ::getTextDataChecks
+     * @covers ::getIdDocumentComparisonChecks
      * @covers ::getLivenessChecks
      * @covers ::createCheckFromArray
      * @covers ::filterCheckByType
@@ -100,21 +111,24 @@ class GetSessionResultTest extends TestCase
                 [ 'type' => self::ID_DOCUMENT_AUTHENTICITY ],
                 [ 'type' => self::ID_DOCUMENT_FACE_MATCH ],
                 [ 'type' => self::ID_DOCUMENT_TEXT_DATA_CHECK ],
+                [ 'type' => self::ID_DOCUMENT_COMPARISON ],
                 [ 'type' => self::LIVENESS ],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(4, $result->getChecks());
+        $this->assertCount(5, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
+        $this->assertCount(1, $result->getIdDocumentComparisonChecks());
         $this->assertCount(1, $result->getLivenessChecks());
 
         $this->assertEquals(self::ID_DOCUMENT_AUTHENTICITY, $result->getAuthenticityChecks()[0]->getType());
         $this->assertEquals(self::ID_DOCUMENT_FACE_MATCH, $result->getFaceMatchChecks()[0]->getType());
         $this->assertEquals(self::ID_DOCUMENT_TEXT_DATA_CHECK, $result->getTextDataChecks()[0]->getType());
+        $this->assertEquals(self::ID_DOCUMENT_COMPARISON, $result->getIdDocumentComparisonChecks()[0]->getType());
         $this->assertEquals(self::LIVENESS, $result->getLivenessChecks()[0]->getType());
     }
 }

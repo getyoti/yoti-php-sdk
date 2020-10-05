@@ -4,61 +4,20 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Task;
 
+use Yoti\DocScan\Session\Create\Traits\Builder\ManualCheckTrait;
 use Yoti\Util\Validation;
 
 class RequestedTextExtractionTaskBuilder
 {
+    use ManualCheckTrait;
 
-    private const ALWAYS = 'ALWAYS';
-    private const FALLBACK = 'FALLBACK';
-    private const NEVER = 'NEVER';
     private const DESIRED = 'DESIRED';
     private const IGNORE = 'IGNORE';
 
     /**
      * @var string
      */
-    private $manualCheck;
-
-    /**
-     * @var string
-     */
     private $chipData;
-
-    /**
-     * @param string $manualCheck
-     *
-     * @return $this
-     */
-    public function withManualCheck(string $manualCheck): self
-    {
-        $this->manualCheck = $manualCheck;
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function withManualCheckAlways(): self
-    {
-        return $this->withManualCheck(self::ALWAYS);
-    }
-
-    /**
-     * @return $this
-     */
-    public function withManualCheckFallback(): self
-    {
-        return $this->withManualCheck(self::FALLBACK);
-    }
-
-    /**
-     * @return $this
-     */
-    public function withManualCheckNever(): self
-    {
-        return $this->withManualCheck(self::NEVER);
-    }
 
     /**
      * @param string $chipData
@@ -85,6 +44,18 @@ class RequestedTextExtractionTaskBuilder
     public function withChipDataIgnore(): self
     {
         return $this->withChipData(self::IGNORE);
+    }
+
+    /**
+     * @deprecated custom manual check config is not supported.
+     *
+     * @param string $manualCheck
+     *
+     * @return $this
+     */
+    public function withManualCheck(string $manualCheck): self
+    {
+        return $this->setManualCheck($manualCheck);
     }
 
     /**

@@ -22,4 +22,4 @@ services:
     volumes:
       - ../../:/usr/share/yoti-php-sdk
     working_dir: /usr/share/yoti-php-sdk/examples/profile
-    command: update
+    command: update-local
