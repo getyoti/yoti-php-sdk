@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Http;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface;
 use Yoti\Http\Payload;
 use Yoti\Test\TestCase;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\Http\Payload
@@ -83,7 +82,7 @@ class PayloadTest extends TestCase
      */
     public function testFromStream()
     {
-        $somePayloadStream = stream_for(self::SOME_STRING);
+        $somePayloadStream = Psr7\Utils::streamFor(self::SOME_STRING);
         $payload = Payload::fromStream($somePayloadStream);
 
         $this->assertEquals($somePayloadStream, $payload->toStream());
