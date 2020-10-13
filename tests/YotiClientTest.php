@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -18,8 +19,6 @@ use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
 use Yoti\ShareUrl\Result as ShareUrlResult;
 use Yoti\Util\Config;
 use Yoti\YotiClient;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\YotiClient
@@ -92,8 +91,9 @@ class YotiClientTest extends TestCase
      */
     private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
     {
+        $body = Psr7\Utils::streamFor(file_get_contents(TestData::AML_CHECK_RESULT_JSON));
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
+        $response->method('getBody')->willReturn($body);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -150,8 +150,9 @@ class YotiClientTest extends TestCase
         $amlAddress = new AmlAddress(new AmlCountry('GBR'));
         $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
 
+        $body = Psr7\Utils::streamFor(file_get_contents(TestData::AML_CHECK_RESULT_JSON));
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
+        $response->method('getBody')->willReturn($body);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -182,7 +183,7 @@ class YotiClientTest extends TestCase
             ->build();
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(json_encode([
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
             'qrcode' => 'http://dynamic-code.yoti.com/some-qr-code',
             'ref_id' => 'some-ref-id',
         ])));
