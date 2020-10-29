@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Service\ShareUrl;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
@@ -15,8 +16,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Service
@@ -47,7 +46,7 @@ class ServiceTest extends TestCase
             ->build();
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(json_encode([
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
             'qrcode' => $expectedQrCode,
             'ref_id' => $expectedRefId,
         ])));
@@ -100,7 +99,7 @@ class ServiceTest extends TestCase
     private function createServiceWithErrorResponse($statusCode)
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for('{}'));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor('{}'));
         $response->method('getStatusCode')->willReturn($statusCode);
 
         $httpClient = $this->createMock(ClientInterface::class);

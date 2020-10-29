@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Aml;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Aml\Address;
@@ -15,8 +16,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Service
@@ -43,7 +42,8 @@ class ServiceTest extends TestCase
         $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
+        $body = file_get_contents(TestData::AML_CHECK_RESULT_JSON);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -195,7 +195,7 @@ class ServiceTest extends TestCase
     private function createServiceWithErrorResponse($statusCode, $body = '{}', ?string $contentType = null)
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for($body));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn($statusCode);
 
         if ($contentType !== null) {

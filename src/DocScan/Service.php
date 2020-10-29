@@ -153,7 +153,7 @@ class Service
         self::assertResponseIsSuccess($response);
 
         $content = (string) $response->getBody();
-        $mimeType = $response->getHeader("Content-Type")[0];
+        $mimeType = $response->getHeader("Content-Type")[0] ?? '';
 
         return new Media($mimeType, $content);
     }

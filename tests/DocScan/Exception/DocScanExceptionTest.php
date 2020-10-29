@@ -2,11 +2,10 @@
 
 namespace Yoti\Test\DocScan\Exception;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\DocScan\Exception\DocScanException;
 use Yoti\Test\TestCase;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 class DocScanExceptionTest extends TestCase
 {
@@ -65,7 +64,7 @@ class DocScanExceptionTest extends TestCase
         $responseMock = $this->createMock(ResponseInterface::class);
         $responseMock->method('hasHeader')->willReturn(true);
         $responseMock->method('getHeader')->willReturn(['application/json']);
-        $responseMock->method('getBody')->willReturn(stream_for(json_encode($jsonData)));
+        $responseMock->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode($jsonData)));
 
         $docScanException = new DocScanException($message, $responseMock);
 

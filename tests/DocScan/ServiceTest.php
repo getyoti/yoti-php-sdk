@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,8 +19,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\Service
@@ -88,7 +87,7 @@ class ServiceTest extends TestCase
     private function createResponse(int $statusCode, string $body = '{}', array $headers = []): ResponseInterface
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for($body));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn($statusCode);
         foreach ($headers as $header => $value) {
             $params[] = [$header, $value];
@@ -382,6 +381,41 @@ class ServiceTest extends TestCase
             Media::class,
             $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
         );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getMediaContent
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getMediaContentShouldReturnMediaObjectWithNoContent()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn(
+                $this->createResponse(
+                    204,
+                    '',
+                    []
+                )
+            );
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $media = $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $this->assertInstanceOf(Media::class, $media);
+        $this->assertEquals('', $media->getMimeType());
+        $this->assertEquals('', $media->getContent());
     }
 
     /**
