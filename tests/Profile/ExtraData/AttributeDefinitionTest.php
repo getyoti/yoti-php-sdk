@@ -41,7 +41,7 @@ class AttributeDefinitionTest extends TestCase
     public function testInvalidName($invalidName)
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type string');
+        $this->expectExceptionMessage(sprintf('%s::__construct()', AttributeDefinition::class));
 
         new AttributeDefinition($invalidName);
     }

@@ -133,7 +133,7 @@ class DateTimeTest extends TestCase
     public function emptyTimestampProvider()
     {
         return [
-            [ null, 'must be of the type string, null given', \TypeError::class ],
+            [ null, sprintf('%s::stringToDateTime()', DateTime::class), \TypeError::class ],
             [ '', 'value cannot be empty', \InvalidArgumentException::class ],
         ];
     }

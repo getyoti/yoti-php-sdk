@@ -300,7 +300,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithAgeOverIntegersOnly()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withAgeOver()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -316,7 +316,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithAgeUnderIntegersOnly()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withAgeUnder()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -527,7 +527,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithNonIntegerAuthType()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withWantedAuthType()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withWantedAuthType('99')
