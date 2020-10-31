@@ -296,14 +296,9 @@ class RequestBuilderTest extends TestCase
     public function testWithHeaderInvalidValue()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type string');
+        $this->expectExceptionMessage(sprintf('%s::withHeader()', RequestBuilder::class));
 
-        (new RequestBuilder())
-          ->withBaseUrl(self::SOME_BASE_URL)
-          ->withPemFilePath(TestData::PEM_FILE)
-          ->withHeader('Custom', ['invalid value'])
-          ->withMethod('GET')
-          ->build();
+        (new RequestBuilder())->withHeader('Custom', ['invalid value']);
     }
 
     /**

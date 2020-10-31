@@ -9,7 +9,7 @@
   "homepage": "https://yoti.com",
   "license": "MIT",
   "require": {
-    "php": "^7.1",
+    "php": "^7.1 || ^8.0",
     "ext-json": "*",
     "google/protobuf": "^3.10",
     "phpseclib/phpseclib": "^2.0",

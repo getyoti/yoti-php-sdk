@@ -65,7 +65,7 @@ class WantedAttributeBuilderTest extends TestCase
     public function testNonStringName()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type string');
+        $this->expectExceptionMessage(sprintf('%s::withName()', WantedAttributeBuilder::class));
 
         (new WantedAttributeBuilder())
             ->withName(['some array'])
