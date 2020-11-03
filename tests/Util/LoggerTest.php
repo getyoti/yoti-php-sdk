@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Util;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 use Yoti\Test\TestCase;
 use Yoti\Util\Logger;
@@ -34,7 +35,7 @@ class LoggerTest extends TestCase
      */
     public function testLogInvalidLevel()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf('"%s" level is not allowed', self::SOME_INVALID_LEVEL));
 
         $logger = new Logger();
