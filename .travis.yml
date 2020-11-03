@@ -51,7 +51,7 @@ jobs:
       php: "8.0snapshot"
       install:
         # Remove php-cs-fixer until compatible with PHP 8
-        - travis_retry composer remove --dev --no-interaction friendsofphp/php-cs-fixer
+        - travis_retry composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
         - travis_retry composer self-update
         - travis_retry composer install --no-interaction --prefer-source --dev
       before_script:
