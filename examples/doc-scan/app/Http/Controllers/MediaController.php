@@ -15,6 +15,10 @@ class MediaController extends BaseController
         $content = $media->getContent();
         $contentType = $media->getMimeType();
 
+        if ($content === '') {
+            return response('', 204);
+        }
+
         return response($content, 200)->header('Content-Type', $contentType);
     }
 }

@@ -16,7 +16,6 @@ class ZoomLivenessResourceResponseTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getLivenessType
-     * @covers ::parseFrames
      * @covers ::getFaceMap
      * @covers ::getFrames
      */

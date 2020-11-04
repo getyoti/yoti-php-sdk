@@ -25,26 +25,15 @@ class ZoomLivenessResourceResponse extends LivenessResourceResponse
     {
         parent::__construct($zoomLiveness);
 
-        $this->faceMap = isset($zoomLiveness['facemap'])
-            ? new FaceMapResponse($zoomLiveness['facemap'])
-            : null;
-
-        if (isset($zoomLiveness['frames'])) {
-            $this->frames = $this->parseFrames($zoomLiveness['frames']);
+        if (isset($zoomLiveness['facemap'])) {
+            $this->faceMap = new FaceMapResponse($zoomLiveness['facemap']);
         }
-    }
 
-    /**
-     * @param array<array<string, mixed>> $frames
-     * @return FrameResponse[]
-     */
-    private function parseFrames(array $frames): array
-    {
-        $parsedFrames = [];
-        foreach ($frames as $frame) {
-            $parsedFrames[] = new FrameResponse($frame);
+        if (isset($zoomLiveness['frames']) && is_array($zoomLiveness['frames'])) {
+            foreach ($zoomLiveness['frames'] as $frame) {
+                $this->frames[] = new FrameResponse($frame);
+            }
         }
-        return $parsedFrames;
     }
 
     /**

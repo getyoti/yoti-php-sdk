@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Profile\ActivityDetails;
@@ -12,8 +13,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Service
@@ -193,7 +192,7 @@ class ServiceTest extends TestCase
     private function createResponse($statusCode, $body = '{}')
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for($body));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn($statusCode);
         return $response;
     }

@@ -78,12 +78,12 @@
                 </div>
                 @endif
 
-                @if (count($sessionResult->getTextDataChecks()) > 0)
+                @if (count($sessionResult->getIdDocumentTextDataChecks()) > 0)
                 <div class="card">
                     <div class="card-header" id="text-data-checks">
                         <h3 class="mb-0">
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-text-data-checks" aria-expanded="true" aria-controls="collapse-text-data-checks">
-                                Text Data Checks
+                                ID Document Text Data Checks
                             </button>
                         </h3>
 
@@ -154,6 +154,26 @@
                     <div id="collapse-comparison-checks" class="collapse" aria-labelledby="comparison-checks">
                         <div class="card-body">
                             @foreach($sessionResult->getIdDocumentComparisonChecks() as $check)
+                            @include('partial/check', ['check' => $check])
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if (count($sessionResult->getSupplementaryDocumentTextDataChecks()) > 0)
+                <div class="card">
+                    <div class="card-header" id="sup-doc-text-data-checks">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-sup-doc-text-data-checks" aria-expanded="true" aria-controls="collapse-sup-doc-text-data-checks">
+                                Supplementary Document Text Data Checks
+                            </button>
+                        </h3>
+                    </div>
+
+                    <div id="collapse-sup-doc-text-data-checks" class="collapse" aria-labelledby="sup-doc-text-data-checks">
+                        <div class="card-body">
+                            @foreach($sessionResult->getSupplementaryDocumentTextDataChecks() as $check)
                             @include('partial/check', ['check' => $check])
                             @endforeach
                         </div>
@@ -287,31 +307,211 @@
 
 
                 @if (count($document->getPages()) > 0)
+                @foreach ($document->getPages() as $pageNum => $page)
                 <div class="card">
-                    <div class="card-header" id="document-pages-{{ $docNum }}">
+                    <div class="card-header" id="document-pages-{{ $docNum }}-{{ $pageNum }}">
                         <h4 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-document-pages-{{ $docNum }}" aria-expanded="true" aria-controls="collapse-document-pages-{{ $docNum }}">
-                                Pages
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-document-pages-{{ $docNum }}-{{ $pageNum }}" aria-expanded="true" aria-controls="collapse-document-pages-{{ $docNum }}-{{ $pageNum }}">
+                                Page {{ $pageNum + 1 }}
                             </button>
                         </h4>
                     </div>
-                    <div id="collapse-document-pages-{{ $docNum }}" class="collapse" aria-labelledby="document-pages-{{ $docNum }}">
-                        <div class="card-body">
-                            <div class="card-group">
-                                @foreach ($document->getPages() as $page)
-                                @if ($page->getMedia())
+                    <div id="collapse-document-pages-{{ $docNum }}-{{ $pageNum }}" class="collapse" aria-labelledby="document-pages-{{ $docNum }}-{{ $pageNum }}">
+
+                        @if ($page->getMedia())
+                        <div class="card-group">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="/media/{{ $page->getMedia()->getId() }}" />
+                                <div class="card-body">
+                                    <p>Method: {{ $page->getCaptureMethod() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        @if ($page->getFrames())
+                        <div class="card-group">
+                            @foreach ($page->getFrames() as $frame)
+                                @if ($frame->getMedia())
                                 <div class="card" style="width: 18rem;">
-                                    <img class="card-img-top" src="/media/{{ $page->getMedia()->getId() }}" />
+                                    <img class="card-img-top" src="/media/{{ $frame->getMedia()->getId() }}" />
                                     <div class="card-body">
-                                        <p>Method: {{ $page->getCaptureMethod() }}</p>
+                                        <div class="card-title">Frame</div>
                                     </div>
                                 </div>
                                 @endif
-                                @endforeach
-                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+
+                    </div>
+                </div>
+                @endforeach
+                @endif
+
+            </div>
+
+        </div>
+    </div>
+
+    @endforeach
+    @endif
+
+
+    @if (count($sessionResult->getResources()->getSupplementaryDocuments()) > 0)
+    <div class="row pt-4">
+        <div class="col">
+            <h2>Supplementary Documents</h2>
+        </div>
+    </div>
+
+    @foreach ($sessionResult->getResources()->getSupplementaryDocuments() as $docNum => $document)
+
+    <div class="row pt-4">
+        <div class="col">
+
+            <h3>{{ $document->getDocumentType() }} <span class="badge badge-primary">{{ $document->getIssuingCountry() }}</span></h3>
+
+            <div class="accordion mt-3">
+
+                @if ($document->getDocumentFields())
+                <div class="card">
+                    <div class="card-header" id="sub-doc-fields-{{ $docNum }}">
+                        <h4 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-sub-doc-fields-{{ $docNum }}" aria-expanded="true" aria-controls="collapse-sub-doc-fields-{{ $docNum }}">
+                                Document Fields
+                            </button>
+                        </h4>
+                    </div>
+                    <div id="collapse-sub-doc-fields-{{ $docNum }}" class="collapse" aria-labelledby="sub-doc-fields-{{ $docNum }}">
+                        <div class="card-body">
+                            @if ($document->getDocumentFields()->getMedia())
+                            <h5>Media</h5>
+                            <table class="table table-striped table-light">
+                                <tbody>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>
+                                            <a href="/media/{{ $document->getDocumentFields()->getMedia()->getId() }}">
+                                                {{ $document->getDocumentFields()->getMedia()->getId() }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            @endif
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if (count($document->getTextExtractionTasks()) > 0)
+                <div class="card">
+                    <div class="card-header" id="sup-doc-text-extraction-tasks-{{ $docNum }}">
+                        <h4 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-sup-doc-text-extraction-tasks-{{ $docNum }}" aria-expanded="true" aria-controls="collapse-sup-doc-text-extraction-tasks-{{ $docNum }}">
+                                Text Extraction Tasks
+                            </button>
+                        </h4>
+                    </div>
+                    <div id="collapse-sup-doc-text-extraction-tasks-{{ $docNum }}" class="collapse" aria-labelledby="sup-doc-text-extraction-tasks-{{ $docNum }}">
+                        <div class="card-body">
+                            @foreach ($document->getTextExtractionTasks() as $task)
+                            @include('partial/task', ['task' => $task])
+
+                            @if (count($task->getGeneratedTextDataChecks()) > 0)
+                            <h5>Generated Text Data Checks</h5>
+                            @foreach ($task->getGeneratedTextDataChecks() as $check)
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>{{ $check->getId() }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            @endforeach
+                            @endif
+
+                            @if (count($task->getGeneratedMedia()) > 0)
+                            <h5>Generated Media</h5>
+                            @foreach ($task->getGeneratedMedia() as $media)
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>
+                                            <a href="/media/{{ $media->getId() }}">{{ $media->getId() }}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type</td>
+                                        <td>{{ $media->getType() }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            @endforeach
+                            @endif
+
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if ($document->getDocumentFile())
+                <div class="card">
+                    <div class="card-header" id="sup-doc-file-{{ $docNum }}">
+                        <h4 class="mb-0">
+                            <a class="btn btn-link" type="button" href="/media/{{ $document->getDocumentFile()->getMedia()->getId() }}">
+                                Download File
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+                @endif
+
+                @if (count($document->getPages()) > 0)
+                @foreach ($document->getPages() as $pageNum => $page)
+                <div class="card">
+                    <div class="card-header" id="sup-doc-pages-{{ $docNum }}-{{ $pageNum }}">
+                        <h4 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-sup-doc-pages-{{ $docNum }}-{{ $pageNum }}" aria-expanded="true" aria-controls="collapse-sup-doc-pages-{{ $docNum }}-{{ $pageNum }}">
+                                Page {{ $pageNum + 1 }}
+                            </button>
+                        </h4>
+                    </div>
+                    <div id="collapse-sup-doc-pages-{{ $docNum }}-{{ $pageNum }}" class="collapse" aria-labelledby="sup-doc-pages-{{ $docNum }}-{{ $pageNum }}">
+
+                        @if ($page->getMedia())
+                        <div class="card-group">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="/media/{{ $page->getMedia()->getId() }}" />
+                                <div class="card-body">
+                                    <p>Method: {{ $page->getCaptureMethod() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        @if ($page->getFrames())
+                        <div class="card-group">
+                            @foreach ($page->getFrames() as $frame)
+                                @if ($frame->getMedia())
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top" src="/media/{{ $frame->getMedia()->getId() }}" />
+                                    <div class="card-body">
+                                        <div class="card-title">Frame</div>
+                                    </div>
+                                </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        @endif
+
+                    </div>
+                </div>
+                @endforeach
                 @endif
 
             </div>
@@ -356,14 +556,14 @@
                     <div id="collapse-liveness-{{ $livenessNum }}-frames" class="collapse" aria-labelledby="liveness-{{ $livenessNum }}-frames">
                         <div class="card-group">
                             @foreach ($livenessResource->getFrames() as $frame)
-                            @if ($frame->getMedia())
-                            <div class="card">
-                                <img class="card-img-top" src="/media/{{ $frame->getMedia()->getId() }}" />
-                                <div class="card-body">
-                                    <h5 class="card-title">Frame</h5>
+                                @if ($frame->getMedia())
+                                <div class="card">
+                                    <img class="card-img-top" src="/media/{{ $frame->getMedia()->getId() }}" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">Frame</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            @endif
+                                @endif
                             @endforeach
                         </div>
                     </div>

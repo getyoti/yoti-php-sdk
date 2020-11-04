@@ -11,8 +11,11 @@ use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
 use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
+use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
+use Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjectiveBuilder;
 use Yoti\DocScan\Session\Create\SdkConfigBuilder;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
+use Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskBuilder;
 use Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTaskBuilder;
 
 class HomeController extends BaseController
@@ -34,7 +37,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
-                    ->withManualCheckNever()
+                    ->withManualCheckAlways()
                     ->build()
             )
             ->withRequestedCheck(
@@ -43,8 +46,13 @@ class HomeController extends BaseController
             )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
-                    ->withManualCheckNever()
+                    ->withManualCheckAlways()
                     ->withChipDataDesired()
+                    ->build()
+            )
+            ->withRequestedTask(
+                (new RequestedSupplementaryDocTextExtractionTaskBuilder())
+                    ->withManualCheckAlways()
                     ->build()
             )
             ->withSdkConfig(
@@ -69,10 +77,12 @@ class HomeController extends BaseController
                     ->build()
             )
             ->withRequiredDocument(
-                (new RequiredIdDocumentBuilder())
-                    ->withFilter(
-                        (new OrthogonalRestrictionsFilterBuilder())
-                            ->withWhitelistedDocumentTypes(['DRIVING_LICENCE'])
+                (new RequiredIdDocumentBuilder())->build()
+            )
+            ->withRequiredDocument(
+                (new RequiredSupplementaryDocumentBuilder())
+                    ->withObjective(
+                        (new ProofOfAddressObjectiveBuilder)
                             ->build()
                     )
                     ->build()

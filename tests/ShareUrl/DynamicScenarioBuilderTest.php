@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\ShareUrl;
 
+use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Extension\ExtensionBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
@@ -94,7 +95,7 @@ class DynamicScenarioBuilderTest extends TestCase
     public function testBuildWithoutCallback()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type string');
+        $this->expectExceptionMessage(sprintf('%s::__construct()', DynamicScenario::class));
 
         (new DynamicScenarioBuilder())
             ->withPolicy($this->createMock(DynamicPolicy::class))

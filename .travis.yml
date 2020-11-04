@@ -47,6 +47,17 @@ jobs:
         - travis_retry composer install --no-interaction --prefer-source --dev
       script:
         - composer test
+    - <<: *compatibility
+      php: "8.0snapshot"
+      install:
+        # Remove php-cs-fixer until compatible with PHP 8
+        - travis_retry composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+        - travis_retry composer self-update
+        - travis_retry composer install --no-interaction --prefer-source --dev
+      before_script:
+        - echo 'xdebug.mode=coverage' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+      script:
+        - composer test
     - <<: *test
       stage: Analyze
       name: Sonarcloud

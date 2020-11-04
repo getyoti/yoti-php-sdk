@@ -1,7 +1,7 @@
 {
   "name": "yoti/yoti-php-sdk",
   "description": "Yoti SDK for quickly integrating your PHP backend with Yoti",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "keywords": [
     "yoti",
     "sdk"
@@ -9,13 +9,15 @@
   "homepage": "https://yoti.com",
   "license": "MIT",
   "require": {
-    "php": "^7.1",
+    "php": "^7.1 || ^8.0",
     "ext-json": "*",
     "google/protobuf": "^3.10",
     "phpseclib/phpseclib": "^2.0",
     "guzzlehttp/guzzle": "^6.4 || ^7.0",
     "psr/http-client": "^1.0",
-    "psr/http-message": "^1.0"
+    "psr/http-message": "^1.0",
+    "psr/log": "^1.1",
+    "guzzlehttp/psr7": "^1.7"
   },
   "autoload": {
     "psr-4": {

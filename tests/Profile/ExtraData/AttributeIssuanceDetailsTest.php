@@ -80,7 +80,8 @@ class AttributeIssuanceDetailsTest extends TestCase
      */
     public function testInvalidToken($invalidToken)
     {
-        $this->expectException(\TypeError::class, 'must be of the type string');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage(sprintf('%s::__construct()', AttributeIssuanceDetails::class));
 
         new AttributeIssuanceDetails($invalidToken);
     }

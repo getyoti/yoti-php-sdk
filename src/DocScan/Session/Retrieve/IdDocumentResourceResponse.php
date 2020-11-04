@@ -4,7 +4,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class IdDocumentResourceResponse extends ResourceResponse
 {
-
     /**
      * @var string|null
      */
@@ -94,5 +93,13 @@ class IdDocumentResourceResponse extends ResourceResponse
     public function getDocumentIdPhoto(): ?DocumentIdPhotoResponse
     {
         return $this->documentIdPhoto;
+    }
+
+    /**
+     * @return TextExtractionTaskResponse[]
+     */
+    public function getTextExtractionTasks(): array
+    {
+        return $this->filterTasksByType(TextExtractionTaskResponse::class);
     }
 }

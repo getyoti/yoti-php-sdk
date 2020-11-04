@@ -82,14 +82,14 @@ class Service
 
         $this->checkForReceipt($result);
 
-        $receipt = new Receipt($result['receipt']);
+        $receipt = new Receipt($result['receipt'], $this->config->getLogger());
 
         // Check response was successful
         if ($receipt->getSharingOutcome() !== self::OUTCOME_SUCCESS) {
             throw new ActivityDetailsException('Outcome was unsuccessful');
         }
 
-        return new ActivityDetails($receipt, $this->pemFile);
+        return new ActivityDetails($receipt, $this->pemFile, $this->config->getLogger());
     }
 
     /**

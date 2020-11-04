@@ -12,7 +12,8 @@ This example requires [Docker](https://docs.docker.com/)
 * Copy `.env.example` to `.env`
 * Open `.env` file and fill in the environment variables `YOTI_SDK_ID`, `YOTI_KEY_FILE_PATH`
   * Set `YOTI_KEY_FILE_PATH` to `./keys/your-application-pem-file.pem`
-* Run the `docker-compose up --build` command
+* Install dependencies `docker-compose up composer`
+* Run the `docker-compose up --build web` command
 * Visit [https://localhost:4003](https://localhost:4003)
 * Run the `docker-compose stop` command to stop the containers.
 
