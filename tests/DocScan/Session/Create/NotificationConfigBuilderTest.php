@@ -133,7 +133,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
      */
-    public function shouldProduceCorrectOutput()
+    public function shouldSerializeWithCorrectProperties()
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -147,6 +147,21 @@ class NotificationConfigBuilderTest extends TestCase
             'topics' => [
                 self::SOME_TOPIC
             ]
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
+     */
+    public function shouldSerializeWithoutNullValues()
+    {
+        $result = (new NotificationConfigBuilder())->build();
+
+        $expected = [
+            'topics' => []
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));

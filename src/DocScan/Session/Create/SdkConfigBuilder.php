@@ -11,44 +11,49 @@ class SdkConfigBuilder
     private const CAMERA_AND_UPLOAD = 'CAMERA_AND_UPLOAD';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $allowedCaptureMethods;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $primaryColour;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $secondaryColour;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fontColour;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $locale;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $presetIssuingCountry;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $successUrl;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $errorUrl;
+
+    /**
+     * @var string|null
+     */
+    private $privacyPolicyUrl;
 
     public function withAllowsCamera(): self
     {
@@ -108,6 +113,12 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withPrivacyPolicyUrl(string $privacyPolicyUrl): self
+    {
+        $this->privacyPolicyUrl = $privacyPolicyUrl;
+        return $this;
+    }
+
     public function build(): SdkConfig
     {
         return new SdkConfig(
@@ -118,7 +129,8 @@ class SdkConfigBuilder
             $this->locale,
             $this->presetIssuingCountry,
             $this->successUrl,
-            $this->errorUrl
+            $this->errorUrl,
+            $this->privacyPolicyUrl
         );
     }
 }

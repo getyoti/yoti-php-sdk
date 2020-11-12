@@ -49,10 +49,10 @@ class SessionSpecificationBuilderTest extends TestCase
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
-        $this->sdkConfigMock->method('jsonSerialize')->willReturn(['sdkConfig']);
+        $this->sdkConfigMock->method('jsonSerialize')->willReturn((object)['sdkConfig']);
 
         $this->notificationsMock = $this->createMock(NotificationConfig::class);
-        $this->notificationsMock->method('jsonSerialize')->willReturn(['notifications']);
+        $this->notificationsMock->method('jsonSerialize')->willReturn((object)['notifications']);
 
         $this->requestedCheckMock = $this->createMock(RequestedCheck::class);
         $this->requestedCheckMock->method('jsonSerialize')->willReturn(['requestedChecks']);

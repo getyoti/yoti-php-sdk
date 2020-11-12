@@ -65,6 +65,7 @@ class HomeController extends BaseController
                   ->withPresetIssuingCountry('GBR')
                   ->withSuccessUrl(config('app.url') . '/success')
                   ->withErrorUrl(config('app.url') . '/error')
+                  ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
                   ->build()
               )
             ->withRequiredDocument(
