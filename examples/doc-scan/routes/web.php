@@ -20,3 +20,7 @@ Route::get('/success', 'SuccessController@show');
 Route::get('/media/{id}', 'MediaController@show');
 
 Route::get('/error', 'ErrorController@show');
+
+Route::get('/privacy-policy', function () {
+    return view('privacy');
+});

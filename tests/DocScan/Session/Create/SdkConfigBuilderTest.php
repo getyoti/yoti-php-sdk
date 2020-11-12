@@ -19,6 +19,7 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_PRESET_ISSUING_COUNTRY = 'somePresetIssuingCountry';
     private const SOME_SUCCESS_URL = 'someSuccessUrl';
     private const SOME_ERROR_URL = 'someErrorUrl';
+    private const SOME_PRIVACY_POLICY_URL = 'somePrivacyPolicyUrl';
 
     /**
      * @test
@@ -31,6 +32,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withPresetIssuingCountry
      * @covers ::withSuccessUrl
      * @covers ::withErrorUrl
+     * @covers ::withPrivacyPolicyUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -40,6 +42,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPresetIssuingCountry
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuccessUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getErrorUrl
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrivacyPolicyUrl
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -52,6 +55,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withPresetIssuingCountry(self::SOME_PRESET_ISSUING_COUNTRY)
             ->withSuccessUrl(self::SOME_SUCCESS_URL)
             ->withErrorUrl(self::SOME_ERROR_URL)
+            ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -62,6 +66,7 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_PRESET_ISSUING_COUNTRY, $result->getPresetIssuingCountry());
         $this->assertEquals(self::SOME_SUCCESS_URL, $result->getSuccessUrl());
         $this->assertEquals(self::SOME_ERROR_URL, $result->getErrorUrl());
+        $this->assertEquals(self::SOME_PRIVACY_POLICY_URL, $result->getPrivacyPolicyUrl());
     }
 
     /**
@@ -105,6 +110,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withPresetIssuingCountry(self::SOME_PRESET_ISSUING_COUNTRY)
             ->withSuccessUrl(self::SOME_SUCCESS_URL)
             ->withErrorUrl(self::SOME_ERROR_URL)
+            ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->build();
 
         $expected = [
@@ -116,8 +122,20 @@ class SdkConfigBuilderTest extends TestCase
             'preset_issuing_country' => self::SOME_PRESET_ISSUING_COUNTRY,
             'success_url' => self::SOME_SUCCESS_URL,
             'error_url' => self::SOME_ERROR_URL,
+            'privacy_policy_url' => self::SOME_PRIVACY_POLICY_URL,
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldSerializeToEmptyObjectWithNoValuesSet()
+    {
+        $result = (new SdkConfigBuilder())->build();
+
+        $this->assertJsonStringEqualsJsonString('{}', json_encode($result));
     }
 }

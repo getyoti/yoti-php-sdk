@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
-use JsonSerializable;
+use Yoti\Util\Json;
 
-class NotificationConfig implements JsonSerializable
+class NotificationConfig implements \JsonSerializable
 {
 
     /**
@@ -38,15 +38,15 @@ class NotificationConfig implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return \stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): \stdClass
     {
-        return [
+        return (object) Json::withoutNullValues([
             'auth_token' => $this->getAuthToken(),
             'endpoint' => $this->getEndpoint(),
             'topics' => $this->getTopics(),
-        ];
+        ]);
     }
 
     /**

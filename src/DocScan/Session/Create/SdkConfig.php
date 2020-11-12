@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
-use JsonSerializable;
+use Yoti\Util\Json;
 
-class SdkConfig implements JsonSerializable
+class SdkConfig implements \JsonSerializable
 {
 
     /**
@@ -49,6 +49,11 @@ class SdkConfig implements JsonSerializable
      */
     private $errorUrl;
 
+    /**
+     * @var string|null
+     */
+    private $privacyPolicyUrl;
+
     public function __construct(
         ?string $allowedCaptureMethods,
         ?string $primaryColour,
@@ -57,7 +62,8 @@ class SdkConfig implements JsonSerializable
         ?string $locale,
         ?string $presetIssuingCountry,
         ?string $successUrl,
-        ?string $errorUrl
+        ?string $errorUrl,
+        ?string $privacyPolicyUrl = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -67,14 +73,15 @@ class SdkConfig implements JsonSerializable
         $this->presetIssuingCountry = $presetIssuingCountry;
         $this->successUrl = $successUrl;
         $this->errorUrl = $errorUrl;
+        $this->privacyPolicyUrl = $privacyPolicyUrl;
     }
 
     /**
-     * @return array<string, mixed>
+     * @return \stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): \stdClass
     {
-        return [
+        return (object) Json::withoutNullValues([
             'allowed_capture_methods' => $this->getAllowedCaptureMethods(),
             'primary_colour' => $this->getPrimaryColour(),
             'secondary_colour' => $this->getSecondaryColour(),
@@ -83,7 +90,8 @@ class SdkConfig implements JsonSerializable
             'preset_issuing_country' => $this->getPresetIssuingCountry(),
             'success_url' => $this->getSuccessUrl(),
             'error_url' => $this->getErrorUrl(),
-        ];
+            'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
+        ]);
     }
 
     /**
@@ -148,5 +156,13 @@ class SdkConfig implements JsonSerializable
     public function getErrorUrl(): ?string
     {
         return $this->errorUrl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPrivacyPolicyUrl(): ?string
+    {
+        return $this->privacyPolicyUrl;
     }
 }
