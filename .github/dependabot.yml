@@ -8,6 +8,5 @@ updates:
   target-branch: development
   reviewers:
   - echarrod
-  - davidgrayston
   assignees:
-  - davidgrayston
+  - echarrod
