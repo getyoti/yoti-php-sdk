@@ -1,0 +1,23 @@
+name: Sonar Scan
+on: [push, pull_request_target]
+
+jobs:
+  sonar:
+    name: Sonar Scan
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' || 
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
