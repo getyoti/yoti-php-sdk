@@ -1,6 +1,5 @@
 # Yoti PHP SDK
 
-[![Build Status](https://travis-ci.com/getyoti/yoti-php-sdk.svg?branch=master)](https://travis-ci.com/getyoti/yoti-php-sdk)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=coverage)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=bugs)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=code_smells)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
