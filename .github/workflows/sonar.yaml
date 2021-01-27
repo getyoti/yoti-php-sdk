@@ -15,7 +15,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: 8.0
 
+      - run: composer coverage-clover
+      
       - uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

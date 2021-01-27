@@ -1,5 +1,6 @@
 # Yoti PHP SDK
 
+[![Build Status](https://github.com/getyoti/yoti-php-sdk/workflows/Unit%20Test/badge.svg?branch=master)](https://github.com/getyoti/yoti-php-sdk/actions)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=coverage)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=bugs)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=getyoti%3Aphp&metric=code_smells)](https://sonarcloud.io/dashboard?id=getyoti%3Aphp)
