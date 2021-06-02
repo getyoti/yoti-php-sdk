@@ -108,7 +108,7 @@ jobs:
       - uses: shivammathur/setup-php@2.9.0
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: pecl
+          extensions: php-pear, pecl
 
       - run: pecl install protobuf
 
