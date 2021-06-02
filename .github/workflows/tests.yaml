@@ -1,5 +1,5 @@
 name: Unit Tests
-on: [push, pull_request_target]
+on: [ push, pull_request_target ]
 
 jobs:
   php8compat:
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [8.0]
+        php-version: [ 8.0 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [7.4, 7.3, 7.2, 7.1]
+        php-version: [ 7.4, 7.3, 7.2, 7.1 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [7.4]
+        php-version: [ 7.4 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -100,17 +100,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [7.4]
+        php-version: [ 7.4 ]
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: shivammathur/setup-php@2.9.0
+      - uses: shivammathur/setup-php@2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: php7.4-dev, php-pear
-
-      - run: pecl install protobuf
+          extensions: protobuf
 
       - run: composer self-update
 
