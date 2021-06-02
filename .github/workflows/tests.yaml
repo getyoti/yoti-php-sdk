@@ -110,8 +110,9 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: pecl-3.13.0
 
-      - run: pecl install protobuf-3.13.0
-      
+#      - run: pecl install protobuf-3.13.0
+      - run: pecl install channel://pecl.php.net/protobuf-3.13.0
+
       - run: composer self-update
 
       - run: composer install --no-interaction --prefer-source --dev
