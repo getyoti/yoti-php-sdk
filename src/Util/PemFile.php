@@ -18,7 +18,7 @@ class PemFile
     /**
      * Private Key.
      *
-     * @var \OpenSSLAsymmetricKey
+     * @var mixed
      */
     private $privateKey;
 
