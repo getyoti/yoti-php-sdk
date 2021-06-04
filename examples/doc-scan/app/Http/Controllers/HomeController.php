@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
 use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
@@ -42,6 +43,10 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedIdDocumentComparisonCheckBuilder())
+                    ->build()
+            )
+            ->withRequestedCheck(
+                (new RequestedThirdPartyIdentityCheckBuilder())
                     ->build()
             )
             ->withRequestedTask(
