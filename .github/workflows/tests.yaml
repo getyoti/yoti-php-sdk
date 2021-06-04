@@ -1,0 +1,120 @@
+name: Unit Tests
+on: [ push, pull_request_target ]
+
+jobs:
+  php8compat:
+    name: Unit Tests PHP8 Compatibility (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' || 
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.0 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      # Remove php-cs-fixer until compatible with PHP 8
+      - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+  php7:
+    name: Unit Tests (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' || 
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 7.4, 7.3, 7.2, 7.1 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+      - run: composer lint
+
+  guzzle:
+    name: Unit Tests With Guzzle 6 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' || 
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 7.4 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - run: composer require guzzlehttp/guzzle "^6.5"
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+      - run: composer lint
+
+  protobuf:
+    name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' || 
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 7.4 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: protobuf
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+      - run: composer lint
+
