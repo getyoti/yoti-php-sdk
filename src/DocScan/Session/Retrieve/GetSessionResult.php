@@ -218,6 +218,8 @@ class GetSessionResult
                 return new SupplementaryDocTextDataCheckResponse($check);
             case Constants::LIVENESS:
                 return new LivenessCheckResponse($check);
+            case Constants::THIRD_PARTY_IDENTITY:
+                return new ThirdPartyIdentityCheckResponse($check);
             default:
                 return new CheckResponse($check);
         }
