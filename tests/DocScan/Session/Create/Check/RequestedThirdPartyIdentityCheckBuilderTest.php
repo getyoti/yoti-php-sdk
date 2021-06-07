@@ -6,6 +6,9 @@ use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck;
 use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
 use Yoti\Test\TestCase;
 
+/**
+ * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder
+ */
 class RequestedThirdPartyIdentityCheckBuilderTest extends TestCase
 {
     private const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
