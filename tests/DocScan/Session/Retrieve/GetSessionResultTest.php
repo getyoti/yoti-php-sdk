@@ -19,6 +19,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
+    private const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     private const LIVENESS = 'LIVENESS';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
@@ -102,6 +103,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getTextDataChecks
      * @covers ::getIdDocumentTextDataChecks
      * @covers ::getIdDocumentComparisonChecks
+     * @covers ::getThirdPartyIdentityChecks
      * @covers ::getSupplementaryDocumentTextDataChecks
      * @covers ::getLivenessChecks
      * @covers ::createCheckFromArray
@@ -115,6 +117,7 @@ class GetSessionResultTest extends TestCase
                 [ 'type' => self::ID_DOCUMENT_FACE_MATCH ],
                 [ 'type' => self::ID_DOCUMENT_TEXT_DATA_CHECK ],
                 [ 'type' => self::ID_DOCUMENT_COMPARISON ],
+                [ 'type' => self::THIRD_PARTY_IDENTITY ],
                 [ 'type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK ],
                 [ 'type' => self::LIVENESS ],
             ],
@@ -122,12 +125,13 @@ class GetSessionResultTest extends TestCase
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(6, $result->getChecks());
+        $this->assertCount(7, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
         $this->assertCount(1, $result->getIdDocumentTextDataChecks());
         $this->assertCount(1, $result->getIdDocumentComparisonChecks());
+        $this->assertCount(1, $result->getThirdPartyIdentityChecks());
         $this->assertCount(1, $result->getSupplementaryDocumentTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
 
@@ -150,6 +154,10 @@ class GetSessionResultTest extends TestCase
         $this->assertEquals(
             self::ID_DOCUMENT_COMPARISON,
             $result->getIdDocumentComparisonChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::THIRD_PARTY_IDENTITY,
+            $result->getThirdPartyIdentityChecks()[0]->getType()
         );
         $this->assertEquals(
             self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK,
