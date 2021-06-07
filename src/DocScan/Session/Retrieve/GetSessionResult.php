@@ -157,6 +157,14 @@ class GetSessionResult
     }
 
     /**
+     * @return ThirdPartyIdentityCheckResponse[]
+     */
+    public function getThirdPartyIdentityChecks(): array
+    {
+        return $this->filterCheckByType(ThirdPartyIdentityCheckResponse::class);
+    }
+
+    /**
      * @return FaceMatchCheckResponse[]
      */
     public function getFaceMatchChecks(): array
