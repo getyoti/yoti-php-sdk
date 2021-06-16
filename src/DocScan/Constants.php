@@ -25,4 +25,7 @@ class Constants
     public const ALWAYS = 'ALWAYS';
     public const FALLBACK = 'FALLBACK';
     public const NEVER = 'NEVER';
+
+    public const BASIC = 'BASIC';
+    public const BEARER = 'BEARER';
 }

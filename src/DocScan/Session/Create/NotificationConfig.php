@@ -17,6 +17,11 @@ class NotificationConfig implements \JsonSerializable
     /**
      * @var string|null
      */
+    private $authType;
+
+    /**
+     * @var string|null
+     */
     private $endpoint;
 
     /**
@@ -27,12 +32,14 @@ class NotificationConfig implements \JsonSerializable
     /**
      * NotificationConfig constructor.
      * @param string|null $authToken
+     * @param string|null $authType
      * @param string|null $endpoint
      * @param array<string> $topics
      */
-    public function __construct(?string $authToken, ?string $endpoint, array $topics = [])
+    public function __construct(?string $authToken, ?string $authType, ?string $endpoint, array $topics = [])
     {
         $this->authToken = $authToken;
+        $this->authType = $authType;
         $this->endpoint = $endpoint;
         $this->topics = array_unique($topics);
     }
@@ -44,6 +51,7 @@ class NotificationConfig implements \JsonSerializable
     {
         return (object) Json::withoutNullValues([
             'auth_token' => $this->getAuthToken(),
+            'auth_type' => $this->getAuthType(),
             'endpoint' => $this->getEndpoint(),
             'topics' => $this->getTopics(),
         ]);
@@ -55,6 +63,14 @@ class NotificationConfig implements \JsonSerializable
     public function getAuthToken(): ?string
     {
         return $this->authToken;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthType(): ?string
+    {
+        return $this->authType;
     }
 
     /**
