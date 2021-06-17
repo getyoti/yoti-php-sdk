@@ -119,6 +119,6 @@ class NotificationConfigBuilder
      */
     public function build(): NotificationConfig
     {
-        return new NotificationConfig($this->authToken, $this->authType, $this->endpoint, $this->topics);
+        return new NotificationConfig($this->authToken, $this->endpoint, $this->topics, $this->authType);
     }
 }

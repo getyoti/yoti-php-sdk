@@ -32,11 +32,11 @@ class NotificationConfig implements \JsonSerializable
     /**
      * NotificationConfig constructor.
      * @param string|null $authToken
-     * @param string|null $authType
      * @param string|null $endpoint
      * @param array<string> $topics
+     * @param string|null $authType
      */
-    public function __construct(?string $authToken, ?string $authType, ?string $endpoint, array $topics = [])
+    public function __construct(?string $authToken, ?string $endpoint, array $topics = [], ?string $authType = '')
     {
         $this->authToken = $authToken;
         $this->authType = $authType;
