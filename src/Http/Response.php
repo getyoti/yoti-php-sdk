@@ -9,11 +9,13 @@ use Yoti\DocScan\Exception\DocScanException;
 
 class Response
 {
+    /** HTTP messages */
     private const BAD_REQUEST_MESSAGE = 'Failed validation - ';
     private const UNAUTHORIZED_MESSAGE = 'Failed authorization with the given key - ';
     private const INTERNAL_SERVER_MESSAGE_ERROR = 'An unexpected error occurred on the server - ';
     private const DEFAULT_MESSAGE = 'Unexpected error - ';
 
+    /** HTTP codes */
     private const BAD_REQUEST_CODE = 400;
     private const UNAUTHORIZED_CODE = 401;
     private const INTERNAL_SERVER_CODE = 500;
