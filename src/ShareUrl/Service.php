@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Yoti\ShareUrl;
 
 use Yoti\Constants;
-use Yoti\Exception\ShareUrlException;
+use Yoti\Exception\base\YotiException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
+use Yoti\Http\Response;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
 use Yoti\Util\PemFile;
@@ -42,11 +43,11 @@ class Service
     }
 
     /**
-     * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
+     * @param DynamicScenario $dynamicScenario
      *
-     * @return \Yoti\ShareUrl\Result
+     * @return Result
      *
-     * @throws \Yoti\Exception\ShareUrlException
+     * @throws YotiException
      */
     public function createShareUrl(DynamicScenario $dynamicScenario): Result
     {
@@ -62,7 +63,7 @@ class Service
 
         $httpCode = $response->getStatusCode();
         if ($httpCode < 200 || $httpCode > 299) {
-            throw new ShareUrlException("Server responded with {$httpCode}");
+            Response::createYotiExceptionFromStatusCode($response);
         }
 
         return new Result(Json::decode((string) $response->getBody()));

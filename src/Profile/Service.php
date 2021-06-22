@@ -6,8 +6,11 @@ namespace Yoti\Profile;
 
 use Yoti\Constants;
 use Yoti\Exception\ActivityDetailsException;
+use Yoti\Exception\base\YotiException;
+use Yoti\Exception\PemFileException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Http\RequestBuilder;
+use Yoti\Http\Response;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
 use Yoti\Util\PemFile;
@@ -52,10 +55,11 @@ class Service
      *
      * @param string $encryptedConnectToken
      *
-     * @return \Yoti\Profile\ActivityDetails
+     * @return ActivityDetails
      *
-     * @throws \Yoti\Exception\ActivityDetailsException
-     * @throws \Yoti\Exception\ReceiptException
+     * @throws ActivityDetailsException
+     * @throws ReceiptException
+     * @throws YotiException|PemFileException
      */
     public function getActivityDetails(string $encryptedConnectToken): ActivityDetails
     {
@@ -75,7 +79,7 @@ class Service
 
         $httpCode = $response->getStatusCode();
         if ($httpCode < 200 || $httpCode > 299) {
-            throw new ActivityDetailsException("Server responded with {$httpCode}");
+            Response::createYotiExceptionFromStatusCode($response);
         }
 
         $result = Json::decode((string) $response->getBody());
@@ -118,7 +122,7 @@ class Service
     /**
      * @param array<string, mixed> $responseArr
      *
-     * @throws \Yoti\Exception\ReceiptException
+     * @throws ReceiptException
      */
     private function checkForReceipt(array $responseArr): void
     {

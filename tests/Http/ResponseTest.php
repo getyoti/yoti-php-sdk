@@ -2,7 +2,7 @@
 
 namespace Yoti\Test\Http;
 
-use Yoti\DocScan\Exception\DocScanException;
+use Yoti\Exception\base\YotiException;
 use Yoti\Http\Response;
 use Yoti\Test\TestCase;
 
@@ -27,7 +27,7 @@ class ResponseTest extends TestCase
      */
     public function testCreateYotiExceptionWithBadRequestStatusCode(): void
     {
-        $this->expectException(DocScanException::class);
+        $this->expectException(YotiException::class);
         $this->expectExceptionMessage(self::BAD_REQUEST_MESSAGE);
 
         $badRequestResponse = new \GuzzleHttp\Psr7\Response(self::BAD_REQUEST_CODE);
@@ -39,7 +39,7 @@ class ResponseTest extends TestCase
      */
     public function testCreateYotiExceptionWithInternalServerErrorStatusCode(): void
     {
-        $this->expectException(DocScanException::class);
+        $this->expectException(YotiException::class);
         $this->expectExceptionMessage(self::INTERNAL_SERVER_MESSAGE_ERROR);
 
         $internalServerErrorResponse = new \GuzzleHttp\Psr7\Response(self::INTERNAL_SERVER_CODE);
@@ -51,7 +51,7 @@ class ResponseTest extends TestCase
      */
     public function testCreateYotiExceptionWithUnauthorizedStatusCode(): void
     {
-        $this->expectException(DocScanException::class);
+        $this->expectException(YotiException::class);
         $this->expectExceptionMessage(self::UNAUTHORIZED_MESSAGE);
 
         $unauthorizedResponse = new \GuzzleHttp\Psr7\Response(self::UNAUTHORIZED_CODE);
@@ -63,7 +63,7 @@ class ResponseTest extends TestCase
      */
     public function testCreateYotiExceptionWithAnotherStatusCode(): void
     {
-        $this->expectException(DocScanException::class);
+        $this->expectException(YotiException::class);
         $this->expectExceptionMessage(self::DEFAULT_MESSAGE);
 
         $someResponse = new \GuzzleHttp\Psr7\Response(302);

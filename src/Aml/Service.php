@@ -6,9 +6,10 @@ namespace Yoti\Aml;
 
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
-use Yoti\Exception\AmlException;
+use Yoti\Exception\base\YotiException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
+use Yoti\Http\Response;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
 use Yoti\Util\PemFile;
@@ -47,7 +48,7 @@ class Service
      *
      * @return \Yoti\Aml\Result
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws YotiException
      */
     public function performCheck(Profile $amlProfile): Result
     {
@@ -73,7 +74,7 @@ class Service
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws \Yoti\Exception\base\YotiException
      */
     private function validateAmlResult(ResponseInterface $response): void
     {
@@ -84,7 +85,7 @@ class Service
             return;
         }
 
-        throw new AmlException($this->getErrorMessage($response));
+        Response::createYotiExceptionFromStatusCode($response);
     }
 
     /**

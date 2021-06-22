@@ -6,14 +6,15 @@ namespace Yoti\DocScan;
 
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
-use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
+use Yoti\Exception\base\YotiException;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
+use Yoti\Http\Response;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
@@ -63,7 +64,7 @@ class Service
      *
      * @return CreateSessionResult
      *
-     * @throws DocScanException
+     * @throws YotiException
      */
     public function createSession(SessionSpecification $sessionSpec): CreateSessionResult
     {
@@ -80,7 +81,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new CreateSessionResult($result);
     }
@@ -90,7 +91,7 @@ class Service
      *
      * @param string $sessionId
      * @return GetSessionResult
-     * @throws DocScanException
+     * @throws YotiException
      */
     public function retrieveSession(string $sessionId): GetSessionResult
     {
@@ -105,7 +106,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new GetSessionResult($result);
     }
@@ -114,7 +115,7 @@ class Service
      * Deletes a session from the Yoti Doc Scan system.
      *
      * @param string $sessionId
-     * @throws DocScanException
+     * @throws YotiException
      */
     public function deleteSession(string $sessionId): void
     {
@@ -137,7 +138,7 @@ class Service
      * @param string $sessionId
      * @param string $mediaId
      * @return Media
-     * @throws DocScanException
+     * @throws YotiException
      */
     public function getMediaContent(string $sessionId, string $mediaId): Media
     {
@@ -152,7 +153,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $content = (string) $response->getBody();
+        $content = (string)$response->getBody();
         $mimeType = $response->getHeader("Content-Type")[0] ?? '';
 
         return new Media($mimeType, $content);
@@ -164,7 +165,7 @@ class Service
      *
      * @param string $sessionId
      * @param string $mediaId
-     * @throws DocScanException
+     * @throws YotiException
      */
     public function deleteMediaContent(string $sessionId, string $mediaId): void
     {
@@ -184,6 +185,7 @@ class Service
      * Gets a list of supported documents.
      *
      * @return SupportedDocumentsResponse
+     * @throws YotiException
      */
     public function getSupportedDocuments(): SupportedDocumentsResponse
     {
@@ -197,21 +199,20 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new SupportedDocumentsResponse($result);
     }
 
     /**
      * @param ResponseInterface $response
-     *
-     * @throws DocScanException
+     * @throws YotiException
      */
     private static function assertResponseIsSuccess(ResponseInterface $response): void
     {
         $httpCode = $response->getStatusCode();
         if ($httpCode < 200 || $httpCode > 299) {
-            throw new DocScanException("Server responded with {$httpCode}", $response);
+            Response::createYotiExceptionFromStatusCode($response);
         }
     }
 }

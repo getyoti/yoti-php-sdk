@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Http;
 
 use Psr\Http\Message\ResponseInterface;
-use Yoti\DocScan\Exception\DocScanException;
+use Yoti\Exception\base\YotiException;
 
 class Response
 {
@@ -22,7 +22,7 @@ class Response
 
     /**
      * @param ResponseInterface $response
-     * @throws DocScanException
+     * @throws YotiException
      */
     public static function createYotiExceptionFromStatusCode(ResponseInterface $response): void
     {
@@ -41,6 +41,6 @@ class Response
                 break;
         }
 
-        throw new DocScanException($message, $response);
+        throw new YotiException($message, $response);
     }
 }
