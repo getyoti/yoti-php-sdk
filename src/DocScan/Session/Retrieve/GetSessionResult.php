@@ -165,6 +165,14 @@ class GetSessionResult
     }
 
     /**
+     * @return mixed[]
+     */
+    public function getWatchlistScreeningChecks(): array
+    {
+        return $this->filterCheckByType(WatchlistScreeningCheckResponse::class);
+    }
+
+    /**
      * @return FaceMatchCheckResponse[]
      */
     public function getFaceMatchChecks(): array
