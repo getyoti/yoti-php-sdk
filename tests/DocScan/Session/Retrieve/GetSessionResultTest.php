@@ -20,6 +20,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
     private const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
+    private const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     private const LIVENESS = 'LIVENESS';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
@@ -52,9 +53,9 @@ class GetSessionResultTest extends TestCase
             'client_session_token_ttl' => self::SOME_CLIENT_SESSION_TOKEN_TTL,
             'biometric_consent' => self::SOME_BIOMETRIC_CONSENT_DATE_STRING,
             'checks' => [
-                [ 'type' => self::ID_DOCUMENT_AUTHENTICITY ]
+                ['type' => self::ID_DOCUMENT_AUTHENTICITY]
             ],
-            'resources' => [ ],
+            'resources' => [],
         ];
 
         $result = new GetSessionResult($input);
@@ -84,7 +85,7 @@ class GetSessionResultTest extends TestCase
     {
         $input = [
             'checks' => [
-                [ 'type' => self::SOME_UNKNOWN_TYPE ],
+                ['type' => self::SOME_UNKNOWN_TYPE],
             ],
         ];
 
@@ -113,25 +114,27 @@ class GetSessionResultTest extends TestCase
     {
         $input = [
             'checks' => [
-                [ 'type' => self::ID_DOCUMENT_AUTHENTICITY ],
-                [ 'type' => self::ID_DOCUMENT_FACE_MATCH ],
-                [ 'type' => self::ID_DOCUMENT_TEXT_DATA_CHECK ],
-                [ 'type' => self::ID_DOCUMENT_COMPARISON ],
-                [ 'type' => self::THIRD_PARTY_IDENTITY ],
-                [ 'type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK ],
-                [ 'type' => self::LIVENESS ],
+                ['type' => self::ID_DOCUMENT_AUTHENTICITY],
+                ['type' => self::ID_DOCUMENT_FACE_MATCH],
+                ['type' => self::ID_DOCUMENT_TEXT_DATA_CHECK],
+                ['type' => self::ID_DOCUMENT_COMPARISON],
+                ['type' => self::THIRD_PARTY_IDENTITY],
+                ['type' => self::WATCHLIST_SCREENING],
+                ['type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK],
+                ['type' => self::LIVENESS],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(7, $result->getChecks());
+        $this->assertCount(8, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
         $this->assertCount(1, $result->getIdDocumentTextDataChecks());
         $this->assertCount(1, $result->getIdDocumentComparisonChecks());
         $this->assertCount(1, $result->getThirdPartyIdentityChecks());
+        $this->assertCount(1, $result->getWatchlistScreeningChecks());
         $this->assertCount(1, $result->getSupplementaryDocumentTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
 
@@ -158,6 +161,10 @@ class GetSessionResultTest extends TestCase
         $this->assertEquals(
             self::THIRD_PARTY_IDENTITY,
             $result->getThirdPartyIdentityChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::WATCHLIST_SCREENING,
+            $result->getWatchlistScreeningChecks()[0]->getType()
         );
         $this->assertEquals(
             self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK,

@@ -12,7 +12,7 @@ class RequestedWatchlistScreeningConfigBuilder
     /**
      * @var string[]
      */
-    private $categories;
+    private $categories = [];
 
     /**
      * @return $this
@@ -36,8 +36,9 @@ class RequestedWatchlistScreeningConfigBuilder
      */
     public function withCategory(string $category): RequestedWatchlistScreeningConfigBuilder
     {
-        Validation::notNull($category, 'category');
+        Validation::notEmptyString($category, 'category');
         $this->categories[] = $category;
+        $this->categories = array_unique($this->categories);
 
         return $this;
     }
@@ -47,7 +48,6 @@ class RequestedWatchlistScreeningConfigBuilder
      */
     public function build(): RequestedWatchlistScreeningConfig
     {
-        $categories = $this->categories ?? [];
-        return new RequestedWatchlistScreeningConfig($categories);
+        return new RequestedWatchlistScreeningConfig($this->categories);
     }
 }
