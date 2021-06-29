@@ -165,7 +165,7 @@ class GetSessionResult
     }
 
     /**
-     * @return mixed[]
+     * @return WatchlistScreeningCheckResponse[]
      */
     public function getWatchlistScreeningChecks(): array
     {
@@ -236,6 +236,8 @@ class GetSessionResult
                 return new LivenessCheckResponse($check);
             case Constants::THIRD_PARTY_IDENTITY:
                 return new ThirdPartyIdentityCheckResponse($check);
+            case Constants::WATCHLIST_SCREENING:
+                return new WatchlistScreeningCheckResponse($check);
             default:
                 return new CheckResponse($check);
         }

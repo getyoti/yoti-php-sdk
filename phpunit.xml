@@ -18,6 +18,7 @@
             <directory suffix=".php">src</directory>
             <exclude>
                 <directory>src/Protobuf</directory>
+                <directory>src/DocScan/Session/Retrieve/Contracts</directory>
             </exclude>
         </whitelist>
     </filter>

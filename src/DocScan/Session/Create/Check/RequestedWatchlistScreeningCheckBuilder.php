@@ -7,16 +7,19 @@ namespace Yoti\DocScan\Session\Create\Check;
 class RequestedWatchlistScreeningCheckBuilder
 {
     /**
-     * @var RequestedWatchlistScreeningConfig
+     * @var RequestedWatchlistScreeningConfig|null
      */
     private $config;
 
     /**
-     * @param RequestedWatchlistScreeningConfig $config
+     * @param RequestedWatchlistScreeningConfig|null $config
+     * @return RequestedWatchlistScreeningCheckBuilder
      */
-    public function withConfig(RequestedWatchlistScreeningConfig $config): void
+    public function withConfig(?RequestedWatchlistScreeningConfig $config): RequestedWatchlistScreeningCheckBuilder
     {
         $this->config = $config;
+
+        return $this;
     }
 
     /**

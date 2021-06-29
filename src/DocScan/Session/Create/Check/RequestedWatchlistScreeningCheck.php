@@ -9,15 +9,15 @@ use Yoti\DocScan\Constants;
 class RequestedWatchlistScreeningCheck extends RequestedCheck
 {
     /**
-     * @var RequestedWatchlistScreeningConfig
+     * @var RequestedWatchlistScreeningConfig|null
      */
     private $config;
 
     /**
      * RequestedWatchlistScreeningCheck constructor.
-     * @param RequestedWatchlistScreeningConfig $config
+     * @param RequestedWatchlistScreeningConfig|null $config
      */
-    public function __construct(RequestedWatchlistScreeningConfig $config)
+    public function __construct(?RequestedWatchlistScreeningConfig $config)
     {
         $this->config = $config;
     }
@@ -25,7 +25,7 @@ class RequestedWatchlistScreeningCheck extends RequestedCheck
     /**
      * @return string
      */
-    protected function getType(): string
+    public function getType(): string
     {
         return Constants::WATCHLIST_SCREENING;
     }
@@ -33,7 +33,7 @@ class RequestedWatchlistScreeningCheck extends RequestedCheck
     /**
      * @return RequestedCheckConfigInterface|null
      */
-    protected function getConfig(): ?RequestedCheckConfigInterface
+    public function getConfig(): ?RequestedCheckConfigInterface
     {
         return $this->config;
     }
