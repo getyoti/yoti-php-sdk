@@ -10,6 +10,8 @@ use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
 use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
@@ -23,6 +25,11 @@ class HomeController extends BaseController
 {
     public function show(Request $request, DocScanClient $client)
     {
+        $watchScreeningConfig = (new RequestedWatchlistScreeningConfigBuilder())
+            ->withSanctionsCategory()
+            ->withAdverseMediaCategory()
+            ->build();
+
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
             ->withResourcesTtl(90000)
@@ -47,6 +54,11 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedThirdPartyIdentityCheckBuilder())
+                    ->build()
+            )
+            ->withRequestedCheck(
+                (new RequestedWatchlistScreeningCheckBuilder())
+                    ->withConfig($watchScreeningConfig)
                     ->build()
             )
             ->withRequestedTask(
