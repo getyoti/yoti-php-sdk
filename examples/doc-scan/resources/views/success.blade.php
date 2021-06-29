@@ -219,6 +219,29 @@
                                 </div>
                             </div>
                         @endif
+
+                        @if (count($sessionResult->getWatchlistScreeningChecks()) > 0)
+                            <div class="card">
+                                <div class="card-header" id="watchlist-screening-checks">
+                                    <h3 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-watchlist-screening-checks" aria-expanded="true"
+                                                aria-controls="collapse-watchlist-screening-checks">
+                                            Watchlist Screening Checks
+                                        </button>
+                                    </h3>
+                                </div>
+
+                                <div id="collapse-watchlist-screening-checks" class="collapse"
+                                     aria-labelledby="watchlist-screening-checks">
+                                    <div class="card-body">
+                                        @foreach($sessionResult->getWatchlistScreeningChecks() as $check)
+                                            @include('partial/check', ['check' => $check])
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
