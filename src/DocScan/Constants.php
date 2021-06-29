@@ -9,6 +9,7 @@ class Constants
     public const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     public const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     public const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
+    public const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
     public const LIVENESS = 'LIVENESS';
 
     public const ID_DOCUMENT_TEXT_DATA_EXTRACTION = 'ID_DOCUMENT_TEXT_DATA_EXTRACTION';
@@ -24,4 +25,7 @@ class Constants
     public const ALWAYS = 'ALWAYS';
     public const FALLBACK = 'FALLBACK';
     public const NEVER = 'NEVER';
+
+    public const BASIC = 'BASIC';
+    public const BEARER = 'BEARER';
 }

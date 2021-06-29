@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Create;
 
+use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\NotificationConfigBuilder;
 use Yoti\Test\TestCase;
 
@@ -28,7 +29,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getEndpoint
      * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getTopics
      */
-    public function shouldBuildNotificationConfig()
+    public function shouldBuildNotificationConfig(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -47,7 +48,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers ::forResourceUpdate
      */
-    public function shouldUseCorrectValueForResourceUpdate()
+    public function shouldUseCorrectValueForResourceUpdate(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -62,7 +63,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers ::forTaskCompletion
      */
-    public function shouldUseCorrectValueForTaskCompletion()
+    public function shouldUseCorrectValueForTaskCompletion(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -77,7 +78,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers ::forCheckCompletion
      */
-    public function shouldUseCorrectValueForCheckCompletion()
+    public function shouldUseCorrectValueForCheckCompletion(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -92,7 +93,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers ::forSessionCompletion
      */
-    public function shouldUseCorrectValueForSessionCompletion()
+    public function shouldUseCorrectValueForSessionCompletion(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -111,7 +112,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @covers ::forSessionCompletion
      * @covers ::withTopic
      */
-    public function shouldAllowAllNotificationTypes()
+    public function shouldAllowAllNotificationTypes(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -133,7 +134,7 @@ class NotificationConfigBuilderTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
      */
-    public function shouldProduceCorrectOutput()
+    public function shouldSerializeWithCorrectProperties(): void
     {
         $result = (new NotificationConfigBuilder())
             ->withAuthToken(self::SOME_AUTH_TOKEN)
@@ -150,5 +151,61 @@ class NotificationConfigBuilderTest extends TestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
+     */
+    public function shouldSerializeWithoutNullValues(): void
+    {
+        $result = (new NotificationConfigBuilder())->build();
+
+        $expected = [
+            'topics' => []
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getAuthType
+     */
+    public function shouldNotImplicitlySetAValueForAuthType(): void
+    {
+        $result = (new NotificationConfigBuilder())
+            ->forResourceUpdate()
+            ->build();
+
+        $this->assertNull($result->getAuthType());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\NotificationConfigBuilder::withAuthTypeBasic
+     */
+    public function shouldSetAuthTypeToBasic()
+    {
+        $result = (new NotificationConfigBuilder())
+            ->forResourceUpdate()
+            ->withAuthTypeBasic()
+            ->build();
+
+        $this->assertEquals($result->getAuthType(), Constants::BASIC);
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\NotificationConfigBuilder::withAuthTypeBearer
+     */
+    public function shouldSetAuthTypeToBearer()
+    {
+        $result = (new NotificationConfigBuilder())
+            ->forResourceUpdate()
+            ->withAuthTypeBearer()
+            ->build();
+
+        $this->assertEquals($result->getAuthType(), Constants::BEARER);
     }
 }

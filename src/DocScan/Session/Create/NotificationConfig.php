@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
-use JsonSerializable;
+use Yoti\Util\Json;
 
-class NotificationConfig implements JsonSerializable
+class NotificationConfig implements \JsonSerializable
 {
 
     /**
      * @var string|null
      */
     private $authToken;
+
+    /**
+     * @var string|null
+     */
+    private $authType;
 
     /**
      * @var string|null
@@ -29,24 +34,27 @@ class NotificationConfig implements JsonSerializable
      * @param string|null $authToken
      * @param string|null $endpoint
      * @param array<string> $topics
+     * @param string|null $authType
      */
-    public function __construct(?string $authToken, ?string $endpoint, array $topics = [])
+    public function __construct(?string $authToken, ?string $endpoint, array $topics = [], ?string $authType = '')
     {
         $this->authToken = $authToken;
+        $this->authType = $authType;
         $this->endpoint = $endpoint;
         $this->topics = array_unique($topics);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return \stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): \stdClass
     {
-        return [
+        return (object) Json::withoutNullValues([
             'auth_token' => $this->getAuthToken(),
+            'auth_type' => $this->getAuthType(),
             'endpoint' => $this->getEndpoint(),
             'topics' => $this->getTopics(),
-        ];
+        ]);
     }
 
     /**
@@ -55,6 +63,14 @@ class NotificationConfig implements JsonSerializable
     public function getAuthToken(): ?string
     {
         return $this->authToken;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthType(): ?string
+    {
+        return $this->authType;
     }
 
     /**
