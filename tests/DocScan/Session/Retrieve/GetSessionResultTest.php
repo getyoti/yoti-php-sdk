@@ -105,6 +105,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getIdDocumentTextDataChecks
      * @covers ::getIdDocumentComparisonChecks
      * @covers ::getThirdPartyIdentityChecks
+     * @covers ::getWatchlistScreeningChecks
      * @covers ::getSupplementaryDocumentTextDataChecks
      * @covers ::getLivenessChecks
      * @covers ::createCheckFromArray
