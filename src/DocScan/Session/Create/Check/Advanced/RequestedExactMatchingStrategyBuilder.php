@@ -6,10 +6,6 @@ namespace Yoti\DocScan\Session\Create\Check\Advanced;
 
 class RequestedExactMatchingStrategyBuilder
 {
-    private function __construct()
-    {
-    }
-
     /**
      * @return RequestedExactMatchingStrategy
      */

@@ -11,10 +11,6 @@ class RequestedFuzzyMatchingStrategyBuilder
      */
     private $fuzziness;
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param float $fuzziness
      * @return $this

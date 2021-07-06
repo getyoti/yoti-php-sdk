@@ -13,10 +13,6 @@ class RequestedWatchlistAdvancedCaCheckBuilder
      */
     private $config;
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param RequestedWatchlistAdvancedCaConfig $config
      * @return $this

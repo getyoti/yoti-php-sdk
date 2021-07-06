@@ -11,10 +11,6 @@ class RequestedSearchProfileSourcesBuilder
      */
     private $searchProfile;
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param string $searchProfile
      * @return $this

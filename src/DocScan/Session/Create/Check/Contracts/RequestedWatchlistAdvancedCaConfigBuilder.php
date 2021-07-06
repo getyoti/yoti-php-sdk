@@ -35,10 +35,6 @@ abstract class RequestedWatchlistAdvancedCaConfigBuilder
      */
     abstract protected function build();
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param bool $removeDeceased
      * @return $this

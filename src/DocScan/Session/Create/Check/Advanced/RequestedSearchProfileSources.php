@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check\Advanced;
 
-class RequestedSearchProfileSources
+use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources;
+
+class RequestedSearchProfileSources extends RequestedCaSources
 {
     /**
      * @var string

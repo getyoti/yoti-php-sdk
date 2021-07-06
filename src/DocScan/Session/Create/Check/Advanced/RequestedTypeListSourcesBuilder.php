@@ -11,10 +11,6 @@ class RequestedTypeListSourcesBuilder
      */
     private $types;
 
-    private function __construct()
-    {
-    }
-
     /**
      * @param string[] $types
      * @return $this

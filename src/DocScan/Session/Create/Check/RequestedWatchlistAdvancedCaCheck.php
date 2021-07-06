@@ -22,7 +22,7 @@ class RequestedWatchlistAdvancedCaCheck extends RequestedCheck
     /**
      * @return string
      */
-    protected function getType(): string
+    public function getType(): string
     {
         return Constants::WATCHLIST_ADVANCED_CA;
     }
@@ -30,7 +30,7 @@ class RequestedWatchlistAdvancedCaCheck extends RequestedCheck
     /**
      * @return RequestedCheckConfigInterface|null
      */
-    protected function getConfig(): ?RequestedCheckConfigInterface
+    public function getConfig(): ?RequestedCheckConfigInterface
     {
         return $this->config;
     }
