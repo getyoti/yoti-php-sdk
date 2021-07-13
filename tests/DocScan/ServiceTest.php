@@ -8,12 +8,12 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Service;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
-use Yoti\Exception\base\YotiException;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -144,8 +144,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Failed validation - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 400");
 
         $docScanService->createSession($sessionSpecificationMock);
     }
@@ -234,8 +234,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Unexpected error - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->retrieveSession(TestData::DOC_SCAN_SESSION_ID);
     }
@@ -321,8 +321,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Unexpected error - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->deleteSession(TestData::DOC_SCAN_SESSION_ID);
     }
@@ -462,8 +462,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Unexpected error - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
@@ -551,8 +551,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Unexpected error - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
@@ -637,8 +637,8 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(YotiException::class);
-        $this->expectExceptionMessage("Unexpected error - ");
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->getSupportedDocuments();
     }

@@ -6,11 +6,9 @@ namespace Yoti\Profile;
 
 use Yoti\Constants;
 use Yoti\Exception\ActivityDetailsException;
-use Yoti\Exception\base\YotiException;
 use Yoti\Exception\PemFileException;
 use Yoti\Exception\ReceiptException;
 use Yoti\Http\RequestBuilder;
-use Yoti\Http\Response;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
 use Yoti\Util\PemFile;
@@ -29,19 +27,19 @@ class Service
     private $sdkId;
 
     /**
-     * @var \Yoti\Util\PemFile
+     * @var PemFile
      */
     private $pemFile;
 
     /**
-     * @var \Yoti\Util\Config
+     * @var Config
      */
     private $config;
 
     /**
      * @param string $sdkId
-     * @param \Yoti\Util\PemFile $pemFile
-     * @param \Yoti\Util\Config $config
+     * @param PemFile $pemFile
+     * @param Config $config
      */
     public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
@@ -59,7 +57,7 @@ class Service
      *
      * @throws ActivityDetailsException
      * @throws ReceiptException
-     * @throws YotiException|PemFileException
+     * @throws PemFileException
      */
     public function getActivityDetails(string $encryptedConnectToken): ActivityDetails
     {
@@ -79,10 +77,10 @@ class Service
 
         $httpCode = $response->getStatusCode();
         if ($httpCode < 200 || $httpCode > 299) {
-            Response::createYotiExceptionFromStatusCode($response);
+            throw new ActivityDetailsException("Server responded with {$httpCode}", $response);
         }
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         $this->checkForReceipt($result);
 
@@ -90,7 +88,7 @@ class Service
 
         // Check response was successful
         if ($receipt->getSharingOutcome() !== self::OUTCOME_SUCCESS) {
-            throw new ActivityDetailsException('Outcome was unsuccessful');
+            throw new ActivityDetailsException('Outcome was unsuccessful', $response);
         }
 
         return new ActivityDetails($receipt, $this->pemFile, $this->config->getLogger());
@@ -102,6 +100,7 @@ class Service
      * @param string $encryptedConnectToken
      *
      * @return string
+     * @throws ActivityDetailsException
      */
     private function decryptConnectToken(string $encryptedConnectToken): string
     {
@@ -110,7 +109,7 @@ class Service
             throw new ActivityDetailsException('Could not decode one time use token.');
         }
 
-        openssl_private_decrypt($decodedToken, $token, (string) $this->pemFile);
+        openssl_private_decrypt($decodedToken, $token, (string)$this->pemFile);
 
         if (!isset($token) || strlen($token) === 0) {
             throw new ActivityDetailsException('Could not decrypt one time use token.');

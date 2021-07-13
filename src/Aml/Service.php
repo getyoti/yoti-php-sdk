@@ -6,10 +6,10 @@ namespace Yoti\Aml;
 
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
+use Yoti\Exception\AmlException;
 use Yoti\Exception\base\YotiException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
-use Yoti\Http\Response;
 use Yoti\Util\Config;
 use Yoti\Util\Json;
 use Yoti\Util\PemFile;
@@ -66,15 +66,15 @@ class Service
         $this->validateAmlResult($response);
 
         // Set and return result
-        return new Result(Json::decode((string) $response->getBody()));
+        return new Result(Json::decode((string)$response->getBody()));
     }
 
     /**
      * Handle request result.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseInterface $response
      *
-     * @throws \Yoti\Exception\base\YotiException
+     * @throws AmlException
      */
     private function validateAmlResult(ResponseInterface $response): void
     {
@@ -85,13 +85,13 @@ class Service
             return;
         }
 
-        Response::createYotiExceptionFromStatusCode($response);
+        throw new AmlException($this->getErrorMessage($response), $response);
     }
 
     /**
      * Get error message from the response.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return string
      */
@@ -107,9 +107,9 @@ class Service
             return $statusCodeMessage;
         }
 
-        $jsonData = Json::decode((string) $response->getBody());
+        $jsonData = Json::decode((string)$response->getBody());
 
-        $errorCode = isset($jsonData['code']) ? $jsonData['code'] : 'Error';
+        $errorCode = $jsonData['code'] ?? 'Error';
 
         // Throw the error message that's included in the response.
         if (isset($jsonData['errors'][0]['property']) && isset($jsonData['errors'][0]['message'])) {
