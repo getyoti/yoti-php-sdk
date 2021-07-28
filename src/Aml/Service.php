@@ -44,11 +44,11 @@ class Service
     }
 
     /**
-     * @param \Yoti\Aml\Profile $amlProfile
+     * @param Profile $amlProfile
      *
-     * @return \Yoti\Aml\Result
+     * @return Result
      *
-     * @throws YotiException
+     * @throws AmlException
      */
     public function performCheck(Profile $amlProfile): Result
     {
