@@ -7,7 +7,6 @@ namespace Yoti\Aml;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
 use Yoti\Exception\AmlException;
-use Yoti\Exception\base\YotiException;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
 use Yoti\Util\Config;
@@ -22,19 +21,19 @@ class Service
     private $sdkId;
 
     /**
-     * @var \Yoti\Util\PemFile
+     * @var PemFile
      */
     private $pemFile;
 
     /**
-     * @var \Yoti\Util\Config
+     * @var Config
      */
     private $config;
 
     /**
      * @param string $sdkId
-     * @param \Yoti\Util\PemFile $pemFile
-     * @param \Yoti\Util\Config $config
+     * @param PemFile $pemFile
+     * @param Config $config
      */
     public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {

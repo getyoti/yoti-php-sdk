@@ -9,7 +9,6 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
-use Yoti\Exception\base\YotiException;
 use Yoti\Exception\PemFileException;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
@@ -68,7 +67,7 @@ class DocScanClient
      *
      * @param SessionSpecification $sessionSpecification
      * @return CreateSessionResult
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function createSession(SessionSpecification $sessionSpecification): CreateSessionResult
     {
@@ -80,7 +79,7 @@ class DocScanClient
      *
      * @param string $sessionId
      * @return GetSessionResult
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function getSession(string $sessionId): GetSessionResult
     {
@@ -92,13 +91,12 @@ class DocScanClient
      * of its related resources.
      *
      * @param string $sessionId
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function deleteSession(string $sessionId): void
     {
         $this->docScanService->deleteSession($sessionId);
     }
-
 
     /**
      * Retrieves media related to a Yoti Doc Scan session based
@@ -107,7 +105,7 @@ class DocScanClient
      * @param string $sessionId
      * @param string $mediaId
      * @return Media
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function getMediaContent(string $sessionId, string $mediaId): Media
     {
@@ -120,7 +118,7 @@ class DocScanClient
      *
      * @param string $sessionId
      * @param string $mediaId
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function deleteMediaContent(string $sessionId, string $mediaId): void
     {
@@ -131,7 +129,7 @@ class DocScanClient
      * Gets a list of supported documents.
      *
      * @return SupportedDocumentsResponse
-     * @throws YotiException
+     * @throws Exception\DocScanException
      */
     public function getSupportedDocuments(): SupportedDocumentsResponse
     {
