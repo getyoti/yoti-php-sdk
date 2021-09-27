@@ -10,6 +10,11 @@ use Yoti\Util\DateTime;
 class GetSessionResult
 {
     /**
+     * @var array<mixed>|null
+     */
+    private $sessionData;
+
+    /**
      * @var string|null
      */
     private $state;
@@ -55,6 +60,7 @@ class GetSessionResult
      */
     public function __construct(array $sessionData)
     {
+        $this->sessionData = $sessionData;
         $this->state = $sessionData['state'] ?? null;
         $this->sessionId = $sessionData['session_id'] ?? null;
         $this->userTrackingId = $sessionData['user_tracking_id'] ?? null;
@@ -74,6 +80,14 @@ class GetSessionResult
         if (isset($sessionData['resources'])) {
             $this->resources = new ResourceContainer($sessionData['resources']);
         }
+    }
+
+    /**
+     * @return array<mixed>|null
+     */
+    public function getSessionData()
+    {
+        return $this->sessionData;
     }
 
     /**
