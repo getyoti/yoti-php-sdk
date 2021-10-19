@@ -28,7 +28,7 @@ class AttributeListConverter
 
         foreach ($attributeList->getAttributes() as $attr) { /** @var \Yoti\Protobuf\Attrpubapi\Attribute $attr */
             $attrName = $attr->getName();
-            if (null == $attrName || strlen($attrName) === 0) {
+            if (null == $attrName || strlen($attrName) == 0) {
                 continue;
             }
             $yotiAttribute = AttributeConverter::convertToYotiAttribute($attr, $logger);
