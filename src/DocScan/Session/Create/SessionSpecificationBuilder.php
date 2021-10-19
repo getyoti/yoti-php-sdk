@@ -10,11 +10,17 @@ use Yoti\DocScan\Session\Create\Task\RequestedTask;
 
 class SessionSpecificationBuilder
 {
+    public const DATETIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
     /**
      * @var int
      */
     private $clientSessionTokenTtl;
+
+    /**
+     * @var string
+     */
+    private $sessionDeadLine;
 
     /**
      * @var int
@@ -63,6 +69,16 @@ class SessionSpecificationBuilder
     public function withClientSessionTokenTtl(int $clientSessionTokenTtl): self
     {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeImmutable $sessionDeadLine
+     * @return $this
+     */
+    public function withSessionDeadLine(\DateTimeImmutable $sessionDeadLine): self
+    {
+        $this->sessionDeadLine = $sessionDeadLine->format(self::DATETIME_FORMAT);
         return $this;
     }
 
@@ -179,6 +195,7 @@ class SessionSpecificationBuilder
     {
         return new SessionSpecification(
             $this->clientSessionTokenTtl,
+            $this->sessionDeadLine,
             $this->resourcesTtl,
             $this->userTrackingId,
             $this->notifications,
