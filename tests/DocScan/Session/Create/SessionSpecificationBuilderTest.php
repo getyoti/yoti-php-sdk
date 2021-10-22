@@ -61,7 +61,7 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->requestedTaskMock->method('jsonSerialize')->willReturn(['requestedTasks']);
 
         $this->requiredDocumentMock = $this->createMock(RequiredDocument::class);
-        $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object) ['requiredDocument']);
+        $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);
     }
 
     /**
@@ -134,7 +134,7 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withResourcesTtl(self::SOME_RESOURCES_TTL)
             ->withUserTrackingId(self::SOME_USER_TRACKING_ID)
             ->withRequestedCheck($this->requestedCheckMock)
-            ->withRequestedChecks([ $someOtherRequestedCheckMock ])
+            ->withRequestedChecks([$someOtherRequestedCheckMock])
             ->build();
 
         $this->assertCount(1, $sessionSpecification->getRequestedChecks());
@@ -155,7 +155,7 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withResourcesTtl(self::SOME_RESOURCES_TTL)
             ->withUserTrackingId(self::SOME_USER_TRACKING_ID)
             ->withRequestedTask($this->requestedTaskMock)
-            ->withRequestedTasks([ $someOtherRequestedTaskMock ])
+            ->withRequestedTasks([$someOtherRequestedTaskMock])
             ->build();
 
         $this->assertCount(1, $sessionSpecification->getRequestedTasks());
@@ -187,9 +187,9 @@ class SessionSpecificationBuilderTest extends TestCase
                 'user_tracking_id' => self::SOME_USER_TRACKING_ID,
                 'notifications' => $this->notificationsMock,
                 'sdk_config' => $this->sdkConfigMock,
-                'requested_checks' => [ $this->requestedCheckMock ],
-                'requested_tasks' => [ $this->requestedTaskMock ],
-                'required_documents' => [ $this->requiredDocumentMock ],
+                'requested_checks' => [$this->requestedCheckMock],
+                'requested_tasks' => [$this->requestedTaskMock],
+                'required_documents' => [$this->requiredDocumentMock],
                 'block_biometric_consent' => true,
             ]),
             json_encode($sessionSpecification)
@@ -254,5 +254,23 @@ class SessionSpecificationBuilderTest extends TestCase
             ]),
             json_encode($sessionSpecification)
         );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSessionDeadline
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSessionDeadline
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldSetTheSessionDeadline()
+    {
+        $date = new \DateTimeImmutable();
+        $correctDateFormatValue = $date->format(SessionSpecificationBuilder::DATETIME_FORMAT);
+
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withSessionDeadline($date)
+            ->build();
+
+        $this->assertEquals($correctDateFormatValue, $sessionSpecificationResult->getSessionDeadline());
     }
 }
