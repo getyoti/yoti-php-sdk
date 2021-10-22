@@ -258,8 +258,8 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSessionDeadLine
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSessionDeadLine
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSessionDeadline
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSessionDeadline
      * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldSetTheSessionDeadline()
@@ -268,9 +268,9 @@ class SessionSpecificationBuilderTest extends TestCase
         $correctDateFormatValue = $date->format(SessionSpecificationBuilder::DATETIME_FORMAT);
 
         $sessionSpecificationResult = (new SessionSpecificationBuilder())
-            ->withSessionDeadLine($date)
+            ->withSessionDeadline($date)
             ->build();
 
-        $this->assertEquals($correctDateFormatValue, $sessionSpecificationResult->getSessionDeadLine());
+        $this->assertEquals($correctDateFormatValue, $sessionSpecificationResult->getSessionDeadline());
     }
 }

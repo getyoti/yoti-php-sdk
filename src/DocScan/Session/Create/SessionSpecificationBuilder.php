@@ -20,7 +20,7 @@ class SessionSpecificationBuilder
     /**
      * @var string
      */
-    private $sessionDeadLine;
+    private $sessionDeadline;
 
     /**
      * @var int
@@ -73,12 +73,12 @@ class SessionSpecificationBuilder
     }
 
     /**
-     * @param \DateTimeImmutable $sessionDeadLine
+     * @param \DateTimeImmutable $sessionDeadline
      * @return $this
      */
-    public function withSessionDeadLine(\DateTimeImmutable $sessionDeadLine): self
+    public function withSessionDeadLine(\DateTimeImmutable $sessionDeadline): self
     {
-        $this->sessionDeadLine = $sessionDeadLine->format(self::DATETIME_FORMAT);
+        $this->sessionDeadline = $sessionDeadline->format(self::DATETIME_FORMAT);
         return $this;
     }
 
@@ -195,7 +195,7 @@ class SessionSpecificationBuilder
     {
         return new SessionSpecification(
             $this->clientSessionTokenTtl,
-            $this->sessionDeadLine,
+            $this->sessionDeadline,
             $this->resourcesTtl,
             $this->userTrackingId,
             $this->notifications,
