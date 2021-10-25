@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
 use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -80,7 +81,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new CreateSessionResult($result);
     }
@@ -105,7 +106,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new GetSessionResult($result);
     }
@@ -152,7 +153,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $content = (string) $response->getBody();
+        $content = (string)$response->getBody();
         $mimeType = $response->getHeader("Content-Type")[0] ?? '';
 
         return new Media($mimeType, $content);
@@ -197,9 +198,33 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new SupportedDocumentsResponse($result);
+    }
+
+    /**
+     * @param string $sessionId
+     * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+     * @throws DocScanException
+     */
+    public function createFaceCaptureResource(
+        string $sessionId,
+        CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+    ): string {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withQueryParam('sdkId', $this->sdkId)
+            ->withPemFile($this->pemFile)
+            ->withPayload(Payload::fromJsonData($createFaceCaptureResourcePayload))
+            ->withPost()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        return 'string';
+        //Finish from here
     }
 
     /**
