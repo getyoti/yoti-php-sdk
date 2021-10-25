@@ -6,6 +6,7 @@ namespace Yoti\DocScan;
 
 use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -133,5 +134,12 @@ class DocScanClient
     public function getSupportedDocuments(): SupportedDocumentsResponse
     {
         return $this->docScanService->getSupportedDocuments();
+    }
+
+    public function createFaceCaptureResource(
+        string $sessionId,
+        CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+    ): string {
+        return 'string';
     }
 }
