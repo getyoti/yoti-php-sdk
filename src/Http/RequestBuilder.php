@@ -22,6 +22,9 @@ class RequestBuilder
     /** SDK Version HTTP header key. */
     private const YOTI_SDK_VERSION_HEADER_KEY = 'X-Yoti-SDK-Version';
 
+    /** Device meta header key */
+    private const YOTI_DEVICE_META_HEADER_KEY = 'X-Yoti-Device-Meta';
+
     /**
      * @var string
      */

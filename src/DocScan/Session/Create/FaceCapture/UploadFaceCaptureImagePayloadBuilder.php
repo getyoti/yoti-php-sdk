@@ -13,7 +13,7 @@ class UploadFaceCaptureImagePayloadBuilder
     private $imageContentType;
 
     /**
-     * @var array<string, mixed>
+     * @var array<int, int>
      */
     private $imageContents;
 
@@ -44,7 +44,7 @@ class UploadFaceCaptureImagePayloadBuilder
     /**
      * Sets the contents of the image to be uploaded
      *
-     * @param array<string, mixed> $imageContents
+     * @param array<int, int> $imageContents
      * @return $this
      */
     public function withImageContents(array $imageContents): UploadFaceCaptureImagePayloadBuilder

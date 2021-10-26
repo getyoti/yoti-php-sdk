@@ -15,6 +15,15 @@ class CreateFaceCaptureResourceResponse
     private $frames;
 
     /**
+     * @param array<string,mixed> $sessionData
+     */
+    public function __construct(array $sessionData)
+    {
+        $this->id = $sessionData['id'];
+        $this->frames = $sessionData['frames'];
+    }
+
+    /**
      * Returns the ID of the newly created Face Capture resource
      *
      * @return string

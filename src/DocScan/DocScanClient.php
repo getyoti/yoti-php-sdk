@@ -136,10 +136,16 @@ class DocScanClient
         return $this->docScanService->getSupportedDocuments();
     }
 
+    /**
+     * @param string $sessionId
+     * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+     * @return Session\Retrieve\CreateFaceCaptureResourceResponse
+     * @throws Exception\DocScanException
+     */
     public function createFaceCaptureResource(
         string $sessionId,
         CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
-    ): string {
-        return 'string';
+    ): Session\Retrieve\CreateFaceCaptureResourceResponse {
+        return $this->docScanService->createFaceCaptureResource($sessionId, $createFaceCaptureResourcePayload);
     }
 }
