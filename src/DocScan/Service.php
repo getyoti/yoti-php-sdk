@@ -10,6 +10,7 @@ use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
@@ -206,15 +207,16 @@ class Service
     /**
      * @param string $sessionId
      * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+     * @return CreateFaceCaptureResourceResponse
      * @throws DocScanException
      */
     public function createFaceCaptureResource(
         string $sessionId,
         CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
-    ): string {
+    ): CreateFaceCaptureResourceResponse {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withQueryParam('sdkId', $this->sdkId)
+            ->withEndpoint("sessions/$sessionId/resources/face-capture")
             ->withPemFile($this->pemFile)
             ->withPayload(Payload::fromJsonData($createFaceCaptureResourcePayload))
             ->withPost()
@@ -223,8 +225,9 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        return 'string';
-        //Finish from here
+        $result = Json::decode((string)$response->getBody());
+
+        return new CreateFaceCaptureResourceResponse($result);
     }
 
     /**
