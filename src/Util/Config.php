@@ -29,8 +29,12 @@ class Config
     /** Logger key */
     public const LOGGER = 'logger';
 
+    public const YOTI_MULTIPART_BOUNDARY = 'yoti-doc-scan-boundary';
+
     /** Type error message */
     private const TYPE_ERROR_MESSAGE = '%s configuration value must be of type %s';
+
+
 
     /**
      * @var array<string, mixed>
