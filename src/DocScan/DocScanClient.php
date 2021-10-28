@@ -7,6 +7,7 @@ namespace Yoti\DocScan;
 use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -147,5 +148,19 @@ class DocScanClient
         CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
     ): Session\Retrieve\CreateFaceCaptureResourceResponse {
         return $this->docScanService->createFaceCaptureResource($sessionId, $createFaceCaptureResourcePayload);
+    }
+
+    /**
+     * @param string $sessionId
+     * @param string $resourceId
+     * @param UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
+     * @throws Exception\DocScanException
+     */
+    public function uploadFaceCaptureImage(
+        string $sessionId,
+        string $resourceId,
+        UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
+    ): void {
+        $this->docScanService->uploadFaceCaptureImage($sessionId, $resourceId, $uploadFaceCaptureImagePayload);
     }
 }

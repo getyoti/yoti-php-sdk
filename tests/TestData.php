@@ -30,4 +30,8 @@ class TestData
 
     public const DOC_SCAN_SESSION_CREATION_RESPONSE = __DIR__ . '/sample-data/docs/session-creation.json';
     public const DOC_SCAN_SESSION_RESPONSE = __DIR__ . '/sample-data/docs/session.json';
+
+    public const SOME_SESSION_SPEC_BYTES = [1,2,3,4];
+    public const SOME_RESOURCE_ID = 'someResourceId';
+    public const SOME_IMAGE_CONTENT_TYPE = 'someImageContentType';
 }
