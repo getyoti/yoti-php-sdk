@@ -19,8 +19,8 @@ class CreateFaceCaptureResourceResponse
      */
     public function __construct(array $sessionData)
     {
-        $this->id = $sessionData['id'];
-        $this->frames = $sessionData['frames'];
+        $this->id = $sessionData['id'] ?? null;
+        $this->frames = $sessionData['frames'] ?? null;
     }
 
     /**

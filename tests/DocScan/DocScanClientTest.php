@@ -8,7 +8,10 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\DocScan\DocScanClient;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -265,6 +268,63 @@ class DocScanClientTest extends TestCase
         $this->assertInstanceOf(
             SupportedDocumentsResponse::class,
             $docScanClient->getSupportedDocuments()
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::createFaceCaptureResource
+     */
+    public function testCreateFaceCaptureResource()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(201);
+
+        $createFaceCaptureResourcePayloadMock = $this->createMock(CreateFaceCaptureResourcePayload::class);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertInstanceOf(
+            CreateFaceCaptureResourceResponse::class,
+            $docScanClient->createFaceCaptureResource(
+                TestData::DOC_SCAN_SESSION_ID,
+                $createFaceCaptureResourcePayloadMock
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::uploadFaceCaptureImage
+     */
+    public function testUploadFaceCaptureImage()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $uploadFaceCaptureImagePayloadMock = $this->createMock(UploadFaceCaptureImagePayload::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->uploadFaceCaptureImage(
+            TestData::DOC_SCAN_SESSION_ID,
+            TestData::SOME_RESOURCE_ID,
+            $uploadFaceCaptureImagePayloadMock
         );
     }
 }

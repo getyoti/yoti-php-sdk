@@ -49,7 +49,7 @@ class MultipartEntity
     {
         $this->multipartData[] = [
             'name' => $name,
-            'contents' => $payload,
+            'contents' => json_encode($payload),
             'filename' => $fileName,
             'headers' => ['Content-type' => $contentType]
         ];
