@@ -12,6 +12,7 @@ class Constants
     public const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
     public const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
     public const LIVENESS = 'LIVENESS';
+    public const FACE_CAPTURE = 'FACE_CAPTURE';
 
     public const ADVERSE_MEDIA = 'ADVERSE-MEDIA';
     public const SANCTIONS = 'SANCTIONS';
@@ -32,4 +33,8 @@ class Constants
 
     public const BASIC = 'BASIC';
     public const BEARER = 'BEARER';
+
+    public const END_USER = 'END_USER';
+    public const RELYING_BUSINESS = 'RELYING_BUSINESS';
+    public const IBV = 'IBV';
 }

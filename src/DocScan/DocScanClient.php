@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -162,5 +163,17 @@ class DocScanClient
         UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
     ): void {
         $this->docScanService->uploadFaceCaptureImage($sessionId, $resourceId, $uploadFaceCaptureImagePayload);
+    }
+
+    /**
+     * Fetches the configuration for the given sessionID.
+     *
+     * @param string $sessionId
+     * @return SessionConfigurationResponse
+     * @throws Exception\DocScanException
+     */
+    public function getSessionConfiguration(string $sessionId): SessionConfigurationResponse
+    {
+        return $this->docScanService->fetchSessionConfiguration($sessionId);
     }
 }
