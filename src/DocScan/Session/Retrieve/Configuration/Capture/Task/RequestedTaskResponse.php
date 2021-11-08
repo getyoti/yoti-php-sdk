@@ -5,21 +5,21 @@ namespace Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task;
 abstract class RequestedTaskResponse
 {
     /**
-     * @var string
+     * @var string|null
      */
-    private $type;
+    protected $type;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $state;
+    protected $state;
 
     /**
      * Returns the type of the {@link RequestedTaskResponse}
      *
-     * @return string
+     * @return string|null
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -27,9 +27,9 @@ abstract class RequestedTaskResponse
     /**
      * Returns the current state of the Requested Task
      *
-     * @return string
+     * @return string|null
      */
-    public function getState(): string
+    public function getState(): ?string
     {
         return $this->state;
     }
