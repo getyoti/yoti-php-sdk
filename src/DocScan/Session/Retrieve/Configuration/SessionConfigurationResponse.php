@@ -7,22 +7,22 @@ use Yoti\DocScan\Session\Retrieve\Configuration\Capture\CaptureResponse;
 class SessionConfigurationResponse
 {
     /**
-     * @var int
+     * @var int|null
      */
     private $clientSessionTokenTtl;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $sessionId;
 
     /**
-     * @var array<int,string>
+     * @var array<int,string>|null
      */
     private $requestedChecks;
 
     /**
-     * @var CaptureResponse
+     * @var CaptureResponse|null
      */
     private $capture;
 
@@ -31,17 +31,19 @@ class SessionConfigurationResponse
      */
     public function __construct(array $sessionData)
     {
-        //TODO Get data and save it
         $this->clientSessionTokenTtl = $sessionData['client_session_token_ttl'] ?? null;
+        $this->sessionId = $sessionData['session_id'] ?? null;
+        $this->requestedChecks = $sessionData['requested_checks'] ?? null;
+        $this->capture = isset($sessionData['capture']) ? new CaptureResponse($sessionData['capture']) : null;
     }
 
     /**
      * Returns the amount of time remaining in seconds until the session
      * expires.
      *
-     * @return int
+     * @return int|null
      */
-    public function getClientSessionTokenTtl(): int
+    public function getClientSessionTokenTtl(): ?int
     {
         return $this->clientSessionTokenTtl;
     }
@@ -49,9 +51,9 @@ class SessionConfigurationResponse
     /**
      * The session ID that the configuration belongs to
      *
-     * @return string
+     * @return string|null
      */
-    public function getSessionId(): string
+    public function getSessionId(): ?string
     {
         return $this->sessionId;
     }
@@ -60,9 +62,9 @@ class SessionConfigurationResponse
      * Returns a list of strings, signifying the checks that have been requested
      * in the session
      *
-     * @return string[]
+     * @return string[]|null
      */
-    public function getRequestedChecks(): array
+    public function getRequestedChecks(): ?array
     {
         return $this->requestedChecks;
     }
@@ -71,9 +73,9 @@ class SessionConfigurationResponse
      * Returns information about what needs to be captured to fulfill the
      * sessions requirements
      *
-     * @return CaptureResponse
+     * @return CaptureResponse|null
      */
-    public function getCapture(): CaptureResponse
+    public function getCapture(): ?CaptureResponse
     {
         return $this->capture;
     }

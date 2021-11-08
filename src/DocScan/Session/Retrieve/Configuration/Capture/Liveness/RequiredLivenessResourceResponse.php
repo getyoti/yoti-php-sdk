@@ -7,27 +7,24 @@ use Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse
 abstract class RequiredLivenessResourceResponse extends RequiredResourceResponse
 {
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
+     * @var string|null
      */
     private $livenessType;
 
     /**
-     * @return string
+     * @param array<string, string> $captureData
      */
-    public function getType(): string
+    public function __construct(array $captureData)
     {
-        return $this->type;
+        parent::__construct($captureData);
+
+        $this->livenessType = $captureData['liveness_type'] ?? null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLivenessType(): string
+    public function getLivenessType(): ?string
     {
         return $this->livenessType;
     }

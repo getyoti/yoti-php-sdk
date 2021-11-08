@@ -2,6 +2,7 @@
 
 namespace Yoti\DocScan\Session\Retrieve\Configuration\Capture;
 
+use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredDocumentResourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse;
@@ -12,23 +13,39 @@ use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Liveness\RequiredZoomLiv
 class CaptureResponse
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $biometricConsent;
 
     /**
-     * @var array<int,RequiredResourceResponse>
+     * @var RequiredResourceResponse[]
      */
     private $requiredResources;
+
+
+    /**
+     * @param array<string, mixed> $captureData
+     */
+    public function __construct(array $captureData)
+    {
+        $this->biometricConsent = $captureData['biometric_consent'] ?? null;
+
+        if (isset($captureData['required_resources'])) {
+            foreach ($captureData['required_resources'] as $resource) {
+                $this->requiredResources[] = $this->createRequiredResourcesArray($resource);
+            }
+        }
+    }
+
 
     /**
      * Returns a String enum of the state of biometric consent
      *
      * return if biometric consent needs to be captured
      *
-     * @return string
+     * @return string|null
      */
-    public function getBiometricConsent(): string
+    public function getBiometricConsent(): ?string
     {
         return $this->biometricConsent;
     }
@@ -120,5 +137,25 @@ class CaptureResponse
         });
 
         return array_values($filtered);
+    }
+
+    /**
+     * @param array<string, mixed> $requiredResource
+     * @return RequiredResourceResponse
+     */
+    private function createRequiredResourcesArray(array $requiredResource): RequiredResourceResponse
+    {
+        switch ($requiredResource['type'] ?? null) {
+            case Constants::ID_DOCUMENT:
+                return new RequiredIdDocumentResourceResponse($requiredResource);
+            case Constants::SUPPLEMENTARY_DOCUMENT:
+                return new RequiredSupplementaryDocumentResourceResponse($requiredResource);
+            case Constants::LIVENESS:
+                return new RequiredZoomLivenessResourceResponse($requiredResource);
+            case Constants::FACE_CAPTURE:
+                return new RequiredFaceCaptureResourceResponse($requiredResource);
+            default:
+                return new UnknownRequiredResourceResponse($requiredResource);
+        }
     }
 }

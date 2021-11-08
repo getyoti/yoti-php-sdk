@@ -2,10 +2,14 @@
 
 namespace Yoti\DocScan\Session\Retrieve\Configuration\Capture;
 
+use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
 
-abstract class RequiredResourceResponse
+class RequiredResourceResponse
 {
     /**
      * @var string
@@ -26,6 +30,22 @@ abstract class RequiredResourceResponse
      * @var array<int,AllowedSourceResponse>
      */
     private $allowedSources;
+
+    /**
+     * @param array<string, mixed> $captureData
+     */
+    public function __construct(array $captureData)
+    {
+        $this->type = $captureData['type'] ?? null;
+        $this->id = $captureData['id'] ?? null;
+        $this->state = $captureData['state'] ?? null;
+
+        if (isset($captureData['allowed_sources'])) {
+            foreach ($captureData['allowed_sources'] as $allowedSource) {
+                $this->allowedSources[] = $this->createAllowedSourceFromArray($allowedSource);
+            }
+        }
+    }
 
     /**
      * @return string
@@ -79,5 +99,23 @@ abstract class RequiredResourceResponse
         }
 
         return false;
+    }
+
+    /**
+     * @param array<string, string> $source
+     * @return AllowedSourceResponse
+     */
+    private function createAllowedSourceFromArray(array $source): AllowedSourceResponse
+    {
+        switch ($source['type'] ?? null) {
+            case Constants::END_USER:
+                return new EndUserAllowedSourceResponse();
+            case Constants::IBV:
+                return new IbvAllowedSourceResponse();
+            case Constants::RELYING_BUSINESS:
+                return new RelyingBusinessAllowedSourceResponse();
+            default:
+                return new UnknownAllowedSourceResponse();
+        }
     }
 }

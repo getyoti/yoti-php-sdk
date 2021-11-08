@@ -5,14 +5,14 @@ namespace Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source;
 abstract class AllowedSourceResponse
 {
     /**
-     * @var string
+     * @var string|null
      */
-    private $type;
+    protected $type;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
