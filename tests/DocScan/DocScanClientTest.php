@@ -11,6 +11,7 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -325,6 +326,31 @@ class DocScanClientTest extends TestCase
             TestData::DOC_SCAN_SESSION_ID,
             TestData::SOME_RESOURCE_ID,
             $uploadFaceCaptureImagePayloadMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getSessionConfiguration
+     */
+    public function testGetSessionConfiguration()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertInstanceOf(
+            SessionConfigurationResponse::class,
+            $docScanClient->getSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 }
