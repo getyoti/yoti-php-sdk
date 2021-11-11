@@ -9,7 +9,7 @@ class RequestedIdDocTaskResponse extends RequestedTaskResponse
      */
     public function __construct(array $requestedTask)
     {
-        $this->type = $requestedTask['task'] ?? null;
+        $this->type = $requestedTask['type'] ?? null;
         $this->state = $requestedTask['state'] ?? null;
     }
 }
