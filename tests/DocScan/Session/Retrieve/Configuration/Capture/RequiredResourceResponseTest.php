@@ -5,6 +5,8 @@ namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture;
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
 use Yoti\Test\TestCase;
 
 /**
@@ -18,6 +20,12 @@ class RequiredResourceResponseTest extends TestCase
     private const SOME_ALLOWED_SOURCES = [
         [
             'type' => Constants::END_USER,
+        ],
+        [
+            'type' => Constants::RELYING_BUSINESS,
+        ],
+        [
+            'type' => Constants::IBV,
         ],
     ];
 
@@ -42,14 +50,16 @@ class RequiredResourceResponseTest extends TestCase
 
         $result = new RequiredResourceResponse($input);
 
-
         $this->assertEquals(self::SOME_TYPE, $result->getType());
         $this->assertEquals(self::SOME_ID, $result->getId());
         $this->assertEquals(self::SOME_STATE, $result->getState());
 
-        $this->assertCount(1, $result->getAllowedSources());
+        $this->assertCount(3, $result->getAllowedSources());
 
         $this->assertInstanceOf(EndUserAllowedSourceResponse::class, $result->getAllowedSources()[0]);
-        $this->assertFalse($result->isRelyingBusinessAllowed());
+        $this->assertInstanceOf(RelyingBusinessAllowedSourceResponse::class, $result->getAllowedSources()[1]);
+        $this->assertInstanceOf(IbvAllowedSourceResponse::class, $result->getAllowedSources()[2]);
+
+        $this->assertTrue($result->isRelyingBusinessAllowed());
     }
 }
