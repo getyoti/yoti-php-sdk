@@ -90,7 +90,7 @@ class RequiredResourceResponse
      */
     public function isRelyingBusinessAllowed(): bool
     {
-        if (($this->allowedSources != null)) {
+        if ($this->allowedSources != null) {
             foreach ($this->allowedSources as $allowedSource) {
                 if ($allowedSource instanceof RelyingBusinessAllowedSourceResponse) {
                     return true;
