@@ -144,4 +144,23 @@ class SdkConfigBuilderTest extends TestCase
 
         $this->assertJsonStringEqualsJsonString('{}', json_encode($result));
     }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfigBuilder::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     */
+    public function allowHandoffShouldBeNullWhenItIsNotSet()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowedCaptureMethod(self::SOME_CAPTURE_METHOD)
+            ->withPrimaryColour(self::SOME_PRIMARY_COLOUR)
+            ->withSecondaryColour(self::SOME_SECONDARY_COLOUR)
+            ->withFontColour(self::SOME_FONT_COLOUR)
+            ->withLocale(self::SOME_LOCALE)
+            ->withPresetIssuingCountry(self::SOME_PRESET_ISSUING_COUNTRY)
+            ->build();
+
+        $this->assertNull($result->getAllowHandoff());
+    }
 }
