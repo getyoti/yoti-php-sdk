@@ -21,7 +21,7 @@ class RequestedDocumentAuthenticityCheck extends RequestedCheck
     /**
      * @inheritDoc
      */
-    protected function getType(): string
+    public function getType(): string
     {
         return Constants::ID_DOCUMENT_AUTHENTICITY;
     }
@@ -29,7 +29,7 @@ class RequestedDocumentAuthenticityCheck extends RequestedCheck
     /**
      * @inheritDoc
      */
-    protected function getConfig(): ?RequestedCheckConfigInterface
+    public function getConfig(): ?RequestedCheckConfigInterface
     {
         return $this->config;
     }

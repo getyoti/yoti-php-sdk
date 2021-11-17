@@ -13,9 +13,19 @@ class RequestedDocumentAuthenticityCheckConfig implements RequestedCheckConfigIn
      */
     private $manualCheck;
 
-    public function __construct(?string $manualCheck)
+    /**
+     * @var IssuingAuthoritySubCheck|null
+     */
+    private $issuingAuthoritySubCheck;
+
+    /**
+     * @param string|null $manualCheck
+     * @param IssuingAuthoritySubCheck|null $issuingAuthoritySubCheck
+     */
+    public function __construct(?string $manualCheck, ?IssuingAuthoritySubCheck $issuingAuthoritySubCheck = null)
     {
         $this->manualCheck = $manualCheck;
+        $this->issuingAuthoritySubCheck = $issuingAuthoritySubCheck;
     }
 
     /**
@@ -25,6 +35,7 @@ class RequestedDocumentAuthenticityCheckConfig implements RequestedCheckConfigIn
     {
         return (object) Json::withoutNullValues([
             'manual_check' => $this->getManualCheck(),
+            'issuing_authority_sub_check' => $this->getIssuingAuthoritySubCheck(),
         ]);
     }
 
@@ -34,5 +45,13 @@ class RequestedDocumentAuthenticityCheckConfig implements RequestedCheckConfigIn
     public function getManualCheck(): ?string
     {
         return $this->manualCheck;
+    }
+
+    /**
+     * @return IssuingAuthoritySubCheck|null
+     */
+    public function getIssuingAuthoritySubCheck(): ?IssuingAuthoritySubCheck
+    {
+        return $this->issuingAuthoritySubCheck;
     }
 }
