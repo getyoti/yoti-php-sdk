@@ -20,6 +20,8 @@ class Constants
     public const PROFILE = 'PROFILE';
     public const EXACT = 'EXACT';
     public const FUZZY = 'FUZZY';
+    public const FACE_CAPTURE = 'FACE_CAPTURE';
+
 
     public const ADVERSE_MEDIA = 'ADVERSE-MEDIA';
     public const SANCTIONS = 'SANCTIONS';
@@ -40,4 +42,8 @@ class Constants
 
     public const BASIC = 'BASIC';
     public const BEARER = 'BEARER';
+
+    public const END_USER = 'END_USER';
+    public const RELYING_BUSINESS = 'RELYING_BUSINESS';
+    public const IBV = 'IBV';
 }

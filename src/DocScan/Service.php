@@ -8,7 +8,11 @@ use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
 use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
@@ -80,7 +84,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new CreateSessionResult($result);
     }
@@ -105,7 +109,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new GetSessionResult($result);
     }
@@ -152,7 +156,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $content = (string) $response->getBody();
+        $content = (string)$response->getBody();
         $mimeType = $response->getHeader("Content-Type")[0] ?? '';
 
         return new Media($mimeType, $content);
@@ -197,9 +201,87 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string) $response->getBody());
+        $result = Json::decode((string)$response->getBody());
 
         return new SupportedDocumentsResponse($result);
+    }
+
+    /**
+     * @param string $sessionId
+     * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+     * @return CreateFaceCaptureResourceResponse
+     * @throws DocScanException
+     */
+    public function createFaceCaptureResource(
+        string $sessionId,
+        CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+    ): CreateFaceCaptureResourceResponse {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withEndpoint("sessions/$sessionId/resources/face-capture")
+            ->withPemFile($this->pemFile)
+            ->withPayload(Payload::fromJsonData($createFaceCaptureResourcePayload))
+            ->withPost()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new CreateFaceCaptureResourceResponse($result);
+    }
+
+    /**
+     * @param string $sessionId
+     * @param string $resourceId
+     * @param UploadFaceCaptureImagePayload $faceCaptureImagePayload
+     * @throws DocScanException
+     */
+    public function uploadFaceCaptureImage(
+        string $sessionId,
+        string $resourceId,
+        UploadFaceCaptureImagePayload $faceCaptureImagePayload
+    ): void {
+        $response = (new RequestBuilder($this->config))
+            ->withMultipartBoundary(Config::YOTI_MULTIPART_BOUNDARY)
+            ->withMultipartBinaryBody(
+                "binary-content",
+                $faceCaptureImagePayload->getImageContents(),
+                $faceCaptureImagePayload->getImageContentType(),
+                'face-capture-image'
+            )
+            ->withPemFile($this->pemFile)
+            ->withBaseUrl($this->apiUrl)
+            ->withEndpoint("/sessions/$sessionId/resources/face-capture/$resourceId/image")
+            ->withPut()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return SessionConfigurationResponse
+     * @throws DocScanException
+     */
+    public function fetchSessionConfiguration(string $sessionId): SessionConfigurationResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withEndpoint(sprintf('/sessions/%s/configuration', $sessionId))
+            ->withQueryParam('sdkId', $this->sdkId)
+            ->withPemFile($this->pemFile)
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new SessionConfigurationResponse($result);
     }
 
     /**

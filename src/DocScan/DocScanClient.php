@@ -6,7 +6,10 @@ namespace Yoti\DocScan;
 
 use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -133,5 +136,44 @@ class DocScanClient
     public function getSupportedDocuments(): SupportedDocumentsResponse
     {
         return $this->docScanService->getSupportedDocuments();
+    }
+
+    /**
+     * @param string $sessionId
+     * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+     * @return Session\Retrieve\CreateFaceCaptureResourceResponse
+     * @throws Exception\DocScanException
+     */
+    public function createFaceCaptureResource(
+        string $sessionId,
+        CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
+    ): Session\Retrieve\CreateFaceCaptureResourceResponse {
+        return $this->docScanService->createFaceCaptureResource($sessionId, $createFaceCaptureResourcePayload);
+    }
+
+    /**
+     * @param string $sessionId
+     * @param string $resourceId
+     * @param UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
+     * @throws Exception\DocScanException
+     */
+    public function uploadFaceCaptureImage(
+        string $sessionId,
+        string $resourceId,
+        UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
+    ): void {
+        $this->docScanService->uploadFaceCaptureImage($sessionId, $resourceId, $uploadFaceCaptureImagePayload);
+    }
+
+    /**
+     * Fetches the configuration for the given sessionID.
+     *
+     * @param string $sessionId
+     * @return SessionConfigurationResponse
+     * @throws Exception\DocScanException
+     */
+    public function getSessionConfiguration(string $sessionId): SessionConfigurationResponse
+    {
+        return $this->docScanService->fetchSessionConfiguration($sessionId);
     }
 }

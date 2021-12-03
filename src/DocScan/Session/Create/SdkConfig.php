@@ -54,6 +54,11 @@ class SdkConfig implements \JsonSerializable
      */
     private $privacyPolicyUrl;
 
+    /**
+     * @var bool|null
+     */
+    private $allowHandoff;
+
     public function __construct(
         ?string $allowedCaptureMethods,
         ?string $primaryColour,
@@ -63,7 +68,8 @@ class SdkConfig implements \JsonSerializable
         ?string $presetIssuingCountry,
         ?string $successUrl,
         ?string $errorUrl,
-        ?string $privacyPolicyUrl = null
+        ?string $privacyPolicyUrl = null,
+        ?bool $allowHandoff = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -74,6 +80,7 @@ class SdkConfig implements \JsonSerializable
         $this->successUrl = $successUrl;
         $this->errorUrl = $errorUrl;
         $this->privacyPolicyUrl = $privacyPolicyUrl;
+        $this->allowHandoff = $allowHandoff;
     }
 
     /**
@@ -91,6 +98,7 @@ class SdkConfig implements \JsonSerializable
             'success_url' => $this->getSuccessUrl(),
             'error_url' => $this->getErrorUrl(),
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
+            'allow_handoff' => $this->getAllowHandoff(),
         ]);
     }
 
@@ -164,5 +172,13 @@ class SdkConfig implements \JsonSerializable
     public function getPrivacyPolicyUrl(): ?string
     {
         return $this->privacyPolicyUrl;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getAllowHandoff(): ?bool
+    {
+        return $this->allowHandoff;
     }
 }

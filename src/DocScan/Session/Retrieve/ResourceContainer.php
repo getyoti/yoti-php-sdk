@@ -22,6 +22,11 @@ class ResourceContainer
     private $livenessCapture = [];
 
     /**
+     * @var FaceCaptureResourceResponse[]
+     */
+    private $faceCapture = [];
+
+    /**
      * ResourceContainer constructor.
      * @param array<string, mixed> $resources
      */
@@ -37,6 +42,10 @@ class ResourceContainer
 
         if (isset($resources['liveness_capture'])) {
             $this->livenessCapture = $this->parseLivenessCapture($resources['liveness_capture']);
+        }
+
+        if (isset($resources['face_capture'])) {
+            $this->faceCapture = $this->parseFaceCapture($resources['face_capture']);
         }
     }
 
@@ -89,6 +98,19 @@ class ResourceContainer
     }
 
     /**
+     * @param array<array<string, mixed>> $faceCaptures
+     * @return FaceCaptureResourceResponse[]
+     */
+    private function parseFaceCapture(array $faceCaptures): array
+    {
+        $parsedFaceCaptures = [];
+        foreach ($faceCaptures as $faceCapture) {
+            $parsedFaceCaptures[] = new FaceCaptureResourceResponse($faceCapture);
+        }
+        return $parsedFaceCaptures;
+    }
+
+    /**
      * @return IdDocumentResourceResponse[]
      */
     public function getIdDocuments(): array
@@ -118,6 +140,14 @@ class ResourceContainer
     public function getZoomLivenessResources(): array
     {
         return $this->filterLivenessByType(ZoomLivenessResourceResponse::class);
+    }
+
+    /**
+     * @return FaceCaptureResourceResponse[]
+     */
+    public function getFaceCapture(): array
+    {
+        return $this->faceCapture;
     }
 
     /**

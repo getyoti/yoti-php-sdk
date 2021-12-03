@@ -3,6 +3,7 @@
 namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
 
 class ResourceResponse
 {
@@ -15,6 +16,11 @@ class ResourceResponse
      * @var TaskResponse[]
      */
     private $tasks = [];
+
+    /**
+     * @var AllowedSourceResponse
+     */
+    private $source;
 
     /**
      * ResourceResponse constructor.
@@ -45,6 +51,14 @@ class ResourceResponse
     public function getTasks(): array
     {
         return $this->tasks;
+    }
+
+    /**
+     * @return AllowedSourceResponse
+     */
+    public function getSource(): AllowedSourceResponse
+    {
+        return $this->source;
     }
 
     /**
