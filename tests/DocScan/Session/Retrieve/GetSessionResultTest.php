@@ -21,6 +21,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
     private const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
     private const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
+    private const WATCHLIST_ADVANCED_CA = 'WATCHLIST_ADVANCED_CA';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     private const LIVENESS = 'LIVENESS';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
@@ -108,6 +109,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getWatchlistScreeningChecks
      * @covers ::getSupplementaryDocumentTextDataChecks
      * @covers ::getLivenessChecks
+     * @covers ::getWatchlistAdvancedCaChecks
      * @covers ::createCheckFromArray
      * @covers ::filterCheckByType
      */
@@ -123,12 +125,13 @@ class GetSessionResultTest extends TestCase
                 ['type' => self::WATCHLIST_SCREENING],
                 ['type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK],
                 ['type' => self::LIVENESS],
+                ['type' => self::WATCHLIST_ADVANCED_CA],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(8, $result->getChecks());
+        $this->assertCount(9, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
@@ -138,6 +141,7 @@ class GetSessionResultTest extends TestCase
         $this->assertCount(1, $result->getWatchlistScreeningChecks());
         $this->assertCount(1, $result->getSupplementaryDocumentTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
+        $this->assertCount(1, $result->getWatchlistAdvancedCaChecks());
 
         $this->assertEquals(
             self::ID_DOCUMENT_AUTHENTICITY,
@@ -166,6 +170,10 @@ class GetSessionResultTest extends TestCase
         $this->assertEquals(
             self::WATCHLIST_SCREENING,
             $result->getWatchlistScreeningChecks()[0]->getType()
+        );
+        $this->assertEquals(
+            self::WATCHLIST_ADVANCED_CA,
+            $result->getWatchlistAdvancedCaChecks()[0]->getType()
         );
         $this->assertEquals(
             self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK,
