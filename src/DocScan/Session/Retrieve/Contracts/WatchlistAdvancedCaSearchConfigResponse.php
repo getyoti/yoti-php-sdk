@@ -46,4 +46,20 @@ abstract class WatchlistAdvancedCaSearchConfigResponse extends WatchlistSearchCo
     {
         return $this->shareUrl;
     }
+
+    /**
+     * @return CaSourcesResponse
+     */
+    public function getSources(): CaSourcesResponse
+    {
+        return $this->sources;
+    }
+
+    /**
+     * @return CaMatchingStrategyResponse
+     */
+    public function getMatchingStrategy(): CaMatchingStrategyResponse
+    {
+        return $this->matchingStrategy;
+    }
 }

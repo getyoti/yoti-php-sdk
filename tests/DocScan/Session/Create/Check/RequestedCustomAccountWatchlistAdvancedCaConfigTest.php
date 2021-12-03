@@ -80,5 +80,17 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
         Assert::assertEquals(self::SOME_CLIENT_REF, $result->getClientRef());
         Assert::assertEquals(self::SOME_MONITORING, $result->getMonitoring());
         Assert::assertEquals(self::SOME_TAGS, $result->getTags());
+
+        $encodedProfileSource = json_encode($this->profileSource);
+        $encodedMatchingStrategy = json_encode($this->exactMatchingStrategy);
+
+        $expected = [
+            'remove_deceased' => true,
+            'share_url' => false,
+            'sources' => $this->profileSource,
+            'matching_strategy' => $this->exactMatchingStrategy
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Yoti\DocScan\DocScanClient;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources;
 use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
@@ -13,6 +15,7 @@ use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistAdvancedCaCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
 use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
@@ -29,6 +32,13 @@ class HomeController extends BaseController
         $watchScreeningConfig = (new RequestedWatchlistScreeningConfigBuilder())
             ->withSanctionsCategory()
             ->withAdverseMediaCategory()
+            ->build();
+
+        $watchlistAdvancedConfig = (new RequestedYotiAccountWatchlistAdvancedCaConfigBuilder())
+            ->withRemoveDeceased(true)
+            ->withShareUrl(false)
+            ->withSources(new RequestedSearchProfileSources('SOME_PROFILE'))
+            ->withMatchingStrategy(new RequestedFuzzyMatchingStrategy(0.5))
             ->build();
 
         $sessionSpec = (new SessionSpecificationBuilder())
@@ -64,6 +74,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedWatchlistAdvancedCaCheckBuilder())
+                    ->withConfig($watchlistAdvancedConfig)
                     ->build()
             )
             ->withRequestedTask(

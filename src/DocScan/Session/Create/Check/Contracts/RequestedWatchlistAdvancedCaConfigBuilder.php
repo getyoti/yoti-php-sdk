@@ -33,7 +33,7 @@ abstract class RequestedWatchlistAdvancedCaConfigBuilder
     /**
      * @return mixed
      */
-    abstract protected function build();
+    abstract public function build();
 
     /**
      * @param bool $removeDeceased
