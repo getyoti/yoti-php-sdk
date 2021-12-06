@@ -13,16 +13,6 @@ class MultipartEntityTest extends TestCase
 {
     /**
      * @test
-     * @covers ::__construct
-     */
-    public function shouldNoCreateObjectByConstructorTest()
-    {
-        $this->expectError();
-        $newEntity = new MultipartEntity();
-    }
-
-    /**
-     * @test
      * @covers ::create
      */
     public function shouldCorrectlyCreateObjectTest()
