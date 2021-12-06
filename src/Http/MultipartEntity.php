@@ -17,6 +17,9 @@ class MultipartEntity
      */
     private $multipartData;
 
+    /**
+     *  This constructor is private, because of you have to create objects only by static method 'create'
+     */
     private function __construct()
     {
     }
@@ -61,5 +64,21 @@ class MultipartEntity
     public function createStream(): StreamInterface
     {
         return new MultipartStream($this->multipartData, $this->multipartBoundary);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMultipartBoundary(): string
+    {
+        return $this->multipartBoundary;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getMultipartData(): array
+    {
+        return $this->multipartData;
     }
 }

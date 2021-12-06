@@ -97,7 +97,9 @@ class CaptureResponseTest extends TestCase
         $result = new CaptureResponse($input);
 
         $this->assertCount(4, $result->getRequiredResources());
+        $this->assertCount(2, $result->getDocumentResourceRequirements());
         $this->assertCount(1, $result->getIdDocumentResourceRequirements());
+        $this->assertCount(1, $result->getLivenessResourceRequirements());
         $this->assertCount(1, $result->getSupplementaryResourceRequirements());
         $this->assertCount(1, $result->getZoomLivenessResourceRequirements());
         $this->assertCount(1, $result->getFaceCaptureResourceRequirements());
