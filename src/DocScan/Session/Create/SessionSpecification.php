@@ -63,7 +63,11 @@ class SessionSpecification implements JsonSerializable
     private $blockBiometricConsent;
 
     /**
-     * SessionSpecification constructor.
+     * @var IbvOptions|null
+     */
+    private $ibvOptions;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -74,6 +78,7 @@ class SessionSpecification implements JsonSerializable
      * @param SdkConfig|null $sdkConfig
      * @param RequiredDocument[] $requiredDocuments
      * @param bool|null $blockBiometricConsent
+     * @param IbvOptions|null $ibvOptions
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -85,7 +90,8 @@ class SessionSpecification implements JsonSerializable
         array $requestedTasks,
         ?SdkConfig $sdkConfig,
         array $requiredDocuments = [],
-        ?bool $blockBiometricConsent = null
+        ?bool $blockBiometricConsent = null,
+        ?IbvOptions $ibvOptions = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -97,6 +103,7 @@ class SessionSpecification implements JsonSerializable
         $this->sdkConfig = $sdkConfig;
         $this->requiredDocuments = $requiredDocuments;
         $this->blockBiometricConsent = $blockBiometricConsent;
+        $this->ibvOptions = $ibvOptions;
     }
 
     /**
@@ -115,6 +122,7 @@ class SessionSpecification implements JsonSerializable
             'sdk_config' => $this->getSdkConfig(),
             'required_documents' => $this->getRequiredDocuments(),
             'block_biometric_consent' => $this->getBlockBiometricConsent(),
+            'ibv_options' => $this->getIbvOptions(),
         ]);
     }
 
@@ -198,5 +206,16 @@ class SessionSpecification implements JsonSerializable
     public function getBlockBiometricConsent(): ?bool
     {
         return $this->blockBiometricConsent;
+    }
+
+    /**
+     * The options that define if a session will be required to be performed
+     * using In-Branch Verification
+     *
+     * @return IbvOptions|null
+     */
+    public function getIbvOptions(): ?IbvOptions
+    {
+        return $this->ibvOptions;
     }
 }
