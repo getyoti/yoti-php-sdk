@@ -43,6 +43,8 @@ class Constants
     public const FALLBACK = 'FALLBACK';
     public const NEVER = 'NEVER';
 
+    public const UK_POST_OFFICE = "UK_POST_OFFICE";
+
     public const BASIC = 'BASIC';
     public const BEARER = 'BEARER';
 

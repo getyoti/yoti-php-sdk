@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -175,5 +176,13 @@ class DocScanClient
     public function getSessionConfiguration(string $sessionId): SessionConfigurationResponse
     {
         return $this->docScanService->fetchSessionConfiguration($sessionId);
+    }
+
+    /**
+     * @throws Exception\DocScanException
+     */
+    public function putIbvInstructions(string $sessionId, Instructions $instructions): void
+    {
+        $this->docScanService->putIbvInstructions($sessionId, $instructions);
     }
 }
