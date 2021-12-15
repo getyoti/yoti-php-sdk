@@ -56,6 +56,8 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
+        -
+      - run: composer fix
 
       - run: composer lint
 
