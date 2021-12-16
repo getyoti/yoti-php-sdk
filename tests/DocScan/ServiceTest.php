@@ -992,7 +992,7 @@ class ServiceTest extends TestCase
                         $expectedPathPattern = sprintf(
                             '~^%s/sessions/%s/instructions.*?~',
                             TestData::DOC_SCAN_BASE_URL,
-                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::DOC_SCAN_SESSION_ID
                         );
 
                         $this->assertEquals('PUT', $requestMessage->getMethod());
