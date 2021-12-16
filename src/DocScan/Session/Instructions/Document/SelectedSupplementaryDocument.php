@@ -11,20 +11,20 @@ use Yoti\DocScan\Constants;
 class SelectedSupplementaryDocument extends SelectedDocument
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $countryCode;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $documentType;
 
     /**
-     * @param string $countryCode
-     * @param string $documentType
+     * @param string|null $countryCode
+     * @param string|null $documentType
      */
-    public function __construct(string $countryCode, string $documentType)
+    public function __construct(?string $countryCode, ?string $documentType)
     {
         parent::__construct(Constants::ID_DOCUMENT);
         $this->countryCode = $countryCode;
@@ -34,9 +34,9 @@ class SelectedSupplementaryDocument extends SelectedDocument
     /**
      * The country code of the selected document
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
@@ -44,9 +44,9 @@ class SelectedSupplementaryDocument extends SelectedDocument
     /**
      * The document type of the selected document
      *
-     * @return string
+     * @return string|null
      */
-    public function getDocumentType(): string
+    public function getDocumentType(): ?string
     {
         return $this->documentType;
     }

@@ -5,12 +5,12 @@ namespace Yoti\DocScan\Session\Instructions\Document;
 class SelectedIdDocumentBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $countryCode;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $documentType;
 

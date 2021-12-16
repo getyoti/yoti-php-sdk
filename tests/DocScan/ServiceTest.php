@@ -970,7 +970,7 @@ class ServiceTest extends TestCase
 
         $docScanService->putIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID,
-            $instructionsMock,
+            $instructionsMock
         );
     }
 

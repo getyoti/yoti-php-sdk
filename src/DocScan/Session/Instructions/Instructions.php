@@ -14,26 +14,26 @@ use Yoti\DocScan\Session\Instructions\Document\DocumentProposal;
 class Instructions
 {
     /**
-     * @var ContactProfile
+     * @var ContactProfile|null
      */
     private $contactProfile;
 
     /**
-     * @var DocumentProposal[]
+     * @var DocumentProposal[]|null
      */
     private $documents;
 
     /**
-     * @var Branch
+     * @var Branch|null
      */
     private $branch;
 
     /**
-     * @param ContactProfile $contactProfile
+     * @param ContactProfile|null $contactProfile
      * @param DocumentProposal[] $documents
-     * @param Branch $branch
+     * @param Branch|null $branch
      */
-    public function __construct(ContactProfile $contactProfile, array $documents, Branch $branch)
+    public function __construct(?ContactProfile $contactProfile, ?array $documents, ?Branch $branch)
     {
         $this->contactProfile = $contactProfile;
         $this->documents = $documents;
@@ -44,9 +44,9 @@ class Instructions
      * The contact profile that will be used for any communication
      * with the end-user
      *
-     * @return ContactProfile
+     * @return ContactProfile|null
      */
-    public function getContactProfile(): ContactProfile
+    public function getContactProfile(): ?ContactProfile
     {
         return $this->contactProfile;
     }
@@ -54,9 +54,9 @@ class Instructions
     /**
      * A list of document proposals that will satisfy the sessions requirements.
      *
-     * @return DocumentProposal[]
+     * @return DocumentProposal[]|null
      */
-    public function getDocuments(): array
+    public function getDocuments(): ?array
     {
         return $this->documents;
     }
@@ -64,9 +64,9 @@ class Instructions
     /**
      * The branch that has been selected to perform the In-Branch Verification
      *
-     * @return Branch
+     * @return Branch|null
      */
-    public function getBranch(): Branch
+    public function getBranch(): ?Branch
     {
         return $this->branch;
     }

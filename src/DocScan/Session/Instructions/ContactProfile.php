@@ -5,26 +5,26 @@ namespace Yoti\DocScan\Session\Instructions;
 class ContactProfile
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $firstName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $lastName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $email;
 
     /**
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $email
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param string|null $email
      */
-    public function __construct(string $firstName, string $lastName, string $email)
+    public function __construct(?string $firstName, ?string $lastName, ?string $email)
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -34,9 +34,9 @@ class ContactProfile
     /**
      * The first name set as part of the contact profile
      *
-     * @return string
+     * @return string|null
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -44,9 +44,9 @@ class ContactProfile
     /**
      * The last name set as part of the contact profile
      *
-     * @return string
+     * @return string|null
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -54,9 +54,9 @@ class ContactProfile
     /**
      * The email address set as part of the contact profile
      *
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

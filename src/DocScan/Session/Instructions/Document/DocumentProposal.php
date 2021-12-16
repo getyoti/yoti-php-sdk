@@ -5,37 +5,37 @@ namespace Yoti\DocScan\Session\Instructions\Document;
 class DocumentProposal
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $requirementId;
 
     /**
-     * @var SelectedDocument
+     * @var SelectedDocument|null
      */
     private $document;
 
     /**
-     * @param string $requirementId
-     * @param SelectedDocument $document
+     * @param string|null $requirementId
+     * @param SelectedDocument|null $document
      */
-    public function __construct(string $requirementId, SelectedDocument $document)
+    public function __construct(?string $requirementId, ?SelectedDocument $document)
     {
         $this->requirementId = $requirementId;
         $this->document = $document;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRequirementId(): string
+    public function getRequirementId(): ?string
     {
         return $this->requirementId;
     }
 
     /**
-     * @return SelectedDocument
+     * @return SelectedDocument|null
      */
-    public function getDocument(): SelectedDocument
+    public function getDocument(): ?SelectedDocument
     {
         return $this->document;
     }

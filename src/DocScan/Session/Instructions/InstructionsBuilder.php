@@ -8,17 +8,17 @@ use Yoti\DocScan\Session\Instructions\Document\DocumentProposal;
 class InstructionsBuilder
 {
     /**
-     * @var ContactProfile
+     * @var ContactProfile|null
      */
     private $contactProfile;
 
     /**
-     * @var DocumentProposal[]
+     * @var DocumentProposal[]|null
      */
     private $documents;
 
     /**
-     * @var Branch
+     * @var Branch|null
      */
     private $branch;
 

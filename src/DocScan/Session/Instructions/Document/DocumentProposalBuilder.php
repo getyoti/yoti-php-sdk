@@ -5,12 +5,12 @@ namespace Yoti\DocScan\Session\Instructions\Document;
 class DocumentProposalBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $requirementId;
 
     /**
-     * @var SelectedDocument
+     * @var SelectedDocument|null
      */
     private $document;
 

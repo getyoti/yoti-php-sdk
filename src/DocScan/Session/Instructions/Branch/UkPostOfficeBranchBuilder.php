@@ -5,17 +5,17 @@ namespace Yoti\DocScan\Session\Instructions\Branch;
 class UkPostOfficeBranchBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $address;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $postCode;
 

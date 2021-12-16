@@ -7,17 +7,17 @@ use Yoti\DocScan\Constants;
 class UkPostOfficeBranch extends Branch
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $address;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $postCode;
 
@@ -32,9 +32,9 @@ class UkPostOfficeBranch extends Branch
     private $location;
 
     public function __construct(
-        string $name,
-        string $address,
-        string $postCode,
+        ?string $name,
+        ?string $address,
+        ?string $postCode,
         ?string $fadCode = null,
         ?Location $location = null
     ) {
@@ -59,9 +59,9 @@ class UkPostOfficeBranch extends Branch
     /**
      * Returns the name that has been set for the {@link UkPostOfficeBranch}
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -69,9 +69,9 @@ class UkPostOfficeBranch extends Branch
     /**
      * Returns the address that has been set for the {@link UkPostOfficeBranch}
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -79,9 +79,9 @@ class UkPostOfficeBranch extends Branch
     /**
      * Returns the post code that has been set for the {@link UkPostOfficeBranch}
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostCode(): string
+    public function getPostCode(): ?string
     {
         return $this->postCode;
     }

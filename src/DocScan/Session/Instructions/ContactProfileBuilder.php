@@ -5,17 +5,17 @@ namespace Yoti\DocScan\Session\Instructions;
 class ContactProfileBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $firstName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $lastName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $email;
 
