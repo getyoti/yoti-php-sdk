@@ -14,6 +14,7 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
@@ -586,7 +587,7 @@ class ServiceTest extends TestCase
                     }
                 )
             )
-            ->willReturn($this->createResponse(200, json_encode((object) [])));
+            ->willReturn($this->createResponse(200, json_encode((object)[])));
 
         $docScanService = new Service(
             TestData::SDK_ID,
@@ -866,7 +867,7 @@ class ServiceTest extends TestCase
                     }
                 )
             )
-            ->willReturn($this->createResponse(200, json_encode((object) [])));
+            ->willReturn($this->createResponse(200, json_encode((object)[])));
 
         $docScanService = new Service(
             TestData::SDK_ID,
@@ -926,5 +927,98 @@ class ServiceTest extends TestCase
         $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::putIbvInstructions
+     * @covers ::assertResponseIsSuccess
+     */
+    public function putIbvInstructionsShouldNotThrowExceptionOnSuccessfulCall()
+    {
+        $instructionsMock = $this->createMock(Instructions::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('PUT', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $docScanService->putIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID,
+            $instructionsMock,
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::uploadFaceCaptureImage
+     * @covers ::assertResponseIsSuccess
+     */
+    public function putIbvInstructionsShouldThrowExceptionOnFailedCall()
+    {
+        $instructionsMock = $this->createMock(Instructions::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID,
+                        );
+
+                        $this->assertEquals('PUT', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->putIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID,
+            $instructionsMock
+        );
     }
 }
