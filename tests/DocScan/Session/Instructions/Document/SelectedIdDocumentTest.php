@@ -6,7 +6,7 @@ use Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Document\DocumentProposal
+ * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocument
  */
 class SelectedIdDocumentTest extends TestCase
 {
@@ -16,11 +16,13 @@ class SelectedIdDocumentTest extends TestCase
     /**
      * @test
      * @covers ::__construct
-     * @covers ::getDocument
-     * @covers ::getRequirementId
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withSelectedDocument
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withRequirementId
+     * @covers ::getDocumentType
+     * @covers ::getCountryCode
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::getType
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::__construct
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::build
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::withCountryCode
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::withDocumentType
      */
     public function builderShouldBuildWithAllProperties()
     {

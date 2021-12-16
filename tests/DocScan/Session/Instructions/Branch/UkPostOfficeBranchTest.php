@@ -66,8 +66,10 @@ class UkPostOfficeBranchTest extends TestCase
      * @covers ::getLocation
      * @covers ::getFadCode
      * @covers ::getAddress
+     * @covers ::getName
      * @covers ::getPostCode
      * @covers \Yoti\DocScan\Session\Instructions\Branch\Branch::getType
+     * @covers \Yoti\DocScan\Session\Instructions\Branch\Branch::__construct
      * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::build
      * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withPostCode
      * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withName

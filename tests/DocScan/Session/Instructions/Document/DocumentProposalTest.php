@@ -29,10 +29,9 @@ class DocumentProposalTest extends TestCase
      * @covers ::__construct
      * @covers ::getRequirementId
      * @covers ::getDocument
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::getType
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::withDocumentType
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::withCountryCode
+     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::build
+     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withRequirementId
+     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withSelectedDocument
      */
     public function builderShouldBuildWithAllProperties()
     {

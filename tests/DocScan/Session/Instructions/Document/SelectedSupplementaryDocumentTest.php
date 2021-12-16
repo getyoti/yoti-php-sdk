@@ -19,6 +19,7 @@ class SelectedSupplementaryDocumentTest extends TestCase
      * @covers ::getCountryCode
      * @covers ::getDocumentType
      * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::getType
+     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::__construct
      * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::build
      * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::withDocumentType
      * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedSupplementaryDocumentBuilder::withCountryCode

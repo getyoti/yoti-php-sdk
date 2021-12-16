@@ -16,7 +16,7 @@ jobs:
         php-version: [ 8.0 ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@2.9.0
 
       - uses: shivammathur/setup-php@2
         with:
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: shivammathur/setup-php@2
+      - uses: shivammathur/setup-php@2.9.0
         with:
           php-version: ${{ matrix.php-version }}
 
@@ -56,8 +56,6 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-
-      - run: composer lint
 
   guzzle:
     name: Unit Tests With Guzzle 6 (php ${{ matrix.php-version }})
@@ -75,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: shivammathur/setup-php@2
+      - uses: shivammathur/setup-php@2.9.0
         with:
           php-version: ${{ matrix.php-version }}
 
@@ -86,8 +84,6 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-
-      - run: composer lint
 
   protobuf:
     name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
@@ -115,6 +111,4 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-
-      - run: composer lint
 
