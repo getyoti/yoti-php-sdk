@@ -33,6 +33,6 @@ class SelectedSupplementaryDocumentTest extends TestCase
 
         $this->assertEquals(self::SOME_DOCUMENT_TYPE, $result->getDocumentType());
         $this->assertEquals(self::SOME_COUNTRY_CODE, $result->getCountryCode());
-        $this->assertEquals("ID_DOCUMENT", $result->getType());
+        $this->assertEquals("SUPPLEMENTARY_DOCUMENT", $result->getType());
     }
 }

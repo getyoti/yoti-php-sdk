@@ -26,7 +26,7 @@ class SelectedSupplementaryDocument extends SelectedDocument
      */
     public function __construct(?string $countryCode, ?string $documentType)
     {
-        parent::__construct(Constants::ID_DOCUMENT);
+        parent::__construct(Constants::SUPPLEMENTARY_DOCUMENT);
         $this->countryCode = $countryCode;
         $this->documentType = $documentType;
     }
