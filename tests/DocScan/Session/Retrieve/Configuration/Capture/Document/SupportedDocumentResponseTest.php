@@ -16,12 +16,14 @@ class SupportedDocumentResponseTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getType
+     * @covers ::isStrictlyLatin
      */
-    public function shouldBuildCorrectly()
+    public function shouldBuildCorrectly(): void
     {
-        $result = new SupportedDocumentResponse(['type' => self::SOME_TYPE]);
+        $result = new SupportedDocumentResponse(['type' => self::SOME_TYPE, 'is_strictly_latin' => true]);
 
         $this->assertEquals(self::SOME_TYPE, $result->getType());
         $this->assertInstanceOf(SupportedDocumentResponse::class, $result);
+        $this->assertTrue($result->isStrictlyLatin());
     }
 }

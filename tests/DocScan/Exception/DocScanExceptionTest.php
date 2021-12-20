@@ -9,7 +9,6 @@ use Yoti\Test\TestCase;
 
 class DocScanExceptionTest extends TestCase
 {
-
     private const SOME_MESSAGE = 'Some message';
     private const SOME_RESPONSE_CODE = 'SOME_ERROR_CODE';
     private const SOME_RESPONSE_MESSAGE = 'Some response message';

@@ -8,5 +8,4 @@ use Yoti\DocScan\Session\Retrieve\Contracts\WatchlistReportResponse;
 
 class WatchlistScreeningReportResponse extends WatchlistReportResponse
 {
-
 }

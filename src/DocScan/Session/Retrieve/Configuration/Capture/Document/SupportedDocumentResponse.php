@@ -10,11 +10,17 @@ class SupportedDocumentResponse
     private $type;
 
     /**
-     * @param array<string, string> $supportedDocument
+     * @var bool|null
+     */
+    private $isStrictlyLatin;
+
+    /**
+     * @param array<string, mixed> $supportedDocument
      */
     public function __construct(array $supportedDocument)
     {
         $this->type = $supportedDocument['type'] ?? null;
+        $this->isStrictlyLatin = $supportedDocument['is_strictly_latin'] ?? null;
     }
 
     /**
@@ -25,5 +31,13 @@ class SupportedDocumentResponse
     public function getType(): ?string
     {
         return $this->type;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isStrictlyLatin(): ?bool
+    {
+        return $this->isStrictlyLatin;
     }
 }

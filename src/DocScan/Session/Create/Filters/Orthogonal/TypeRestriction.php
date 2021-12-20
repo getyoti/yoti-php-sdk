@@ -8,7 +8,6 @@ use Yoti\Util\Validation;
 
 class TypeRestriction implements \JsonSerializable
 {
-
     /**
      * @var string
      */

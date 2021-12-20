@@ -6,5 +6,4 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class AuthenticityCheckResponse extends CheckResponse
 {
-
 }

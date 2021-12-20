@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class BreakdownResponse
 {
-
     /**
      * @var string|null
      */

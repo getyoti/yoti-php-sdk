@@ -8,7 +8,6 @@ use Yoti\Util\Json;
 
 class SdkConfig implements \JsonSerializable
 {
-
     /**
      * @var string|null
      */

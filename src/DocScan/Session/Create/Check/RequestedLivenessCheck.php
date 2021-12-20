@@ -8,7 +8,6 @@ use Yoti\DocScan\Constants;
 
 class RequestedLivenessCheck extends RequestedCheck
 {
-
     /**
      * @var RequestedLivenessConfig
      */

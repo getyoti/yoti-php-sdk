@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class PageResponse
 {
-
     /**
      * @var string|null
      */

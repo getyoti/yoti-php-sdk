@@ -8,7 +8,6 @@ use Yoti\Util\Validation;
 
 class RequestedLivenessCheckBuilder
 {
-
     private const ZOOM = 'ZOOM';
 
     /**

@@ -8,5 +8,4 @@ use Yoti\DocScan\Session\Retrieve\Contracts\WatchlistCheckResponse;
 
 class WatchlistAdvancedCaCheckResponse extends WatchlistCheckResponse
 {
-
 }

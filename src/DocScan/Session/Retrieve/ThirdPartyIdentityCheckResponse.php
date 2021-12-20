@@ -8,5 +8,4 @@ use Yoti\DocScan\Session\Retrieve\Contracts\ProfileCheckResponse;
 
 class ThirdPartyIdentityCheckResponse extends ProfileCheckResponse
 {
-
 }

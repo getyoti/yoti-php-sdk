@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Create\Check;
 
 class RequestedFaceMatchCheckConfig implements RequestedCheckConfigInterface
 {
-
     /**
      * @var string
      */

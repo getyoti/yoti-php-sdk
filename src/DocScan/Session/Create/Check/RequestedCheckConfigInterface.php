@@ -8,5 +8,4 @@ use JsonSerializable;
 
 interface RequestedCheckConfigInterface extends JsonSerializable
 {
-
 }

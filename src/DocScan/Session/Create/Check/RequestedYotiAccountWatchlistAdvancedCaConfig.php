@@ -8,5 +8,4 @@ use Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConf
 
 class RequestedYotiAccountWatchlistAdvancedCaConfig extends RequestedWatchlistAdvancedCaConfig
 {
-
 }

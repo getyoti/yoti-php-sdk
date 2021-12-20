@@ -13,7 +13,6 @@ use Yoti\Test\TestCase;
  */
 class ResourceContainerTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::__construct
