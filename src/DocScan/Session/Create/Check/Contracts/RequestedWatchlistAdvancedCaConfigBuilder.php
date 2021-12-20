@@ -9,7 +9,6 @@ use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources;
 
 abstract class RequestedWatchlistAdvancedCaConfigBuilder
 {
-
     /**
      * @var bool
      */

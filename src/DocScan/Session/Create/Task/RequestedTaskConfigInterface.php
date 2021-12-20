@@ -8,5 +8,4 @@ use JsonSerializable;
 
 interface RequestedTaskConfigInterface extends JsonSerializable
 {
-
 }

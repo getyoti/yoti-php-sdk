@@ -26,7 +26,6 @@ use Yoti\Util\PemFile;
 
 class Service
 {
-
     /**
      * @var string
      */

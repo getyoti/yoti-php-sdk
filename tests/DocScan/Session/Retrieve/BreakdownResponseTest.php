@@ -12,7 +12,6 @@ use Yoti\Test\TestCase;
  */
 class BreakdownResponseTest extends TestCase
 {
-
     private const SOME_SUB_CHECK = 'someSubCheck';
     private const SOME_RESULT = 'someResult';
     private const SOME_DETAILS = [

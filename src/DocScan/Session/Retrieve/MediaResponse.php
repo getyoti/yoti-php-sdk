@@ -7,7 +7,6 @@ use Yoti\Util\DateTime;
 
 class MediaResponse
 {
-
     /**
      * @var string|null
      */

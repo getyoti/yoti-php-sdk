@@ -13,7 +13,6 @@ use Yoti\Test\TestCase;
  */
 class FacemapResponseTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::__construct

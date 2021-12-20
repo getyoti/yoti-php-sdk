@@ -10,7 +10,6 @@ use Yoti\Test\TestCase;
  */
 class SdkConfigBuilderTest extends TestCase
 {
-
     private const SOME_CAPTURE_METHOD = 'someCaptureMethod';
     private const SOME_PRIMARY_COLOUR = 'somePrimaryColour';
     private const SOME_SECONDARY_COLOUR = 'someSecondaryColour';

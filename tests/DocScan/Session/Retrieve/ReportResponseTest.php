@@ -12,7 +12,6 @@ use Yoti\Test\TestCase;
  */
 class ReportResponseTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::__construct
