@@ -11,7 +11,11 @@ use Psr\Http\Message\ResponseInterface;
 use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Service;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -641,5 +645,286 @@ class ServiceTest extends TestCase
         $this->expectExceptionMessage("Server responded with 404");
 
         $docScanService->getSupportedDocuments();
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::createFaceCaptureResource
+     * @covers ::assertResponseIsSuccess
+     */
+    public function createFaceCaptureResourceShouldReturnFaceCaptureResourceResponse()
+    {
+        $createFaceCaptureResourcePayloadMock = $this->createMock(CreateFaceCaptureResourcePayload::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/resources/face-capture.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(201, json_encode((object)[])));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->assertInstanceOf(
+            CreateFaceCaptureResourceResponse::class,
+            $docScanService->createFaceCaptureResource(
+                TestData::DOC_SCAN_SESSION_ID,
+                $createFaceCaptureResourcePayloadMock
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::createFaceCaptureResource
+     * @covers ::assertResponseIsSuccess
+     */
+    public function createFaceCaptureResourceShouldThrowExceptionOnFailedCall()
+    {
+        $createFaceCaptureResourcePayloadMock = $this->createMock(CreateFaceCaptureResourcePayload::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/resources/face-capture.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->createFaceCaptureResource(
+            TestData::DOC_SCAN_SESSION_ID,
+            $createFaceCaptureResourcePayloadMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::uploadFaceCaptureImage
+     * @covers ::assertResponseIsSuccess
+     */
+    public function uploadFaceCaptureImageShouldNotThrowExceptionOnSuccessfulCall()
+    {
+        $uploadFaceCaptureImagePayloadMock = $this->createMock(UploadFaceCaptureImagePayload::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/resources/face-capture/%s/image.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::SOME_RESOURCE_ID
+                        );
+
+                        $this->assertEquals('PUT', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $docScanService->uploadFaceCaptureImage(
+            TestData::DOC_SCAN_SESSION_ID,
+            TestData::SOME_RESOURCE_ID,
+            $uploadFaceCaptureImagePayloadMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::uploadFaceCaptureImage
+     * @covers ::assertResponseIsSuccess
+     */
+    public function uploadFaceCaptureImageShouldThrowExceptionOnFailedCall()
+    {
+        $uploadFaceCaptureImagePayloadMock = $this->createMock(UploadFaceCaptureImagePayload::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/resources/face-capture/%s/image.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::SOME_RESOURCE_ID
+                        );
+
+                        $this->assertEquals('PUT', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->uploadFaceCaptureImage(
+            TestData::DOC_SCAN_SESSION_ID,
+            TestData::SOME_RESOURCE_ID,
+            $uploadFaceCaptureImagePayloadMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::fetchSessionConfiguration
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getSessionConfigurationShouldReturnSessionConfiguration()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/configuration.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200, json_encode((object) [])));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->assertInstanceOf(
+            SessionConfigurationResponse::class,
+            $docScanService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::fetchSessionConfiguration
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getSessionConfigurationShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/configuration.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID);
     }
 }

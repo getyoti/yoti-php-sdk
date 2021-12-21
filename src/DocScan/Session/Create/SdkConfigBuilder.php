@@ -55,6 +55,11 @@ class SdkConfigBuilder
      */
     private $privacyPolicyUrl;
 
+    /**
+     * @var bool|null
+     */
+    private $allowHandoff;
+
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -119,6 +124,12 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withAllowHandoff(bool $allowHandoff): self
+    {
+        $this->allowHandoff = $allowHandoff;
+        return $this;
+    }
+
     public function build(): SdkConfig
     {
         return new SdkConfig(
@@ -130,7 +141,8 @@ class SdkConfigBuilder
             $this->presetIssuingCountry,
             $this->successUrl,
             $this->errorUrl,
-            $this->privacyPolicyUrl
+            $this->privacyPolicyUrl,
+            $this->allowHandoff
         );
     }
 }

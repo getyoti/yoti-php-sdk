@@ -33,6 +33,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withSuccessUrl
      * @covers ::withErrorUrl
      * @covers ::withPrivacyPolicyUrl
+     * @covers ::withAllowHandoff
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -43,6 +44,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuccessUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getErrorUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrivacyPolicyUrl
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -56,6 +58,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withSuccessUrl(self::SOME_SUCCESS_URL)
             ->withErrorUrl(self::SOME_ERROR_URL)
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
+            ->withAllowHandoff(true)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -67,6 +70,7 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_SUCCESS_URL, $result->getSuccessUrl());
         $this->assertEquals(self::SOME_ERROR_URL, $result->getErrorUrl());
         $this->assertEquals(self::SOME_PRIVACY_POLICY_URL, $result->getPrivacyPolicyUrl());
+        $this->assertTrue($result->getAllowHandoff());
     }
 
     /**
@@ -111,6 +115,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withSuccessUrl(self::SOME_SUCCESS_URL)
             ->withErrorUrl(self::SOME_ERROR_URL)
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
+            ->withAllowHandoff(true)
             ->build();
 
         $expected = [
@@ -123,6 +128,7 @@ class SdkConfigBuilderTest extends TestCase
             'success_url' => self::SOME_SUCCESS_URL,
             'error_url' => self::SOME_ERROR_URL,
             'privacy_policy_url' => self::SOME_PRIVACY_POLICY_URL,
+            'allow_handoff' => true,
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
@@ -137,5 +143,24 @@ class SdkConfigBuilderTest extends TestCase
         $result = (new SdkConfigBuilder())->build();
 
         $this->assertJsonStringEqualsJsonString('{}', json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfigBuilder::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     */
+    public function allowHandoffShouldBeNullWhenItIsNotSet()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowedCaptureMethod(self::SOME_CAPTURE_METHOD)
+            ->withPrimaryColour(self::SOME_PRIMARY_COLOUR)
+            ->withSecondaryColour(self::SOME_SECONDARY_COLOUR)
+            ->withFontColour(self::SOME_FONT_COLOUR)
+            ->withLocale(self::SOME_LOCALE)
+            ->withPresetIssuingCountry(self::SOME_PRESET_ISSUING_COUNTRY)
+            ->build();
+
+        $this->assertNull($result->getAllowHandoff());
     }
 }

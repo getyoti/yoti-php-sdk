@@ -8,7 +8,7 @@ use Yoti\Media\Image;
 
 class Jpeg extends Image
 {
-    private const MIME_TYPE = 'image/jpeg';
+    public const MIME_TYPE = 'image/jpeg';
 
     public function __construct(string $content)
     {

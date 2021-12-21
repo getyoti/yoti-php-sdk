@@ -21,6 +21,8 @@ class ResourceContainerTest extends TestCase
      * @covers ::parseLivenessCapture
      * @covers ::getIdDocuments
      * @covers ::getLivenessCapture
+     * @covers ::getFaceCapture
+     * @covers ::parseFaceCapture
      * @covers ::parseSupplementaryDocuments
      * @covers ::getSupplementaryDocuments
      */
@@ -39,6 +41,9 @@ class ResourceContainerTest extends TestCase
                 [ 'liveness_type' => 'ZOOM' ],
                 [ 'liveness_type' => 'someUnknownType' ],
             ],
+            'face_capture' => [
+                ['id' => 'SOME_ID']
+            ]
         ];
 
         $result = new ResourceContainer($input);
@@ -47,6 +52,7 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(2, $result->getLivenessCapture());
         $this->assertCount(1, $result->getZoomLivenessResources());
         $this->assertCount(2, $result->getSupplementaryDocuments());
+        $this->assertCount(1, $result->getFaceCapture());
     }
 
     /**

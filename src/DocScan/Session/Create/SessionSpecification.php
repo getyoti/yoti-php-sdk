@@ -18,6 +18,11 @@ class SessionSpecification implements JsonSerializable
     private $clientSessionTokenTtl;
 
     /**
+     * @var string|null
+     */
+    private $sessionDeadline;
+
+    /**
      * @var int|null
      */
     private $resourcesTtl;
@@ -60,6 +65,7 @@ class SessionSpecification implements JsonSerializable
     /**
      * SessionSpecification constructor.
      * @param int|null $clientSessionTokenTtl
+     * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
      * @param string|null $userTrackingId
      * @param NotificationConfig|null $notificationConfig
@@ -71,6 +77,7 @@ class SessionSpecification implements JsonSerializable
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
+        ?string $sessionDeadline,
         ?int $resourcesTtl,
         ?string $userTrackingId,
         ?NotificationConfig $notificationConfig,
@@ -81,6 +88,7 @@ class SessionSpecification implements JsonSerializable
         ?bool $blockBiometricConsent = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
+        $this->sessionDeadline = $sessionDeadline;
         $this->resourcesTtl = $resourcesTtl;
         $this->userTrackingId = $userTrackingId;
         $this->notifications = $notificationConfig;
@@ -98,6 +106,7 @@ class SessionSpecification implements JsonSerializable
     {
         return Json::withoutNullValues([
             'client_session_token_ttl' => $this->getClientSessionTokenTtl(),
+            'session_deadline' => $this->getSessionDeadline(),
             'resources_ttl' => $this->getResourcesTtl(),
             'user_tracking_id' => $this->getUserTrackingId(),
             'notifications' => $this->getNotifications(),
@@ -115,6 +124,14 @@ class SessionSpecification implements JsonSerializable
     public function getClientSessionTokenTtl(): ?int
     {
         return $this->clientSessionTokenTtl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSessionDeadline(): ?string
+    {
+        return $this->sessionDeadline;
     }
 
     /**
