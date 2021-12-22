@@ -30,7 +30,6 @@ use Yoti\Util\PemFile;
  */
 class ServiceTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::__construct

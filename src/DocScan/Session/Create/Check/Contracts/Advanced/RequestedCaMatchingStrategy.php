@@ -6,5 +6,4 @@ namespace Yoti\DocScan\Session\Create\Check\Contracts\Advanced;
 
 abstract class RequestedCaMatchingStrategy
 {
-
 }

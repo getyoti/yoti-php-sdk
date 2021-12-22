@@ -4,7 +4,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class FaceMapResponse
 {
-
     /**
      * @var MediaResponse|null
      */

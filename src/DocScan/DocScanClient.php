@@ -30,7 +30,6 @@ use Yoti\Util\Validation;
  */
 class DocScanClient
 {
-
     /**
      * @var Service
      */

@@ -6,5 +6,4 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class TextDataCheckResponse extends CheckResponse
 {
-
 }

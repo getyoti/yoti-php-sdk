@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Create\Check;
 
 class RequestedLivenessConfig implements RequestedCheckConfigInterface
 {
-
     /**
      * @var string
      */

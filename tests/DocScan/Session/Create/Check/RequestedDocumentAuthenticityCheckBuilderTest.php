@@ -13,7 +13,6 @@ use Yoti\Test\TestCase;
  */
 class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::build

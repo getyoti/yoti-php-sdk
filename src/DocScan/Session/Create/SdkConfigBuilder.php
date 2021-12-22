@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Create;
 
 class SdkConfigBuilder
 {
-
     private const CAMERA = 'CAMERA';
     private const CAMERA_AND_UPLOAD = 'CAMERA_AND_UPLOAD';
 

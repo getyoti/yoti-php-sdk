@@ -9,7 +9,6 @@ use Yoti\Util\Json;
 
 abstract class RequestedTask implements JsonSerializable
 {
-
     /**
      * @return array<string, mixed>
      */

@@ -8,7 +8,6 @@ use Yoti\Util\Json;
 
 class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
 {
-
     /**
      * @var string
      */

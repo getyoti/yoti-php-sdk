@@ -10,7 +10,6 @@ use Yoti\Test\TestCase;
  */
 class RequestedLivenessCheckConfigTest extends TestCase
 {
-
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
     private const SOME_MAX_RETRIES = 5;
 

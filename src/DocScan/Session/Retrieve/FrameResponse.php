@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class FrameResponse
 {
-
     /**
      * @var MediaResponse|null
      */

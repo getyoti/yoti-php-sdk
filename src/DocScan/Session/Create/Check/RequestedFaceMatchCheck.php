@@ -8,7 +8,6 @@ use Yoti\DocScan\Constants;
 
 class RequestedFaceMatchCheck extends RequestedCheck
 {
-
     /**
      * @var RequestedFaceMatchCheckConfig
      */
