@@ -12,6 +12,7 @@ use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
@@ -183,5 +184,15 @@ class DocScanClient
     public function putIbvInstructions(string $sessionId, Instructions $instructions): void
     {
         $this->docScanService->putIbvInstructions($sessionId, $instructions);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return InstructionsResponse
+     * @throws Exception\DocScanException
+     */
+    public function getIbvInstructions(string $sessionId): InstructionsResponse
+    {
+        return $this->docScanService->getIbvInstructions($sessionId);
     }
 }
