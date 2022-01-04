@@ -1127,7 +1127,7 @@ class ServiceTest extends TestCase
                         $expectedPathPattern = sprintf(
                             '~^%s/sessions/%s/instructions/pdf.*?~',
                             TestData::DOC_SCAN_BASE_URL,
-                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::DOC_SCAN_SESSION_ID
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
@@ -1181,7 +1181,7 @@ class ServiceTest extends TestCase
                         $expectedPathPattern = sprintf(
                             '~^%s/sessions/%s/instructions/pdf.*?~',
                             TestData::DOC_SCAN_BASE_URL,
-                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::DOC_SCAN_SESSION_ID
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
