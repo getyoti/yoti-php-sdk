@@ -129,13 +129,13 @@ class DocScanClient
     }
 
     /**
-     * Gets a list of supported documents.
-     *
+     * @param bool $isStrictlyLatin
      * @return SupportedDocumentsResponse
+     * @throws Exception\DocScanException
      */
-    public function getSupportedDocuments(): SupportedDocumentsResponse
+    public function getSupportedDocuments(bool $isStrictlyLatin = false): SupportedDocumentsResponse
     {
-        return $this->docScanService->getSupportedDocuments();
+        return $this->docScanService->getSupportedDocuments($isStrictlyLatin);
     }
 
     /**
