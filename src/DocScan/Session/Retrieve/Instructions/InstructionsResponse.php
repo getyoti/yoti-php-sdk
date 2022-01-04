@@ -5,6 +5,7 @@ namespace Yoti\DocScan\Session\Retrieve\Instructions;
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
+use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UnknownBranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Document\DocumentProposalResponse;
 
 class InstructionsResponse
@@ -42,6 +43,8 @@ class InstructionsResponse
                 case Constants::UK_POST_OFFICE:
                     $this->branch = new UkPostOfficeBranchResponse($sessionData['branch']);
                     break;
+                default:
+                    $this->branch = new UnknownBranchResponse();
             }
         }
     }

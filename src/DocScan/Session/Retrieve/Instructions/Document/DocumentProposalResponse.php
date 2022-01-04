@@ -29,6 +29,8 @@ class DocumentProposalResponse
             case Constants::SUPPLEMENTARY_DOCUMENT:
                 $this->document = new SelectedSupplementaryDocumentResponse($documentData['document']);
                 break;
+            default:
+                $this->document = new UnknownDocumentResponse($documentData['document']);
         }
     }
 
