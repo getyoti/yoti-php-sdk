@@ -22,6 +22,9 @@ class Constants
     public const FUZZY = 'FUZZY';
     public const FACE_CAPTURE = 'FACE_CAPTURE';
 
+    public const MANDATORY = "MANDATORY";
+    public const NOT_ALLOWED = "NOT_ALLOWED";
+
 
     public const ADVERSE_MEDIA = 'ADVERSE-MEDIA';
     public const SANCTIONS = 'SANCTIONS';
@@ -39,6 +42,8 @@ class Constants
     public const ALWAYS = 'ALWAYS';
     public const FALLBACK = 'FALLBACK';
     public const NEVER = 'NEVER';
+
+    public const UK_POST_OFFICE = "UK_POST_OFFICE";
 
     public const BASIC = 'BASIC';
     public const BEARER = 'BEARER';

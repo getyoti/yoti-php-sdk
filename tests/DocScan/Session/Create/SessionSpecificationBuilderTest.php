@@ -6,6 +6,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\DocScan\Session\Create\IbvOptions;
 use Yoti\DocScan\Session\Create\NotificationConfig;
 use Yoti\DocScan\Session\Create\SdkConfig;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
@@ -46,6 +47,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $requiredDocumentMock;
 
+    /**
+     * @var IbvOptions
+     */
+    private $ibvOptionsMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -62,6 +68,8 @@ class SessionSpecificationBuilderTest extends TestCase
 
         $this->requiredDocumentMock = $this->createMock(RequiredDocument::class);
         $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);
+
+        $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
     }
 
     /**
@@ -272,5 +280,44 @@ class SessionSpecificationBuilderTest extends TestCase
             ->build();
 
         $this->assertEquals($correctDateFormatValue, $sessionSpecificationResult->getSessionDeadline());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function withIbvOptionsShouldSetTheIbvOptions()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withIbvOptions($this->ibvOptionsMock)
+            ->build();
+
+        $this->assertEquals($this->ibvOptionsMock, $sessionSpecificationResult->getIbvOptions());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithIbvOptions()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withIbvOptions($this->ibvOptionsMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'ibv_options' => $this->ibvOptionsMock,
+            ]),
+            json_encode($sessionSpecification)
+        );
     }
 }

@@ -8,5 +8,4 @@ use Yoti\DocScan\Session\Retrieve\Contracts\WatchlistAdvancedCaSearchConfigRespo
 
 class YotiAccountWatchlistCaSearchConfigResponse extends WatchlistAdvancedCaSearchConfigResponse
 {
-
 }

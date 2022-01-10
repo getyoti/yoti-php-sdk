@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class GeneratedMedia
 {
-
     /**
      * @var string|null
      */

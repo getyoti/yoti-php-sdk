@@ -8,7 +8,6 @@ use Yoti\DocScan\Constants;
 
 class RequestedIdDocumentComparisonCheck extends RequestedCheck
 {
-
     /**
      * @inheritDoc
      */

@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
@@ -29,7 +30,6 @@ use Yoti\Util\Validation;
  */
 class DocScanClient
 {
-
     /**
      * @var Service
      */
@@ -131,14 +131,19 @@ class DocScanClient
     /**
      * Gets a list of supported documents.
      *
+     * @param bool $isStrictlyLatin
      * @return SupportedDocumentsResponse
+     * @throws Exception\DocScanException
      */
-    public function getSupportedDocuments(): SupportedDocumentsResponse
+    public function getSupportedDocuments(bool $isStrictlyLatin = false): SupportedDocumentsResponse
     {
-        return $this->docScanService->getSupportedDocuments();
+        return $this->docScanService->getSupportedDocuments($isStrictlyLatin);
     }
 
     /**
+     * Creates a Face Capture resource, that will be linked using
+     * the supplied requirement ID
+     *
      * @param string $sessionId
      * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
      * @return Session\Retrieve\CreateFaceCaptureResourceResponse
@@ -152,6 +157,8 @@ class DocScanClient
     }
 
     /**
+     * Uploads an image to the specified Face Capture resource
+     *
      * @param string $sessionId
      * @param string $resourceId
      * @param UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
@@ -175,5 +182,15 @@ class DocScanClient
     public function getSessionConfiguration(string $sessionId): SessionConfigurationResponse
     {
         return $this->docScanService->fetchSessionConfiguration($sessionId);
+    }
+
+    /**
+     * Sets the IBV instructions for the given session
+     *
+     * @throws Exception\DocScanException
+     */
+    public function putIbvInstructions(string $sessionId, Instructions $instructions): void
+    {
+        $this->docScanService->putIbvInstructions($sessionId, $instructions);
     }
 }

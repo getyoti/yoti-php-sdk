@@ -10,7 +10,6 @@ use Yoti\Test\TestCase;
  */
 class RequestedFaceMatchCheckConfigTest extends TestCase
 {
-
     private const SOME_MANUAL_CHECK = 'someManualCheck';
 
     /**

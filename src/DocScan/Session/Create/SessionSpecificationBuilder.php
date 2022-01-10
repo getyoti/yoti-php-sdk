@@ -63,6 +63,11 @@ class SessionSpecificationBuilder
     private $blockBiometricConsent;
 
     /**
+     * @var IbvOptions|null
+     */
+    private $ibvOptions;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -189,6 +194,20 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the options that define if a session will be required to be performed
+     * using In-Branch Verification
+     *
+     * @param IbvOptions $ibvOptions
+     *
+     * @return $this
+     */
+    public function withIbvOptions(IbvOptions $ibvOptions): self
+    {
+        $this->ibvOptions = $ibvOptions;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -203,7 +222,8 @@ class SessionSpecificationBuilder
             $this->requestedTasks,
             $this->sdkConfig,
             $this->requiredDocuments,
-            $this->blockBiometricConsent
+            $this->blockBiometricConsent,
+            $this->ibvOptions
         );
     }
 }

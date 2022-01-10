@@ -12,7 +12,6 @@ use Yoti\Test\TestCase;
  */
 class GeneratedMediaTest extends TestCase
 {
-
     private const SOME_ID = 'someId';
     private const SOME_TYPE = 'someType';
 

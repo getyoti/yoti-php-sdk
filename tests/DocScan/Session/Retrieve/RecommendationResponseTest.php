@@ -12,7 +12,6 @@ use Yoti\Test\TestCase;
  */
 class RecommendationResponseTest extends TestCase
 {
-
     private const SOME_VALUE = 'someValue';
     private const SOME_REASON = 'someReason';
     private const SOME_RECOVERY_SUGGESTION = 'someRecoverySuggestion';

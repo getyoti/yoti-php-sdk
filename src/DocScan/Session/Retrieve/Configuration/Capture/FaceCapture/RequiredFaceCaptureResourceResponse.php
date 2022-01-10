@@ -6,5 +6,4 @@ use Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse
 
 class RequiredFaceCaptureResourceResponse extends RequiredResourceResponse
 {
-
 }

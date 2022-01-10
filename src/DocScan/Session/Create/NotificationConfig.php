@@ -8,7 +8,6 @@ use Yoti\Util\Json;
 
 class NotificationConfig implements \JsonSerializable
 {
-
     /**
      * @var string|null
      */

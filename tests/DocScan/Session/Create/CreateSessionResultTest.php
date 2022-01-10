@@ -10,7 +10,6 @@ use Yoti\Test\TestCase;
  */
 class CreateSessionResultTest extends TestCase
 {
-
     private const SOME_CLIENT_SESSION_TOKEN_TTL = 30;
     private const SOME_CLIENT_SESSION_TOKEN = 'someClientSessionToken';
     private const SOME_SESSION_ID = 'someSessionId';

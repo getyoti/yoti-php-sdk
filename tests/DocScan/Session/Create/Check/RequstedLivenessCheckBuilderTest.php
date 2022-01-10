@@ -11,7 +11,6 @@ use Yoti\Test\TestCase;
  */
 class RequstedLivenessCheckBuilderTest extends TestCase
 {
-
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
     private const SOME_MAX_RETRIES = 3;
 
