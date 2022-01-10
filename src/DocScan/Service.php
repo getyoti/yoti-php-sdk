@@ -187,17 +187,23 @@ class Service
     }
 
     /**
-     * Gets a list of supported documents.
-     *
+     * @param bool $isStrictlyLatin
      * @return SupportedDocumentsResponse
+     * @throws DocScanException
      */
-    public function getSupportedDocuments(): SupportedDocumentsResponse
+    public function getSupportedDocuments(bool $isStrictlyLatin): SupportedDocumentsResponse
     {
-        $response = (new RequestBuilder($this->config))
+        $requestBuilder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint('/supported-documents')
             ->withPemFile($this->pemFile)
-            ->withGet()
+            ->withGet();
+
+        if ($isStrictlyLatin) {
+            $requestBuilder->withQueryParam('includeNonLatin', '1');
+        }
+
+        $response = $requestBuilder
             ->build()
             ->execute();
 

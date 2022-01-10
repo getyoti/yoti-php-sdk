@@ -37,4 +37,5 @@ class TestData
     public const SOME_IMAGE_CONTENT_TYPE = 'someImageContentType';
     public const SOME_ID = 'someId';
     public const SOME_FRAMES = 1;
+    public const INCLUDE_NON_LATIN = true;
 }
