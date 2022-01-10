@@ -204,4 +204,15 @@ class DocScanClient
     {
         return $this->docScanService->getIbvInstructions($sessionId);
     }
+
+
+    /**
+     * @param string $sessionId
+     * @return Media
+     * @throws Exception\DocScanException
+     */
+    public function getIbvInstructionsPdf(string $sessionId): Media
+    {
+        return $this->docScanService->getIbvInstructionsPdf($sessionId);
+    }
 }

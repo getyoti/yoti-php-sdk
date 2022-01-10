@@ -6,6 +6,7 @@ use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Instructions\Document\DocumentProposalResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse;
+use Yoti\DocScan\Session\Retrieve\Instructions\Document\UnknownDocumentResponse;
 use Yoti\Test\TestCase;
 
 /**
@@ -46,6 +47,15 @@ class DocumentProposalResponseTest extends TestCase
             ],
         ];
 
+        $data3 = [
+            'requirement_id' => self::SOME_REQUIREMENT_ID,
+            'document' => [
+                'type' => 'SOME_TYPE',
+                'country_code' => self::SOME_COUNTRY_CODE,
+                'document_type' => self::SOME_DOCUMENT_TYPE
+            ],
+        ];
+
         $result = new DocumentProposalResponse($data);
 
         $this->assertEquals(self::SOME_REQUIREMENT_ID, $result->getRequirementId());
@@ -54,5 +64,9 @@ class DocumentProposalResponseTest extends TestCase
         $result2 = new DocumentProposalResponse($data2);
         $this->assertEquals(self::SOME_REQUIREMENT_ID, $result2->getRequirementId());
         $this->assertInstanceOf(SelectedSupplementaryDocumentResponse::class, $result2->getDocument());
+
+        $result3 = new DocumentProposalResponse($data3);
+        $this->assertEquals(self::SOME_REQUIREMENT_ID, $result3->getRequirementId());
+        $this->assertInstanceOf(UnknownDocumentResponse::class, $result3->getDocument());
     }
 }

@@ -333,6 +333,29 @@ class Service
     }
 
     /**
+     * @param string $sessionId
+     * @return Media
+     * @throws DocScanException
+     */
+    public function getIbvInstructionsPdf(string $sessionId): Media
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/pdf', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $content = (string)$response->getBody();
+        $mimeType = $response->getHeader("Content-Type")[0] ?? '';
+
+        return new Media($mimeType, $content);
+    }
+
+    /**
      * @param ResponseInterface $response
      *
      * @throws DocScanException
