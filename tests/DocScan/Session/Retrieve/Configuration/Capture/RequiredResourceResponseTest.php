@@ -7,6 +7,7 @@ use Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
 use Yoti\Test\TestCase;
 
 /**
@@ -61,5 +62,30 @@ class RequiredResourceResponseTest extends TestCase
         $this->assertInstanceOf(IbvAllowedSourceResponse::class, $result->getAllowedSources()[2]);
 
         $this->assertTrue($result->isRelyingBusinessAllowed());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::isRelyingBusinessAllowed
+     * @covers ::createAllowedSourceFromArray
+     */
+    public function shouldHaveIsRelyingBusinessFalseAndUnknownSource()
+    {
+        $input = [
+            'type' => self::SOME_TYPE,
+            'id' => self::SOME_ID,
+            'state' => self::SOME_STATE,
+            'allowed_sources' => [
+                [
+                    'type' => 'Unknown',
+                ],
+            ]
+        ];
+
+        $result = new RequiredResourceResponse($input);
+
+        $this->assertFalse($result->isRelyingBusinessAllowed());
+        $this->assertInstanceOf(UnknownAllowedSourceResponse::class, $result->getAllowedSources()[0]);
     }
 }

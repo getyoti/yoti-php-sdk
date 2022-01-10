@@ -129,6 +129,8 @@ class DocScanClient
     }
 
     /**
+     * Gets a list of supported documents.
+     *
      * @param bool $isStrictlyLatin
      * @return SupportedDocumentsResponse
      * @throws Exception\DocScanException
@@ -139,6 +141,9 @@ class DocScanClient
     }
 
     /**
+     * Creates a Face Capture resource, that will be linked using
+     * the supplied requirement ID
+     *
      * @param string $sessionId
      * @param CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
      * @return Session\Retrieve\CreateFaceCaptureResourceResponse
@@ -152,6 +157,8 @@ class DocScanClient
     }
 
     /**
+     * Uploads an image to the specified Face Capture resource
+     *
      * @param string $sessionId
      * @param string $resourceId
      * @param UploadFaceCaptureImagePayload $uploadFaceCaptureImagePayload
@@ -178,6 +185,8 @@ class DocScanClient
     }
 
     /**
+     * Sets the IBV instructions for the given session
+     *
      * @throws Exception\DocScanException
      */
     public function putIbvInstructions(string $sessionId, Instructions $instructions): void

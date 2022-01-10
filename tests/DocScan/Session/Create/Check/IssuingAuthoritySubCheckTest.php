@@ -15,6 +15,7 @@ class IssuingAuthoritySubCheckTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::isRequested
+     * @covers ::getFilter
      * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withDocumentFilter
      * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withRequested
      * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::build
@@ -30,5 +31,6 @@ class IssuingAuthoritySubCheckTest extends TestCase
 
         $this->assertTrue($result->isRequested());
         $this->assertInstanceOf(DocumentFilter::class, $result->getFilter());
+        $this->assertEquals($documentFilterMock, $result->getFilter());
     }
 }
