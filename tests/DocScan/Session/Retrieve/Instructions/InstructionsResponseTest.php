@@ -5,6 +5,7 @@ namespace Yoti\Test\DocScan\Session\Retrieve\Instructions;
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UnknownBranchResponse;
+use Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\Test\TestCase;
 
@@ -117,5 +118,10 @@ class InstructionsResponseTest extends TestCase
 
         $result2 = new InstructionsResponse($data2);
         $this->assertInstanceOf(UnknownBranchResponse::class, $result2->getBranch());
+        $result = new InstructionsResponse($data);
+
+        $this->assertTrue($result->isContactProfileExists());
+        $this->assertInstanceOf(BranchResponse::class, $result->getBranch());
+        $this->assertCount(2, $result->getDocuments());
     }
 }

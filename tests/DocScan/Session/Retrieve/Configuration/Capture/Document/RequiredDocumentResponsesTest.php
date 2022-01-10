@@ -6,6 +6,9 @@ use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\ObjectiveResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse;
 use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedIdDocTaskResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedSupplementaryDocTaskResponse;
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\UnknownRequestedTaskResponse;
 use Yoti\Test\TestCase;
 
 /**
@@ -81,6 +84,12 @@ class RequiredDocumentResponsesTest extends TestCase
         $this->assertEquals(self::SOME_ATTEMPTS, $requiredIdDocumentResourceResponse->getAttemptsRemaining());
         $this->assertCount(1, $requiredIdDocumentResourceResponse->getSupportedCountries());
 
+        $expectedRequestedTasks = [
+            new RequestedIdDocTaskResponse(['type' => 'ID_DOCUMENT_TEXT_DATA_EXTRACTION']),
+            new RequestedSupplementaryDocTaskResponse(['type' => 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION']),
+            new UnknownRequestedTaskResponse(),
+        ];
+
         $inputForSupplementary = [
             'type' => self::SOME_TYPE,
             'id' => self::SOME_ID,
@@ -112,6 +121,10 @@ class RequiredDocumentResponsesTest extends TestCase
         $this->assertInstanceOf(
             ObjectiveResponse::class,
             $requiredSupplementaryDocumentResourceResponse->getObjective()
+        );
+        $this->assertEquals(
+            $expectedRequestedTasks,
+            $requiredSupplementaryDocumentResourceResponse->getRequestedTasks()
         );
     }
 }

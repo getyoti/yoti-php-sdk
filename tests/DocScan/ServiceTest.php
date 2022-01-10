@@ -576,8 +576,9 @@ class ServiceTest extends TestCase
                 $this->callback(
                     function (RequestInterface $requestMessage) {
                         $expectedPathPattern = sprintf(
-                            '~^%s/supported-documents.*?~',
-                            TestData::DOC_SCAN_BASE_URL
+                            '~^%s/supported-documents\?includeNonLatin=%s.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::INCLUDE_NON_LATIN
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
@@ -600,7 +601,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             SupportedDocumentsResponse::class,
-            $docScanService->getSupportedDocuments()
+            $docScanService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN)
         );
     }
 
@@ -619,8 +620,9 @@ class ServiceTest extends TestCase
                 $this->callback(
                     function (RequestInterface $requestMessage) {
                         $expectedPathPattern = sprintf(
-                            '~^%s/supported-documents.*?~',
-                            TestData::DOC_SCAN_BASE_URL
+                            '~^%s/supported-documents\?includeNonLatin=%s.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::INCLUDE_NON_LATIN
                         );
 
                         $this->assertEquals('GET', $requestMessage->getMethod());
@@ -644,7 +646,7 @@ class ServiceTest extends TestCase
         $this->expectException(DocScanException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->getSupportedDocuments();
+        $docScanService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN);
     }
 
     /**

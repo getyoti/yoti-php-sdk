@@ -34,13 +34,6 @@ class HomeController extends BaseController
             ->withAdverseMediaCategory()
             ->build();
 
-        $watchlistAdvancedConfig = (new RequestedYotiAccountWatchlistAdvancedCaConfigBuilder())
-            ->withRemoveDeceased(true)
-            ->withShareUrl(false)
-            ->withSources(new RequestedSearchProfileSources('SOME_PROFILE'))
-            ->withMatchingStrategy(new RequestedFuzzyMatchingStrategy(0.5))
-            ->build();
-
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
             ->withResourcesTtl(90000)
@@ -70,11 +63,6 @@ class HomeController extends BaseController
             ->withRequestedCheck(
                 (new RequestedWatchlistScreeningCheckBuilder())
                     ->withConfig($watchScreeningConfig)
-                    ->build()
-            )
-            ->withRequestedCheck(
-                (new RequestedWatchlistAdvancedCaCheckBuilder())
-                    ->withConfig($watchlistAdvancedConfig)
                     ->build()
             )
             ->withRequestedTask(
