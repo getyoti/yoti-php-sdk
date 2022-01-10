@@ -197,6 +197,8 @@ class DocScanClient
     }
 
     /**
+     * Fetches any currently set instructions for an IBV session.
+     *
      * @param string $sessionId
      * @return InstructionsResponse
      * @throws Exception\DocScanException
@@ -207,6 +209,8 @@ class DocScanClient
     }
 
     /**
+     * Fetches the instructions PDF associated with an In-Branch Verification session.
+     *
      * @param string $sessionId
      * @return Media
      * @throws Exception\DocScanException
@@ -217,6 +221,8 @@ class DocScanClient
     }
 
     /**
+     * Fetches the associated instructions contact profile for the given In-Branch Verification session
+     *
      * @param string $sessionId
      * @return ContactProfileResponse
      * @throws Exception\DocScanException
