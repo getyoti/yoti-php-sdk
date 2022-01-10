@@ -15,6 +15,7 @@ use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
@@ -307,6 +308,28 @@ class Service
             ->execute();
 
         self::assertResponseIsSuccess($response);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return InstructionsResponse
+     * @throws DocScanException
+     */
+    public function getIbvInstructions(string $sessionId): InstructionsResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new InstructionsResponse($result);
     }
 
     /**
