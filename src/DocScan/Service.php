@@ -15,6 +15,7 @@ use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
@@ -353,6 +354,28 @@ class Service
         $mimeType = $response->getHeader("Content-Type")[0] ?? '';
 
         return new Media($mimeType, $content);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return ContactProfileResponse
+     * @throws DocScanException
+     */
+    public function fetchInstructionsContactProfile(string $sessionId): ContactProfileResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/contact-profile', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new ContactProfileResponse($result);
     }
 
     /**

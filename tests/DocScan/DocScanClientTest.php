@@ -428,4 +428,28 @@ class DocScanClientTest extends TestCase
             TestData::DOC_SCAN_SESSION_ID
         );
     }
+
+    /**
+     * @test
+     * @covers ::fetchInstructionsContactProfile
+     */
+    public function testFetchInstructionsContactProfile()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->fetchInstructionsContactProfile(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
 }

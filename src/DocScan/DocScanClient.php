@@ -12,6 +12,7 @@ use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -196,6 +197,8 @@ class DocScanClient
     }
 
     /**
+     * Fetches any currently set instructions for an IBV session.
+     *
      * @param string $sessionId
      * @return InstructionsResponse
      * @throws Exception\DocScanException
@@ -205,8 +208,9 @@ class DocScanClient
         return $this->docScanService->getIbvInstructions($sessionId);
     }
 
-
     /**
+     * Fetches the instructions PDF associated with an In-Branch Verification session.
+     *
      * @param string $sessionId
      * @return Media
      * @throws Exception\DocScanException
@@ -214,5 +218,17 @@ class DocScanClient
     public function getIbvInstructionsPdf(string $sessionId): Media
     {
         return $this->docScanService->getIbvInstructionsPdf($sessionId);
+    }
+
+    /**
+     * Fetches the associated instructions contact profile for the given In-Branch Verification session
+     *
+     * @param string $sessionId
+     * @return ContactProfileResponse
+     * @throws Exception\DocScanException
+     */
+    public function fetchInstructionsContactProfile(string $sessionId): ContactProfileResponse
+    {
+        return $this->docScanService->fetchInstructionsContactProfile($sessionId);
     }
 }

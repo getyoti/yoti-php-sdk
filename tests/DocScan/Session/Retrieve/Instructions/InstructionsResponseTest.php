@@ -3,9 +3,9 @@
 namespace Yoti\Test\DocScan\Session\Retrieve\Instructions;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UnknownBranchResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\Test\TestCase;
 
