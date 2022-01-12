@@ -379,6 +379,23 @@ class Service
     }
 
     /**
+     * @param string $sessionId
+     * @throws DocScanException
+     */
+    public function triggerIbvEmailNotification(string $sessionId): void
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/email', $sessionId))
+            ->withPost()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+    }
+
+    /**
      * @param ResponseInterface $response
      *
      * @throws DocScanException

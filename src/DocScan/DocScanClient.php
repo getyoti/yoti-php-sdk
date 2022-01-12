@@ -231,4 +231,17 @@ class DocScanClient
     {
         return $this->docScanService->fetchInstructionsContactProfile($sessionId);
     }
+
+    /**
+     * Triggers an email notification for the IBV instructions at-home flow.
+     * This will be one of:
+     *  - an email sent directly to the end user, using the email provided in the ContactProfile
+     *  - if requested, a backend notification using the configured notification endpoint
+     *
+     * @throws Exception\DocScanException
+     */
+    public function triggerIbvEmailNotification(string $sessionId): void
+    {
+        $this->docScanService->triggerIbvEmailNotification($sessionId);
+    }
 }
