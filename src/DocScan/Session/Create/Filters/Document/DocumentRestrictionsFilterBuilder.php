@@ -21,6 +21,11 @@ class DocumentRestrictionsFilterBuilder
     private $documents = [];
 
     /**
+     * @var bool|null
+     */
+    private $allowNonLatinDocuments;
+
+    /**
      * @return $this
      */
     public function forWhitelist(): self
@@ -50,11 +55,24 @@ class DocumentRestrictionsFilterBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withAllowNonLatinDocuments(): self
+    {
+        $this->allowNonLatinDocuments = true;
+        return $this;
+    }
+
+    /**
      * @return DocumentRestrictionsFilter
      */
     public function build(): DocumentFilter
     {
         Validation::notEmptyString($this->inclusion, 'inclusion');
-        return new DocumentRestrictionsFilter($this->inclusion, $this->documents);
+        return new DocumentRestrictionsFilter(
+            $this->inclusion,
+            $this->documents,
+            $this->allowNonLatinDocuments
+        );
     }
 }

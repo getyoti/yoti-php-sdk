@@ -66,12 +66,14 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
         $filter = (new DocumentRestrictionsFilterBuilder())
             ->forBlacklist()
             ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowNonLatinDocuments()
             ->build();
 
         $this->assertJsonStringEqualsJsonString(
             json_encode(
                 (object) [
                     'type' => 'DOCUMENT_RESTRICTIONS',
+                    'allow_non_latin_documents' => true,
                     'inclusion' => 'BLACKLIST',
                     'documents' => [ $this->documentRestrictionMock ],
                 ]
@@ -108,5 +110,47 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
         (new DocumentRestrictionsFilterBuilder())
             ->forWhitelist()
             ->build();
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
+     * @covers ::forBlacklist
+     * @covers ::withAllowNonLatinDocuments
+     * @covers ::withDocumentRestriction
+     * @covers ::build
+     */
+    public function shouldBuildWithAllowNonLatinDocuments(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowNonLatinDocuments()
+            ->build();
+
+        $this->assertTrue($filter->isAllowNonLatinDocuments());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
+     * @covers ::forBlacklist
+     * @covers ::withDocumentRestriction
+     * @covers ::build
+     */
+    public function shouldBuildAndAllowNonLatinDocumentsEqualsNull(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->build();
+
+        $this->assertNull($filter->isAllowNonLatinDocuments());
     }
 }
