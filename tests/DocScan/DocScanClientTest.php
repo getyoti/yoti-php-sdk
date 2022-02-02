@@ -229,6 +229,31 @@ class DocScanClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @covers ::getMediaContent
+     */
+    public function testGetMediaIfNoContent()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(204);
+        $response->method('getHeader')->willReturn([ 'image/png' ]);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertNull(
+            $docScanClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
      * @covers ::deleteMediaContent
      */
     public function testDeleteMediaDoesNotThrowException()

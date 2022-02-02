@@ -28,6 +28,9 @@ use Yoti\Util\PemFile;
 
 class Service
 {
+    /** @const int */
+    private const HTTP_STATUS_NO_CONTENT = 204;
+
     /**
      * @var string
      */
@@ -142,10 +145,10 @@ class Service
      *
      * @param string $sessionId
      * @param string $mediaId
-     * @return Media
+     * @return Media|null if 204 No Content
      * @throws DocScanException
      */
-    public function getMediaContent(string $sessionId, string $mediaId): Media
+    public function getMediaContent(string $sessionId, string $mediaId): ?Media
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
@@ -157,6 +160,10 @@ class Service
             ->execute();
 
         self::assertResponseIsSuccess($response);
+
+        if ($response->getStatusCode() == self::HTTP_STATUS_NO_CONTENT) {
+            return null;
+        }
 
         $content = (string)$response->getBody();
         $mimeType = $response->getHeader("Content-Type")[0] ?? '';
