@@ -109,10 +109,10 @@ class DocScanClient
      *
      * @param string $sessionId
      * @param string $mediaId
-     * @return Media
+     * @return Media|null
      * @throws Exception\DocScanException
      */
-    public function getMediaContent(string $sessionId, string $mediaId): Media
+    public function getMediaContent(string $sessionId, string $mediaId): ?Media
     {
         return $this->docScanService->getMediaContent($sessionId, $mediaId);
     }
