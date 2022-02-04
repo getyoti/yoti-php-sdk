@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile;
 
+use Yoti\Aml\Profile;
 use Yoti\Media\Image;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\ApplicationProfile;

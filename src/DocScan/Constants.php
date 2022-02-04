@@ -51,4 +51,7 @@ class Constants
     public const END_USER = 'END_USER';
     public const RELYING_BUSINESS = 'RELYING_BUSINESS';
     public const IBV = 'IBV';
+
+    public const RECLASSIFICATION = "RECLASSIFICATION";
+    public const GENERIC = "GENERIC";
 }
