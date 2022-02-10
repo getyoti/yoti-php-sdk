@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check;
 
+use stdClass;
 use Yoti\Util\Json;
 
 class RequestedDocumentAuthenticityCheckConfig implements RequestedCheckConfigInterface
@@ -29,9 +30,9 @@ class RequestedDocumentAuthenticityCheckConfig implements RequestedCheckConfigIn
     }
 
     /**
-     * @return \stdClass
+     * @return stdClass
      */
-    public function jsonSerialize(): \stdClass
+    public function jsonSerialize(): stdClass
     {
         return (object) Json::withoutNullValues([
             'manual_check' => $this->getManualCheck(),

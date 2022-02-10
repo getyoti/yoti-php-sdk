@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use stdClass;
 use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
@@ -51,11 +52,11 @@ class DynamicPolicy implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'wanted' => $this->wantedAttributes,
             'wanted_auth_types' => $this->wantedAuthTypes,
             'wanted_remember_me' => $this->wantedRememberMe,

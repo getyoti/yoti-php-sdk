@@ -42,7 +42,7 @@ class ServiceTest extends TestCase
     {
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
         $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
+            (object)[
                 'someKey' => 'someValue',
                 'someOtherKey' => 'someOtherValue',
             ]
@@ -114,7 +114,7 @@ class ServiceTest extends TestCase
     {
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
         $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
+            (object)[
                 'someKey' => 'someValue',
                 'someOtherKey' => 'someOtherValue',
             ]

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use stdClass;
 use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
@@ -43,11 +44,11 @@ class SourceConstraint implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'type' => self::TYPE,
             'preferred_sources' => [
                 'anchors' => $this->anchors,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create;
 
 use JsonSerializable;
+use stdClass;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
@@ -107,11 +108,11 @@ class SessionSpecification implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return Json::withoutNullValues([
+        return (object) Json::withoutNullValues([
             'client_session_token_ttl' => $this->getClientSessionTokenTtl(),
             'session_deadline' => $this->getSessionDeadline(),
             'resources_ttl' => $this->getResourcesTtl(),

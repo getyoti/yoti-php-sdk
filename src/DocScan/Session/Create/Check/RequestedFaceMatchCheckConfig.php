@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check;
 
+use stdClass;
+
 class RequestedFaceMatchCheckConfig implements RequestedCheckConfigInterface
 {
     /**
@@ -17,11 +19,11 @@ class RequestedFaceMatchCheckConfig implements RequestedCheckConfigInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object) [
             'manual_check' => $this->getManualCheck(),
         ];
     }
