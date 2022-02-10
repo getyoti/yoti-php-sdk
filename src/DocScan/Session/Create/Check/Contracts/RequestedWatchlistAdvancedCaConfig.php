@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check\Contracts;
 
+use stdClass;
 use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy;
 use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources;
 use Yoti\DocScan\Session\Create\Check\RequestedCheckConfigInterface;
@@ -75,11 +76,11 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object) [
             'remove_deceased' => $this->getRemoveDeceased(),
             'share_url' => $this->getShareUrl(),
             'sources' => $this->getSources(),

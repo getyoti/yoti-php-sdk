@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\ExtraData;
 
+use stdClass;
 use Yoti\Util\Json;
 
 class AttributeDefinition implements \JsonSerializable
@@ -32,11 +33,11 @@ class AttributeDefinition implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'name' => $this->getName(),
         ];
     }

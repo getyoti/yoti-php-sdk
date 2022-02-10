@@ -61,10 +61,10 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->notificationsMock->method('jsonSerialize')->willReturn((object)['notifications']);
 
         $this->requestedCheckMock = $this->createMock(RequestedCheck::class);
-        $this->requestedCheckMock->method('jsonSerialize')->willReturn(['requestedChecks']);
+        $this->requestedCheckMock->method('jsonSerialize')->willReturn((object)['requestedChecks']);
 
         $this->requestedTaskMock = $this->createMock(RequestedTask::class);
-        $this->requestedTaskMock->method('jsonSerialize')->willReturn(['requestedTasks']);
+        $this->requestedTaskMock->method('jsonSerialize')->willReturn((object)['requestedTasks']);
 
         $this->requiredDocumentMock = $this->createMock(RequiredDocument::class);
         $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check;
 
+use stdClass;
+
 /**
  * Class RequestedWatchlistScreeningConfig
  * @package Yoti\DocScan\Session\Create\Check
@@ -25,11 +27,11 @@ class RequestedWatchlistScreeningConfig implements RequestedCheckConfigInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object) [
             'categories' => $this->categories,
         ];
     }

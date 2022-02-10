@@ -113,7 +113,7 @@ class DocScanClientTest extends TestCase
         ]);
 
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn(new \stdClass());
 
         $docScanClient->createSession($sessionSpecificationMock);
     }
@@ -139,11 +139,7 @@ class DocScanClientTest extends TestCase
         ]);
 
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
-                'someKey' => 'someValue'
-            ]
-        );
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn((object)['someKey' => 'someValue']);
 
         $this->assertInstanceOf(
             CreateSessionResult::class,

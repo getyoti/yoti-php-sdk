@@ -35,7 +35,7 @@ class ProfileTest extends TestCase
         $this->amlAddressMock = $this->createMock(Address::class);
         $this->amlAddressMock
             ->method('jsonSerialize')
-            ->willReturn(['some' => 'address']);
+            ->willReturn((object)['some' => 'address']);
 
         $this->amlProfile = new Profile(
             self::SOME_GIVEN_NAMES,

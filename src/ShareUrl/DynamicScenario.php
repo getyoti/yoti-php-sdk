@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl;
 
+use stdClass;
 use Yoti\ShareUrl\Extension\Extension;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
 use Yoti\Util\Json;
@@ -51,11 +52,11 @@ class DynamicScenario implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'callback_endpoint' => $this->callbackEndpoint,
             'policy' => $this->dynamicPolicy,
             'extensions' => $this->extensions,
