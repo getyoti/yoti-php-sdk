@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Task;
 
+use stdClass;
 use Yoti\Util\Json;
 
 class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
 {
-
     /**
      * @var string
      */
@@ -30,11 +30,11 @@ class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return Json::withoutNullValues([
+        return (object)Json::withoutNullValues([
             'manual_check' => $this->getManualCheck(),
             'chip_data' => $this->getChipData(),
         ]);

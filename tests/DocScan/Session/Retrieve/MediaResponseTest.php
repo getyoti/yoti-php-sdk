@@ -13,7 +13,6 @@ use Yoti\Util\DateTime;
  */
 class MediaResponseTest extends TestCase
 {
-
     private const SOME_ID = 'someId';
     private const SOME_TYPE = 'someType';
     private const SOME_CREATED = '2019-03-24T03:55:12Z';

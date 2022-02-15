@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Retrieve;
 
-class ThirdPartyIdentityCheckResponse extends CheckResponse
-{
+use Yoti\DocScan\Session\Retrieve\Contracts\ProfileCheckResponse;
 
+class ThirdPartyIdentityCheckResponse extends ProfileCheckResponse
+{
 }

@@ -6,5 +6,4 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class IdDocumentComparisonCheckResponse extends CheckResponse
 {
-
 }

@@ -8,7 +8,6 @@ use Yoti\DocScan\Constants;
 
 class RequestedTextExtractionTask extends RequestedTask
 {
-
     /**
      * @var RequestedTextExtractionTaskConfig
      */

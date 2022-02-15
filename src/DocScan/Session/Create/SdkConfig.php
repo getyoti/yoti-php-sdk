@@ -8,7 +8,6 @@ use Yoti\Util\Json;
 
 class SdkConfig implements \JsonSerializable
 {
-
     /**
      * @var string|null
      */
@@ -54,6 +53,29 @@ class SdkConfig implements \JsonSerializable
      */
     private $privacyPolicyUrl;
 
+    /**
+     * @var bool|null
+     */
+    private $allowHandoff;
+
+    /**
+     * @var AttemptsConfiguration|null
+     */
+    private $attemptsConfiguration;
+
+    /**
+     * @param string|null $allowedCaptureMethods
+     * @param string|null $primaryColour
+     * @param string|null $secondaryColour
+     * @param string|null $fontColour
+     * @param string|null $locale
+     * @param string|null $presetIssuingCountry
+     * @param string|null $successUrl
+     * @param string|null $errorUrl
+     * @param string|null $privacyPolicyUrl
+     * @param bool|null $allowHandoff
+     * @param array<string, int>|null $idDocumentTextDataExtractionRetriesConfig
+     */
     public function __construct(
         ?string $allowedCaptureMethods,
         ?string $primaryColour,
@@ -63,7 +85,9 @@ class SdkConfig implements \JsonSerializable
         ?string $presetIssuingCountry,
         ?string $successUrl,
         ?string $errorUrl,
-        ?string $privacyPolicyUrl = null
+        ?string $privacyPolicyUrl = null,
+        ?bool $allowHandoff = null,
+        ?array $idDocumentTextDataExtractionRetriesConfig = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -74,6 +98,10 @@ class SdkConfig implements \JsonSerializable
         $this->successUrl = $successUrl;
         $this->errorUrl = $errorUrl;
         $this->privacyPolicyUrl = $privacyPolicyUrl;
+        $this->allowHandoff = $allowHandoff;
+        if (!is_null($idDocumentTextDataExtractionRetriesConfig)) {
+            $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
+        }
     }
 
     /**
@@ -81,7 +109,7 @@ class SdkConfig implements \JsonSerializable
      */
     public function jsonSerialize(): \stdClass
     {
-        return (object) Json::withoutNullValues([
+        return (object)Json::withoutNullValues([
             'allowed_capture_methods' => $this->getAllowedCaptureMethods(),
             'primary_colour' => $this->getPrimaryColour(),
             'secondary_colour' => $this->getSecondaryColour(),
@@ -91,6 +119,8 @@ class SdkConfig implements \JsonSerializable
             'success_url' => $this->getSuccessUrl(),
             'error_url' => $this->getErrorUrl(),
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
+            'allow_handoff' => $this->getAllowHandoff(),
+            'attempts_configuration' => $this->getAttemptsConfiguration(),
         ]);
     }
 
@@ -164,5 +194,21 @@ class SdkConfig implements \JsonSerializable
     public function getPrivacyPolicyUrl(): ?string
     {
         return $this->privacyPolicyUrl;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getAllowHandoff(): ?bool
+    {
+        return $this->allowHandoff;
+    }
+
+    /**
+     * @return AttemptsConfiguration|null
+     */
+    public function getAttemptsConfiguration(): ?AttemptsConfiguration
+    {
+        return $this->attemptsConfiguration;
     }
 }

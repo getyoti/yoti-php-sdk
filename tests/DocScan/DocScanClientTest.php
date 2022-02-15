@@ -8,7 +8,12 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\DocScan\DocScanClient;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\DocScan\Session\Create\SessionSpecification;
+use Yoti\DocScan\Session\Instructions\Instructions;
+use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
@@ -108,7 +113,7 @@ class DocScanClientTest extends TestCase
         ]);
 
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn([]);
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn(new \stdClass());
 
         $docScanClient->createSession($sessionSpecificationMock);
     }
@@ -134,11 +139,7 @@ class DocScanClientTest extends TestCase
         ]);
 
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
-        $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
-                'someKey' => 'someValue'
-            ]
-        );
+        $sessionSpecificationMock->method('jsonSerialize')->willReturn((object)['someKey' => 'someValue']);
 
         $this->assertInstanceOf(
             CreateSessionResult::class,
@@ -224,6 +225,31 @@ class DocScanClientTest extends TestCase
     /**
      * @test
      * @covers ::__construct
+     * @covers ::getMediaContent
+     */
+    public function testGetMediaIfNoContent()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(204);
+        $response->method('getHeader')->willReturn([ 'image/png' ]);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertNull(
+            $docScanClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
      * @covers ::deleteMediaContent
      */
     public function testDeleteMediaDoesNotThrowException()
@@ -265,6 +291,210 @@ class DocScanClientTest extends TestCase
         $this->assertInstanceOf(
             SupportedDocumentsResponse::class,
             $docScanClient->getSupportedDocuments()
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::createFaceCaptureResource
+     */
+    public function testCreateFaceCaptureResource()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(201);
+
+        $createFaceCaptureResourcePayloadMock = $this->createMock(CreateFaceCaptureResourcePayload::class);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertInstanceOf(
+            CreateFaceCaptureResourceResponse::class,
+            $docScanClient->createFaceCaptureResource(
+                TestData::DOC_SCAN_SESSION_ID,
+                $createFaceCaptureResourcePayloadMock
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::uploadFaceCaptureImage
+     */
+    public function testUploadFaceCaptureImage()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $uploadFaceCaptureImagePayloadMock = $this->createMock(UploadFaceCaptureImagePayload::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->uploadFaceCaptureImage(
+            TestData::DOC_SCAN_SESSION_ID,
+            TestData::SOME_RESOURCE_ID,
+            $uploadFaceCaptureImagePayloadMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getSessionConfiguration
+     */
+    public function testGetSessionConfiguration()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $this->assertInstanceOf(
+            SessionConfigurationResponse::class,
+            $docScanClient->getSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::putIbvInstructions
+     */
+    public function testPutIbvInstructions()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $instructionsMock = $this->createMock(Instructions::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->putIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID,
+            $instructionsMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getIbvInstructions
+     */
+    public function testGetIbvInstructions()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->getIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getIbvInstructionsPdf
+     */
+    public function testGetIbvInstructionsPdf()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->getIbvInstructionsPdf(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::fetchInstructionsContactProfile
+     */
+    public function testFetchInstructionsContactProfile()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->fetchInstructionsContactProfile(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::triggerIbvEmailNotification
+     */
+    public function testTriggerIbvEmailNotification()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $docScanClient->triggerIbvEmailNotification(
+            TestData::DOC_SCAN_SESSION_ID
         );
     }
 }

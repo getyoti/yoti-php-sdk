@@ -6,6 +6,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\DocScan\Session\Create\IbvOptions;
 use Yoti\DocScan\Session\Create\NotificationConfig;
 use Yoti\DocScan\Session\Create\SdkConfig;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
@@ -46,6 +47,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $requiredDocumentMock;
 
+    /**
+     * @var IbvOptions
+     */
+    private $ibvOptionsMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -55,13 +61,15 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->notificationsMock->method('jsonSerialize')->willReturn((object)['notifications']);
 
         $this->requestedCheckMock = $this->createMock(RequestedCheck::class);
-        $this->requestedCheckMock->method('jsonSerialize')->willReturn(['requestedChecks']);
+        $this->requestedCheckMock->method('jsonSerialize')->willReturn((object)['requestedChecks']);
 
         $this->requestedTaskMock = $this->createMock(RequestedTask::class);
-        $this->requestedTaskMock->method('jsonSerialize')->willReturn(['requestedTasks']);
+        $this->requestedTaskMock->method('jsonSerialize')->willReturn((object)['requestedTasks']);
 
         $this->requiredDocumentMock = $this->createMock(RequiredDocument::class);
-        $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object) ['requiredDocument']);
+        $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);
+
+        $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
     }
 
     /**
@@ -134,7 +142,7 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withResourcesTtl(self::SOME_RESOURCES_TTL)
             ->withUserTrackingId(self::SOME_USER_TRACKING_ID)
             ->withRequestedCheck($this->requestedCheckMock)
-            ->withRequestedChecks([ $someOtherRequestedCheckMock ])
+            ->withRequestedChecks([$someOtherRequestedCheckMock])
             ->build();
 
         $this->assertCount(1, $sessionSpecification->getRequestedChecks());
@@ -155,7 +163,7 @@ class SessionSpecificationBuilderTest extends TestCase
             ->withResourcesTtl(self::SOME_RESOURCES_TTL)
             ->withUserTrackingId(self::SOME_USER_TRACKING_ID)
             ->withRequestedTask($this->requestedTaskMock)
-            ->withRequestedTasks([ $someOtherRequestedTaskMock ])
+            ->withRequestedTasks([$someOtherRequestedTaskMock])
             ->build();
 
         $this->assertCount(1, $sessionSpecification->getRequestedTasks());
@@ -187,9 +195,9 @@ class SessionSpecificationBuilderTest extends TestCase
                 'user_tracking_id' => self::SOME_USER_TRACKING_ID,
                 'notifications' => $this->notificationsMock,
                 'sdk_config' => $this->sdkConfigMock,
-                'requested_checks' => [ $this->requestedCheckMock ],
-                'requested_tasks' => [ $this->requestedTaskMock ],
-                'required_documents' => [ $this->requiredDocumentMock ],
+                'requested_checks' => [$this->requestedCheckMock],
+                'requested_tasks' => [$this->requestedTaskMock],
+                'required_documents' => [$this->requiredDocumentMock],
                 'block_biometric_consent' => true,
             ]),
             json_encode($sessionSpecification)
@@ -251,6 +259,63 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_tasks' => [],
                 'required_documents' => [],
                 'block_biometric_consent' => false,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSessionDeadline
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSessionDeadline
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldSetTheSessionDeadline()
+    {
+        $date = new \DateTimeImmutable();
+        $correctDateFormatValue = $date->format(SessionSpecificationBuilder::DATETIME_FORMAT);
+
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withSessionDeadline($date)
+            ->build();
+
+        $this->assertEquals($correctDateFormatValue, $sessionSpecificationResult->getSessionDeadline());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function withIbvOptionsShouldSetTheIbvOptions()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withIbvOptions($this->ibvOptionsMock)
+            ->build();
+
+        $this->assertEquals($this->ibvOptionsMock, $sessionSpecificationResult->getIbvOptions());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithIbvOptions()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withIbvOptions($this->ibvOptionsMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'ibv_options' => $this->ibvOptionsMock,
             ]),
             json_encode($sessionSpecification)
         );

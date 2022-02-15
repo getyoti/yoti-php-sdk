@@ -13,7 +13,6 @@ use Yoti\Test\TestCase;
  */
 class NotificationConfigBuilderTest extends TestCase
 {
-
     private const SOME_AUTH_TOKEN = 'someAuthToken';
     private const SOME_ENDPOINT = 'someEndpoint';
     private const SOME_TOPIC = 'someTopic';

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check;
 
+use stdClass;
+
 class RequestedLivenessConfig implements RequestedCheckConfigInterface
 {
-
     /**
      * @var string
      */
@@ -24,11 +25,11 @@ class RequestedLivenessConfig implements RequestedCheckConfigInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object) [
             'liveness_type' => $this->getLivenessType(),
             'max_retries' => $this->getMaxRetries(),
         ];

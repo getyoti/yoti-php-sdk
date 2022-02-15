@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
+use Yoti\DocScan\Constants;
+
 class SdkConfigBuilder
 {
-
     private const CAMERA = 'CAMERA';
     private const CAMERA_AND_UPLOAD = 'CAMERA_AND_UPLOAD';
 
@@ -54,6 +55,16 @@ class SdkConfigBuilder
      * @var string|null
      */
     private $privacyPolicyUrl;
+
+    /**
+     * @var bool|null
+     */
+    private $allowHandoff;
+
+    /**
+     * @var array<string,int>|null
+     */
+    private $idDocumentTextDataExtractionRetriesConfig;
 
     public function withAllowsCamera(): self
     {
@@ -119,6 +130,59 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withAllowHandoff(bool $allowHandoff): self
+    {
+        $this->allowHandoff = $allowHandoff;
+        return $this;
+    }
+
+    /**
+     * Allows configuring the number of attempts permitted for text extraction on an ID document
+     *
+     * The category for the retries number
+     * @param string $category
+     * The number of retries for the category specified
+     * @param int $retries
+     * @return SdkConfigBuilder
+     */
+    public function withIdDocumentTextExtractionCategoryRetries(string $category, int $retries): self
+    {
+        $this->idDocumentTextDataExtractionRetriesConfig[$category] = $retries;
+
+        return $this;
+    }
+
+    /**
+     * Allows configuring the number of 'Reclassification' attempts permitted for text extraction on an ID document
+     *
+     * The number of retries for reclassification
+     * @param int $reclassificationRetries
+     * @return $this
+     */
+    public function withIdDocumentTextExtractionReclassificationRetries(int $reclassificationRetries): self
+    {
+        $this->withIdDocumentTextExtractionCategoryRetries(
+            Constants::RECLASSIFICATION,
+            $reclassificationRetries
+        );
+
+        return $this;
+    }
+
+    /**
+     * Allows configuring the number of 'Generic' attempts permitted for text extraction on an ID document
+     *
+     * The number of generic retries
+     * @param int $genericRetries
+     * @return $this
+     */
+    public function withIdDocumentTextExtractionGenericRetries(int $genericRetries): self
+    {
+        $this->withIdDocumentTextExtractionCategoryRetries(Constants::GENERIC, $genericRetries);
+        return $this;
+    }
+
+
     public function build(): SdkConfig
     {
         return new SdkConfig(
@@ -130,7 +194,9 @@ class SdkConfigBuilder
             $this->presetIssuingCountry,
             $this->successUrl,
             $this->errorUrl,
-            $this->privacyPolicyUrl
+            $this->privacyPolicyUrl,
+            $this->allowHandoff,
+            $this->idDocumentTextDataExtractionRetriesConfig
         );
     }
 }

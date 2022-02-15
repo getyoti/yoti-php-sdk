@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class RecommendationResponse
 {
-
     /**
      * @var string|null
      */

@@ -11,7 +11,6 @@ use Yoti\Test\TestCase;
  */
 class RequestedFaceMatchCheckBuilderTest extends TestCase
 {
-
     /**
      * @test
      * @covers ::withManualCheckAlways

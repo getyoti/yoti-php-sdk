@@ -8,5 +8,4 @@ use Yoti\Exception\base\YotiException;
 
 class DocScanException extends YotiException
 {
-
 }

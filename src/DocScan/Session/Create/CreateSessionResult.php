@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Create;
 
 class CreateSessionResult
 {
-
     /**
      * @var int|null
      */

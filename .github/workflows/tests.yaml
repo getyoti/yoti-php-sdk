@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ 7.4, 7.3, 7.2, 7.1 ]
+        php-version: [ 7.4 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -56,8 +56,6 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-
-      - run: composer lint
 
   guzzle:
     name: Unit Tests With Guzzle 6 (php ${{ matrix.php-version }})
@@ -87,8 +85,6 @@ jobs:
 
       - run: composer test
 
-      - run: composer lint
-
   protobuf:
     name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
@@ -115,6 +111,4 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-
-      - run: composer lint
 

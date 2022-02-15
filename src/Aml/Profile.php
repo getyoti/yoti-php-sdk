@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
+use stdClass;
 use Yoti\Util\Json;
 
 class Profile implements \JsonSerializable
@@ -92,11 +93,11 @@ class Profile implements \JsonSerializable
     /**
      * Get Aml profile data.
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object) [
             self::GIVEN_NAMES_ATTR  => $this->getGivenNames(),
             self::FAMILY_NAME_ATTR  => $this->getFamilyName(),
             self::SSN_ATTR => $this->getSsn(),

@@ -8,7 +8,7 @@ use Yoti\Media\Image;
 
 class Png extends Image
 {
-    private const MIME_TYPE = 'image/png';
+    public const MIME_TYPE = 'image/png';
 
     public function __construct(string $content)
     {

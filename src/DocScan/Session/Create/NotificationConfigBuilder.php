@@ -8,7 +8,6 @@ use Yoti\DocScan\Constants;
 
 class NotificationConfigBuilder
 {
-
     private const RESOURCE_UPDATE = 'RESOURCE_UPDATE';
     private const TASK_COMPLETION = 'TASK_COMPLETION';
     private const CHECK_COMPLETION = 'CHECK_COMPLETION';

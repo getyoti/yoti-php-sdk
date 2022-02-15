@@ -12,6 +12,7 @@ class TestData
     public const PEM_FILE = __DIR__ . '/sample-data/yw-access-security.pem';
     public const INVALID_PEM_FILE = __DIR__ . '/sample-data/invalid.pem';
     public const DUMMY_SELFIE_FILE = __DIR__ . '/sample-data/dummy-avatar.png';
+    public const DUMMY_PDF_FILE = __DIR__ . '/sample-data/barcapdf.pdf';
     public const AML_PRIVATE_KEY = __DIR__ . '/sample-data/aml-check-private-key.pem';
     public const AML_PUBLIC_KEY = __DIR__ . '/sample-data/aml-check-public-key.pem';
     public const AML_CHECK_RESULT_JSON = __DIR__ . '/sample-data/aml-check-result.json';
@@ -30,4 +31,11 @@ class TestData
 
     public const DOC_SCAN_SESSION_CREATION_RESPONSE = __DIR__ . '/sample-data/docs/session-creation.json';
     public const DOC_SCAN_SESSION_RESPONSE = __DIR__ . '/sample-data/docs/session.json';
+
+    public const SOME_SESSION_SPEC_BYTES = [1,2,3,4];
+    public const SOME_RESOURCE_ID = 'someResourceId';
+    public const SOME_IMAGE_CONTENT_TYPE = 'someImageContentType';
+    public const SOME_ID = 'someId';
+    public const SOME_FRAMES = 1;
+    public const INCLUDE_NON_LATIN = true;
 }

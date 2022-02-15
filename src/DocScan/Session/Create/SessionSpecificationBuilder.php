@@ -10,11 +10,17 @@ use Yoti\DocScan\Session\Create\Task\RequestedTask;
 
 class SessionSpecificationBuilder
 {
+    public const DATETIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
     /**
      * @var int
      */
     private $clientSessionTokenTtl;
+
+    /**
+     * @var string
+     */
+    private $sessionDeadline;
 
     /**
      * @var int
@@ -57,12 +63,27 @@ class SessionSpecificationBuilder
     private $blockBiometricConsent;
 
     /**
+     * @var IbvOptions|null
+     */
+    private $ibvOptions;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
     public function withClientSessionTokenTtl(int $clientSessionTokenTtl): self
     {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
+        return $this;
+    }
+
+    /**
+     * @param \DateTimeImmutable $sessionDeadline
+     * @return $this
+     */
+    public function withSessionDeadLine(\DateTimeImmutable $sessionDeadline): self
+    {
+        $this->sessionDeadline = $sessionDeadline->format(self::DATETIME_FORMAT);
         return $this;
     }
 
@@ -173,12 +194,27 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the options that define if a session will be required to be performed
+     * using In-Branch Verification
+     *
+     * @param IbvOptions $ibvOptions
+     *
+     * @return $this
+     */
+    public function withIbvOptions(IbvOptions $ibvOptions): self
+    {
+        $this->ibvOptions = $ibvOptions;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
     {
         return new SessionSpecification(
             $this->clientSessionTokenTtl,
+            $this->sessionDeadline,
             $this->resourcesTtl,
             $this->userTrackingId,
             $this->notifications,
@@ -186,7 +222,8 @@ class SessionSpecificationBuilder
             $this->requestedTasks,
             $this->sdkConfig,
             $this->requiredDocuments,
-            $this->blockBiometricConsent
+            $this->blockBiometricConsent,
+            $this->ibvOptions
         );
     }
 }

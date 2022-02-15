@@ -20,6 +20,11 @@ class OrthogonalRestrictionsFilterBuilder
     private $typeRestriction;
 
     /**
+     * @var bool|null
+     */
+    private $allowNonLatinDocuments;
+
+    /**
      * @param string[] $countryCodes
      *
      * @return $this
@@ -77,10 +82,23 @@ class OrthogonalRestrictionsFilterBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withAllowNonLatinDocuments(): OrthogonalRestrictionsFilterBuilder
+    {
+        $this->allowNonLatinDocuments = true;
+        return $this;
+    }
+
+    /**
      * @return OrthogonalRestrictionsFilter
      */
     public function build(): DocumentFilter
     {
-        return new OrthogonalRestrictionsFilter($this->countryRestriction, $this->typeRestriction);
+        return new OrthogonalRestrictionsFilter(
+            $this->countryRestriction,
+            $this->typeRestriction,
+            $this->allowNonLatinDocuments
+        );
     }
 }

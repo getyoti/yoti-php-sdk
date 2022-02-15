@@ -6,7 +6,6 @@ namespace Yoti\DocScan\Session\Retrieve;
 
 class ZoomLivenessResourceResponse extends LivenessResourceResponse
 {
-
     /**
      * @var FaceMapResponse|null
      */

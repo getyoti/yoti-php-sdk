@@ -165,6 +165,14 @@ class GetSessionResult
     }
 
     /**
+     * @return WatchlistScreeningCheckResponse[]
+     */
+    public function getWatchlistScreeningChecks(): array
+    {
+        return $this->filterCheckByType(WatchlistScreeningCheckResponse::class);
+    }
+
+    /**
      * @return FaceMatchCheckResponse[]
      */
     public function getFaceMatchChecks(): array
@@ -199,6 +207,14 @@ class GetSessionResult
     }
 
     /**
+     * @return mixed[]
+     */
+    public function getWatchlistAdvancedCaChecks(): array
+    {
+        return $this->filterCheckByType(WatchlistAdvancedCaCheckResponse::class);
+    }
+
+    /**
      * @return LivenessCheckResponse[]
      */
     public function getLivenessChecks(): array
@@ -228,6 +244,10 @@ class GetSessionResult
                 return new LivenessCheckResponse($check);
             case Constants::THIRD_PARTY_IDENTITY:
                 return new ThirdPartyIdentityCheckResponse($check);
+            case Constants::WATCHLIST_SCREENING:
+                return new WatchlistScreeningCheckResponse($check);
+            case Constants::WATCHLIST_ADVANCED_CA:
+                return new WatchlistAdvancedCaCheckResponse($check);
             default:
                 return new CheckResponse($check);
         }

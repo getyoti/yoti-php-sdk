@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create;
 
 use JsonSerializable;
+use stdClass;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
@@ -16,6 +17,11 @@ class SessionSpecification implements JsonSerializable
      * @var int|null
      */
     private $clientSessionTokenTtl;
+
+    /**
+     * @var string|null
+     */
+    private $sessionDeadline;
 
     /**
      * @var int|null
@@ -58,8 +64,13 @@ class SessionSpecification implements JsonSerializable
     private $blockBiometricConsent;
 
     /**
-     * SessionSpecification constructor.
+     * @var IbvOptions|null
+     */
+    private $ibvOptions;
+
+    /**
      * @param int|null $clientSessionTokenTtl
+     * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
      * @param string|null $userTrackingId
      * @param NotificationConfig|null $notificationConfig
@@ -68,9 +79,11 @@ class SessionSpecification implements JsonSerializable
      * @param SdkConfig|null $sdkConfig
      * @param RequiredDocument[] $requiredDocuments
      * @param bool|null $blockBiometricConsent
+     * @param IbvOptions|null $ibvOptions
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
+        ?string $sessionDeadline,
         ?int $resourcesTtl,
         ?string $userTrackingId,
         ?NotificationConfig $notificationConfig,
@@ -78,9 +91,11 @@ class SessionSpecification implements JsonSerializable
         array $requestedTasks,
         ?SdkConfig $sdkConfig,
         array $requiredDocuments = [],
-        ?bool $blockBiometricConsent = null
+        ?bool $blockBiometricConsent = null,
+        ?IbvOptions $ibvOptions = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
+        $this->sessionDeadline = $sessionDeadline;
         $this->resourcesTtl = $resourcesTtl;
         $this->userTrackingId = $userTrackingId;
         $this->notifications = $notificationConfig;
@@ -89,15 +104,17 @@ class SessionSpecification implements JsonSerializable
         $this->sdkConfig = $sdkConfig;
         $this->requiredDocuments = $requiredDocuments;
         $this->blockBiometricConsent = $blockBiometricConsent;
+        $this->ibvOptions = $ibvOptions;
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return Json::withoutNullValues([
+        return (object) Json::withoutNullValues([
             'client_session_token_ttl' => $this->getClientSessionTokenTtl(),
+            'session_deadline' => $this->getSessionDeadline(),
             'resources_ttl' => $this->getResourcesTtl(),
             'user_tracking_id' => $this->getUserTrackingId(),
             'notifications' => $this->getNotifications(),
@@ -106,6 +123,7 @@ class SessionSpecification implements JsonSerializable
             'sdk_config' => $this->getSdkConfig(),
             'required_documents' => $this->getRequiredDocuments(),
             'block_biometric_consent' => $this->getBlockBiometricConsent(),
+            'ibv_options' => $this->getIbvOptions(),
         ]);
     }
 
@@ -115,6 +133,14 @@ class SessionSpecification implements JsonSerializable
     public function getClientSessionTokenTtl(): ?int
     {
         return $this->clientSessionTokenTtl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSessionDeadline(): ?string
+    {
+        return $this->sessionDeadline;
     }
 
     /**
@@ -181,5 +207,16 @@ class SessionSpecification implements JsonSerializable
     public function getBlockBiometricConsent(): ?bool
     {
         return $this->blockBiometricConsent;
+    }
+
+    /**
+     * The options that define if a session will be required to be performed
+     * using In-Branch Verification
+     *
+     * @return IbvOptions|null
+     */
+    public function getIbvOptions(): ?IbvOptions
+    {
+        return $this->ibvOptions;
     }
 }

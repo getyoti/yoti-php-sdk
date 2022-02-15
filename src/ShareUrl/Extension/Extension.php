@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Extension;
 
+use stdClass;
 use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
@@ -37,11 +38,11 @@ class Extension implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'type' => $this->type,
             'content' => $this->content,
         ];

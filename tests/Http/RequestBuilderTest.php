@@ -123,6 +123,22 @@ class RequestBuilderTest extends TestCase
 
     /**
      * @covers ::build
+     * @covers ::withPut
+     */
+    public function testWithPut()
+    {
+        $request = (new RequestBuilder())
+            ->withBaseUrl(self::SOME_BASE_URL)
+            ->withPemFilePath(TestData::PEM_FILE)
+            ->withPut()
+            ->build();
+
+        $message = $request->getMessage();
+        $this->assertEquals('PUT', $message->getMethod());
+    }
+
+    /**
+     * @covers ::build
      * @covers ::withGet
      */
     public function testWithGet()

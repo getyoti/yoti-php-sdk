@@ -73,7 +73,7 @@ class AddressTest extends TestCase
     {
         $amlAddress = new Address($this->countryMock, self::SOME_POSTCODE);
 
-        $expectedData = [
+        $expectedData = (object)[
             'post_code' => self::SOME_POSTCODE,
             'country' => $this->countryMock,
         ];
