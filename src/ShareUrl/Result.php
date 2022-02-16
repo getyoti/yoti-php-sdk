@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl;
 
+use Psr\Http\Message\ResponseInterface;
 use Yoti\Exception\ShareUrlException;
 use Yoti\Util\Validation;
 
@@ -26,24 +27,24 @@ class Result
      * @param array<string, string> $result
      * @throws ShareUrlException
      */
-    public function __construct(array $result)
+    public function __construct(array $result, ResponseInterface $response)
     {
-        $this->shareUrl = $this->getResultValue($result, 'qrcode');
-        $this->refId = $this->getResultValue($result, 'ref_id');
+        $this->shareUrl = $this->getResultValue($result, 'qrcode', $response);
+        $this->refId = $this->getResultValue($result, 'ref_id', $response);
     }
 
     /**
      * @param array<string, string> $result
      * @param string $key
-     *
+     * @param ResponseInterface $response
      * @return string
      *
      * @throws ShareUrlException
      */
-    private function getResultValue(array $result, string $key): string
+    private function getResultValue(array $result, string $key, ResponseInterface $response): string
     {
         if (!isset($result[$key])) {
-            throw new ShareUrlException("JSON result does not contain '{$key}'");
+            throw new ShareUrlException("JSON result does not contain '{$key}'", $response);
         }
         Validation::isString($result[$key], $key);
         return $result[$key];

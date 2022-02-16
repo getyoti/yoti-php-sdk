@@ -65,6 +65,6 @@ class Service
             throw new ShareUrlException("Server responded with {$httpCode}", $response);
         }
 
-        return new Result(Json::decode((string) $response->getBody()));
+        return new Result(Json::decode((string)$response->getBody()), $response);
     }
 }

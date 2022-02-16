@@ -65,7 +65,7 @@ class Service
         $this->validateAmlResult($response);
 
         // Set and return result
-        return new Result(Json::decode((string)$response->getBody()));
+        return new Result(Json::decode((string)$response->getBody()), $response);
     }
 
     /**
