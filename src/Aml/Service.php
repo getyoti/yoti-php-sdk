@@ -21,19 +21,19 @@ class Service
     private $sdkId;
 
     /**
-     * @var \Yoti\Util\PemFile
+     * @var PemFile
      */
     private $pemFile;
 
     /**
-     * @var \Yoti\Util\Config
+     * @var Config
      */
     private $config;
 
     /**
      * @param string $sdkId
-     * @param \Yoti\Util\PemFile $pemFile
-     * @param \Yoti\Util\Config $config
+     * @param PemFile $pemFile
+     * @param Config $config
      */
     public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
@@ -43,11 +43,11 @@ class Service
     }
 
     /**
-     * @param \Yoti\Aml\Profile $amlProfile
+     * @param Profile $amlProfile
      *
-     * @return \Yoti\Aml\Result
+     * @return Result
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws AmlException
      */
     public function performCheck(Profile $amlProfile): Result
     {
@@ -65,15 +65,15 @@ class Service
         $this->validateAmlResult($response);
 
         // Set and return result
-        return new Result(Json::decode((string) $response->getBody()));
+        return new Result(Json::decode((string)$response->getBody()), $response);
     }
 
     /**
      * Handle request result.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseInterface $response
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws AmlException
      */
     private function validateAmlResult(ResponseInterface $response): void
     {
@@ -84,13 +84,13 @@ class Service
             return;
         }
 
-        throw new AmlException($this->getErrorMessage($response));
+        throw new AmlException($this->getErrorMessage($response), $response);
     }
 
     /**
      * Get error message from the response.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return string
      */
@@ -106,9 +106,9 @@ class Service
             return $statusCodeMessage;
         }
 
-        $jsonData = Json::decode((string) $response->getBody());
+        $jsonData = Json::decode((string)$response->getBody());
 
-        $errorCode = isset($jsonData['code']) ? $jsonData['code'] : 'Error';
+        $errorCode = $jsonData['code'] ?? 'Error';
 
         // Throw the error message that's included in the response.
         if (isset($jsonData['errors'][0]['property']) && isset($jsonData['errors'][0]['message'])) {

@@ -7,6 +7,9 @@ namespace Yoti;
 use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Aml\Service as AmlService;
+use Yoti\Exception\ActivityDetailsException;
+use Yoti\Exception\PemFileException;
+use Yoti\Exception\ReceiptException;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Service as ProfileService;
 use Yoti\ShareUrl\DynamicScenario;
@@ -26,17 +29,17 @@ use Yoti\Util\Validation;
 class YotiClient
 {
     /**
-     * @var \Yoti\Aml\Service
+     * @var AmlService
      */
     private $amlService;
 
     /**
-     * @var \Yoti\Profile\Service
+     * @var ProfileService
      */
     private $profileService;
 
     /**
-     * @var \Yoti\ShareUrl\Service
+     * @var ShareUrlService
      */
     private $shareUrlService;
 
@@ -50,7 +53,7 @@ class YotiClient
      * @param array<string, mixed> $options (optional)
      *   SDK configuration options - {@see \Yoti\Util\Config} for available options.
      *
-     * @throws \Yoti\Exception\PemFileException
+     * @throws PemFileException
      */
     public function __construct(
         string $sdkId,
@@ -87,12 +90,14 @@ class YotiClient
      *
      * @param string $encryptedConnectToken
      *
-     * @return \Yoti\Profile\ActivityDetails
+     * @return ActivityDetails
      *
-     * @throws \Yoti\Exception\ActivityDetailsException
-     * @throws \Yoti\Exception\ReceiptException
+     * @throws ActivityDetailsException
+     * @throws Exception\PemFileException
+     * @throws ReceiptException
      */
-    public function getActivityDetails($encryptedConnectToken): ActivityDetails
+
+    public function getActivityDetails(string $encryptedConnectToken): ActivityDetails
     {
         return $this->profileService->getActivityDetails($encryptedConnectToken);
     }
@@ -100,11 +105,11 @@ class YotiClient
     /**
      * Perform AML profile check.
      *
-     * @param \Yoti\Aml\Profile $amlProfile
+     * @param AmlProfile $amlProfile
      *
-     * @return \Yoti\Aml\Result
+     * @return AmlResult
      *
-     * @throws \Yoti\Exception\AmlException
+     * @throws Exception\AmlException
      */
     public function performAmlCheck(AmlProfile $amlProfile): AmlResult
     {
@@ -114,11 +119,11 @@ class YotiClient
     /**
      * Get Share URL for provided dynamic scenario.
      *
-     * @param \Yoti\ShareUrl\DynamicScenario $dynamicScenario
+     * @param DynamicScenario $dynamicScenario
      *
-     * @return \Yoti\ShareUrl\Result
+     * @return ShareUrlResult
      *
-     * @throws \Yoti\Exception\ShareUrlException
+     * @throws Exception\ShareUrlException
      */
     public function createShareUrl(DynamicScenario $dynamicScenario): ShareUrlResult
     {

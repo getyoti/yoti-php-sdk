@@ -380,7 +380,7 @@ class Service
 
         self::assertResponseIsSuccess($response);
 
-        $result = Json::decode((string)$response->getBody());
+        $result = Json::decode((string) $response->getBody());
 
         return new ContactProfileResponse($result);
     }

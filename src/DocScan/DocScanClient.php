@@ -15,6 +15,7 @@ use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
+use Yoti\Exception\PemFileException;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
 use Yoti\Util\Env;
@@ -47,7 +48,7 @@ class DocScanClient
      * @param array<string, mixed> $options (optional)
      *   SDK configuration options - {@see \Yoti\Util\Config} for available options.
      *
-     * @throws \Yoti\Exception\PemFileException
+     * @throws PemFileException
      */
     public function __construct(
         string $sdkId,
@@ -101,7 +102,6 @@ class DocScanClient
     {
         $this->docScanService->deleteSession($sessionId);
     }
-
 
     /**
      * Retrieves media related to a Yoti Doc Scan session based
