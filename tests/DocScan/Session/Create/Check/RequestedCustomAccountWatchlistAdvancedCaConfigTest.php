@@ -79,16 +79,18 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
         Assert::assertEquals(self::SOME_API_KEY, $result->getApiKey());
         Assert::assertEquals(self::SOME_CLIENT_REF, $result->getClientRef());
         Assert::assertEquals(self::SOME_MONITORING, $result->getMonitoring());
-        Assert::assertEquals(self::SOME_TAGS, $result->getTags());
-
-        $encodedProfileSource = json_encode($this->profileSource);
-        $encodedMatchingStrategy = json_encode($this->exactMatchingStrategy);
+        Assert::assertEquals((object)self::SOME_TAGS, $result->getTags());
 
         $expected = [
             'remove_deceased' => true,
             'share_url' => false,
             'sources' => $this->profileSource,
-            'matching_strategy' => $this->exactMatchingStrategy
+            'matching_strategy' => $this->exactMatchingStrategy,
+            'tags' => (object)self::SOME_TAGS,
+            'api_key' => self::SOME_API_KEY,
+            'monitoring' => self::SOME_MONITORING,
+            'client_ref' => self::SOME_CLIENT_REF,
+            'type' => 'WITH_CUSTOM_ACCOUNT'
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));

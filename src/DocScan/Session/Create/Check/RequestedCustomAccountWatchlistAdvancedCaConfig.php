@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Check;
 
+use stdClass;
+use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy;
 use Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources;
 use Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig;
@@ -21,7 +23,7 @@ class RequestedCustomAccountWatchlistAdvancedCaConfig extends RequestedWatchlist
     private $monitoring;
 
     /**
-     * @var string[]
+     * @var stdClass
      */
     private $tags;
 
@@ -48,12 +50,12 @@ class RequestedCustomAccountWatchlistAdvancedCaConfig extends RequestedWatchlist
         RequestedCaMatchingStrategy $matchingStrategy,
         string $apiKey,
         bool $monitoring,
-        array $tags,
-        string $clientRef
+        string $clientRef,
+        ?array $tags
     ) {
         $this->apiKey = $apiKey;
         $this->monitoring = $monitoring;
-        $this->tags = $tags;
+        $this->tags = !is_null($tags) ? (object)$tags : new stdClass();
         $this->clientRef = $clientRef;
 
         parent::__construct($removeDeceased, $shareUrl, $sources, $matchingStrategy);
@@ -76,9 +78,9 @@ class RequestedCustomAccountWatchlistAdvancedCaConfig extends RequestedWatchlist
     }
 
     /**
-     * @return string[]
+     * @return stdClass
      */
-    public function getTags(): array
+    public function getTags(): stdClass
     {
         return $this->tags;
     }
@@ -89,5 +91,27 @@ class RequestedCustomAccountWatchlistAdvancedCaConfig extends RequestedWatchlist
     public function getClientRef(): string
     {
         return $this->clientRef;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return Constants::WITH_CUSTOM_ACCOUNT;
+    }
+
+    /**
+     * @return stdClass
+     */
+    public function jsonSerialize(): stdClass
+    {
+        $json = parent::jsonSerialize();
+        $json->api_key = $this->getApiKey();
+        $json->monitoring = $this->getMonitoring();
+        $json->tags = $this->getTags();
+        $json->client_ref = $this->getClientRef();
+
+        return $json;
     }
 }
