@@ -12,6 +12,7 @@ class TestData
     public const PEM_FILE = __DIR__ . '/sample-data/yw-access-security.pem';
     public const INVALID_PEM_FILE = __DIR__ . '/sample-data/invalid.pem';
     public const DUMMY_SELFIE_FILE = __DIR__ . '/sample-data/dummy-avatar.png';
+    public const DUMMY_PDF_FILE = __DIR__ . '/sample-data/barcapdf.pdf';
     public const AML_PRIVATE_KEY = __DIR__ . '/sample-data/aml-check-private-key.pem';
     public const AML_PUBLIC_KEY = __DIR__ . '/sample-data/aml-check-public-key.pem';
     public const AML_CHECK_RESULT_JSON = __DIR__ . '/sample-data/aml-check-result.json';

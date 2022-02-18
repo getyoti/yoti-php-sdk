@@ -18,7 +18,9 @@ use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
+use Yoti\Exception\PemFileException;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -978,7 +980,7 @@ class ServiceTest extends TestCase
     /**
      * @test
      * @covers ::__construct
-     * @covers ::uploadFaceCaptureImage
+     * @covers ::putIbvInstructions
      * @covers ::assertResponseIsSuccess
      */
     public function putIbvInstructionsShouldThrowExceptionOnFailedCall()
@@ -1020,6 +1022,375 @@ class ServiceTest extends TestCase
         $docScanService->putIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID,
             $instructionsMock
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getIbvInstructions
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getIbvInstructionsShouldNotThrowExceptionOnSuccessfulCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $docScanService->getIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getIbvInstructions
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getIbvInstructionsShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->getIbvInstructions(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getIbvInstructionsPdf
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getIbvInstructionsPdfShouldReturnMediaObjectOnSuccessfulCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/pdf.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                $this->createResponse(
+                    200,
+                    file_get_contents(TestData::DUMMY_PDF_FILE),
+                    [
+                        'Content-Type' => [
+                            'application/pdf'
+                        ]
+                    ]
+                )
+            );
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->assertInstanceOf(
+            Media::class,
+            $docScanService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getIbvInstructionsPdf
+     * @covers ::assertResponseIsSuccess
+     */
+    public function getIbvInstructionsPdfShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/pdf.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                $this->createResponse(
+                    404
+                )
+            );
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::fetchInstructionsContactProfile
+     * @covers ::assertResponseIsSuccess
+     * @throws DocScanException|PemFileException
+     */
+    public function fetchInstructionsContactProfileShouldReturnContactProfileOnSuccessfulCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/contact-profile.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200, json_encode((object)[])));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->assertInstanceOf(
+            ContactProfileResponse::class,
+            $docScanService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::fetchInstructionsContactProfile
+     * @covers ::assertResponseIsSuccess
+     */
+    public function fetchInstructionsContactProfileShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/contact-profile.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('GET', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::triggerIbvEmailNotification
+     * @covers ::assertResponseIsSuccess
+     */
+    public function triggerIbvEmailNotificationShouldNotThrowExceptionOnSuccessfulCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/email.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(200));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $docScanService->triggerIbvEmailNotification(
+            TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::triggerIbvEmailNotification
+     * @covers ::assertResponseIsSuccess
+     */
+    public function triggerIbvEmailNotificationShouldThrowExceptionOnFailedCall()
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/instructions/email.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string)$requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config(
+                [
+                    Config::HTTP_CLIENT => $httpClient,
+                ]
+            )
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage("Server responded with 404");
+
+        $docScanService->triggerIbvEmailNotification(
+            TestData::DOC_SCAN_SESSION_ID
         );
     }
 }

@@ -15,6 +15,8 @@ use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
+use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
@@ -303,6 +305,90 @@ class Service
             ->withEndpoint(sprintf('/sessions/%s/instructions', $sessionId))
             ->withPut()
             ->withPayload(Payload::fromJsonData($instructions))
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return InstructionsResponse
+     * @throws DocScanException
+     */
+    public function getIbvInstructions(string $sessionId): InstructionsResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new InstructionsResponse($result);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return Media
+     * @throws DocScanException
+     */
+    public function getIbvInstructionsPdf(string $sessionId): Media
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/pdf', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $content = (string)$response->getBody();
+        $mimeType = $response->getHeader("Content-Type")[0] ?? '';
+
+        return new Media($mimeType, $content);
+    }
+
+    /**
+     * @param string $sessionId
+     * @return ContactProfileResponse
+     * @throws DocScanException
+     */
+    public function fetchInstructionsContactProfile(string $sessionId): ContactProfileResponse
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/contact-profile', $sessionId))
+            ->withGet()
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $result = Json::decode((string)$response->getBody());
+
+        return new ContactProfileResponse($result);
+    }
+
+    /**
+     * @param string $sessionId
+     * @throws DocScanException
+     */
+    public function triggerIbvEmailNotification(string $sessionId): void
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withPemFile($this->pemFile)
+            ->withEndpoint(sprintf('/sessions/%s/instructions/email', $sessionId))
+            ->withPost()
             ->build()
             ->execute();
 
