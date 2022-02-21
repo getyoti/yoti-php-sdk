@@ -24,6 +24,7 @@ class RequestedYotiAccountWatchlistAdvancedCaConfigTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withShareUrl
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::build
+     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
      */
     public function builderShouldBuildWithCorrectProperties(): void
     {
@@ -42,5 +43,6 @@ class RequestedYotiAccountWatchlistAdvancedCaConfigTest extends TestCase
         Assert::assertEquals(self::SOME_SHARE_URL, $result->getShareUrl());
         Assert::assertEquals($profileSource, $result->getSources());
         Assert::assertEquals($exactMatchingStrategy, $result->getMatchingStrategy());
+        Assert::assertEquals('WITH_YOTI_ACCOUNT', $result->getType());
     }
 }

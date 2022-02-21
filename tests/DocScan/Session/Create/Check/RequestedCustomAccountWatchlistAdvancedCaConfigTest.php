@@ -52,11 +52,13 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getRemoveDeceased
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getTags
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getMonitoring
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getClientRef
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getApiKey
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::__construct
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getType
      */
     public function builderShouldBuildWithCorrectProperties()
     {
@@ -80,6 +82,7 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
         Assert::assertEquals(self::SOME_CLIENT_REF, $result->getClientRef());
         Assert::assertEquals(self::SOME_MONITORING, $result->getMonitoring());
         Assert::assertEquals((object)self::SOME_TAGS, $result->getTags());
+        Assert::assertEquals('WITH_CUSTOM_ACCOUNT', $result->getType());
 
         $expected = [
             'remove_deceased' => true,
