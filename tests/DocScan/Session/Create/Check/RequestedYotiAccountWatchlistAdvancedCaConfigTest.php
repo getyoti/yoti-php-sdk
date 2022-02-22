@@ -25,6 +25,7 @@ class RequestedYotiAccountWatchlistAdvancedCaConfigTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::build
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfig::getType
      */
     public function builderShouldBuildWithCorrectProperties(): void
     {

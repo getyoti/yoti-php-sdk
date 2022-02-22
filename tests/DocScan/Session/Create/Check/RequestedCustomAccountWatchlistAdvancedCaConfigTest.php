@@ -52,6 +52,7 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getRemoveDeceased
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::jsonSerialize
      * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getTags
      * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getMonitoring
