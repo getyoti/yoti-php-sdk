@@ -54,7 +54,6 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
         $this->matchingStrategy = $matchingStrategy;
     }
 
-
     /**
      * @return bool
      */
