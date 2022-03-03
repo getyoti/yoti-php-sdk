@@ -18,6 +18,7 @@ use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistAdvancedCaCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
 use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
@@ -56,6 +57,7 @@ class HomeController extends BaseController
         $exactMatchingStrategy = (new RequestedExactMatchingStrategyBuilder())
             ->build();
 
+        //CustomAccountConfig
         $customConfig = (new RequestedCustomAccountWatchlistAdvancedCaConfigBuilder())
             ->withMatchingStrategy($exactMatchingStrategy)
             ->withSources($searchProfileSources)
@@ -65,6 +67,14 @@ class HomeController extends BaseController
             ->withClientRef("string")
             ->withMonitoring(true)
             ->withTags(['tag1'])
+            ->build();
+
+        //YotiAccountConfig
+        $yotiConfig = (new RequestedYotiAccountWatchlistAdvancedCaConfigBuilder())
+            ->withMatchingStrategy($exactMatchingStrategy)
+            ->withSources($typeListSources)
+            ->withShareUrl(false)
+            ->withRemoveDeceased(true)
             ->build();
 
 
