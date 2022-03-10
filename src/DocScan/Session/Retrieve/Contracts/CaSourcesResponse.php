@@ -9,7 +9,7 @@ abstract class CaSourcesResponse
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @return string

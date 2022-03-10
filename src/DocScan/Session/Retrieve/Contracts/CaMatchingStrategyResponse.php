@@ -9,7 +9,7 @@ abstract class CaMatchingStrategyResponse
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @return string

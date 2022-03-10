@@ -14,6 +14,14 @@ class WatchlistScreeningSearchConfigResponse extends WatchlistSearchConfigRespon
     private $categories;
 
     /**
+     * @param array<string, array> $searchConfig
+     */
+    public function __construct(array $searchConfig)
+    {
+        $this->categories = $searchConfig['categories'];
+    }
+
+    /**
      * @return string[]
      */
     public function getCategories(): array

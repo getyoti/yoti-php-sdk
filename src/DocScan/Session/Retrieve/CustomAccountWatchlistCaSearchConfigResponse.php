@@ -29,6 +29,18 @@ class CustomAccountWatchlistCaSearchConfigResponse extends WatchlistAdvancedCaSe
     private $clientRef;
 
     /**
+     * @param array<string, mixed> $searchConfig
+     */
+    public function __construct(array $searchConfig)
+    {
+        parent::__construct($searchConfig);
+        $this->apiKey = $searchConfig['api_key'];
+        $this->monitoring = $searchConfig['monitoring'];
+        $this->clientRef = $searchConfig['client_ref'];
+        $this->tags = json_decode($searchConfig['tags'], true);
+    }
+
+    /**
      * @return string
      */
     public function getApiKey(): string
