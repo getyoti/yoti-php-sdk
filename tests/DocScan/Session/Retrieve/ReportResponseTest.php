@@ -70,6 +70,7 @@ class ReportResponseTest extends TestCase
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getTotalHits
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getRawResults
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getSearchConfig
+     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getAssociatedCountryCodes
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::__construct
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getSources
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getMatchingStrategy
@@ -248,6 +249,7 @@ class ReportResponseTest extends TestCase
      * @test
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistScreeningSearchConfigResponse::__construct
      * @covers \Yoti\DocScan\Session\Retrieve\WatchlistScreeningSearchConfigResponse::getCategories
+     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::setSearchConfig
      */
     public function shouldBuildWithWatchlistScreening()
     {
