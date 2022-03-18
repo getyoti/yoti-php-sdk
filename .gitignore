@@ -6,6 +6,7 @@ composer.lock
 phpcs.xml
 
 .phpunit.result.cache
+phpunit.xml.bak
 
 .php_cs.cache
 

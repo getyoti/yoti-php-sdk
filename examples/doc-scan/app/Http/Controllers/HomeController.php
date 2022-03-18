@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Yoti\DocScan\DocScanClient;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder;
+use Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder;
+use Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
 use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
@@ -29,10 +32,51 @@ class HomeController extends BaseController
 {
     public function show(Request $request, DocScanClient $client)
     {
+        //WatchScreening Config
         $watchScreeningConfig = (new RequestedWatchlistScreeningConfigBuilder())
             ->withSanctionsCategory()
             ->withAdverseMediaCategory()
             ->build();
+
+        //Search Profiles Sources
+        $searchProfileSources = (new RequestedSearchProfileSourcesBuilder())
+            ->withSearchProfile("5c62a621-ed6a-4f07-89a1-a941c1733b7c")
+            ->build();
+
+        //TypeListSources
+        $typeListSources = (new RequestedTypeListSourcesBuilder())
+            ->withTypes(['type1', 'type2'])
+            ->build();
+
+        //FuzzyMatchingStrategy
+        $fuzzyMatchingStrategy = (new RequestedFuzzyMatchingStrategyBuilder())
+            ->withFuzziness(0.5)
+            ->build();
+
+        //ExactMatchingStrategy
+        $exactMatchingStrategy = (new RequestedExactMatchingStrategyBuilder())
+            ->build();
+
+        //CustomAccountConfig
+        $customConfig = (new RequestedCustomAccountWatchlistAdvancedCaConfigBuilder())
+            ->withMatchingStrategy($exactMatchingStrategy)
+            ->withSources($searchProfileSources)
+            ->withShareUrl(false)
+            ->withRemoveDeceased(true)
+            ->withApiKey('qiKTHG7Mgqj31mK2d21F7QPpaVBp9zKc')
+            ->withClientRef("string")
+            ->withMonitoring(true)
+            ->withTags(['tag1'])
+            ->build();
+
+        //YotiAccountConfig
+        $yotiConfig = (new RequestedYotiAccountWatchlistAdvancedCaConfigBuilder())
+            ->withMatchingStrategy($exactMatchingStrategy)
+            ->withSources($typeListSources)
+            ->withShareUrl(false)
+            ->withRemoveDeceased(true)
+            ->build();
+
 
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
@@ -45,6 +89,11 @@ class HomeController extends BaseController
             ->withRequestedCheck(
                 (new RequestedLivenessCheckBuilder())
                     ->forZoomLiveness()
+                    ->build()
+            )
+            ->withRequestedCheck(
+                (new RequestedWatchlistAdvancedCaCheckBuilder())
+                    ->withConfig($customConfig)
                     ->build()
             )
             ->withRequestedCheck(
@@ -78,17 +127,17 @@ class HomeController extends BaseController
             )
             ->withSdkConfig(
                 (new SdkConfigBuilder())
-                  ->withAllowsCameraAndUpload()
-                  ->withPrimaryColour('#2d9fff')
-                  ->withSecondaryColour('#FFFFFF')
-                  ->withFontColour('#FFFFFF')
-                  ->withLocale('en-GB')
-                  ->withPresetIssuingCountry('GBR')
-                  ->withSuccessUrl(config('app.url') . '/success')
-                  ->withErrorUrl(config('app.url') . '/error')
-                  ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
-                  ->build()
-              )
+                    ->withAllowsCameraAndUpload()
+                    ->withPrimaryColour('#2d9fff')
+                    ->withSecondaryColour('#FFFFFF')
+                    ->withFontColour('#FFFFFF')
+                    ->withLocale('en-GB')
+                    ->withPresetIssuingCountry('GBR')
+                    ->withSuccessUrl(config('app.url') . '/success')
+                    ->withErrorUrl(config('app.url') . '/error')
+                    ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
+                    ->build()
+            )
             ->withRequiredDocument(
                 (new RequiredIdDocumentBuilder())
                     ->withFilter(
@@ -118,9 +167,9 @@ class HomeController extends BaseController
 
         return view('home', [
             'iframeUrl' => config('yoti')['doc.scan.iframe.url'] . '?' . http_build_query([
-                'sessionID' => $session->getSessionId(),
-                'sessionToken' => $session->getClientSessionToken(),
-            ])
+                    'sessionID' => $session->getSessionId(),
+                    'sessionToken' => $session->getClientSessionToken(),
+                ])
         ]);
     }
 }
