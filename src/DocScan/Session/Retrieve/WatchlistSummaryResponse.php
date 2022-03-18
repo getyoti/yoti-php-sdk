@@ -53,10 +53,13 @@ class WatchlistSummaryResponse
      */
     private function setSearchConfig(array $searchConfig): void
     {
-        if ($searchConfig['type'] == Constants::WITH_YOTI_ACCOUNT) {
-            $this->searchConfig = new YotiAccountWatchlistCaSearchConfigResponse($searchConfig);
-        } elseif ($searchConfig['type'] == Constants::WITH_CUSTOM_ACCOUNT) {
-            $this->searchConfig = new CustomAccountWatchlistCaSearchConfigResponse($searchConfig);
+        if (isset($searchConfig['type'])) {
+            if ($searchConfig['type'] == Constants::WITH_YOTI_ACCOUNT) {
+                $this->searchConfig = new YotiAccountWatchlistCaSearchConfigResponse($searchConfig);
+            }
+            if ($searchConfig['type'] == Constants::WITH_CUSTOM_ACCOUNT) {
+                $this->searchConfig = new CustomAccountWatchlistCaSearchConfigResponse($searchConfig);
+            }
         } else {
             $this->searchConfig = new WatchlistScreeningSearchConfigResponse($searchConfig);
         }

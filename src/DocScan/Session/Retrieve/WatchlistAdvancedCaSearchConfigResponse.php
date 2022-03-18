@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yoti\DocScan\Session\Retrieve\Contracts;
+namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Session\Retrieve\Contracts\CaMatchingStrategyResponse;
+use Yoti\DocScan\Session\Retrieve\Contracts\CaSourcesResponse;
+use Yoti\DocScan\Session\Retrieve\Contracts\WatchlistSearchConfigResponse;
 use Yoti\DocScan\Session\Retrieve\Matching\ExactMatchingStrategyResponse;
+use Yoti\DocScan\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse;
 use Yoti\DocScan\Session\Retrieve\Sources\SearchProfileSourcesResponse;
 use Yoti\DocScan\Session\Retrieve\Sources\TypeListSourcesResponse;
 
@@ -55,10 +59,10 @@ class WatchlistAdvancedCaSearchConfigResponse extends WatchlistSearchConfigRespo
     private function setSources(array $searchConfig): void
     {
         if ($searchConfig['sources']['type'] == Constants::PROFILE) {
-            $this->sources = new SearchProfileSourcesResponse($searchConfig['search_profile']);
+            $this->sources = new SearchProfileSourcesResponse($searchConfig['sources']['search_profile']);
         }
         if ($searchConfig['sources']['type'] == Constants::TYPE_LIST) {
-            $this->sources = new TypeListSourcesResponse($searchConfig['types']);
+            $this->sources = new TypeListSourcesResponse($searchConfig['sources']['types']);
         }
     }
 
@@ -73,7 +77,7 @@ class WatchlistAdvancedCaSearchConfigResponse extends WatchlistSearchConfigRespo
             );
         }
         if ($searchConfig['matching_strategy']['type'] == Constants::FUZZY) {
-            $this->matchingStrategy = new ExactMatchingStrategyResponse(
+            $this->matchingStrategy = new FuzzyMatchingStrategyResponse(
                 $searchConfig['matching_strategy']['fuzziness']
             );
         }
