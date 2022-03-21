@@ -17,8 +17,14 @@ class ReportResponse
     private $breakdown = [];
 
     /**
+     * @var WatchlistSummaryResponse|null
+     */
+    private $watchListSummary;
+
+    /**
      * ReportResponse constructor.
      * @param array<string, mixed> $reportData
+     * @throws \Yoti\Exception\DateTimeException
      */
     public function __construct(array $reportData)
     {
@@ -30,6 +36,10 @@ class ReportResponse
             foreach ($reportData['breakdown'] as $breakdown) {
                 $this->breakdown[] = new BreakdownResponse($breakdown);
             }
+        }
+
+        if (isset($reportData['watchlist_summary'])) {
+            $this->watchListSummary = new WatchlistSummaryResponse($reportData['watchlist_summary']);
         }
     }
 
@@ -47,5 +57,13 @@ class ReportResponse
     public function getBreakdown(): array
     {
         return $this->breakdown;
+    }
+
+    /**
+     * @return WatchlistSummaryResponse|null
+     */
+    public function getWatchlistSummary(): ?WatchlistSummaryResponse
+    {
+        return $this->watchListSummary;
     }
 }

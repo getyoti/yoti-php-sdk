@@ -78,4 +78,23 @@ class IbvOptionsBuilderTest extends TestCase
 
         $this->assertEquals(self::SOME_GUIDANCE_URL, $result->getGuidanceUrl());
     }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\IbvOptions::jsonSerialize
+     */
+    public function shouldSerializeWithCorrectProperties(): void
+    {
+        $result = (new IbvOptionsBuilder())
+            ->withIbvNotAllowed()
+            ->withGuidanceUrl(self::SOME_GUIDANCE_URL)
+            ->build();
+
+        $expected = [
+            'support' => 'NOT_ALLOWED',
+            'guidance_url' => self::SOME_GUIDANCE_URL,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
 }
