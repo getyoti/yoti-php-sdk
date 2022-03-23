@@ -43,7 +43,7 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigBuilder extends RequestedWa
      * @param bool $monitoring
      * @return $this
      */
-    public function withMonitoring(bool $monitoring): RequestedCustomAccountWatchlistAdvancedCaConfigBuilder
+    public function withMonitoring(bool $monitoring = false): RequestedCustomAccountWatchlistAdvancedCaConfigBuilder
     {
         $this->monitoring = $monitoring;
 
@@ -84,8 +84,8 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigBuilder extends RequestedWa
             $this->matchingStrategy,
             $this->apiKey,
             $this->monitoring,
-            $this->tags,
-            $this->clientRef
+            $this->clientRef,
+            $this->tags
         );
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Yoti\DocScan\Session\Create;
 
-class IbvOptions
+use JsonSerializable;
+use Yoti\Util\Json;
+
+class IbvOptions implements JsonSerializable
 {
     /**
      * @var string
@@ -38,5 +41,17 @@ class IbvOptions
     public function getGuidanceUrl(): ?string
     {
         return $this->guidanceUrl;
+    }
+
+
+    /**
+     * @return \stdClass
+     */
+    public function jsonSerialize(): \stdClass
+    {
+        return (object)Json::withoutNullValues([
+            'support' => $this->getSupport(),
+            'guidance_url' => $this->getGuidanceUrl(),
+        ]);
     }
 }

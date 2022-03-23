@@ -31,6 +31,18 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
      */
     private $matchingStrategy;
 
+    /**
+     * @return string
+     */
+    abstract public function getType(): string;
+
+    /**
+     * @param bool $removeDeceased
+     * @param bool $shareUrl
+     * @param RequestedCaSources $sources
+     * @param RequestedCaMatchingStrategy $matchingStrategy
+     */
+
     public function __construct(
         bool $removeDeceased,
         bool $shareUrl,
@@ -85,6 +97,7 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
             'share_url' => $this->getShareUrl(),
             'sources' => $this->getSources(),
             'matching_strategy' => $this->getMatchingStrategy(),
+            'type' => $this->getType(),
         ];
     }
 }
