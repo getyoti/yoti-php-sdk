@@ -32,6 +32,11 @@ class DynamicScenario implements \JsonSerializable
     private $extensions;
 
     /**
+     * @var object|null
+     */
+    private $subject;
+
+    /**
      * @param string $callbackEndpoint
      *   The device's callback endpoint. Must be a URL relative to the Application
      *   Domain specified in your Yoti Hub.
@@ -39,14 +44,21 @@ class DynamicScenario implements \JsonSerializable
      *   The customisable DynamicPolicy to use in the share.
      * @param \Yoti\ShareUrl\Extension\Extension[] $extensions
      *   List of Extension to be activated for the application.
+     * @param object $subject
+     *   Set of data required to represent an identity profile
      */
-    public function __construct(string $callbackEndpoint, DynamicPolicy $dynamicPolicy, array $extensions)
-    {
+    public function __construct(
+        string $callbackEndpoint,
+        DynamicPolicy $dynamicPolicy,
+        array $extensions,
+        $subject = null
+    ) {
         $this->callbackEndpoint = $callbackEndpoint;
         $this->dynamicPolicy = $dynamicPolicy;
 
         Validation::isArrayOfType($extensions, [Extension::class], 'extensions');
         $this->extensions = $extensions;
+        $this->subject = $subject;
     }
 
     /**
@@ -60,6 +72,7 @@ class DynamicScenario implements \JsonSerializable
             'callback_endpoint' => $this->callbackEndpoint,
             'policy' => $this->dynamicPolicy,
             'extensions' => $this->extensions,
+            'subject' => $this->subject,
         ];
     }
 
@@ -69,5 +82,13 @@ class DynamicScenario implements \JsonSerializable
     public function __toString(): string
     {
         return Json::encode($this);
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }

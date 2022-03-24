@@ -37,6 +37,11 @@ class DynamicPolicyBuilder
     private $wantedRememberMe = false;
 
     /**
+     * @var object|null
+     */
+    private $identityProfileRequirements = null;
+
+    /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute $wantedAttribute
      *
      * @return $this
@@ -378,14 +383,27 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * @return \Yoti\ShareUrl\Policy\DynamicPolicy
+     * Use an Identity Profile Requirement object for the share
+     *
+     * @param object $identityProfileRequirements
+     * @return $this
+     */
+    public function withIdentityProfileRequirements($identityProfileRequirements): self
+    {
+        $this->identityProfileRequirements = $identityProfileRequirements;
+        return $this;
+    }
+
+    /**
+     * @return DynamicPolicy
      */
     public function build(): DynamicPolicy
     {
         return new DynamicPolicy(
             array_values($this->wantedAttributes),
             array_values($this->wantedAuthTypes),
-            $this->wantedRememberMe
+            $this->wantedRememberMe,
+            $this->identityProfileRequirements
         );
     }
 }
