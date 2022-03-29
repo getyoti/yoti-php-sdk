@@ -23,12 +23,18 @@ class DynamicScenarioBuilderTest extends TestCase
      * @covers ::withCallbackEndpoint
      * @covers ::withPolicy
      * @covers ::withExtension
+     * @covers ::withSubject
      * @covers \Yoti\ShareUrl\DynamicScenario::__construct
      * @covers \Yoti\ShareUrl\DynamicScenario::__toString
      * @covers \Yoti\ShareUrl\DynamicScenario::jsonSerialize
+     * @covers \Yoti\ShareUrl\DynamicScenario::getSubject
      */
     public function testBuild()
     {
+        $subjectSample = (object)[
+          'subject_id' => 'SOME_STRING'
+        ];
+
         $somePolicy = (new DynamicPolicyBuilder())
             ->withFullName()
             ->withGivenNames()
@@ -49,6 +55,7 @@ class DynamicScenarioBuilderTest extends TestCase
             ->withPolicy($somePolicy)
             ->withExtension($someExtension1)
             ->withExtension($someExtension2)
+            ->withSubject($subjectSample)
             ->build();
 
         $expectedJsonData = [
@@ -67,6 +74,7 @@ class DynamicScenarioBuilderTest extends TestCase
                 'wanted_auth_types' => [],
                 'wanted_remember_me' => false,
                 'wanted_remember_me_optional' => false,
+                'identity_profile_requirements' => null
             ],
             'extensions' => [
                 [
@@ -82,10 +90,12 @@ class DynamicScenarioBuilderTest extends TestCase
                     ],
                 ],
             ],
+            'subject' => $subjectSample
         ];
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($dynamicScenario));
         $this->assertEquals(json_encode($expectedJsonData), $dynamicScenario);
+        $this->assertEquals($subjectSample, $dynamicScenario->getSubject());
     }
 
     /**

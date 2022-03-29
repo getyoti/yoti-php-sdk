@@ -28,6 +28,11 @@ class DynamicScenarioBuilder
     private $extensions = [];
 
     /**
+     * @var object|null
+     */
+    private $subject = null;
+
+    /**
      * @param string $callbackEndpoint
      *
      * @return $this
@@ -61,10 +66,21 @@ class DynamicScenarioBuilder
     }
 
     /**
+     * @param object $subject
+     *
+     * @return $this
+     */
+    public function withSubject($subject): self
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
+    /**
      * @return \Yoti\ShareUrl\DynamicScenario
      */
     public function build(): DynamicScenario
     {
-        return new DynamicScenario($this->callbackEndpoint, $this->dynamicPolicy, $this->extensions);
+        return new DynamicScenario($this->callbackEndpoint, $this->dynamicPolicy, $this->extensions, $this->subject);
     }
 }
