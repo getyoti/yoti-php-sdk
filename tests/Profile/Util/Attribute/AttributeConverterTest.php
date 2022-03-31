@@ -10,6 +10,7 @@ use Yoti\Exception\DateTimeException;
 use Yoti\Media\Image;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
+use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -527,6 +528,24 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
         $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testIdentityProfileReportAttributeShouldBeAddedToProfile()
+    {
+        $json = file_get_contents(TestData::IDENTITY_PROFILE_ATTRIBUTE);
+
+        $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute([
+            'name' => UserProfile::ATTR_IDENTITY_PROFILE_REPORT,
+            'value' => $json,
+            'content_type' => self::CONTENT_TYPE_JSON,
+        ]);
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+
+        $this->assertEquals(json_decode($json, true), $attr->getValue());
     }
 
     /**

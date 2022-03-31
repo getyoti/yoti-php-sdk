@@ -20,6 +20,7 @@ class TestData
     public const YOTI_CONNECT_TOKEN_DECRYPTED = 'i79CctmY-22ad195c-d166-49a2-af16-8f356788c9dd' .
         '-be094d26-19b5-450d-afce-070101760f0b';
     public const MULTI_VALUE_ATTRIBUTE = __DIR__ . '/sample-data/attributes/multi-value.txt';
+    public const IDENTITY_PROFILE_ATTRIBUTE = __DIR__ . '/sample-data/attributes/identity-profile-report.json';
     public const EXTRA_DATA_CONTENT = __DIR__ . '/sample-data/extra-data-content.txt';
     public const THIRD_PARTY_ATTRIBUTE = __DIR__ . '/sample-data/attributes/third-party-attribute.txt';
     public const PEM_AUTH_KEY = __DIR__ . '/sample-data/pem-auth-key.txt';
