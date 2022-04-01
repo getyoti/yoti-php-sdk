@@ -74,6 +74,11 @@ class SessionSpecification implements JsonSerializable
     private $subject;
 
     /**
+     * @var object|null
+     */
+    private $identityProfileRequirements;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -86,6 +91,7 @@ class SessionSpecification implements JsonSerializable
      * @param bool|null $blockBiometricConsent
      * @param IbvOptions|null $ibvOptions
      * @param object|null $subject
+     * @param object|null $identityProfileRequirements
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -99,7 +105,8 @@ class SessionSpecification implements JsonSerializable
         array $requiredDocuments = [],
         ?bool $blockBiometricConsent = null,
         ?IbvOptions $ibvOptions = null,
-        $subject = null
+        $subject = null,
+        $identityProfileRequirements = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -113,6 +120,7 @@ class SessionSpecification implements JsonSerializable
         $this->blockBiometricConsent = $blockBiometricConsent;
         $this->ibvOptions = $ibvOptions;
         $this->subject = $subject;
+        $this->identityProfileRequirements = $identityProfileRequirements;
     }
 
     /**
@@ -133,6 +141,7 @@ class SessionSpecification implements JsonSerializable
             'block_biometric_consent' => $this->getBlockBiometricConsent(),
             'ibv_options' => $this->getIbvOptions(),
             'subject' => $this->getSubject(),
+            'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
         ]);
     }
 
@@ -235,5 +244,13 @@ class SessionSpecification implements JsonSerializable
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getIdentityProfileRequirements()
+    {
+        return $this->identityProfileRequirements;
     }
 }
