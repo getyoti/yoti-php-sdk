@@ -56,7 +56,7 @@ class DynamicPolicyBuilder
         }
 
         if ($wantedAttribute->getConstraints() !== null) {
-            $key .= '-' . md5(Json::encode($wantedAttribute->getConstraints()));
+            $key .= '-' . hash('sha256', Json::encode($wantedAttribute->getConstraints()));
         }
 
         $this->wantedAttributes[$key] = $wantedAttribute;
