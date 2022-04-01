@@ -73,6 +73,11 @@ class SessionSpecificationBuilder
     private $subject;
 
     /**
+     * @var object|null
+     */
+    private $identityProfileRequirements;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -226,6 +231,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the Identity Profile Requirements for the session
+     *
+     * @param object $identityProfileRequirements
+     *
+     * @return $this
+     */
+    public function withIdentityProfileRequirements($identityProfileRequirements): self
+    {
+        $this->identityProfileRequirements = $identityProfileRequirements;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -242,7 +260,8 @@ class SessionSpecificationBuilder
             $this->requiredDocuments,
             $this->blockBiometricConsent,
             $this->ibvOptions,
-            $this->subject
+            $this->subject,
+            $this->identityProfileRequirements
         );
     }
 }
