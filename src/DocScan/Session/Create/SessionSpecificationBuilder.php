@@ -68,6 +68,11 @@ class SessionSpecificationBuilder
     private $ibvOptions;
 
     /**
+     * @var object|null
+     */
+    private $subject;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -208,6 +213,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the Subject object for the session
+     *
+     * @param object $subject
+     *
+     * @return $this
+     */
+    public function withSubject($subject): self
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -223,7 +241,8 @@ class SessionSpecificationBuilder
             $this->sdkConfig,
             $this->requiredDocuments,
             $this->blockBiometricConsent,
-            $this->ibvOptions
+            $this->ibvOptions,
+            $this->subject
         );
     }
 }

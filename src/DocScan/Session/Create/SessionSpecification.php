@@ -69,6 +69,11 @@ class SessionSpecification implements JsonSerializable
     private $ibvOptions;
 
     /**
+     * @var object|null
+     */
+    private $subject;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -80,6 +85,7 @@ class SessionSpecification implements JsonSerializable
      * @param RequiredDocument[] $requiredDocuments
      * @param bool|null $blockBiometricConsent
      * @param IbvOptions|null $ibvOptions
+     * @param object|null $subject
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -92,7 +98,8 @@ class SessionSpecification implements JsonSerializable
         ?SdkConfig $sdkConfig,
         array $requiredDocuments = [],
         ?bool $blockBiometricConsent = null,
-        ?IbvOptions $ibvOptions = null
+        ?IbvOptions $ibvOptions = null,
+        $subject = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -105,6 +112,7 @@ class SessionSpecification implements JsonSerializable
         $this->requiredDocuments = $requiredDocuments;
         $this->blockBiometricConsent = $blockBiometricConsent;
         $this->ibvOptions = $ibvOptions;
+        $this->subject = $subject;
     }
 
     /**
@@ -124,6 +132,7 @@ class SessionSpecification implements JsonSerializable
             'required_documents' => $this->getRequiredDocuments(),
             'block_biometric_consent' => $this->getBlockBiometricConsent(),
             'ibv_options' => $this->getIbvOptions(),
+            'subject' => $this->getSubject(),
         ]);
     }
 
@@ -218,5 +227,13 @@ class SessionSpecification implements JsonSerializable
     public function getIbvOptions(): ?IbvOptions
     {
         return $this->ibvOptions;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }
