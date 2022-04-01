@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Profile\ActivityDetails;
@@ -12,8 +13,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\Profile\Service
@@ -41,7 +40,7 @@ class ServiceTest extends TestCase
                 $expectedAuthKey = file_get_contents(TestData::PEM_AUTH_KEY);
 
                 $this->assertEquals('GET', $requestMessage->getMethod());
-                $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
                 $this->assertEquals($expectedAuthKey, $requestMessage->getHeader('X-Yoti-Auth-Key')[0]);
                 return true;
             }))
@@ -107,8 +106,7 @@ class ServiceTest extends TestCase
      */
     public function testGetActivityDetailsFailure($statusCode)
     {
-        $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $this->expectException(\Yoti\Exception\base\YotiException::class);
 
         $profileService = $this->createProfileServiceWithResponse($statusCode);
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
@@ -193,7 +191,7 @@ class ServiceTest extends TestCase
     private function createResponse($statusCode, $body = '{}')
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for($body));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn($statusCode);
         return $response;
     }

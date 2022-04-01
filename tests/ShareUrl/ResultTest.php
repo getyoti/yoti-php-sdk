@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Service\ShareUrl;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Http\Message\ResponseInterface;
 use Yoti\ShareUrl\Result;
 use Yoti\Test\TestCase;
 
@@ -16,6 +18,16 @@ class ResultTest extends TestCase
     private const SOME_REF_ID = 'some-ref-id';
 
     /**
+     * @var mixed|MockObject|ResponseInterface
+     */
+    private $responseMock;
+
+    public function setup(): void
+    {
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+    }
+
+    /**
      * @covers ::__construct
      * @covers ::getResultValue
      * @covers ::getShareUrl
@@ -26,7 +38,7 @@ class ResultTest extends TestCase
         $result = new Result([
             'qrcode' => self::SOME_SHARE_URL,
             'ref_id' => self::SOME_REF_ID,
-        ]);
+        ], $this->responseMock);
 
         $this->assertEquals(self::SOME_SHARE_URL, $result->getShareUrl());
         $this->assertEquals(self::SOME_REF_ID, $result->getRefId());
@@ -43,7 +55,7 @@ class ResultTest extends TestCase
 
         new Result([
             'ref_id' => self::SOME_REF_ID,
-        ]);
+        ], $this->responseMock);
     }
 
     /**
@@ -57,7 +69,7 @@ class ResultTest extends TestCase
 
         new Result([
             'qrcode' => [self::SOME_SHARE_URL],
-        ]);
+        ], $this->responseMock);
     }
 
     /**
@@ -71,7 +83,7 @@ class ResultTest extends TestCase
 
         new Result([
             'qrcode' => self::SOME_SHARE_URL,
-        ]);
+        ], $this->responseMock);
     }
 
     /**
@@ -86,6 +98,6 @@ class ResultTest extends TestCase
         new Result([
             'qrcode' => self::SOME_SHARE_URL,
             'ref_id' => [self::SOME_REF_ID],
-        ]);
+        ], $this->responseMock);
     }
 }

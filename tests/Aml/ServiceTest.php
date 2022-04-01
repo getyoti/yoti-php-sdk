@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Aml;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Aml\Address;
@@ -11,12 +12,12 @@ use Yoti\Aml\Country;
 use Yoti\Aml\Profile;
 use Yoti\Aml\Result;
 use Yoti\Aml\Service;
+use Yoti\Exception\base\YotiException;
+use Yoti\Exception\PemFileException;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\Aml\Service
@@ -43,7 +44,8 @@ class ServiceTest extends TestCase
         $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(file_get_contents(TestData::AML_CHECK_RESULT_JSON)));
+        $body = file_get_contents(TestData::AML_CHECK_RESULT_JSON);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -53,7 +55,7 @@ class ServiceTest extends TestCase
                 $this->callback(function ($requestMessage) use ($amlProfile, $expectedPathPattern) {
                     $this->assertEquals('POST', $requestMessage->getMethod());
                     $this->assertEquals((string) $amlProfile, (string) $requestMessage->getBody());
-                    $this->assertRegExp($expectedPathPattern, (string) $requestMessage->getUri());
+                    $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
                     $this->assertEquals('application/json', $requestMessage->getHeader('Content-Type')[0]);
                     return true;
                 })
@@ -82,8 +84,7 @@ class ServiceTest extends TestCase
      */
     public function testPerformAmlCheckFailure($statusCode)
     {
-        $this->expectException(\Yoti\Exception\AmlException::class);
-        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $this->expectException(YotiException::class);
 
         $amlService = $this->createServiceWithErrorResponse($statusCode);
         $amlService->performCheck($this->createMock(Profile::class));
@@ -98,8 +99,7 @@ class ServiceTest extends TestCase
      */
     public function testPerformAmlCheckFailureWithErrorMessage($statusCode)
     {
-        $this->expectException(\Yoti\Exception\AmlException::class);
-        $this->expectExceptionMessage('Error - some property: some message');
+        $this->expectException(YotiException::class);
 
         $amlService = $this->createServiceWithErrorResponse(
             $statusCode,
@@ -117,15 +117,90 @@ class ServiceTest extends TestCase
     }
 
     /**
-     * @param int $statusCode
+     * @covers ::performCheck
+     * @covers ::validateAmlResult
+     * @covers ::getErrorMessage
      *
-     * @return \Yoti\Aml\Service
+     * @dataProvider httpErrorStatusCodeProvider
      */
-    private function createServiceWithErrorResponse($statusCode, $body = '{}')
+    public function testPerformAmlCheckFailureWithCode($statusCode)
+    {
+        $this->expectException(YotiException::class);
+
+        $amlService = $this->createServiceWithErrorResponse(
+            $statusCode,
+            json_encode([
+                'code' => 'SOME_CODE',
+            ])
+        );
+
+        $amlService->performCheck($this->createMock(Profile::class));
+    }
+
+    /**
+     * @covers ::performCheck
+     * @covers ::validateAmlResult
+     * @covers ::getErrorMessage
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     */
+    public function testPerformAmlCheckFailureWithCodeAndErrors($statusCode)
+    {
+        $this->expectException(YotiException::class);
+
+        $amlService = $this->createServiceWithErrorResponse(
+            $statusCode,
+            json_encode([
+                'code' => 'SOME_CODE',
+                'errors' => [
+                    [
+                        'message' => 'some message',
+                        'property' => 'some property',
+                    ]
+                ]
+            ])
+        );
+
+        $amlService->performCheck($this->createMock(Profile::class));
+    }
+
+    /**
+     * @covers ::performCheck
+     * @covers ::validateAmlResult
+     * @covers ::getErrorMessage
+     *
+     * @dataProvider httpErrorStatusCodeProvider
+     */
+    public function testPerformAmlCheckFailureWithoutJsonResponse($statusCode)
+    {
+        $this->expectException(YotiException::class);
+
+        $amlService = $this->createServiceWithErrorResponse(
+            $statusCode,
+            'some response',
+            'text/html'
+        );
+
+        $amlService->performCheck($this->createMock(Profile::class));
+    }
+
+    /**
+     * @param int $statusCode
+     * @param string $body
+     * @param string|null $contentType
+     * @return Service
+     * @throws PemFileException
+     */
+    private function createServiceWithErrorResponse($statusCode, $body = '{}', ?string $contentType = null)
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for($body));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor($body));
         $response->method('getStatusCode')->willReturn($statusCode);
+
+        if ($contentType !== null) {
+            $response->method('hasHeader')->willReturn(true);
+            $response->method('getHeader')->willReturn([$contentType]);
+        }
 
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient

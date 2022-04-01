@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    build: ../docker
+    ports:
+      - "4003:443"
+    volumes:
+      - ./:/usr/share/nginx/html
+    links:
+      - php
+
+  php:
+    build:
+      context: ../docker
+      dockerfile: php.dockerfile
+    volumes:
+      - ./:/usr/share/nginx/html
+
+  composer:
+    image: composer
+    volumes:
+      - ../../:/usr/share/yoti-php-sdk
+    working_dir: /usr/share/yoti-php-sdk/examples/doc-scan
+    command: update-local

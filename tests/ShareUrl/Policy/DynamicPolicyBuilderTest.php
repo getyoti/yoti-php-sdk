@@ -75,6 +75,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -125,6 +126,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertJsonStringEqualsJsonString(
@@ -151,6 +153,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -186,8 +189,8 @@ class DynamicPolicyBuilderTest extends TestCase
 
         $jsonData = $dynamicPolicy->jsonSerialize();
 
-        $this->assertCount(3, $jsonData['wanted']);
-        foreach ($jsonData['wanted'] as $wantedAttribute) {
+        $this->assertCount(3, $jsonData->wanted);
+        foreach ($jsonData->wanted as $wantedAttribute) {
             $this->assertEquals('family_name', $wantedAttribute->getName());
         }
     }
@@ -211,6 +214,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -243,6 +247,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -273,6 +278,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -320,6 +326,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertJsonStringEqualsJsonString(
@@ -336,7 +343,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithAgeOverIntegersOnly()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withAgeOver()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -352,7 +359,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithAgeUnderIntegersOnly()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withAgeUnder()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withDateOfBirth()
@@ -379,6 +386,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -402,6 +410,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [self::SELFIE_AUTH_TYPE, self::PIN_AUTH_TYPE, 99],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -425,6 +434,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [self::SELFIE_AUTH_TYPE, self::PIN_AUTH_TYPE, 99],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -448,6 +458,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -471,6 +482,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -492,6 +504,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [self::SELFIE_AUTH_TYPE],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -512,6 +525,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [self::SELFIE_AUTH_TYPE, self::PIN_AUTH_TYPE],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -532,6 +546,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -552,6 +567,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -563,7 +579,7 @@ class DynamicPolicyBuilderTest extends TestCase
     public function testWithNonIntegerAuthType()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of the type int');
+        $this->expectExceptionMessage(sprintf('%s::withWantedAuthType()', DynamicPolicyBuilder::class));
 
         (new DynamicPolicyBuilder())
             ->withWantedAuthType('99')
@@ -584,6 +600,7 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => true,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
@@ -603,8 +620,42 @@ class DynamicPolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+    }
+
+    /**
+     * @covers ::withIdentityProfileRequirements
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::getIdentityProfileRequirements
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::jsonSerialize
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__toString
+     */
+    public function testWithIdentityProfileRequirements()
+    {
+        $identityProfileSample = (object)[
+            'trust_framework' => 'UK_TFIDA',
+            'scheme' => [
+                'type' => 'DBS',
+                'objective' => 'STANDARD'
+            ]
+        ];
+
+        $expectedWantedAttributeData = [
+            'wanted' => [],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => $identityProfileSample
+        ];
+
+        $dynamicPolicy = (new DynamicPolicyBuilder())
+            ->withIdentityProfileRequirements($identityProfileSample)
+            ->build();
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));
+        $this->assertEquals($identityProfileSample, $dynamicPolicy->getIdentityProfileRequirements());
     }
 }

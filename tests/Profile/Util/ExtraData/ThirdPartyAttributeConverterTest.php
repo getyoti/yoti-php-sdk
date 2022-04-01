@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
+use Psr\Log\LoggerInterface;
+use Yoti\Exception\DateTimeException;
 use Yoti\Profile\Util\ExtraData\ThirdPartyAttributeConverter;
 use Yoti\Protobuf\Sharepubapi\Definition;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
@@ -21,10 +23,20 @@ class ThirdPartyAttributeConverterTest extends TestCase
     private const SOME_EXPIRY_DATE = '2019-12-02T12:00:00.123Z';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function setup(): void
+    {
+        $this->logger = $this->createMock(LoggerInterface::class);
+    }
+
+    /**
      * @covers ::convertValue
      * @covers ::parseToken
      */
-    public function testConvertValue()
+    public function testConvert()
     {
         $thirdPartyAttribute = ThirdPartyAttributeConverter::convertValue(
             $this->createThirdPartyAttribute(
@@ -86,9 +98,18 @@ class ThirdPartyAttributeConverterTest extends TestCase
      *
      * @dataProvider invalidDateProvider
      */
-    public function testConvertValueInvalidDate($invalidExpiryDate)
+    public function testConvertValueInvalidDate($invalidExpiryDate, $expectedException)
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with(
+                'Failed to parse expiry date from ThirdPartyAttribute',
+                $this->callback(function ($context) use ($expectedException) {
+                    $this->assertInstanceOf($expectedException, $context['exception']);
+                    return true;
+                })
+            );
 
         $thirdPartyAttribute = ThirdPartyAttributeConverter::convertValue(
             $this->createThirdPartyAttribute(
@@ -97,7 +118,8 @@ class ThirdPartyAttributeConverterTest extends TestCase
                 [
                     [ 'name' => self::SOME_ISSUING_ATTRIBUTE_NAME ],
                 ]
-            )
+            ),
+            $this->logger
         );
 
         $this->assertEquals(base64_encode(self::SOME_ISSUANCE_TOKEN), $thirdPartyAttribute->getToken());
@@ -106,7 +128,6 @@ class ThirdPartyAttributeConverterTest extends TestCase
             self::SOME_ISSUING_ATTRIBUTE_NAME,
             $thirdPartyAttribute->getIssuingAttributes()[0]->getName()
         );
-        $this->assertLogContains('Failed to parse expiry date from ThirdPartyAttribute');
     }
 
     /**
@@ -115,9 +136,9 @@ class ThirdPartyAttributeConverterTest extends TestCase
     public function invalidDateProvider()
     {
         return [
-            [ '' ],
-            [ 1 ],
-            [ 'invalid date' ],
+            [ '', \InvalidArgumentException::class ],
+            [ 1, DateTimeException::class ],
+            [ 'invalid date', DateTimeException::class],
         ];
     }
 
@@ -130,17 +151,29 @@ class ThirdPartyAttributeConverterTest extends TestCase
      */
     private function createThirdPartyAttribute($token, $expiryDate, $definitions)
     {
-        return (new ThirdPartyAttribute([
-            'issuance_token' => $token,
-            'issuing_attributes' => new IssuingAttributes([
-                'expiry_date' => $expiryDate,
-                'definitions' => array_map(
-                    function ($definition) {
-                        return new Definition($definition);
-                    },
-                    $definitions
-                )
-            ]),
-        ]))->serializeToString();
+        $thirdPartyAttribute = new ThirdPartyAttribute();
+
+        if (isset($token)) {
+            $thirdPartyAttribute->setIssuanceToken($token);
+        }
+
+        $issuingAttributes = new IssuingAttributes();
+
+        if (isset($expiryDate)) {
+            $issuingAttributes->setExpiryDate($expiryDate);
+        }
+
+        if (isset($definitions)) {
+            $issuingAttributes->setDefinitions(array_map(
+                function ($definition) {
+                    return new Definition($definition);
+                },
+                $definitions
+            ));
+        }
+
+        $thirdPartyAttribute->setIssuingAttributes($issuingAttributes);
+
+        return $thirdPartyAttribute->serializeToString();
     }
 }

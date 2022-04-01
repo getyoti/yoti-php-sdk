@@ -1,0 +1,5 @@
+{
+  "client_session_token_ttl": 300,
+  "client_session_token": "someClientSessionToken",
+  "session_id": "someSessionId"
+}

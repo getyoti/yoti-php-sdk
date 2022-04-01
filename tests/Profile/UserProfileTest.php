@@ -219,6 +219,25 @@ class UserProfileTest extends TestCase
     }
 
     /**
+     * @covers ::getIdentityProfileReport
+     */
+    public function testIdentityProfileReport()
+    {
+        $attributeName = 'identity_profile_report';
+
+        $someAttribute = $this->createMock(\Yoti\Profile\Attribute::class);
+        $someAttribute
+            ->method('getName')
+            ->willReturn($attributeName);
+
+        $profileData = [
+            $attributeName => $someAttribute,
+        ];
+        $profile = new UserProfile($profileData);
+        $this->assertSame($profileData['identity_profile_report'], $profile->getIdentityProfileReport());
+    }
+
+    /**
      * @param string $anchorString
      *
      * @return array $anchors

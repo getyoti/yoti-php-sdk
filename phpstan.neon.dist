@@ -2,9 +2,8 @@ parameters:
     level: max
     paths:
         - src
-        - sandbox/src
     excludes_analyse:
         - src/Protobuf/*
 
 includes:
-    - phpstan-ignore.neon
+    - phpstan-baseline.neon

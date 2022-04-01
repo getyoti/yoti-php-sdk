@@ -15,6 +15,17 @@ class ThirdPartyAttributeExtensionBuilderTest extends TestCase
     private const THIRD_PARTY_ATTRIBUTE_TYPE = 'THIRD_PARTY_ATTRIBUTE';
     private const SOME_DEFINITION = 'some definition';
     private const SOME_OTHER_DEFINITION = 'some other definition';
+    private const SOME_DATE_STRING = '2019-12-02T12:00:00.123Z';
+
+    /**
+     * @var \DateTime
+     */
+    private $someDate;
+
+    public function setup(): void
+    {
+        $this->someDate = new \DateTime(self::SOME_DATE_STRING);
+    }
 
     /**
      * @covers ::withExpiryDate
@@ -24,20 +35,23 @@ class ThirdPartyAttributeExtensionBuilderTest extends TestCase
     public function testBuild()
     {
         $thirdPartyAttributeExtension = (new ThirdPartyAttributeExtensionBuilder())
-            ->withExpiryDate(new \DateTime('2019-12-02T12:00:00.123Z'))
+            ->withExpiryDate($this->someDate)
             ->withDefinition(self::SOME_DEFINITION)
             ->withDefinition(self::SOME_OTHER_DEFINITION)
             ->build();
 
         $expectedJson = $this->createExpectedJson(
-            '2019-12-02T12:00:00.123000+00:00',
+            $this->someDate->format(\DateTime::RFC3339_EXTENDED),
             [
                 self::SOME_DEFINITION,
                 self::SOME_OTHER_DEFINITION,
             ]
         );
 
-        $this->assertEquals($expectedJson, json_encode($thirdPartyAttributeExtension));
+        $this->assertJsonStringEqualsJsonString(
+            $expectedJson,
+            json_encode($thirdPartyAttributeExtension)
+        );
     }
 
     /**
@@ -46,7 +60,7 @@ class ThirdPartyAttributeExtensionBuilderTest extends TestCase
     public function testWithDefinitionsOverwritesExistingDefinitions()
     {
         $thirdPartyAttributeExtension = (new ThirdPartyAttributeExtensionBuilder())
-            ->withExpiryDate(new \DateTime('2019-12-02T12:00:00.123Z'))
+            ->withExpiryDate($this->someDate)
             ->withDefinition('initial definition')
             ->withDefinitions([
                 self::SOME_DEFINITION,
@@ -54,9 +68,9 @@ class ThirdPartyAttributeExtensionBuilderTest extends TestCase
             ])
             ->build();
 
-        $this->assertEquals(
+        $this->assertJsonStringEqualsJsonString(
             $this->createExpectedJson(
-                '2019-12-02T12:00:00.123000+00:00',
+                $this->someDate->format(\DateTime::RFC3339_EXTENDED),
                 [
                     self::SOME_DEFINITION,
                     self::SOME_OTHER_DEFINITION,
@@ -64,6 +78,35 @@ class ThirdPartyAttributeExtensionBuilderTest extends TestCase
             ),
             json_encode($thirdPartyAttributeExtension)
         );
+    }
+
+    /**
+     * @covers ::withExpiryDate
+     *
+     * @dataProvider expiryDateDataProvider
+     */
+    public function testWithExpiryDateFormat($inputDate, $outputDate)
+    {
+        $thirdPartyAttributeExtension = (new ThirdPartyAttributeExtensionBuilder())
+            ->withExpiryDate(new \DateTime($inputDate))
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            $this->createExpectedJson($outputDate, []),
+            json_encode($thirdPartyAttributeExtension)
+        );
+    }
+
+    /**
+     * Provides test expiry dates.
+     */
+    public function expiryDateDataProvider()
+    {
+        return [
+            ['2020-01-02T01:02:03.123456Z', '2020-01-02T01:02:03.123+00:00'],
+            ['2020-01-01T01:02:03.123+04:00', '2019-12-31T21:02:03.123+00:00'],
+            ['2020-01-02T01:02:03.123-02:00', '2020-01-02T03:02:03.123+00:00']
+        ];
     }
 
     /**

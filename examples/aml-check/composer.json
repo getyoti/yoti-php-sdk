@@ -1,0 +1,28 @@
+{
+  "name": "yoti/yoti-php-sdk-example-aml-check",
+  "description": "Yoti SDK AML Check Demo",
+  "require": {
+    "yoti/yoti-php-sdk": "^3.0",
+    "symfony/dotenv": "3.3.0"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./sdk",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
+  "scripts": {
+    "copy-sdk": "grep -q 'yoti-php-sdk' ../../composer.json && rm -fr ./sdk && cd ../../ && git archive --prefix=sdk/ --format=tar HEAD | (cd - && tar xf -) || echo 'Could not install SDK from parent directory'",
+    "install-local": [
+      "@copy-sdk",
+      "composer install"
+    ],
+    "update-local": [
+      "@copy-sdk",
+      "composer update"
+    ]
+  }
+}

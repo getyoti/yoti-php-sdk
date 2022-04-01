@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl;
 
+use stdClass;
 use Yoti\ShareUrl\Extension\Extension;
 use Yoti\ShareUrl\Policy\DynamicPolicy;
 use Yoti\Util\Json;
@@ -31,6 +32,11 @@ class DynamicScenario implements \JsonSerializable
     private $extensions;
 
     /**
+     * @var object|null
+     */
+    private $subject;
+
+    /**
      * @param string $callbackEndpoint
      *   The device's callback endpoint. Must be a URL relative to the Application
      *   Domain specified in your Yoti Hub.
@@ -38,27 +44,35 @@ class DynamicScenario implements \JsonSerializable
      *   The customisable DynamicPolicy to use in the share.
      * @param \Yoti\ShareUrl\Extension\Extension[] $extensions
      *   List of Extension to be activated for the application.
+     * @param object $subject
+     *   Set of data required to represent an identity profile
      */
-    public function __construct(string $callbackEndpoint, DynamicPolicy $dynamicPolicy, array $extensions)
-    {
+    public function __construct(
+        string $callbackEndpoint,
+        DynamicPolicy $dynamicPolicy,
+        array $extensions,
+        $subject = null
+    ) {
         $this->callbackEndpoint = $callbackEndpoint;
         $this->dynamicPolicy = $dynamicPolicy;
 
         Validation::isArrayOfType($extensions, [Extension::class], 'extensions');
         $this->extensions = $extensions;
+        $this->subject = $subject;
     }
 
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'callback_endpoint' => $this->callbackEndpoint,
             'policy' => $this->dynamicPolicy,
             'extensions' => $this->extensions,
+            'subject' => $this->subject,
         ];
     }
 
@@ -68,5 +82,13 @@ class DynamicScenario implements \JsonSerializable
     public function __toString(): string
     {
         return Json::encode($this);
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }

@@ -6,6 +6,7 @@ namespace Yoti\Http;
 
 use GuzzleHttp\Psr7\Request as RequestMessage;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\StreamInterface;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 
@@ -66,6 +67,11 @@ class RequestBuilder
      * @var \Yoti\Util\Config
      */
     private $config;
+
+    /**
+     * @var MultipartEntity
+     */
+    private $multipartEntity;
 
     /**
      * @param \Yoti\Util\Config $config
@@ -158,6 +164,14 @@ class RequestBuilder
     }
 
     /**
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withPut(): self
+    {
+        return $this->withMethod(Request::METHOD_PUT);
+    }
+
+    /**
      * @param \Yoti\Http\Payload $payload
      *
      * @return \Yoti\Http\RequestBuilder
@@ -204,6 +218,53 @@ class RequestBuilder
     }
 
     /**
+     * @return void
+     */
+    private function forMultipartRequest(): void
+    {
+        if ($this->multipartEntity == null) {
+            $this->multipartEntity = MultipartEntity::create();
+        }
+    }
+
+    /**
+     * Sets the boundary to be used on the multipart request
+     *
+     * @param string $multipartBoundary
+     * @return RequestBuilder
+     */
+    public function withMultipartBoundary(string $multipartBoundary): RequestBuilder
+    {
+        $this->forMultipartRequest();
+        $this->multipartEntity->setBoundary($multipartBoundary);
+
+        return $this;
+    }
+
+    /**
+     * Adds a binary body to the multipart request.
+     *
+     * Note: the Signed Request must be specified with a boundary also
+     * in order to make use of the Multipart request
+     *
+     * @param string $name
+     * @param array<int, int> $payload
+     * @param string $contentType
+     * @param string $fileName
+     * @return $this
+     */
+    public function withMultipartBinaryBody(
+        string $name,
+        array $payload,
+        string $contentType,
+        string $fileName
+    ): RequestBuilder {
+        $this->multipartEntity->addBinaryBody($name, $payload, $contentType, $fileName);
+
+        return $this;
+    }
+
+    /**
      * Return the request headers including defaults.
      *
      * @return array<string, string>
@@ -222,6 +283,10 @@ class RequestBuilder
 
         if (isset($this->payload)) {
             $defaultHeaders['Content-Type'] = 'application/json';
+        }
+
+        if (isset($this->multipartEntity)) {
+            $defaultHeaders['Content-Type'] = 'multipart/form-data';
         }
 
         return array_merge($defaultHeaders, $this->headers);
@@ -299,7 +364,7 @@ class RequestBuilder
         // Add nonce and timestamp to the URL.
         $this
             ->withQueryParam('nonce', self::generateNonce())
-            ->withQueryParam('timestamp', (string) (round(microtime(true) * 1000)));
+            ->withQueryParam('timestamp', (string)(round(microtime(true) * 1000)));
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 
@@ -312,13 +377,28 @@ class RequestBuilder
 
         $url = $this->baseUrl . $endpointWithParams;
 
+
         $message = new RequestMessage(
             $this->method,
             uri_for($url),
             $this->getHeaders(),
-            isset($this->payload) ? $this->payload->toStream() : null
+            $this->getBodyByTypeOfRequest()
         );
 
-        return new Request($message, $this->client ?? $this->config->getHttpClient() ?? new Client());
+        return new Request($message, $this->client ?? $this->config->getHttpClient());
+    }
+
+    /**
+     * @return StreamInterface|null
+     */
+    private function getBodyByTypeOfRequest(): ?StreamInterface
+    {
+        if (isset($this->payload)) {
+            return $this->payload->toStream();
+        } elseif (isset($this->multipartEntity)) {
+            return $this->multipartEntity->createStream();
+        } else {
+            return null;
+        }
     }
 }

@@ -1,0 +1,267 @@
+{
+  "client_session_token_ttl" : 599,
+  "session_id" : "<uuid>",
+  "user_tracking_id" : "<uuid>",
+  "state" : "ONGOING",
+  "client_session_token" : "<uuid>",
+  "resources" : {
+    "id_documents" : [
+      {
+        "id" : "<uuid>",
+        "document_type" : "PASSPORT",
+        "issuing_country" : "GBR",
+        "pages" : [
+          {
+            "capture_method" : "CAMERA",
+            "media" : {
+              "id" : "<uuid>",
+              "type" : "IMAGE",
+              "created" : "2019-03-24T03:55:12Z",
+              "last_updated" : "2019-03-24T03:55:12Z"
+            },
+            "hologram_frames" : [
+              {
+                "media" : {
+                  "id" : "<uuid>",
+                  "type" : "IMAGE",
+                  "created" : "2019-03-24T03:55:12Z",
+                  "last_updated" : "2019-03-24T03:55:12Z"
+                }
+              }
+            ]
+          }
+        ],
+        "document_fields" : {
+          "media" : {
+            "id" : "<uuid>",
+            "type" : "JSON",
+            "created" : "2019-03-24T03:55:12Z",
+            "last_updated" : "2019-03-24T03:55:12Z"
+          }
+        },
+        "tasks" : [
+          {
+            "id" : "<uuid>",
+            "type" : "ID_DOCUMENT_TEXT_DATA_EXTRACTION",
+            "state" : "DONE",
+            "created" : "2019-03-24T03:55:12Z",
+            "last_updated" : "2019-03-24T03:55:12Z",
+            "generated_media" : [
+              {
+                "id" : "<uuid>",
+                "type" : "JSON"
+              }
+            ],
+            "generated_checks" : [
+              {
+                "id" : "<uuid>",
+                "type" : "ID_DOCUMENT_TEXT_DATA_CHECK"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "face_capture" : [
+      {
+        "id" : "<uuid>",
+        "photos" : [
+          {
+            "media" : {
+              "id" : "<uuid>",
+              "type" : "IMAGE",
+              "created" : "2019-03-24T03:55:12Z",
+              "last_updated" : "2019-03-24T03:55:12Z"
+            }
+          }
+        ]
+      }
+    ],
+    "liveness_capture" : [
+      {
+        "id" : "<uuid>",
+        "liveness_type" : "ZOOM",
+        "facemap" : {
+          "media" : {
+            "id" : "<uuid>",
+            "type" : "BINARY",
+            "created" : "2019-03-24T03:55:12Z",
+            "last_updated" : "2019-03-24T03:55:12Z"
+          }
+        },
+        "frames": [
+          {
+            "media": {
+              "id": "<uuid>",
+              "type": "IMAGE",
+              "created": "2019-03-24T03:55:12Z",
+              "last_updated": "2019-03-24T03:55:12Z"
+            }
+          },
+          {
+            "media": null
+          }
+        ]
+      }
+    ]
+  },
+
+  "checks" : [
+    {
+      "id" : "<uuid>",
+      "type" : "ID_DOCUMENT_AUTHENTICITY",
+      "state" : "DONE",
+      "resources_used" : ["<uuid>"],
+      "generated_media" : [ ],
+      "report" : {
+        "recommendation": {
+          "value" : "APPROVE"
+        },
+        "breakdown": [
+          {
+            "sub_check": "security_features",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "data_positioning",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "live_photo",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "issuing_authority_verification",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "fraud_list",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "document_in_date",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "check_digits_validation",
+            "result": "PASS"
+          }
+        ]
+      },
+      "created" : "2019-03-24T03:55:12Z",
+      "last_updated" : "2019-03-24T03:55:12Z"
+    },
+    {
+      "id" : "<uuid>",
+      "type" : "ID_DOCUMENT_AUTHENTICITY",
+      "state" : "DONE",
+      "resources_used" : ["<uuid>"],
+      "generated_media" : [ ],
+      "report" : {
+        "recommendation": {
+          "value" : "NOT_AVAILABLE",
+          "reason" : "PICTURE_TOO_DARK",
+          "recovery_suggestion" : "BETTER_LIGHTING"
+        },
+        "breakdown": [
+          {
+            "sub_check": "issuing_authority_verification",
+            "result": "PASS"
+          }
+        ]
+      },
+      "created" : "2019-03-24T03:55:12Z",
+      "last_updated" : "2019-03-24T03:55:12Z"
+    },
+    {
+      "id" : "<uuid>",
+      "type" : "ID_DOCUMENT_AUTHENTICITY",
+      "state" : "DONE",
+      "resources_used" : ["<uuid>"],
+      "generated_media" : [ ],
+      "report" : {
+        "recommendation": {
+          "value" : "REJECT",
+          "reason" : "NOT_GENUINE"
+        },
+        "breakdown": [
+          {
+            "sub_check": "security_features",
+            "result": "FAIL"
+          },
+          {
+            "sub_check": "data_positioning",
+            "result": "FAIL"
+          },
+          {
+            "sub_check": "live_photo",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "issuing_authority_verification",
+            "result": "FAIL"
+          },
+          {
+            "sub_check": "document_in_date",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "check_digits_validation",
+            "result": "PASS"
+          }
+        ]
+      },
+      "created" : "2019-03-24T03:55:12Z",
+      "last_updated" : "2019-03-24T03:55:12Z"
+    },
+    {
+      "id" : "<uuid>",
+      "type" : "ID_DOCUMENT_TEXT_DATA_CHECK",
+      "state" : "DONE",
+      "resources_used" : ["<uuid>"],
+      "generated_media" : [
+        {
+          "id" : "<uuid>",
+          "type" : "JSON"
+        }
+      ],
+      "report" : {
+        "recommendation": {
+          "value" : "APPROVE"
+        },
+        "breakdown": [
+          {
+            "sub_check": "security_features",
+            "result": "PASS"
+          }
+        ]
+      },
+      "created" : "2019-03-24T03:55:12Z",
+      "last_updated" : "2019-03-24T03:55:12Z"
+    },
+    {
+      "id": "<uuid>",
+      "type": "LIVENESS",
+      "state": "DONE",
+      "resources_used": [ "<uuid>" ],
+      "generated_media": [ ],
+      "report": {
+        "recommendation": {
+          "value": "APPROVE"
+        },
+        "breakdown": [
+          {
+            "sub_check": "security_features",
+            "result": "PASS"
+          },
+          {
+            "sub_check": "check_digits_validation",
+            "result": "PASS"
+          }
+        ]
+      },
+      "created": "2019-03-24T03:55:12Z",
+      "last_updated": "2019-03-24T03:55:12Z"
+    }
+  ]
+}

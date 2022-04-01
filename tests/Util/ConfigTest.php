@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\Util;
 
 use Psr\Http\Client\ClientInterface;
+use Psr\Log\LoggerInterface;
 use Yoti\Constants;
 use Yoti\Test\TestCase;
 use Yoti\Util\Config;
@@ -18,6 +19,7 @@ class ConfigTest extends TestCase
     private const SDK_VERSION_KEY = 'sdk.version';
     private const API_URL_KEY = 'api.url';
     private const HTTP_CLIENT_KEY = 'http.client';
+    private const LOGGER_KEY = 'logger';
 
     private const SOME_SDK_IDENTIFIER = 'some identifier';
     private const SOME_SDK_VERSION = 'some version';
@@ -116,7 +118,6 @@ class ConfigTest extends TestCase
         $this->assertSame($someHttpClient, $config->getHttpClient());
     }
 
-
     /**
      * @covers ::setHttpClient
      */
@@ -125,7 +126,7 @@ class ConfigTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'http.client configuration value must be of type %s',
-            \Psr\Http\Client\ClientInterface::class
+            ClientInterface::class
         ));
 
         new Config([
@@ -135,10 +136,58 @@ class ConfigTest extends TestCase
 
     /**
      * @covers ::getHttpClient
+     * @covers ::setHttpClient
      */
     public function testGetHttpClientDefault()
     {
-        $this->assertNull((new Config())->getHttpClient());
+        $this->assertInstanceOf(
+            ClientInterface::class,
+            (new Config())->getHttpClient()
+        );
+    }
+
+    /**
+     * @covers ::setLogger
+     * @covers ::getLogger
+     * @covers ::validateKeys
+     * @covers ::__construct
+     */
+    public function testGetLogger()
+    {
+        $someLogger = $this->createMock(LoggerInterface::class);
+        $config = new Config([
+            self::LOGGER_KEY => $someLogger,
+        ]);
+
+        $this->assertSame($someLogger, $config->getLogger());
+    }
+
+    /**
+     * @covers ::setLogger
+     */
+    public function testInvalidLogger()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'logger configuration value must be of type %s',
+            LoggerInterface::class
+        ));
+
+        new Config([
+            self::LOGGER_KEY => 'some invalid logger',
+        ]);
+    }
+
+    /**
+     * @covers ::setLogger
+     * @covers ::getLogger
+     */
+    public function testGetLoggerDefault()
+    {
+        $this->assertInstanceOf(
+            LoggerInterface::class,
+            (new Config())->getLogger()
+        );
     }
 
     /**
@@ -153,5 +202,17 @@ class ConfigTest extends TestCase
         new Config([
             'some.invalid.key' => 'some string',
         ]);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testNullValuesIgnored()
+    {
+        $config = new Config([
+            Config::SDK_IDENTIFIER => null,
+        ]);
+
+        $this->assertEquals(Constants::SDK_IDENTIFIER, $config->getSdkIdentifier());
     }
 }

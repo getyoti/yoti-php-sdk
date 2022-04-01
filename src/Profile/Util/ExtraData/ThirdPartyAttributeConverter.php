@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Util\ExtraData;
 
+use Psr\Log\LoggerInterface;
 use Yoti\Exception\ExtraDataException;
 use Yoti\Profile\ExtraData\AttributeDefinition;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Protobuf\Sharepubapi\IssuingAttributes;
 use Yoti\Protobuf\Sharepubapi\ThirdPartyAttribute;
 use Yoti\Util\DateTime;
+use Yoti\Util\Logger;
 
 class ThirdPartyAttributeConverter
 {
     /**
      * @param string $value
+     * @param \Psr\Log\LoggerInterface|null $logger
      *
      * @return \Yoti\Profile\ExtraData\AttributeIssuanceDetails
      */
-    public static function convertValue(string $value): AttributeIssuanceDetails
+    public static function convertValue(string $value, ?LoggerInterface $logger = null): AttributeIssuanceDetails
     {
+        $logger = $logger ?? new Logger();
+
         $thirdPartyAttributeProto = new ThirdPartyAttribute();
         $thirdPartyAttributeProto->mergeFromString($value);
 
@@ -33,7 +38,10 @@ class ThirdPartyAttributeConverter
             try {
                 $expiryDate = DateTime::stringToDateTime($issuingAttributesProto->getExpiryDate());
             } catch (\Exception $e) {
-                error_log("Failed to parse expiry date from ThirdPartyAttribute", 0);
+                $logger->warning(
+                    'Failed to parse expiry date from ThirdPartyAttribute',
+                    ['exception' => $e]
+                );
             }
 
             $issuingAttributes = array_map(

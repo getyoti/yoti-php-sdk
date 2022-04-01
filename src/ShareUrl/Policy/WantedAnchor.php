@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Policy;
 
+use stdClass;
 use Yoti\Util\Json;
 
 /**
@@ -54,11 +55,11 @@ class WantedAnchor implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'name' => $this->value,
             'sub_type' => $this->subType,
         ];

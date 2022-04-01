@@ -6,12 +6,17 @@ namespace Yoti\Test;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
-class TestCase extends PHPUnitTestCase
+abstract class TestCase extends PHPUnitTestCase
 {
     /**
      * @var callable[]
      */
     private static $mockFunctions;
+
+    /**
+     * @var bool
+     */
+    private $isCapturingLogs = false;
 
     public function setup(): void
     {
@@ -23,6 +28,11 @@ class TestCase extends PHPUnitTestCase
     public function teardown(): void
     {
         parent::teardown();
+
+        if ($this->isCapturingLogs) {
+            unlink(ini_get('error_log'));
+            $this->isCapturingLogs = false;
+        }
 
         // Restores ini settings.
         ini_restore('error_log');
@@ -39,12 +49,10 @@ class TestCase extends PHPUnitTestCase
      *
      * @param string $function
      * @param callable $callback
-     *
-     * @return callable|null
      */
-    protected static function mockFunction($function, $callback)
+    protected static function mockFunction($function, $callback): void
     {
-        return self::$mockFunctions[$function] = $callback;
+        self::$mockFunctions[$function] = $callback;
     }
 
     /**
@@ -71,11 +79,15 @@ class TestCase extends PHPUnitTestCase
      */
     protected function captureExpectedLogs()
     {
-        if (!is_dir('./logs')) {
-            mkdir('./logs');
+        $logPath = realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR . 'logs';
+
+        if (!is_dir($logPath)) {
+            mkdir($logPath);
         }
-        ini_set('error_log', './logs/' . uniqid('error_', true) . '.log');
+        ini_set('error_log', $logPath . DIRECTORY_SEPARATOR . uniqid('error_', true) . '.log');
         ini_set('display_errors', 'off');
+
+        $this->isCapturingLogs = true;
     }
 
     /**
@@ -104,5 +116,23 @@ class TestCase extends PHPUnitTestCase
             },
             $clientCodes + $serverCodes
         );
+    }
+
+    /**
+     * Override assertMatchesRegularExpression to support older versions of PHPUnit.
+     *
+     * @param string $pattern
+     * @param string $string
+     * @param string $message
+     *
+     * @return void
+     */
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        if (method_exists(parent::class, __FUNCTION__)) {
+            parent::{__FUNCTION__}(...\func_get_args());
+        } else {
+            parent::assertRegExp(...\func_get_args());
+        }
     }
 }

@@ -1,5 +1,4 @@
 /examples export-ignore
-/sandbox export-ignore
 /tests export-ignore
 /phpunit.xml export-ignore
 /.gitattributes export-ignore
@@ -13,6 +12,7 @@
 /.dependabot export-ignore
 /phpstan.neon.dist export-ignore
 /phpstan-ignore.neon export-ignore
+/docs export-ignore
 
 # Auto detect text files and perform LF normalization
 * text=auto

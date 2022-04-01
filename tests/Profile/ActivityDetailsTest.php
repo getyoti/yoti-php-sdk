@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile;
 
+use Yoti\Aml\Profile;
 use Yoti\Media\Image;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\ApplicationProfile;
@@ -170,7 +171,7 @@ class ActivityDetailsTest extends TestCase
         $activityDetails = new ActivityDetails($receipt, $this->pemFile);
 
         $this->assertNull($activityDetails->getTimestamp());
-        $this->assertLogContains('Warning: Could not parse string to DateTime');
+        $this->assertLogContains('warning: Could not parse string to DateTime');
     }
 
     /**

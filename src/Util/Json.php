@@ -34,6 +34,19 @@ class Json
     }
 
     /**
+     * Returns a filtered array without null values
+     *
+     * @param array<mixed, mixed> $data
+     * @return array<mixed, mixed>
+     */
+    public static function withoutNullValues(array $data): array
+    {
+        return array_filter($data, function ($value): bool {
+            return $value !== null;
+        });
+    }
+
+    /**
      * @throws \Yoti\Exception\JsonException
      */
     private static function validate(): void

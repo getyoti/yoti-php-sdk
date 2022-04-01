@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Service\ShareUrl;
 
+use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Constants;
+use Yoti\Exception\base\YotiException;
+use Yoti\Exception\PemFileException;
 use Yoti\ShareUrl\DynamicScenario;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
@@ -15,8 +18,6 @@ use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @coversDefaultClass \Yoti\ShareUrl\Service
@@ -47,7 +48,7 @@ class ServiceTest extends TestCase
             ->build();
 
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for(json_encode([
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
             'qrcode' => $expectedQrCode,
             'ref_id' => $expectedRefId,
         ])));
@@ -58,7 +59,7 @@ class ServiceTest extends TestCase
             ->expects($this->once())
             ->method('sendRequest')
             ->with($this->callback(function ($request) use ($expectedUrlPattern, $dynamicScenario) {
-                $this->assertRegExp($expectedUrlPattern, (string) $request->getUri());
+                $this->assertMatchesRegularExpression($expectedUrlPattern, (string) $request->getUri());
                 $this->assertEquals(json_encode($dynamicScenario), (string) $request->getBody());
                 return true;
             }))
@@ -85,8 +86,7 @@ class ServiceTest extends TestCase
      */
     public function testCreateShareUrlFailure($statusCode)
     {
-        $this->expectException(\Yoti\Exception\ShareUrlException::class);
-        $this->expectExceptionMessage("Server responded with {$statusCode}");
+        $this->expectException(YotiException::class);
 
         $yotiClient = $this->createServiceWithErrorResponse($statusCode);
         $yotiClient->createShareUrl($this->createMock(DynamicScenario::class));
@@ -95,12 +95,13 @@ class ServiceTest extends TestCase
     /**
      * @param int $statusCode
      *
-     * @return \Yoti\YotiClient
+     * @return Service
+     * @throws PemFileException
      */
     private function createServiceWithErrorResponse($statusCode)
     {
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(stream_for('{}'));
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor('{}'));
         $response->method('getStatusCode')->willReturn($statusCode);
 
         $httpClient = $this->createMock(ClientInterface::class);

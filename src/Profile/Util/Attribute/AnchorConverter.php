@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Profile\Util\Attribute;
 
-use phpseclib\File\ASN1;
-use phpseclib\File\X509;
+use phpseclib3\File\ASN1;
+use phpseclib3\File\X509;
 use Yoti\Profile\Attribute\Anchor;
 use Yoti\Profile\Attribute\SignedTimeStamp;
 use Yoti\Protobuf\Attrpubapi\Anchor as ProtobufAnchor;
@@ -58,10 +58,8 @@ class AnchorConverter
      */
     private static function decodeAnchorValue(string $extEncodedValue): string
     {
-        $X509 = new X509();
-        $ASN1 = new ASN1();
-        $encodedBER = $X509->_extractBER($extEncodedValue);
-        $decodedValArr = $ASN1->decodeBER($encodedBER);
+        $encodedBER = ASN1::extractBER($extEncodedValue);
+        $decodedValArr = ASN1::decodeBER($encodedBER);
         if (isset($decodedValArr[0]['content'][0]['content'])) {
             return $decodedValArr[0]['content'][0]['content'];
         }
@@ -109,6 +107,14 @@ class AnchorConverter
     {
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
+
+        /** We need because of new 3.0 version phpseclib @link https://github.com/phpseclib/phpseclib/issues/1738 */
+        array_walk_recursive($X509Data, function (&$item): void {
+            if (is_string($item) && mb_detect_encoding($item) != 'ASCII') {
+                $item = base64_encode($item);
+            }
+        });
+
         $decodedX509Data = Json::decode(Json::encode($X509Data), false);
 
         // Ensure serial number is cast to string.

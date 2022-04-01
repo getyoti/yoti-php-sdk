@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Profile\Util\ExtraData;
 
+use Psr\Log\LoggerInterface;
+use Yoti\Exception\ExtraDataException;
 use Yoti\Profile\ExtraData;
 use Yoti\Profile\ExtraData\AttributeIssuanceDetails;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
@@ -22,9 +24,19 @@ class ExtraDataConverterTest extends TestCase
     private const TYPE_THIRD_PARTY_ATTRIBUTE = 6;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function setup(): void
+    {
+        $this->logger = $this->createMock(LoggerInterface::class);
+    }
+
+    /**
      * @covers ::convertValue
      */
-    public function testConvertValue()
+    public function testConvert()
     {
         $extraData = ExtraDataConverter::convertValue(base64_decode(file_get_contents(TestData::EXTRA_DATA_CONTENT)));
         $this->assertInstanceOf(ExtraData::class, $extraData);
@@ -47,7 +59,25 @@ class ExtraDataConverterTest extends TestCase
      */
     public function testConvertValueSkipInvalidDataEntries()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(2))
+            ->method('warning')
+            ->withConsecutive(
+                [
+                    'Failed to convert data entry',
+                    $this->callback(function ($context) {
+                        $this->assertInstanceOf(ExtraDataException::class, $context['exception']);
+                        return true;
+                    })
+                ],
+                [
+                    'Failed to convert data entry',
+                    $this->callback(function ($context) {
+                        $this->assertInstanceOf(ExtraDataException::class, $context['exception']);
+                        return true;
+                    })
+                ]
+            );
 
         $someToken = 'some token';
 
@@ -72,12 +102,9 @@ class ExtraDataConverterTest extends TestCase
             ]
         ]))->serializeToString();
 
-        $extraData = ExtraDataConverter::convertValue($extraDataContent);
+        $extraData = ExtraDataConverter::convertValue($extraDataContent, $this->logger);
 
         $this->assertEquals(base64_encode($someToken), $extraData->getAttributeIssuanceDetails()->getToken());
-
-        $this->assertLogContains("Failed to convert data entry: Unsupported data entry '0'");
-        $this->assertLogContains("Failed to convert data entry: Failed to retrieve token from ThirdPartyAttribute");
     }
 
     /**
@@ -85,13 +112,25 @@ class ExtraDataConverterTest extends TestCase
      */
     public function testConvertValueInvalidData()
     {
-        $this->captureExpectedLogs();
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method('warning')
+            ->with(
+                'Failed to parse extra data',
+                $this->callback(function ($context) {
+                    $this->assertInstanceOf(\Exception::class, $context['exception']);
+                    $this->assertStringContainsString(
+                        'Error occurred during parsing',
+                        $context['exception']->getMessage()
+                    );
+                    return true;
+                })
+            );
 
-        $extraData = ExtraDataConverter::convertValue('some invalid data');
+        $extraData = ExtraDataConverter::convertValue('some invalid data', $this->logger);
 
         $this->assertInstanceOf(ExtraData::class, $extraData);
         $this->assertNull($extraData->getAttributeIssuanceDetails());
-        $this->assertLogContains("Failed to parse extra data: Error occurred during parsing: Unexpected wire type");
     }
 
     /**

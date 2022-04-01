@@ -1,0 +1,59 @@
+{
+    "name": "yoti/yoti-php-sdk-example-profile",
+    "description": "Yoti SDK Profile Demo",
+    "license": "MIT",
+    "require": {
+        "php": "^7.2.5",
+        "fideloper/proxy": "^4.2",
+        "fruitcake/laravel-cors": "^1.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
+        "yoti/yoti-php-sdk": "^3.0"
+    },
+    "require-dev": {
+        "facade/ignition": "^2.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": "@php artisan key:generate --ansi",
+        "copy-sdk": "grep -q 'yoti-php-sdk' ../../composer.json && rm -fr ./sdk && cd ../../ && git archive --prefix=sdk/ --format=tar HEAD | (cd - && tar xf -) || echo 'Could not install SDK from parent directory'",
+        "install-local": [
+            "@copy-sdk",
+            "composer install"
+        ],
+        "update-local": [
+            "@copy-sdk",
+            "composer update"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./sdk",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}

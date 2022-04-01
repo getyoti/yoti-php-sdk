@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
+use Psr\Http\Message\ResponseInterface;
 use Yoti\Exception\AmlException;
 use Yoti\Util\Json;
 
@@ -45,13 +46,14 @@ class Result
      * AmlResult constructor.
      *
      * @param array<string, bool> $result
+     * @param ResponseInterface $response
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public function __construct(array $result)
+    public function __construct(array $result, ResponseInterface $response)
     {
         $this->rawResult = $result;
-        $this->setAttributes();
+        $this->setAttributes($response);
     }
 
     /**
@@ -87,13 +89,15 @@ class Result
     /**
      * Set attribute values.
      *
+     * @param ResponseInterface $response
+     *
      * @throws \Yoti\Exception\AmlException
      */
-    private function setAttributes(): void
+    private function setAttributes(ResponseInterface $response): void
     {
         $result = $this->rawResult;
         // Check if no attribute is missing from the result
-        self::checkAttributes($result);
+        self::checkAttributes($result, $response);
 
         $this->onPepList = (bool) $result[self::ON_PEP_LIST_KEY];
         $this->onFraudList = (bool) $result[self::ON_FRAUD_LIST_KEY];
@@ -104,10 +108,11 @@ class Result
      * Check if all the attributes are included in the result.
      *
      * @param array<string, bool> $result
+     * @param ResponseInterface $response
      *
      * @throws \Yoti\Exception\AmlException
      */
-    public static function checkAttributes(array $result): void
+    public static function checkAttributes(array $result, ResponseInterface $response): void
     {
         $expectedAttributes = [
             self::ON_PEP_LIST_KEY,
@@ -119,7 +124,7 @@ class Result
 
         // Throw an error if any expected attribute is missing.
         if (count($missingAttr) > 0) {
-            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr));
+            throw new AmlException('Missing attributes from the result: ' . implode(',', $missingAttr), $response);
         }
     }
 

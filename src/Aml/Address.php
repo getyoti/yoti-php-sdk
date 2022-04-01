@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Aml;
 
+use stdClass;
 use Yoti\Util\Json;
 
 class Address implements \JsonSerializable
@@ -52,13 +53,13 @@ class Address implements \JsonSerializable
     /**
      * Get address data.
      *
-     * @return array<string, string|null>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
-            self::POSTCODE_ATTR => $this->postcode,
-            self::COUNTRY_ATTR => $this->country->getCode(),
+        return (object) [
+            self::POSTCODE_ATTR => $this->getPostcode(),
+            self::COUNTRY_ATTR => $this->getCountry(),
         ];
     }
 
