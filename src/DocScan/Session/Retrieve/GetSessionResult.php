@@ -50,8 +50,15 @@ class GetSessionResult
     private $biometricConsent;
 
     /**
+     * @var IdentityProfileResponse
+     */
+    private $identityProfile;
+
+    /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
+     *
+     * @throws \Yoti\Exception\DateTimeException
      */
     public function __construct(array $sessionData)
     {
@@ -73,6 +80,10 @@ class GetSessionResult
 
         if (isset($sessionData['resources'])) {
             $this->resources = new ResourceContainer($sessionData['resources']);
+        }
+
+        if (isset($sessionData['identity_profile'])) {
+            $this->identityProfile = new IdentityProfileResponse($sessionData['identity_profile']);
         }
     }
 
@@ -267,5 +278,13 @@ class GetSessionResult
         );
 
         return array_values($filtered);
+    }
+
+    /**
+     * @return IdentityProfileResponse
+     */
+    public function getIdentityProfile(): IdentityProfileResponse
+    {
+        return $this->identityProfile;
     }
 }
