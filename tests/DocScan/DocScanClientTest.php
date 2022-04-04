@@ -20,6 +20,7 @@ use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;
+use Yoti\Util\Json;
 
 /**
  * @coversDefaultClass \Yoti\DocScan\DocScanClient
@@ -495,6 +496,47 @@ class DocScanClientTest extends TestCase
 
         $docScanClient->triggerIbvEmailNotification(
             TestData::DOC_SCAN_SESSION_ID
+        );
+    }
+
+    /**
+     * @test
+     *
+     * Parse session response with identity profile
+     */
+    public function testParseIdentityProfileResponse()
+    {
+        $sessionDataString = Json::decode(file_get_contents(TestData::SESSION_RESULT_IDENTITY_PROFILE));
+        $sessionResult = new GetSessionResult($sessionDataString);
+
+        $this->assertEquals('DONE', $sessionResult->getIdentityProfile()->getResult());
+        $this->assertEquals('someStringHere', $sessionResult->getIdentityProfile()->getSubjectId());
+        $this->assertEquals(
+            'MANDATORY_DOCUMENT_COULD_NOT_BE_PROVIDED',
+            $sessionResult->getIdentityProfile()->getFailureReason()->getStringCode()
+        );
+
+        $this->assertEquals(
+            'UK_TFIDA',
+            $sessionResult->getIdentityProfile()->getIdentityProfileReport()->trust_framework
+        );
+        $this->assertEquals(
+            'DBS',
+            $sessionResult->getIdentityProfile()->getIdentityProfileReport()->schemes_compliance[0]['scheme']['type']
+        );
+        $this->assertEquals(
+            'STANDARD',
+            $sessionResult->getIdentityProfile()->getIdentityProfileReport()
+                ->schemes_compliance[0]['scheme']['objective']
+        );
+        $this->assertEquals(
+            'some string here',
+            $sessionResult->getIdentityProfile()->getIdentityProfileReport()
+                ->schemes_compliance[0]['requirements_not_met_info']
+        );
+        $this->assertTrue(
+            $sessionResult->getIdentityProfile()->getIdentityProfileReport()
+                ->schemes_compliance[0]['requirements_met']
         );
     }
 }

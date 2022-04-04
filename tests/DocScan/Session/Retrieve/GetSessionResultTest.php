@@ -7,6 +7,7 @@ namespace Yoti\Test\DocScan\Session\Retrieve;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
@@ -31,6 +32,14 @@ class GetSessionResultTest extends TestCase
     private const SOME_CLIENT_SESSION_TOKEN = 'someClientSessionToken';
     private const SOME_CLIENT_SESSION_TOKEN_TTL = 300;
     private const SOME_BIOMETRIC_CONSENT_DATE_STRING = '2019-12-02T12:00:00.123Z';
+    private const IDENTITY_PROFILE = [
+        'subject_id' => 'SOME_STRING',
+        'result' => 'SOME_ANOTHER_STRING',
+        'failure_reason' => [
+            'reason_code' => 'ANOTHER_STRING',
+        ],
+        'identity_profile_report' => [],
+    ];
 
     /**
      * @test
@@ -43,6 +52,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getResources
      * @covers ::getChecks
      * @covers ::getBiometricConsentTimestamp
+     * @covers ::getIdentityProfile
      */
     public function shouldBuildCorrectly()
     {
@@ -57,6 +67,7 @@ class GetSessionResultTest extends TestCase
                 ['type' => self::ID_DOCUMENT_AUTHENTICITY]
             ],
             'resources' => [],
+            'identity_profile' => self::IDENTITY_PROFILE
         ];
 
         $result = new GetSessionResult($input);
@@ -70,6 +81,7 @@ class GetSessionResultTest extends TestCase
         $this->assertNotNull($result->getChecks());
         $this->assertCount(1, $result->getChecks());
         $this->assertInstanceOf(AuthenticityCheckResponse::class, $result->getChecks()[0]);
+        $this->assertInstanceOf(IdentityProfileResponse::class, $result->getIdentityProfile());
 
         $this->assertNotNull($result->getResources());
 
