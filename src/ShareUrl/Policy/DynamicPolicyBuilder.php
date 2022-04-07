@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\ShareUrl\Policy;
 
 use Yoti\Profile\UserProfile;
+use Yoti\Util\Json;
 
 /**
  * Builder for DynamicPolicy.
@@ -49,8 +50,13 @@ class DynamicPolicyBuilder
     public function withWantedAttribute(WantedAttribute $wantedAttribute): self
     {
         $key = $wantedAttribute->getName();
+
         if ($wantedAttribute->getDerivation() !== null) {
             $key = $wantedAttribute->getDerivation();
+        }
+
+        if ($wantedAttribute->getConstraints() !== null) {
+            $key .= '-' . hash('sha256', Json::encode($wantedAttribute->getConstraints()));
         }
 
         $this->wantedAttributes[$key] = $wantedAttribute;
