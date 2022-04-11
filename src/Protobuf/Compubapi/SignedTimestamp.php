@@ -16,27 +16,27 @@ class SignedTimestamp extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>int32 version = 1;</code>
      */
-    private $version = 0;
+    protected $version = 0;
     /**
      * Generated from protobuf field <code>uint64 timestamp = 2;</code>
      */
-    private $timestamp = 0;
+    protected $timestamp = 0;
     /**
      * Generated from protobuf field <code>bytes message_digest = 3;</code>
      */
-    private $message_digest = '';
+    protected $message_digest = '';
     /**
      * Generated from protobuf field <code>bytes chain_digest = 4;</code>
      */
-    private $chain_digest = '';
+    protected $chain_digest = '';
     /**
      * Generated from protobuf field <code>bytes chain_digest_skip1 = 5;</code>
      */
-    private $chain_digest_skip1 = '';
+    protected $chain_digest_skip1 = '';
     /**
      * Generated from protobuf field <code>bytes chain_digest_skip2 = 6;</code>
      */
-    private $chain_digest_skip2 = '';
+    protected $chain_digest_skip2 = '';
 
     /**
      * Constructor.

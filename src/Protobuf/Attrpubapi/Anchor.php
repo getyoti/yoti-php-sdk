@@ -16,7 +16,7 @@ class Anchor extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>bytes artifact_link = 1;</code>
      */
-    private $artifact_link = '';
+    protected $artifact_link = '';
     /**
      * Generated from protobuf field <code>repeated bytes origin_server_certs = 2;</code>
      */
@@ -24,19 +24,23 @@ class Anchor extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>bytes artifact_signature = 3;</code>
      */
-    private $artifact_signature = '';
+    protected $artifact_signature = '';
     /**
      * Generated from protobuf field <code>string sub_type = 4;</code>
      */
-    private $sub_type = '';
+    protected $sub_type = '';
     /**
      * Generated from protobuf field <code>bytes signature = 5;</code>
      */
-    private $signature = '';
+    protected $signature = '';
     /**
      * Generated from protobuf field <code>bytes signed_time_stamp = 6;</code>
      */
-    private $signed_time_stamp = '';
+    protected $signed_time_stamp = '';
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     */
+    protected $associated_source = '';
 
     /**
      * Constructor.
@@ -50,6 +54,7 @@ class Anchor extends \Google\Protobuf\Internal\Message
      *     @type string $sub_type
      *     @type string $signature
      *     @type string $signed_time_stamp
+     *     @type string $associated_source
      * }
      */
     public function __construct($data = NULL) {
@@ -185,6 +190,28 @@ class Anchor extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, False);
         $this->signed_time_stamp = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     * @return string
+     */
+    public function getAssociatedSource()
+    {
+        return $this->associated_source;
+    }
+
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setAssociatedSource($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->associated_source = $var;
 
         return $this;
     }

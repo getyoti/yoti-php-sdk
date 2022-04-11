@@ -4,6 +4,8 @@
 
 namespace Yoti\Protobuf\Attrpubapi;
 
+use UnexpectedValueException;
+
 /**
  * Protobuf type <code>attrpubapi_v1.ContentType</code>
  */
@@ -41,5 +43,36 @@ class ContentType
      * Generated from protobuf enum <code>INT = 7;</code>
      */
     const INT = 7;
+
+    private static $valueToName = [
+        self::UNDEFINED => 'UNDEFINED',
+        self::STRING => 'STRING',
+        self::JPEG => 'JPEG',
+        self::DATE => 'DATE',
+        self::PNG => 'PNG',
+        self::JSON => 'JSON',
+        self::MULTI_VALUE => 'MULTI_VALUE',
+        self::INT => 'INT',
+    ];
+
+    public static function name($value)
+    {
+        if (!isset(self::$valueToName[$value])) {
+            throw new UnexpectedValueException(sprintf(
+                    'Enum %s has no name defined for value %s', __CLASS__, $value));
+        }
+        return self::$valueToName[$value];
+    }
+
+
+    public static function value($name)
+    {
+        $const = __CLASS__ . '::' . strtoupper($name);
+        if (!defined($const)) {
+            throw new UnexpectedValueException(sprintf(
+                    'Enum %s has no value defined for name %s', __CLASS__, $name));
+        }
+        return constant($const);
+    }
 }
 

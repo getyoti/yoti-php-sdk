@@ -56,6 +56,23 @@ class BaseProfile
     }
 
     /**
+     * Retrieves an attribute which matches the ID specified.
+     *
+     * @param string $attributeId
+     *
+     * @return Attribute
+     */
+    public function getAttributeById(string $attributeId): ?Attribute
+    {
+        foreach ($this->attributesList as $attribute) {
+            if ($attribute->getId() == $attributeId) {
+                return $attribute;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param string $attributeName.
      *
      * @return \Yoti\Profile\Attribute|null
