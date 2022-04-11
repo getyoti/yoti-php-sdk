@@ -4,6 +4,8 @@
 
 namespace Yoti\Protobuf\Sharepubapi\DataEntry;
 
+use UnexpectedValueException;
+
 /**
  * Protobuf type <code>sharepubapi_v1.DataEntry.Type</code>
  */
@@ -37,6 +39,36 @@ class Type
      * Generated from protobuf enum <code>THIRD_PARTY_ATTRIBUTE = 6;</code>
      */
     const THIRD_PARTY_ATTRIBUTE = 6;
+
+    private static $valueToName = [
+        self::UNDEFINED => 'UNDEFINED',
+        self::INVOICE => 'INVOICE',
+        self::PAYMENT_TRANSACTION => 'PAYMENT_TRANSACTION',
+        self::LOCATION => 'LOCATION',
+        self::TRANSACTION => 'TRANSACTION',
+        self::AGE_VERIFICATION_SECRET => 'AGE_VERIFICATION_SECRET',
+        self::THIRD_PARTY_ATTRIBUTE => 'THIRD_PARTY_ATTRIBUTE',
+    ];
+
+    public static function name($value)
+    {
+        if (!isset(self::$valueToName[$value])) {
+            throw new UnexpectedValueException(sprintf(
+                    'Enum %s has no name defined for value %s', __CLASS__, $value));
+        }
+        return self::$valueToName[$value];
+    }
+
+
+    public static function value($name)
+    {
+        $const = __CLASS__ . '::' . strtoupper($name);
+        if (!defined($const)) {
+            throw new UnexpectedValueException(sprintf(
+                    'Enum %s has no value defined for name %s', __CLASS__, $name));
+        }
+        return constant($const);
+    }
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

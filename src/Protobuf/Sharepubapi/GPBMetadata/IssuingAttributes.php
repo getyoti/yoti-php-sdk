@@ -14,21 +14,18 @@ class IssuingAttributes
         if (static::$is_initialized == true) {
           return;
         }
-        $pool->internalAddGeneratedFile(hex2bin(
-            "0af4020a1749737375696e67417474726962757465732e70726f746f120e" .
-            "73686172657075626170695f763122590a1149737375696e674174747269" .
-            "627574657312130a0b6578706972795f64617465180120012809122f0a0b" .
-            "646566696e6974696f6e7318022003280b321a2e73686172657075626170" .
-            "695f76312e446566696e6974696f6e221a0a0a446566696e6974696f6e12" .
-            "0c0a046e616d6518012001280942c9010a24636f6d2e796f74692e617069" .
-            "2e636c69656e742e7370692e72656d6f74652e70726f746f421649737375" .
-            "696e674174747269627574657350726f746f5a0e796f746970726f746f73" .
-            "68617265aa0218596f74692e417574682e50726f746f4275662e53686172" .
-            "65ca0219596f74695c50726f746f6275665c5368617265707562617069e2" .
-            "0225596f74695c50726f746f6275665c53686172657075626170695c4750" .
-            "424d65746164617461ea0219596f74692e50726f746f6275662e53686172" .
-            "65707562617069620670726f746f33"
-        ));
+        $pool->internalAddGeneratedFile(
+            '
+˜
+IssuingAttributes.protosharepubapi_v1"Y
+IssuingAttributes
+expiry_date (	/
+definitions (2.sharepubapi_v1.Definition"
+
+Definition
+name (	Bí
+$com.yoti.api.client.spi.remote.protoBIssuingAttributesProtoZ0github.com/getyoti/yoti-go-sdk/v3/yotiprotoshareªYoti.Auth.ProtoBuf.ShareÊYoti\\Protobuf\\Sharepubapiâ%Yoti\\Protobuf\\Sharepubapi\\GPBMetadataêYoti::Protobuf::Sharepubapibproto3'
+        , true);
 
         static::$is_initialized = true;
     }

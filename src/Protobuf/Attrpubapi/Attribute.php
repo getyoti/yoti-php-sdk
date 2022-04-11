@@ -16,19 +16,31 @@ class Attribute extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>string name = 1;</code>
      */
-    private $name = '';
+    protected $name = '';
     /**
      * Generated from protobuf field <code>bytes value = 2;</code>
      */
-    private $value = '';
+    protected $value = '';
     /**
      * Generated from protobuf field <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
-    private $content_type = 0;
+    protected $content_type = 0;
     /**
      * Generated from protobuf field <code>repeated .attrpubapi_v1.Anchor anchors = 4;</code>
      */
     private $anchors;
+    /**
+     * Generated from protobuf field <code>repeated .attrpubapi_v1.UserMetadata user_metadata = 5;</code>
+     */
+    private $user_metadata;
+    /**
+     * Generated from protobuf field <code>.attrpubapi_v1.Metadata metadata = 6;</code>
+     */
+    protected $metadata = null;
+    /**
+     * Generated from protobuf field <code>string ephemeral_id = 7;</code>
+     */
+    protected $ephemeral_id = '';
 
     /**
      * Constructor.
@@ -40,6 +52,9 @@ class Attribute extends \Google\Protobuf\Internal\Message
      *     @type string $value
      *     @type int $content_type
      *     @type \Yoti\Protobuf\Attrpubapi\Anchor[]|\Google\Protobuf\Internal\RepeatedField $anchors
+     *     @type \Yoti\Protobuf\Attrpubapi\UserMetadata[]|\Google\Protobuf\Internal\RepeatedField $user_metadata
+     *     @type \Yoti\Protobuf\Attrpubapi\Metadata $metadata
+     *     @type string $ephemeral_id
      * }
      */
     public function __construct($data = NULL) {
@@ -131,6 +146,82 @@ class Attribute extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Yoti\Protobuf\Attrpubapi\Anchor::class);
         $this->anchors = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .attrpubapi_v1.UserMetadata user_metadata = 5;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getUserMetadata()
+    {
+        return $this->user_metadata;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .attrpubapi_v1.UserMetadata user_metadata = 5;</code>
+     * @param \Yoti\Protobuf\Attrpubapi\UserMetadata[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setUserMetadata($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Yoti\Protobuf\Attrpubapi\UserMetadata::class);
+        $this->user_metadata = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>.attrpubapi_v1.Metadata metadata = 6;</code>
+     * @return \Yoti\Protobuf\Attrpubapi\Metadata|null
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    public function hasMetadata()
+    {
+        return isset($this->metadata);
+    }
+
+    public function clearMetadata()
+    {
+        unset($this->metadata);
+    }
+
+    /**
+     * Generated from protobuf field <code>.attrpubapi_v1.Metadata metadata = 6;</code>
+     * @param \Yoti\Protobuf\Attrpubapi\Metadata $var
+     * @return $this
+     */
+    public function setMetadata($var)
+    {
+        GPBUtil::checkMessage($var, \Yoti\Protobuf\Attrpubapi\Metadata::class);
+        $this->metadata = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string ephemeral_id = 7;</code>
+     * @return string
+     */
+    public function getEphemeralId()
+    {
+        return $this->ephemeral_id;
+    }
+
+    /**
+     * Generated from protobuf field <code>string ephemeral_id = 7;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setEphemeralId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->ephemeral_id = $var;
 
         return $this;
     }

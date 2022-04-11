@@ -16,27 +16,31 @@ class AttributeSigning extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>string name = 1;</code>
      */
-    private $name = '';
+    protected $name = '';
     /**
      * Generated from protobuf field <code>bytes value = 2;</code>
      */
-    private $value = '';
+    protected $value = '';
     /**
      * Generated from protobuf field <code>.attrpubapi_v1.ContentType content_type = 3;</code>
      */
-    private $content_type = 0;
+    protected $content_type = 0;
     /**
      * Generated from protobuf field <code>bytes artifact_signature = 4;</code>
      */
-    private $artifact_signature = '';
+    protected $artifact_signature = '';
     /**
      * Generated from protobuf field <code>string sub_type = 5;</code>
      */
-    private $sub_type = '';
+    protected $sub_type = '';
     /**
      * Generated from protobuf field <code>bytes signed_time_stamp = 6;</code>
      */
-    private $signed_time_stamp = '';
+    protected $signed_time_stamp = '';
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     */
+    protected $associated_source = '';
 
     /**
      * Constructor.
@@ -50,6 +54,7 @@ class AttributeSigning extends \Google\Protobuf\Internal\Message
      *     @type string $artifact_signature
      *     @type string $sub_type
      *     @type string $signed_time_stamp
+     *     @type string $associated_source
      * }
      */
     public function __construct($data = NULL) {
@@ -185,6 +190,28 @@ class AttributeSigning extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, False);
         $this->signed_time_stamp = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     * @return string
+     */
+    public function getAssociatedSource()
+    {
+        return $this->associated_source;
+    }
+
+    /**
+     * Generated from protobuf field <code>string associated_source = 7;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setAssociatedSource($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->associated_source = $var;
 
         return $this;
     }

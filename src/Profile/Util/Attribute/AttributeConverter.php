@@ -160,10 +160,12 @@ class AttributeConverter
                 $attrValue,
                 $attrName
             );
+            $attrId = $protobufAttribute->getEphemeralId();
             $yotiAttribute = new Attribute(
                 $attrName,
                 $attrValue,
-                $yotiAnchors
+                $yotiAnchors,
+                $attrId
             );
         } catch (AttributeException $e) {
             $logger->warning(

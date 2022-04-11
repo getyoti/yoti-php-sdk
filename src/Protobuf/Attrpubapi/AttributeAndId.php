@@ -16,11 +16,11 @@ class AttributeAndId extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>.attrpubapi_v1.Attribute attribute = 1;</code>
      */
-    private $attribute = null;
+    protected $attribute = null;
     /**
      * Generated from protobuf field <code>bytes attribute_id = 2;</code>
      */
-    private $attribute_id = '';
+    protected $attribute_id = '';
 
     /**
      * Constructor.
@@ -39,11 +39,21 @@ class AttributeAndId extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>.attrpubapi_v1.Attribute attribute = 1;</code>
-     * @return \Yoti\Protobuf\Attrpubapi\Attribute
+     * @return \Yoti\Protobuf\Attrpubapi\Attribute|null
      */
     public function getAttribute()
     {
         return $this->attribute;
+    }
+
+    public function hasAttribute()
+    {
+        return isset($this->attribute);
+    }
+
+    public function clearAttribute()
+    {
+        unset($this->attribute);
     }
 
     /**

@@ -15,21 +15,15 @@ class ThirdPartyAttribute
           return;
         }
         \Yoti\Protobuf\Sharepubapi\GPBMetadata\IssuingAttributes::initOnce();
-        $pool->internalAddGeneratedFile(hex2bin(
-            "0aef020a19546869726450617274794174747269627574652e70726f746f" .
-            "120e73686172657075626170695f7631226c0a1354686972645061727479" .
-            "41747472696275746512160a0e69737375616e63655f746f6b656e180120" .
-            "01280c123d0a1269737375696e675f617474726962757465731802200128" .
-            "0b32212e73686172657075626170695f76312e49737375696e6741747472" .
-            "69627574657342cb010a24636f6d2e796f74692e6170692e636c69656e74" .
-            "2e7370692e72656d6f74652e70726f746f42185468697264506172747941" .
-            "747472696275746550726f746f5a0e796f746970726f746f7368617265aa" .
-            "0218596f74692e417574682e50726f746f4275662e5368617265ca021959" .
-            "6f74695c50726f746f6275665c5368617265707562617069e20225596f74" .
-            "695c50726f746f6275665c53686172657075626170695c4750424d657461" .
-            "64617461ea0219596f74692e50726f746f6275662e536861726570756261" .
-            "7069620670726f746f33"
-        ));
+        $pool->internalAddGeneratedFile(
+            '
+“
+ThirdPartyAttribute.protosharepubapi_v1"l
+ThirdPartyAttribute
+issuance_token (=
+issuing_attributes (2!.sharepubapi_v1.IssuingAttributesBï
+$com.yoti.api.client.spi.remote.protoBThirdPartyAttributeProtoZ0github.com/getyoti/yoti-go-sdk/v3/yotiprotoshareªYoti.Auth.ProtoBuf.ShareÊYoti\\Protobuf\\Sharepubapiâ%Yoti\\Protobuf\\Sharepubapi\\GPBMetadataêYoti::Protobuf::Sharepubapibproto3'
+        , true);
 
         static::$is_initialized = true;
     }
