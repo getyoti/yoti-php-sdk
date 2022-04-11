@@ -9,7 +9,6 @@ use Yoti\Profile\Attribute;
 use Yoti\Profile\BaseProfile;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Protobuf\Attrpubapi\Attribute as ProtobufAttribute;
-use Yoti\Test\Profile\TestTools\BaseProfileAdd;
 use Yoti\Test\TestCase;
 
 /**
@@ -137,17 +136,14 @@ class BaseProfileTest extends TestCase
             self::SOME_ID_2
         );
 
-        $yotiProfile = new BaseProfileAdd([$imageAttribute1, $imageAttribute2]);
-
-
         $givenNamesAttribute = new ProtobufAttribute([
             'name' => self::SOME_ATTRIBUTE,
             'value' => utf8_decode('Alan'),
             'content_type' => self::CONTENT_TYPE_STRING,
         ]);
-
         $newAttribute = AttributeConverter::convertToYotiAttribute($givenNamesAttribute);
-        $yotiProfile->addAttributeToList($newAttribute);
+
+        $yotiProfile = new BaseProfile([$imageAttribute1, $imageAttribute2, $newAttribute]);
 
         $this->assertEquals($imageAttribute1, $yotiProfile->getAttributeById(self::SOME_ID_1));
         $this->assertEquals($imageAttribute2, $yotiProfile->getAttributeById(self::SOME_ID_2));
@@ -166,7 +162,7 @@ class BaseProfileTest extends TestCase
             self::SOME_ID_1
         );
 
-        $yotiProfile = new BaseProfileAdd([$imageAttribute1]);
+        $yotiProfile = new BaseProfile([$imageAttribute1]);
 
         $this->assertNull($yotiProfile->getAttributeById('SOME-another'));
     }
