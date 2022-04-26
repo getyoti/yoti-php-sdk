@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Yoti\Http;
 
 use GuzzleHttp\Psr7\Request as RequestMessage;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\StreamInterface;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
-
-use function GuzzleHttp\Psr7\uri_for;
 
 class RequestBuilder
 {
@@ -380,7 +379,7 @@ class RequestBuilder
 
         $message = new RequestMessage(
             $this->method,
-            uri_for($url),
+            Utils::uriFor($url),
             $this->getHeaders(),
             $this->getBodyByTypeOfRequest()
         );
