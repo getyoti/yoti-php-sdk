@@ -26,8 +26,9 @@ class Logger extends AbstractLogger
 
     /**
      * @inheritDoc
+     * @param array<mixed,mixed> $context
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         if (!in_array($level, self::LEVELS, true)) {
             throw new InvalidArgumentException(sprintf('"%s" level is not allowed', $level));
