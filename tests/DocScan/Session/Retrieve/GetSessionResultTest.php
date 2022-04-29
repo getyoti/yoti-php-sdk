@@ -8,6 +8,7 @@ use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
+use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
@@ -21,6 +22,7 @@ class GetSessionResultTest extends TestCase
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     private const ID_DOCUMENT_COMPARISON = 'ID_DOCUMENT_COMPARISON';
     private const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
+    private const THIRD_PARTY_IDENTITY_FRAUD_1 = "THIRD_PARTY_IDENTITY_FRAUD_1";
     private const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
     private const WATCHLIST_ADVANCED_CA = 'WATCHLIST_ADVANCED_CA';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
@@ -122,6 +124,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getSupplementaryDocumentTextDataChecks
      * @covers ::getLivenessChecks
      * @covers ::getWatchlistAdvancedCaChecks
+     * @covers ::getThirdPartyIdentityFraudOneChecks
      * @covers ::createCheckFromArray
      * @covers ::filterCheckByType
      */
@@ -138,12 +141,13 @@ class GetSessionResultTest extends TestCase
                 ['type' => self::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK],
                 ['type' => self::LIVENESS],
                 ['type' => self::WATCHLIST_ADVANCED_CA],
+                ['type' => self::THIRD_PARTY_IDENTITY_FRAUD_1],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(9, $result->getChecks());
+        $this->assertCount(10, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
@@ -154,6 +158,7 @@ class GetSessionResultTest extends TestCase
         $this->assertCount(1, $result->getSupplementaryDocumentTextDataChecks());
         $this->assertCount(1, $result->getLivenessChecks());
         $this->assertCount(1, $result->getWatchlistAdvancedCaChecks());
+        $this->assertCount(1, $result->getThirdPartyIdentityFraudOneChecks());
 
         $this->assertEquals(
             self::ID_DOCUMENT_AUTHENTICITY,
@@ -195,5 +200,29 @@ class GetSessionResultTest extends TestCase
             self::LIVENESS,
             $result->getLivenessChecks()[0]->getType()
         );
+
+        $this->assertInstanceOf(
+            ThirdPartyIdentityFraudOneCheckResponse::class,
+            $result->getThirdPartyIdentityFraudOneChecks()[0]
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getThirdPartyIdentityFraudOneChecks
+     * @covers ::createCheckFromArray
+     * @covers ::filterCheckByType
+     */
+    public function thirdPartyIdentityFraudOneChecksShouldReturnEmptyCollectionWhenNoneOfTypeArePresent()
+    {
+        $input = [
+            'checks' => [
+                ['type' => self::ID_DOCUMENT_AUTHENTICITY],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertCount(0, $result->getThirdPartyIdentityFraudOneChecks());
     }
 }
