@@ -220,6 +220,29 @@
                             </div>
                         @endif
 
+                        @if (count($sessionResult->getThirdPartyIdentityFraudOneChecks()) > 0)
+                            <div class="card">
+                                <div class="card-header" id="third-party-identity-fraud-one-checks">
+                                    <h3 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-third-party-identity-fraud-one-checks" aria-expanded="true"
+                                                aria-controls="collapse-third-party-identity-fraud-one-checks">
+                                            Third Party Identity Fraud Checks
+                                        </button>
+                                    </h3>
+                                </div>
+
+                                <div id="collapse-third-party-identity-fraud-one-checks" class="collapse"
+                                     aria-labelledby="third-party-identity-fraud-one-checks">
+                                    <div class="card-body">
+                                        @foreach($sessionResult->getThirdPartyIdentityFraudOneChecks() as $check)
+                                            @include('partial/check', ['check' => $check])
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         @if (count($sessionResult->getWatchlistScreeningChecks()) > 0)
                             <div class="card">
                                 <div class="card-header" id="watchlist-screening-checks">
