@@ -3,13 +3,13 @@
     "description": "Yoti SDK Profile Demo",
     "license": "MIT",
     "require": {
-        "php": "^7.2.5",
+        "php": "^8.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0",
-        "yoti/yoti-php-sdk": "^3.0"
+        "guzzlehttp/guzzle": "^6.4 || ^7.0",
+        "laravel/framework": "^8.0",
+        "laravel/tinker": "^2.3.0",
+        "yoti/yoti-php-sdk": "^3.9.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0"
