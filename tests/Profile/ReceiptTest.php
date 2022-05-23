@@ -43,22 +43,29 @@ class ReceiptTest extends TestCase
     }
 
     /**
-     * @covers ::__construct
-     * @covers ::validateReceipt
-     */
-    public function testShouldThrowExceptionForInvalidReceipt()
-    {
-        $this->expectException(\Yoti\Exception\ReceiptException::class);
-
-        new Receipt([]);
-    }
-
-    /**
      * @covers ::getTimestamp
      */
     public function testGetTimestamp()
     {
         $this->assertEquals('2016-07-19T08:55:38Z', $this->receipt->getTimestamp());
+    }
+
+    /**
+     * @covers ::getErrorDetails
+     */
+    public function testGetErrorDetails()
+    {
+        $this->assertIsArray($this->receipt->getErrorDetails());
+    }
+
+    /**
+     * @covers ::generateErrorMessage
+     */
+    public function testGenerateErrorMessage()
+    {
+        $mes1 = "Sharing activity unsuccessful for 9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl ";
+        $mes2 = "UNKNOWN FRAUD_DETECTED";
+        $this->assertEquals($mes1 . $mes2, $this->receipt->generateErrorMessage());
     }
 
     /**

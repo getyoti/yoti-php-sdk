@@ -160,8 +160,10 @@ class ServiceTest extends TestCase
      */
     public function testSharingOutcomeFailure()
     {
+        $mes1 = "Sharing activity unsuccessful for 9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl ";
+        $mes2 = "UNKNOWN FRAUD_DETECTED";
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage('Outcome was unsuccessful');
+        $this->expectExceptionMessage($mes1 . $mes2);
 
         $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $json['receipt']['sharing_outcome'] = 'FAILURE';
