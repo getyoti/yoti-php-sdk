@@ -23,6 +23,7 @@ class Receipt
     private const ATTR_WRAPPED_RECEIPT_KEY = 'wrapped_receipt_key';
     private const ATTR_OTHER_PARTY_PROFILE_CONTENT = 'other_party_profile_content';
     private const ATTR_EXTRA_DATA_CONTENT = 'extra_data_content';
+    private const ATTR_ERROR_DETAILS = 'error_details';
 
     /**
      * @var array<string, mixed>
@@ -44,8 +45,6 @@ class Receipt
     public function __construct(array $receiptData, ?LoggerInterface $logger = null)
     {
         $this->logger = $logger ?? new Logger();
-
-        $this->validateReceipt($receiptData);
 
         $this->receiptData = $receiptData;
     }
@@ -164,19 +163,5 @@ class Receipt
             $this->getWrappedReceiptKey(),
             $pemFile
         );
-    }
-
-    /**
-     * Check Wrapped_receipt_key exists and is not NULL.
-     *
-     * @param array<string, mixed> $receiptData
-     *
-     * @throws ReceiptException
-     */
-    private function validateReceipt(array $receiptData): void
-    {
-        if (!isset($receiptData[self::ATTR_WRAPPED_RECEIPT_KEY])) {
-            throw new ReceiptException('Wrapped Receipt key attr is missing');
-        }
     }
 }
