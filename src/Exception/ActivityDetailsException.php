@@ -6,31 +6,30 @@ namespace Yoti\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Exception\base\YotiException;
-use Yoti\Profile\Receipt;
 use Yoti\Util\Json;
 
 class ActivityDetailsException extends YotiException
 {
     /**
-     * @var Receipt|null
+     * @var array<string, mixed>|null
      */
-    private $receipt;
+    private $responseBody;
 
     /**
      * @param string $message
      * @param ResponseInterface|null $response
-     * @param Receipt|null $receipt
+     * @param array<string, mixed>|null $responseBody
      * @param \Throwable|null $previous
      */
     public function __construct(
         $message = "",
         ?ResponseInterface $response = null,
-        ?Receipt $receipt = null,
+        ?array $responseBody = null,
         \Throwable $previous = null
     ) {
         parent::__construct($message, $response, $previous);
 
-        $this->receipt = $receipt;
+        $this->responseBody = $responseBody;
     }
 
     /**
@@ -38,14 +37,14 @@ class ActivityDetailsException extends YotiException
      */
     public function getReceiptErrorDetails(): string
     {
-        if (!is_null($this->receipt)) {
-            return Json::encode([
-                'receipt_id' => $this->receipt->getReceiptId(),
-                'description' => $this->receipt->getErrorDetails()['description'] ?? ' ',
-                'error_code' => $this->receipt->getErrorDetails()['error_code'] ?? ' ',
-            ]);
+        $result = [];
+        if (!is_null($this->responseBody)) {
+            $result['receipt_id'] = $this->responseBody['receipt']['receipt_id'] ?? ' ';
+            if (isset($this->responseBody['error_details'])) {
+                $result['description'] = $this->responseBody['error_details']['description'] ?? ' ';
+                $result['error_code'] = $this->responseBody['error_details']['error_code'] ?? ' ';
+            }
         }
-
-        return " ";
+        return Json::encode($result);
     }
 }

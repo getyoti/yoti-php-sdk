@@ -88,7 +88,13 @@ class Service
 
         // Check response was successful
         if ($receipt->getSharingOutcome() !== self::OUTCOME_SUCCESS) {
-            throw new ActivityDetailsException($receipt->generateErrorMessage(), $response, $receipt);
+            throw new ActivityDetailsException(
+                'Sharing activity unsuccessful for ' . $receipt->getReceiptId() . ' '
+                . $result['error_details']['description'] . ' '
+                . $result['error_details']['error_code'],
+                $response,
+                $result
+            );
         }
 
         return new ActivityDetails($receipt, $this->pemFile, $this->config->getLogger());
