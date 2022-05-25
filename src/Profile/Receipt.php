@@ -80,14 +80,6 @@ class Receipt
     }
 
     /**
-     * @return array<string,string>|null
-     */
-    public function getErrorDetails(): ?array
-    {
-        return $this->getAttribute(self::ATTR_ERROR_DETAILS);
-    }
-
-    /**
      * @param string $attributeName
      *
      * @return mixed
