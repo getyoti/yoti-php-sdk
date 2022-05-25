@@ -149,26 +149,6 @@ class Receipt
     }
 
     /**
-     * Generate error message if receipt is not SUCCESS
-     *
-     * @return string
-     */
-    public function generateErrorMessage(): string
-    {
-        $errorMessage = 'Sharing activity unsuccessful for ' . $this->getReceiptId() . ' ';
-        if (!is_null($this->getErrorDetails())) {
-            if (isset($this->getErrorDetails()['description'])) {
-                $errorMessage .= $this->getErrorDetails()['description'] . ' ';
-            }
-            if (isset($this->getErrorDetails()['error_code'])) {
-                $errorMessage .= $this->getErrorDetails()['error_code'];
-            }
-        }
-
-        return $errorMessage;
-    }
-
-    /**
      * Decrypt receipt attribute.
      *
      * @param string $attributeName
