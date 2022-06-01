@@ -9,7 +9,7 @@
         "guzzlehttp/guzzle": "^6.4 || ^7.0",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.3.0",
-        "yoti/yoti-php-sdk": "^3.9.1"
+        "yoti/yoti-php-sdk": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0"
