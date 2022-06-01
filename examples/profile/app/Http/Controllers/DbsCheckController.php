@@ -16,13 +16,13 @@ class DbsCheckController extends BaseController
                 'trust_framework' => 'UK_TFIDA',
                 'scheme' => [
                     'type' => 'DBS',
-                    'objective' => 'STANDARD'
+                    'objective' => 'BASIC'
                 ]
             ])
             ->build();
 
         $dynamicScenario = (new DynamicScenarioBuilder())
-            ->withCallbackEndpoint("/account/connect")
+            ->withCallbackEndpoint("/profile")
             ->withPolicy($dynamicPolicy)
             ->withSubject((object)[
                 'subject_id' => "some_subject_id_string"

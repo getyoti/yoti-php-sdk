@@ -7,6 +7,7 @@ namespace Yoti\Test\Profile;
 use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Yoti\Exception\ActivityDetailsException;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Service;
 use Yoti\Test\TestCase;
@@ -160,14 +161,37 @@ class ServiceTest extends TestCase
      */
     public function testSharingOutcomeFailure()
     {
+        $mes1 = "Sharing activity unsuccessful for 9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl ";
+        $mes2 = "UNKNOWN FRAUD_DETECTED";
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
-        $this->expectExceptionMessage('Outcome was unsuccessful');
+        $this->expectExceptionMessage($mes1 . $mes2);
 
         $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
         $json['receipt']['sharing_outcome'] = 'FAILURE';
 
         $profileService = $this->createProfileServiceWithResponse(200, json_encode($json));
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
+    }
+
+    /**
+     * @covers \Yoti\Exception\ActivityDetailsException::getReceiptErrorDetails
+     * @covers \Yoti\Exception\ActivityDetailsException::__construct
+     */
+    public function testReceiptErrorDetailsException()
+    {
+        $json = json_decode(file_get_contents(TestData::RECEIPT_JSON), true);
+        $json['receipt']['sharing_outcome'] = 'FAILURE';
+
+        $profileService = $this->createProfileServiceWithResponse(200, json_encode($json));
+        try {
+            $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
+        } catch (ActivityDetailsException $e) {
+            $this->assertEquals([
+                'receipt_id' => '9HNJDX5bEIN5TqBm0OGzVIc1LaAmbzfx6eIrwNdwpHvKeQmgPujyogC+r7hJCVPl',
+                'description' => 'UNKNOWN',
+                'error_code' => 'FRAUD_DETECTED',
+            ], json_decode($e->getReceiptErrorDetails(), true));
+        }
     }
 
     /**

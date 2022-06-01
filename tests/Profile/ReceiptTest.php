@@ -35,6 +35,11 @@ class ReceiptTest extends TestCase
      */
     public $receipt;
 
+    /**
+     * @throws \Yoti\Exception\PemFileException
+     * @throws \Yoti\Exception\ReceiptException
+     * @covers ::__construct
+     */
     public function setup(): void
     {
         $this->pemFile = PemFile::fromFilePath(TestData::PEM_FILE);
@@ -43,18 +48,8 @@ class ReceiptTest extends TestCase
     }
 
     /**
-     * @covers ::__construct
-     * @covers ::validateReceipt
-     */
-    public function testShouldThrowExceptionForInvalidReceipt()
-    {
-        $this->expectException(\Yoti\Exception\ReceiptException::class);
-
-        new Receipt([]);
-    }
-
-    /**
      * @covers ::getTimestamp
+     * @covers ::__construct
      */
     public function testGetTimestamp()
     {
