@@ -16,11 +16,11 @@ class EncryptedData extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>bytes iv = 1;</code>
      */
-    private $iv = '';
+    protected $iv = '';
     /**
      * Generated from protobuf field <code>bytes cipher_text = 2;</code>
      */
-    private $cipher_text = '';
+    protected $cipher_text = '';
 
     /**
      * Constructor.

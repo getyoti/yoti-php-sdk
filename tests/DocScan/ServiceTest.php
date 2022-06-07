@@ -42,7 +42,7 @@ class ServiceTest extends TestCase
     {
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
         $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
+            (object)[
                 'someKey' => 'someValue',
                 'someOtherKey' => 'someOtherValue',
             ]
@@ -114,7 +114,7 @@ class ServiceTest extends TestCase
     {
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
         $sessionSpecificationMock->method('jsonSerialize')->willReturn(
-            [
+            (object)[
                 'someKey' => 'someValue',
                 'someOtherKey' => 'someOtherValue',
             ]
@@ -395,7 +395,7 @@ class ServiceTest extends TestCase
      * @covers ::getMediaContent
      * @covers ::assertResponseIsSuccess
      */
-    public function getMediaContentShouldReturnMediaObjectWithNoContent()
+    public function getMediaContentShouldReturnNullWhenResponseWithNoContent()
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
@@ -419,9 +419,7 @@ class ServiceTest extends TestCase
         );
 
         $media = $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
-        $this->assertInstanceOf(Media::class, $media);
-        $this->assertEquals('', $media->getMimeType());
-        $this->assertEquals('', $media->getContent());
+        $this->assertNull($media);
     }
 
     /**

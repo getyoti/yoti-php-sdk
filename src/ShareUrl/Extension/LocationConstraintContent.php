@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\ShareUrl\Extension;
 
+use stdClass;
 use Yoti\Util\Json;
 use Yoti\Util\Validation;
 
@@ -62,11 +63,11 @@ class LocationConstraintContent implements \JsonSerializable
     /**
      * @inheritDoc
      *
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return [
+        return (object)[
             'expected_device_location' => [
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,

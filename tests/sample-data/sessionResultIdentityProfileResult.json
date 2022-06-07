@@ -1,0 +1,34 @@
+{
+  "session_id": "a1746488-efcc-4c59-bd28-f849dcb933a2",
+  "client_session_token_ttl": 599,
+  "user_tracking_id": "user-tracking-id",
+  "biometric_consent": "2022-03-29T11:39:08.473Z",
+  "state": "COMPLETED",
+  "client_session_token": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "identity_profile": {
+    "subject_id": "someStringHere",
+    "result": "DONE",
+    "failure_reason": {
+      "reason_code": "MANDATORY_DOCUMENT_COULD_NOT_BE_PROVIDED"
+    },
+    "identity_profile_report": {
+      "trust_framework": "UK_TFIDA",
+      "schemes_compliance": [
+        {
+          "scheme": {
+            "type": "DBS",
+            "objective": "STANDARD"
+          },
+          "requirements_met": true,
+          "requirements_not_met_info": "some string here"
+        }
+      ],
+      "media": {
+        "id": "c69ff2db-6caf-4e74-8386-037711bbc8d7",
+        "type": "IMAGE",
+        "created": "2022-03-29T11:39:24Z",
+        "last_updated": "2022-03-29T11:39:24Z"
+      }
+    }
+  }
+}

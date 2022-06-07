@@ -13,5 +13,9 @@
         "parent_remember_me_id": "f5RjVQMyoKOvO/hkv43Ik+t6d6mGfP2tdrNijH4k4qafTG0FSNUgQIvd2Z3Nx1j8",
         "sharing_outcome": "SUCCESS",
         "timestamp": "2016-07-19T08:55:38Z"
+    },
+    "error_details": {
+        "description": "UNKNOWN",
+        "error_code" : "FRAUD_DETECTED"
     }
 }

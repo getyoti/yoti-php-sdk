@@ -16,11 +16,11 @@ class DataEntry extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>.sharepubapi_v1.DataEntry.Type type = 1;</code>
      */
-    private $type = 0;
+    protected $type = 0;
     /**
      * Generated from protobuf field <code>bytes value = 2;</code>
      */
-    private $value = '';
+    protected $value = '';
 
     /**
      * Constructor.
@@ -53,7 +53,7 @@ class DataEntry extends \Google\Protobuf\Internal\Message
      */
     public function setType($var)
     {
-        GPBUtil::checkEnum($var, \Yoti\Protobuf\Sharepubapi\DataEntry_Type::class);
+        GPBUtil::checkEnum($var, \Yoti\Protobuf\Sharepubapi\DataEntry\Type::class);
         $this->type = $var;
 
         return $this;

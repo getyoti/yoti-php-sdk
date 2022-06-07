@@ -16,7 +16,7 @@ class IssuingAttributes extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>string expiry_date = 1;</code>
      */
-    private $expiry_date = '';
+    protected $expiry_date = '';
     /**
      * Generated from protobuf field <code>repeated .sharepubapi_v1.Definition definitions = 2;</code>
      */

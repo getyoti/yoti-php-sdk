@@ -16,11 +16,11 @@ class ThirdPartyAttribute extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>bytes issuance_token = 1;</code>
      */
-    private $issuance_token = '';
+    protected $issuance_token = '';
     /**
      * Generated from protobuf field <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
      */
-    private $issuing_attributes = null;
+    protected $issuing_attributes = null;
 
     /**
      * Constructor.
@@ -61,11 +61,21 @@ class ThirdPartyAttribute extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>.sharepubapi_v1.IssuingAttributes issuing_attributes = 2;</code>
-     * @return \Yoti\Protobuf\Sharepubapi\IssuingAttributes
+     * @return \Yoti\Protobuf\Sharepubapi\IssuingAttributes|null
      */
     public function getIssuingAttributes()
     {
         return $this->issuing_attributes;
+    }
+
+    public function hasIssuingAttributes()
+    {
+        return isset($this->issuing_attributes);
+    }
+
+    public function clearIssuingAttributes()
+    {
+        unset($this->issuing_attributes);
     }
 
     /**

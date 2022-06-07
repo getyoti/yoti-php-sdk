@@ -15,18 +15,14 @@ class ExtraData
           return;
         }
         \Yoti\Protobuf\Sharepubapi\GPBMetadata\DataEntry::initOnce();
-        $pool->internalAddGeneratedFile(hex2bin(
-            "0aa3020a0f4578747261446174612e70726f746f120e7368617265707562" .
-            "6170695f763122340a0945787472614461746112270a046c697374180120" .
-            "03280b32192e73686172657075626170695f76312e44617461456e747279" .
-            "42c1010a24636f6d2e796f74692e6170692e636c69656e742e7370692e72" .
-            "656d6f74652e70726f746f420e45787472614461746150726f746f5a0e79" .
-            "6f746970726f746f7368617265aa0218596f74692e417574682e50726f74" .
-            "6f4275662e5368617265ca0219596f74695c50726f746f6275665c536861" .
-            "7265707562617069e20225596f74695c50726f746f6275665c5368617265" .
-            "7075626170695c4750424d65746164617461ea0219596f74692e50726f74" .
-            "6f6275662e5368617265707562617069620670726f746f33"
-        ));
+        $pool->internalAddGeneratedFile(
+            '
+Ç
+ExtraData.protosharepubapi_v1"4
+	ExtraData\'
+list (2.sharepubapi_v1.DataEntryBå
+$com.yoti.api.client.spi.remote.protoBExtraDataProtoZ0github.com/getyoti/yoti-go-sdk/v3/yotiprotoshareªYoti.Auth.ProtoBuf.ShareÊYoti\\Protobuf\\Sharepubapiâ%Yoti\\Protobuf\\Sharepubapi\\GPBMetadataêYoti::Protobuf::Sharepubapibproto3'
+        , true);
 
         static::$is_initialized = true;
     }

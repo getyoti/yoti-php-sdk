@@ -19,22 +19,29 @@ class Attribute
     private $value;
 
     /**
-     * @var \Yoti\Profile\Attribute\Anchor[]
+     * @var Anchor[]
      */
     private $anchors;
+
+    /**
+     * @var string|null
+     */
+    private $id;
 
     /**
      * Attribute constructor.
      *
      * @param string $name
      * @param mixed $value
-     * @param \Yoti\Profile\Attribute\Anchor[] $anchors
+     * @param Anchor[] $anchors
+     * @param string|null $id
      */
-    public function __construct(string $name, $value, array $anchors)
+    public function __construct(string $name, $value, array $anchors, string $id = null)
     {
         $this->name = $name;
         $this->value = $value;
         $this->anchors = $anchors;
+        $this->id = $id;
     }
 
     /**
@@ -54,7 +61,7 @@ class Attribute
     }
 
     /**
-     * @return \Yoti\Profile\Attribute\Anchor[]
+     * @return Anchor[]
      */
     public function getSources(): array
     {
@@ -62,7 +69,7 @@ class Attribute
     }
 
     /**
-     * @return \Yoti\Profile\Attribute\Anchor[]
+     * @return Anchor[]
      */
     public function getVerifiers(): array
     {
@@ -77,7 +84,7 @@ class Attribute
      *  ...
      * ]
      *
-     * @return \Yoti\Profile\Attribute\Anchor[]
+     * @return Anchor[]
      */
     public function getAnchors(): array
     {
@@ -87,7 +94,7 @@ class Attribute
     /**
      * @param string $type
      *
-     * @return \Yoti\Profile\Attribute\Anchor[]
+     * @return Anchor[]
      */
     private function filterAnchors(string $type): array
     {
@@ -98,5 +105,15 @@ class Attribute
             }
         );
         return array_values($filteredAnchors);
+    }
+
+    /**
+     * Gets the ID of the attribute
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 }

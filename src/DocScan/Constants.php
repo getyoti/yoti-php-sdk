@@ -10,6 +10,7 @@ class Constants
     public const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     public const ID_DOCUMENT_FACE_MATCH = 'ID_DOCUMENT_FACE_MATCH';
     public const THIRD_PARTY_IDENTITY = 'THIRD_PARTY_IDENTITY';
+    public const THIRD_PARTY_IDENTITY_FRAUD_1 = "THIRD_PARTY_IDENTITY_FRAUD_1";
     public const LIVENESS = 'LIVENESS';
     public const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
     public const WATCHLIST_ADVANCED_CA = 'WATCHLIST_ADVANCED_CA';
@@ -51,4 +52,7 @@ class Constants
     public const END_USER = 'END_USER';
     public const RELYING_BUSINESS = 'RELYING_BUSINESS';
     public const IBV = 'IBV';
+
+    public const RECLASSIFICATION = "RECLASSIFICATION";
+    public const GENERIC = "GENERIC";
 }

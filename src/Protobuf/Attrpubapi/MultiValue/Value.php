@@ -16,11 +16,11 @@ class Value extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>.attrpubapi_v1.ContentType content_type = 1;</code>
      */
-    private $content_type = 0;
+    protected $content_type = 0;
     /**
      * Generated from protobuf field <code>bytes data = 2;</code>
      */
-    private $data = '';
+    protected $data = '';
 
     /**
      * Constructor.

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create;
 
 use JsonSerializable;
+use stdClass;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
@@ -68,6 +69,16 @@ class SessionSpecification implements JsonSerializable
     private $ibvOptions;
 
     /**
+     * @var object|null
+     */
+    private $subject;
+
+    /**
+     * @var object|null
+     */
+    private $identityProfileRequirements;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -79,6 +90,8 @@ class SessionSpecification implements JsonSerializable
      * @param RequiredDocument[] $requiredDocuments
      * @param bool|null $blockBiometricConsent
      * @param IbvOptions|null $ibvOptions
+     * @param object|null $subject
+     * @param object|null $identityProfileRequirements
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -91,7 +104,9 @@ class SessionSpecification implements JsonSerializable
         ?SdkConfig $sdkConfig,
         array $requiredDocuments = [],
         ?bool $blockBiometricConsent = null,
-        ?IbvOptions $ibvOptions = null
+        ?IbvOptions $ibvOptions = null,
+        $subject = null,
+        $identityProfileRequirements = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -104,14 +119,16 @@ class SessionSpecification implements JsonSerializable
         $this->requiredDocuments = $requiredDocuments;
         $this->blockBiometricConsent = $blockBiometricConsent;
         $this->ibvOptions = $ibvOptions;
+        $this->subject = $subject;
+        $this->identityProfileRequirements = $identityProfileRequirements;
     }
 
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return Json::withoutNullValues([
+        return (object) Json::withoutNullValues([
             'client_session_token_ttl' => $this->getClientSessionTokenTtl(),
             'session_deadline' => $this->getSessionDeadline(),
             'resources_ttl' => $this->getResourcesTtl(),
@@ -123,6 +140,8 @@ class SessionSpecification implements JsonSerializable
             'required_documents' => $this->getRequiredDocuments(),
             'block_biometric_consent' => $this->getBlockBiometricConsent(),
             'ibv_options' => $this->getIbvOptions(),
+            'subject' => $this->getSubject(),
+            'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
         ]);
     }
 
@@ -217,5 +236,21 @@ class SessionSpecification implements JsonSerializable
     public function getIbvOptions(): ?IbvOptions
     {
         return $this->ibvOptions;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getIdentityProfileRequirements()
+    {
+        return $this->identityProfileRequirements;
     }
 }

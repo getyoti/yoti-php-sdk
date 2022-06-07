@@ -27,6 +27,7 @@ class UserProfile extends BaseProfile
     public const ATTR_DOCUMENT_DETAILS = "document_details";
     public const ATTR_DOCUMENT_IMAGES = 'document_images';
     public const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
+    public const ATTR_IDENTITY_PROFILE_REPORT = 'identity_profile_report';
 
     /** @var \Yoti\Profile\Attribute\AgeVerification[] */
     private $ageVerifications;
@@ -166,6 +167,17 @@ class UserProfile extends BaseProfile
     public function getDocumentImages(): ?Attribute
     {
         return $this->getProfileAttribute(self::ATTR_DOCUMENT_IMAGES);
+    }
+
+    /**
+     * IdentityProfileReport represents the JSON object containing identity assertion and the
+     *  verification report. This will be null if not provided by Yoti.
+     *
+     * @return Attribute|null
+     */
+    public function getIdentityProfileReport(): ?Attribute
+    {
+        return $this->getProfileAttribute(self::ATTR_IDENTITY_PROFILE_REPORT);
     }
 
     /**

@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Create\Check;
 
 use JsonSerializable;
+use stdClass;
 use Yoti\Util\Json;
 
 abstract class RequestedCheck implements JsonSerializable
 {
     /**
-     * @return array<string, mixed>
+     * @return stdClass
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): stdClass
     {
-        return Json::withoutNullValues([
+        return (object) Json::withoutNullValues([
             'type' => $this->getType(),
             'config' => $this->getConfig()
         ]);

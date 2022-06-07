@@ -73,6 +73,9 @@
                                 @case ('Structured Postal Address')
                                     @include('partial/address', ['address' => $item['obj']->getValue()])
                                     @break
+                                @case ('Identity Profile Report')
+                                    @include('partial/report', ['report' => $item['obj']->getValue()])
+                                    @break
                                 @default
                                     @include('partial/attribute', ['value' => $item['obj']->getValue()])
                             @endswitch

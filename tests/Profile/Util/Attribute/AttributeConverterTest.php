@@ -10,6 +10,8 @@ use Yoti\Exception\DateTimeException;
 use Yoti\Media\Image;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\Attribute\MultiValue;
+use Yoti\Profile\BaseProfile;
+use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeConverter;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -30,6 +32,14 @@ class AttributeConverterTest extends TestCase
     private const CONTENT_TYPE_JSON = 5;
     private const CONTENT_TYPE_MULTI_VALUE = 6;
     private const CONTENT_TYPE_INT = 7;
+
+    /**
+     * Sample data
+     */
+
+    private const EMPTY_STRING = '';
+    private const ID1 = 'f6dcdee6-af1d-474d-9658-e949d676bfe7';
+    private const ID2 = '6b2ad943-1ace-4b2c-8dec-06b7ab44ba9a';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -54,6 +64,19 @@ class AttributeConverterTest extends TestCase
                 \Google\Protobuf\Internal\GPBType::MESSAGE,
                 \Yoti\Protobuf\Attrpubapi\Anchor::class
             ),
+        ]);
+    }
+
+    /**
+     * Creates \Yoti\Protobuf\Attrpubapi\Attribute with provided name and value.
+     */
+    private function createProtobufAttributeWithId($name, $value, string $ephemeralId)
+    {
+        return new \Yoti\Protobuf\Attrpubapi\Attribute([
+            'name' => $name,
+            'value' => $value,
+            'content_type' => self::CONTENT_TYPE_STRING,
+            'ephemeral_id' => $ephemeralId
         ]);
     }
 
@@ -527,6 +550,61 @@ class AttributeConverterTest extends TestCase
 
         $this->assertEquals('THIRD_PARTY', $attr->getVerifiers()[0]->getValue());
         $this->assertEquals('orgName', $attr->getVerifiers()[0]->getSubType());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     */
+    public function testIdentityProfileReportAttributeShouldBeAddedToProfile()
+    {
+        $json = file_get_contents(TestData::IDENTITY_PROFILE_ATTRIBUTE);
+
+        $protobufAttribute = new \Yoti\Protobuf\Attrpubapi\Attribute([
+            'name' => UserProfile::ATTR_IDENTITY_PROFILE_REPORT,
+            'value' => $json,
+            'content_type' => self::CONTENT_TYPE_JSON,
+        ]);
+
+        $attr = AttributeConverter::convertToYotiAttribute($protobufAttribute);
+
+        $this->assertEquals(json_decode($json, true), $attr->getValue());
+    }
+
+    /**
+     * @covers ::convertToYotiAttribute
+     * @covers \Yoti\Profile\Attribute::getId
+     * @covers \Yoti\Profile\Attribute::__construct
+     * @covers \Yoti\Profile\BaseProfile::getAttributesList
+     * @covers \Yoti\Profile\BaseProfile::__construct
+     */
+    public function testShouldAddMultipleSameNamedAttributes()
+    {
+        $name = 'sameName';
+
+        $attribute1 = $this->createProtobufAttributeWithId(
+            $name,
+            self::EMPTY_STRING,
+            self::ID1
+        );
+
+        $attribute2 = $this->createProtobufAttributeWithId(
+            $name,
+            self::EMPTY_STRING,
+            self::ID2
+        );
+
+        $yotiAttribute1 = AttributeConverter::convertToYotiAttribute($attribute1);
+        $yotiAttribute2 = AttributeConverter::convertToYotiAttribute($attribute2);
+
+        $yotiProfile = new BaseProfile([$yotiAttribute1,$yotiAttribute2]);
+
+        $this->assertCount(2, $yotiProfile->getAttributesList());
+
+        $this->assertEquals($name, $yotiAttribute1->getName());
+        $this->assertEquals($name, $yotiAttribute2->getName());
+
+        $this->assertEquals(self::ID1, $yotiAttribute1->getId());
+        $this->assertEquals(self::ID2, $yotiAttribute2->getId());
     }
 
     /**

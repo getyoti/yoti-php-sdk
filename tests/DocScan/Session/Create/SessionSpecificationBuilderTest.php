@@ -52,6 +52,16 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $ibvOptionsMock;
 
+    /**
+     * @var object
+     */
+    private $subject;
+
+    /**
+     * @var object
+     */
+    private $identityProfileRequirements;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -61,15 +71,25 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->notificationsMock->method('jsonSerialize')->willReturn((object)['notifications']);
 
         $this->requestedCheckMock = $this->createMock(RequestedCheck::class);
-        $this->requestedCheckMock->method('jsonSerialize')->willReturn(['requestedChecks']);
+        $this->requestedCheckMock->method('jsonSerialize')->willReturn((object)['requestedChecks']);
 
         $this->requestedTaskMock = $this->createMock(RequestedTask::class);
-        $this->requestedTaskMock->method('jsonSerialize')->willReturn(['requestedTasks']);
+        $this->requestedTaskMock->method('jsonSerialize')->willReturn((object)['requestedTasks']);
 
         $this->requiredDocumentMock = $this->createMock(RequiredDocument::class);
         $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);
 
         $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
+
+        $this->subject = (object)[1 => 'some'];
+
+        $this->identityProfileRequirements = (object)[
+            'trust_framework' => 'UK_TFIDA',
+            'scheme' => [
+                'type' => 'DBS',
+                'objective' => 'STANDARD'
+            ]
+        ];
     }
 
     /**
@@ -316,6 +336,117 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_tasks' => [],
                 'required_documents' => [],
                 'ibv_options' => $this->ibvOptionsMock,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSubject
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldBuildWithSubject()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withSubject($this->subject)
+            ->build();
+
+        $this->assertEquals($this->subject, $sessionSpecificationResult->getSubject());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSubject
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldNotImplicitlySetAValueForSubject()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->build();
+
+        $this->assertNull($sessionSpecificationResult->getSubject());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithSubject()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withSubject($this->subject)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'subject' => $this->subject,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIdentityProfileRequirements
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldBuildWithIdentityProfileRequirements()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withIdentityProfileRequirements($this->identityProfileRequirements)
+            ->build();
+
+        $this->assertEquals(
+            $this->identityProfileRequirements,
+            $sessionSpecificationResult->getIdentityProfileRequirements()
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIdentityProfileRequirements
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldNotImplicitlySetAValueForIdentityProfileRequirements()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->build();
+
+        $this->assertNull($sessionSpecificationResult->getIdentityProfileRequirements());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithIdentityProfileRequirements()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withIdentityProfileRequirements($this->identityProfileRequirements)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'identity_profile_requirements' => $this->identityProfileRequirements,
             ]),
             json_encode($sessionSpecification)
         );

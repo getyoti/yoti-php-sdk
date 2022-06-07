@@ -50,9 +50,26 @@ class BaseProfile
      *
      * @return \Yoti\Profile\Attribute[]
      */
-    private function getAttributesByName(string $attributeName): array
+    public function getAttributesByName(string $attributeName): array
     {
         return $this->attributesMap[$attributeName] ?? [];
+    }
+
+    /**
+     * Retrieves an attribute which matches the ID specified.
+     *
+     * @param string $attributeId
+     *
+     * @return Attribute
+     */
+    public function getAttributeById(string $attributeId): ?Attribute
+    {
+        foreach ($this->attributesList as $attribute) {
+            if ($attribute->getId() == $attributeId) {
+                return $attribute;
+            }
+        }
+        return null;
     }
 
     /**
