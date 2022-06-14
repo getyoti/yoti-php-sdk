@@ -42,7 +42,6 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
      * @param RequestedCaSources $sources
      * @param RequestedCaMatchingStrategy $matchingStrategy
      */
-
     public function __construct(
         bool $removeDeceased,
         bool $shareUrl,
@@ -92,7 +91,7 @@ abstract class RequestedWatchlistAdvancedCaConfig implements RequestedCheckConfi
      */
     public function jsonSerialize(): stdClass
     {
-        return (object) [
+        return (object)[
             'remove_deceased' => $this->getRemoveDeceased(),
             'share_url' => $this->getShareUrl(),
             'sources' => $this->getSources(),

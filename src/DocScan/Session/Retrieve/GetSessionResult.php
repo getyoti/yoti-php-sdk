@@ -234,6 +234,14 @@ class GetSessionResult
     }
 
     /**
+     * @return ThirdPartyIdentityFraudOneCheckResponse[]
+     */
+    public function getThirdPartyIdentityFraudOneChecks(): array
+    {
+        return $this->filterCheckByType(ThirdPartyIdentityFraudOneCheckResponse::class);
+    }
+
+    /**
      * @param array<string, mixed> $check
      * @return CheckResponse
      * @throws \Yoti\Exception\DateTimeException
@@ -259,6 +267,8 @@ class GetSessionResult
                 return new WatchlistScreeningCheckResponse($check);
             case Constants::WATCHLIST_ADVANCED_CA:
                 return new WatchlistAdvancedCaCheckResponse($check);
+            case Constants::THIRD_PARTY_IDENTITY_FRAUD_1:
+                return new ThirdPartyIdentityFraudOneCheckResponse($check);
             default:
                 return new CheckResponse($check);
         }
