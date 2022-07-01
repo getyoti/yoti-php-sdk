@@ -18,10 +18,16 @@ class RequestedLivenessConfig implements RequestedCheckConfigInterface
      */
     private $maxRetries;
 
-    public function __construct(string $livenessType, int $maxRetries)
+    /**
+     * @var string|null
+     */
+    private $manualCheck;
+
+    public function __construct(string $livenessType, int $maxRetries, string $manualCheck = null)
     {
         $this->livenessType = $livenessType;
         $this->maxRetries = $maxRetries;
+        $this->manualCheck = $manualCheck;
     }
 
     /**
@@ -29,10 +35,16 @@ class RequestedLivenessConfig implements RequestedCheckConfigInterface
      */
     public function jsonSerialize(): stdClass
     {
-        return (object) [
+        $data = [
             'liveness_type' => $this->getLivenessType(),
             'max_retries' => $this->getMaxRetries(),
         ];
+
+        if (null !== $this->manualCheck) {
+            $data['manual_check'] = $this->getManualCheck();
+        }
+
+        return (object)$data;
     }
 
     /**
@@ -49,5 +61,13 @@ class RequestedLivenessConfig implements RequestedCheckConfigInterface
     public function getMaxRetries(): int
     {
         return $this->maxRetries;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getManualCheck(): ?string
+    {
+        return $this->manualCheck;
     }
 }

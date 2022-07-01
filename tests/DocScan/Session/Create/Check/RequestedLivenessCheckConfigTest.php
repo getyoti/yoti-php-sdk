@@ -12,19 +12,22 @@ class RequestedLivenessCheckConfigTest extends TestCase
 {
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
     private const SOME_MAX_RETRIES = 5;
+    private const NEVER = 'NEVER';
 
     /**
      * @test
      * @covers ::__construct
      * @covers ::getLivenessType
      * @covers ::getMaxRetries
+     * @covers ::getManualCheck
      */
     public function shouldHoldValuesCorrectly()
     {
-        $result = new RequestedLivenessConfig(self::SOME_LIVENESS_TYPE, self::SOME_MAX_RETRIES);
+        $result = new RequestedLivenessConfig(self::SOME_LIVENESS_TYPE, self::SOME_MAX_RETRIES, self::NEVER);
 
         $this->assertEquals(self::SOME_LIVENESS_TYPE, $result->getLivenessType());
         $this->assertEquals(self::SOME_MAX_RETRIES, $result->getMaxRetries());
+        $this->assertEquals(self::NEVER, $result->getManualCheck());
     }
 
     /**
