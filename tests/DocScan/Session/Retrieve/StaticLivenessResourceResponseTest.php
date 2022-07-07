@@ -12,6 +12,7 @@ use Yoti\Test\TestCase;
 class StaticLivenessResourceResponseTest extends TestCase
 {
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
+    private const SOME_ID = '493ru49358gh945fh305';
 
     /**
      * @test
@@ -25,7 +26,7 @@ class StaticLivenessResourceResponseTest extends TestCase
             'liveness_type' => self::SOME_LIVENESS_TYPE,
             'image' => [
                 'media' => [
-                    'id' => '349c30c35dc34c',
+                    'id' => self::SOME_ID,
                     'type' => 'IMAGE',
                     'created' => '2021-06-11T11:39:24Z',
                     'last_updated' => '2021-06-11T11:39:24Z',
@@ -37,6 +38,7 @@ class StaticLivenessResourceResponseTest extends TestCase
         $result = new StaticLivenessResourceResponse($input);
 
         $this->assertEquals(self::SOME_LIVENESS_TYPE, $result->getLivenessType());
+        $this->assertEquals(self::SOME_ID, $result->getImage()->getId());
         $this->assertNotNull($result->getImage());
         $this->assertInstanceOf(MediaResponse::class, $result->getImage());
     }
