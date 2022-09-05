@@ -9,14 +9,14 @@ class AttemptsConfiguration
      *
      * @var array<string, int>
      */
-    public $idDocumentTextDataExtraction;
+    public $ID_DOCUMENT_TEXT_DATA_EXTRACTION;
 
     /**
      * @param array<string, int> $idDocumentTextDataExtraction
      */
     public function __construct(array $idDocumentTextDataExtraction)
     {
-        $this->idDocumentTextDataExtraction = $idDocumentTextDataExtraction;
+        $this->ID_DOCUMENT_TEXT_DATA_EXTRACTION = $idDocumentTextDataExtraction;
     }
 
     /**
@@ -24,6 +24,6 @@ class AttemptsConfiguration
      */
     public function getIdDocumentTextDataExtraction(): array
     {
-        return $this->idDocumentTextDataExtraction;
+        return $this->ID_DOCUMENT_TEXT_DATA_EXTRACTION;
     }
 }
