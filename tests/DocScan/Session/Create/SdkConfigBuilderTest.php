@@ -226,6 +226,10 @@ class SdkConfigBuilderTest extends TestCase
 
         $this->assertCount(1, $sdkConfig->getAttemptsConfiguration()->getIdDocumentTextDataExtraction());
         $this->assertEquals($data, $sdkConfig->getAttemptsConfiguration()->getIdDocumentTextDataExtraction());
+        $this->assertArrayHasKey(
+            Constants::ID_DOCUMENT_TEXT_DATA_EXTRACTION,
+            (array)$sdkConfig->getAttemptsConfiguration()
+        );
     }
 
     /**

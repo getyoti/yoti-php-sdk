@@ -268,6 +268,7 @@ class Service
             )
             ->withPemFile($this->pemFile)
             ->withBaseUrl($this->apiUrl)
+            ->withQueryParam('sdkId', $this->sdkId)
             ->withEndpoint("/sessions/$sessionId/resources/face-capture/$resourceId/image")
             ->withPut()
             ->build()
