@@ -42,19 +42,19 @@ class MultipartEntity
 
     /**
      * @param string $name
-     * @param array<int,int> $payload
+     * @param string $payload
      * @param string $contentType
      * @param string $fileName
      *
      * @return void
      */
-    public function addBinaryBody(string $name, array $payload, string $contentType, string $fileName): void
+    public function addBinaryBody(string $name, string $payload, string $contentType, string $fileName): void
     {
         $this->multipartData[] = [
             'name' => $name,
-            'contents' => json_encode($payload),
+            'contents' => $payload,
             'filename' => $fileName,
-            'headers' => ['Content-type' => $contentType]
+            'headers' => ['Content-Type' => $contentType]
         ];
     }
 

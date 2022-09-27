@@ -33,7 +33,7 @@ class MultipartEntityTest extends TestCase
     public function shouldCorrectCreateStream()
     {
         $name = 'SOME_NAME';
-        $payload = ['SOME_PAYLOAD'];
+        $payload = 'SOME_PAYLOAD';
         $contentType = 'SOME_TYPE';
         $fileName = 'SOME_FILENAME';
 
@@ -42,9 +42,9 @@ class MultipartEntityTest extends TestCase
         $multipartData = [
             [
                 'name' => $name,
-                'contents' => json_encode($payload),
+                'contents' => $payload,
                 'filename' => $fileName,
-                'headers' => ['Content-type' => $contentType]
+                'headers' => ['Content-Type' => $contentType]
             ]
         ];
 

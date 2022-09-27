@@ -247,14 +247,14 @@ class RequestBuilder
      * in order to make use of the Multipart request
      *
      * @param string $name
-     * @param array<int, int> $payload
+     * @param string $payload
      * @param string $contentType
      * @param string $fileName
      * @return $this
      */
     public function withMultipartBinaryBody(
         string $name,
-        array $payload,
+        string $payload,
         string $contentType,
         string $fileName
     ): RequestBuilder {
@@ -282,10 +282,6 @@ class RequestBuilder
 
         if (isset($this->payload)) {
             $defaultHeaders['Content-Type'] = 'application/json';
-        }
-
-        if (isset($this->multipartEntity)) {
-            $defaultHeaders['Content-Type'] = 'multipart/form-data';
         }
 
         return array_merge($defaultHeaders, $this->headers);
@@ -367,11 +363,14 @@ class RequestBuilder
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 
+        $payload = isset($this->multipartEntity) ? Payload::fromStream($this->multipartEntity->createStream()) :
+            $this->payload;
+
         $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
             $this->pemFile,
             $endpointWithParams,
             $this->method,
-            $this->payload
+            $payload
         ));
 
         $url = $this->baseUrl . $endpointWithParams;

@@ -233,6 +233,7 @@ class Service
     ): CreateFaceCaptureResourceResponse {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
+            ->withQueryParam('sdkId', $this->sdkId)
             ->withEndpoint("sessions/$sessionId/resources/face-capture")
             ->withPemFile($this->pemFile)
             ->withPayload(Payload::fromJsonData($createFaceCaptureResourcePayload))
