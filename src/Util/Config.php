@@ -29,7 +29,7 @@ class Config
     /** Logger key */
     public const LOGGER = 'logger';
 
-    public const YOTI_MULTIPART_BOUNDARY = 'yoti-doc-scan-boundary';
+    public const YOTI_MULTIPART_BOUNDARY = 'X-Yoti-Multipart-Request-Boundary';
 
     /** Type error message */
     private const TYPE_ERROR_MESSAGE = '%s configuration value must be of type %s';

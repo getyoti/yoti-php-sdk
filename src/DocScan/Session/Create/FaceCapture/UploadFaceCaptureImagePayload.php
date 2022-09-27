@@ -10,15 +10,15 @@ class UploadFaceCaptureImagePayload
     private $imageContentType;
 
     /**
-     * @var array<int, int>
+     * @var string
      */
     private $imageContents;
 
     /**
      * @param string $imageContentType
-     * @param array<int, int> $imageContents
+     * @param string $imageContents
      */
-    public function __construct(string $imageContentType, array $imageContents)
+    public function __construct(string $imageContentType, string $imageContents)
     {
         $this->imageContentType = $imageContentType;
         $this->imageContents = $imageContents;
@@ -33,9 +33,9 @@ class UploadFaceCaptureImagePayload
     }
 
     /**
-     * @return array<int, int>
+     * @return string
      */
-    public function getImageContents(): array
+    public function getImageContents(): string
     {
         return $this->imageContents;
     }
