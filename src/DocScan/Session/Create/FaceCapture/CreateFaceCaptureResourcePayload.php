@@ -2,12 +2,16 @@
 
 namespace Yoti\DocScan\Session\Create\FaceCapture;
 
-class CreateFaceCaptureResourcePayload
+use JsonSerializable;
+use stdClass;
+use Yoti\Util\Json;
+
+class CreateFaceCaptureResourcePayload implements JsonSerializable
 {
     /**
      * @var string
      */
-    private $requirementId;
+    public $requirementId;
 
     /**
      * @param string $requirementId
@@ -23,5 +27,12 @@ class CreateFaceCaptureResourcePayload
     public function getRequirementId(): string
     {
         return $this->requirementId;
+    }
+
+    public function jsonSerialize(): stdClass
+    {
+        return (object)Json::withoutNullValues([
+            'requirement_id' => $this->getRequirementId(),
+        ]);
     }
 }

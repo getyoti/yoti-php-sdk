@@ -13,7 +13,7 @@ use Yoti\Test\TestCase;
  */
 class UploadFaceCaptureImagePayloadBuilderTest extends TestCase
 {
-    private const SOME_IMAGE_CONTENTS = [1, 2, 3, 4];
+    private const SOME_IMAGE_CONTENTS = "SOME_CONTENTS";
 
     /**
      * @test

@@ -11,7 +11,7 @@ use Yoti\Test\TestCase;
  */
 class UploadFaceCaptureImagePayloadTest extends TestCase
 {
-    private const SOME_IMAGE_CONTENTS = [1, 2, 3, 4];
+    private const SOME_IMAGE_CONTENTS = "SOME_CONTENTS";
     private const SOME_IMAGE_CONTENT_TYPE = 'img/some';
 
     /**
