@@ -26,6 +26,11 @@ class DocumentRestrictionsFilterBuilder
     private $allowNonLatinDocuments;
 
     /**
+     * @var bool|null
+     */
+    private $allowExpiredDocuments;
+
+    /**
      * @return $this
      */
     public function forWhitelist(): self
@@ -64,6 +69,24 @@ class DocumentRestrictionsFilterBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withAllowExpiredDocuments(): self
+    {
+        $this->allowExpiredDocuments = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withDenyExpiredDocuments(): self
+    {
+        $this->allowExpiredDocuments = false;
+        return $this;
+    }
+
+    /**
      * @return DocumentRestrictionsFilter
      */
     public function build(): DocumentFilter
@@ -72,7 +95,8 @@ class DocumentRestrictionsFilterBuilder
         return new DocumentRestrictionsFilter(
             $this->inclusion,
             $this->documents,
-            $this->allowNonLatinDocuments
+            $this->allowNonLatinDocuments,
+            $this->allowExpiredDocuments
         );
     }
 }
