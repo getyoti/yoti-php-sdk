@@ -25,20 +25,27 @@ class OrthogonalRestrictionsFilter extends DocumentFilter
     private $allowNonLatinDocuments;
 
     /**
+     * @var bool|null
+     */
+    private $allowExpiredDocuments;
+
+    /**
      * @param CountryRestriction|null $countryRestriction
      * @param TypeRestriction|null $typeRestriction
      * @param bool|null $allowNonLatinDocuments
+     * @param bool|null $allowExpiredDocuments
      */
     public function __construct(
         ?CountryRestriction $countryRestriction,
         ?TypeRestriction $typeRestriction,
-        ?bool $allowNonLatinDocuments
+        ?bool $allowNonLatinDocuments,
+        ?bool $allowExpiredDocuments
     ) {
         parent::__construct(Constants::ORTHOGONAL_RESTRICTIONS);
-
         $this->countryRestriction = $countryRestriction;
         $this->typeRestriction = $typeRestriction;
         $this->allowNonLatinDocuments = $allowNonLatinDocuments;
+        $this->allowExpiredDocuments = $allowExpiredDocuments;
     }
 
     /**
@@ -60,6 +67,10 @@ class OrthogonalRestrictionsFilter extends DocumentFilter
             $jsonData->allow_non_latin_documents = $this->allowNonLatinDocuments;
         }
 
+        if (isset($this->allowExpiredDocuments)) {
+            $jsonData->allow_expired_documents = $this->allowExpiredDocuments;
+        }
+
         return $jsonData;
     }
 
@@ -69,5 +80,13 @@ class OrthogonalRestrictionsFilter extends DocumentFilter
     public function isAllowNonLatinDocuments(): ?bool
     {
         return $this->allowNonLatinDocuments;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isAllowExpiredDocuments(): ?bool
+    {
+        return $this->allowExpiredDocuments;
     }
 }

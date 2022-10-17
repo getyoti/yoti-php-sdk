@@ -153,4 +153,68 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertNull($filter->isAllowNonLatinDocuments());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withAllowExpiredDocuments
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithAllowExpiredDocuments(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowExpiredDocuments()
+            ->build();
+
+        $this->assertTrue($filter->isAllowExpiredDocuments());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withDenyExpiredDocuments
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithDenyExpiredDocuments(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withDenyExpiredDocuments()
+            ->build();
+
+        $this->assertFalse($filter->isAllowExpiredDocuments());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildAndAllowExpiredDocumentsEqualsNull(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->build();
+
+        $this->assertNull($filter->isAllowExpiredDocuments());
+    }
 }

@@ -25,6 +25,11 @@ class OrthogonalRestrictionsFilterBuilder
     private $allowNonLatinDocuments;
 
     /**
+     * @var bool|null
+     */
+    private $allowExpiredDocuments;
+
+    /**
      * @param string[] $countryCodes
      *
      * @return $this
@@ -91,6 +96,24 @@ class OrthogonalRestrictionsFilterBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withAllowExpiredDocuments(): OrthogonalRestrictionsFilterBuilder
+    {
+        $this->allowExpiredDocuments = true;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withDenyExpiredDocuments(): OrthogonalRestrictionsFilterBuilder
+    {
+        $this->allowExpiredDocuments = false;
+        return $this;
+    }
+
+    /**
      * @return OrthogonalRestrictionsFilter
      */
     public function build(): DocumentFilter
@@ -98,7 +121,8 @@ class OrthogonalRestrictionsFilterBuilder
         return new OrthogonalRestrictionsFilter(
             $this->countryRestriction,
             $this->typeRestriction,
-            $this->allowNonLatinDocuments
+            $this->allowNonLatinDocuments,
+            $this->allowExpiredDocuments
         );
     }
 }
