@@ -27,6 +27,7 @@ class GetSessionResultTest extends TestCase
     private const WATCHLIST_ADVANCED_CA = 'WATCHLIST_ADVANCED_CA';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
     private const LIVENESS = 'LIVENESS';
+    private const FACE_COMPARISON = 'FACE_COMPARISON';
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
     private const SOME_STATE = 'someState';
     private const SOME_SESSION_ID = 'someSessionId';
@@ -125,6 +126,7 @@ class GetSessionResultTest extends TestCase
      * @covers ::getLivenessChecks
      * @covers ::getWatchlistAdvancedCaChecks
      * @covers ::getThirdPartyIdentityFraudOneChecks
+     * @covers ::getFaceComparisonChecks
      * @covers ::createCheckFromArray
      * @covers ::filterCheckByType
      */
@@ -142,12 +144,13 @@ class GetSessionResultTest extends TestCase
                 ['type' => self::LIVENESS],
                 ['type' => self::WATCHLIST_ADVANCED_CA],
                 ['type' => self::THIRD_PARTY_IDENTITY_FRAUD_1],
+                ['type' => self::FACE_COMPARISON],
             ],
         ];
 
         $result = new GetSessionResult($input);
 
-        $this->assertCount(10, $result->getChecks());
+        $this->assertCount(11, $result->getChecks());
         $this->assertCount(1, $result->getAuthenticityChecks());
         $this->assertCount(1, $result->getFaceMatchChecks());
         $this->assertCount(1, $result->getTextDataChecks());
@@ -159,6 +162,7 @@ class GetSessionResultTest extends TestCase
         $this->assertCount(1, $result->getLivenessChecks());
         $this->assertCount(1, $result->getWatchlistAdvancedCaChecks());
         $this->assertCount(1, $result->getThirdPartyIdentityFraudOneChecks());
+        $this->assertCount(1, $result->getFaceComparisonChecks());
 
         $this->assertEquals(
             self::ID_DOCUMENT_AUTHENTICITY,
@@ -204,6 +208,11 @@ class GetSessionResultTest extends TestCase
         $this->assertInstanceOf(
             ThirdPartyIdentityFraudOneCheckResponse::class,
             $result->getThirdPartyIdentityFraudOneChecks()[0]
+        );
+
+        $this->assertEquals(
+            self::FACE_COMPARISON,
+            $result->getFaceComparisonChecks()[0]->getType()
         );
     }
 
