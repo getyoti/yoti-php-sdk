@@ -60,5 +60,10 @@
     "hooks": {
         "pre-commit": "composer test && composer lint"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
   }
 }
