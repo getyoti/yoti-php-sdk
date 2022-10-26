@@ -18,11 +18,6 @@ class ResourceResponse
     private $tasks = [];
 
     /**
-     * @var AllowedSourceResponse
-     */
-    private $source;
-
-    /**
      * ResourceResponse constructor.
      * @param array<string, mixed> $resource
      */
@@ -51,14 +46,6 @@ class ResourceResponse
     public function getTasks(): array
     {
         return $this->tasks;
-    }
-
-    /**
-     * @return AllowedSourceResponse
-     */
-    public function getSource(): AllowedSourceResponse
-    {
-        return $this->source;
     }
 
     /**

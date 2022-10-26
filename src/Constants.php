@@ -25,7 +25,7 @@ class Constants
     public const SDK_IDENTIFIER = 'PHP';
 
     /** Default SDK version */
-    public const SDK_VERSION = '3.9.1';
+    public const SDK_VERSION = '3.9.2';
 
     /** Base url for connect page (user will be redirected to this page eg. baseurl/app-id) */
     public const CONNECT_BASE_URL = 'https://www.yoti.com/connect';
