@@ -31,32 +31,6 @@ jobs:
 
       - run: composer test
 
-  php7:
-    name: Unit Tests (php ${{ matrix.php-version }})
-    runs-on: ubuntu-latest
-    # always run on push events
-    # only run on pull_request_target event when pull request pulls from fork repository
-    if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [ 7.4 ]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: shivammathur/setup-php@2.9.0
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - run: composer self-update
-
-      - run: composer install --no-interaction --prefer-source --dev
-
-      - run: composer test
-
   protobuf:
     name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
@@ -68,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ 7.4 ]
+        php-version: [ 8.1 ]
 
     steps:
       - uses: actions/checkout@v2
