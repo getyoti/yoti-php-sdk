@@ -2,7 +2,7 @@ name: Unit Tests
 on: [ push, pull_request_target ]
 
 jobs:
-  php8compat:
+  php8-1:
     name: Unit Tests php8.1 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
@@ -31,7 +31,7 @@ jobs:
 
       - run: composer test
 
-  php7:
+  php7-4:
     name: Unit Tests php7.4 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
@@ -57,7 +57,7 @@ jobs:
 
       - run: composer test
 
-  php8.0:
+  php8-0:
     name: Unit Tests php8.0 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
