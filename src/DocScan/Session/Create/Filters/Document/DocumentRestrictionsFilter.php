@@ -32,7 +32,7 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
 
     /**
      * @param string $inclusion
-     * @param array $documents
+     * @param DocumentRestriction[] $documents
      * @param bool|null $allowNonLatinDocuments
      * @param bool|null $allowExpiredDocuments
      */
