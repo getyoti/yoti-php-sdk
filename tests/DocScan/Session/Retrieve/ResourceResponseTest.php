@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
+use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
 use Yoti\DocScan\Session\Retrieve\ResourceResponse;
 use Yoti\DocScan\Session\Retrieve\TaskResponse;
 use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
@@ -18,6 +19,7 @@ class ResourceResponseTest extends TestCase
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION';
     private const SOME_UNKNOWN_TASK = 'someUnknownTask';
     private const SOME_ID = 'someId';
+    private const RELYING_BUSINESS = 'RELYING_BUSINESS';
 
     /**
      * @test
@@ -112,5 +114,24 @@ class ResourceResponseTest extends TestCase
 
         $this->assertNull($result->getId());
         $this->assertCount(0, $result->getTasks());
+    }
+
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::createSourceFromType
+     */
+    public function shouldCreateSourceCorrectly()
+    {
+        $input = [
+            'source' => [
+                'type' => self::RELYING_BUSINESS
+            ]
+        ];
+
+        $result = new ResourceResponse($input);
+
+        $this->assertInstanceOf(AllowedSourceResponse::class, $result->getSource());
     }
 }
