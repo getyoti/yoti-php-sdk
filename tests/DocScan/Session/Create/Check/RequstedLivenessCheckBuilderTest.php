@@ -13,6 +13,7 @@ class RequstedLivenessCheckBuilderTest extends TestCase
 {
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
     private const SOME_MAX_RETRIES = 3;
+    private const NEVER = 'NEVER';
 
     /**
      * @test
@@ -77,6 +78,37 @@ class RequstedLivenessCheckBuilderTest extends TestCase
             'config' => [
                 'liveness_type' => 'ZOOM',
                 'max_retries' => self::SOME_MAX_RETRIES,
+            ]
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
+     * @covers ::forStaticLiveness
+     * @covers ::withManualCheck
+     * @covers ::withoutManualCheck
+     * @covers ::withMaxRetries
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::__construct
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getType
+     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getConfig
+     */
+    public function shouldBuildWithStaticLivenessType()
+    {
+        $result = (new RequestedLivenessCheckBuilder())
+            ->forStaticLiveness()
+            ->withMaxRetries(self::SOME_MAX_RETRIES)
+            ->withoutManualCheck()
+            ->build();
+
+        $expected = [
+            'type' => 'LIVENESS',
+            'config' => [
+                'liveness_type' => 'STATIC',
+                'max_retries' => self::SOME_MAX_RETRIES,
+                'manual_check' => self::NEVER,
             ]
         ];
 

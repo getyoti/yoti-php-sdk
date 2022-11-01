@@ -270,4 +270,115 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertNull($filter->isAllowNonLatinDocuments());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowExpiredDocuments
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     */
+    public function shouldBuildWithAllowExpiredDocuments()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withBlacklistedDocumentTypes([self::SOME_DOCUMENT_TYPE])
+            ->withBlacklistedCountries([self::SOME_COUNTRY_CODE])
+            ->withAllowExpiredDocuments()
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'ORTHOGONAL_RESTRICTIONS',
+                    'allow_expired_documents' => true,
+                    'country_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'country_codes' => [self::SOME_COUNTRY_CODE],
+                    ],
+                    'type_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'document_types' => [self::SOME_DOCUMENT_TYPE],
+                    ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertTrue($filter->isAllowExpiredDocuments());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::withDenyExpiredDocuments
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     */
+    public function shouldBuildWithDenyExpiredDocuments()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withBlacklistedDocumentTypes([self::SOME_DOCUMENT_TYPE])
+            ->withBlacklistedCountries([self::SOME_COUNTRY_CODE])
+            ->withDenyExpiredDocuments()
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'ORTHOGONAL_RESTRICTIONS',
+                    'allow_expired_documents' => false,
+                    'country_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'country_codes' => [self::SOME_COUNTRY_CODE],
+                    ],
+                    'type_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'document_types' => [self::SOME_DOCUMENT_TYPE],
+                    ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertFalse($filter->isAllowExpiredDocuments());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     */
+    public function shouldBuildAndAllowExpiredDocumentsEqualsNull()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withBlacklistedDocumentTypes([self::SOME_DOCUMENT_TYPE])
+            ->withBlacklistedCountries([self::SOME_COUNTRY_CODE])
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'ORTHOGONAL_RESTRICTIONS',
+                    'country_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'country_codes' => [self::SOME_COUNTRY_CODE],
+                    ],
+                    'type_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'document_types' => [self::SOME_DOCUMENT_TYPE],
+                    ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertNull($filter->isAllowExpiredDocuments());
+    }
 }

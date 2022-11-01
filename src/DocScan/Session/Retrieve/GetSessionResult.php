@@ -192,6 +192,14 @@ class GetSessionResult
     }
 
     /**
+     * @return FaceComparisonCheckResponse[]
+     */
+    public function getFaceComparisonChecks(): array
+    {
+        return $this->filterCheckByType(FaceComparisonCheckResponse::class);
+    }
+
+    /**
      * @deprecated replaced by ::getIdDocumentTextDataChecks()
      *
      * @return TextDataCheckResponse[]
@@ -255,6 +263,8 @@ class GetSessionResult
                 return new IdDocumentComparisonCheckResponse($check);
             case Constants::ID_DOCUMENT_FACE_MATCH:
                 return new FaceMatchCheckResponse($check);
+            case Constants::FACE_COMPARISON:
+                return new FaceComparisonCheckResponse($check);
             case Constants::ID_DOCUMENT_TEXT_DATA_CHECK:
                 return new TextDataCheckResponse($check);
             case Constants::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK:

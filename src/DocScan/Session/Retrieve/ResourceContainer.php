@@ -88,6 +88,9 @@ class ResourceContainer
                     case 'ZOOM':
                         $parsedLivenessCaptures[] = new ZoomLivenessResourceResponse($capture);
                         break;
+                    case 'STATIC':
+                        $parsedLivenessCaptures[] = new StaticLivenessResourceResponse($capture);
+                        break;
                     default:
                         $parsedLivenessCaptures[] = new LivenessResourceResponse($capture);
                         break;
@@ -140,6 +143,14 @@ class ResourceContainer
     public function getZoomLivenessResources(): array
     {
         return $this->filterLivenessByType(ZoomLivenessResourceResponse::class);
+    }
+
+    /**
+     * @return StaticLivenessResourceResponse[]
+     */
+    public function getStaticLivenessResources(): array
+    {
+        return $this->filterLivenessByType(StaticLivenessResourceResponse::class);
     }
 
     /**

@@ -14,6 +14,7 @@ class Constants
     public const LIVENESS = 'LIVENESS';
     public const WATCHLIST_SCREENING = 'WATCHLIST_SCREENING';
     public const WATCHLIST_ADVANCED_CA = 'WATCHLIST_ADVANCED_CA';
+    public const FACE_COMPARISON = 'FACE_COMPARISON';
 
     public const WITH_YOTI_ACCOUNT = 'WITH_YOTI_ACCOUNT';
     public const WITH_CUSTOM_ACCOUNT = 'WITH_CUSTOM_ACCOUNT';

@@ -32,7 +32,7 @@ composer coverage-clover
 We follow the [PSR-12 Style Guide](https://www.php-fig.org/psr/psr-12/), which
 is configured in [.phpcs.xml.dist](.phpcs.xml.dist).
 
-Additional checks are configured in [.php_cs.dist](.php_cs.dist) - See
+Additional checks are configured in [.php-cs-fixer.dist.php](.php-cs-fixer.dist.php) - See
 <https://cs.symfony.com/> for further information.
 
 Coding style can be verified by running:

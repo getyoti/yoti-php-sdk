@@ -26,12 +26,22 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
     private $allowNonLatinDocuments;
 
     /**
+     * @var bool|null
+     */
+    private $allowExpiredDocuments;
+
+    /**
      * @param string $inclusion
      * @param DocumentRestriction[] $documents
      * @param bool|null $allowNonLatinDocuments
+     * @param bool|null $allowExpiredDocuments
      */
-    public function __construct(string $inclusion, array $documents, ?bool $allowNonLatinDocuments)
-    {
+    public function __construct(
+        string $inclusion,
+        array $documents,
+        ?bool $allowNonLatinDocuments,
+        ?bool $allowExpiredDocuments
+    ) {
         parent::__construct(Constants::DOCUMENT_RESTRICTIONS);
 
         Validation::notEmptyString($inclusion, 'inclusion');
@@ -41,6 +51,7 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
         Validation::isArrayOfType($documents, [DocumentRestriction::class], 'documents');
         $this->documents = $documents;
         $this->allowNonLatinDocuments = $allowNonLatinDocuments;
+        $this->allowExpiredDocuments = $allowExpiredDocuments;
     }
 
     /**
@@ -56,6 +67,10 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
             $jsonData->allow_non_latin_documents = $this->allowNonLatinDocuments;
         }
 
+        if (isset($this->allowExpiredDocuments)) {
+            $jsonData->allow_expired_documents = $this->allowExpiredDocuments;
+        }
+
         return $jsonData;
     }
 
@@ -65,5 +80,13 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
     public function isAllowNonLatinDocuments(): ?bool
     {
         return $this->allowNonLatinDocuments;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isAllowExpiredDocuments(): ?bool
+    {
+        return $this->allowExpiredDocuments;
     }
 }
