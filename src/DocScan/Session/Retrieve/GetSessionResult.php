@@ -49,10 +49,9 @@ class GetSessionResult
      */
     private $biometricConsent;
 
-    /**
-     * @var IdentityProfileResponse
-     */
-    private $identityProfile;
+    private ?IdentityProfileResponse $identityProfile;
+
+    private ?IdentityProfilePreviewResponse $identityProfilePreview;
 
     /**
      * DocScanSession constructor.
@@ -84,6 +83,12 @@ class GetSessionResult
 
         if (isset($sessionData['identity_profile'])) {
             $this->identityProfile = new IdentityProfileResponse($sessionData['identity_profile']);
+        }
+
+        if (isset($sessionData['identity_profile_preview'])) {
+            $this->identityProfilePreview = new IdentityProfilePreviewResponse(
+                $sessionData['identity_profile_preview']
+            );
         }
     }
 
@@ -300,11 +305,13 @@ class GetSessionResult
         return array_values($filtered);
     }
 
-    /**
-     * @return IdentityProfileResponse
-     */
-    public function getIdentityProfile(): IdentityProfileResponse
+    public function getIdentityProfile(): ?IdentityProfileResponse
     {
         return $this->identityProfile;
+    }
+
+    public function getIdentityProfilePreview(): ?IdentityProfilePreviewResponse
+    {
+        return $this->identityProfilePreview;
     }
 }
