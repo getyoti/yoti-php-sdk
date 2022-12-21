@@ -78,6 +78,11 @@ class SessionSpecificationBuilder
     private $identityProfileRequirements;
 
     /**
+     * @var bool
+     */
+    private bool $createIdentityProfilePreview = false;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -244,6 +249,15 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withCreateIdentityProfilePreview(): self
+    {
+        $this->createIdentityProfilePreview = true;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -261,7 +275,8 @@ class SessionSpecificationBuilder
             $this->blockBiometricConsent,
             $this->ibvOptions,
             $this->subject,
-            $this->identityProfileRequirements
+            $this->identityProfileRequirements,
+            $this->createIdentityProfilePreview,
         );
     }
 }

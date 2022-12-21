@@ -219,6 +219,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_tasks' => [$this->requestedTaskMock],
                 'required_documents' => [$this->requiredDocumentMock],
                 'block_biometric_consent' => true,
+                'create_identity_profile_preview' => false,
             ]),
             json_encode($sessionSpecification)
         );
@@ -237,6 +238,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
             ]),
             json_encode($sessionSpecification)
         );
@@ -257,6 +259,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
                 'block_biometric_consent' => true,
             ]),
             json_encode($sessionSpecification)
@@ -278,6 +281,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
                 'block_biometric_consent' => false,
             ]),
             json_encode($sessionSpecification)
@@ -335,6 +339,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
                 'ibv_options' => $this->ibvOptionsMock,
             ]),
             json_encode($sessionSpecification)
@@ -389,6 +394,7 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
                 'subject' => $this->subject,
             ]),
             json_encode($sessionSpecification)
@@ -446,7 +452,34 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_checks' => [],
                 'requested_tasks' => [],
                 'required_documents' => [],
+                'create_identity_profile_preview' => false,
                 'identity_profile_requirements' => $this->identityProfileRequirements,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getCreateIdentityProfilePreview
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withCreateIdentityProfilePreview
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithIdentityProfilePreviewTrue()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withCreateIdentityProfilePreview()
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'create_identity_profile_preview' => true,
             ]),
             json_encode($sessionSpecification)
         );
