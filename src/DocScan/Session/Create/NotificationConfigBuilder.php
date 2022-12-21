@@ -12,6 +12,7 @@ class NotificationConfigBuilder
     private const TASK_COMPLETION = 'TASK_COMPLETION';
     private const CHECK_COMPLETION = 'CHECK_COMPLETION';
     private const SESSION_COMPLETION = 'SESSION_COMPLETION';
+    private const CLIENT_SESSION_TOKEN_DELETED = 'CLIENT_SESSION_TOKEN_DELETED';
 
     /**
      * @var string
@@ -111,6 +112,14 @@ class NotificationConfigBuilder
     public function forSessionCompletion(): self
     {
         return $this->withTopic(self::SESSION_COMPLETION);
+    }
+
+    /**
+     * @return $this
+     */
+    public function forClientSessionCompletion(): self
+    {
+        return $this->withTopic(self::CLIENT_SESSION_TOKEN_DELETED);
     }
 
     /**
