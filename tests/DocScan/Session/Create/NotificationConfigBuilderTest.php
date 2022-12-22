@@ -105,10 +105,26 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
+     * @covers ::forClientSessionCompletion
+     */
+    public function shouldUseCorrectValueForClientSessionCompletion(): void
+    {
+        $result = (new NotificationConfigBuilder())
+            ->withAuthToken(self::SOME_AUTH_TOKEN)
+            ->withEndpoint(self::SOME_ENDPOINT)
+            ->forClientSessionCompletion()
+            ->build();
+
+        $this->assertContains('CLIENT_SESSION_TOKEN_DELETED', $result->getTopics());
+    }
+
+    /**
+     * @test
      * @covers ::forResourceUpdate
      * @covers ::forTaskCompletion
      * @covers ::forCheckCompletion
      * @covers ::forSessionCompletion
+     * @covers ::forClientSessionCompletion
      * @covers ::withTopic
      */
     public function shouldAllowAllNotificationTypes(): void
@@ -120,13 +136,15 @@ class NotificationConfigBuilderTest extends TestCase
             ->forTaskCompletion()
             ->forCheckCompletion()
             ->forSessionCompletion()
+            ->forClientSessionCompletion()
             ->build();
 
-        $this->assertCount(4, $result->getTopics());
+        $this->assertCount(5, $result->getTopics());
         $this->assertContains('RESOURCE_UPDATE', $result->getTopics());
         $this->assertContains('TASK_COMPLETION', $result->getTopics());
         $this->assertContains('CHECK_COMPLETION', $result->getTopics());
         $this->assertContains('SESSION_COMPLETION', $result->getTopics());
+        $this->assertContains('CLIENT_SESSION_TOKEN_DELETED', $result->getTopics());
     }
 
     /**
