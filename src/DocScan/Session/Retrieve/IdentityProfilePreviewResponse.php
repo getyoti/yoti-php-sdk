@@ -6,6 +6,10 @@ class IdentityProfilePreviewResponse
 {
     private ?MediaResponse $media = null;
 
+    /**
+     * @param array<string, mixed> $sessionData
+     * @throws \Yoti\Exception\DateTimeException
+     */
     public function __construct(array $sessionData)
     {
         if (isset($sessionData['media'])) {
