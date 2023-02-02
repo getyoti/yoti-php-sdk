@@ -7,6 +7,7 @@ namespace Yoti\Test\DocScan\Session\Retrieve;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
+use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
@@ -233,5 +234,28 @@ class GetSessionResultTest extends TestCase
         $result = new GetSessionResult($input);
 
         $this->assertCount(0, $result->getThirdPartyIdentityFraudOneChecks());
+    }
+
+    /**
+     * @test
+     * @covers ::getIdentityProfilePreview
+     * @covers ::__construct
+     */
+    public function shouldParseIdentityProfilePreviewResponse()
+    {
+        $input = [
+            'identity_profile_preview' => [
+                'media' => [
+                    'id' => 'SOME_ID',
+                    'type' => 'JSON',
+                    'created' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                ]
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(IdentityProfilePreviewResponse::class, $result->getIdentityProfilePreview());
     }
 }

@@ -78,6 +78,8 @@ class SessionSpecification implements JsonSerializable
      */
     private $identityProfileRequirements;
 
+    private ?bool $createIdentityProfilePreview;
+
     /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
@@ -92,6 +94,7 @@ class SessionSpecification implements JsonSerializable
      * @param IbvOptions|null $ibvOptions
      * @param object|null $subject
      * @param object|null $identityProfileRequirements
+     * @param bool $createIdentityProfilePreview
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -106,7 +109,8 @@ class SessionSpecification implements JsonSerializable
         ?bool $blockBiometricConsent = null,
         ?IbvOptions $ibvOptions = null,
         $subject = null,
-        $identityProfileRequirements = null
+        $identityProfileRequirements = null,
+        ?bool $createIdentityProfilePreview = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -121,6 +125,7 @@ class SessionSpecification implements JsonSerializable
         $this->ibvOptions = $ibvOptions;
         $this->subject = $subject;
         $this->identityProfileRequirements = $identityProfileRequirements;
+        $this->createIdentityProfilePreview = $createIdentityProfilePreview;
     }
 
     /**
@@ -142,6 +147,7 @@ class SessionSpecification implements JsonSerializable
             'ibv_options' => $this->getIbvOptions(),
             'subject' => $this->getSubject(),
             'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
+            'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
         ]);
     }
 
@@ -252,5 +258,10 @@ class SessionSpecification implements JsonSerializable
     public function getIdentityProfileRequirements()
     {
         return $this->identityProfileRequirements;
+    }
+
+    public function getCreateIdentityProfilePreview(): ?bool
+    {
+        return $this->createIdentityProfilePreview;
     }
 }

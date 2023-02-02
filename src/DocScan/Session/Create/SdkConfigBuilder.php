@@ -170,13 +170,20 @@ class SdkConfigBuilder
     }
 
     /**
+     * @deprecated from 4.2.0, @see withIdDocumentTextExtractionGenericAttempts
+     */
+    public function withIdDocumentTextExtractionGenericRetries(int $genericRetries): void
+    {
+    }
+
+    /**
      * Allows configuring the number of 'Generic' attempts permitted for text extraction on an ID document
      *
      * The number of generic retries
      * @param int $genericRetries
      * @return $this
      */
-    public function withIdDocumentTextExtractionGenericRetries(int $genericRetries): self
+    public function withIdDocumentTextExtractionGenericAttempts(int $genericRetries): self
     {
         $this->withIdDocumentTextExtractionCategoryRetries(Constants::GENERIC, $genericRetries);
         return $this;

@@ -237,7 +237,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withIdDocumentTextExtractionCategoryRetries
      * @covers ::withIdDocumentTextExtractionReclassificationRetries
-     * @covers ::withIdDocumentTextExtractionGenericRetries
+     * @covers ::withIdDocumentTextExtractionGenericAttempts
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAttemptsConfiguration
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::__construct
@@ -250,7 +250,7 @@ class SdkConfigBuilderTest extends TestCase
 
         $sdkConfig = (new SdkConfigBuilder())
             ->withIdDocumentTextExtractionReclassificationRetries($numberOfReclassificationRetries)
-            ->withIdDocumentTextExtractionGenericRetries($numberOfGenericRetries)
+            ->withIdDocumentTextExtractionGenericAttempts($numberOfGenericRetries)
             ->withIdDocumentTextExtractionCategoryRetries(self::SOME_CATEGORY, self::SOME_NUMBER_RETRIES)
             ->build();
 
