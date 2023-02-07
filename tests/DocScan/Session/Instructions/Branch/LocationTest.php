@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions\Branch;
+namespace Yoti\Test\IDV\Session\Instructions\Branch;
 
-use Yoti\DocScan\Session\Instructions\Branch\LocationBuilder;
+use Yoti\IDV\Session\Instructions\Branch\LocationBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Branch\Location
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\Branch\Location
  */
 class LocationTest extends TestCase
 {
@@ -18,9 +18,9 @@ class LocationTest extends TestCase
      * @covers ::__construct
      * @covers ::getLongitude
      * @covers ::getLatitude
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\LocationBuilder::withLongitude
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\LocationBuilder::withLatitude
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\LocationBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\Branch\LocationBuilder::withLongitude
+     * @covers \Yoti\IDV\Session\Instructions\Branch\LocationBuilder::withLatitude
+     * @covers \Yoti\IDV\Session\Instructions\Branch\LocationBuilder::build
      */
     public function builderShouldBuildWithAllProperties()
     {

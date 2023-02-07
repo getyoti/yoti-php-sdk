@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfig;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfig;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfig
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfig
  */
 class RequestedWatchlistScreeningConfigTest extends TestCase
 {
@@ -32,7 +32,7 @@ class RequestedWatchlistScreeningConfigTest extends TestCase
     /**
      * @test
      * @covers ::getCategories
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
      */
     public function builderShouldBuildWithAdverseMediaCategory()
     {
@@ -47,7 +47,7 @@ class RequestedWatchlistScreeningConfigTest extends TestCase
     /**
      * @test
      * @covers ::getCategories
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
      */
     public function builderShouldBuildWithSanctionsCategory()
     {
@@ -78,10 +78,10 @@ class RequestedWatchlistScreeningConfigTest extends TestCase
     /**
      * @test
      * @covers ::getCategories
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withCategory
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::build
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::build
      * @covers ::__construct
      */
     public function builderShouldNotAddCategoryMoreThanOnceEvenIfCalled()
@@ -99,10 +99,10 @@ class RequestedWatchlistScreeningConfigTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withCategory
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::build
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withSanctionsCategory
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder::withAdverseMediaCategory
      */
     public function builderShouldNotAllowNullCategory()
     {

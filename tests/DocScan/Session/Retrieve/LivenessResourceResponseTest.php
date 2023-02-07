@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\LivenessResourceResponse;
+use Yoti\IDV\Session\Retrieve\LivenessResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\LivenessResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\LivenessResourceResponse
  */
 class LivenessResourceResponseTest extends TestCase
 {

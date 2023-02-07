@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck;
-use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck;
+use Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheckBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheckBuilder
  */
 class RequestedFaceMatchCheckBuilderTest extends TestCase
 {
@@ -28,13 +28,13 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckAlways
      * @covers ::setManualCheck
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getType
      */
     public function shouldReturnTheCorrectValuesWhenManualCheckIsAlways()
     {
@@ -54,13 +54,13 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckFallback
      * @covers ::setManualCheck
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getType
      */
     public function shouldReturnTheCorrectValuesWhenManualCheckIsFallback()
     {
@@ -80,13 +80,13 @@ class RequestedFaceMatchCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::jsonSerialize
      * @covers ::withManualCheckNever
      * @covers ::setManualCheck
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheck::getType
      */
     public function shouldReturnTheCorrectValuesWhenManualCheckIsNever()
     {

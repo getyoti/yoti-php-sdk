@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse;
-use Yoti\DocScan\Session\Retrieve\GeneratedMedia;
-use Yoti\DocScan\Session\Retrieve\GeneratedTextDataCheckResponse;
-use Yoti\DocScan\Session\Retrieve\TaskResponse;
+use Yoti\IDV\Session\Retrieve\GeneratedCheckResponse;
+use Yoti\IDV\Session\Retrieve\GeneratedMedia;
+use Yoti\IDV\Session\Retrieve\GeneratedTextDataCheckResponse;
+use Yoti\IDV\Session\Retrieve\TaskResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\TaskResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\TaskResponse
  */
 class TaskResponseTest extends TestCase
 {
@@ -129,9 +129,9 @@ class TaskResponseTest extends TestCase
      * @test
      * @covers ::parseGeneratedChecks
      * @covers ::getGeneratedChecks
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getId
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::getId
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::getType
      */
     public function shouldReturnGeneratedTextDataChecks()
     {
@@ -146,9 +146,9 @@ class TaskResponseTest extends TestCase
      * @test
      * @covers ::parseGeneratedChecks
      * @covers ::getGeneratedChecks
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getId
-     * @covers \Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::getId
+     * @covers \Yoti\IDV\Session\Retrieve\GeneratedCheckResponse::getType
      */
     public function shouldReturnGeneratedCheckWithUnknownType()
     {

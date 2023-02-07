@@ -1,23 +1,23 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck;
-use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig;
-use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
+use Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck;
+use Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig;
+use Yoti\IDV\Session\Create\Filters\DocumentFilter;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder
  */
 class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
 {
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getType
      */
     public function shouldCreateRequestedDocumentAuthenticityCheckCorrectly()
     {
@@ -30,10 +30,10 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
      */
     public function shouldJsonEncodeCorrectly()
     {
@@ -50,7 +50,7 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__toString
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__toString
      */
     public function shouldCreateCorrectString()
     {
@@ -69,7 +69,7 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckAlways
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
      */
     public function shouldJsonEncodeCorrectlyWithManualCheckAlways()
     {
@@ -91,7 +91,7 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckNever
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
      */
     public function shouldJsonEncodeCorrectlyWithManualCheckNever()
     {
@@ -113,7 +113,7 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckFallback
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
      */
     public function shouldJsonEncodeCorrectlyWithManualCheckFallback()
     {
@@ -135,9 +135,9 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
      * @test
      * @covers ::withIssuingAuthoritySubCheck
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig::getIssuingAuthoritySubCheck
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig::getIssuingAuthoritySubCheck
      */
     public function withIssuingAuthoritySubCheckShouldBuildDefaultObject()
     {
@@ -156,9 +156,9 @@ class RequestedDocumentAuthenticityCheckBuilderTest extends TestCase
      * @test
      * @covers ::withIssuingAuthoritySubCheckAndDocumentFilter
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig::getIssuingAuthoritySubCheck
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig::getIssuingAuthoritySubCheck
      */
     public function withIssuingAuthoritySubCheckShouldAcceptDocumentFilter()
     {

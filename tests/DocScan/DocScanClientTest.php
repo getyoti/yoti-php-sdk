@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan;
+namespace Yoti\Test\IDV;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\DocScan\DocScanClient;
-use Yoti\DocScan\Session\Create\CreateSessionResult;
-use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
-use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
-use Yoti\DocScan\Session\Create\SessionSpecification;
-use Yoti\DocScan\Session\Instructions\Instructions;
-use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
-use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
-use Yoti\DocScan\Session\Retrieve\GetSessionResult;
-use Yoti\DocScan\Support\SupportedDocumentsResponse;
+use Yoti\IDV\IDVClient;
+use Yoti\IDV\Session\Create\CreateSessionResult;
+use Yoti\IDV\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\IDV\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\IDV\Session\Create\SessionSpecification;
+use Yoti\IDV\Session\Instructions\Instructions;
+use Yoti\IDV\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\IDV\Session\Retrieve\CreateFaceCaptureResourceResponse;
+use Yoti\IDV\Session\Retrieve\GetSessionResult;
+use Yoti\IDV\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -23,9 +23,9 @@ use Yoti\Util\Config;
 use Yoti\Util\Json;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\DocScanClient
+ * @coversDefaultClass \Yoti\IDV\IDVClient
  */
-class DocScanClientTest extends TestCase
+class IDVClientTest extends TestCase
 {
     private const SOME_ENV_URL = 'https://example.com/env/api';
     private const SOME_OPTION_URL = 'https://example.com/option/api';
@@ -39,7 +39,7 @@ class DocScanClientTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("SDK ID cannot be empty");
 
-        new DocScanClient('', TestData::PEM_FILE);
+        new IDVClient('', TestData::PEM_FILE);
     }
 
     /**
@@ -108,7 +108,7 @@ class DocScanClientTest extends TestCase
             }))
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
             Config::API_URL => $clientApiUrl,
         ]);
@@ -116,7 +116,7 @@ class DocScanClientTest extends TestCase
         $sessionSpecificationMock = $this->createMock(SessionSpecification::class);
         $sessionSpecificationMock->method('jsonSerialize')->willReturn(new \stdClass());
 
-        $docScanClient->createSession($sessionSpecificationMock);
+        $IDVClient->createSession($sessionSpecificationMock);
     }
 
     /**
@@ -135,7 +135,7 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
@@ -144,7 +144,7 @@ class DocScanClientTest extends TestCase
 
         $this->assertInstanceOf(
             CreateSessionResult::class,
-            $docScanClient->createSession($sessionSpecificationMock)
+            $IDVClient->createSession($sessionSpecificationMock)
         );
     }
 
@@ -164,13 +164,13 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             GetSessionResult::class,
-            $docScanClient->getSession(TestData::DOC_SCAN_SESSION_ID)
+            $IDVClient->getSession(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -189,11 +189,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->deleteSession(TestData::DOC_SCAN_SESSION_ID);
+        $IDVClient->deleteSession(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -213,13 +213,13 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             Media::class,
-            $docScanClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
+            $IDVClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
         );
     }
 
@@ -239,12 +239,12 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertNull(
-            $docScanClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
+            $IDVClient->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
         );
     }
 
@@ -263,11 +263,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $IDVClient->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
 
     /**
@@ -285,13 +285,13 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             SupportedDocumentsResponse::class,
-            $docScanClient->getSupportedDocuments()
+            $IDVClient->getSupportedDocuments()
         );
     }
 
@@ -312,13 +312,13 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             CreateFaceCaptureResourceResponse::class,
-            $docScanClient->createFaceCaptureResource(
+            $IDVClient->createFaceCaptureResource(
                 TestData::DOC_SCAN_SESSION_ID,
                 $createFaceCaptureResourcePayloadMock
             )
@@ -341,11 +341,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->uploadFaceCaptureImage(
+        $IDVClient->uploadFaceCaptureImage(
             TestData::DOC_SCAN_SESSION_ID,
             TestData::SOME_RESOURCE_ID,
             $uploadFaceCaptureImagePayloadMock
@@ -367,13 +367,13 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
         $this->assertInstanceOf(
             SessionConfigurationResponse::class,
-            $docScanClient->getSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
+            $IDVClient->getSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -393,11 +393,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->putIbvInstructions(
+        $IDVClient->putIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID,
             $instructionsMock
         );
@@ -418,11 +418,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->getIbvInstructions(
+        $IDVClient->getIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -442,11 +442,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->getIbvInstructionsPdf(
+        $IDVClient->getIbvInstructionsPdf(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -466,11 +466,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->fetchInstructionsContactProfile(
+        $IDVClient->fetchInstructionsContactProfile(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -490,11 +490,11 @@ class DocScanClientTest extends TestCase
             ->method('sendRequest')
             ->willReturn($response);
 
-        $docScanClient = new DocScanClient(TestData::SDK_ID, TestData::PEM_FILE, [
+        $IDVClient = new IDVClient(TestData::SDK_ID, TestData::PEM_FILE, [
             Config::HTTP_CLIENT => $httpClient,
         ]);
 
-        $docScanClient->triggerIbvEmailNotification(
+        $IDVClient->triggerIbvEmailNotification(
             TestData::DOC_SCAN_SESSION_ID
         );
     }

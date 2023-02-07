@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\MediaResponse;
-use Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse;
+use Yoti\IDV\Session\Retrieve\MediaResponse;
+use Yoti\IDV\Session\Retrieve\StaticLivenessResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\StaticLivenessResourceResponse
  */
 class StaticLivenessResourceResponseTest extends TestCase
 {

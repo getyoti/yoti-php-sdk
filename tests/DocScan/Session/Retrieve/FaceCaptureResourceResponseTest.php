@@ -1,14 +1,14 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\FaceCaptureImageResponse;
-use Yoti\DocScan\Session\Retrieve\FaceCaptureResourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\FaceCaptureImageResponse;
+use Yoti\IDV\Session\Retrieve\FaceCaptureResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\FaceCaptureResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\FaceCaptureResourceResponse
  */
 class FaceCaptureResourceResponseTest extends TestCase
 {
@@ -19,11 +19,11 @@ class FaceCaptureResourceResponseTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getImage
-     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\ResourceResponse::getSource
-     * @covers \Yoti\DocScan\Session\Retrieve\MediaResponse::getId
-     * @covers \Yoti\DocScan\Session\Retrieve\FaceCaptureImageResponse::getMedia
-     * @covers \Yoti\DocScan\Session\Retrieve\FaceCaptureImageResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\ResourceResponse::getSource
+     * @covers \Yoti\IDV\Session\Retrieve\MediaResponse::getId
+     * @covers \Yoti\IDV\Session\Retrieve\FaceCaptureImageResponse::getMedia
+     * @covers \Yoti\IDV\Session\Retrieve\FaceCaptureImageResponse::__construct
      */
     public function shouldBuildCorrectly()
     {

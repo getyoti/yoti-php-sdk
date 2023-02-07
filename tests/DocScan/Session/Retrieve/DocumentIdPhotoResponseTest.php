@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse;
-use Yoti\DocScan\Session\Retrieve\MediaResponse;
+use Yoti\IDV\Session\Retrieve\DocumentIdPhotoResponse;
+use Yoti\IDV\Session\Retrieve\MediaResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\DocumentIdPhotoResponse
  */
 class DocumentIdPhotoResponseTest extends TestCase
 {

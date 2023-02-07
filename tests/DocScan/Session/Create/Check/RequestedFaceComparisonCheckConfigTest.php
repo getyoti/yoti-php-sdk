@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedFaceComparisonCheckConfig;
+use Yoti\IDV\Session\Create\Check\RequestedFaceComparisonCheckConfig;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedFaceComparisonCheckConfig
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedFaceComparisonCheckConfig
  */
 class RequestedFaceComparisonCheckConfigTest extends TestCase
 {

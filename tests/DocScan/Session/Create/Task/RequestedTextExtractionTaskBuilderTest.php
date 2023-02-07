@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yoti\DocScan\Session\Create\Task;
+namespace Yoti\IDV\Session\Create\Task;
 
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTaskBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTaskBuilder
  */
 class RequestedTextExtractionTaskBuilderTest extends TestCase
 {
@@ -18,7 +18,7 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
      * @covers ::withManualCheck
      * @covers ::setManualCheck
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::__construct
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::__construct
      */
     public function shouldBuildCorrectlyWithoutException()
     {
@@ -32,9 +32,9 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withManualCheckAlways
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getConfig
      */
     public function shouldUseAlwaysAsValueForManualCheck()
     {
@@ -55,9 +55,9 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withManualCheckFallback
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getConfig
      */
     public function shouldUseFallbackAsValueForManualCheck()
     {
@@ -78,9 +78,9 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withManualCheckNever
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getConfig
      */
     public function shouldUseNeverAsValueForManualCheck()
     {
@@ -100,7 +100,7 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::__toString
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::__toString
      */
     public function shouldCreateCorrectString()
     {
@@ -122,9 +122,9 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
      * @test
      * @covers ::withChipDataDesired
      * @covers ::withChipData
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getConfig
      */
     public function shouldUseDesiredAsValueForChipData()
     {
@@ -148,9 +148,9 @@ class RequestedTextExtractionTaskBuilderTest extends TestCase
      * @test
      * @covers ::withChipDataIgnore
      * @covers ::withChipData
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedTextExtractionTask::getConfig
      */
     public function shouldUseIgnoreAsValueForChipData()
     {

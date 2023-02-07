@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create;
+namespace Yoti\Test\IDV\Session\Create;
 
-use Yoti\DocScan\Session\Create\IbvOptionsBuilder;
+use Yoti\IDV\Session\Create\IbvOptionsBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\IbvOptionsBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\IbvOptionsBuilder
  */
 class IbvOptionsBuilderTest extends TestCase
 {
@@ -17,8 +17,8 @@ class IbvOptionsBuilderTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withIbvMandatory
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::__construct
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::getSupport
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::__construct
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::getSupport
      */
     public function builderWithMandatorySupportShouldSetCorrectSupportValue()
     {
@@ -33,8 +33,8 @@ class IbvOptionsBuilderTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withIbvNotAllowed
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::__construct
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::getSupport
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::__construct
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::getSupport
      */
     public function builderWithNotAllowedSupportShouldSetCorrectSupportValue()
     {
@@ -49,8 +49,8 @@ class IbvOptionsBuilderTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withSupport
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::__construct
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::getSupport
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::__construct
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::getSupport
      */
     public function builderShouldAllowUserOverrideOfSupportValue()
     {
@@ -66,8 +66,8 @@ class IbvOptionsBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withIbvMandatory
      * @covers ::withGuidanceUrl
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::__construct
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::getGuidanceUrl
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::__construct
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::getGuidanceUrl
      */
     public function builderShouldSetCorrectGuidanceUrlValue()
     {
@@ -81,7 +81,7 @@ class IbvOptionsBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\IbvOptions::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\IbvOptions::jsonSerialize
      */
     public function shouldSerializeWithCorrectProperties(): void
     {

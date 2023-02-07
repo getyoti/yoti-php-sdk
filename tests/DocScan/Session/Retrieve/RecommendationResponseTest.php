@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\RecommendationResponse;
+use Yoti\IDV\Session\Retrieve\RecommendationResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\RecommendationResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\RecommendationResponse
  */
 class RecommendationResponseTest extends TestCase
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture\Document;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture\Document;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\SupportedCountryResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Document\SupportedCountryResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\SupportedCountryResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\Document\SupportedCountryResponse
  */
 class SupportedCountryResponseTest extends TestCase
 {

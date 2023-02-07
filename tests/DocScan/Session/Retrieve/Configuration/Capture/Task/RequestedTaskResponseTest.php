@@ -1,14 +1,14 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture\Task;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture\Task;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedIdDocTaskResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedSupplementaryDocTaskResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\UnknownRequestedTaskResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Task\RequestedIdDocTaskResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Task\RequestedSupplementaryDocTaskResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Task\UnknownRequestedTaskResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedTaskResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\Task\RequestedTaskResponse
  */
 class RequestedTaskResponseTest extends TestCase
 {

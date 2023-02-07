@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions;
+namespace Yoti\Test\IDV\Session\Instructions;
 
-use Yoti\DocScan\Session\Instructions\ContactProfileBuilder;
+use Yoti\IDV\Session\Instructions\ContactProfileBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\ContactProfile
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\ContactProfile
  */
 class ContactProfileTest extends TestCase
 {
@@ -20,10 +20,10 @@ class ContactProfileTest extends TestCase
      * @covers ::getLastName
      * @covers ::getEmail
      * @covers ::getFirstName
-     * @covers \Yoti\DocScan\Session\Instructions\ContactProfileBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\ContactProfileBuilder::withFirstName
-     * @covers \Yoti\DocScan\Session\Instructions\ContactProfileBuilder::withEmail
-     * @covers \Yoti\DocScan\Session\Instructions\ContactProfileBuilder::withLastName
+     * @covers \Yoti\IDV\Session\Instructions\ContactProfileBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\ContactProfileBuilder::withFirstName
+     * @covers \Yoti\IDV\Session\Instructions\ContactProfileBuilder::withEmail
+     * @covers \Yoti\IDV\Session\Instructions\ContactProfileBuilder::withLastName
      */
     public function builderShouldBuildWithAllProperties()
     {

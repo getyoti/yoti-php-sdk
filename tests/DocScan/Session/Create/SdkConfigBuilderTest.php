@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create;
+namespace Yoti\Test\IDV\Session\Create;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\SdkConfigBuilder;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Create\SdkConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\SdkConfigBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\SdkConfigBuilder
  */
 class SdkConfigBuilderTest extends TestCase
 {
@@ -36,17 +36,17 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withErrorUrl
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSecondaryColour
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getFontColour
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getLocale
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPresetIssuingCountry
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuccessUrl
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getErrorUrl
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrivacyPolicyUrl
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAllowedCaptureMethods
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getPrimaryColour
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getSecondaryColour
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getFontColour
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getLocale
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getPresetIssuingCountry
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getSuccessUrl
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getErrorUrl
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getPrivacyPolicyUrl
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAllowHandoff
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -103,7 +103,7 @@ class SdkConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::jsonSerialize
      */
     public function shouldProduceTheCorrectJsonString()
     {
@@ -138,7 +138,7 @@ class SdkConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::jsonSerialize
      */
     public function shouldSerializeToEmptyObjectWithNoValuesSet()
     {
@@ -149,8 +149,8 @@ class SdkConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SdkConfigBuilder::build
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     * @covers \Yoti\IDV\Session\Create\SdkConfigBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAllowHandoff
      */
     public function allowHandoffShouldBeNullWhenItIsNotSet()
     {
@@ -170,10 +170,10 @@ class SdkConfigBuilderTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withIdDocumentTextExtractionCategoryRetries
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAttemptsConfiguration
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAttemptsConfiguration
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
      */
     public function shouldBuildWithIdDocumentTextExtractionCategoryRetries(): void
     {
@@ -191,8 +191,8 @@ class SdkConfigBuilderTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAttemptsConfiguration
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAttemptsConfiguration
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::__construct
      */
     public function attemptsConfigurationShouldBeNullIfNotSet(): void
     {
@@ -207,10 +207,10 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::build
      * @covers ::withIdDocumentTextExtractionCategoryRetries
      * @covers ::withIdDocumentTextExtractionReclassificationRetries
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAttemptsConfiguration
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAttemptsConfiguration
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
      */
     public function attemptsConfigurationShouldResetSameValueWithRepeatedCalls(): void
     {
@@ -238,10 +238,10 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withIdDocumentTextExtractionCategoryRetries
      * @covers ::withIdDocumentTextExtractionReclassificationRetries
      * @covers ::withIdDocumentTextExtractionGenericAttempts
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAttemptsConfiguration
-     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::__construct
-     * @covers \Yoti\DocScan\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::getAttemptsConfiguration
+     * @covers \Yoti\IDV\Session\Create\SdkConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::__construct
+     * @covers \Yoti\IDV\Session\Create\AttemptsConfiguration::getIdDocumentTextDataExtraction
      */
     public function attemptsConfigurationShouldAllowMultipleCategories(): void
     {

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\ResourceContainer;
-use Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse;
-use Yoti\DocScan\Session\Retrieve\ZoomLivenessResourceResponse;
+use Yoti\IDV\Session\Retrieve\ResourceContainer;
+use Yoti\IDV\Session\Retrieve\StaticLivenessResourceResponse;
+use Yoti\IDV\Session\Retrieve\ZoomLivenessResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\ResourceContainer
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\ResourceContainer
  */
 class ResourceContainerTest extends TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck;
-use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck;
+use Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder
  */
 class RequestedIdDocumentComparisonCheckBuilderTest extends TestCase
 {
@@ -16,8 +16,8 @@ class RequestedIdDocumentComparisonCheckBuilderTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::getType
      */
     public function shouldCreateRequestedIdDocumentComparisonCheckCorrectly()
     {
@@ -29,9 +29,9 @@ class RequestedIdDocumentComparisonCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::getConfig
      */
     public function shouldJsonEncodeCorrectly()
     {
@@ -47,7 +47,7 @@ class RequestedIdDocumentComparisonCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheck::__toString
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheck::__toString
      */
     public function shouldCreateCorrectString()
     {

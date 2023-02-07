@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\IdentityProfile\FailureReasonResponse;
-use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
+use Yoti\IDV\Session\Retrieve\IdentityProfile\FailureReasonResponse;
+use Yoti\IDV\Session\Retrieve\IdentityProfileResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\IdentityProfileResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\IdentityProfileResponse
  */
 class IdentityProfileResponseTest extends TestCase
 {
@@ -37,8 +37,8 @@ class IdentityProfileResponseTest extends TestCase
      * @covers ::getFailureReason
      * @covers ::getResult
      * @covers ::getSubjectId
-     * @covers \Yoti\DocScan\Session\Retrieve\IdentityProfile\FailureReasonResponse::getStringCode
-     * @covers \Yoti\DocScan\Session\Retrieve\IdentityProfile\FailureReasonResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\IdentityProfile\FailureReasonResponse::getStringCode
+     * @covers \Yoti\IDV\Session\Retrieve\IdentityProfile\FailureReasonResponse::__construct
      */
     public function shouldCreatedCorrectly(): void
     {

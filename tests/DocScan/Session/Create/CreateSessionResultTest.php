@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create;
+namespace Yoti\Test\IDV\Session\Create;
 
-use Yoti\DocScan\Session\Create\CreateSessionResult;
+use Yoti\IDV\Session\Create\CreateSessionResult;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\CreateSessionResult
+ * @coversDefaultClass \Yoti\IDV\Session\Create\CreateSessionResult
  */
 class CreateSessionResultTest extends TestCase
 {

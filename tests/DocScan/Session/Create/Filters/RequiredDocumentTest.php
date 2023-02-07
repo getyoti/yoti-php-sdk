@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create\Filters;
+namespace Yoti\Test\IDV\Session\Create\Filters;
 
-use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\IDV\Session\Create\Filters\RequiredDocument;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\RequiredDocument
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\RequiredDocument
  */
 class RequiredDocumentTest extends TestCase
 {

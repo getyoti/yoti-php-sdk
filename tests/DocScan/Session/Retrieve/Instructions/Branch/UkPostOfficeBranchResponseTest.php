@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions\Branch;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions\Branch;
 
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\LocationResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\LocationResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse
  */
 class UkPostOfficeBranchResponseTest extends TestCase
 {
@@ -27,7 +27,7 @@ class UkPostOfficeBranchResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::getPostCode
      * @covers ::getLocation
-     * @covers \Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Instructions\Branch\BranchResponse::getType
      */
     public function shouldBuildCorrectly(): void
     {

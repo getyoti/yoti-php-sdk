@@ -4,19 +4,19 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-use Yoti\DocScan\DocScanClient;
+use Yoti\IDV\IDVClient;
 
-class YotiDocScanServiceProvider extends ServiceProvider implements DeferrableProvider
+class YotiIDVServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * @return void
      */
     public function register()
     {
-        $this->app->singleton(DocScanClient::class, function ($app) {
+        $this->app->singleton(IDVClient::class, function ($app) {
             $config = $app['config']['yoti'];
 
-            return new DocScanClient($config['client.sdk.id'], $config['pem.file.path']);
+            return new IDVClient($config['client.sdk.id'], $config['pem.file.path']);
         });
     }
 
@@ -25,6 +25,6 @@ class YotiDocScanServiceProvider extends ServiceProvider implements DeferrablePr
      */
     public function provides()
     {
-        return [DocScanClient::class];
+        return [IDVClient::class];
     }
 }

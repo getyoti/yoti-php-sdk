@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Exception;
+namespace Yoti\Test\IDV\Exception;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\DocScan\Exception\DocScanException;
+use Yoti\IDV\Exception\IDVException;
 use Yoti\Test\TestCase;
 
-class DocScanExceptionTest extends TestCase
+class IDVExceptionTest extends TestCase
 {
     private const SOME_MESSAGE = 'Some message';
     private const SOME_RESPONSE_CODE = 'SOME_ERROR_CODE';
@@ -22,8 +22,8 @@ class DocScanExceptionTest extends TestCase
      */
     public function responseShouldBeOptional()
     {
-        $docScanException = new DocScanException(self::SOME_MESSAGE);
-        $this->assertEquals(self::SOME_MESSAGE, $docScanException->getMessage());
+        $IDVException = new IDVException(self::SOME_MESSAGE);
+        $this->assertEquals(self::SOME_MESSAGE, $IDVException->getMessage());
     }
 
     /**
@@ -33,9 +33,9 @@ class DocScanExceptionTest extends TestCase
     {
         $responseMock = $this->createMock(ResponseInterface::class);
 
-        $docScanException = new DocScanException(self::SOME_MESSAGE, $responseMock);
-        $this->assertEquals(self::SOME_MESSAGE, $docScanException->getMessage());
-        $this->assertSame($responseMock, $docScanException->getResponse());
+        $IDVException = new IDVException(self::SOME_MESSAGE, $responseMock);
+        $this->assertEquals(self::SOME_MESSAGE, $IDVException->getMessage());
+        $this->assertSame($responseMock, $IDVException->getResponse());
     }
 
     /**
@@ -47,10 +47,10 @@ class DocScanExceptionTest extends TestCase
         $responseMock->method('hasHeader')->willReturn(true);
         $responseMock->method('getHeader')->willReturn(['text/html']);
 
-        $docScanException = new DocScanException(self::SOME_MESSAGE, $responseMock);
+        $IDVException = new IDVException(self::SOME_MESSAGE, $responseMock);
 
-        $this->assertEquals(self::SOME_MESSAGE, $docScanException->getMessage());
-        $this->assertEquals($responseMock, $docScanException->getResponse());
+        $this->assertEquals(self::SOME_MESSAGE, $IDVException->getMessage());
+        $this->assertEquals($responseMock, $IDVException->getResponse());
     }
 
     /**
@@ -65,10 +65,10 @@ class DocScanExceptionTest extends TestCase
         $responseMock->method('getHeader')->willReturn(['application/json']);
         $responseMock->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode($jsonData)));
 
-        $docScanException = new DocScanException($message, $responseMock);
+        $IDVException = new IDVException($message, $responseMock);
 
-        $this->assertEquals($expectedMessage, $docScanException->getMessage());
-        $this->assertEquals($responseMock, $docScanException->getResponse());
+        $this->assertEquals($expectedMessage, $IDVException->getMessage());
+        $this->assertEquals($responseMock, $IDVException->getResponse());
     }
 
     /**

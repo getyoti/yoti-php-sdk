@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Filters\Document;
+namespace Yoti\Test\IDV\Session\Create\Check\Filters\Document;
 
-use Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionBuilder;
+use Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionBuilder
  */
 class DocumentRestrictionBuilderTest extends TestCase
 {
@@ -20,8 +20,8 @@ class DocumentRestrictionBuilderTest extends TestCase
      *
      * @covers ::withDocumentTypes
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionWithDocumentTypes()
     {
@@ -50,8 +50,8 @@ class DocumentRestrictionBuilderTest extends TestCase
      *
      * @covers ::withCountries
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionWithCountries()
     {
@@ -81,8 +81,8 @@ class DocumentRestrictionBuilderTest extends TestCase
      * @covers ::withDocumentTypes
      * @covers ::withCountries
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionWithCountriesAndDocumentTypes()
     {
@@ -119,8 +119,8 @@ class DocumentRestrictionBuilderTest extends TestCase
      *
      * @covers ::withCountries
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionWithEmptyCountryList()
     {
@@ -143,8 +143,8 @@ class DocumentRestrictionBuilderTest extends TestCase
      *
      * @covers ::withDocumentTypes
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionWithEmptyDocumentTypeList()
     {

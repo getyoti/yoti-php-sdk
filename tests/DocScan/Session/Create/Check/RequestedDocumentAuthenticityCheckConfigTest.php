@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig;
+use Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckConfig
  */
 class RequestedDocumentAuthenticityCheckConfigTest extends TestCase
 {

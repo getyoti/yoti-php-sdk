@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions\Branch;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions\Branch;
 
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\LocationResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\LocationResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\Branch\LocationResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\Branch\LocationResponse
  */
 class LocationResponseTest extends TestCase
 {

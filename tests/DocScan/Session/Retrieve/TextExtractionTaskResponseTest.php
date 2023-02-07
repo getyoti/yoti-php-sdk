@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse;
-use Yoti\DocScan\Session\Retrieve\GeneratedTextDataCheckResponse;
-use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
+use Yoti\IDV\Session\Retrieve\GeneratedCheckResponse;
+use Yoti\IDV\Session\Retrieve\GeneratedTextDataCheckResponse;
+use Yoti\IDV\Session\Retrieve\TextExtractionTaskResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\TextExtractionTaskResponse
  */
 class TextExtractionTaskResponseTest extends TestCase
 {

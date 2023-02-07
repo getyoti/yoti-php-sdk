@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create\Filters;
+namespace Yoti\Test\IDV\Session\Create\Filters;
 
-use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
-use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
-use Yoti\DocScan\Session\Create\Filters\RequiredIdDocument;
-use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
+use Yoti\IDV\Session\Create\Filters\DocumentFilter;
+use Yoti\IDV\Session\Create\Filters\RequiredDocument;
+use Yoti\IDV\Session\Create\Filters\RequiredIdDocument;
+use Yoti\IDV\Session\Create\Filters\RequiredIdDocumentBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\RequiredIdDocumentBuilder
  */
 class RequiredIdDocumentBuilderTest extends TestCase
 {
@@ -19,10 +19,10 @@ class RequiredIdDocumentBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdDocument::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredIdDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredIdDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
     public function shouldBuildRequiredIdDocumentWithoutFilter()
     {
@@ -44,10 +44,10 @@ class RequiredIdDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers ::withFilter
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredIdDocument::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredIdDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredIdDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
     public function shouldBuildRequiredIdDocumentWithFilter()
     {

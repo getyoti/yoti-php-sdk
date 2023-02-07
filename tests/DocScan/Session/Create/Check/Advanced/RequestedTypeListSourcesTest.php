@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Advanced;
+namespace Yoti\Test\IDV\Session\Create\Check\Advanced;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder
  */
 class RequestedTypeListSourcesTest extends TestCase
 {
@@ -20,10 +20,10 @@ class RequestedTypeListSourcesTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withTypes
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSources::getTypes
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSources::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSources::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSources::getTypes
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSources::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaSources::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSources::__construct
      */
     public function builderShouldBuildWithCorrectListOfTypes(): void
     {
@@ -40,9 +40,9 @@ class RequestedTypeListSourcesTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withTypes
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSources::getTypes
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSources::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSources::getTypes
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSources::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaSources::jsonSerialize
      */
     public function builderShouldBuildWithCorrectJson(): void
     {

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Exception\UnknownCheckException;
-use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
-use Yoti\DocScan\Session\Retrieve\CheckResponse;
+use Yoti\IDV\Exception\UnknownCheckException;
+use Yoti\IDV\Session\Retrieve\AuthenticityCheckResponse;
+use Yoti\IDV\Session\Retrieve\CheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\CheckResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\CheckResponse
  */
 class CheckResponseTest extends TestCase
 {

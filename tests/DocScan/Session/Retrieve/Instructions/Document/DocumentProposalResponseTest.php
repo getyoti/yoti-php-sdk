@@ -1,16 +1,16 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions\Document;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions\Document;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\DocumentProposalResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\UnknownDocumentResponse;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\DocumentProposalResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\UnknownDocumentResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\Document\DocumentProposalResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\Document\DocumentProposalResponse
  */
 class DocumentProposalResponseTest extends TestCase
 {
@@ -24,8 +24,8 @@ class DocumentProposalResponseTest extends TestCase
      * @covers ::getRequirementId
      * @covers ::getDocument
      * @covers ::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse::__construct
      */
     public function shouldBuildCorrectly(): void
     {

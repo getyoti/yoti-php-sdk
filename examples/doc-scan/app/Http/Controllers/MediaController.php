@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Yoti\DocScan\DocScanClient;
+use Yoti\IDV\IDVClient;
 
 class MediaController extends BaseController
 {
-    public function show(string $id, Request $request, DocScanClient $client)
+    public function show(string $id, Request $request, IDVClient $client)
     {
         $media = $client->getMediaContent($request->session()->get('YOTI_SESSION_ID'), $id);
 

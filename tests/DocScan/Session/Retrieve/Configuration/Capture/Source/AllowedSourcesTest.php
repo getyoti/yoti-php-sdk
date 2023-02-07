@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture\Source;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture\Source;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse
  */
 class AllowedSourcesTest extends TestCase
 {
@@ -20,10 +20,10 @@ class AllowedSourcesTest extends TestCase
     /**
      * @test
      * @covers ::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse::__construct
      */
     public function shouldBuildCorrectly()
     {

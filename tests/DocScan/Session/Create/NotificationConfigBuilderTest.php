@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create;
+namespace Yoti\Test\IDV\Session\Create;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\NotificationConfigBuilder;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Create\NotificationConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\NotificationConfigBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\NotificationConfigBuilder
  */
 class NotificationConfigBuilderTest extends TestCase
 {
@@ -23,10 +23,10 @@ class NotificationConfigBuilderTest extends TestCase
      * @covers ::withAuthToken
      * @covers ::withEndpoint
      * @covers ::withTopic
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getAuthToken
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getEndpoint
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getTopics
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::getAuthToken
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::getEndpoint
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::getTopics
      */
     public function shouldBuildNotificationConfig(): void
     {
@@ -149,7 +149,7 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::jsonSerialize
      */
     public function shouldSerializeWithCorrectProperties(): void
     {
@@ -172,7 +172,7 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::jsonSerialize
      */
     public function shouldSerializeWithoutNullValues(): void
     {
@@ -187,7 +187,7 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfig::getAuthType
+     * @covers \Yoti\IDV\Session\Create\NotificationConfig::getAuthType
      */
     public function shouldNotImplicitlySetAValueForAuthType(): void
     {
@@ -200,7 +200,7 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfigBuilder::withAuthTypeBasic
+     * @covers \Yoti\IDV\Session\Create\NotificationConfigBuilder::withAuthTypeBasic
      */
     public function shouldSetAuthTypeToBasic()
     {
@@ -214,7 +214,7 @@ class NotificationConfigBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\NotificationConfigBuilder::withAuthTypeBearer
+     * @covers \Yoti\IDV\Session\Create\NotificationConfigBuilder::withAuthTypeBearer
      */
     public function shouldSetAuthTypeToBearer()
     {

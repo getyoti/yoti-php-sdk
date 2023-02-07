@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions\Document;
+namespace Yoti\Test\IDV\Session\Instructions\Document;
 
-use Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder;
-use Yoti\DocScan\Session\Instructions\Document\SelectedDocument;
+use Yoti\IDV\Session\Instructions\Document\DocumentProposalBuilder;
+use Yoti\IDV\Session\Instructions\Document\SelectedDocument;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Document\DocumentProposal
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\Document\DocumentProposal
  */
 class DocumentProposalTest extends TestCase
 {
@@ -29,9 +29,9 @@ class DocumentProposalTest extends TestCase
      * @covers ::__construct
      * @covers ::getRequirementId
      * @covers ::getDocument
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withRequirementId
-     * @covers \Yoti\DocScan\Session\Instructions\Document\DocumentProposalBuilder::withSelectedDocument
+     * @covers \Yoti\IDV\Session\Instructions\Document\DocumentProposalBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\Document\DocumentProposalBuilder::withRequirementId
+     * @covers \Yoti\IDV\Session\Instructions\Document\DocumentProposalBuilder::withSelectedDocument
      */
     public function builderShouldBuildWithAllProperties()
     {

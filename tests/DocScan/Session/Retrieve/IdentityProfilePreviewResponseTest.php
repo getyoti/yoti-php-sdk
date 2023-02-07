@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
-use Yoti\DocScan\Session\Retrieve\MediaResponse;
+use Yoti\IDV\Session\Retrieve\IdentityProfilePreviewResponse;
+use Yoti\IDV\Session\Retrieve\MediaResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\IdentityProfilePreviewResponse
  */
 class IdentityProfilePreviewResponseTest extends TestCase
 {

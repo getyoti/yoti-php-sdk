@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck;
-use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck;
+use Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder
  */
 class RequestedThirdPartyIdentityCheckBuilderTest extends TestCase
 {
@@ -16,8 +16,8 @@ class RequestedThirdPartyIdentityCheckBuilderTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::getConfig
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::getType
      */
     public function shouldCreateRequestedThirdPartyIdentityCheckCorrectly()
     {
@@ -29,9 +29,9 @@ class RequestedThirdPartyIdentityCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::getConfig
      */
     public function shouldJsonEncodeCorrectly()
     {
@@ -47,7 +47,7 @@ class RequestedThirdPartyIdentityCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheck::__toString
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheck::__toString
      */
     public function shouldCreateCorrectString()
     {

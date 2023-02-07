@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategy;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources;
-use Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategy;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources;
+use Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder
  */
 class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
 {
@@ -42,24 +42,24 @@ class RequestedCustomAccountWatchlistAdvancedCaConfigTest extends TestCase
      * @covers ::withMonitoring
      * @covers ::withClientRef
      * @covers ::withTags
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withMatchingStrategy
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withSources
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withShareUrl
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getMatchingStrategy
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getSources
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getShareUrl
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getRemoveDeceased
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getTags
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getMonitoring
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getClientRef
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getApiKey
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withMatchingStrategy
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withSources
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withShareUrl
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getMatchingStrategy
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getSources
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getShareUrl
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getRemoveDeceased
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getTags
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getMonitoring
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getClientRef
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getApiKey
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfig::getType
      */
     public function builderShouldBuildWithCorrectProperties()
     {

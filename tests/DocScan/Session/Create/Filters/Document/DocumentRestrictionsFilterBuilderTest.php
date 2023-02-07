@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Filters\Document;
+namespace Yoti\Test\IDV\Session\Create\Check\Filters\Document;
 
-use Yoti\DocScan\Session\Create\Filters\Document\DocumentRestriction;
-use Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilterBuilder;
+use Yoti\IDV\Session\Create\Filters\Document\DocumentRestriction;
+use Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilterBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilterBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilterBuilder
  */
 class DocumentRestrictionsFilterBuilderTest extends TestCase
 {
@@ -30,8 +30,8 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @covers ::forWhitelist
      * @covers ::withDocumentRestriction
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionsFilterForWhitelist()
     {
@@ -58,8 +58,8 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @covers ::forBlacklist
      * @covers ::withDocumentRestriction
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
      */
     public function shouldBuildDocumentRestrictionsFilterForBlacklist()
     {
@@ -86,7 +86,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
      */
     public function shouldThrowExceptionWithoutInclusion()
     {
@@ -100,7 +100,7 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
      */
     public function shouldThrowExceptionWithoutDocumentRestriction()
     {
@@ -116,8 +116,8 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
      * @covers ::forBlacklist
      * @covers ::withAllowNonLatinDocuments
      * @covers ::withDocumentRestriction
@@ -138,8 +138,8 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowNonLatinDocuments
      * @covers ::forBlacklist
      * @covers ::withDocumentRestriction
      * @covers ::build
@@ -158,9 +158,9 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
      * @covers ::forBlacklist
      * @covers ::withAllowExpiredDocuments
      * @covers ::withDocumentRestriction
@@ -180,9 +180,9 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
      * @covers ::forBlacklist
      * @covers ::withDenyExpiredDocuments
      * @covers ::withDocumentRestriction
@@ -202,9 +202,9 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
-     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Document\DocumentRestrictionsFilter::jsonSerialize
      * @covers ::forBlacklist
      * @covers ::withDocumentRestriction
      */
