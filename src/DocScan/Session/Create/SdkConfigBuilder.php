@@ -172,7 +172,7 @@ class SdkConfigBuilder
     /**
      * @deprecated from 4.2.0, @see withIdDocumentTextExtractionGenericAttempts
      */
-    public function withIdDocumentTextExtractionGenericRetries(int $genericRetries)
+    public function withIdDocumentTextExtractionGenericRetries(int $genericRetries): void
     {
     }
 
