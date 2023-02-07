@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\FrameResponse;
-use Yoti\DocScan\Session\Retrieve\MediaResponse;
-use Yoti\DocScan\Session\Retrieve\PageResponse;
+use Yoti\IDV\Session\Retrieve\FrameResponse;
+use Yoti\IDV\Session\Retrieve\MediaResponse;
+use Yoti\IDV\Session\Retrieve\PageResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\PageResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\PageResponse
  */
 class PageResponseTest extends TestCase
 {

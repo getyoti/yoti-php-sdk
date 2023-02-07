@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Support;
+namespace Yoti\Test\IDV\Support;
 
-use Yoti\DocScan\Support\SupportedDocument;
+use Yoti\IDV\Support\SupportedDocument;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Support\SupportedDocument
+ * @coversDefaultClass \Yoti\IDV\Support\SupportedDocument
  */
 class SupportedDocumentTest extends TestCase
 {

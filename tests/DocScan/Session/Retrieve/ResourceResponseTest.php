@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\ResourceResponse;
-use Yoti\DocScan\Session\Retrieve\TaskResponse;
-use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\AllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\ResourceResponse;
+use Yoti\IDV\Session\Retrieve\TaskResponse;
+use Yoti\IDV\Session\Retrieve\TextExtractionTaskResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\ResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\ResourceResponse
  */
 class ResourceResponseTest extends TestCase
 {

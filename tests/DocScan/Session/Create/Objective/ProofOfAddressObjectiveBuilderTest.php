@@ -1,14 +1,14 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Objective;
+namespace Yoti\Test\IDV\Session\Create\Check\Objective;
 
-use Yoti\DocScan\Session\Create\Objective\Objective;
-use Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjective;
-use Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjectiveBuilder;
+use Yoti\IDV\Session\Create\Objective\Objective;
+use Yoti\IDV\Session\Create\Objective\ProofOfAddressObjective;
+use Yoti\IDV\Session\Create\Objective\ProofOfAddressObjectiveBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjectiveBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Objective\ProofOfAddressObjectiveBuilder
  */
 class ProofOfAddressObjectiveBuilderTest extends TestCase
 {
@@ -18,10 +18,10 @@ class ProofOfAddressObjectiveBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Objective\Objective::__construct
-     * @covers \Yoti\DocScan\Session\Create\Objective\Objective::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjective::__construct
-     * @covers \Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjective::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Objective\Objective::__construct
+     * @covers \Yoti\IDV\Session\Create\Objective\Objective::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Objective\ProofOfAddressObjective::__construct
+     * @covers \Yoti\IDV\Session\Create\Objective\ProofOfAddressObjective::jsonSerialize
      */
     public function shouldBuildProofOfAddressObjective()
     {

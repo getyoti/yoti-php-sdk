@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Advanced;
+namespace Yoti\Test\IDV\Session\Create\Check\Advanced;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder
  */
 class RequestedFuzzyMatchingStrategyTest extends TestCase
 {
@@ -20,10 +20,10 @@ class RequestedFuzzyMatchingStrategyTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withFuzziness
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::getFuzziness
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::getFuzziness
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::__construct
      */
     public function builderShouldBuildWithCorrectFuzziness(): void
     {
@@ -40,9 +40,9 @@ class RequestedFuzzyMatchingStrategyTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withFuzziness
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategy::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::jsonSerialize
      */
     public function builderShouldBuildCorrectJson(): void
     {

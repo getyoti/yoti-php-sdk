@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture\Document;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture\Document;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\ObjectiveResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Document\ObjectiveResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\ObjectiveResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\Document\ObjectiveResponse
  */
 class ObjectiveResponseTest extends TestCase
 {

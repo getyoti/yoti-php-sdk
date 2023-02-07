@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\CaptureResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\CaptureResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\SessionConfigurationResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\SessionConfigurationResponse
  */
 class SessionConfigurationResponseTest extends TestCase
 {

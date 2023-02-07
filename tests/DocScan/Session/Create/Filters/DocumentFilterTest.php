@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create\Filters;
+namespace Yoti\Test\IDV\Session\Create\Filters;
 
-use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
+use Yoti\IDV\Session\Create\Filters\DocumentFilter;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\DocumentFilter
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\DocumentFilter
  */
 class DocumentFilterTest extends TestCase
 {

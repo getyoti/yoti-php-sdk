@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Filters\Orthogonal;
+namespace Yoti\Test\IDV\Session\Create\Check\Filters\Orthogonal;
 
-use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
+use Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder
  */
 class OrthogonalRestrictionsFilterBuilderTest extends TestCase
 {
@@ -18,10 +18,10 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withWhitelistedCountries
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\CountryRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\CountryRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\CountryRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\CountryRestriction::jsonSerialize
      */
     public function shouldBuildOrthogonalRestrictionsFilterWithWhitelistedCountries()
     {
@@ -48,10 +48,10 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withBlacklistedCountries
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\CountryRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\CountryRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\CountryRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\CountryRestriction::jsonSerialize
      */
     public function shouldBuildOrthogonalRestrictionsFilterWithBlacklistedCountries()
     {
@@ -78,10 +78,10 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withWhitelistedDocumentTypes
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\TypeRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\TypeRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\TypeRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\TypeRestriction::jsonSerialize
      */
     public function shouldBuildOrthogonalRestrictionsFilterWithWhitelistedDocumentTypes()
     {
@@ -109,10 +109,10 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withBlacklistedDocumentTypes
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\TypeRestriction::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\TypeRestriction::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\TypeRestriction::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\TypeRestriction::jsonSerialize
      */
     public function shouldBuildOrthogonalRestrictionsFilterWithBlacklistedDocumentTypes()
     {
@@ -203,8 +203,8 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withAllowNonLatinDocuments
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
      */
     public function shouldBuildWithAllowNonLatinDocuments()
     {
@@ -240,9 +240,9 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withAllowNonLatinDocuments
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowNonLatinDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowNonLatinDocuments
      */
     public function shouldBuildAndAllowNonLatinDocumentsEqualsNull()
     {
@@ -276,9 +276,9 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withAllowExpiredDocuments
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
      */
     public function shouldBuildWithAllowExpiredDocuments()
     {
@@ -314,9 +314,9 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      *
      * @covers ::withDenyExpiredDocuments
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
      */
     public function shouldBuildWithDenyExpiredDocuments()
     {
@@ -351,9 +351,9 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
      * @test
      *
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::isAllowExpiredDocuments
      */
     public function shouldBuildAndAllowExpiredDocumentsEqualsNull()
     {

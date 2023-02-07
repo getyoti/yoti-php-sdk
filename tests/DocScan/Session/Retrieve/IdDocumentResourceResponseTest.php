@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\DocumentFieldsResponse;
-use Yoti\DocScan\Session\Retrieve\DocumentIdPhotoResponse;
-use Yoti\DocScan\Session\Retrieve\IdDocumentResourceResponse;
-use Yoti\DocScan\Session\Retrieve\TextExtractionTaskResponse;
+use Yoti\IDV\Session\Retrieve\DocumentFieldsResponse;
+use Yoti\IDV\Session\Retrieve\DocumentIdPhotoResponse;
+use Yoti\IDV\Session\Retrieve\IdDocumentResourceResponse;
+use Yoti\IDV\Session\Retrieve\TextExtractionTaskResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\IdDocumentResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\IdDocumentResourceResponse
  */
 class IdDocumentResourceResponseTest extends TestCase
 {

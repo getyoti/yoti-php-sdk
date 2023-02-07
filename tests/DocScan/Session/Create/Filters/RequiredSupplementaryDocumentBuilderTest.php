@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create\Filters;
+namespace Yoti\Test\IDV\Session\Create\Filters;
 
-use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
-use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocument;
-use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
-use Yoti\DocScan\Session\Create\Objective\Objective;
+use Yoti\IDV\Session\Create\Filters\RequiredDocument;
+use Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocument;
+use Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
+use Yoti\IDV\Session\Create\Objective\Objective;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocumentBuilder
  */
 class RequiredSupplementaryDocumentBuilderTest extends TestCase
 {
@@ -38,10 +38,10 @@ class RequiredSupplementaryDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers ::withObjective
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::__construct
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::__construct
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredDocument::jsonSerialize
      */
     public function shouldBuildRequiredSupplementaryDocument()
     {
@@ -66,7 +66,7 @@ class RequiredSupplementaryDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers ::withDocumentTypes
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
      */
     public function shouldBuildRequiredSupplementaryDocumentWithDocumentTypes()
     {
@@ -90,7 +90,7 @@ class RequiredSupplementaryDocumentBuilderTest extends TestCase
      *
      * @covers ::build
      * @covers ::withCountryCodes
-     * @covers \Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocument::jsonSerialize
      */
     public function shouldBuildRequiredSupplementaryDocumentWithCountryCodes()
     {

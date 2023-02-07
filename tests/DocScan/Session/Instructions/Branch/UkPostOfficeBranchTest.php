@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions\Branch;
+namespace Yoti\Test\IDV\Session\Instructions\Branch;
 
-use Yoti\DocScan\Session\Instructions\Branch\Location;
-use Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder;
+use Yoti\IDV\Session\Instructions\Branch\Location;
+use Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranch
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranch
  */
 class UkPostOfficeBranchTest extends TestCase
 {
@@ -35,13 +35,13 @@ class UkPostOfficeBranchTest extends TestCase
      * @covers ::getAddress
      * @covers ::getName
      * @covers ::getPostCode
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\Branch::getType
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withLocation
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withPostCode
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withName
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withFadCode
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withAddress
+     * @covers \Yoti\IDV\Session\Instructions\Branch\Branch::getType
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withLocation
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withPostCode
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withName
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withFadCode
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withAddress
      */
     public function builderShouldBuildWithAllProperties()
     {
@@ -66,11 +66,11 @@ class UkPostOfficeBranchTest extends TestCase
      * @covers ::__construct
      * @covers ::getLocation
      * @covers ::getFadCode
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\Branch::__construct
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withPostCode
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withName
-     * @covers \Yoti\DocScan\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withAddress
+     * @covers \Yoti\IDV\Session\Instructions\Branch\Branch::__construct
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withPostCode
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withName
+     * @covers \Yoti\IDV\Session\Instructions\Branch\UkPostOfficeBranchBuilder::withAddress
      */
     public function shouldBuildWithRequiredProperties()
     {

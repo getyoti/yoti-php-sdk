@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck;
-use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedLivenessCheck;
+use Yoti\IDV\Session\Create\Check\RequestedLivenessCheckBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedLivenessCheckBuilder
  */
 class RequstedLivenessCheckBuilderTest extends TestCase
 {
@@ -20,7 +20,7 @@ class RequstedLivenessCheckBuilderTest extends TestCase
      * @covers ::build
      * @covers ::forLivenessType
      * @covers ::withMaxRetries
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::__construct
      */
     public function shouldCorrectlyBuildRequestedLivenessCheck()
     {
@@ -34,10 +34,10 @@ class RequstedLivenessCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
      * @covers ::forLivenessType
      * @covers ::withMaxRetries
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::__construct
      */
     public function shouldBuildWithCustomLivenessType()
     {
@@ -59,12 +59,12 @@ class RequstedLivenessCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
      * @covers ::forZoomLiveness
      * @covers ::withMaxRetries
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::getConfig
      */
     public function shouldBuildWithZoomLivenessType()
     {
@@ -86,14 +86,14 @@ class RequstedLivenessCheckBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::jsonSerialize
      * @covers ::forStaticLiveness
      * @covers ::withManualCheck
      * @covers ::withoutManualCheck
      * @covers ::withMaxRetries
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedLivenessCheck::getConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedLivenessCheck::getConfig
      */
     public function shouldBuildWithStaticLivenessType()
     {

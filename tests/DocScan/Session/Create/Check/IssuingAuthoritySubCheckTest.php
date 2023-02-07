@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder;
-use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
+use Yoti\IDV\Session\Create\Check\IssuingAuthoritySubCheckBuilder;
+use Yoti\IDV\Session\Create\Filters\DocumentFilter;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheck
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\IssuingAuthoritySubCheck
  */
 class IssuingAuthoritySubCheckTest extends TestCase
 {
@@ -16,9 +16,9 @@ class IssuingAuthoritySubCheckTest extends TestCase
      * @covers ::__construct
      * @covers ::isRequested
      * @covers ::getFilter
-     * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withDocumentFilter
-     * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withRequested
-     * @covers \Yoti\DocScan\Session\Create\Check\IssuingAuthoritySubCheckBuilder::build
+     * @covers \Yoti\IDV\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withDocumentFilter
+     * @covers \Yoti\IDV\Session\Create\Check\IssuingAuthoritySubCheckBuilder::withRequested
+     * @covers \Yoti\IDV\Session\Create\Check\IssuingAuthoritySubCheckBuilder::build
      */
     public function withRequestedAndDocumentFilterShouldSetTheValueCorrectly()
     {

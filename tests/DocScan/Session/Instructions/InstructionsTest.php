@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions;
+namespace Yoti\Test\IDV\Session\Instructions;
 
-use Yoti\DocScan\Session\Instructions\Branch\Branch;
-use Yoti\DocScan\Session\Instructions\ContactProfile;
-use Yoti\DocScan\Session\Instructions\Document\DocumentProposal;
-use Yoti\DocScan\Session\Instructions\InstructionsBuilder;
+use Yoti\IDV\Session\Instructions\Branch\Branch;
+use Yoti\IDV\Session\Instructions\ContactProfile;
+use Yoti\IDV\Session\Instructions\Document\DocumentProposal;
+use Yoti\IDV\Session\Instructions\InstructionsBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Instructions
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\Instructions
  */
 class InstructionsTest extends TestCase
 {
@@ -48,10 +48,10 @@ class InstructionsTest extends TestCase
      * @covers ::getDocuments
      * @covers ::getContactProfile
      * @covers ::getBranch
-     * @covers \Yoti\DocScan\Session\Instructions\InstructionsBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\InstructionsBuilder::withDocumentProposal
-     * @covers \Yoti\DocScan\Session\Instructions\InstructionsBuilder::withContactProfile
-     * @covers \Yoti\DocScan\Session\Instructions\InstructionsBuilder::withBranch
+     * @covers \Yoti\IDV\Session\Instructions\InstructionsBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\InstructionsBuilder::withDocumentProposal
+     * @covers \Yoti\IDV\Session\Instructions\InstructionsBuilder::withContactProfile
+     * @covers \Yoti\IDV\Session\Instructions\InstructionsBuilder::withBranch
      */
     public function builderShouldBuildWithAllProperties()
     {

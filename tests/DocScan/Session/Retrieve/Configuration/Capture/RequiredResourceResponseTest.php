@@ -1,17 +1,17 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\RequiredResourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\EndUserAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\IbvAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\RelyingBusinessAllowedSourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\Source\UnknownAllowedSourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\RequiredResourceResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\RequiredResourceResponse
  */
 class RequiredResourceResponseTest extends TestCase
 {

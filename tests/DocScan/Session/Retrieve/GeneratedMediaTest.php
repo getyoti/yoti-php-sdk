@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\GeneratedMedia;
+use Yoti\IDV\Session\Retrieve\GeneratedMedia;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\GeneratedMedia
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\GeneratedMedia
  */
 class GeneratedMediaTest extends TestCase
 {

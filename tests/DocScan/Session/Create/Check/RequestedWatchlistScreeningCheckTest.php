@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheck
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningCheck
  */
 class RequestedWatchlistScreeningCheckTest extends TestCase
 {
@@ -31,8 +31,8 @@ class RequestedWatchlistScreeningCheckTest extends TestCase
      * @covers ::getConfig
      * @covers ::__construct
      * @covers ::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder::build
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder::withConfig
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder::build
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder::withConfig
      */
     public function builderShouldBuildWithSuppliedConfig(): void
     {

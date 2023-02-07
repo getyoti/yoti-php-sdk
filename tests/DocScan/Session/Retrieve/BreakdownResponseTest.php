@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\BreakdownResponse;
+use Yoti\IDV\Session\Retrieve\BreakdownResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\BreakdownResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\BreakdownResponse
  */
 class BreakdownResponseTest extends TestCase
 {
@@ -31,9 +31,9 @@ class BreakdownResponseTest extends TestCase
      * @covers ::getSubCheck
      * @covers ::getResult
      * @covers ::getDetails
-     * @covers \Yoti\DocScan\Session\Retrieve\DetailsResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\DetailsResponse::getName
-     * @covers \Yoti\DocScan\Session\Retrieve\DetailsResponse::getValue
+     * @covers \Yoti\IDV\Session\Retrieve\DetailsResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\DetailsResponse::getName
+     * @covers \Yoti\IDV\Session\Retrieve\DetailsResponse::getValue
      */
     public function shouldBuildCorrectly()
     {

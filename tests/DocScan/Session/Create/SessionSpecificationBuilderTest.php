@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Create;
+namespace Yoti\Test\IDV\Session\Create;
 
-use Yoti\DocScan\Session\Create\Check\RequestedCheck;
-use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
-use Yoti\DocScan\Session\Create\IbvOptions;
-use Yoti\DocScan\Session\Create\NotificationConfig;
-use Yoti\DocScan\Session\Create\SdkConfig;
-use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
-use Yoti\DocScan\Session\Create\Task\RequestedTask;
+use Yoti\IDV\Session\Create\Check\RequestedCheck;
+use Yoti\IDV\Session\Create\Filters\RequiredDocument;
+use Yoti\IDV\Session\Create\IbvOptions;
+use Yoti\IDV\Session\Create\NotificationConfig;
+use Yoti\IDV\Session\Create\SdkConfig;
+use Yoti\IDV\Session\Create\SessionSpecificationBuilder;
+use Yoti\IDV\Session\Create\Task\RequestedTask;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\SessionSpecificationBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\SessionSpecificationBuilder
  */
 class SessionSpecificationBuilderTest extends TestCase
 {
@@ -104,16 +104,16 @@ class SessionSpecificationBuilderTest extends TestCase
      * @covers ::withSdkConfig
      * @covers ::withRequiredDocument
      * @covers ::withBlockBiometricConsent
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getClientSessionTokenTtl
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getResourcesTtl
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getUserTrackingId
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getNotifications
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequestedChecks
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequestedTasks
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSdkConfig
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequiredDocuments
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getBlockBiometricConsent
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getClientSessionTokenTtl
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getResourcesTtl
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getUserTrackingId
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getNotifications
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getRequestedChecks
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getRequestedTasks
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getSdkConfig
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getRequiredDocuments
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getBlockBiometricConsent
      */
     public function shouldCorrectlyBuildSessionSpecification()
     {
@@ -151,7 +151,7 @@ class SessionSpecificationBuilderTest extends TestCase
     /**
      * @test
      * @covers ::withRequestedChecks
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequestedChecks
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getRequestedChecks
      */
     public function shouldOverwriteCurrentListWithRequestedChecks()
     {
@@ -192,7 +192,7 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
      */
     public function shouldReturnCorrectJsonString()
     {
@@ -227,7 +227,7 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
      */
     public function shouldReturnCorrectJsonStringWithoutOptionalProperties()
     {
@@ -246,7 +246,7 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
      */
     public function shouldReturnCorrectJsonStringWithBlockBiometricConsentTrue()
     {
@@ -268,7 +268,7 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
      */
     public function shouldReturnCorrectJsonStringWithBlockBiometricConsentFalse()
     {
@@ -290,9 +290,9 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSessionDeadline
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSessionDeadline
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getSessionDeadline
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withSessionDeadline
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldSetTheSessionDeadline()
     {
@@ -308,10 +308,10 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIbvOptions
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getIbvOptions
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function withIbvOptionsShouldSetTheIbvOptions()
     {
@@ -324,9 +324,9 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIbvOptions
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withIbvOptions
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldReturnCorrectJsonStringWithIbvOptions()
     {
@@ -348,10 +348,10 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSubject
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getSubject
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldBuildWithSubject()
     {
@@ -364,10 +364,10 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getSubject
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getSubject
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldNotImplicitlySetAValueForSubject()
     {
@@ -379,9 +379,9 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withSubject
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withSubject
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldReturnCorrectJsonStringWithSubject()
     {
@@ -403,10 +403,10 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIdentityProfileRequirements
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getIdentityProfileRequirements
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldBuildWithIdentityProfileRequirements()
     {
@@ -422,10 +422,10 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getIdentityProfileRequirements
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getIdentityProfileRequirements
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldNotImplicitlySetAValueForIdentityProfileRequirements()
     {
@@ -437,9 +437,9 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withIdentityProfileRequirements
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldReturnCorrectJsonStringWithIdentityProfileRequirements()
     {
@@ -461,12 +461,12 @@ class SessionSpecificationBuilderTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getCreateIdentityProfilePreview
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withCreateIdentityProfilePreview
-     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::getCreateIdentityProfilePreview
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\IDV\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::withCreateIdentityProfilePreview
+     * @covers \Yoti\IDV\Session\Create\SessionSpecificationBuilder::build
      */
     public function shouldReturnCorrectJsonStringWithIdentityProfilePreviewTrue()
     {

@@ -4,33 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Yoti\DocScan\DocScanClient;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedLivenessCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistAdvancedCaCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
-use Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
-use Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
-use Yoti\DocScan\Session\Create\Filters\RequiredIdDocumentBuilder;
-use Yoti\DocScan\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
-use Yoti\DocScan\Session\Create\Objective\ProofOfAddressObjectiveBuilder;
-use Yoti\DocScan\Session\Create\SdkConfigBuilder;
-use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
-use Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskBuilder;
-use Yoti\DocScan\Session\Create\Task\RequestedTextExtractionTaskBuilder;
+use Yoti\IDV\IDVClient;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedFuzzyMatchingStrategyBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedTypeListSourcesBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedCustomAccountWatchlistAdvancedCaConfigBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedDocumentAuthenticityCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedIdDocumentComparisonCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedLivenessCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedThirdPartyIdentityCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistAdvancedCaCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningCheckBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedWatchlistScreeningConfigBuilder;
+use Yoti\IDV\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
+use Yoti\IDV\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilterBuilder;
+use Yoti\IDV\Session\Create\Filters\RequiredIdDocumentBuilder;
+use Yoti\IDV\Session\Create\Filters\RequiredSupplementaryDocumentBuilder;
+use Yoti\IDV\Session\Create\Objective\ProofOfAddressObjectiveBuilder;
+use Yoti\IDV\Session\Create\SdkConfigBuilder;
+use Yoti\IDV\Session\Create\SessionSpecificationBuilder;
+use Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskBuilder;
+use Yoti\IDV\Session\Create\Task\RequestedTextExtractionTaskBuilder;
 
 class HomeController extends BaseController
 {
-    public function show(Request $request, DocScanClient $client)
+    public function show(Request $request, IDVClient $client)
     {
         //WatchScreening Config
         $watchScreeningConfig = (new RequestedWatchlistScreeningConfigBuilder())

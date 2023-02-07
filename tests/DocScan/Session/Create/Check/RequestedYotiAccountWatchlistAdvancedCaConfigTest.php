@@ -1,15 +1,15 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategy;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources;
-use Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategy;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources;
+use Yoti\IDV\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfigBuilder
  */
 class RequestedYotiAccountWatchlistAdvancedCaConfigTest extends TestCase
 {
@@ -19,13 +19,13 @@ class RequestedYotiAccountWatchlistAdvancedCaConfigTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withMatchingStrategy
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withSources
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withShareUrl
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::build
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfig::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withMatchingStrategy
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withSources
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withShareUrl
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::withRemoveDeceased
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfigBuilder::build
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\RequestedWatchlistAdvancedCaConfig::getType
+     * @covers \Yoti\IDV\Session\Create\Check\RequestedYotiAccountWatchlistAdvancedCaConfig::getType
      */
     public function builderShouldBuildWithCorrectProperties(): void
     {

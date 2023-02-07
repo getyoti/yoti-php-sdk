@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Task;
+namespace Yoti\Test\IDV\Session\Create\Task;
 
-use Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskConfig;
+use Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskConfig;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskConfig
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskConfig
  */
 class RequestedSupplementaryDocTextExtractionTaskConfigTest extends TestCase
 {

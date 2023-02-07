@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Retrieve\Contracts\CaMatchingStrategyResponse;
-use Yoti\DocScan\Session\Retrieve\Contracts\CaSourcesResponse;
-use Yoti\DocScan\Session\Retrieve\Contracts\WatchlistSearchConfigResponse;
-use Yoti\DocScan\Session\Retrieve\MediaResponse;
-use Yoti\DocScan\Session\Retrieve\RawResultsResponse;
-use Yoti\DocScan\Session\Retrieve\ReportResponse;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Retrieve\Contracts\CaMatchingStrategyResponse;
+use Yoti\IDV\Session\Retrieve\Contracts\CaSourcesResponse;
+use Yoti\IDV\Session\Retrieve\Contracts\WatchlistSearchConfigResponse;
+use Yoti\IDV\Session\Retrieve\MediaResponse;
+use Yoti\IDV\Session\Retrieve\RawResultsResponse;
+use Yoti\IDV\Session\Retrieve\ReportResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\ReportResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\ReportResponse
  */
 class ReportResponseTest extends TestCase
 {
@@ -65,42 +65,42 @@ class ReportResponseTest extends TestCase
      * @test
      * @covers ::__construct
      * @covers ::getWatchlistSummary
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::setSearchConfig
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getTotalHits
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getRawResults
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getSearchConfig
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::getAssociatedCountryCodes
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getSources
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getMatchingStrategy
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::isShareUrl
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::isRemoveDeceased
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::setMatchingStrategy
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::setSources
-     * @covers \Yoti\DocScan\Session\Retrieve\RawResultsResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\RawResultsResponse::getMedia
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\TypeListSourcesResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\TypeListSourcesResponse::getTypes
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\TypeListSourcesResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\SearchProfileSourcesResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\SearchProfileSourcesResponse::getSearchProfile
-     * @covers \Yoti\DocScan\Session\Retrieve\Sources\SearchProfileSourcesResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Contracts\CaSourcesResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::getFuzziness
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\ExactMatchingStrategyResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\ExactMatchingStrategyResponse::isExactMatch
-     * @covers \Yoti\DocScan\Session\Retrieve\Matching\ExactMatchingStrategyResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Contracts\CaSourcesResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\Contracts\CaMatchingStrategyResponse::getType
-     * @covers \Yoti\DocScan\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getApiKey
-     * @covers \Yoti\DocScan\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getMonitoring
-     * @covers \Yoti\DocScan\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getTags
-     * @covers \Yoti\DocScan\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getClientRef
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::setSearchConfig
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::getTotalHits
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::getRawResults
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::getSearchConfig
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::getAssociatedCountryCodes
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getSources
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getMatchingStrategy
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::isShareUrl
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::isRemoveDeceased
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::setMatchingStrategy
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistAdvancedCaSearchConfigResponse::setSources
+     * @covers \Yoti\IDV\Session\Retrieve\RawResultsResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\RawResultsResponse::getMedia
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\TypeListSourcesResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\TypeListSourcesResponse::getTypes
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\TypeListSourcesResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\SearchProfileSourcesResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\SearchProfileSourcesResponse::getSearchProfile
+     * @covers \Yoti\IDV\Session\Retrieve\Sources\SearchProfileSourcesResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Contracts\CaSourcesResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::getFuzziness
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\FuzzyMatchingStrategyResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\ExactMatchingStrategyResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\ExactMatchingStrategyResponse::isExactMatch
+     * @covers \Yoti\IDV\Session\Retrieve\Matching\ExactMatchingStrategyResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Contracts\CaSourcesResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\Contracts\CaMatchingStrategyResponse::getType
+     * @covers \Yoti\IDV\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getApiKey
+     * @covers \Yoti\IDV\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getMonitoring
+     * @covers \Yoti\IDV\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getTags
+     * @covers \Yoti\IDV\Session\Retrieve\CustomAccountWatchlistCaSearchConfigResponse::getClientRef
      */
     public function shouldBuildWithWatchlistSummaryResponse()
     {
@@ -247,9 +247,9 @@ class ReportResponseTest extends TestCase
 
     /**
      * @test
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistScreeningSearchConfigResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistScreeningSearchConfigResponse::getCategories
-     * @covers \Yoti\DocScan\Session\Retrieve\WatchlistSummaryResponse::setSearchConfig
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistScreeningSearchConfigResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistScreeningSearchConfigResponse::getCategories
+     * @covers \Yoti\IDV\Session\Retrieve\WatchlistSummaryResponse::setSearchConfig
      */
     public function shouldBuildWithWatchlistScreening()
     {

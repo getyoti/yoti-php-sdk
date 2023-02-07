@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\FaceCapture;
+namespace Yoti\Test\IDV\Session\Create\FaceCapture;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\IDV\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload
+ * @coversDefaultClass \Yoti\IDV\Session\Create\FaceCapture\UploadFaceCaptureImagePayload
  */
 class UploadFaceCaptureImagePayloadTest extends TestCase
 {

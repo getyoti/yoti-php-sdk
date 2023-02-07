@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yoti\DocScan\Session\Create\Task;
+namespace Yoti\IDV\Session\Create\Task;
 
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTaskBuilder
  */
 class RequestedSupplementaryDocTextExtractionTaskBuilderTest extends TestCase
 {
@@ -20,10 +20,10 @@ class RequestedSupplementaryDocTextExtractionTaskBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckAlways
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
      */
     public function shouldUseAlwaysAsValueForManualCheck()
     {
@@ -46,10 +46,10 @@ class RequestedSupplementaryDocTextExtractionTaskBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckFallback
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
      */
     public function shouldUseFallbackAsValueForManualCheck()
     {
@@ -71,10 +71,10 @@ class RequestedSupplementaryDocTextExtractionTaskBuilderTest extends TestCase
      * @test
      * @covers ::withManualCheckNever
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
-     * @covers \Yoti\DocScan\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::__construct
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getType
+     * @covers \Yoti\IDV\Session\Create\Task\RequestedSupplementaryDocTextExtractionTask::getConfig
      */
     public function shouldUseNeverAsValueForManualCheck()
     {

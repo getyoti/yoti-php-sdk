@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions\Document;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions\Document;
 
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedDocumentResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedDocumentResponse
  */
 class SelectedDocumentResponseTest extends TestCase
 {
@@ -21,8 +21,8 @@ class SelectedDocumentResponseTest extends TestCase
      * @covers ::getType
      * @covers ::getDocumentType
      * @covers ::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse::__construct
-     * @covers \Yoti\DocScan\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedIdDocumentResponse::__construct
+     * @covers \Yoti\IDV\Session\Retrieve\Instructions\Document\SelectedSupplementaryDocumentResponse::__construct
      */
     public function shouldBuildCorrectly(): void
     {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions;
 
-use Yoti\DocScan\Constants;
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\BranchResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\Branch\UnknownBranchResponse;
-use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
+use Yoti\IDV\Constants;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\BranchResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\UkPostOfficeBranchResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\Branch\UnknownBranchResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\InstructionsResponse
  */
 class InstructionsResponseTest extends TestCase
 {

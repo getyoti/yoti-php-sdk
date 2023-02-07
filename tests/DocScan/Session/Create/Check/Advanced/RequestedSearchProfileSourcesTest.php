@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Advanced;
+namespace Yoti\Test\IDV\Session\Create\Check\Advanced;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSourcesBuilder
  */
 class RequestedSearchProfileSourcesTest extends TestCase
 {
@@ -20,10 +20,10 @@ class RequestedSearchProfileSourcesTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withSearchProfile
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::getSearchProfile
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::getSearchProfile
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaSources::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::__construct
      */
     public function builderShouldBuildWithCorrectSearchProfile(): void
     {
@@ -40,10 +40,10 @@ class RequestedSearchProfileSourcesTest extends TestCase
      * @test
      * @covers ::build
      * @covers ::withSearchProfile
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::getSearchProfile
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedSearchProfileSources::__construct
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaSources::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::getSearchProfile
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedSearchProfileSources::__construct
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaSources::jsonSerialize
      */
     public function builderShouldBuildWithCorrectJson(): void
     {

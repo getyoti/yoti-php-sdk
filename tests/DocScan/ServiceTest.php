@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan;
+namespace Yoti\Test\IDV;
 
 use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\DocScan\Exception\DocScanException;
-use Yoti\DocScan\Service;
-use Yoti\DocScan\Session\Create\CreateSessionResult;
-use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
-use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
-use Yoti\DocScan\Session\Create\SessionSpecification;
-use Yoti\DocScan\Session\Instructions\Instructions;
-use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
-use Yoti\DocScan\Session\Retrieve\CreateFaceCaptureResourceResponse;
-use Yoti\DocScan\Session\Retrieve\GetSessionResult;
-use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
-use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Exception\PemFileException;
+use Yoti\IDV\Exception\IDVException;
+use Yoti\IDV\Service;
+use Yoti\IDV\Session\Create\CreateSessionResult;
+use Yoti\IDV\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
+use Yoti\IDV\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\IDV\Session\Create\SessionSpecification;
+use Yoti\IDV\Session\Instructions\Instructions;
+use Yoti\IDV\Session\Retrieve\Configuration\SessionConfigurationResponse;
+use Yoti\IDV\Session\Retrieve\CreateFaceCaptureResourceResponse;
+use Yoti\IDV\Session\Retrieve\GetSessionResult;
+use Yoti\IDV\Session\Retrieve\Instructions\ContactProfileResponse;
+use Yoti\IDV\Support\SupportedDocumentsResponse;
 use Yoti\Media\Media;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -28,7 +28,7 @@ use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Service
+ * @coversDefaultClass \Yoti\IDV\Service
  */
 class ServiceTest extends TestCase
 {
@@ -68,7 +68,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(201, file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE)));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -80,7 +80,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             CreateSessionResult::class,
-            $docScanService->createSession($sessionSpecificationMock)
+            $IDVService->createSession($sessionSpecificationMock)
         );
     }
 
@@ -140,7 +140,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(400));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -150,10 +150,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 400");
 
-        $docScanService->createSession($sessionSpecificationMock);
+        $IDVService->createSession($sessionSpecificationMock);
     }
 
     /**
@@ -162,7 +162,7 @@ class ServiceTest extends TestCase
      * @covers ::retrieveSession
      * @covers ::assertResponseIsSuccess
      */
-    public function retrieveSessionShouldReturnDocScanSessionOnSuccessfulCall()
+    public function retrieveSessionShouldReturnIDVSessionOnSuccessfulCall()
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
@@ -185,7 +185,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE)));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -197,7 +197,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             GetSessionResult::class,
-            $docScanService->retrieveSession(TestData::DOC_SCAN_SESSION_ID)
+            $IDVService->retrieveSession(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -230,7 +230,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -240,10 +240,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->retrieveSession(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->retrieveSession(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -275,7 +275,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE)));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -285,7 +285,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->deleteSession(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->deleteSession(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -317,7 +317,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -327,10 +327,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->deleteSession(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->deleteSession(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -373,7 +373,7 @@ class ServiceTest extends TestCase
                 )
             );
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -385,7 +385,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             Media::class,
-            $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
+            $IDVService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID)
         );
     }
 
@@ -408,7 +408,7 @@ class ServiceTest extends TestCase
                 )
             );
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -418,7 +418,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $media = $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $media = $IDVService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
         $this->assertNull($media);
     }
 
@@ -456,7 +456,7 @@ class ServiceTest extends TestCase
                 )
             );
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -466,10 +466,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $IDVService->getMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
 
     /**
@@ -502,7 +502,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE)));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -512,7 +512,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $IDVService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
 
     /**
@@ -545,7 +545,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -555,10 +555,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
+        $IDVService->deleteMediaContent(TestData::DOC_SCAN_SESSION_ID, TestData::DOC_SCAN_MEDIA_ID);
     }
 
     /**
@@ -589,7 +589,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, json_encode((object)[])));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -601,7 +601,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             SupportedDocumentsResponse::class,
-            $docScanService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN)
+            $IDVService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN)
         );
     }
 
@@ -633,7 +633,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -643,10 +643,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN);
+        $IDVService->getSupportedDocuments(TestData::INCLUDE_NON_LATIN);
     }
 
     /**
@@ -678,7 +678,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(201, json_encode((object)[])));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -690,7 +690,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             CreateFaceCaptureResourceResponse::class,
-            $docScanService->createFaceCaptureResource(
+            $IDVService->createFaceCaptureResource(
                 TestData::DOC_SCAN_SESSION_ID,
                 $createFaceCaptureResourcePayloadMock
             )
@@ -726,7 +726,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -736,10 +736,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->createFaceCaptureResource(
+        $IDVService->createFaceCaptureResource(
             TestData::DOC_SCAN_SESSION_ID,
             $createFaceCaptureResourcePayloadMock
         );
@@ -775,7 +775,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -785,7 +785,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->uploadFaceCaptureImage(
+        $IDVService->uploadFaceCaptureImage(
             TestData::DOC_SCAN_SESSION_ID,
             TestData::SOME_RESOURCE_ID,
             $uploadFaceCaptureImagePayloadMock
@@ -822,7 +822,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -832,10 +832,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->uploadFaceCaptureImage(
+        $IDVService->uploadFaceCaptureImage(
             TestData::DOC_SCAN_SESSION_ID,
             TestData::SOME_RESOURCE_ID,
             $uploadFaceCaptureImagePayloadMock
@@ -870,7 +870,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, json_encode((object)[])));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -882,7 +882,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             SessionConfigurationResponse::class,
-            $docScanService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
+            $IDVService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -914,7 +914,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -924,10 +924,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->fetchSessionConfiguration(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -959,7 +959,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -969,7 +969,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->putIbvInstructions(
+        $IDVService->putIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID,
             $instructionsMock
         );
@@ -1004,7 +1004,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1014,10 +1014,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->putIbvInstructions(
+        $IDVService->putIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID,
             $instructionsMock
         );
@@ -1051,7 +1051,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1061,7 +1061,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->getIbvInstructions(
+        $IDVService->getIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -1094,7 +1094,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1104,10 +1104,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->getIbvInstructions(
+        $IDVService->getIbvInstructions(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -1150,7 +1150,7 @@ class ServiceTest extends TestCase
                 )
             );
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1162,7 +1162,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             Media::class,
-            $docScanService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID)
+            $IDVService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -1198,7 +1198,7 @@ class ServiceTest extends TestCase
                 )
             );
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1208,10 +1208,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->getIbvInstructionsPdf(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -1219,7 +1219,7 @@ class ServiceTest extends TestCase
      * @covers ::__construct
      * @covers ::fetchInstructionsContactProfile
      * @covers ::assertResponseIsSuccess
-     * @throws DocScanException|PemFileException
+     * @throws IDVException|PemFileException
      */
     public function fetchInstructionsContactProfileShouldReturnContactProfileOnSuccessfulCall()
     {
@@ -1243,7 +1243,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200, json_encode((object)[])));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1255,7 +1255,7 @@ class ServiceTest extends TestCase
 
         $this->assertInstanceOf(
             ContactProfileResponse::class,
-            $docScanService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID)
+            $IDVService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID)
         );
     }
 
@@ -1287,7 +1287,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1297,10 +1297,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID);
+        $IDVService->fetchInstructionsContactProfile(TestData::DOC_SCAN_SESSION_ID);
     }
 
     /**
@@ -1331,7 +1331,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(200));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1341,7 +1341,7 @@ class ServiceTest extends TestCase
             )
         );
 
-        $docScanService->triggerIbvEmailNotification(
+        $IDVService->triggerIbvEmailNotification(
             TestData::DOC_SCAN_SESSION_ID
         );
     }
@@ -1374,7 +1374,7 @@ class ServiceTest extends TestCase
             )
             ->willReturn($this->createResponse(404));
 
-        $docScanService = new Service(
+        $IDVService = new Service(
             TestData::SDK_ID,
             PemFile::fromFilePath(TestData::PEM_FILE),
             new Config(
@@ -1384,10 +1384,10 @@ class ServiceTest extends TestCase
             )
         );
 
-        $this->expectException(DocScanException::class);
+        $this->expectException(IDVException::class);
         $this->expectExceptionMessage("Server responded with 404");
 
-        $docScanService->triggerIbvEmailNotification(
+        $IDVService->triggerIbvEmailNotification(
             TestData::DOC_SCAN_SESSION_ID
         );
     }

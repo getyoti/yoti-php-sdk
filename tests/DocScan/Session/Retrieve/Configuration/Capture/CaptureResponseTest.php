@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Configuration\Capture;
+namespace Yoti\Test\IDV\Session\Retrieve\Configuration\Capture;
 
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\CaptureResponse;
-use Yoti\DocScan\Session\Retrieve\Configuration\Capture\UnknownRequiredResourceResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\CaptureResponse;
+use Yoti\IDV\Session\Retrieve\Configuration\Capture\UnknownRequiredResourceResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Configuration\Capture\CaptureResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Configuration\Capture\CaptureResponse
  */
 class CaptureResponseTest extends TestCase
 {

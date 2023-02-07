@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Support;
+namespace Yoti\Test\IDV\Support;
 
-use Yoti\DocScan\Support\SupportedCountry;
-use Yoti\DocScan\Support\SupportedDocument;
+use Yoti\IDV\Support\SupportedCountry;
+use Yoti\IDV\Support\SupportedDocument;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Support\SupportedCountry
+ * @coversDefaultClass \Yoti\IDV\Support\SupportedCountry
  */
 class SupportedCountryTest extends TestCase
 {

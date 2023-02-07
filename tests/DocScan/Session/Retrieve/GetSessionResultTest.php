@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Yoti\Test\DocScan\Session\Retrieve;
+namespace Yoti\Test\IDV\Session\Retrieve;
 
-use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
-use Yoti\DocScan\Session\Retrieve\CheckResponse;
-use Yoti\DocScan\Session\Retrieve\GetSessionResult;
-use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
-use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
-use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
+use Yoti\IDV\Session\Retrieve\AuthenticityCheckResponse;
+use Yoti\IDV\Session\Retrieve\CheckResponse;
+use Yoti\IDV\Session\Retrieve\GetSessionResult;
+use Yoti\IDV\Session\Retrieve\IdentityProfilePreviewResponse;
+use Yoti\IDV\Session\Retrieve\IdentityProfileResponse;
+use Yoti\IDV\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\GetSessionResult
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\GetSessionResult
  */
 class GetSessionResultTest extends TestCase
 {

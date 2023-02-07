@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check;
+namespace Yoti\Test\IDV\Session\Create\Check;
 
-use Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckConfig;
+use Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheckConfig;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\RequestedFaceMatchCheckConfig
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\RequestedFaceMatchCheckConfig
  */
 class RequestedFaceMatchCheckConfigTest extends TestCase
 {

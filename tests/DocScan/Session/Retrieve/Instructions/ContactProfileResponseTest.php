@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Retrieve\Instructions;
+namespace Yoti\Test\IDV\Session\Retrieve\Instructions;
 
-use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
+use Yoti\IDV\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse
+ * @coversDefaultClass \Yoti\IDV\Session\Retrieve\Instructions\ContactProfileResponse
  */
 class ContactProfileResponseTest extends TestCase
 {

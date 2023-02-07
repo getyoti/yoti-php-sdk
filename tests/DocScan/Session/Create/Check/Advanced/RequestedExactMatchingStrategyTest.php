@@ -1,22 +1,22 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Create\Check\Advanced;
+namespace Yoti\Test\IDV\Session\Create\Check\Advanced;
 
 use PHPUnit\Framework\Assert;
-use Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder;
+use Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder
+ * @coversDefaultClass \Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategyBuilder
  */
 class RequestedExactMatchingStrategyTest extends TestCase
 {
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::isExactMatch
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::getType
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::isExactMatch
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::getType
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::getType
      */
     public function builderShouldBuildRequestedExactMatchingStrategyTest(): void
     {
@@ -30,8 +30,8 @@ class RequestedExactMatchingStrategyTest extends TestCase
     /**
      * @test
      * @covers ::build
-     * @covers \Yoti\DocScan\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::jsonSerialize
-     * @covers \Yoti\DocScan\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Advanced\RequestedExactMatchingStrategy::jsonSerialize
+     * @covers \Yoti\IDV\Session\Create\Check\Contracts\Advanced\RequestedCaMatchingStrategy::jsonSerialize
      */
     public function builderShouldBuildCorrectJson(): void
     {

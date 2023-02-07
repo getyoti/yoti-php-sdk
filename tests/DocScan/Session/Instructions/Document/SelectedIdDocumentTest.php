@@ -1,12 +1,12 @@
 <?php
 
-namespace Yoti\Test\DocScan\Session\Instructions\Document;
+namespace Yoti\Test\IDV\Session\Instructions\Document;
 
-use Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder;
+use Yoti\IDV\Session\Instructions\Document\SelectedIdDocumentBuilder;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocument
+ * @coversDefaultClass \Yoti\IDV\Session\Instructions\Document\SelectedIdDocument
  */
 class SelectedIdDocumentTest extends TestCase
 {
@@ -18,11 +18,11 @@ class SelectedIdDocumentTest extends TestCase
      * @covers ::__construct
      * @covers ::getDocumentType
      * @covers ::getCountryCode
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::getType
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedDocument::__construct
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::build
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::withCountryCode
-     * @covers \Yoti\DocScan\Session\Instructions\Document\SelectedIdDocumentBuilder::withDocumentType
+     * @covers \Yoti\IDV\Session\Instructions\Document\SelectedDocument::getType
+     * @covers \Yoti\IDV\Session\Instructions\Document\SelectedDocument::__construct
+     * @covers \Yoti\IDV\Session\Instructions\Document\SelectedIdDocumentBuilder::build
+     * @covers \Yoti\IDV\Session\Instructions\Document\SelectedIdDocumentBuilder::withCountryCode
+     * @covers \Yoti\IDV\Session\Instructions\Document\SelectedIdDocumentBuilder::withDocumentType
      */
     public function builderShouldBuildWithAllProperties()
     {
