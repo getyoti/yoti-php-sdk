@@ -9,6 +9,8 @@ use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
+use Yoti\DocScan\Session\Retrieve\ImportTokenResponse;
+use Yoti\DocScan\Session\Retrieve\MediaResponse;
 use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
@@ -257,5 +259,31 @@ class GetSessionResultTest extends TestCase
         $result = new GetSessionResult($input);
 
         $this->assertInstanceOf(IdentityProfilePreviewResponse::class, $result->getIdentityProfilePreview());
+    }
+
+    /**
+     * @test
+     * @covers ::getImportToken
+     * @covers ::__construct
+     */
+    public function shouldParseImportTokenResponse()
+    {
+        $input = [
+            'import_token' => [
+                'media' => [
+                    'id' => 'SOME_ID',
+                    'type' => 'JSON',
+                    'created' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                ],
+                'failure_reason' => 'SOME_REASON'
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(ImportTokenResponse::class, $result->getImportToken());
+        $this->assertInstanceOf(MediaResponse::class, $result->getImportToken()->getMedia());
+        $this->assertEquals('SOME_REASON', $result->getImportToken()->getFailureReason());
     }
 }
