@@ -7,6 +7,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\IbvOptions;
+use Yoti\DocScan\Session\Create\ImportToken;
 use Yoti\DocScan\Session\Create\NotificationConfig;
 use Yoti\DocScan\Session\Create\SdkConfig;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
@@ -62,6 +63,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $identityProfileRequirements;
 
+    /**
+     * @var ImportToken
+     */
+    private $importTokenMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -80,6 +86,8 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->requiredDocumentMock->method('jsonSerialize')->willReturn((object)['requiredDocument']);
 
         $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
+
+        $this->importTokenMock = $this->createMock(ImportToken::class);
 
         $this->subject = (object)[1 => 'some'];
 
@@ -480,6 +488,46 @@ class SessionSpecificationBuilderTest extends TestCase
                 'requested_tasks' => [],
                 'required_documents' => [],
                 'create_identity_profile_preview' => true,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getImportToken
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withImportToken
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function withImportTokenShouldSetImportToken()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withImportToken($this->importTokenMock)
+            ->build();
+
+        $this->assertEquals($this->importTokenMock, $sessionSpecificationResult->getImportToken());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withImportToken
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithImportToken()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withImportToken($this->importTokenMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'create_identity_profile_preview' => false,
+                'import_token' => $this->importTokenMock,
             ]),
             json_encode($sessionSpecification)
         );
