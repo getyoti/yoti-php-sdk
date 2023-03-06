@@ -8,8 +8,11 @@ use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Aml\Service as AmlService;
 use Yoti\Exception\ActivityDetailsException;
+use Yoti\Exception\IdentityException;
 use Yoti\Exception\PemFileException;
 use Yoti\Exception\ReceiptException;
+use Yoti\Identity\IdentityService;
+use Yoti\Identity\ShareSessionRequest;
 use Yoti\Profile\ActivityDetails;
 use Yoti\Profile\Service as ProfileService;
 use Yoti\ShareUrl\DynamicScenario;
@@ -28,20 +31,13 @@ use Yoti\Util\Validation;
  */
 class YotiClient
 {
-    /**
-     * @var AmlService
-     */
-    private $amlService;
+    private AmlService $amlService;
 
-    /**
-     * @var ProfileService
-     */
-    private $profileService;
+    private ProfileService $profileService;
 
-    /**
-     * @var ShareUrlService
-     */
-    private $shareUrlService;
+    private ShareUrlService $shareUrlService;
+
+    private IdentityService $identityService;
 
     /**
      * YotiClient constructor.
@@ -71,6 +67,7 @@ class YotiClient
         $this->profileService = new ProfileService($sdkId, $pemFile, $config);
         $this->amlService = new AmlService($sdkId, $pemFile, $config);
         $this->shareUrlService = new ShareUrlService($sdkId, $pemFile, $config);
+        $this->identityService = new IdentityService($sdkId, $pemFile, $config);
     }
 
     /**
@@ -128,5 +125,17 @@ class YotiClient
     public function createShareUrl(DynamicScenario $dynamicScenario): ShareUrlResult
     {
         return $this->shareUrlService->createShareUrl($dynamicScenario);
+    }
+
+    /**
+     * Create a sharing session to initiate a sharing process based on a policy
+     *
+     * @throws IdentityException
+     *
+     * Aggregate exception signalling issues during the call
+     */
+    public function createShareSession(ShareSessionRequest $request): Identity\ShareSession
+    {
+        return $this->identityService->createShareSession($request);
     }
 }

@@ -13,6 +13,9 @@ use Yoti\Aml\Country as AmlCountry;
 use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Exception\DateTimeException;
+use Yoti\Identity\Policy\Policy;
+use Yoti\Identity\ShareSession;
+use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\Profile\ActivityDetails;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
 use Yoti\ShareUrl\Policy\DynamicPolicyBuilder;
@@ -202,6 +205,44 @@ class YotiClientTest extends TestCase
         $result = $yotiClient->createShareUrl($dynamicScenario);
 
         $this->assertInstanceOf(ShareUrlResult::class, $result);
+    }
+
+    /**
+     * @covers ::createShareSession
+     * @covers ::__construct
+     */
+    public function testCreateShareSession()
+    {
+        $policy = $this->createMock(Policy::class);
+        $redirectUri = 'https://host/redirect/';
+
+        $shareSessionRequest = (new ShareSessionRequestBuilder())
+            ->withPolicy($policy)
+            ->withRedirectUri($redirectUri)
+            ->build();
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'id' => 'some_id',
+            'status' => 'some_status',
+            'expiry' => 'some_time',
+        ])));
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->createShareSession($shareSessionRequest);
+
+        $this->assertInstanceOf(ShareSession::class, $result);
     }
 
     /**
