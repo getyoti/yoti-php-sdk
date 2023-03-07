@@ -22,9 +22,16 @@
         <h2 class="yoti-top-header">Digital Identity Share Complete Example page</h2>
 
         <div>
-            <p> Id: {{$result->getId()}}</p>
-            <p> Status: {{$result->getStatus()}}</p>
-            <p> Expiry: {{$result->getExpiry()}}</p>
+            <p><strong>Session</strong></p>
+            <p> Id: {{$sessionId}}</p>
+            <p> Status: {{$sessionStatus}}</p>
+            <p> Expiry: {{$sessionExpiry}}</p>
+        </div>
+
+        <div>
+            <p><strong>Qr Code</strong></p>
+            <p> Id: {{$qrCodeId}}</p>
+            <p> Uri: {{$qrCodeUri}}</p>
         </div>
 
     </section>

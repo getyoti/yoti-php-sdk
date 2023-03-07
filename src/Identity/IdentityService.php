@@ -13,6 +13,7 @@ use Yoti\Util\PemFile;
 class IdentityService
 {
     private const IDENTITY_SESSION_CREATION_TEMPLATE = '/v2/sessions';
+    private const IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE = '/v2/sessions/%s/qr-codes';
 
     private string $sdkId;
 
@@ -45,5 +46,24 @@ class IdentityService
         }
 
         return new ShareSession(Json::decode((string)$response->getBody()));
+    }
+
+    public function createShareQrCode(string $sessionId): ShareSessionQrCode
+    {
+        $response = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
+            ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE, $sessionId))
+            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
+            ->withPost()
+            ->withPemFile($this->pemFile)
+            ->build()
+            ->execute();
+
+        $httpCode = $response->getStatusCode();
+        if ($httpCode < 200 || $httpCode > 299) {
+            throw new IdentityException("Server responded with {$httpCode}", $response);
+        }
+
+        return new ShareSessionQrCode(Json::decode((string)$response->getBody()));
     }
 }

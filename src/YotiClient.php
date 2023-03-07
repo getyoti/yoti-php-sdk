@@ -138,4 +138,16 @@ class YotiClient
     {
         return $this->identityService->createShareSession($request);
     }
+
+    /**
+     * Create a sharing session QR code to initiate a sharing process based on a policy
+     *
+     * @throws IdentityException
+     *
+     * Aggregate exception signalling issues during the call
+     */
+    public function createShareQrCode(string $sessionId): Identity\ShareSessionQrCode
+    {
+        return $this->identityService->createShareQrCode($sessionId);
+    }
 }

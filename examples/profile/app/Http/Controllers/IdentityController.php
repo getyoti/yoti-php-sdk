@@ -20,11 +20,17 @@ class IdentityController extends BaseController
             ->withRedirectUri($redirectUri)
             ->build();
 
-        $result = $client->createShareSession($shareSessionRequest);
+        $session = $client->createShareSession($shareSessionRequest);
+
+        $qrCode = $client->createShareQrCode($session->getId());
 
         return view('identity', [
             'title' => 'Digital Identity Complete Example',
-            'result' => $result
+            'sessionId' => $session->getId(),
+            'sessionStatus' => $session->getStatus(),
+            'sessionExpiry' => $session->getExpiry(),
+            'qrCodeId' => $qrCode->getId(),
+            'qrCodeUri' => $qrCode->getUri(),
         ]);
     }
 }

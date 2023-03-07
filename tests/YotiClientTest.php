@@ -15,6 +15,7 @@ use Yoti\Aml\Result as AmlResult;
 use Yoti\Exception\DateTimeException;
 use Yoti\Identity\Policy\Policy;
 use Yoti\Identity\ShareSession;
+use Yoti\Identity\ShareSessionQrCode;
 use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\Profile\ActivityDetails;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
@@ -243,6 +244,35 @@ class YotiClientTest extends TestCase
         $result = $yotiClient->createShareSession($shareSessionRequest);
 
         $this->assertInstanceOf(ShareSession::class, $result);
+    }
+
+    /**
+     * @covers ::createShareQrCode
+     * @covers ::__construct
+     */
+    public function testCreateShareQrCode()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'id' => 'some_id',
+            'uri' => 'some_uri',
+        ])));
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->createShareQrCode(TestData::SOME_ID);
+
+        $this->assertInstanceOf(ShareSessionQrCode::class, $result);
     }
 
     /**
