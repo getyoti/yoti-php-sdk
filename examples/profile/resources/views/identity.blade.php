@@ -22,16 +22,26 @@
         <h2 class="yoti-top-header">Digital Identity Share Complete Example page</h2>
 
         <div>
-            <p><strong>Session</strong></p>
+            <p><strong>Created Session</strong></p>
             <p> Id: {{$sessionId}}</p>
             <p> Status: {{$sessionStatus}}</p>
             <p> Expiry: {{$sessionExpiry}}</p>
         </div>
 
         <div>
-            <p><strong>Qr Code</strong></p>
-            <p> Id: {{$qrCodeId}}</p>
-            <p> Uri: {{$qrCodeUri}}</p>
+            <p><strong>Created Session QR Code</strong></p>
+            <p> Id: {{$createdQrCodeId}}</p>
+            <p> URI: {{$createdQrCodeUri}}</p>
+        </div>
+
+        <div>
+            <p><strong>Fetched Session QR Code</strong></p>
+            <p> Expiry: {{$fetchedQrCodeExpiry}}</p>
+            <p> Extensions: {{$fetchedQrCodeExtensions}}</p>
+            <p> Redirect URI: {{$fetchedQrCodeRedirectUri}}</p>
+            <p> Session ID: {{$fetchedQrCodeSessionId}}</p>
+            <p> Session Status: {{$fetchedQrCodeSessionStatus}}</p>
+            <p> Session Expiry: {{$fetchedQrCodeSessionExpiry}}</p>
         </div>
 
     </section>

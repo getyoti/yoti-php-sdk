@@ -2,7 +2,7 @@
 
 namespace Yoti\Identity;
 
-class ShareSessionQrCode implements \JsonSerializable
+class ShareSessionCreatedQrCode implements \JsonSerializable
 {
     private string $id;
 

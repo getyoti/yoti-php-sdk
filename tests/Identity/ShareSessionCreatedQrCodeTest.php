@@ -2,13 +2,13 @@
 
 namespace Yoti\Test\Identity;
 
-use Yoti\Identity\ShareSessionQrCode;
+use Yoti\Identity\ShareSessionCreatedQrCode;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Identity\ShareSessionQrCode
+ * @coversDefaultClass \Yoti\Identity\ShareSessionCreatedQrCode
  */
-class ShareSessionQrCodeTest extends TestCase
+class ShareSessionCreatedQrCodeTest extends TestCase
 {
     private const SOME_ID = 'some_id';
     private const SOME_URI = 'some_uri';
@@ -21,7 +21,7 @@ class ShareSessionQrCodeTest extends TestCase
      */
     public function testShouldBuildCorrectly()
     {
-        $qrCode = new ShareSessionQrCode([
+        $qrCode = new ShareSessionCreatedQrCode([
            'id' => self::SOME_ID,
            'uri' => self::SOME_URI,
            'failed' => 'failed'
@@ -32,7 +32,7 @@ class ShareSessionQrCodeTest extends TestCase
             'uri' => self::SOME_URI,
         ];
 
-        $this->assertInstanceOf(ShareSessionQrCode::class, $qrCode);
+        $this->assertInstanceOf(ShareSessionCreatedQrCode::class, $qrCode);
 
         $this->assertEquals(self::SOME_ID, $qrCode->getId());
         $this->assertEquals(self::SOME_URI, $qrCode->getUri());

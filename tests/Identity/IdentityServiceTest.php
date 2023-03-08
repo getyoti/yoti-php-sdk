@@ -8,7 +8,8 @@ use Yoti\Identity\Extension\Extension;
 use Yoti\Identity\IdentityService;
 use Yoti\Identity\Policy\Policy;
 use Yoti\Identity\ShareSession;
-use Yoti\Identity\ShareSessionQrCode;
+use Yoti\Identity\ShareSessionCreatedQrCode;
+use Yoti\Identity\ShareSessionFetchedQrCode;
 use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
@@ -75,6 +76,31 @@ class IdentityServiceTest extends TestCase
 
         $result = $identityService->createShareQrCode(TestData::SOME_ID);
 
-        $this->assertInstanceOf(ShareSessionQrCode::class, $result);
+        $this->assertInstanceOf(ShareSessionCreatedQrCode::class, $result);
+    }
+
+    /**
+     * @covers ::fetchShareQrCode
+     * @covers ::__construct
+     */
+    public function testShouldFetchShareQrCode()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'id' => 'id',
+            'expiry' => 'expiry',
+            'policy' => 'policy',
+            'extensions' => [['type' => 'type', 'content' => 'content']],
+            'session' => ['id' => 'id', 'status' => 'status', 'expiry' => 'expiry'],
+            'redirectUri' => 'redirectUri',
+        ])));
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $identityService = $this->createMock(IdentityService::class);
+
+        $result = $identityService->fetchShareQrCode(TestData::SOME_ID);
+
+        $this->assertInstanceOf(ShareSessionFetchedQrCode::class, $result);
     }
 }
