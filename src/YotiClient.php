@@ -134,7 +134,7 @@ class YotiClient
      *
      * Aggregate exception signalling issues during the call
      */
-    public function createShareSession(ShareSessionRequest $request): Identity\ShareSession
+    public function createShareSession(ShareSessionRequest $request): Identity\ShareSessionCreated
     {
         return $this->identityService->createShareSession($request);
     }
@@ -161,5 +161,17 @@ class YotiClient
     public function fetchShareQrCode(string $qrCodeId): Identity\ShareSessionFetchedQrCode
     {
         return $this->identityService->fetchShareQrCode($qrCodeId);
+    }
+
+    /**
+     * Retrieve the sharing session
+     *
+     * @throws IdentityException
+     *
+     * Aggregate exception signalling issues during the call
+     */
+    public function fetchShareSession(string $sessionId): Identity\ShareSessionFetched
+    {
+        return $this->identityService->fetchShareSession($sessionId);
     }
 }

@@ -17,7 +17,7 @@ class ShareSessionFetchedQrCode implements \JsonSerializable
      */
     private array $extensions;
 
-    private ShareSession $session;
+    private ShareSessionCreated $session;
 
     private string $redirectUri;
 
@@ -41,7 +41,7 @@ class ShareSessionFetchedQrCode implements \JsonSerializable
             }
         }
         if (isset($sessionData['session'])) {
-            $this->session = new ShareSession($sessionData['session']);
+            $this->session = new ShareSessionCreated($sessionData['session']);
         }
         if (isset($sessionData['redirectUri'])) {
             $this->redirectUri = $sessionData['redirectUri'];
@@ -93,9 +93,9 @@ class ShareSessionFetchedQrCode implements \JsonSerializable
     }
 
     /**
-     * @return ShareSession
+     * @return ShareSessionCreated
      */
-    public function getSession(): ShareSession
+    public function getSession(): ShareSessionCreated
     {
         return $this->session;
     }

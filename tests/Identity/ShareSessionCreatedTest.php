@@ -2,13 +2,13 @@
 
 namespace Yoti\Test\Identity;
 
-use Yoti\Identity\ShareSession;
+use Yoti\Identity\ShareSessionCreated;
 use Yoti\Test\TestCase;
 
 /**
- * @coversDefaultClass \Yoti\Identity\ShareSession
+ * @coversDefaultClass \Yoti\Identity\ShareSessionCreated
  */
-class ShareSessionTest extends TestCase
+class ShareSessionCreatedTest extends TestCase
 {
     private const SOME_ID = 'SOME_ID';
     private const SOME_STATUS = 'SOME_STATUS';
@@ -23,7 +23,7 @@ class ShareSessionTest extends TestCase
      */
     public function testShouldBuildCorrectly()
     {
-        $shareSession = new ShareSession([
+        $shareSession = new ShareSessionCreated([
             'id' => self::SOME_ID,
             'status' => self::SOME_STATUS,
             'expiry' => self::SOME_EXPIRY,
@@ -36,7 +36,7 @@ class ShareSessionTest extends TestCase
             'expiry' => self::SOME_EXPIRY,
         ];
 
-        $this->assertInstanceOf(ShareSession::class, $shareSession);
+        $this->assertInstanceOf(ShareSessionCreated::class, $shareSession);
         $this->assertEquals(self::SOME_ID, $shareSession->getId());
         $this->assertEquals(self::SOME_STATUS, $shareSession->getStatus());
         $this->assertEquals(self::SOME_EXPIRY, $shareSession->getExpiry());
