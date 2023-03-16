@@ -40,7 +40,7 @@ class Validation
      */
     public static function notNull($value, string $name): void
     {
-        if (is_null($value)) {
+        if (null === $value) {
             throw new \InvalidArgumentException("{$name} cannot be null");
         }
     }
