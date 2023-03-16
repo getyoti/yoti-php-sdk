@@ -14,8 +14,10 @@ use Yoti\Aml\Profile as AmlProfile;
 use Yoti\Aml\Result as AmlResult;
 use Yoti\Exception\DateTimeException;
 use Yoti\Identity\Policy\Policy;
-use Yoti\Identity\ShareSession;
-use Yoti\Identity\ShareSessionQrCode;
+use Yoti\Identity\ShareSessionCreated;
+use Yoti\Identity\ShareSessionCreatedQrCode;
+use Yoti\Identity\ShareSessionFetched;
+use Yoti\Identity\ShareSessionFetchedQrCode;
 use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\Profile\ActivityDetails;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
@@ -243,7 +245,7 @@ class YotiClientTest extends TestCase
 
         $result = $yotiClient->createShareSession($shareSessionRequest);
 
-        $this->assertInstanceOf(ShareSession::class, $result);
+        $this->assertInstanceOf(ShareSessionCreated::class, $result);
     }
 
     /**
@@ -272,7 +274,74 @@ class YotiClientTest extends TestCase
 
         $result = $yotiClient->createShareQrCode(TestData::SOME_ID);
 
-        $this->assertInstanceOf(ShareSessionQrCode::class, $result);
+        $this->assertInstanceOf(ShareSessionCreatedQrCode::class, $result);
+    }
+
+    /**
+     * @covers ::fetchShareQrCode
+     * @covers ::__construct
+     */
+    public function testFetchShareQrCode()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'id' => 'id',
+            'expiry' => 'expiry',
+            'policy' => 'policy',
+            'extensions' => [['type' => 'type', 'content' => 'content']],
+            'session' => ['id' => 'id', 'status' => 'status', 'expiry' => 'expiry'],
+            'redirectUri' => 'redirectUri',
+        ])));
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->fetchShareQrCode(TestData::SOME_ID);
+
+        $this->assertInstanceOf(ShareSessionFetchedQrCode::class, $result);
+    }
+
+    /**
+     * @covers ::fetchShareSession
+     * @covers ::__construct
+     */
+    public function testFetchShareSession()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'id' => 'SOME_ID',
+            'status' => 'SOME_STATUS',
+            'expiry' => 'SOME_EXPIRY',
+            'created' => 'SOME_CREATED',
+            'updated' => 'SOME_UPDATED',
+            'qrCode' => ['id' => 'SOME_QRCODE_ID'],
+            'receipt' => ['id' => 'SOME_RECEIPT_ID'],
+        ])));
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->fetchShareSession(TestData::SOME_ID);
+
+        $this->assertInstanceOf(ShareSessionFetched::class, $result);
     }
 
     /**
