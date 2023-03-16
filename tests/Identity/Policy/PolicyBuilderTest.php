@@ -571,6 +571,46 @@ class PolicyBuilderTest extends TestCase
     }
 
     /**
+     * @covers ::withWantedRememberMeOptional
+     */
+    public function testWithRememberMeOptional()
+    {
+        $policy = (new PolicyBuilder())
+            ->withWantedRememberMeOptional(true)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => true,
+            'identity_profile_requirements' => null,
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
+    }
+
+    /**
+     * @covers ::withWantedRememberMeOptional
+     */
+    public function testWithoutRememberMeOptional()
+    {
+        $policy = (new PolicyBuilder())
+            ->withWantedRememberMeOptional(false)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null
+        ];
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
+    }
+
+    /**
      * @covers ::withIdentityProfileRequirements
      * @covers \Yoti\Identity\Policy\Policy::__construct
      * @covers \Yoti\Identity\Policy\Policy::getIdentityProfileRequirements

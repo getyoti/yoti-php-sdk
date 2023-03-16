@@ -19,6 +19,8 @@ class Policy implements \JsonSerializable
 
     private bool $wantedRememberMe;
 
+    private bool $wantedRememberMeOptional;
+
     /**
      * @var object|null
      */
@@ -35,6 +37,7 @@ class Policy implements \JsonSerializable
         array $wantedAttributes,
         array $wantedAuthTypes,
         bool $wantedRememberMe = false,
+        bool $wantedRememberMeOptional = false,
         $identityProfileRequirements = null
     ) {
         Validation::isArrayOfType($wantedAttributes, [WantedAttribute::class], 'wantedAttributes');
@@ -44,6 +47,7 @@ class Policy implements \JsonSerializable
         $this->wantedAuthTypes = $wantedAuthTypes;
 
         $this->wantedRememberMe = $wantedRememberMe;
+        $this->wantedRememberMeOptional = $wantedRememberMeOptional;
         $this->identityProfileRequirements = $identityProfileRequirements;
     }
 
@@ -54,7 +58,7 @@ class Policy implements \JsonSerializable
             'wanted' => $this->wantedAttributes,
             'wanted_auth_types' => $this->wantedAuthTypes,
             'wanted_remember_me' => $this->wantedRememberMe,
-            'wanted_remember_me_optional' => false,
+            'wanted_remember_me_optional' => $this->wantedRememberMeOptional,
             'identity_profile_requirements' => $this->identityProfileRequirements,
         ];
     }

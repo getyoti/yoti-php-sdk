@@ -24,6 +24,8 @@ class PolicyBuilder
 
     private bool $wantedRememberMe = false;
 
+    private bool $wantedRememberMeOptional = false;
+
     private ?object $identityProfileRequirements = null;
 
     public function withWantedAttribute(WantedAttribute $wantedAttribute): self
@@ -298,6 +300,12 @@ class PolicyBuilder
         return $this;
     }
 
+    public function withWantedRememberMeOptional(bool $wantedRememberMeOptional): self
+    {
+        $this->wantedRememberMeOptional = $wantedRememberMeOptional;
+        return $this;
+    }
+
     /**
      * Use an Identity Profile Requirement object for the share
      *
@@ -317,6 +325,7 @@ class PolicyBuilder
             array_values($this->wantedAttributes),
             array_values($this->wantedAuthTypes),
             $this->wantedRememberMe,
+            $this->wantedRememberMeOptional,
             $this->identityProfileRequirements
         );
     }
