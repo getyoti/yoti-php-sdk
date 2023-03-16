@@ -3,7 +3,7 @@
 namespace Yoti\Test\Identity;
 
 use Yoti\Identity\Extension\Extension;
-use Yoti\Identity\ShareSession;
+use Yoti\Identity\ShareSessionCreated;
 use Yoti\Identity\ShareSessionFetchedQrCode;
 use Yoti\Test\TestCase;
 
@@ -65,7 +65,7 @@ class ShareSessionFetchedQrCodeTest extends TestCase
         $this->assertEquals(self::SOME_POLICY, $qrCode->getPolicy());
         $this->assertEquals(self::SOME_REDIRECT_URI, $qrCode->getRedirectUri());
 
-        $this->assertInstanceOf(ShareSession::class, $qrCode->getSession());
+        $this->assertInstanceOf(ShareSessionCreated::class, $qrCode->getSession());
 
         $this->assertContainsOnlyInstancesOf(Extension::class, $qrCode->getExtensions());
 
