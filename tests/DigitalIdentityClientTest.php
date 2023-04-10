@@ -1,46 +1,36 @@
 <?php
 
-namespace Yoti\Test\Identity;
+namespace Yoti\Test;
 
 use GuzzleHttp\Psr7;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Yoti\Identity\Extension\Extension;
-use Yoti\Identity\IdentityService;
+use Yoti\DigitalIdentityClient;
 use Yoti\Identity\Policy\Policy;
 use Yoti\Identity\ShareSessionCreated;
 use Yoti\Identity\ShareSessionCreatedQrCode;
 use Yoti\Identity\ShareSessionFetched;
 use Yoti\Identity\ShareSessionFetchedQrCode;
 use Yoti\Identity\ShareSessionRequestBuilder;
-use Yoti\Test\TestCase;
-use Yoti\Test\TestData;
+use Yoti\Util\Config;
 
 /**
- * @coversDefaultClass \Yoti\Identity\IdentityService
+ * @coversDefaultClass \Yoti\DigitalIdentityClient
  */
-class IdentityServiceTest extends TestCase
+class DigitalIdentityClientTest extends TestCase
 {
-    private const URI = 'uri';
-
-    private Extension $extensionMock;
-    private Policy $policyMock;
-
-    public function setup(): void
-    {
-        $this->extensionMock = $this->createMock(Extension::class);
-        $this->policyMock = $this->createMock(Policy::class);
-    }
-
     /**
      * @covers ::createShareSession
      * @covers ::__construct
      */
-    public function testShouldCreateShareSession()
+    public function testCreateShareSession()
     {
+        $policy = $this->createMock(Policy::class);
+        $redirectUri = 'https://host/redirect/';
+
         $shareSessionRequest = (new ShareSessionRequestBuilder())
-            ->withPolicy($this->policyMock)
-            ->withRedirectUri(self::URI)
-            ->withExtension($this->extensionMock)
+            ->withPolicy($policy)
+            ->withRedirectUri($redirectUri)
             ->build();
 
         $response = $this->createMock(ResponseInterface::class);
@@ -52,9 +42,17 @@ class IdentityServiceTest extends TestCase
 
         $response->method('getStatusCode')->willReturn(201);
 
-        $identityService = $this->createMock(IdentityService::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
 
-        $result = $identityService->createShareSession($shareSessionRequest);
+        $yotiClient = new DigitalIdentityClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->createShareSession($shareSessionRequest);
 
         $this->assertInstanceOf(ShareSessionCreated::class, $result);
     }
@@ -63,7 +61,7 @@ class IdentityServiceTest extends TestCase
      * @covers ::createShareQrCode
      * @covers ::__construct
      */
-    public function testShouldCreateShareQrCode()
+    public function testCreateShareQrCode()
     {
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
@@ -73,9 +71,17 @@ class IdentityServiceTest extends TestCase
 
         $response->method('getStatusCode')->willReturn(201);
 
-        $identityService = $this->createMock(IdentityService::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
 
-        $result = $identityService->createShareQrCode(TestData::SOME_ID);
+        $yotiClient = new DigitalIdentityClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->createShareQrCode(TestData::SOME_ID);
 
         $this->assertInstanceOf(ShareSessionCreatedQrCode::class, $result);
     }
@@ -84,7 +90,7 @@ class IdentityServiceTest extends TestCase
      * @covers ::fetchShareQrCode
      * @covers ::__construct
      */
-    public function testShouldFetchShareQrCode()
+    public function testFetchShareQrCode()
     {
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
@@ -98,9 +104,17 @@ class IdentityServiceTest extends TestCase
 
         $response->method('getStatusCode')->willReturn(201);
 
-        $identityService = $this->createMock(IdentityService::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
 
-        $result = $identityService->fetchShareQrCode(TestData::SOME_ID);
+        $yotiClient = new DigitalIdentityClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->fetchShareQrCode(TestData::SOME_ID);
 
         $this->assertInstanceOf(ShareSessionFetchedQrCode::class, $result);
     }
@@ -109,7 +123,7 @@ class IdentityServiceTest extends TestCase
      * @covers ::fetchShareSession
      * @covers ::__construct
      */
-    public function testShouldFetchShareSession()
+    public function testFetchShareSession()
     {
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
@@ -124,9 +138,17 @@ class IdentityServiceTest extends TestCase
 
         $response->method('getStatusCode')->willReturn(201);
 
-        $identityService = $this->createMock(IdentityService::class);
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->willReturn($response);
 
-        $result = $identityService->fetchShareSession(TestData::SOME_ID);
+        $yotiClient = new DigitalIdentityClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+        ]);
+
+        $result = $yotiClient->fetchShareSession(TestData::SOME_ID);
 
         $this->assertInstanceOf(ShareSessionFetched::class, $result);
     }

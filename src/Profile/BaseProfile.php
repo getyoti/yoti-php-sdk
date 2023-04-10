@@ -9,19 +9,19 @@ use Yoti\Util\Validation;
 class BaseProfile
 {
     /**
-     * @var \Yoti\Profile\Attribute[]
+     * @var Attribute[]
      */
     private $attributesList;
 
     /**
-     * @var \Yoti\Profile\Attribute[][] keyed by attribute name.
+     * @var Attribute[][] keyed by attribute name.
      */
     private $attributesMap;
 
     /**
      * Profile constructor.
      *
-     * @param \Yoti\Profile\Attribute[] $attributesList
+     * @param Attribute[] $attributesList
      */
     public function __construct(array $attributesList)
     {
@@ -48,7 +48,7 @@ class BaseProfile
     /**
      * @param string $attributeName.
      *
-     * @return \Yoti\Profile\Attribute[]
+     * @return Attribute[]
      */
     public function getAttributesByName(string $attributeName): array
     {
@@ -75,7 +75,7 @@ class BaseProfile
     /**
      * @param string $attributeName.
      *
-     * @return \Yoti\Profile\Attribute|null
+     * @return Attribute|null
      */
     public function getProfileAttribute(string $attributeName): ?Attribute
     {
@@ -86,7 +86,7 @@ class BaseProfile
     /**
      * Get all attributes.
      *
-     * @return \Yoti\Profile\Attribute[]
+     * @return Attribute[]
      */
     public function getAttributesList(): array
     {
