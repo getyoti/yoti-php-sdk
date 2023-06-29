@@ -346,6 +346,41 @@
                                 </div>
                             @endif
 
+                            @if ($document->getExpandedDocumentFields())
+                                <div class="card">
+                                    <div class="card-header" id="expanded-document-fields-{{ $docNum }}">
+                                        <h4 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                    data-target="#collapse-expanded-document-fields-{{ $docNum }}"
+                                                    aria-expanded="true"
+                                                    aria-controls="collapse-expanded-document-fields-{{ $docNum }}">
+                                                Expanded Document Fields
+                                            </button>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-expanded-document-fields-{{ $docNum }}" class="collapse"
+                                         aria-labelledby="expanded-document-fields-{{ $docNum }}">
+                                        <div class="card-body">
+                                            @if ($document->getExpandedDocumentFields()->getMedia())
+                                                <h5>Media</h5>
+                                                <table class="table table-striped table-light">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>ID</td>
+                                                        <td>
+                                                            <a href="/media/{{ $document->getExpandedDocumentFields()->getMedia()->getId() }}">
+                                                                {{ $document->getExpandedDocumentFields()->getMedia()->getId() }}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                             @if ($document->getDocumentIdPhoto())
                                 <div class="card">
                                     <div class="card-header" id="document-id-photo-{{ $docNum }}">
