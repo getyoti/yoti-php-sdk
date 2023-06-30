@@ -118,6 +118,7 @@ class HomeController extends BaseController
                 (new RequestedTextExtractionTaskBuilder())
                     ->withManualCheckAlways()
                     ->withChipDataDesired()
+                    ->withCreateExpandedDocumentFields(true)
                     ->build()
             )
             ->withRequestedTask(
@@ -160,6 +161,7 @@ class HomeController extends BaseController
             )
             ->build();
 
+            
         $session = $client->createSession($sessionSpec);
 
         $request->session()->put('YOTI_SESSION_ID', $session->getSessionId());
