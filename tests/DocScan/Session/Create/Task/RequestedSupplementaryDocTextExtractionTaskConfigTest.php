@@ -26,7 +26,6 @@ class RequestedSupplementaryDocTextExtractionTaskConfigTest extends TestCase
         $expected = [
             'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS,
             'manual_check' => self::SOME_MANUAL_CHECK
-            
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
