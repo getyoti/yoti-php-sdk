@@ -12,7 +12,7 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
 {
     private const SOME_MANUAL_CHECK = 'someManualCheck';
     private const SOME_CHIP_DATA = 'someChipData';
-    private const SOME_EXPANDED_DOCUMENT_FIELDS = 'false';
+    private const SOME_EXPANDED_DOCUMENT_FIELDS = false;
 
 
     /**
