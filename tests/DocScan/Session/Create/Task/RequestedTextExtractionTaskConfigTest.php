@@ -26,8 +26,8 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
         $result = new RequestedTextExtractionTaskConfig(self::SOME_MANUAL_CHECK);
 
         $expected = [
-            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS,
             'manual_check' => self::SOME_MANUAL_CHECK,
+            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
@@ -46,8 +46,8 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
 
         $expected = [
             'manual_check' => self::SOME_MANUAL_CHECK,
-            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS,
-            'chip_data' => self::SOME_CHIP_DATA
+            'chip_data' => self::SOME_CHIP_DATA,
+            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
