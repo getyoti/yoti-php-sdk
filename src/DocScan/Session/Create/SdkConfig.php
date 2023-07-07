@@ -228,6 +228,6 @@ class SdkConfig implements \JsonSerializable
      */
     public function getBiometricConsentFlow(): ?string
     {
-        return $this->privacyPolicyUrl;
+        return $this->biometricConsentFlow;
     }
 }
