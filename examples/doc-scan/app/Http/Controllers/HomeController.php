@@ -136,6 +136,7 @@ class HomeController extends BaseController
                     ->withSuccessUrl(config('app.url') . '/success')
                     ->withErrorUrl(config('app.url') . '/error')
                     ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
+                    ->withBiometricConsentFlow('EARLY')
                     ->build()
             )
             ->withRequiredDocument(
