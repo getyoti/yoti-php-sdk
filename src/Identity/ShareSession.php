@@ -7,7 +7,7 @@ use Yoti\Util\Validation;
 /**
  * Defines the Share session.
  */
-class ShareSessionCreated implements \JsonSerializable
+class ShareSession implements \JsonSerializable
 {
     private string $id;
 

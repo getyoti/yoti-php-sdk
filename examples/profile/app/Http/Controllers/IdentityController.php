@@ -29,32 +29,19 @@ class IdentityController extends BaseController
 
             $fetchedQrCode = $client->fetchShareQrCode($createdQrCode->getId());
 
-            $sessionFetched = $client->fetchShareSession($session->getId());
-
             return view('identity', [
                 'title' => 'Digital Identity Complete Example',
-                // Creating session
                 'sessionId' => $session->getId(),
                 'sessionStatus' => $session->getStatus(),
                 'sessionExpiry' => $session->getExpiry(),
-                // Creating QR code
                 'createdQrCodeId' => $createdQrCode->getId(),
                 'createdQrCodeUri' => $createdQrCode->getUri(),
-                // Fetch QR code
                 'fetchedQrCodeExpiry' => $fetchedQrCode->getExpiry(),
                 'fetchedQrCodeExtensions' => $fetchedQrCode->getExtensions(),
                 'fetchedQrCodeRedirectUri' => $fetchedQrCode->getRedirectUri(),
                 'fetchedQrCodeSessionId' => $fetchedQrCode->getSession()->getId(),
                 'fetchedQrCodeSessionStatus' => $fetchedQrCode->getSession()->getStatus(),
                 'fetchedQrCodeSessionExpiry' => $fetchedQrCode->getSession()->getExpiry(),
-                // Fetch session
-                'fetchedSessionId' => $sessionFetched->getId(),
-                'fetchedSessionStatus' => $sessionFetched->getStatus(),
-                'fetchedSessionExpiry' => $sessionFetched->getExpiry(),
-                'fetchedSessionCreated' => $sessionFetched->getCreated(),
-                'fetchedSessionUpdated' => $sessionFetched->getUpdated(),
-                'fetchedSessionQrCodeId' => $sessionFetched->getQrCodeId(),
-                'fetchedSessionReceiptId' => $sessionFetched->getReceiptId(),
             ]);
         } catch (\Throwable $e) {
             Log::error($e->getTraceAsString());
