@@ -12,10 +12,9 @@ use Yoti\Util\PemFile;
 
 class IdentityService
 {
-    private const IDENTITY_SESSION_CREATION = '/v2/sessions';
-    private const IDENTITY_SESSION_RETRIEVAL = '/v2/sessions/%s';
-    private const IDENTITY_SESSION_QR_CODE_CREATION = '/v2/sessions/%s/qr-codes';
-    private const IDENTITY_SESSION_QR_CODE_RETRIEVAL = '/v2/qr-codes/%s';
+    private const IDENTITY_SESSION_CREATION_TEMPLATE = '/v2/sessions';
+    private const IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE = '/v2/sessions/%s/qr-codes';
+    private const IDENTITY_SESSION_QR_CODE_RETRIEVAL_TEMPLATE = '/v2/qr-codes/%s';
 
     private string $sdkId;
 
@@ -30,11 +29,11 @@ class IdentityService
         $this->config = $config;
     }
 
-    public function createShareSession(ShareSessionRequest $shareSessionRequest): ShareSessionCreated
+    public function createShareSession(ShareSessionRequest $shareSessionRequest): ShareSession
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
-            ->withEndpoint(self::IDENTITY_SESSION_CREATION)
+            ->withEndpoint(self::IDENTITY_SESSION_CREATION_TEMPLATE)
             ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
             ->withPost()
             ->withPayload(Payload::fromJsonData($shareSessionRequest))
@@ -47,14 +46,14 @@ class IdentityService
             throw new IdentityException("Server responded with {$httpCode}", $response);
         }
 
-        return new ShareSessionCreated(Json::decode((string)$response->getBody()));
+        return new ShareSession(Json::decode((string)$response->getBody()));
     }
 
     public function createShareQrCode(string $sessionId): ShareSessionCreatedQrCode
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
-            ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_CREATION, $sessionId))
+            ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_CREATION_TEMPLATE, $sessionId))
             ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
             ->withPost()
             ->withPemFile($this->pemFile)
@@ -73,7 +72,7 @@ class IdentityService
     {
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
-            ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_RETRIEVAL, $qrCodeId))
+            ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_RETRIEVAL_TEMPLATE, $qrCodeId))
             ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
             ->withPost()
             ->withPemFile($this->pemFile)
@@ -86,24 +85,5 @@ class IdentityService
         }
 
         return new ShareSessionFetchedQrCode(Json::decode((string)$response->getBody()));
-    }
-
-    public function fetchShareSession(string $sessionId): ShareSessionFetched
-    {
-        $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
-            ->withEndpoint(sprintf(self::IDENTITY_SESSION_RETRIEVAL, $sessionId))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withPost()
-            ->withPemFile($this->pemFile)
-            ->build()
-            ->execute();
-
-        $httpCode = $response->getStatusCode();
-        if ($httpCode < 200 || $httpCode > 299) {
-            throw new IdentityException("Server responded with {$httpCode}", $response);
-        }
-
-        return new ShareSessionFetched(Json::decode((string)$response->getBody()));
     }
 }
