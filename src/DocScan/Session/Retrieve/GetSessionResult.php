@@ -53,6 +53,8 @@ class GetSessionResult
 
     private ?IdentityProfilePreviewResponse $identityProfilePreview;
 
+    private ?ImportTokenResponse $importToken;
+
     /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
@@ -89,6 +91,10 @@ class GetSessionResult
             $this->identityProfilePreview = new IdentityProfilePreviewResponse(
                 $sessionData['identity_profile_preview']
             );
+        }
+
+        if (isset($sessionData['import_token'])) {
+            $this->importToken = new ImportTokenResponse($sessionData['import_token']);
         }
     }
 
@@ -313,5 +319,10 @@ class GetSessionResult
     public function getIdentityProfilePreview(): ?IdentityProfilePreviewResponse
     {
         return $this->identityProfilePreview;
+    }
+
+    public function getImportToken(): ?ImportTokenResponse
+    {
+        return $this->importToken;
     }
 }

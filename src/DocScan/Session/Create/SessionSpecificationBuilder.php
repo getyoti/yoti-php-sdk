@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
+use DateTimeImmutable;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
@@ -78,6 +79,11 @@ class SessionSpecificationBuilder
     private $identityProfileRequirements;
 
     /**
+     * @var ImportToken|null
+     */
+    private $importToken;
+
+    /**
      * @var bool
      */
     private bool $createIdentityProfilePreview = false;
@@ -93,10 +99,10 @@ class SessionSpecificationBuilder
     }
 
     /**
-     * @param \DateTimeImmutable $sessionDeadline
+     * @param DateTimeImmutable $sessionDeadline
      * @return $this
      */
-    public function withSessionDeadLine(\DateTimeImmutable $sessionDeadline): self
+    public function withSessionDeadLine(DateTimeImmutable $sessionDeadline): self
     {
         $this->sessionDeadline = $sessionDeadline->format(self::DATETIME_FORMAT);
         return $this;
@@ -258,6 +264,17 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * @param ImportToken $importToken
+     *
+     * @return $this
+     */
+    public function withImportToken($importToken): self
+    {
+        $this->importToken = $importToken;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -277,6 +294,7 @@ class SessionSpecificationBuilder
             $this->subject,
             $this->identityProfileRequirements,
             $this->createIdentityProfilePreview,
+            $this->importToken,
         );
     }
 }

@@ -81,6 +81,11 @@ class SessionSpecification implements JsonSerializable
     private ?bool $createIdentityProfilePreview;
 
     /**
+     * @var ImportToken|null
+     */
+    private $importToken;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -94,7 +99,8 @@ class SessionSpecification implements JsonSerializable
      * @param IbvOptions|null $ibvOptions
      * @param object|null $subject
      * @param object|null $identityProfileRequirements
-     * @param bool $createIdentityProfilePreview
+     * @param bool|null $createIdentityProfilePreview
+     * @param ImportToken|null $importToken
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -108,9 +114,10 @@ class SessionSpecification implements JsonSerializable
         array $requiredDocuments = [],
         ?bool $blockBiometricConsent = null,
         ?IbvOptions $ibvOptions = null,
-        $subject = null,
-        $identityProfileRequirements = null,
-        ?bool $createIdentityProfilePreview = null
+        ?object $subject = null,
+        ?object $identityProfileRequirements = null,
+        ?bool $createIdentityProfilePreview = null,
+        ?ImportToken $importToken = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -126,6 +133,7 @@ class SessionSpecification implements JsonSerializable
         $this->subject = $subject;
         $this->identityProfileRequirements = $identityProfileRequirements;
         $this->createIdentityProfilePreview = $createIdentityProfilePreview;
+        $this->importToken = $importToken;
     }
 
     /**
@@ -148,6 +156,7 @@ class SessionSpecification implements JsonSerializable
             'subject' => $this->getSubject(),
             'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
             'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
+            'import_token' => $this->getImportToken(),
         ]);
     }
 
@@ -247,7 +256,7 @@ class SessionSpecification implements JsonSerializable
     /**
      * @return object|null
      */
-    public function getSubject()
+    public function getSubject(): ?object
     {
         return $this->subject;
     }
@@ -255,7 +264,7 @@ class SessionSpecification implements JsonSerializable
     /**
      * @return object|null
      */
-    public function getIdentityProfileRequirements()
+    public function getIdentityProfileRequirements(): ?object
     {
         return $this->identityProfileRequirements;
     }
@@ -263,5 +272,10 @@ class SessionSpecification implements JsonSerializable
     public function getCreateIdentityProfilePreview(): ?bool
     {
         return $this->createIdentityProfilePreview;
+    }
+
+    public function getImportToken(): ?ImportToken
+    {
+        return $this->importToken;
     }
 }
