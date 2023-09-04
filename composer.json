@@ -15,7 +15,7 @@
     "phpseclib/phpseclib": "^3.0",
     "guzzlehttp/guzzle": "^7.0",
     "psr/http-client": "^1.0",
-    "psr/http-message": "^1.0",
+    "psr/http-message": "^2.0",
     "guzzlehttp/psr7": "^2.4",
     "ext-openssl": "*"
   },
