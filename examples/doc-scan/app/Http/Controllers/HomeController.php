@@ -80,7 +80,7 @@ class HomeController extends BaseController
 
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
-            ->withResourcesTtl(90000)
+            ->withResourcesTtl(604800)
             ->withUserTrackingId('some-user-tracking-id')
             ->withRequestedCheck(
                 (new RequestedDocumentAuthenticityCheckBuilder())
@@ -88,7 +88,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedLivenessCheckBuilder())
-                    ->forZoomLiveness()
+                    ->forStaticLiveness()
                     ->build()
             )
             ->withRequestedCheck(
@@ -98,7 +98,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withRequestedCheck(
@@ -116,19 +116,19 @@ class HomeController extends BaseController
             )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->withChipDataDesired()
                     ->build()
             )
             ->withRequestedTask(
                 (new RequestedSupplementaryDocTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withSdkConfig(
                 (new SdkConfigBuilder())
                     ->withAllowsCameraAndUpload()
-                    ->withPrimaryColour('#2d9fff')
+                    ->withPrimaryColour('#eee')
                     ->withSecondaryColour('#FFFFFF')
                     ->withFontColour('#FFFFFF')
                     ->withLocale('en-GB')
