@@ -29,8 +29,11 @@ class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
      * @param string|null $chipData
      * @param bool|null $createExpandedDocumentFields
      */
-    public function __construct(string $manualCheck, ?string $chipData = null, ?bool $createExpandedDocumentFields = false)
-    {
+    public function __construct(
+        string $manualCheck,
+        ?string $chipData = null,
+        ?bool $createExpandedDocumentFields = false
+    ) {
         $this->manualCheck = $manualCheck;
         $this->chipData = $chipData;
         $this->createExpandedDocumentFields = $createExpandedDocumentFields;
