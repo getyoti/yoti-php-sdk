@@ -88,6 +88,7 @@ class Service
 
         $this->checkForReceipt($result);
         $receipt = new Receipt($result['receipt'], $this->config->getLogger());
+        error_log("LOG 10=>" . json_encode($result['receipt']));
 
         //error_log("LOG5=>" . $result);
         // Check response was successful
