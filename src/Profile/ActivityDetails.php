@@ -76,6 +76,8 @@ class ActivityDetails
         $this->pemFile = $pemFile;
         $this->logger = $logger ?? new Logger();
 
+        error_log("LOG R1=>" . json_encode($receipt));
+
         $this->setProfile();
         $this->setTimestamp();
         $this->setRememberMeId();
