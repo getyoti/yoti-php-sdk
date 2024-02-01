@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\Aml;
 
 use ArgumentCountError;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\Aml\Result;
 use Yoti\Test\TestCase;
@@ -20,7 +21,10 @@ class ResultTest extends TestCase
      * @var \Yoti\Aml\Result
      */
     public $amlResult;
-
+    /**
+     * @var mixed|MockObject|ResponseInterface
+     */
+    private $responseMock;
     public function setup(): void
     {
         $this->responseMock = $this->createMock(ResponseInterface::class);

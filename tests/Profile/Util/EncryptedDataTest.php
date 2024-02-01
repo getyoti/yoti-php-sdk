@@ -29,6 +29,12 @@ class EncrypedDataTest extends TestCase
     private $wrappedKey;
 
     /**
+     * @var EncryptedDataProto
+     */
+    private $encryptedDataProto;
+
+
+    /**
      * Setup test data.
      */
     public function setup(): void
