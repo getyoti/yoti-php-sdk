@@ -63,8 +63,8 @@ class Service
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
-        error_log("Mas->" . $encryptedConnectToken);
-        error_log($this->config->getApiUrl() ?? Constants::API_URL);
+        //error_log("Mas->" . $encryptedConnectToken);
+        error_log("LOG2=>" . $this->config->getApiUrl() ?? Constants::API_URL);
 
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
