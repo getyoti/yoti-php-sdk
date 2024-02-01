@@ -64,10 +64,12 @@ class Service
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
         //error_log("Mas->" . $encryptedConnectToken);
-        error_log("LOG2=>" . $this->config->getApiUrl() ?? Constants::API_URL);
+        error_log("LOG1=>" . $this->config->getApiUrl() ?? Constants::API_URL);
+        error_log("LOG2=>" . $this->config->getApiUrl());
+        error_log("LOG3=>" . Constants::API_URL);
 
         $response = (new RequestBuilder($this->config))
-            ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
+            ->withBaseUrl("https://api.yoti.com/api/v1")
             ->withEndpoint(sprintf('/profile/%s', $token))
             ->withQueryParam('appId', $this->sdkId)
             ->withHeader(self::YOTI_AUTH_HEADER_KEY, $this->pemFile->getAuthKey())
