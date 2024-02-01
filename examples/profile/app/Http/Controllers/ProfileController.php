@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Yoti\YotiClient;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -14,6 +15,8 @@ class ProfileController extends BaseController
     {
         $activityDetails = $client->getActivityDetails($request->query('token'));
         $profile = $activityDetails->getProfile();
+
+        Log::info('TEST:' . $profile->getFullName());
 
         return view('profile', [
             'fullName' => $profile->getFullName(),
