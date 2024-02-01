@@ -84,11 +84,12 @@ class Service
         }
 
         $result = Json::decode((string)$response->getBody());
+        error_log("LOG4=>" . $result);
 
         $this->checkForReceipt($result);
-
         $receipt = new Receipt($result['receipt'], $this->config->getLogger());
 
+        //error_log("LOG5=>" . $result);
         // Check response was successful
         if ($receipt->getSharingOutcome() !== self::OUTCOME_SUCCESS) {
             throw new ActivityDetailsException(
