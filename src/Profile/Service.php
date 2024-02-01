@@ -84,7 +84,7 @@ class Service
         }
 
         $result = Json::decode((string)$response->getBody());
-        error_log("LOG4=>" . $result);
+        error_log("LOG4=>" . json_encode($result));
 
         $this->checkForReceipt($result);
         $receipt = new Receipt($result['receipt'], $this->config->getLogger());
