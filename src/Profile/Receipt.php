@@ -106,6 +106,8 @@ class Receipt
      */
     public function parseOtherPartyProfileContent(PemFile $pemFile): AttributeList
     {
+        //return "self::ATTR_OTHER_PARTY_PROFILE_CONTENT";
+        error_log("other_party_profile_content:" . self::ATTR_OTHER_PARTY_PROFILE_CONTENT);
         return $this->parseAttribute(self::ATTR_OTHER_PARTY_PROFILE_CONTENT, $pemFile);
     }
 
