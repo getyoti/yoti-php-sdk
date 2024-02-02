@@ -117,6 +117,7 @@ class Receipt
      */
     public function parseAttribute(string $attributeName, PemFile $pemFile): AttributeList
     {
+        error_log("$attributeName: " . $attributeName);
         $attributeList = new AttributeList();
 
         $decryptedData = $this->decryptAttribute($attributeName, $pemFile);
