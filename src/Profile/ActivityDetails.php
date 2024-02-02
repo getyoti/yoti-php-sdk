@@ -110,7 +110,7 @@ class ActivityDetails
     private function setProfile(): void
     {
         $protobufAttrList = $this->receipt->parseOtherPartyProfileContent($this->pemFile);
-        error_log('set profile:' . json_encode($protobufAttrList));
+        error_log('set profile:' . $this->pemFile);
         $this->userProfile = new UserProfile(
             AttributeListConverter::convertToYotiAttributesList($protobufAttrList, $this->logger)
         );
