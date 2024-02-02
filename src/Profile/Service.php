@@ -64,10 +64,10 @@ class Service
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
         //error_log("Mas->" . $encryptedConnectToken);
-        error_log("LOG1=>" . $this->config->getApiUrl() ?? Constants::API_URL);
+       /* error_log("LOG1=>" . $this->config->getApiUrl() ?? Constants::API_URL);
         error_log("LOG2=>" . $this->config->getApiUrl());
         error_log("LOG3=>" . Constants::API_URL);
-
+*/
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl("https://api.yoti.com/api/v1")
             ->withEndpoint(sprintf('/profile/%s', $token))
@@ -84,11 +84,15 @@ class Service
         }
 
         $result = Json::decode((string)$response->getBody());
-        error_log("LOG4=>" . json_encode($result));
+        //error_log("LOG4=>" . json_encode($result));
 
         $this->checkForReceipt($result);
         $receipt = new Receipt($result['receipt'], $this->config->getLogger());
         error_log("LOG 10=>" . json_encode($result['receipt']));
+
+        error_log("LOG 11 =>" . json_encode($result['other_party_profile_content']));
+
+
         //error_log("LOG 11=>" . $receipt);
         //error_log("LOG5=>" . $result);
         // Check response was successful
