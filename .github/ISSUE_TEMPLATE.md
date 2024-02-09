@@ -12,6 +12,6 @@ assignees: ''
 #
 # There's a better way to get help!
 #
-# Send your questions or issues to sdksupport@yoti.com
+# Send your questions or issues to https://support.yoti.com
 #
 #
