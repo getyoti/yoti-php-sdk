@@ -29,7 +29,7 @@ class DynamicShareController extends BaseController
         $scenario = (new DynamicScenarioBuilder())
             ->withPolicy($policy)
             ->withCallbackEndpoint('/profile')
-            //->withExtension($locationConstraint)
+            ->withExtension($locationConstraint)
             ->build();
 
         return view('share', [
