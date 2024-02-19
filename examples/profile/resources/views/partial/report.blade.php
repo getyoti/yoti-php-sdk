@@ -8,6 +8,7 @@
         </tr>
         </thead>
         <tbody>
+        @if (isset($value) && is_array($value))
         @foreach ($value as $name => $result)
             @if (is_array($result))
                 @foreach ($result as $data => $view)
@@ -33,7 +34,7 @@
                 </tr>
             @endif
         @endforeach
-
+        @endif
         </tbody>
     </table>
     @endforeach
