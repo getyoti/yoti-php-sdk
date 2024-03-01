@@ -9,6 +9,8 @@ use Yoti\Exception\JsonException;
 class Json
 {
     /**
+     * Decodes a JSON string.
+     *
      * @param string $json
      * @param bool $assoc
      *
@@ -22,6 +24,8 @@ class Json
     }
 
     /**
+     * Encodes data into a JSON string.
+     *
      * @param mixed $data
      *
      * @return string
@@ -34,7 +38,7 @@ class Json
     }
 
     /**
-     * Returns a filtered array without null values
+     * Returns a filtered array without null values.
      *
      * @param array<mixed, mixed> $data
      * @return array<mixed, mixed>
@@ -47,6 +51,8 @@ class Json
     }
 
     /**
+     * Validates the JSON encoding process.
+     *
      * @throws \Yoti\Exception\JsonException
      */
     private static function validate(): void
@@ -56,21 +62,32 @@ class Json
         }
     }
 
-    public static function convert_from_latin1_to_utf8_recursively($dat)
+    /**
+     * Converts data from Latin1 to UTF-8 recursively.
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    public static function convertFromLatin1ToUtf8Recursively($data)
     {
-        if (is_string($dat)) {
-            return utf8_encode($dat);
-        } elseif (is_array($dat)) {
-            $ret = [];
-            foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
-
-            return $ret;
-        } elseif (is_object($dat)) {
-            foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
-
-            return $dat;
+        if (is_string($data)) {
+            return utf8_encode($data);
+        } elseif (is_array($data)) {
+            // Iterate over array elements
+            $result = [];
+            foreach ($data as $key => $value) {
+                $result[$key] = self::convertFromLatin1ToUtf8Recursively($value);
+            }
+            return $result;
+        } elseif (is_object($data)) {
+            // Convert object to array and iterate over its elements
+            $data = (array) $data;
+            foreach ($data as $key => $value) {
+                $data[$key] = self::convertFromLatin1ToUtf8Recursively($value);
+            }
+            return (object) $data;
         } else {
-            return $dat;
+            return $data;
         }
     }
 }
