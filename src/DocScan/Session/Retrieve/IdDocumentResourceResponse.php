@@ -54,7 +54,7 @@ class IdDocumentResourceResponse extends ResourceResponse
         $this->documentFields = isset($idDocument['document_fields'])
             ? new DocumentFieldsResponse($idDocument['document_fields'])
             : null;
-    
+
         $this->expandedDocumentFields = isset($idDocument['expanded_document_fields'])
             ? new ExpandedDocumentFieldsResponse($idDocument['expanded_document_fields'])
             : null;

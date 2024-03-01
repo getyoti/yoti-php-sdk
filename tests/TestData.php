@@ -24,9 +24,9 @@ class TestData
     public const EXTRA_DATA_CONTENT = __DIR__ . '/sample-data/extra-data-content.txt';
     public const THIRD_PARTY_ATTRIBUTE = __DIR__ . '/sample-data/attributes/third-party-attribute.txt';
     public const PEM_AUTH_KEY = __DIR__ . '/sample-data/pem-auth-key.txt';
-    public const CONNECT_BASE_URL = 'https://api.yoti.com/api/v1';
+    public const CONNECT_BASE_URL = 'https://api.yoti.com/sandbox/v1';
 
-    public const DOC_SCAN_BASE_URL = 'https://api.yoti.com/idverify/v1';
+    public const DOC_SCAN_BASE_URL = 'https://api.yoti.com/sandbox/idverify/v1';
     public const DOC_SCAN_SESSION_ID = 'someSessionId';
     public const DOC_SCAN_MEDIA_ID = 'someMediaId';
 

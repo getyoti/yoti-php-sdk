@@ -10,13 +10,13 @@ class Constants
     public const API_BASE_URL = 'https://api.yoti.com';
 
     /** Default API URL */
-    public const API_URL = self::API_BASE_URL . '/api/v1';
+    public const API_URL = self::API_BASE_URL . '/sandbox/v1';
 
     /** Environment variable to override the default API URL */
     public const ENV_API_URL = 'YOTI_API_URL';
 
     /** Default Doc Scan API URL */
-    public const DOC_SCAN_API_URL = self::API_BASE_URL . '/idverify/v1';
+    public const DOC_SCAN_API_URL = self::API_BASE_URL . '/sandbox/idverify/v1';
 
     /** Environment variable to override the default Doc Scan API URL */
     public const ENV_DOC_SCAN_API_URL = 'YOTI_DOC_SCAN_API_URL';

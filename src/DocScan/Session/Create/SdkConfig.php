@@ -95,7 +95,6 @@ class SdkConfig implements \JsonSerializable
         ?bool $allowHandoff = null,
         ?array $idDocumentTextDataExtractionRetriesConfig = null,
         ?string $biometricConsentFlow = null
-
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -111,9 +110,7 @@ class SdkConfig implements \JsonSerializable
             $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
         }
         $this->biometricConsentFlow = $biometricConsentFlow;
-
     }
-
     /**
      * @return \stdClass
      */
