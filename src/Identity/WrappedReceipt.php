@@ -23,11 +23,11 @@ class WrappedReceipt
 
     private string $wrappedKey;
 
-    private ?string $rememberMeId;
+    private ?string $rememberMeId = null;
 
-    private ?string $parentRememberMeId;
+    private ?string $parentRememberMeId = null;
 
-    private ?string $error;
+    private ?string $error = null;
 
     /**
      * @param array<string, mixed> $sessionData
@@ -38,7 +38,7 @@ class WrappedReceipt
         $this->sessionId = $sessionData['sessionId'];
         $this->timestamp = DateTime::stringToDateTime($sessionData['timestamp']);
         $this->wrappedItemKeyId = $sessionData['wrappedItemKeyId'];
-        $this->wrappedKey = $this->base64decode($sessionData['wrappedKey']);
+        $this->wrappedKey = $sessionData['wrappedKey'];
 
         if (isset($sessionData['content'])) {
             $this->content = new Content(

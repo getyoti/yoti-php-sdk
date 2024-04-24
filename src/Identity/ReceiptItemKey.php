@@ -19,13 +19,8 @@ class ReceiptItemKey
     public function __construct(array $sessionData)
     {
         $this->id = $sessionData['id'];
-        $this->setIv($sessionData['iv']);
-
-        $decoded = base64_decode($sessionData['value'], true);
-        if ($decoded === false) {
-            throw new EncryptedDataException('Could not decode data');
-        }
-        $this->value = $decoded;
+        $this->iv = $sessionData['iv'];
+        $this->value = $sessionData['value'];
     }
 
     /**
@@ -50,17 +45,5 @@ class ReceiptItemKey
     public function getValue(): string
     {
         return $this->value;
-    }
-
-    public function setIv(string $iv): void
-    {
-        $decodedProto = base64_decode($iv, true);
-        if ($decodedProto === false) {
-            throw new EncryptedDataException('Could not decode data');
-        }
-        $encryptedDataProto = new EncryptedData();
-        $encryptedDataProto->mergeFromString($decodedProto);
-
-        $this->iv = $encryptedDataProto->getIv();
     }
 }

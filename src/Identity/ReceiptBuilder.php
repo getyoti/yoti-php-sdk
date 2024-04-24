@@ -20,11 +20,11 @@ class ReceiptBuilder
 
     private UserContent $userContent;
 
-    private ?string $rememberMeId;
+    private ?string $rememberMeId = null;
 
-    private ?string $parentRememberMeId;
+    private ?string $parentRememberMeId = null;
 
-    private ?string $error;
+    private ?string $error = null;
 
     public function withId(string $id): self
     {
