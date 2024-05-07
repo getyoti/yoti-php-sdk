@@ -77,7 +77,7 @@ class DigitalIdentityService
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_RETRIEVAL, $qrCodeId))
             ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withPost()
+            ->withGet()
             ->withPemFile($this->pemFile)
             ->build()
             ->execute();
@@ -96,7 +96,7 @@ class DigitalIdentityService
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_RETRIEVAL, $sessionId))
             ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withPost()
+            ->withGet()
             ->withPemFile($this->pemFile)
             ->build()
             ->execute();

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Yoti\DigitalIdentityClient;
 use Yoti\Identity\Policy\PolicyBuilder;
 use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\YotiClient;
 
 class IdentityController extends BaseController
 {
-    public function show(YotiClient $client)
+    public function show(DigitalIdentityClient $client)
     {
         try {
             $policy = (new PolicyBuilder())->build();
