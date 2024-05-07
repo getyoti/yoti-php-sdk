@@ -43,7 +43,7 @@ class IdentityController extends BaseController
                 'createdQrCodeUri' => $createdQrCode->getUri(),
                 // Fetch QR code
                 'fetchedQrCodeExpiry' => $fetchedQrCode->getExpiry(),
-                'fetchedQrCodeExtensions' => $fetchedQrCode->getExtensions(),
+
                 'fetchedQrCodeRedirectUri' => $fetchedQrCode->getRedirectUri(),
                 'fetchedQrCodeSessionId' => $fetchedQrCode->getSession()->getId(),
                 'fetchedQrCodeSessionStatus' => $fetchedQrCode->getSession()->getStatus(),
@@ -54,8 +54,7 @@ class IdentityController extends BaseController
                 'fetchedSessionExpiry' => $sessionFetched->getExpiry(),
                 'fetchedSessionCreated' => $sessionFetched->getCreated(),
                 'fetchedSessionUpdated' => $sessionFetched->getUpdated(),
-                'fetchedSessionQrCodeId' => $sessionFetched->getQrCodeId(),
-                'fetchedSessionReceiptId' => $sessionFetched->getReceiptId(),
+
             ]);
         } catch (\Throwable $e) {
             Log::error($e->getTraceAsString());
