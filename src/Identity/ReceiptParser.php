@@ -4,12 +4,12 @@ namespace Yoti\Identity;
 
 use Psr\Log\LoggerInterface;
 use Yoti\Exception\EncryptedDataException;
+use Yoti\Identity\Util\IdentityEncryptedData;
 use Yoti\Profile\ApplicationProfile;
 use Yoti\Profile\ExtraData;
 use Yoti\Profile\UserProfile;
 use Yoti\Profile\Util\Attribute\AttributeListConverter;
 use Yoti\Profile\Util\ExtraData\ExtraDataConverter;
-use Yoti\Identity\Util\IdentityEncryptedData;
 use Yoti\Protobuf\Attrpubapi\AttributeList;
 use Yoti\Util\Logger;
 use Yoti\Util\PemFile;
@@ -95,17 +95,19 @@ class ReceiptParser
     private function decryptReceiptKey(string $wrappedKey, ReceiptItemKey $wrappedItemKey, PemFile $pemFile): string
     {
         // Convert 'iv' and 'value' from base64 to binary
-        $iv = base64_decode($wrappedItemKey->getIv(), true);
-        $encryptedItemKey = base64_decode($wrappedItemKey->getValue(), true);
+        $iv = (string)base64_decode($wrappedItemKey->getIv(), true);
+        $encryptedItemKey = (string)base64_decode($wrappedItemKey->getValue(), true);
 
         // Decrypt the 'value' field (encrypted item key) using the private key
         $unwrappedKey = '';
-        if (!openssl_private_decrypt(
-            $encryptedItemKey,
-            $unwrappedKey,
-            (string)$pemFile
-        )) {
-            throw new EncryptedDataException('Could not decrypt the item key');
+        if (
+                !openssl_private_decrypt(
+                    $encryptedItemKey,
+                    $unwrappedKey,
+                    (string)$pemFile
+                )
+        ) {
+                    throw new EncryptedDataException('Could not decrypt the item key');
         }
 
         // Check that 'wrappedKey' is a base64-encoded string

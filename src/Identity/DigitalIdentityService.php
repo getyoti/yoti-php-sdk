@@ -129,7 +129,6 @@ class DigitalIdentityService
     private function doFetchShareReceipt(string $receiptId): WrappedReceipt
     {
         $receiptIdUrl = strtr($receiptId, '+/', '-_');
-        
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_RECEIPT_RETRIEVAL, $receiptIdUrl))

@@ -2,9 +2,6 @@
 
 namespace Yoti\Identity;
 
-use Yoti\Exception\EncryptedDataException;
-use Yoti\Protobuf\Compubapi\EncryptedData;
-
 class ReceiptItemKey
 {
     private string $id;

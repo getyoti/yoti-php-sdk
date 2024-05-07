@@ -11,13 +11,13 @@ class IdentityEncryptedData
 {
     /**
      * @param string $data
-     * @param string $wrappedKey
+     * @param string $unwrappedKey
      *
      * @return string
      */
     public static function decrypt(string $data, string $unwrappedKey): string
     {
-        if ($data === false) {
+        if ($data === "") {
             throw new EncryptedDataException('Could not decode data');
         }
 
