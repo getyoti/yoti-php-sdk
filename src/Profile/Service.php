@@ -63,7 +63,6 @@ class Service
     {
         // Decrypt connect token
         $token = $this->decryptConnectToken($encryptedConnectToken);
-
         // Request endpoint
         $response = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::API_URL)
@@ -76,6 +75,7 @@ class Service
             ->execute();
 
         $httpCode = $response->getStatusCode();
+
         if ($httpCode < 200 || $httpCode > 299) {
             throw new ActivityDetailsException("Server responded with {$httpCode}", $response);
         }

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Yoti\DigitalIdentityClient;
 use Yoti\Identity\Policy\PolicyBuilder;
 use Yoti\Identity\ShareSessionRequestBuilder;
 use Yoti\YotiClient;
 
 class IdentityController extends BaseController
 {
-    public function show(YotiClient $client)
+    public function show(DigitalIdentityClient $client)
     {
         try {
             $policy = (new PolicyBuilder())->build();
@@ -42,7 +43,7 @@ class IdentityController extends BaseController
                 'createdQrCodeUri' => $createdQrCode->getUri(),
                 // Fetch QR code
                 'fetchedQrCodeExpiry' => $fetchedQrCode->getExpiry(),
-                'fetchedQrCodeExtensions' => $fetchedQrCode->getExtensions(),
+
                 'fetchedQrCodeRedirectUri' => $fetchedQrCode->getRedirectUri(),
                 'fetchedQrCodeSessionId' => $fetchedQrCode->getSession()->getId(),
                 'fetchedQrCodeSessionStatus' => $fetchedQrCode->getSession()->getStatus(),
@@ -53,8 +54,7 @@ class IdentityController extends BaseController
                 'fetchedSessionExpiry' => $sessionFetched->getExpiry(),
                 'fetchedSessionCreated' => $sessionFetched->getCreated(),
                 'fetchedSessionUpdated' => $sessionFetched->getUpdated(),
-                'fetchedSessionQrCodeId' => $sessionFetched->getQrCodeId(),
-                'fetchedSessionReceiptId' => $sessionFetched->getReceiptId(),
+
             ]);
         } catch (\Throwable $e) {
             Log::error($e->getTraceAsString());

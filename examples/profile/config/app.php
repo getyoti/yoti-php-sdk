@@ -170,6 +170,7 @@ return [
          * Application Service Providers...
          */
         App\Providers\YotiServiceProvider::class,
+        App\Providers\YotiDigitalIdentityServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     ],
 

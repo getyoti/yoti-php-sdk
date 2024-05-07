@@ -37,7 +37,6 @@
         <div>
             <p><strong>Fetched Session QR Code</strong></p>
             <p> Expiry: {{$fetchedQrCodeExpiry}}</p>
-            <p> Extensions: {{$fetchedQrCodeExtensions}}</p>
             <p> Redirect URI: {{$fetchedQrCodeRedirectUri}}</p>
             <p> Session ID: {{$fetchedQrCodeSessionId}}</p>
             <p> Session Status: {{$fetchedQrCodeSessionStatus}}</p>
@@ -51,8 +50,7 @@
             <p> Updated: {{$fetchedSessionUpdated}}</p>
             <p> Expiry: {{$fetchedSessionExpiry}}</p>
             <p> Status: {{$fetchedSessionStatus}}</p>
-            <p> QR Code ID: {{$fetchedSessionQrCodeId}}</p>
-            <p> Receipt ID: {{$fetchedSessionReceiptId}}</p>
+
         </div>
 
     </section>
