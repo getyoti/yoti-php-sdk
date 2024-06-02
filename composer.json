@@ -11,7 +11,7 @@
   "require": {
     "php": "^7.4 || ^8.0 || ^8.1",
     "ext-json": "*",
-    "google/protobuf": "^3.10",
+    "google/protobuf": "^3.25.3",
     "phpseclib/phpseclib": "^3.0",
     "guzzlehttp/guzzle": "^7.0",
     "psr/http-client": "^1.0",
