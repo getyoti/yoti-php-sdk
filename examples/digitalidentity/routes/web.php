@@ -22,3 +22,4 @@ Route::get('/dynamic-share', 'DynamicShareController@show');
 Route::get('/dbs-check', 'DbsCheckController@show');
 Route::get('/generate-share', 'IdentityController@show');
 Route::get('/generate-share2', 'Identity2Controller@show');
+Route::get('/receipt-info', 'ReceiptController@show');
