@@ -15,7 +15,7 @@
             <div class="yoti-profile-picture-powered-section">
                 <span class="yoti-profile-picture-powered">Powered by</span>
                 <a href="https://www.yoti.com" target="_blank">
-                    <img class="yoti-logo-image" src="/assets/images/logo-.png" srcset="/assets/images/logo@2x-.png 2x"  />
+                    <img class="yoti-logo-image" src="assets/images/logo.png" srcset="assets/images/logo@2x.png 2x"  />
                 </a>
             </div>
 

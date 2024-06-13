@@ -21,7 +21,7 @@ This example requires [Docker](https://docs.docker.com/)
 
 > To see how to retrieve activity details using the one time use token, refer to the [digitalidentity controller](app/Http/Controllers/IdentityController.php)
 
-## Dynamic Share Example
-* Visit [/dynamic-share](https://localhost:4002/dynamic-share)
+## Digital Identity Example
+* Visit [/generate-share](https://localhost:4002/generate-share)
 
-> To see how to create a dynamic scenario, refer to the [dynamic share controller](app/Http/Controllers/DynamicShareController.php)
+> To see how to create a dynamic scenario, refer to the [Digital Identity controller](app/Http/Controllers/IdentityController.php)

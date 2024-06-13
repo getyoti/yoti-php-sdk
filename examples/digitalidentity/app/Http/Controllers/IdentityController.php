@@ -15,7 +15,20 @@ class IdentityController extends BaseController
     public function show(DigitalIdentityClient $client)
     {
         try {
-            $policy = (new PolicyBuilder())->build();
+
+            $policy = (new PolicyBuilder())
+                ->withFamilyName()
+                ->withGivenNames()
+                ->withFullName()
+                ->withDateOfBirth()
+                ->withGender()
+                ->withNationality()
+                ->withPhoneNumber()
+                ->withSelfie()
+                ->withEmail()
+                ->withDocumentDetails()
+                ->withDocumentImages()
+                ->build();
 
             $redirectUri = 'https://host/redirect/';
 
@@ -54,6 +67,7 @@ class IdentityController extends BaseController
                 'fetchedSessionExpiry' => $sessionFetched->getExpiry(),
                 'fetchedSessionCreated' => $sessionFetched->getCreated(),
                 'fetchedSessionUpdated' => $sessionFetched->getUpdated(),
+                'sdkId' => $client->id
 
             ]);
         } catch (\Throwable $e) {

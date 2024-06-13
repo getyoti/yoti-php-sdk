@@ -11,6 +11,9 @@
 
 <body class="yoti-body">
 <main>
+
+
+<main>
     <section class="yoti-top-section">
         <div class="yoti-logo-section">
             <a href="https://www.yoti.com" target="_blank">
@@ -18,43 +21,69 @@
                      alt="Yoti"/>
             </a>
         </div>
+        <h1 class="yoti-top-header">Digital Identity Share Example</h1>
 
-        <h2 class="yoti-top-header">Digital Identity Share Complete Example page</h2>
-
-        <div>
-            <p><strong>Created Session</strong></p>
-            <p> Id: {{$sessionId}}</p>
-            <p> Status: {{$sessionStatus}}</p>
-            <p> Expiry: {{$sessionExpiry}}</p>
-        </div>
-
-        <div>
-            <p><strong>Created Session QR Code</strong></p>
-            <p> Id: {{$createdQrCodeId}}</p>
-            <p> URI: {{$createdQrCodeUri}}</p>
-        </div>
-
-        <div>
-            <p><strong>Fetched Session QR Code</strong></p>
-            <p> Expiry: {{$fetchedQrCodeExpiry}}</p>
-            <p> Redirect URI: {{$fetchedQrCodeRedirectUri}}</p>
-            <p> Session ID: {{$fetchedQrCodeSessionId}}</p>
-            <p> Session Status: {{$fetchedQrCodeSessionStatus}}</p>
-            <p> Session Expiry: {{$fetchedQrCodeSessionExpiry}}</p>
-        </div>
-
-        <div>
-            <p><strong>Fetched Session</strong></p>
-            <p> Id: {{$fetchedSessionId}}</p>
-            <p> Created: {{$fetchedSessionCreated}}</p>
-            <p> Updated: {{$fetchedSessionUpdated}}</p>
-            <p> Expiry: {{$fetchedSessionExpiry}}</p>
-            <p> Status: {{$fetchedSessionStatus}}</p>
-
+        <div class="yoti-sdk-integration-section">
+            <div id="webshare-target"></div>
         </div>
 
     </section>
+
+    <section class="yoti-sponsor-app-section">
+        <h3 class="yoti-sponsor-app-header">The Yoti app is free to download and use:</h3>
+
+        <div class="yoti-store-buttons-section">
+            <a href="https://itunes.apple.com/us/app/yoti/id983980808?ls=1&mt=8" class="yoti-app-button-link">
+                <img src="assets/images/app-store-badge.png"
+                     srcset="assets/images/app-store-badge@2x.png 2x"
+                     alt="Download on the App Store" />
+            </a>
+
+            <a href="https://play.google.com/store/apps/details?id=com.yoti.mobile.android.live" class="yoti-app-button-link">
+                <img src="assets/images/google-play-badge.png"
+                     srcset="assets/images/google-play-badge@2x.png 2x"
+                     alt="get it on Google Play" />
+            </a>
+        </div>
+    </section>
 </main>
+<script>async function onSessionIdResolver(id) {
+        return '{{$sessionId}}'
+    }
+
+    async function completionHandler(receivedReceiptId) {
+        console.log('completion handler:', receivedReceiptId)
+        const url = '/receipt-info?ReceiptID=' + encodeURIComponent(receivedReceiptId);
+
+        window.location.href = url;
+    }
+
+    function onErrorListener(...data) {
+        console.warn('onErrorListener:', ...data)
+    }
+
+    async function onReadyToStart() {
+        const { Yoti } = window
+        await Yoti.createWebShare({
+            name: 'Use Yoti',
+            domId: 'webshare-target',
+            sdkId: '{{$sdkId}}',
+            hooks: {
+                sessionIdResolver: onSessionIdResolver,
+                errorListener: onErrorListener,
+                completionHandler,
+            },
+            flow: "REVEAL_MODAL"
+        })
+    }
+
+    async function onClientLoaded() {
+        const { Yoti } = window
+        await Yoti.ready()
+        await onReadyToStart()
+    }</script>
+<script src="https://www.yoti.com/share/client/v2" onload="onClientLoaded()"></script>
+
 </body>
 
 </html>
