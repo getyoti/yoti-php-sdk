@@ -11,9 +11,6 @@
 
 <body class="yoti-body">
 <main>
-
-
-<main>
     <section class="yoti-top-section">
         <div class="yoti-logo-section">
             <a href="https://www.yoti.com" target="_blank">
@@ -47,14 +44,19 @@
         </div>
     </section>
 </main>
-<script>async function onSessionIdResolver(id) {
-        return '{{$sessionId}}'
+<script>async function onSessionIdResolver() {
+        const response = await fetch('/generate-session');
+        if (!response.ok) {
+            throw new Error('Response was not ok');
+        }
+        const result = await response.text();
+        console.log("session id %s", result);
+        return result;
     }
 
     async function completionHandler(receivedReceiptId) {
         console.log('completion handler:', receivedReceiptId)
         const url = '/receipt-info?ReceiptID=' + encodeURIComponent(receivedReceiptId);
-
         window.location.href = url;
     }
 
@@ -83,7 +85,5 @@
         await onReadyToStart()
     }</script>
 <script src="https://www.yoti.com/share/client/v2" onload="onClientLoaded()"></script>
-
 </body>
-
 </html>
