@@ -1,0 +1,425 @@
+.yoti-html {
+    height: 100%;
+}
+
+.yoti-body {
+    margin: 0;
+    height: 100%;
+}
+
+.yoti-icon-profile,
+.yoti-icon-phone,
+.yoti-icon-email,
+.yoti-icon-calendar,
+.yoti-icon-verified,
+.yoti-icon-address,
+.yoti-icon-gender,
+.yoti-icon-nationality {
+    display: inline-block;
+    height: 28px;
+    width: 28px;
+    flex-shrink: 0;
+}
+
+.yoti-icon-profile {
+    background: no-repeat url('/assets/images/icons/profile.svg');
+}
+
+.yoti-icon-phone {
+    background: no-repeat url('/assets/images/icons/phone.svg');
+}
+
+.yoti-icon-email {
+    background: no-repeat url('/assets/images/icons/email.svg');
+}
+
+.yoti-icon-calendar {
+    background: no-repeat url('/assets/images/icons/calendar.svg');
+}
+
+.yoti-icon-verified {
+    background: no-repeat url('/assets/images/icons/verified.svg');
+}
+
+.yoti-icon-address {
+    background: no-repeat url('/assets/images/icons/address.svg');
+}
+
+.yoti-icon-gender {
+    background: no-repeat url('/assets/images/icons/gender.svg');
+}
+
+.yoti-icon-nationality {
+    background: no-repeat url('/assets/images/icons/nationality.svg');
+}
+
+.yoti-profile-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 1100px) {
+    .yoti-profile-layout {
+        grid-template-columns: 360px 1fr;
+        height: 100%;
+    }
+}
+
+.yoti-profile-user-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 40px 0;
+    background-color: #f7f8f9;
+}
+
+@media (min-width: 1100px) {
+    .yoti-profile-user-section {
+        display: grid;
+        grid-template-rows: repeat(3, min-content);
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+}
+
+.yoti-profile-picture-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+}
+
+.yoti-profile-picture-powered,
+.yoti-profile-picture-account-creation {
+    font-family: Roboto;
+    font-size: 14px;
+    color: #b6bfcb;
+}
+
+.yoti-profile-picture-powered-section {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+@media (min-width: 1100px) {
+    .yoti-profile-picture-powered-section {
+        align-self: start;
+    }
+}
+
+.yoti-profile-picture-powered {
+    margin-bottom: 20px;
+}
+
+.yoti-profile-picture-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 1100px) {
+    .yoti-profile-picture-section {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+    }
+}
+
+.yoti-logo-image {
+    margin-bottom: 25px;
+}
+
+.yoti-profile-picture-area {
+    position: relative;
+    display: inline-block;
+}
+
+.yoti-profile-picture-verified-icon {
+    display: block;
+    background: no-repeat url("/assets/images/icons/verified.svg");
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.yoti-profile-name {
+    margin-top: 20px;
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    text-align: center;
+    color: #333b40;
+}
+
+.yoti-attributes-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    width: 100%;
+    padding: 40px 0;
+}
+
+.yoti-attributes-section.-condensed {
+    padding: 0;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attributes-section {
+        padding: 60px 0;
+        align-items: start;
+        overflow-y: scroll;
+    }
+
+    .yoti-attributes-section.-condensed {
+        padding: 0;
+    }
+}
+
+.yoti-company-logo {
+    margin-bottom: 40px;
+}
+
+@media (min-width: 1100px) {
+    .yoti-company-logo {
+        margin-left: 130px;
+    }
+}
+
+/* extended layout list */
+.yoti-attribute-list-header,
+.yoti-attribute-list-subheader {
+    display: none;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-list-header,
+    .yoti-attribute-list-subheader {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: 200px 1fr 1fr;
+        grid-template-rows: 40px;
+
+        align-items: center;
+        text-align: center;
+
+        font-family: Roboto;
+        font-size: 14px;
+        color: #b6bfcb;
+    }
+}
+
+.yoti-attribute-list-header-attribute,
+.yoti-attribute-list-header-value {
+    justify-self: start;
+    padding: 0 20px;
+}
+
+.yoti-attribute-list-subheader {
+    grid-template-rows: 30px;
+}
+
+.yoti-attribute-list-subhead-layout {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.yoti-attribute-list {
+    display: grid;
+    width: 100%;
+}
+
+.yoti-attribute-list-item:first-child {
+    border-top: 2px solid #f7f8f9;
+}
+
+.yoti-attribute-list-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(60px, auto);
+    border-bottom: 2px solid #f7f8f9;
+    border-right: none;
+    border-left: none;
+}
+
+.yoti-attribute-list-item.-condensed {
+    grid-template-columns: 50% 50%;
+    padding: 5px 35px;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-list-item {
+        display: grid;
+        grid-template-columns: 200px 1fr 1fr;
+        grid-template-rows: minmax(80px, auto);
+    }
+
+    .yoti-attribute-list-item.-condensed {
+        grid-template-columns: 200px 1fr;
+        padding: 0 75px;
+    }
+}
+
+.yoti-attribute-cell {
+    display: flex;
+    align-items: center;
+}
+
+.yoti-attribute-name {
+    grid-column: 1 / 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-right: 2px solid #f7f8f9;
+
+    padding: 20px;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-name {
+        justify-content: start;
+    }
+}
+
+.yoti-attribute-name.-condensed {
+    justify-content: start;
+}
+
+.yoti-attribute-name-cell {
+    display: flex;
+    align-items: center;
+}
+
+.yoti-attribute-name-cell-text {
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    color: #b6bfcb;
+    margin-left: 12px;
+}
+
+.yoti-attribute-value-text table {
+    font-size: 14px;
+    border-spacing: 0;
+}
+
+.yoti-attribute-value-text table td:first-child {
+    font-weight: bold;
+}
+
+.yoti-attribute-value-text table td {
+    border-bottom: 1px solid #f7f8f9;
+    padding: 5px;
+}
+
+.yoti-attribute-value-text img {
+    width: 100%;
+}
+
+.yoti-attribute-value {
+    grid-column: 2 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-value {
+        justify-content: start;
+    }
+}
+
+.yoti-attribute-value.-condensed {
+    justify-content: start;
+}
+
+.yoti-attribute-value-text {
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
+    color: #333b40;
+    word-break: break-word;
+}
+
+.yoti-attribute-anchors-layout {
+    grid-column: 1 / 3;
+    grid-row: 2 / 2;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: minmax(40px, auto);
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+
+    background-color: #f7f8f9;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-anchors-layout {
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+    }
+}
+
+.yoti-attribute-anchors-head {
+    border-bottom: 1px solid #dde2e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 1100px) {
+    .yoti-attribute-anchors-head {
+        display: none;
+    }
+}
+
+.yoti-attribute-anchors {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yoti-attribute-anchors-head.-s-v {
+    grid-column-start: span 1 s-v;
+}
+.yoti-attribute-anchors-head.-value {
+    grid-column-start: span 1 value;
+}
+.yoti-attribute-anchors-head.-subtype {
+    grid-column-start: span 1 subtype;
+}
+
+.yoti-attribute-anchors.-s-v {
+    grid-column-start: span 1 s-v;
+}
+
+.yoti-attribute-anchors.-value {
+    grid-column-start: span 1 value;
+}
+
+.yoti-attribute-anchors.-subtype {
+    grid-column-start: span 1 subtype;
+}
+
+.yoti-edit-section {
+    padding: 50px 20px;
+}
+
+@media (min-width: 1100px) {
+    .yoti-edit-section {
+        padding: 75px 110px;
+    }
+}

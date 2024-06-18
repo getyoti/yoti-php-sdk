@@ -1,0 +1,173 @@
+.yoti-body {
+    margin: 0;
+}
+
+.yoti-top-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 38px 0;
+
+    background-color: #f7f8f9;
+
+    align-items: center;
+}
+
+.yoti-logo-section {
+    margin-bottom: 25px;
+}
+
+.yoti-logo-image {
+    display: block;
+}
+
+.yoti-top-header {
+    font-family: Roboto, sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 80px;
+    text-align: center;
+
+    color: #000;
+}
+
+@media (min-width: 600px) {
+    .yoti-top-header {
+        line-height: 1.4;
+    }
+}
+
+.yoti-sdk-integration-section {
+    margin: 30px 0;
+}
+
+#yoti-share-button {
+    width: 250px;
+    height: 45px;
+}
+
+.yoti-login-or-separator {
+    text-transform: uppercase;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.yoti-login-dialog {
+    display: grid;
+
+    box-sizing: border-box;
+    width: 100%;
+    padding: 35px 38px;
+
+    border-radius: 5px;
+    background: #fff;
+
+    grid-gap: 25px;
+}
+
+@media (min-width: 600px) {
+    .yoti-login-dialog {
+        width: 560px;
+        padding: 35px 88px;
+    }
+}
+
+.yoti-login-dialog-header {
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+
+    margin: 0;
+
+    color: #000;
+}
+
+.yoti-input {
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    box-sizing: border-box;
+    padding: 12px 15px;
+
+    color: #000;
+    border: solid 2px #000;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.yoti-login-actions {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.yoti-login-forgot-button {
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+
+    text-transform: capitalize;
+}
+
+.yoti-login-button {
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+
+    box-sizing: border-box;
+    width: 145px;
+    height: 50px;
+
+    text-transform: uppercase;
+
+    color: #fff;
+    border: 0;
+    background-color: #000;
+}
+
+.yoti-sponsor-app-section {
+    display: flex;
+    flex-direction: column;
+
+    padding: 70px 0;
+
+    align-items: center;
+}
+
+.yoti-sponsor-app-header {
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    margin: 0;
+
+    text-align: center;
+
+    color: #000;
+}
+
+.yoti-store-buttons-section {
+    margin-top: 40px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+    .yoti-store-buttons-section {
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 25px;
+    }
+}
+
+.yoti-app-button-link {
+    text-decoration: none;
+}
