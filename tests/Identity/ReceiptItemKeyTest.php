@@ -2,10 +2,8 @@
 
 namespace Yoti\Test\Identity;
 
-use Yoti\Exception\EncryptedDataException;
 use Yoti\Identity\ReceiptItemKey;
 use Yoti\Test\TestCase;
-use Yoti\Test\TestData;
 
 /**
  * @coversDefaultClass \Yoti\Identity\ReceiptItemKey
@@ -19,23 +17,21 @@ class ReceiptItemKeyTest extends TestCase
      * @covers ::setIv
      * @covers ::__construct
      */
-    /*public function testShouldBuildCorrectly()
+    public function testShouldBuildCorrectly()
     {
         $someId = 'SOME_ID';
-        $someIv = TestData::YOTI_CONNECT_TOKEN_DECRYPTED;
-        $someValue = 'weofmwrfmwrkfmwepkfmwprekmf';
+        $someIv = 'd2VvZm13cmZtd3JrZm13ZXBrZm13cHJla21m';
+        $someValue = 'ZDJWdlptMTNjbVp0ZDNKclptMTNaWEJyWm0xM2NISmxhMjFt';
 
         $sessionData = [
             'id' => $someId,
             'iv' => $someIv,
-            'value' => base64_encode($someValue)
+            'value' => $someValue
         ];
-
-        $this->expectException(EncryptedDataException::class);
 
         $receiptItemKey = new ReceiptItemKey($sessionData);
 
         $this->assertEquals($someId, $receiptItemKey->getId());
         $this->assertEquals($someValue, $receiptItemKey->getValue());
-    }*/
+    }
 }

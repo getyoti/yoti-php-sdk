@@ -22,7 +22,7 @@ use Yoti\Util\Validation;
 class DigitalIdentityClient
 {
     private DigitalIdentityService $digitalIdentityService;
-    public string $id='';
+    public string $id = '';
     /**
      * DigitalIdentityClient constructor.
      *
@@ -112,7 +112,7 @@ class DigitalIdentityClient
         return $this->digitalIdentityService->fetchShareReceipt($receiptId);
     }
 
-    public function getSdkID()
+    public function getSdkID(): string
     {
         return $this->id;
     }
