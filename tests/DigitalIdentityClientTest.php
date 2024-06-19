@@ -6,7 +6,9 @@ use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yoti\DigitalIdentityClient;
+use Yoti\Identity\DigitalIdentityService;
 use Yoti\Identity\Policy\Policy;
+use Yoti\Identity\Receipt;
 use Yoti\Identity\ShareSessionCreated;
 use Yoti\Identity\ShareSessionCreatedQrCode;
 use Yoti\Identity\ShareSessionFetched;
@@ -151,5 +153,22 @@ class DigitalIdentityClientTest extends TestCase
         $result = $yotiClient->fetchShareSession(TestData::SOME_ID);
 
         $this->assertInstanceOf(ShareSessionFetched::class, $result);
+    }
+
+    /**
+     * @covers ::fetchShareReceipt
+     * @covers ::__construct
+     */
+    public function testFetchShareReceipt()
+    {
+        $response = $this->createMock(ResponseInterface::class);
+
+        $response->method('getStatusCode')->willReturn(201);
+
+        $identityService = $this->createMock(DigitalIdentityService::class);
+
+        $result = $identityService->fetchShareReceipt(TestData::SOME_ID);
+
+        $this->assertInstanceOf(Receipt::class, $result);
     }
 }
