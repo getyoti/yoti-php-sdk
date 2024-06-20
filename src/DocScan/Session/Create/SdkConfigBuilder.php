@@ -66,11 +66,6 @@ class SdkConfigBuilder
      */
     private $idDocumentTextDataExtractionRetriesConfig;
 
-      /**
-     * @var string|null
-     */
-    private $biometricConsentFlow;
-
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -141,11 +136,6 @@ class SdkConfigBuilder
         return $this;
     }
 
-    public function withBiometricConsentFlow(string $biometricConsentFlow): self
-    {
-        $this->biometricConsentFlow = $biometricConsentFlow;
-        return $this;
-    }
     /**
      * Allows configuring the number of attempts permitted for text extraction on an ID document
      *
@@ -213,8 +203,7 @@ class SdkConfigBuilder
             $this->errorUrl,
             $this->privacyPolicyUrl,
             $this->allowHandoff,
-            $this->idDocumentTextDataExtractionRetriesConfig,
-            $this->biometricConsentFlow
+            $this->idDocumentTextDataExtractionRetriesConfig
         );
     }
 }

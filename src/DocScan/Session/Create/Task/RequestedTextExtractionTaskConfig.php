@@ -19,21 +19,14 @@ class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
      */
     private $chipData;
 
-     /**
-     * @var bool|null
-     */
-    private $createExpandedDocumentFields;
-
     /**
      * @param string $manualCheck
      * @param string|null $chipData
-     * @param bool|null $createExpandedDocumentFields
      */
-    public function __construct(string $manualCheck, ?string $chipData = null, ?bool $createExpandedDocumentFields = false)
+    public function __construct(string $manualCheck, ?string $chipData = null)
     {
         $this->manualCheck = $manualCheck;
         $this->chipData = $chipData;
-        $this->createExpandedDocumentFields = $createExpandedDocumentFields;
     }
 
     /**
@@ -44,7 +37,6 @@ class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
         return (object)Json::withoutNullValues([
             'manual_check' => $this->getManualCheck(),
             'chip_data' => $this->getChipData(),
-            'create_expanded_document_fields' => $this->getCreateExpandedDocumentFields(),
         ]);
     }
 
@@ -62,13 +54,5 @@ class RequestedTextExtractionTaskConfig implements RequestedTaskConfigInterface
     public function getChipData(): ?string
     {
         return $this->chipData;
-    }
-
-     /**
-     * @return bool
-     */
-    public function getCreateExpandedDocumentFields(): ?bool
-    {
-        return $this->createExpandedDocumentFields;
     }
 }

@@ -58,23 +58,6 @@ class RequestedTextExtractionTaskBuilder
         return $this->setManualCheck($manualCheck);
     }
 
-     /**
-     * @var bool
-     */
-    private $createExpandedDocumentFields;
-
-    /**
-     * 
-     * @param string $createExpandedDocumentFields
-     *
-     * @return $this
-     */
-    public function withCreateExpandedDocumentFields(bool $createExpandedDocumentFields): self
-    {
-        $this->createExpandedDocumentFields = $createExpandedDocumentFields;
-        return $this;
-    }
-
     /**
      * @return RequestedTextExtractionTask
      */
@@ -82,8 +65,7 @@ class RequestedTextExtractionTaskBuilder
     {
         Validation::notEmptyString($this->manualCheck, 'manualCheck');
 
-        $config = new RequestedTextExtractionTaskConfig($this->manualCheck, $this->chipData,
-        $this->createExpandedDocumentFields);
+        $config = new RequestedTextExtractionTaskConfig($this->manualCheck, $this->chipData);
         return new RequestedTextExtractionTask($config);
     }
 }
