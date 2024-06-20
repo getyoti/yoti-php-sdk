@@ -7,21 +7,30 @@ class FailureReasonResponse
     /**
      * @var string
      */
-    private $stringCode;
-
+    private $reasonCode;
     /**
-     * @param string $stringCode
+     * @var RequirementNotMetDetails
      */
-    public function __construct(string $stringCode)
+    private $requirementsNotMetDetails;
+    public function __construct(array $data)
     {
-        $this->stringCode = $stringCode;
+        $this->reasonCode = $data["reason_code"];
+        $this->requirementsNotMetDetails = new RequirementNotMetDetails($data["requirements_not_met_details"]);
     }
 
     /**
      * @return string
      */
-    public function getStringCode(): string
+    public function getReasonCode(): string
     {
-        return $this->stringCode;
+        return $this->reasonCode;
     }
+    /**
+     * @return RequirementNotMetDetails
+     */
+    public function getRequirementNotMetDetails(): RequirementNotMetDetails
+    {
+        return $this->requirementsNotMetDetails;
+    }
+
 }
