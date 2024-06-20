@@ -11,7 +11,6 @@ use Yoti\Test\TestCase;
 class RequestedSupplementaryDocTextExtractionTaskConfigTest extends TestCase
 {
     private const SOME_MANUAL_CHECK = 'someManualCheck';
-    private const SOME_EXPANDED_DOCUMENT_FIELDS = 'false';
 
     /**
      * @test
@@ -24,7 +23,7 @@ class RequestedSupplementaryDocTextExtractionTaskConfigTest extends TestCase
         $result = new RequestedSupplementaryDocTextExtractionTaskConfig(self::SOME_MANUAL_CHECK);
 
         $expected = [
-            'manual_check' => self::SOME_MANUAL_CHECK
+            'manual_check' => self::SOME_MANUAL_CHECK,
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));

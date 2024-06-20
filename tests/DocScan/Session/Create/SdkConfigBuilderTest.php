@@ -22,8 +22,6 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_PRIVACY_POLICY_URL = 'somePrivacyPolicyUrl';
     private const SOME_CATEGORY = 'someCategory';
     private const SOME_NUMBER_RETRIES = 5;
-    private const SOME_BIOMETRIC_CONSENT_FLOW = 'someBiometricConsentFlow';
-
 
     /**
      * @test
@@ -120,7 +118,6 @@ class SdkConfigBuilderTest extends TestCase
             ->withErrorUrl(self::SOME_ERROR_URL)
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->withAllowHandoff(true)
-            ->withBiometricConsentFlow(self::SOME_BIOMETRIC_CONSENT_FLOW)
             ->build();
 
         $expected = [
@@ -134,7 +131,6 @@ class SdkConfigBuilderTest extends TestCase
             'error_url' => self::SOME_ERROR_URL,
             'privacy_policy_url' => self::SOME_PRIVACY_POLICY_URL,
             'allow_handoff' => true,
-            'biometric_consent_flow' => self::SOME_BIOMETRIC_CONSENT_FLOW
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
