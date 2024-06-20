@@ -63,7 +63,7 @@ class HomeController extends BaseController
             ->withSources($searchProfileSources)
             ->withShareUrl(false)
             ->withRemoveDeceased(true)
-            ->withApiKey('qiKTHG7Mgqj31mK2d21F7QPpaVBp9zKc')
+            ->withApiKey('api-key')
             ->withClientRef("string")
             ->withMonitoring(true)
             ->withTags(['tag1'])

@@ -103,7 +103,6 @@ class ReceiptBuilder
             $this->parentRememberMeId,
             $this->error,
             $this->errorReason
-
         );
     }
 }
