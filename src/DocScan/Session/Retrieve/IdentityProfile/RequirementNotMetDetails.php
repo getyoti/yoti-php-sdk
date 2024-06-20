@@ -26,7 +26,7 @@ class RequirementNotMetDetails
     private $details;
 
     /**
-     * @param array $data
+     * @param array<int, array<string, string>> $data
      */
     public function __construct(array $data)
     {
@@ -72,5 +72,4 @@ class RequirementNotMetDetails
     {
         return $this->documentType;
     }
-
 }

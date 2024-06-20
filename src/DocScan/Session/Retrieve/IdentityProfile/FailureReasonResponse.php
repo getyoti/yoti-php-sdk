@@ -12,6 +12,9 @@ class FailureReasonResponse
      * @var RequirementNotMetDetails
      */
     private $requirementsNotMetDetails;
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(array $data)
     {
         $this->reasonCode = $data["reason_code"];
@@ -32,5 +35,4 @@ class FailureReasonResponse
     {
         return $this->requirementsNotMetDetails;
     }
-
 }
