@@ -64,6 +64,11 @@ class SdkConfig implements \JsonSerializable
     private $attemptsConfiguration;
 
     /**
+     * @var string|null
+     */
+    private $biometricConsentFlow;
+
+    /**
      * @param string|null $allowedCaptureMethods
      * @param string|null $primaryColour
      * @param string|null $secondaryColour
@@ -75,6 +80,7 @@ class SdkConfig implements \JsonSerializable
      * @param string|null $privacyPolicyUrl
      * @param bool|null $allowHandoff
      * @param array<string, int>|null $idDocumentTextDataExtractionRetriesConfig
+     * @param string|null $biometricConsentFlow
      */
     public function __construct(
         ?string $allowedCaptureMethods,
@@ -87,7 +93,9 @@ class SdkConfig implements \JsonSerializable
         ?string $errorUrl,
         ?string $privacyPolicyUrl = null,
         ?bool $allowHandoff = null,
-        ?array $idDocumentTextDataExtractionRetriesConfig = null
+        ?array $idDocumentTextDataExtractionRetriesConfig = null,
+        ?string $biometricConsentFlow = null
+
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -102,6 +110,8 @@ class SdkConfig implements \JsonSerializable
         if (!is_null($idDocumentTextDataExtractionRetriesConfig)) {
             $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
         }
+        $this->biometricConsentFlow = $biometricConsentFlow;
+
     }
 
     /**
@@ -121,6 +131,7 @@ class SdkConfig implements \JsonSerializable
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
             'allow_handoff' => $this->getAllowHandoff(),
             'attempts_configuration' => $this->getAttemptsConfiguration(),
+            'biometric_consent_flow' => $this->getBiometricConsentFlow()
         ]);
     }
 
@@ -210,5 +221,13 @@ class SdkConfig implements \JsonSerializable
     public function getAttemptsConfiguration(): ?AttemptsConfiguration
     {
         return $this->attemptsConfiguration;
+    }
+
+     /**
+     * @return string|null
+     */
+    public function getBiometricConsentFlow(): ?string
+    {
+        return $this->biometricConsentFlow;
     }
 }
