@@ -12,6 +12,8 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
 {
     private const SOME_MANUAL_CHECK = 'someManualCheck';
     private const SOME_CHIP_DATA = 'someChipData';
+    private const SOME_EXPANDED_DOCUMENT_FIELDS = false;
+
 
     /**
      * @test
@@ -25,6 +27,7 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
 
         $expected = [
             'manual_check' => self::SOME_MANUAL_CHECK,
+            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
@@ -44,6 +47,7 @@ class RequestedTextExtractionTaskConfigTest extends TestCase
         $expected = [
             'manual_check' => self::SOME_MANUAL_CHECK,
             'chip_data' => self::SOME_CHIP_DATA,
+            'create_expanded_document_fields' => self::SOME_EXPANDED_DOCUMENT_FIELDS
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
