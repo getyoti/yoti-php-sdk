@@ -71,10 +71,10 @@ class IdentityProfileResponseTest extends TestCase
         $this->assertEquals((object)self::IDENTITY_PROFILE_REPORT, $result->getIdentityProfileReport());
         $this->assertInstanceOf(FailureReasonResponse::class, $result->getFailureReason());
         $this->assertEquals(self::REASON_CODE, $result->getFailureReason()->getReasonCode());
-        $reqNotMet = $result->getFailureReason()->getRequirementNotMetDetails();
-        $this->assertEquals(self::FAILURE_TYPE, $reqNotMet->getFailureType());
-        $this->assertEquals(self::DOCUMENT_TYPE, $reqNotMet->getDocumentType());
-        $this->assertEquals(self::AUDIT_ID, $reqNotMet->getAuditId());
-        $this->assertEquals(self::DETAILS, $reqNotMet->getDetails());
+        $requriementNotMetDetailsResponse = $result->getFailureReason()->getRequirementNotMetDetails();
+        $this->assertEquals(self::FAILURE_TYPE, $requriementNotMetDetailsResponse->getFailureType());
+        $this->assertEquals(self::DOCUMENT_TYPE, $requriementNotMetDetailsResponse->getDocumentType());
+        $this->assertEquals(self::AUDIT_ID, $requriementNotMetDetailsResponse->getAuditId());
+        $this->assertEquals(self::DETAILS, $requriementNotMetDetailsResponse->getDetails());
     }
 }
