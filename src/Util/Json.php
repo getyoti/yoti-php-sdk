@@ -56,7 +56,13 @@ class Json
         }
     }
 
-    public static function convertFromLatin1ToUtf8Recursively(mixed $dat): mixed
+    /**
+     * Recursively converts data from Latin1 to UTF-8 encoding.
+     *
+     * @param mixed $dat
+     * @return mixed
+     */
+    public static function convertFromLatin1ToUtf8Recursively($dat)
     {
         if (is_string($dat)) {
             return utf8_encode($dat);
