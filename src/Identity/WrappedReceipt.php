@@ -28,6 +28,7 @@ class WrappedReceipt
     private ?string $parentRememberMeId = null;
 
     private ?string $error = null;
+    private ?string $errorReason = null;
 
     /**
      * @param array<string, mixed> $sessionData
@@ -61,6 +62,9 @@ class WrappedReceipt
         }
         if (isset($sessionData['error'])) {
             $this->error = $sessionData['error'];
+        }
+        if (isset($sessionData['errorReason'])) {
+            $this->errorReason = $sessionData['errorReason'];
         }
     }
 
@@ -130,6 +134,11 @@ class WrappedReceipt
     public function getError(): ?string
     {
         return $this->error;
+    }
+
+    public function getErrorReason(): ?string
+    {
+        return $this->errorReason;
     }
 
     private function base64decode(string $encoded): string
