@@ -28,7 +28,7 @@ class WrappedReceipt
     private ?string $parentRememberMeId = null;
 
     private ?string $error = null;
-    private ?string $errorReason = null;
+    private ?ErrorReason $errorReason = null;
 
     /**
      * @param array<string, mixed> $sessionData
@@ -136,7 +136,7 @@ class WrappedReceipt
         return $this->error;
     }
 
-    public function getErrorReason(): ?string
+    public function getErrorReason(): ?ErrorReason
     {
         return $this->errorReason;
     }

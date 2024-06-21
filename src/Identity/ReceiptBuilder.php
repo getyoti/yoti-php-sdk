@@ -25,7 +25,7 @@ class ReceiptBuilder
     private ?string $parentRememberMeId = null;
 
     private ?string $error = null;
-    private ?string $errorReason = null;
+    private ?ErrorReason $errorReason = null;
 
 
     public function withId(string $id): self
@@ -84,7 +84,7 @@ class ReceiptBuilder
         return $this;
     }
 
-    public function withErrorReason(string $errorReason = null): self
+    public function withErrorReason(ErrorReason $errorReason = null): self
     {
         $this->errorReason = $errorReason;
 

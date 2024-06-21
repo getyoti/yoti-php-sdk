@@ -17,7 +17,7 @@ class Receipt
     private ?string $rememberMeId;
     private ?string $parentRememberMeId;
     private ?string $error;
-    private ?string $errorReason;
+    private ?ErrorReason $errorReason;
 
     public function __construct(
         string $id,
@@ -28,7 +28,7 @@ class Receipt
         ?string $rememberMeId,
         ?string $parentRememberMeId,
         ?string $error,
-        ?string $errorReason
+        ?ErrorReason $errorReason
     ) {
         $this->id = $id;
         $this->sessionId = $sessionId;
@@ -91,7 +91,7 @@ class Receipt
         return $this->error;
     }
 
-    public function getErrorReason(): ?string
+    public function getErrorReason(): ?ErrorReason
     {
         return $this->errorReason;
     }

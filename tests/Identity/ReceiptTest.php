@@ -4,6 +4,7 @@ namespace Yoti\Test\Identity;
 
 use Yoti\Identity\Content\ApplicationContent;
 use Yoti\Identity\Content\UserContent;
+use Yoti\Identity\ErrorReason;
 use Yoti\Identity\Receipt;
 use Yoti\Identity\ReceiptBuilder;
 use Yoti\Profile\ApplicationProfile;
@@ -39,7 +40,7 @@ class ReceiptTest extends TestCase
         $rememberId = 'SOME_REMEMBER_ID';
         $parentRememberId = 'SOME_PARENT_REMEMBER_ID';
         $someError = 'SOME_ERROR';
-        $someErrorReason = 'SOME_ERROR_REASON';
+        $someErrorReason = $this->createMock(ErrorReason::class);
 
         $receipt = new Receipt(
             $someId,
@@ -86,7 +87,7 @@ class ReceiptTest extends TestCase
         $rememberId = 'SOME_REMEMBER_ID';
         $parentRememberId = 'SOME_PARENT_REMEMBER_ID';
         $someError = 'SOME_ERROR';
-        $someErrorReason = 'SOME_ERROR_REASON';
+        $someErrorReason = $this->createMock(ErrorReason::class);
 
         $receipt = (new ReceiptBuilder())
             ->withId($someId)
