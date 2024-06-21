@@ -75,4 +75,36 @@ class JsonTest extends TestCase
 
         $this->assertArrayNotHasKey('other_key', $withoutNull);
     }
+
+    /**
+     * @covers ::convertFromLatin1ToUtf8Recursively
+     */
+    public function testConvertFromLatin1ToUtf8Recursively()
+    {
+        $latin1String = utf8_decode('éàê');
+        $latin1Array = [utf8_decode('éàê'), utf8_decode('çî')];
+        $nestedLatin1Array = [utf8_decode('éàê'), [utf8_decode('çî'), utf8_decode('üñ')]];
+
+        $latin1Object = new \stdClass();
+        $latin1Object->property1 = utf8_decode('éàê');
+        $latin1Object->property2 = utf8_decode('çî');
+
+        $nestedLatin1Object = new \stdClass();
+        $nestedLatin1Object->property = utf8_decode('çî');
+        $latin1ObjectWithNestedObject = new \stdClass();
+        $latin1ObjectWithNestedObject->property1 = utf8_decode('éàê');
+        $latin1ObjectWithNestedObject->property2 = $nestedLatin1Object;
+
+        $this->assertSame('éàê', Json::convertFromLatin1ToUtf8Recursively($latin1String));
+        $this->assertSame(['éàê', 'çî'], Json::convertFromLatin1ToUtf8Recursively($latin1Array));
+        $this->assertSame(['éàê', ['çî', 'üñ']], Json::convertFromLatin1ToUtf8Recursively($nestedLatin1Array));
+
+        $utf8Object = Json::convertFromLatin1ToUtf8Recursively($latin1Object);
+        $this->assertSame('éàê', $utf8Object->property1);
+        $this->assertSame('çî', $utf8Object->property2);
+
+        $utf8NestedObject = Json::convertFromLatin1ToUtf8Recursively($latin1ObjectWithNestedObject);
+        $this->assertSame('éàê', $utf8NestedObject->property1);
+        $this->assertSame('çî', $utf8NestedObject->property2->property);
+    }
 }

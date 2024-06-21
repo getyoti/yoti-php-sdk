@@ -20,4 +20,3 @@ Route::get('/profile', 'ProfileController@show');
 Route::get('/dynamic-share', 'DynamicShareController@show');
 
 Route::get('/dbs-check', 'DbsCheckController@show');
-Route::get('/generate-share', 'IdentityController@show');
