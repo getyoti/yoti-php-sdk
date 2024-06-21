@@ -72,12 +72,12 @@ class SdkConfig implements \JsonSerializable
      * @var string|null
      */
     private $darkMode;
-  
+
     /**
      * @var string|null
      */
     private $primaryColourDarkMode;
-  
+
     /**
      * @var string|null
      */
@@ -263,7 +263,7 @@ class SdkConfig implements \JsonSerializable
     {
         return $this->darkMode;
     }
-  
+
     /**
      * @return string|null
      */

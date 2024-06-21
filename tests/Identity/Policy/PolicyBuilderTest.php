@@ -350,7 +350,6 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
-            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
