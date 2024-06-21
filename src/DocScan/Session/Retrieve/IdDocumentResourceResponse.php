@@ -25,6 +25,11 @@ class IdDocumentResourceResponse extends ResourceResponse
     private $documentFields;
 
     /**
+     * @var ExpandedDocumentFieldsResponse|null
+     */
+    private $expandedDocumentFields;
+
+    /**
      * @var DocumentIdPhotoResponse|null
      */
     private $documentIdPhoto;
@@ -48,6 +53,9 @@ class IdDocumentResourceResponse extends ResourceResponse
 
         $this->documentFields = isset($idDocument['document_fields'])
             ? new DocumentFieldsResponse($idDocument['document_fields'])
+            : null;
+        $this->expandedDocumentFields = isset($idDocument['expanded_document_fields'])
+            ? new ExpandedDocumentFieldsResponse($idDocument['expanded_document_fields'])
             : null;
 
         $this->documentIdPhoto = isset($idDocument['document_id_photo'])
@@ -85,6 +93,14 @@ class IdDocumentResourceResponse extends ResourceResponse
     public function getDocumentFields(): ?DocumentFieldsResponse
     {
         return $this->documentFields;
+    }
+
+    /**
+     * @return ExpandedDocumentFieldsResponse|null
+     */
+    public function getExpandedDocumentFields(): ?ExpandedDocumentFieldsResponse
+    {
+        return $this->expandedDocumentFields;
     }
 
     /**
