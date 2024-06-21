@@ -11,11 +11,11 @@ class ErrorReason
 
 
     /**
-     * @param RequirementNotMetDetails $data
+     * @param array<int, array<string, string>> $data
      */
-    public function __construct(RequirementNotMetDetails $data)
+    public function __construct(array $data)
     {
-        $this->requirementNotMetDetails = $data;
+        $this->requirementNotMetDetails = new RequirementNotMetDetails($data);
     }
 
     /**

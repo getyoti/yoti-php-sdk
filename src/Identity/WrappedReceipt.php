@@ -63,8 +63,8 @@ class WrappedReceipt
         if (isset($sessionData['error'])) {
             $this->error = $sessionData['error'];
         }
-        if (isset($sessionData['errorReason'])) {
-            $this->errorReason = $sessionData['errorReason'];
+        if (isset($sessionData['errorDetails'])) {
+            $this->errorReason = new ErrorReason($sessionData['errorDetails']['error_reason']);
         }
     }
 
