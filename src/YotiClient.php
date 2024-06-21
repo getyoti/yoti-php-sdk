@@ -28,20 +28,11 @@ use Yoti\Util\Validation;
  */
 class YotiClient
 {
-    /**
-     * @var AmlService
-     */
-    private $amlService;
+    private AmlService $amlService;
 
-    /**
-     * @var ProfileService
-     */
-    private $profileService;
+    private ProfileService $profileService;
 
-    /**
-     * @var ShareUrlService
-     */
-    private $shareUrlService;
+    private ShareUrlService $shareUrlService;
 
     /**
      * YotiClient constructor.

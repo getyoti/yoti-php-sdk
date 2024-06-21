@@ -204,6 +204,7 @@ class YotiClientTest extends TestCase
         $this->assertInstanceOf(ShareUrlResult::class, $result);
     }
 
+
     /**
      * @covers ::getLoginUrl
      */
