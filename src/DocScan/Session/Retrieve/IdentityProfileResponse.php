@@ -35,7 +35,7 @@ class IdentityProfileResponse
         $this->result = $sessionData['result'];
 
         if (isset($sessionData['failure_reason'])) {
-            $this->failureReason = new FailureReasonResponse($sessionData['failure_reason']['reason_code']);
+            $this->failureReason = new FailureReasonResponse($sessionData['failure_reason']);
         }
 
         if (isset($sessionData['identity_profile_report'])) {

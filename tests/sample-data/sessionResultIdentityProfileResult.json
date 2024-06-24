@@ -9,7 +9,16 @@
     "subject_id": "someStringHere",
     "result": "DONE",
     "failure_reason": {
-      "reason_code": "MANDATORY_DOCUMENT_COULD_NOT_BE_PROVIDED"
+      "reason_code": "MANDATORY_DOCUMENT_COULD_NOT_BE_PROVIDED",
+      "requirements_not_met_details": [
+        {
+          "failure_type": "someStringHere",
+          "document_type": "someStringHere",
+          "document_country_iso_code": "someStringHere",
+          "audit_id": "someStringHere",
+          "details": "someStringHere"
+        }
+      ]
     },
     "identity_profile_report": {
       "trust_framework": "UK_TFIDA",
