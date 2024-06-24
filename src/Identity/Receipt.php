@@ -10,20 +10,14 @@ use Yoti\Profile\UserProfile;
 class Receipt
 {
     private string $id;
-
     private string $sessionId;
-
     private \DateTime $timestamp;
-
     private ApplicationContent $applicationContent;
-
     private UserContent $userContent;
-
     private ?string $rememberMeId;
-
     private ?string $parentRememberMeId;
-
     private ?string $error;
+    private ?ErrorReason $errorReason;
 
     public function __construct(
         string $id,
@@ -33,7 +27,8 @@ class Receipt
         UserContent $userContent,
         ?string $rememberMeId,
         ?string $parentRememberMeId,
-        ?string $error
+        ?string $error,
+        ?ErrorReason $errorReason
     ) {
         $this->id = $id;
         $this->sessionId = $sessionId;
@@ -43,6 +38,7 @@ class Receipt
         $this->rememberMeId = $rememberMeId;
         $this->parentRememberMeId = $parentRememberMeId;
         $this->error = $error;
+        $this->errorReason = $errorReason;
     }
 
     public function getId(): string
@@ -93,5 +89,10 @@ class Receipt
     public function getError(): ?string
     {
         return $this->error;
+    }
+
+    public function getErrorReason(): ?ErrorReason
+    {
+        return $this->errorReason;
     }
 }
