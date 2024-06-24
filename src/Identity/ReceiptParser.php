@@ -89,6 +89,7 @@ class ReceiptParser
             ->withSessionId($wrappedReceipt->getSessionId())
             ->withTimestamp($wrappedReceipt->getTimestamp())
             ->withError($wrappedReceipt->getError())
+            ->withErrorReason($wrappedReceipt->getErrorReason())
             ->build();
     }
 

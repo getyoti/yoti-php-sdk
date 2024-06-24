@@ -4,6 +4,7 @@ namespace Yoti\Test\Identity;
 
 use Yoti\Identity\Content\ApplicationContent;
 use Yoti\Identity\Content\UserContent;
+use Yoti\Identity\ErrorReason;
 use Yoti\Identity\Receipt;
 use Yoti\Identity\ReceiptBuilder;
 use Yoti\Profile\ApplicationProfile;
@@ -20,6 +21,7 @@ class ReceiptTest extends TestCase
      * @covers ::getProfile
      * @covers ::getId
      * @covers ::getError
+     * @covers ::getErrorReason
      * @covers ::getApplicationContent
      * @covers ::getTimestamp
      * @covers ::getParentRememberMeId
@@ -38,6 +40,7 @@ class ReceiptTest extends TestCase
         $rememberId = 'SOME_REMEMBER_ID';
         $parentRememberId = 'SOME_PARENT_REMEMBER_ID';
         $someError = 'SOME_ERROR';
+        $someErrorReason = $this->createMock(ErrorReason::class);
 
         $receipt = new Receipt(
             $someId,
@@ -47,7 +50,8 @@ class ReceiptTest extends TestCase
             $userContent,
             $rememberId,
             $parentRememberId,
-            $someError
+            $someError,
+            $someErrorReason
         );
 
         $this->assertEquals($someId, $receipt->getId());
@@ -58,10 +62,12 @@ class ReceiptTest extends TestCase
         $this->assertEquals($rememberId, $receipt->getRememberMeId());
         $this->assertEquals($parentRememberId, $receipt->getParentRememberMeId());
         $this->assertEquals($someError, $receipt->getError());
+        $this->assertEquals($someErrorReason, $receipt->getErrorReason());
     }
 
     /**
      * @covers \Yoti\Identity\ReceiptBuilder::withError
+     * @covers \Yoti\Identity\ReceiptBuilder::withErrorReason
      * @covers \Yoti\Identity\ReceiptBuilder::withApplicationContent
      * @covers \Yoti\Identity\ReceiptBuilder::withId
      * @covers \Yoti\Identity\ReceiptBuilder::withTimestamp
@@ -81,6 +87,7 @@ class ReceiptTest extends TestCase
         $rememberId = 'SOME_REMEMBER_ID';
         $parentRememberId = 'SOME_PARENT_REMEMBER_ID';
         $someError = 'SOME_ERROR';
+        $someErrorReason = $this->createMock(ErrorReason::class);
 
         $receipt = (new ReceiptBuilder())
             ->withId($someId)
@@ -91,8 +98,8 @@ class ReceiptTest extends TestCase
             ->withRememberMeId($rememberId)
             ->withParentRememberMeId($parentRememberId)
             ->withError($someError)
+            ->withErrorReason($someErrorReason)
             ->build();
-
 
         $this->assertEquals($someId, $receipt->getId());
         $this->assertEquals($sessionId, $receipt->getSessionId());
@@ -102,5 +109,6 @@ class ReceiptTest extends TestCase
         $this->assertEquals($rememberId, $receipt->getRememberMeId());
         $this->assertEquals($parentRememberId, $receipt->getParentRememberMeId());
         $this->assertEquals($someError, $receipt->getError());
+        $this->assertEquals($someErrorReason, $receipt->getErrorReason());
     }
 }
