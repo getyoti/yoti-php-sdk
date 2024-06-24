@@ -101,7 +101,6 @@ class ReceiptTest extends TestCase
             ->withErrorReason($someErrorReason)
             ->build();
 
-
         $this->assertEquals($someId, $receipt->getId());
         $this->assertEquals($sessionId, $receipt->getSessionId());
         $this->assertEquals($someTime, $receipt->getTimestamp());
