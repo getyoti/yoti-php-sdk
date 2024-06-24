@@ -64,7 +64,11 @@ class WrappedReceipt
             $this->error = $sessionData['error'];
         }
         if (isset($sessionData['errorDetails'])) {
-            $this->errorReason = new ErrorReason($sessionData['errorDetails']['error_reason']);
+            if (isset($sessionData["error_details"]["error_reason"]["requirements_not_met_details"])) {
+                $this->errorReason = new ErrorReason(
+                    $sessionData['errorDetails']['error_reason']['requirements_not_met_details']
+                );
+            }
         }
     }
 

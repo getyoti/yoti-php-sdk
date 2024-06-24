@@ -30,11 +30,11 @@ class RequirementNotMetDetails
      */
     public function __construct(array $data)
     {
-        $this->failureType = $data[0]["failure_type"];
-        $this->details = $data[0]["details"];
-        $this->auditId = $data[0]["audit_id"];
-        $this->documentCountryIsoCode = $data[0]["document_country_iso_code"];
-        $this->documentType = $data[0]["document_type"];
+        $this->failureType = $data[0]["failure_type"] ?? '';
+        $this->details = $data[0]["details"] ?? '';
+        $this->auditId = $data[0]["audit_id"] ?? '';
+        $this->documentCountryIsoCode = $data[0]["document_country_iso_code"] ?? '';
+        $this->documentType = $data[0]["document_type"] ?? '';
     }
 
     /**
