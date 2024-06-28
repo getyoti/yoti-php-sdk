@@ -89,6 +89,7 @@ class HomeController extends BaseController
             ->withRequestedCheck(
                 (new RequestedLivenessCheckBuilder())
                     ->forStaticLiveness()
+                    ->withMaxRetries(3)
                     ->build()
             )
             ->withRequestedCheck(
@@ -128,7 +129,7 @@ class HomeController extends BaseController
             ->withSdkConfig(
                 (new SdkConfigBuilder())
                     ->withAllowsCameraAndUpload()
-                    ->withPrimaryColour('#eee')
+                    ->withPrimaryColour('#2875BC')
                     ->withSecondaryColour('#FFFFFF')
                     ->withFontColour('#FFFFFF')
                     ->withLocale('en-GB')
