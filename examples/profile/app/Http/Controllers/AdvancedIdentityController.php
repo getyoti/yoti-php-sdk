@@ -46,7 +46,7 @@ class AdvancedIdentityController extends BaseController
             ->build();
 
         return view('advanced', [
-            'title' => 'Advanced Identity Check Example',
+            'title' => 'Advanced Identity Share Example',
             'buttonConfig' => [
                 'elements' => [
                     [
