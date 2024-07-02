@@ -16,29 +16,30 @@ class AdvancedIdentityController extends BaseController
     public function generateSession(DigitalIdentityClient $client)
     {
         try {
-            $advancedIdentityProfileJson = '
-            {
-                "profiles": [
-                    {
-                        "trust_framework": "YOTI_GLOBAL",
-                        "schemes": [
-                            {
-                                "label": "identity-AL-L1",
-                                "type": "IDENTITY",
-                                "objective": "AL_L1"
-                            },
-                            {
-                                "label": "identity-AL-M1",
-                                "type": "IDENTITY",
-                                "objective": "AL_M1"
-                            }
+            $advancedIdentityProfileJson =
+                (object)[
+                "profiles" => [(object)[
+
+                        "trust_framework" => "YOTI_GLOBAL",
+                        "schemes" => [(object)[
+
+                                "label" => "identity-AL-L1",
+                                "type" => "IDENTITY",
+                                "objective"=> "AL_L1"
+                            ],
+                            [
+                                "label" => "identity-AL-M1",
+                                "type" => "IDENTITY",
+                                "objective" => "AL_M1"
+                            ]
                         ]
-                    }
+                    ]
                 ]
-            }';
+                ]
+            ;
 
             $policy = (new PolicyBuilder())
-                ->withAdvancedIdentityProfileRequirements($advancedIdentityProfileJson)
+                ->withAdvancedIdentityProfileRequirements((object)$advancedIdentityProfileJson)
                 ->build();
 
             $redirectUri = 'https://host/redirect/';

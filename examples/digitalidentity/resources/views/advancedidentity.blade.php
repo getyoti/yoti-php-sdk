@@ -18,7 +18,7 @@
                      alt="Yoti"/>
             </a>
         </div>
-        <h1 class="yoti-top-header">Digital Identity(Advanced)4 Share Example</h1>
+        <h1 class="yoti-top-header">Digital Identity(Advanced) Share Example</h1>
 
         <div class="yoti-sdk-integration-section">
             <div id="webshare-target"></div>

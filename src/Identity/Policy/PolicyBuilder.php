@@ -331,8 +331,6 @@ class PolicyBuilder
         return $this;
     }
 
-
-
     public function build(): Policy
     {
         return new Policy(
@@ -340,7 +338,8 @@ class PolicyBuilder
             array_values($this->wantedAuthTypes),
             $this->wantedRememberMe,
             $this->wantedRememberMeOptional,
-            $this->identityProfileRequirements
+            $this->identityProfileRequirements,
+            $this->advancedIdentityProfileRequirements
         );
     }
 }
