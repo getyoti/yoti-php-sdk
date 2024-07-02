@@ -679,9 +679,9 @@ class DynamicPolicyBuilderTest extends TestCase
     }
 
     /**
-     * @covers ::withIdentityProfileRequirements
+     * @covers ::withAdvancedIdentityProfileRequirements
      * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__construct
-     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::getIdentityProfileRequirements
+     * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::getAdvancedIdentityProfileRequirements
      * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::jsonSerialize
      * @covers \Yoti\ShareUrl\Policy\DynamicPolicy::__toString
      */
