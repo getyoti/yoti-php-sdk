@@ -27,6 +27,7 @@ class PolicyBuilder
     private bool $wantedRememberMeOptional = false;
 
     private ?object $identityProfileRequirements = null;
+    private ?object $advancedIdentityProfileRequirements = null;
 
     public function withWantedAttribute(WantedAttribute $wantedAttribute): self
     {
@@ -317,6 +318,19 @@ class PolicyBuilder
         $this->identityProfileRequirements = $identityProfileRequirements;
         return $this;
     }
+
+    /**
+     * Use an Advanced Identity Profile Requirement object for the share
+     *
+     * @param object $advancedIdentityProfileRequirements
+     * @return $this
+     */
+    public function withAdvancedIdentityProfileRequirements($advancedIdentityProfileRequirements): self
+    {
+        $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
+        return $this;
+    }
+
 
 
     public function build(): Policy
