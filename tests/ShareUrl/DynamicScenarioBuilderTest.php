@@ -74,7 +74,8 @@ class DynamicScenarioBuilderTest extends TestCase
                 'wanted_auth_types' => [],
                 'wanted_remember_me' => false,
                 'wanted_remember_me_optional' => false,
-                'identity_profile_requirements' => null
+                'identity_profile_requirements' => null,
+                'advanced_identity_profile_requirements' => null
             ],
             'extensions' => [
                 [
