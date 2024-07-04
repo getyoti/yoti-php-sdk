@@ -43,6 +43,11 @@ class DynamicPolicyBuilder
     private $identityProfileRequirements = null;
 
     /**
+     * @var object|null
+     */
+    private $advancedIdentityProfileRequirements = null;
+
+    /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute $wantedAttribute
      *
      * @return $this
@@ -401,6 +406,18 @@ class DynamicPolicyBuilder
     }
 
     /**
+     * Use an Identity Profile Requirement object for the share
+     *
+     * @param object $advancedIdentityProfileRequirements
+     * @return $this
+     */
+    public function withAdvancedIdentityProfileRequirements($advancedIdentityProfileRequirements): self
+    {
+        $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
+        return $this;
+    }
+
+    /**
      * @return DynamicPolicy
      */
     public function build(): DynamicPolicy
@@ -409,7 +426,8 @@ class DynamicPolicyBuilder
             array_values($this->wantedAttributes),
             array_values($this->wantedAuthTypes),
             $this->wantedRememberMe,
-            $this->identityProfileRequirements
+            $this->identityProfileRequirements,
+            $this->advancedIdentityProfileRequirements
         );
     }
 }

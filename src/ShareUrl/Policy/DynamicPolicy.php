@@ -34,18 +34,25 @@ class DynamicPolicy implements \JsonSerializable
     private $identityProfileRequirements;
 
     /**
+     * @var object|null
+     */
+    private $advancedIdentityProfileRequirements;
+
+    /**
      * @param \Yoti\ShareUrl\Policy\WantedAttribute[] $wantedAttributes
      *   Array of attributes to be requested.
      * @param int[] $wantedAuthTypes
      *   Auth types represents the authentication type to be used.
      * @param bool $wantedRememberMe
      * @param object $identityProfileRequirements
+     * @param object $advancedIdentityProfileRequirements
      */
     public function __construct(
         array $wantedAttributes,
         array $wantedAuthTypes,
         bool $wantedRememberMe = false,
-        $identityProfileRequirements = null
+        $identityProfileRequirements = null,
+        $advancedIdentityProfileRequirements = null
     ) {
         Validation::isArrayOfType($wantedAttributes, [WantedAttribute::class], 'wantedAttributes');
         $this->wantedAttributes = $wantedAttributes;
@@ -55,6 +62,7 @@ class DynamicPolicy implements \JsonSerializable
 
         $this->wantedRememberMe = $wantedRememberMe;
         $this->identityProfileRequirements = $identityProfileRequirements;
+        $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
     }
 
     /**
@@ -70,6 +78,7 @@ class DynamicPolicy implements \JsonSerializable
             'wanted_remember_me' => $this->wantedRememberMe,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => $this->identityProfileRequirements,
+            'advanced_identity_profile_requirements' => $this->advancedIdentityProfileRequirements,
         ];
     }
 
@@ -89,5 +98,15 @@ class DynamicPolicy implements \JsonSerializable
     public function getIdentityProfileRequirements()
     {
         return $this->identityProfileRequirements;
+    }
+
+    /**
+     * AdvancedIdentityProfileRequirements requested in the policy
+     *
+     * @return object|null
+     */
+    public function getAdvancedIdentityProfileRequirements()
+    {
+        return $this->advancedIdentityProfileRequirements;
     }
 }
