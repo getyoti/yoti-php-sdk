@@ -75,6 +75,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -124,6 +125,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertJsonStringEqualsJsonString(
@@ -151,6 +153,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -205,6 +208,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -238,6 +242,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -269,6 +274,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -314,6 +320,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertJsonStringEqualsJsonString(
@@ -343,6 +350,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -367,6 +375,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -390,7 +399,8 @@ class PolicyBuilderTest extends TestCase
             'wanted_auth_types' => [self::SELFIE_AUTH_TYPE, self::PIN_AUTH_TYPE, 99],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
-            'identity_profile_requirements' => null
+            'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -415,6 +425,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -439,6 +450,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -461,6 +473,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -482,6 +495,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -503,6 +517,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -524,6 +539,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -545,6 +561,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => true,
             'wanted_remember_me_optional' => false,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -564,7 +581,8 @@ class PolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
-            'identity_profile_requirements' => null
+            'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -585,6 +603,7 @@ class PolicyBuilderTest extends TestCase
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => true,
             'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -604,7 +623,8 @@ class PolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
-            'identity_profile_requirements' => null
+            'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
@@ -631,7 +651,8 @@ class PolicyBuilderTest extends TestCase
             'wanted_auth_types' => [],
             'wanted_remember_me' => false,
             'wanted_remember_me_optional' => false,
-            'identity_profile_requirements' => $identityProfileSample
+            'identity_profile_requirements' => $identityProfileSample,
+            'advanced_identity_profile_requirements' => null
         ];
 
         $policy = (new PolicyBuilder())
@@ -640,5 +661,52 @@ class PolicyBuilderTest extends TestCase
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
         $this->assertEquals($identityProfileSample, $policy->getIdentityProfileRequirements());
+    }
+
+    /**
+     * @covers ::withAdvancedIdentityProfileRequirements
+     * @covers \Yoti\Identity\Policy\Policy::__construct
+     * @covers \Yoti\Identity\Policy\Policy::getAdvancedIdentityProfileRequirements
+     * @covers \Yoti\Identity\Policy\Policy::jsonSerialize
+     */
+    public function testWithAdvancedIdentityProfileRequirements()
+    {
+        $advancedIdentityProfileSample =
+            (object)[
+                "profiles" => [(object)[
+
+                    "trust_framework" => "YOTI_GLOBAL",
+                    "schemes" => [(object)[
+
+                        "label" => "identity-AL-L1",
+                        "type" => "IDENTITY",
+                        "objective"=> "AL_L1"
+                    ],
+                        [
+                            "label" => "identity-AL-M1",
+                            "type" => "IDENTITY",
+                            "objective" => "AL_M1"
+                        ]
+                    ]
+                ]
+                ]
+            ]
+        ;
+
+        $expectedWantedAttributeData = [
+            'wanted' => [],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => $advancedIdentityProfileSample
+        ];
+
+        $policy = (new PolicyBuilder())
+            ->withAdvancedIdentityProfileRequirements($advancedIdentityProfileSample)
+            ->build();
+
+        $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
+        $this->assertEquals($advancedIdentityProfileSample, $policy->getAdvancedIdentityProfileRequirements());
     }
 }
