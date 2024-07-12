@@ -1,3 +1,4 @@
+@if (isset($key) && is_array($key))
 @foreach ($report as $key => $value)
     <table>
         <thead>
@@ -37,3 +38,4 @@
         </tbody>
     </table>
     @endforeach
+@endif
