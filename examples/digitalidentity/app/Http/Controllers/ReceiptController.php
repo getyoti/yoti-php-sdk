@@ -17,9 +17,7 @@ class ReceiptController extends BaseController
 
         $logger->warning("Unknown Content Type parsing as a String");
         $shareReceipt = $client->fetchShareReceipt($request->query('ReceiptID'));
-
         $profile = $shareReceipt->getProfile();
-
         return view('receipt', [
             'fullName' => $profile->getFullName(),
             'selfie' => $profile->getSelfie(),

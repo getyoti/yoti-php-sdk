@@ -38,4 +38,17 @@
         </tbody>
     </table>
     @endforeach
+@else
+    <table>
+        @foreach ($report as $key => $value)
+            <tr>
+                <td>
+                    {{ $key }}<br/>
+                    <pre>
+                        {!! json_encode($value, JSON_PRETTY_PRINT) !!}
+                    </pre>
+                </td>
+            </tr>
+        @endforeach
+    </table>
 @endif
