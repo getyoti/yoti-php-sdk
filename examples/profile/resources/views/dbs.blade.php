@@ -56,7 +56,7 @@
     </section>
 </main>
 
-<script src="https://www.public.stg1.dmz.yoti.com/share/client/"></script>
+<script src="https://www.yoti.com/share/client/"></script>
 <script>
     window.Yoti.Share.init(@json($buttonConfig, JSON_PRETTY_PRINT));
 </script>
