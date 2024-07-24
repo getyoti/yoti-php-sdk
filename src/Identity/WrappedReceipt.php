@@ -6,7 +6,6 @@ use Yoti\Exception\DigitalIdentityException;
 use Yoti\Exception\EncryptedDataException;
 use Yoti\Identity\Content\Content;
 use Yoti\Util\DateTime;
-
 class WrappedReceipt
 {
     private string $id;
@@ -19,9 +18,9 @@ class WrappedReceipt
 
     private Content $otherPartyContent;
 
-    private string $wrappedItemKeyId;
+    private ?string $wrappedItemKeyId = null;
 
-    private string $wrappedKey;
+    private ?string $wrappedKey;
 
     private ?string $rememberMeId = null;
 
@@ -38,8 +37,8 @@ class WrappedReceipt
         $this->id = $sessionData['id'];
         $this->sessionId = $sessionData['sessionId'];
         $this->timestamp = DateTime::stringToDateTime($sessionData['timestamp']);
-        $this->wrappedItemKeyId = $sessionData['wrappedItemKeyId'];
-        $this->wrappedKey = $sessionData['wrappedKey'];
+        $this->wrappedItemKeyId = $sessionData['wrappedItemKeyId'] ?? null;
+        $this->wrappedKey = $sessionData['wrappedKey'] ?? null;
 
         if (isset($sessionData['content'])) {
             $this->content = new Content(
@@ -63,10 +62,10 @@ class WrappedReceipt
         if (isset($sessionData['error'])) {
             $this->error = $sessionData['error'];
         }
-        if (isset($sessionData['errorDetails'])) {
-            if (isset($sessionData["error_details"]["error_reason"]["requirements_not_met_details"])) {
+        if (isset($sessionData['errorReason'])) {
+            if (isset($sessionData["errorReason"]["requirements_not_met_details"])) {
                 $this->errorReason = new ErrorReason(
-                    $sessionData['errorDetails']['error_reason']['requirements_not_met_details']
+                    $sessionData["errorReason"]["requirements_not_met_details"]
                 );
             }
         }

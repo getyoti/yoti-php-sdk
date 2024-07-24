@@ -12,8 +12,8 @@ class Receipt
     private string $id;
     private string $sessionId;
     private \DateTime $timestamp;
-    private ApplicationContent $applicationContent;
-    private UserContent $userContent;
+    private ?ApplicationContent $applicationContent;
+    private ?UserContent $userContent;
     private ?string $rememberMeId;
     private ?string $parentRememberMeId;
     private ?string $error;
@@ -23,8 +23,8 @@ class Receipt
         string $id,
         string $sessionId,
         \DateTime $timestamp,
-        ApplicationContent $applicationContent,
-        UserContent $userContent,
+        ?ApplicationContent $applicationContent,
+        ?UserContent $userContent,
         ?string $rememberMeId,
         ?string $parentRememberMeId,
         ?string $error,
