@@ -18,7 +18,7 @@
                      alt="Yoti"/>
             </a>
         </div>
-        <h1 class="yoti-top-header">Digital Identity Share Example</h1>
+        <h1 class="yoti-top-header">Digital Identity DBS Ckeck Example</h1>
 
         <div class="yoti-sdk-integration-section">
             <div id="webshare-target"></div>
@@ -45,7 +45,7 @@
     </section>
 </main>
 <script>async function onSessionIdResolver() {
-        const response = await fetch('/generate-session');
+        const response = await fetch('/generate-advanced-identity-session');
         if (!response.ok) {
             throw new Error('Response was not ok');
         }
