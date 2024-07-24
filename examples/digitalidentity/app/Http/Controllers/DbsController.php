@@ -16,30 +16,14 @@ class DbsController extends BaseController
     public function generateSession(DigitalIdentityClient $client)
     {
         try {
-            $advancedIdentityProfileJson =
-                (object)[
-                "profiles" => [(object)[
-
-                        "trust_framework" => "UK_TFIDA",
-                        "schemes" => [(object)[
-
-                                "label" => "identity-AL-L1",
-                                "type" => "DBS",
-                                "objective"=> "BASIC"
-                            ],
-                            [
-                                "label" => "identity-AL-M1",
-                                "type" => "DBS",
-                                "objective" => "BASIC"
-                            ]
-                        ]
-                    ]
-                ]
-                ]
-            ;
-
             $policy = (new PolicyBuilder())
-                ->withAdvancedIdentityProfileRequirements((object)$advancedIdentityProfileJson)
+                ->withIdentityProfileRequirements((object)[
+                    'trust_framework' => 'UK_TFIDA',
+                    'scheme' => [
+                        'type' => 'DBS',
+                        'objective' => 'BASIC'
+                    ]
+                ])
                 ->build();
 
             $redirectUri = 'https://host/redirect/';
