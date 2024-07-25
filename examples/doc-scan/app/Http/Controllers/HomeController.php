@@ -88,7 +88,7 @@ class HomeController extends BaseController
 
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
-            ->withResourcesTtl(90000)
+            ->withResourcesTtl(604800)
             ->withUserTrackingId('some-user-tracking-id')
             //For Identity Profile Requirements Object
             //->withBlockBiometricConsent(false) //User needs to provide consent for the liveness detection
@@ -99,7 +99,8 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedLivenessCheckBuilder())
-                    ->forZoomLiveness()
+                    ->forStaticLiveness()
+                    ->withMaxRetries(3)
                     ->build()
             )
             ->withRequestedCheck(
@@ -109,7 +110,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withRequestedCheck(
@@ -127,20 +128,20 @@ class HomeController extends BaseController
             )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->withChipDataDesired()
                     ->withCreateExpandedDocumentFields(true)
                     ->build()
             )
             ->withRequestedTask(
                 (new RequestedSupplementaryDocTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withSdkConfig(
                 (new SdkConfigBuilder())
                     ->withAllowsCameraAndUpload()
-                    ->withPrimaryColour('#2d9fff')
+                    ->withPrimaryColour('#2875BC')
                     ->withSecondaryColour('#FFFFFF')
                     ->withFontColour('#FFFFFF')
                     ->withLocale('en-GB')
