@@ -28,7 +28,6 @@ class UserProfile extends BaseProfile
     public const ATTR_DOCUMENT_IMAGES = 'document_images';
     public const ATTR_STRUCTURED_POSTAL_ADDRESS = 'structured_postal_address';
     public const ATTR_IDENTITY_PROFILE_REPORT = 'identity_profile_report';
-    public const ATTR_ADVANCED_IDENTITY_PROFILE_REPORT = 'advanced_identity_profile_report';
     /** @var \Yoti\Profile\Attribute\AgeVerification[] */
     private $ageVerifications;
 
