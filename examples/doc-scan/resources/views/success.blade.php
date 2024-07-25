@@ -293,7 +293,57 @@
                 </div>
             </div>
         @endif
-
+        @if ($sessionResult->getIdentityProfile())
+            @if ($sessionResult->getIdentityProfile()->getFailureReason()->getReasonCode())
+            <div class="row pt-4">
+                <div class="col">
+                    <h2>Identity Result Error</h2>
+                </div>
+            </div>
+            @if ($sessionResult->getIdentityProfile()->getFailureReason()->getReasonCode())
+                <table class="table table-striped table-light">
+                    <tbody>
+                    <tr>
+                        <td>Reason Code</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getReasonCode()}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Failure Type</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getRequirementNotMetDetails()->getFailureType()}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Details</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getRequirementNotMetDetails()->getDetails()}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Audit Id</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getRequirementNotMetDetails()->getAuditId()}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Country ISO Code</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getRequirementNotMetDetails()->getDocumentCountryIsoCode()}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Document Type</td>
+                        <td>
+                            {{$sessionResult->getIdentityProfile()->getFailureReason()->getRequirementNotMetDetails()->getDocumentType()}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            @endif
+            @endif
+        @endif
         @if (count($sessionResult->getResources()->getIdDocuments()) > 0)
             <div class="row pt-4">
                 <div class="col">
