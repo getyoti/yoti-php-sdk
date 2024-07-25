@@ -77,8 +77,7 @@ class HomeController extends BaseController
             ->withRemoveDeceased(true)
             ->build();
 
-
-        //Identity Profile Requeirements
+        //Identity Profile Requeirements Object
         /*$identityProfileRequirements = (object)[
             'trust_framework' => 'UK_TFIDA',
             'scheme' => [
@@ -91,8 +90,8 @@ class HomeController extends BaseController
             ->withClientSessionTokenTtl(600)
             ->withResourcesTtl(90000)
             ->withUserTrackingId('some-user-tracking-id')
-            ->withBlockBiometricConsent(false) //User needs to provide consent for the liveness detection
-            //For Identity Profile Requirements
+            //For Identity Profile Requirements Object
+            //->withBlockBiometricConsent(false) //User needs to provide consent for the liveness detection
             //->withIdentityProfileRequirements($identityProfileRequirements)
             ->withRequestedCheck(
                 (new RequestedDocumentAuthenticityCheckBuilder())
@@ -152,7 +151,6 @@ class HomeController extends BaseController
                     ->withBiometricConsentFlow('EARLY')
                     ->build()
             )
-            /*
             ->withRequiredDocument(
                 (new RequiredIdDocumentBuilder())
                     ->withFilter(
@@ -173,7 +171,6 @@ class HomeController extends BaseController
                     )
                     ->build()
             )
-            */
             ->build();
 
             
