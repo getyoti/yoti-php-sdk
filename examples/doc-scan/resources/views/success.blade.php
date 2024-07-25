@@ -293,7 +293,9 @@
                 </div>
             </div>
         @endif
-        @if ($sessionResult->getIdentityProfile())
+        @if (isset($sessionResult))
+        @if ($sessionResult->getIdentityProfile() != null)
+            @if ($sessionResult->getIdentityProfile()->getFailureReason() != null)
             @if ($sessionResult->getIdentityProfile()->getFailureReason()->getReasonCode())
             <div class="row pt-4">
                 <div class="col">
@@ -341,6 +343,8 @@
                     </tr>
                     </tbody>
                 </table>
+            @endif
+                    @endif
             @endif
             @endif
         @endif

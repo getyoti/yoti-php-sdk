@@ -11,7 +11,7 @@ class SuccessController extends BaseController
     public function show(Request $request, DocScanClient $client)
     {
         return view('success', [
-            'sessionResult' => $client->getSession('894a51f1-f8fc-4986-85e7-fb8a56d61388'),
+            'sessionResult' => $client->getSession($request->session()->get('YOTI_SESSION_ID')),
         ]);
     }
 }

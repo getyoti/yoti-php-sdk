@@ -62,7 +62,7 @@ class IdentityProfileResponse
     /**
      * @return FailureReasonResponse
      */
-    public function getFailureReason(): FailureReasonResponse
+    public function getFailureReason(): ?FailureReasonResponse
     {
         return $this->failureReason;
     }
