@@ -680,7 +680,7 @@ class PolicyBuilderTest extends TestCase
 
                         "label" => "identity-AL-L1",
                         "type" => "IDENTITY",
-                        "objective"=> "AL_L1"
+                        "objective" => "AL_L1"
                     ],
                         [
                             "label" => "identity-AL-M1",

@@ -6,6 +6,7 @@ use Yoti\Exception\DigitalIdentityException;
 use Yoti\Exception\EncryptedDataException;
 use Yoti\Identity\Content\Content;
 use Yoti\Util\DateTime;
+
 class WrappedReceipt
 {
     private string $id;
