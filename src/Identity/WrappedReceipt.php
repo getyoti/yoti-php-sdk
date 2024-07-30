@@ -115,12 +115,12 @@ class WrappedReceipt
         return $this->otherPartyContent->getExtraData();
     }
 
-    public function getWrappedItemKeyId(): string
+    public function getWrappedItemKeyId(): ?string
     {
         return $this->wrappedItemKeyId;
     }
 
-    public function getWrappedKey(): string
+    public function getWrappedKey(): ?string
     {
         return $this->wrappedKey;
     }

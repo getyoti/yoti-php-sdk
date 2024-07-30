@@ -58,20 +58,28 @@ class Receipt
 
     public function getProfile(): ?UserProfile
     {
-        return $this->userContent->getProfile();
+        if ($this->userContent !== null) {
+            return $this->userContent->getProfile();
+        } else {
+            return null;
+        }
     }
 
     public function getExtraData(): ?ExtraData
     {
-        return $this->userContent->getExtraData();
+        if ($this->userContent !== null) {
+            return $this->userContent->getExtraData();
+        } else {
+            return null;
+        }
     }
 
-    public function getApplicationContent(): ApplicationContent
+    public function getApplicationContent(): ?ApplicationContent
     {
         return $this->applicationContent;
     }
 
-    public function getUserContent(): UserContent
+    public function getUserContent(): ?UserContent
     {
         return $this->userContent;
     }

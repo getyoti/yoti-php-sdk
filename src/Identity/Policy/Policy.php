@@ -37,7 +37,7 @@ class Policy implements \JsonSerializable
      * @param int[] $wantedAuthTypes
      *   Auth types represents the authentication type to be used.
      * @param object $identityProfileRequirements
-     * @param object $advancedidentityProfileRequirements
+     * @param object $advancedIdentityProfileRequirements
      */
     public function __construct(
         array $wantedAttributes,

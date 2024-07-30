@@ -93,8 +93,11 @@ class ReceiptParser
             ->build();
     }
 
-    private function decryptReceiptKey(string $wrappedKey, ReceiptItemKey $wrappedItemKey, PemFile $pemFile): string
+    private function decryptReceiptKey(?string $wrappedKey, ReceiptItemKey $wrappedItemKey, PemFile $pemFile): string
     {
+        if ($wrappedKey == null) {
+            throw new EncryptedDataException('Wrapped is null');
+        }
         // Convert 'iv' and 'value' from base64 to binary
         $iv = (string)base64_decode($wrappedItemKey->getIv(), true);
         $encryptedItemKey = (string)base64_decode($wrappedItemKey->getValue(), true);

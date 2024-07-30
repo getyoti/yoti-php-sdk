@@ -313,10 +313,11 @@ class GetSessionResult
 
     public function getIdentityProfile(): ?IdentityProfileResponse
     {
-        if (isset($this->identityProfile))
+        if (isset($this->identityProfile)) {
             return $this->identityProfile;
-        else
+        } else {
             return null;
+        }
     }
 
     public function getIdentityProfilePreview(): ?IdentityProfilePreviewResponse
