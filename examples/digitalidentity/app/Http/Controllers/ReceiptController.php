@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\UserProfile;
 use Yoti\Util\Logger;
+use Yoti\Exception\ActivityDetailsException;
 class ReceiptController extends BaseController
 {
     public function show(Request $request, DigitalIdentityClient $client, ?LoggerInterface $logger = null)
@@ -17,14 +18,25 @@ class ReceiptController extends BaseController
 
         $logger->warning("Unknown Content Type parsing as a String");
         $shareReceipt = $client->fetchShareReceipt($request->query('ReceiptID'));
-
-        $profile = $shareReceipt->getProfile();
-
-        return view('receipt', [
-            'fullName' => $profile->getFullName(),
-            'selfie' => $profile->getSelfie(),
-            'profileAttributes' => $this->createAttributesDisplayList($profile),
-        ]);
+        if ($shareReceipt->getError() != null)
+        {
+            error_log($shareReceipt->getErrorReason()->getRequirementNotMetDetails()->getDocumentCountryIsoCode());
+            return view('receipt', [
+                'fullName' => null,
+                'selfie' => null,
+                'profileAttributes' => null,
+                'error' => $shareReceipt->getErrorReason()
+            ]);
+        }
+        else {
+            $profile = $shareReceipt->getProfile();
+            return view('receipt', [
+                'fullName' => $profile->getFullName(),
+                'selfie' => $profile->getSelfie(),
+                'profileAttributes' => $this->createAttributesDisplayList($profile),
+                'error' => null
+            ]);
+        }
     }
 
     /**

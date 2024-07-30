@@ -16,9 +16,9 @@ class ReceiptBuilder
 
     private \DateTime $timestamp;
 
-    private ApplicationContent $applicationContent;
+    private ?ApplicationContent $applicationContent = null;
 
-    private UserContent $userContent;
+    private ?UserContent $userContent = null;
 
     private ?string $rememberMeId = null;
 

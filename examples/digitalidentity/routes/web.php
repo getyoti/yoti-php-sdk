@@ -18,3 +18,5 @@ Route::get('/receipt-info', 'ReceiptController@show');
 Route::get('/generate-session', 'IdentityController@generateSession');
 Route::get('/generate-advanced-identity-share', 'AdvancedIdentityController@show');
 Route::get('/generate-advanced-identity-session', 'AdvancedIdentityController@generateSession');
+Route::get('/generate-dbs-share', 'DbsController@show');
+Route::get('/generate-dbs-session', 'DbsController@generateSession');

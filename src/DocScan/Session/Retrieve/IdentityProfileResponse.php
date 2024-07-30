@@ -31,7 +31,7 @@ class IdentityProfileResponse
      */
     public function __construct(array $sessionData)
     {
-        $this->subjectId = $sessionData['subject_id'];
+        $this->subjectId = $sessionData['subject_id'] ?? '';
         $this->result = $sessionData['result'];
 
         if (isset($sessionData['failure_reason'])) {
@@ -62,7 +62,7 @@ class IdentityProfileResponse
     /**
      * @return FailureReasonResponse
      */
-    public function getFailureReason(): FailureReasonResponse
+    public function getFailureReason(): ?FailureReasonResponse
     {
         return $this->failureReason;
     }

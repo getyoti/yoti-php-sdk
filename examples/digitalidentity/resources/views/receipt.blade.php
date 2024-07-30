@@ -36,10 +36,37 @@
         </section>
 
         <section class="yoti-attributes-section">
+
             <a href="/">
                 <img class="yoti-company-logo" src="/assets/images/company-logo.jpg" alt="company logo">
             </a>
+            @if ($error)
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute"><b>Errors</b></div>
+                    <div class="yoti-attribute-list-header-value"> </div>
+                </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Audit Id</div>
+                    <div class="yoti-attribute-list-header-value">{{ $error->getRequirementNotMetDetails()->getAuditId() }}</div>
+                </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Details</div>
+                    <div class="yoti-attribute-list-header-value">{{ $error->getRequirementNotMetDetails()->getDetails() }}</div>
+                </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Failure Type</div>
+                    <div class="yoti-attribute-list-header-value">{{ $error->getRequirementNotMetDetails()->getFailureType() }}</div>
+                </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Document Type</div>
+                    <div class="yoti-attribute-list-header-value">{{ $error->getRequirementNotMetDetails()->getDocumentType() }}</div>
+                </div>
+                <div class="yoti-attribute-list-header">
+                    <div class="yoti-attribute-list-header-attribute">Country</div>
+                    <div class="yoti-attribute-list-header-value">{{ $error->getRequirementNotMetDetails()->getDocumentCountryIsoCode() }}</div>
+                </div>
 
+            @endif
             <div class="yoti-attribute-list-header">
                 <div class="yoti-attribute-list-header-attribute">Attribute</div>
                 <div class="yoti-attribute-list-header-value">Value</div>
@@ -55,6 +82,7 @@
             </div>
 
             <div class="yoti-attribute-list">
+                @if(@$profileAttributes)
                 @foreach($profileAttributes as $item)
                     @if ($item['obj'])
                     <div class="yoti-attribute-list-item">
@@ -96,6 +124,7 @@
                     </div>
                     @endif
                 @endforeach
+                @endif
             </div>
         </section>
     </main>
