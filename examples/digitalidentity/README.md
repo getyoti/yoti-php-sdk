@@ -18,7 +18,7 @@ This example requires [Docker](https://docs.docker.com/)
 * Visit [https://localhost:4002](https://localhost:4002)
 * Run the `docker-compose stop` command to stop the containers.
 
-> To see how to retrieve a profile using share receipt, refer to the [digitalidentity controller](app/Http/Controllers/ReceiptController.php)
+> To see how to retrieve a profile using share receipt, refer to the [receipt controller](app/Http/Controllers/ReceiptController.php)
 ## Digital Identity Example
 * Visit [/generate-share](https://localhost:4002/generate-share)
 ## Digital Identity(Advanced) Share Example
