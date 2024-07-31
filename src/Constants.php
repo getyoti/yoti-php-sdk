@@ -15,6 +15,12 @@ class Constants
     /** Environment variable to override the default API URL */
     public const ENV_API_URL = 'YOTI_API_URL';
 
+    /** Default Digital Identity API URL */
+    public const DIGITAL_IDENTITY_API_URL = self::API_BASE_URL . '/share';
+
+    /** Environment variable to override the default Digital Identity API URL */
+    public const ENV_DIGITAL_IDENTITY_API_URL = 'YOTI_DIGITAL_IDENTITY_API_URL';
+
     /** Default Doc Scan API URL */
     public const DOC_SCAN_API_URL = self::API_BASE_URL . '/idverify/v1';
 
@@ -25,7 +31,7 @@ class Constants
     public const SDK_IDENTIFIER = 'PHP';
 
     /** Default SDK version */
-    public const SDK_VERSION = '4.2.2';
+    public const SDK_VERSION = '4.3.0';
 
     /** Base url for connect page (user will be redirected to this page eg. baseurl/app-id) */
     public const CONNECT_BASE_URL = 'https://www.yoti.com/connect';

@@ -56,18 +56,26 @@ class Json
         }
     }
 
-    public static function convert_from_latin1_to_utf8_recursively($dat)
+    /**
+     * Recursively converts data from Latin1 to UTF-8 encoding.
+     *
+     * @param mixed $dat
+     * @return mixed
+     */
+    public static function convertFromLatin1ToUtf8Recursively($dat)
     {
         if (is_string($dat)) {
             return utf8_encode($dat);
         } elseif (is_array($dat)) {
             $ret = [];
-            foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
-
+            foreach ($dat as $i => $d) {
+                $ret[$i] = self::convertFromLatin1ToUtf8Recursively($d);
+            }
             return $ret;
         } elseif (is_object($dat)) {
-            foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
-
+            foreach (get_object_vars($dat) as $i => $d) {
+                $dat->$i = self::convertFromLatin1ToUtf8Recursively($d);
+            }
             return $dat;
         } else {
             return $dat;

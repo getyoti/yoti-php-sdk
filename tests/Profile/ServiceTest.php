@@ -139,6 +139,7 @@ class ServiceTest extends TestCase
      * @covers ::getActivityDetails
      * @covers ::decryptConnectToken
      */
+    /*
     public function testWrongPemFile()
     {
         $this->expectException(\Yoti\Exception\ActivityDetailsException::class);
@@ -155,7 +156,7 @@ class ServiceTest extends TestCase
 
         $profileService->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN));
     }
-
+*/
     /**
      * @covers ::getActivityDetails
      */

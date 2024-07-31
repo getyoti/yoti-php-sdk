@@ -513,7 +513,7 @@ class DocScanClientTest extends TestCase
         $this->assertEquals('someStringHere', $sessionResult->getIdentityProfile()->getSubjectId());
         $this->assertEquals(
             'MANDATORY_DOCUMENT_COULD_NOT_BE_PROVIDED',
-            $sessionResult->getIdentityProfile()->getFailureReason()->getStringCode()
+            $sessionResult->getIdentityProfile()->getFailureReason()->getReasonCode()
         );
 
         $this->assertEquals(

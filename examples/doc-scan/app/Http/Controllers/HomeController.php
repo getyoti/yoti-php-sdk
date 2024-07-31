@@ -63,7 +63,7 @@ class HomeController extends BaseController
             ->withSources($searchProfileSources)
             ->withShareUrl(false)
             ->withRemoveDeceased(true)
-            ->withApiKey('qiKTHG7Mgqj31mK2d21F7QPpaVBp9zKc')
+            ->withApiKey('api-key')
             ->withClientRef("string")
             ->withMonitoring(true)
             ->withTags(['tag1'])
@@ -77,18 +77,30 @@ class HomeController extends BaseController
             ->withRemoveDeceased(true)
             ->build();
 
+        //Identity Profile Requeirements Object
+        /*$identityProfileRequirements = (object)[
+            'trust_framework' => 'UK_TFIDA',
+            'scheme' => [
+                'type' => 'DBS',
+                'objective' => 'BASIC'
+            ]
+        ];*/
 
         $sessionSpec = (new SessionSpecificationBuilder())
             ->withClientSessionTokenTtl(600)
-            ->withResourcesTtl(90000)
+            ->withResourcesTtl(604800)
             ->withUserTrackingId('some-user-tracking-id')
+            //For Identity Profile Requirements Object
+            //->withBlockBiometricConsent(false) //User needs to provide consent for the liveness detection
+            //->withIdentityProfileRequirements($identityProfileRequirements)
             ->withRequestedCheck(
                 (new RequestedDocumentAuthenticityCheckBuilder())
                     ->build()
             )
             ->withRequestedCheck(
                 (new RequestedLivenessCheckBuilder())
-                    ->forZoomLiveness()
+                    ->forStaticLiveness()
+                    ->withMaxRetries(3)
                     ->build()
             )
             ->withRequestedCheck(
@@ -98,7 +110,7 @@ class HomeController extends BaseController
             )
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withRequestedCheck(
@@ -116,20 +128,20 @@ class HomeController extends BaseController
             )
             ->withRequestedTask(
                 (new RequestedTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->withChipDataDesired()
                     ->withCreateExpandedDocumentFields(true)
                     ->build()
             )
             ->withRequestedTask(
                 (new RequestedSupplementaryDocTextExtractionTaskBuilder())
-                    ->withManualCheckAlways()
+                    ->withManualCheckFallback()
                     ->build()
             )
             ->withSdkConfig(
                 (new SdkConfigBuilder())
                     ->withAllowsCameraAndUpload()
-                    ->withPrimaryColour('#2d9fff')
+                    ->withPrimaryColour('#2875BC')
                     ->withSecondaryColour('#FFFFFF')
                     ->withFontColour('#FFFFFF')
                     ->withLocale('en-GB')

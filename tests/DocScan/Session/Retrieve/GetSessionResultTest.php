@@ -43,6 +43,16 @@ class GetSessionResultTest extends TestCase
         'result' => 'SOME_ANOTHER_STRING',
         'failure_reason' => [
             'reason_code' => 'ANOTHER_STRING',
+            'requirements_not_met_details' => [
+                0 => [
+                        'failure_type' => 'ANOTHER_STRING',
+                        'document_type' => 'ANOTHER_STRING',
+                        'document_country_iso_code' => 'ANOTHER_STRING',
+                        'audit_id' => 'ANOTHER_STRING',
+                        'details' => 'ANOTHER_STRING'
+                    ]
+
+            ]
         ],
         'identity_profile_report' => [],
     ];

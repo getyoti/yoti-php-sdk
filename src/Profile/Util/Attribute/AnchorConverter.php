@@ -115,8 +115,7 @@ class AnchorConverter
             }
         });
 
-        $decodedX509Data = Json::decode(Json::encode(Json::convert_from_latin1_to_utf8_recursively($X509Data)), false);
-
+        $decodedX509Data = Json::decode(Json::encode(Json::convertFromLatin1ToUtf8Recursively($X509Data)), false);
         // Ensure serial number is cast to string.
         // @see \phpseclib\Math\BigInteger::__toString()
         $decodedX509Data
