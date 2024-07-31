@@ -18,7 +18,10 @@ This example requires [Docker](https://docs.docker.com/)
 * Visit [https://localhost:4002](https://localhost:4002)
 * Run the `docker-compose stop` command to stop the containers.
 
-> To see how to retrieve activity details using the one time use token, refer to the [digitalidentity controller](app/Http/Controllers/IdentityController.php)
-
+> To see how to retrieve a profile using share receipt, refer to the [digitalidentity controller](app/Http/Controllers/ReceiptController.php)
 ## Digital Identity Example
 * Visit [/generate-share](https://localhost:4002/generate-share)
+## Digital Identity(Advanced) Share Example
+* Visit [/generate-advanced-identity-share](https://localhost:4002/generate-advanced-identity-share)
+* ## Digital Identity DBS Example
+* Visit [/generate-dbs-share](https://localhost:4002/generate-dbs-share)
