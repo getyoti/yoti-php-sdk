@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Yoti\DigitalIdentityClient;
-use Yoti\YotiClient;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\UserProfile;
 use Yoti\Util\Logger;
-use Yoti\Exception\ActivityDetailsException;
+
 class ReceiptController extends BaseController
 {
     public function show(Request $request, DigitalIdentityClient $client, ?LoggerInterface $logger = null)
