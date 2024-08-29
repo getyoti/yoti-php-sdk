@@ -7,6 +7,7 @@ namespace Yoti\Test;
 use GuzzleHttp\Psr7;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use Yoti\Aml\Address as AmlAddress;
 use Yoti\Aml\Country as AmlCountry;
@@ -122,8 +123,12 @@ class YotiClientTest extends TestCase
      */
     public function testGetActivityDetails()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(file_get_contents(TestData::RECEIPT_JSON));
+        $stream->method('__toString')->willReturn(file_get_contents(TestData::RECEIPT_JSON));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::RECEIPT_JSON));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -220,20 +225,21 @@ class YotiClientTest extends TestCase
      */
     public function testCustomLogger()
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $jsonstr = json_encode([
+            'receipt' => [
+                'timestamp'  => 'some invalid timestamp',
+                'wrapped_receipt_key' => 'some receipt key',
+                'sharing_outcome' => 'SUCCESS',
+            ]
+        ]);
 
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn($jsonstr);
+        $stream->method('__toString')->willReturn($jsonstr);
+
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
-        $response
-            ->method('getBody')
-            ->willReturn(
-                json_encode([
-                    'receipt' => [
-                        'timestamp'  => 'some invalid timestamp',
-                        'wrapped_receipt_key' => 'some receipt key',
-                        'sharing_outcome' => 'SUCCESS',
-                    ]
-                ])
-            );
 
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
