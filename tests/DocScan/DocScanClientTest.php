@@ -6,6 +6,7 @@ namespace Yoti\Test\DocScan;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Yoti\DocScan\DocScanClient;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
@@ -92,8 +93,12 @@ class DocScanClientTest extends TestCase
      */
     private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
     {
+        $stream = $this->createMock(\Psr\Http\Message\StreamInterface::class);
+        $stream->method('getContents')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $stream->method('__toString')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -126,8 +131,13 @@ class DocScanClientTest extends TestCase
      */
     public function testCreateSession()
     {
+        $stream = $this->createMock(\Psr\Http\Message\StreamInterface::class);
+        $stream->method('getContents')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $stream->method('__toString')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_CREATION_RESPONSE));
+        $response->method('getBody')->willReturn($stream);
+
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -155,8 +165,12 @@ class DocScanClientTest extends TestCase
      */
     public function testGetSession()
     {
+        $stream = $this->createMock(\Psr\Http\Message\StreamInterface::class);
+        $stream->method('getContents')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+        $stream->method('__toString')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -203,8 +217,13 @@ class DocScanClientTest extends TestCase
      */
     public function testGetMedia()
     {
+        $stream = $this->createMock(\Psr\Http\Message\StreamInterface::class);
+        $stream->method('getContents')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+        $stream->method('__toString')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(file_get_contents(TestData::DOC_SCAN_SESSION_RESPONSE));
+        $response->method('getBody')->willReturn($stream);
+
         $response->method('getStatusCode')->willReturn(200);
         $response->method('getHeader')->willReturn([ 'image/png' ]);
 
@@ -276,8 +295,12 @@ class DocScanClientTest extends TestCase
      */
     public function testGetSupportedDocuments()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -301,8 +324,12 @@ class DocScanClientTest extends TestCase
      */
     public function testCreateFaceCaptureResource()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(201);
 
         $createFaceCaptureResourcePayloadMock = $this->createMock(CreateFaceCaptureResourcePayload::class);
@@ -331,9 +358,14 @@ class DocScanClientTest extends TestCase
      */
     public function testUploadFaceCaptureImage()
     {
+
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn($stream);
         $uploadFaceCaptureImagePayloadMock = $this->createMock(UploadFaceCaptureImagePayload::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -358,8 +390,12 @@ class DocScanClientTest extends TestCase
      */
     public function testGetSessionConfiguration()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -383,9 +419,13 @@ class DocScanClientTest extends TestCase
      */
     public function testPutIbvInstructions()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn($stream);
         $instructionsMock = $this->createMock(Instructions::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -409,8 +449,12 @@ class DocScanClientTest extends TestCase
      */
     public function testGetIbvInstructions()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -433,8 +477,12 @@ class DocScanClientTest extends TestCase
      */
     public function testGetIbvInstructionsPdf()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -457,8 +505,12 @@ class DocScanClientTest extends TestCase
      */
     public function testFetchInstructionsContactProfile()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -481,8 +533,12 @@ class DocScanClientTest extends TestCase
      */
     public function testTriggerIbvEmailNotification()
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn(json_encode((object)[]));
+        $stream->method('__toString')->willReturn(json_encode((object)[]));
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn(json_encode((object)[]));
+        $response->method('getBody')->willReturn($stream);
         $response->method('getStatusCode')->willReturn(200);
 
         $httpClient = $this->createMock(ClientInterface::class);
