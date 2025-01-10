@@ -70,7 +70,14 @@ class SdkConfigBuilder
      * @var string|null
      */
     private $biometricConsentFlow;
-
+    /**
+     * @var string|null
+     */
+    private $darkMode;
+    /**
+     * @var string|null
+     */
+    private $primaryColourDarkMode;
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -199,6 +206,18 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withDarkMode(string $darkMode): self
+    {
+        $this->darkMode = $darkMode;
+        return $this;
+    }
+
+    public function withPrimaryColourDarkMode(string $primaryColourDarkMode): self
+    {
+        $this->primaryColourDarkMode = $primaryColourDarkMode;
+        return $this;
+    }
+
 
     public function build(): SdkConfig
     {
@@ -214,7 +233,9 @@ class SdkConfigBuilder
             $this->privacyPolicyUrl,
             $this->allowHandoff,
             $this->idDocumentTextDataExtractionRetriesConfig,
-            $this->biometricConsentFlow
+            $this->biometricConsentFlow,
+            $this->darkMode,
+            $this->primaryColourDarkMode,
         );
     }
 }

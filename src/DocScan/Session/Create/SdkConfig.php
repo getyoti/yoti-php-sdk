@@ -146,7 +146,7 @@ class SdkConfig implements \JsonSerializable
             'attempts_configuration' => $this->getAttemptsConfiguration(),
             'biometric_consent_flow' => $this->getBiometricConsentFlow(),
             'dark_mode' => $this->getDarkMode(),
-            'primary_colour_dark_mode' => $this->getPrimaryColour(),
+            'primary_colour_dark_mode' => $this->getPrimaryColourDarkMode(),
         ]);
     }
 
@@ -252,8 +252,8 @@ class SdkConfig implements \JsonSerializable
     {
         return $this->darkMode;
     }
-    public function getPrimaryColourDarkMode(): ?string{
+    public function getPrimaryColourDarkMode(): ?string
+    {
         return $this->primaryColourDarkMode;
     }
-
 }
