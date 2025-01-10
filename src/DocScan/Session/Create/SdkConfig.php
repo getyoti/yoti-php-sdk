@@ -69,6 +69,15 @@ class SdkConfig implements \JsonSerializable
     private $biometricConsentFlow;
 
     /**
+     * @var string|null
+     */
+    private $darkMode;
+    /**
+     * @var string|null
+     */
+    private $primaryColourDarkMode;
+
+    /**
      * @param string|null $allowedCaptureMethods
      * @param string|null $primaryColour
      * @param string|null $secondaryColour
@@ -81,6 +90,8 @@ class SdkConfig implements \JsonSerializable
      * @param bool|null $allowHandoff
      * @param array<string, int>|null $idDocumentTextDataExtractionRetriesConfig
      * @param string|null $biometricConsentFlow
+     * @param string|null $darkMode
+     * @param string|null $primaryColourDarkMode
      */
     public function __construct(
         ?string $allowedCaptureMethods,
@@ -94,7 +105,9 @@ class SdkConfig implements \JsonSerializable
         ?string $privacyPolicyUrl = null,
         ?bool $allowHandoff = null,
         ?array $idDocumentTextDataExtractionRetriesConfig = null,
-        ?string $biometricConsentFlow = null
+        ?string $biometricConsentFlow = null,
+        ?string $darkMode = null,
+        ?string $primaryColourDarkMode = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -110,6 +123,8 @@ class SdkConfig implements \JsonSerializable
             $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
         }
         $this->biometricConsentFlow = $biometricConsentFlow;
+        $this->darkMode = $darkMode;
+        $this->primaryColourDarkMode = $primaryColourDarkMode;
     }
 
     /**
@@ -129,7 +144,9 @@ class SdkConfig implements \JsonSerializable
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
             'allow_handoff' => $this->getAllowHandoff(),
             'attempts_configuration' => $this->getAttemptsConfiguration(),
-            'biometric_consent_flow' => $this->getBiometricConsentFlow()
+            'biometric_consent_flow' => $this->getBiometricConsentFlow(),
+            'dark_mode' => $this->getDarkMode(),
+            'primary_colour_dark_mode' => $this->getPrimaryColour(),
         ]);
     }
 
@@ -228,4 +245,15 @@ class SdkConfig implements \JsonSerializable
     {
         return $this->biometricConsentFlow;
     }
+    /**
+     * @return string|null
+     */
+    public function getDarkMode(): ?string
+    {
+        return $this->darkMode;
+    }
+    public function getPrimaryColourDarkMode(): ?string{
+        return $this->primaryColourDarkMode;
+    }
+
 }
