@@ -32,6 +32,7 @@ class WantedAttributeBuilderTest extends TestCase
         $wantedAttribute = (new WantedAttributeBuilder())
             ->withName($someName)
             ->withDerivation($someDerivation)
+            ->withOptional(false)
             ->build();
 
         $expectedJsonData = [
@@ -91,6 +92,7 @@ class WantedAttributeBuilderTest extends TestCase
         $wantedAttributeDefault = (new WantedAttributeBuilder())
             ->withName($someName)
             ->withAcceptSelfAsserted()
+            ->withOptional(false)
             ->build();
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($wantedAttributeDefault));
@@ -124,6 +126,7 @@ class WantedAttributeBuilderTest extends TestCase
         $wantedAttribute = (new WantedAttributeBuilder())
             ->withName($someName)
             ->withAcceptSelfAsserted(false)
+            ->withOptional(false)
             ->build();
 
         $this->assertEquals(json_encode($expectedJsonData), json_encode($wantedAttribute));
@@ -149,6 +152,7 @@ class WantedAttributeBuilderTest extends TestCase
 
         $wantedAttribute = (new WantedAttributeBuilder())
             ->withName($someName)
+            ->withOptional(false)
             ->withConstraints($constraints)
             ->build();
 

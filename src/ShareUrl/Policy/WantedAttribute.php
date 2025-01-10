@@ -108,7 +108,8 @@ class WantedAttribute implements \JsonSerializable
     /**
      * @return bool|null
      */
-    public function getOptional(): ?bool{
+    public function getOptional(): ?bool
+    {
         return $this->optional;
     }
 
