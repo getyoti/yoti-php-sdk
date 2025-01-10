@@ -84,6 +84,7 @@
         await Yoti.ready()
         await onReadyToStart()
     }</script>
-<script src="https://www.yoti.com/share/client/v2" onload="onClientLoaded()"></script>
+<script src="https://www.public.stg1.dmz.yoti.com/share/client/v2" onload="onClientLoaded()"></script>
+
 </body>
 </html>
