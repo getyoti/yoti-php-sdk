@@ -103,11 +103,12 @@ class HomeController extends BaseController
                     ->withMaxRetries(3)
                     ->build()
             )
+            /*
             ->withRequestedCheck(
                 (new RequestedWatchlistAdvancedCaCheckBuilder())
                     ->withConfig($customConfig)
                     ->build()
-            )
+            )*/
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
                     ->withManualCheckFallback()
@@ -150,6 +151,7 @@ class HomeController extends BaseController
                     ->withErrorUrl(config('app.url') . '/error')
                     ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
                     ->withBiometricConsentFlow('EARLY')
+
                     ->build()
             )
             ->withRequiredDocument(
