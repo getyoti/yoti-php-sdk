@@ -86,6 +86,7 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_PRIMARY_COLOUR_DARK_MODE, $result->getPrimaryColourDarkMode());
     }
 
+
     /**
      * @test
      * @covers ::withAllowsCamera
@@ -303,5 +304,43 @@ class SdkConfigBuilderTest extends TestCase
             $sdkConfig->getAttemptsConfiguration()
             ->getIdDocumentTextDataExtraction()
         );
+    }
+
+    /**
+     * @test
+     * @covers ::withDarkModeAuto
+     */
+    public function shouldSetCorrectValueWithDarkModeAuto()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeAuto()
+            ->build();
+
+        $this->assertEquals('AUTO', $result->getDarkMode());
+    }
+    /**
+     * @test
+     * @covers ::withDarkModeOn
+     */
+    public function shouldSetCorrectValueWithDarkModeOn()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeOn()
+            ->build();
+
+        $this->assertEquals('ON', $result->getDarkMode());
+    }
+
+    /**
+     * @test
+     * @covers ::withDarkModeOff
+     */
+    public function shouldSetCorrectValueWithDarkModeOff()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeOff()
+            ->build();
+
+        $this->assertEquals('OFF', $result->getDarkMode());
     }
 }

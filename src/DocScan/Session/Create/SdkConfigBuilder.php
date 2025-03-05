@@ -212,11 +212,31 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withDarkModeOn(): self
+    {
+        $this->darkMode = "ON";
+        return $this;
+    }
+
+    public function withDarkModeOff(): self
+    {
+        $this->darkMode = "OFF";
+        return $this;
+    }
+
+    public function withDarkModeAuto(): self
+    {
+        $this->darkMode = "AUTO";
+        return $this;
+    }
+
+
     public function withPrimaryColourDarkMode(string $primaryColourDarkMode): self
     {
         $this->primaryColourDarkMode = $primaryColourDarkMode;
         return $this;
     }
+
 
 
     public function build(): SdkConfig
