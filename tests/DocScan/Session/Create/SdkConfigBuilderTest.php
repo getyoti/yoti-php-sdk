@@ -25,6 +25,7 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_BIOMETRIC_CONSENT_FLOW = 'someBiometricConsentFlow';
     private const SOME_DARK_MODE = 'someDarkMode';
     private const SOME_PRIMARY_COLOUR_DARK_MODE = 'somePrimaryColourDarkMode';
+    private const SOME_BRAND_ID = 'someBrandId';
 
     /**
      * @test
@@ -39,6 +40,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withErrorUrl
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
+     * @covers ::withBrandId
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -52,6 +54,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getDarkMode
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColourDarkMode
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getBrandId
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -69,6 +72,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withBiometricConsentFlow(self::SOME_BIOMETRIC_CONSENT_FLOW)
             ->withDarkMode(self::SOME_DARK_MODE)
             ->withPrimaryColourDarkMode(self::SOME_PRIMARY_COLOUR_DARK_MODE)
+            ->withBrandId(self::SOME_BRAND_ID)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -84,8 +88,8 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertTrue($result->getAllowHandoff());
         $this->assertEquals(self::SOME_DARK_MODE, $result->getDarkMode());
         $this->assertEquals(self::SOME_PRIMARY_COLOUR_DARK_MODE, $result->getPrimaryColourDarkMode());
+        $this->assertEquals(self::SOME_BRAND_ID, $result->getBrandId());
     }
-
 
     /**
      * @test
@@ -318,6 +322,7 @@ class SdkConfigBuilderTest extends TestCase
 
         $this->assertEquals('AUTO', $result->getDarkMode());
     }
+  
     /**
      * @test
      * @covers ::withDarkModeOn
