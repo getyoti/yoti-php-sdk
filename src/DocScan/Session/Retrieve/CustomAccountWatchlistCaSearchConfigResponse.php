@@ -35,7 +35,9 @@ class CustomAccountWatchlistCaSearchConfigResponse extends WatchlistAdvancedCaSe
         $this->apiKey = $searchConfig['api_key'];
         $this->monitoring = $searchConfig['monitoring'];
         $this->clientRef = $searchConfig['client_ref'];
-        $this->tags = array_key_exists('tags', $searchConfig) ? json_decode($searchConfig['tags'], true) : [];
+        $this->tags = array_key_exists('tags', $searchConfig) && is_string($searchConfig['tags'])
+            ? json_decode($searchConfig['tags'], true)
+            : (array_key_exists('tags', $searchConfig) && is_array($searchConfig['tags']) ? $searchConfig['tags'] : []);
     }
 
     /**
