@@ -114,7 +114,7 @@ class SdkConfig implements \JsonSerializable
         ?array $idDocumentTextDataExtractionRetriesConfig = null,
         ?string $biometricConsentFlow = null,
         ?string $darkMode = null,
-        ?string $primaryColourDarkMode = null
+        ?string $primaryColourDarkMode = null,
         ?string $brandId = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
