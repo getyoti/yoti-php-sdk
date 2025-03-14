@@ -30,6 +30,10 @@ class WantedAttributeBuilder
     private $acceptSelfAsserted;
 
     /**
+     * @var bool|null
+     */
+    private $optional = false;
+    /**
      * @param string $name
      *
      * @return $this
@@ -74,6 +78,16 @@ class WantedAttributeBuilder
     }
 
     /**
+     * @param bool $optional
+     *
+     * @return $this
+     */
+    public function withOptional(?bool $optional = false): self
+    {
+        $this->optional = $optional;
+        return $this;
+    }
+    /**
      * @return \Yoti\ShareUrl\Policy\WantedAttribute
      */
     public function build(): WantedAttribute
@@ -82,7 +96,8 @@ class WantedAttributeBuilder
             $this->name,
             $this->derivation,
             $this->acceptSelfAsserted,
-            $this->constraints
+            $this->constraints,
+            $this->optional
         );
     }
 }
