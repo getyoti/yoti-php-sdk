@@ -23,6 +23,7 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_CATEGORY = 'someCategory';
     private const SOME_NUMBER_RETRIES = 5;
     private const SOME_BIOMETRIC_CONSENT_FLOW = 'someBiometricConsentFlow';
+    private const SOME_BRAND_ID = 'someBrandId';
 
 
     /**
@@ -38,6 +39,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withErrorUrl
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
+     * @covers ::withBrandId
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -49,6 +51,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getErrorUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrivacyPolicyUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getBrandId
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -63,6 +66,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withErrorUrl(self::SOME_ERROR_URL)
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->withAllowHandoff(true)
+            ->withBrandId(self::SOME_BRAND_ID)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -75,6 +79,7 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_ERROR_URL, $result->getErrorUrl());
         $this->assertEquals(self::SOME_PRIVACY_POLICY_URL, $result->getPrivacyPolicyUrl());
         $this->assertTrue($result->getAllowHandoff());
+        $this->assertEquals(self::SOME_BRAND_ID, $result->getBrandId());
     }
 
     /**
