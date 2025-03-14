@@ -71,6 +71,11 @@ class SdkConfigBuilder
      */
     private $biometricConsentFlow;
 
+    /**
+     * @var string|null
+     */
+    private $brandId;
+
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -199,6 +204,11 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withBrandId(string $brandId): self
+    {
+        $this->brandId = $brandId;
+        return $this;
+    }
 
     public function build(): SdkConfig
     {
@@ -214,7 +224,8 @@ class SdkConfigBuilder
             $this->privacyPolicyUrl,
             $this->allowHandoff,
             $this->idDocumentTextDataExtractionRetriesConfig,
-            $this->biometricConsentFlow
+            $this->biometricConsentFlow,
+            $this->brandId
         );
     }
 }
