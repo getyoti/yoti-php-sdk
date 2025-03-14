@@ -33,16 +33,23 @@ class WantedAttribute implements \JsonSerializable
     private $acceptSelfAsserted;
 
     /**
+     * @var bool|null
+     */
+    private $optional;
+
+    /**
      * @param string $name
      * @param string $derivation
      * @param bool $acceptSelfAsserted
      * @param \Yoti\ShareUrl\Policy\Constraints $constraints
+     * @param bool $optional
      */
     public function __construct(
         string $name,
         string $derivation = null,
         bool $acceptSelfAsserted = null,
-        Constraints $constraints = null
+        Constraints $constraints = null,
+        bool $optional = null
     ) {
         Validation::notEmptyString($name, 'name');
         $this->name = $name;
@@ -50,6 +57,7 @@ class WantedAttribute implements \JsonSerializable
         $this->derivation = $derivation;
         $this->acceptSelfAsserted = $acceptSelfAsserted;
         $this->constraints = $constraints;
+        $this->optional = $optional;
     }
 
     /**
@@ -98,6 +106,14 @@ class WantedAttribute implements \JsonSerializable
     }
 
     /**
+     * @return bool|null
+     */
+    public function getOptional(): ?bool
+    {
+        return $this->optional;
+    }
+
+    /**
      * @inheritDoc
      *
      * @return array<string, mixed>
@@ -106,7 +122,7 @@ class WantedAttribute implements \JsonSerializable
     {
         $json = [
             'name' => $this->getName(),
-            'optional' => false,
+            'optional' => $this->getOptional(),
         ];
 
         if ($this->getDerivation() !== null) {
@@ -120,6 +136,12 @@ class WantedAttribute implements \JsonSerializable
         if ($this->getAcceptSelfAsserted() !== null) {
             $json['accept_self_asserted'] = $this->getAcceptSelfAsserted();
         }
+
+        if ($this->getOptional() !== null) {
+            $json['optional'] = $this->getOptional();
+        }
+
+
 
         return $json;
     }
