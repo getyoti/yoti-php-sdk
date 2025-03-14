@@ -103,11 +103,12 @@ class HomeController extends BaseController
                     ->withMaxRetries(3)
                     ->build()
             )
+            /*
             ->withRequestedCheck(
                 (new RequestedWatchlistAdvancedCaCheckBuilder())
                     ->withConfig($customConfig)
                     ->build()
-            )
+            )*/
             ->withRequestedCheck(
                 (new RequestedFaceMatchCheckBuilder())
                     ->withManualCheckFallback()

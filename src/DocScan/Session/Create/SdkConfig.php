@@ -71,6 +71,16 @@ class SdkConfig implements \JsonSerializable
     /**
      * @var string|null
      */
+    private $darkMode;
+  
+    /**
+     * @var string|null
+     */
+    private $primaryColourDarkMode;
+  
+    /**
+     * @var string|null
+     */
     private $brandId;
 
     /**
@@ -86,6 +96,8 @@ class SdkConfig implements \JsonSerializable
      * @param bool|null $allowHandoff
      * @param array<string, int>|null $idDocumentTextDataExtractionRetriesConfig
      * @param string|null $biometricConsentFlow
+     * @param string|null $darkMode
+     * @param string|null $primaryColourDarkMode
      * @param string|null $brandId
      */
     public function __construct(
@@ -101,6 +113,8 @@ class SdkConfig implements \JsonSerializable
         ?bool $allowHandoff = null,
         ?array $idDocumentTextDataExtractionRetriesConfig = null,
         ?string $biometricConsentFlow = null,
+        ?string $darkMode = null,
+        ?string $primaryColourDarkMode = null,
         ?string $brandId = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
@@ -117,6 +131,8 @@ class SdkConfig implements \JsonSerializable
             $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
         }
         $this->biometricConsentFlow = $biometricConsentFlow;
+        $this->darkMode = $darkMode;
+        $this->primaryColourDarkMode = $primaryColourDarkMode;
         $this->brandId = $brandId;
     }
 
@@ -138,6 +154,8 @@ class SdkConfig implements \JsonSerializable
             'allow_handoff' => $this->getAllowHandoff(),
             'attempts_configuration' => $this->getAttemptsConfiguration(),
             'biometric_consent_flow' => $this->getBiometricConsentFlow(),
+            'dark_mode' => $this->getDarkMode(),
+            'primary_colour_dark_mode' => $this->getPrimaryColourDarkMode(),
             'brand_id' => $this->getBrandId()
         ]);
     }
@@ -236,6 +254,22 @@ class SdkConfig implements \JsonSerializable
     public function getBiometricConsentFlow(): ?string
     {
         return $this->biometricConsentFlow;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDarkMode(): ?string
+    {
+        return $this->darkMode;
+    }
+  
+    /**
+     * @return string|null
+     */
+    public function getPrimaryColourDarkMode(): ?string
+    {
+        return $this->primaryColourDarkMode;
     }
 
     /**
