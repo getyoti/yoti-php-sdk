@@ -23,7 +23,9 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_CATEGORY = 'someCategory';
     private const SOME_NUMBER_RETRIES = 5;
     private const SOME_BIOMETRIC_CONSENT_FLOW = 'someBiometricConsentFlow';
-
+    private const SOME_DARK_MODE = 'someDarkMode';
+    private const SOME_PRIMARY_COLOUR_DARK_MODE = 'somePrimaryColourDarkMode';
+    private const SOME_BRAND_ID = 'someBrandId';
 
     /**
      * @test
@@ -38,6 +40,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withErrorUrl
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
+     * @covers ::withBrandId
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -49,6 +52,9 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getErrorUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrivacyPolicyUrl
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getDarkMode
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColourDarkMode
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getBrandId
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
@@ -63,6 +69,10 @@ class SdkConfigBuilderTest extends TestCase
             ->withErrorUrl(self::SOME_ERROR_URL)
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->withAllowHandoff(true)
+            ->withBiometricConsentFlow(self::SOME_BIOMETRIC_CONSENT_FLOW)
+            ->withDarkMode(self::SOME_DARK_MODE)
+            ->withPrimaryColourDarkMode(self::SOME_PRIMARY_COLOUR_DARK_MODE)
+            ->withBrandId(self::SOME_BRAND_ID)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -74,7 +84,11 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_SUCCESS_URL, $result->getSuccessUrl());
         $this->assertEquals(self::SOME_ERROR_URL, $result->getErrorUrl());
         $this->assertEquals(self::SOME_PRIVACY_POLICY_URL, $result->getPrivacyPolicyUrl());
+        $this->assertEquals(self::SOME_BIOMETRIC_CONSENT_FLOW, $result->getBiometricConsentFlow());
         $this->assertTrue($result->getAllowHandoff());
+        $this->assertEquals(self::SOME_DARK_MODE, $result->getDarkMode());
+        $this->assertEquals(self::SOME_PRIMARY_COLOUR_DARK_MODE, $result->getPrimaryColourDarkMode());
+        $this->assertEquals(self::SOME_BRAND_ID, $result->getBrandId());
     }
 
     /**
@@ -121,6 +135,8 @@ class SdkConfigBuilderTest extends TestCase
             ->withPrivacyPolicyUrl(self::SOME_PRIVACY_POLICY_URL)
             ->withAllowHandoff(true)
             ->withBiometricConsentFlow(self::SOME_BIOMETRIC_CONSENT_FLOW)
+            ->withPrimaryColourDarkMode(self::SOME_PRIMARY_COLOUR_DARK_MODE)
+            ->withDarkMode(self::SOME_DARK_MODE)
             ->build();
 
         $expected = [
@@ -134,7 +150,9 @@ class SdkConfigBuilderTest extends TestCase
             'error_url' => self::SOME_ERROR_URL,
             'privacy_policy_url' => self::SOME_PRIVACY_POLICY_URL,
             'allow_handoff' => true,
-            'biometric_consent_flow' => self::SOME_BIOMETRIC_CONSENT_FLOW
+            'biometric_consent_flow' => self::SOME_BIOMETRIC_CONSENT_FLOW,
+            'dark_mode' => self::SOME_DARK_MODE,
+            'primary_colour_dark_mode' => self::SOME_PRIMARY_COLOUR_DARK_MODE
         ];
 
         $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
@@ -290,5 +308,44 @@ class SdkConfigBuilderTest extends TestCase
             $sdkConfig->getAttemptsConfiguration()
             ->getIdDocumentTextDataExtraction()
         );
+    }
+
+    /**
+     * @test
+     * @covers ::withDarkModeAuto
+     */
+    public function shouldSetCorrectValueWithDarkModeAuto()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeAuto()
+            ->build();
+
+        $this->assertEquals('AUTO', $result->getDarkMode());
+    }
+  
+    /**
+     * @test
+     * @covers ::withDarkModeOn
+     */
+    public function shouldSetCorrectValueWithDarkModeOn()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeOn()
+            ->build();
+
+        $this->assertEquals('ON', $result->getDarkMode());
+    }
+
+    /**
+     * @test
+     * @covers ::withDarkModeOff
+     */
+    public function shouldSetCorrectValueWithDarkModeOff()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withDarkModeOff()
+            ->build();
+
+        $this->assertEquals('OFF', $result->getDarkMode());
     }
 }

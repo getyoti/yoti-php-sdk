@@ -71,6 +71,21 @@ class SdkConfigBuilder
      */
     private $biometricConsentFlow;
 
+    /**
+     * @var string|null
+     */
+    private $darkMode;
+  
+    /**
+     * @var string|null
+     */
+    private $primaryColourDarkMode;
+
+    /**
+     * @var string|null
+     */
+    private $brandId;
+
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -146,6 +161,7 @@ class SdkConfigBuilder
         $this->biometricConsentFlow = $biometricConsentFlow;
         return $this;
     }
+  
     /**
      * Allows configuring the number of attempts permitted for text extraction on an ID document
      *
@@ -199,6 +215,41 @@ class SdkConfigBuilder
         return $this;
     }
 
+    public function withDarkMode(string $darkMode): self
+    {
+        $this->darkMode = $darkMode;
+        return $this;
+    }
+
+    public function withDarkModeOn(): self
+    {
+        $this->darkMode = "ON";
+        return $this;
+    }
+
+    public function withDarkModeOff(): self
+    {
+        $this->darkMode = "OFF";
+        return $this;
+    }
+
+    public function withDarkModeAuto(): self
+    {
+        $this->darkMode = "AUTO";
+        return $this;
+    }
+
+    public function withPrimaryColourDarkMode(string $primaryColourDarkMode): self
+    {
+        $this->primaryColourDarkMode = $primaryColourDarkMode;
+        return $this;
+    }
+
+    public function withBrandId(string $brandId): self
+    {
+        $this->brandId = $brandId;
+        return $this;
+    }
 
     public function build(): SdkConfig
     {
@@ -214,7 +265,10 @@ class SdkConfigBuilder
             $this->privacyPolicyUrl,
             $this->allowHandoff,
             $this->idDocumentTextDataExtractionRetriesConfig,
-            $this->biometricConsentFlow
+            $this->biometricConsentFlow,
+            $this->darkMode,
+            $this->primaryColourDarkMode,
+            $this->brandId
         );
     }
 }
