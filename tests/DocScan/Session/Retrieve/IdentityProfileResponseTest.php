@@ -42,7 +42,6 @@ class IdentityProfileResponseTest extends TestCase
      * @covers ::getFailureReason
      * @covers ::getResult
      * @covers ::getSubjectId
-     * @covers \Yoti\DocScan\Session\Retrieve\IdentityProfile\FailureReasonResponse::getStringCode
      * @covers \Yoti\DocScan\Session\Retrieve\IdentityProfile\FailureReasonResponse::__construct
      */
     public function shouldCreatedCorrectly(): void

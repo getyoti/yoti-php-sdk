@@ -27,7 +27,7 @@ Please feel free to reach out
 
 ## Requirements
 
-* PHP ^7.4 || ^8.0 || ^8.1
+* PHP ^7.4 || ^8.0 || ^8.1 || ^8.4
 * CURL PHP extension (must support TLSv1.2)
 
 ### Recommended (optional)

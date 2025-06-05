@@ -42,14 +42,14 @@ class ReceiptBuilder
         return $this;
     }
 
-    public function withRememberMeId(string $rememberMeId = null): self
+    public function withRememberMeId(?string $rememberMeId = null): self
     {
         $this->rememberMeId = $rememberMeId;
 
         return $this;
     }
 
-    public function withParentRememberMeId(string $parentRememberMeId = null): self
+    public function withParentRememberMeId(?string $parentRememberMeId = null): self
     {
         $this->parentRememberMeId = $parentRememberMeId;
 
@@ -63,28 +63,28 @@ class ReceiptBuilder
         return $this;
     }
 
-    public function withApplicationContent(ApplicationProfile $profile, ExtraData $extraData = null): self
+    public function withApplicationContent(ApplicationProfile $profile, ?ExtraData $extraData = null): self
     {
         $this->applicationContent = new ApplicationContent($profile, $extraData);
 
         return $this;
     }
 
-    public function withUserContent(UserProfile $profile = null, ExtraData $extraData = null): self
+    public function withUserContent(?UserProfile $profile = null, ?ExtraData $extraData = null): self
     {
         $this->userContent = new UserContent($profile, $extraData);
 
         return $this;
     }
 
-    public function withError(string $error = null): self
+    public function withError(?string $error = null): self
     {
         $this->error = $error;
 
         return $this;
     }
 
-    public function withErrorReason(ErrorReason $errorReason = null): self
+    public function withErrorReason(?ErrorReason $errorReason = null): self
     {
         $this->errorReason = $errorReason;
 

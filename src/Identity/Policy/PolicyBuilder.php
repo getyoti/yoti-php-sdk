@@ -51,8 +51,8 @@ class PolicyBuilder
      */
     public function withWantedAttributeByName(
         string $name,
-        array $constraints = null,
-        bool $acceptSelfAsserted = null
+        ?array $constraints = null,
+        ?bool $acceptSelfAsserted = null
     ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName($name);
@@ -71,7 +71,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withFamilyName(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withFamilyName(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_FAMILY_NAME,
@@ -83,7 +83,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withGivenNames(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withGivenNames(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_GIVEN_NAMES,
@@ -95,7 +95,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withFullName(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withFullName(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_FULL_NAME,
@@ -107,7 +107,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withDateOfBirth(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDateOfBirth(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DATE_OF_BIRTH,
@@ -119,7 +119,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withAgeOver(int $age, array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withAgeOver(int $age, ?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
             UserProfile::AGE_OVER . $age,
@@ -131,7 +131,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withAgeUnder(int $age, array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withAgeUnder(int $age, ?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
             UserProfile::AGE_UNDER . $age,
@@ -145,8 +145,8 @@ class PolicyBuilder
      */
     public function withAgeDerivedAttribute(
         string $derivation,
-        array $constraints = null,
-        bool $acceptSelfAsserted = null
+        ?array $constraints = null,
+        ?bool $acceptSelfAsserted = null
     ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName(UserProfile::ATTR_DATE_OF_BIRTH)
@@ -166,7 +166,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withGender(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withGender(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_GENDER,
@@ -178,7 +178,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withPostalAddress(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withPostalAddress(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_POSTAL_ADDRESS,
@@ -190,7 +190,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withStructuredPostalAddress(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withStructuredPostalAddress(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
@@ -202,7 +202,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withNationality(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withNationality(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_NATIONALITY,
@@ -214,7 +214,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withPhoneNumber(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withPhoneNumber(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_PHONE_NUMBER,
@@ -226,7 +226,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withSelfie(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withSelfie(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_SELFIE,
@@ -238,7 +238,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withDocumentDetails(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDocumentDetails(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DOCUMENT_DETAILS,
@@ -250,7 +250,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withDocumentImages(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDocumentImages(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DOCUMENT_IMAGES,
@@ -262,7 +262,7 @@ class PolicyBuilder
     /**
      * @param Constraint[]|null $constraints
      */
-    public function withEmail(array $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withEmail(?array $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_EMAIL_ADDRESS,

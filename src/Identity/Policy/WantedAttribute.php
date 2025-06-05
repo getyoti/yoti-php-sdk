@@ -29,10 +29,10 @@ class WantedAttribute implements \JsonSerializable
      */
     public function __construct(
         string $name,
-        string $derivation = null,
+        ?string $derivation = null,
         bool $optional = false,
-        bool $acceptSelfAsserted = null,
-        array $constraints = null
+        ?bool $acceptSelfAsserted = null,
+        ?array $constraints = null
     ) {
         Validation::notEmptyString($name, 'name');
         $this->name = $name;

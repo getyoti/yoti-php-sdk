@@ -2,14 +2,15 @@ name: Unit Tests
 on: [ push, pull_request_target ]
 
 jobs:
+  # This job will run tests for PHP 8.1
   php8-1:
     name: Unit Tests php8.1 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:
@@ -31,13 +32,44 @@ jobs:
 
       - run: composer test
 
+  # Add a new job for PHP 8.4
+  php8-4:
+    name: Unit Tests php8.4 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # The 'if' condition should be the same as your other PHP version jobs
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.4 ] # Specify PHP 8.4 here
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Use shivammathur/setup-php to install PHP 8.4
+      - uses: shivammathur/setup-php@2.9.0 # Ensure you are using a version of setup-php that supports 8.4
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      # You might or might not need the php-cs-fixer removal depending on its 8.4 compatibility
+      # - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+  # This job will run tests for PHP 7.4
   php7-4:
     name: Unit Tests php7.4 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
+      github.event_name == 'push' ||
       github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
@@ -57,13 +89,14 @@ jobs:
 
       - run: composer test
 
+  # This job will run tests for PHP 8.0
   php8-0:
     name: Unit Tests php8.0 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
+      github.event_name == 'push' ||
       github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
@@ -83,18 +116,19 @@ jobs:
 
       - run: composer test
 
+  # This job runs tests with the Protobuf C Extension
   protobuf:
     name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ 8.1 ]
+        php-version: [ 8.1 ] # You might want to add 8.4 here as well if Protobuf supports it
 
     steps:
       - uses: actions/checkout@v2
@@ -109,4 +143,3 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-

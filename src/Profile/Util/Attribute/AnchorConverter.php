@@ -61,7 +61,14 @@ class AnchorConverter
         $encodedBER = ASN1::extractBER($extEncodedValue);
         $decodedValArr = ASN1::decodeBER($encodedBER);
         if (isset($decodedValArr[0]['content'][0]['content'])) {
-            return $decodedValArr[0]['content'][0]['content'];
+            $value = $decodedValArr[0]['content'][0]['content'];
+            if (is_string($value) && $value !== '' && ord($value[0]) < 32) {
+                return substr($value, 1);
+            }
+            if (is_object($value) && method_exists($value, 'getContent')) {
+                $value = $value->getContent();
+            }
+            return (string) $value;
         }
         return '';
     }
