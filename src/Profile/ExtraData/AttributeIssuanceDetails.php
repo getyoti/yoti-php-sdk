@@ -25,10 +25,10 @@ class AttributeIssuanceDetails
 
     /**
      * @param string $token
-     * @param \DateTime $expiryDate
+     * @param \DateTime|null $expiryDate
      * @param \Yoti\Profile\ExtraData\AttributeDefinition[] $issuingAttributes
      */
-    public function __construct(string $token, \DateTime $expiryDate = null, array $issuingAttributes = [])
+    public function __construct(string $token, ?\DateTime $expiryDate = null, array $issuingAttributes = [])
     {
         $this->token = $token;
 

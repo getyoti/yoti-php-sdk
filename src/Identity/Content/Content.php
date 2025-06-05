@@ -9,7 +9,7 @@ class Content
     private ?string $profile;
     private ?string $extraData;
 
-    public function __construct(string $profile = null, string $extraData = null)
+    public function __construct(?string $profile = null, ?string $extraData = null)
     {
         $this->profile = $profile;
         $this->extraData = $extraData;

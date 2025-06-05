@@ -81,18 +81,27 @@ class JsonTest extends TestCase
      */
     public function testConvertFromLatin1ToUtf8Recursively()
     {
-        $latin1String = utf8_decode('éàê');
-        $latin1Array = [utf8_decode('éàê'), utf8_decode('çî')];
-        $nestedLatin1Array = [utf8_decode('éàê'), [utf8_decode('çî'), utf8_decode('üñ')]];
+        $latin1String = mb_convert_encoding('éàê', 'ISO-8859-1', 'UTF-8');
+        $latin1Array = [
+            mb_convert_encoding('éàê', 'ISO-8859-1', 'UTF-8'),
+            mb_convert_encoding('çî', 'ISO-8859-1', 'UTF-8')
+        ];
+        $nestedLatin1Array = [
+            mb_convert_encoding('éàê', 'ISO-8859-1', 'UTF-8'),
+            [
+                mb_convert_encoding('çî', 'ISO-8859-1', 'UTF-8'),
+                mb_convert_encoding('üñ', 'ISO-8859-1', 'UTF-8')
+            ]
+        ];
 
         $latin1Object = new \stdClass();
-        $latin1Object->property1 = utf8_decode('éàê');
-        $latin1Object->property2 = utf8_decode('çî');
+        $latin1Object->property1 = mb_convert_encoding('éàê', 'ISO-8859-1', 'UTF-8');
+        $latin1Object->property2 = mb_convert_encoding('çî', 'ISO-8859-1', 'UTF-8');
 
         $nestedLatin1Object = new \stdClass();
-        $nestedLatin1Object->property = utf8_decode('çî');
+        $nestedLatin1Object->property = mb_convert_encoding('çî', 'ISO-8859-1', 'UTF-8');
         $latin1ObjectWithNestedObject = new \stdClass();
-        $latin1ObjectWithNestedObject->property1 = utf8_decode('éàê');
+        $latin1ObjectWithNestedObject->property1 = mb_convert_encoding('éàê', 'ISO-8859-1', 'UTF-8');
         $latin1ObjectWithNestedObject->property2 = $nestedLatin1Object;
 
         $this->assertSame('éàê', Json::convertFromLatin1ToUtf8Recursively($latin1String));
