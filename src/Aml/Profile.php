@@ -50,7 +50,7 @@ class Profile implements \JsonSerializable
      * @param \Yoti\Aml\Address $amlAddress
      * @param null|string $ssn
      */
-    public function __construct($givenNames, $familyName, Address $amlAddress, string $ssn = null)
+    public function __construct(string $givenNames, string $familyName, Address $amlAddress, ?string $ssn = null)
     {
         $this->givenNames = $givenNames;
         $this->familyName = $familyName;

@@ -75,7 +75,7 @@ class SdkConfigBuilder
      * @var string|null
      */
     private $darkMode;
-  
+
     /**
      * @var string|null
      */
@@ -161,7 +161,7 @@ class SdkConfigBuilder
         $this->biometricConsentFlow = $biometricConsentFlow;
         return $this;
     }
-  
+
     /**
      * Allows configuring the number of attempts permitted for text extraction on an ID document
      *

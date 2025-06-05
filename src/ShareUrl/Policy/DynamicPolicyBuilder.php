@@ -77,8 +77,8 @@ class DynamicPolicyBuilder
      */
     public function withWantedAttributeByName(
         string $name,
-        Constraints $constraints = null,
-        bool $acceptSelfAsserted = null
+        ?Constraints $constraints = null,
+        ?bool $acceptSelfAsserted = null
     ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName($name);
@@ -100,7 +100,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withFamilyName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withFamilyName(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_FAMILY_NAME,
@@ -115,7 +115,7 @@ class DynamicPolicyBuilder
      *
      * @return self
      */
-    public function withGivenNames(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withGivenNames(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_GIVEN_NAMES,
@@ -130,7 +130,7 @@ class DynamicPolicyBuilder
      *
      * @return self
      */
-    public function withFullName(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withFullName(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_FULL_NAME,
@@ -145,7 +145,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withDateOfBirth(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDateOfBirth(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DATE_OF_BIRTH,
@@ -161,7 +161,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withAgeOver(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withAgeOver(int $age, ?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
             UserProfile::AGE_OVER . (string) $age,
@@ -177,7 +177,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withAgeUnder(int $age, Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withAgeUnder(int $age, ?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withAgeDerivedAttribute(
             UserProfile::AGE_UNDER . (string) $age,
@@ -195,8 +195,8 @@ class DynamicPolicyBuilder
      */
     public function withAgeDerivedAttribute(
         string $derivation,
-        Constraints $constraints = null,
-        bool $acceptSelfAsserted = null
+        ?Constraints $constraints = null,
+        ?bool $acceptSelfAsserted = null
     ): self {
         $wantedAttributeBuilder = (new WantedAttributeBuilder())
             ->withName(UserProfile::ATTR_DATE_OF_BIRTH)
@@ -216,7 +216,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withGender(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withGender(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_GENDER,
@@ -231,7 +231,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withPostalAddress(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_POSTAL_ADDRESS,
@@ -246,7 +246,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withStructuredPostalAddress(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withStructuredPostalAddress(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
@@ -261,7 +261,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withNationality(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withNationality(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_NATIONALITY,
@@ -276,7 +276,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withPhoneNumber(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withPhoneNumber(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_PHONE_NUMBER,
@@ -291,7 +291,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withSelfie(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withSelfie(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_SELFIE,
@@ -306,7 +306,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withDocumentDetails(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDocumentDetails(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DOCUMENT_DETAILS,
@@ -321,7 +321,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withDocumentImages(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withDocumentImages(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_DOCUMENT_IMAGES,
@@ -336,7 +336,7 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withEmail(Constraints $constraints = null, bool $acceptSelfAsserted = null): self
+    public function withEmail(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
     {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_EMAIL_ADDRESS,
@@ -411,7 +411,7 @@ class DynamicPolicyBuilder
      * @param object $advancedIdentityProfileRequirements
      * @return $this
      */
-    public function withAdvancedIdentityProfileRequirements($advancedIdentityProfileRequirements): self
+    public function withAdvIdentityProfileReqs($advancedIdentityProfileRequirements): self
     {
         $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
         return $this;

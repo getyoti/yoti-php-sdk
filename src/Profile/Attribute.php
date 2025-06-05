@@ -36,7 +36,7 @@ class Attribute
      * @param Anchor[] $anchors
      * @param string|null $id
      */
-    public function __construct(string $name, $value, array $anchors, string $id = null)
+    public function __construct(string $name, $value, array $anchors, ?string $id = null)
     {
         $this->name = $name;
         $this->value = $value;
