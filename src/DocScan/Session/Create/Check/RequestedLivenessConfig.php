@@ -23,7 +23,7 @@ class RequestedLivenessConfig implements RequestedCheckConfigInterface
      */
     private $manualCheck;
 
-    public function __construct(string $livenessType, int $maxRetries, string $manualCheck = null)
+    public function __construct(string $livenessType, int $maxRetries, ?string $manualCheck = null)
     {
         $this->livenessType = $livenessType;
         $this->maxRetries = $maxRetries;

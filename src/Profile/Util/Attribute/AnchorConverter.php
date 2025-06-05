@@ -60,8 +60,31 @@ class AnchorConverter
     {
         $encodedBER = ASN1::extractBER($extEncodedValue);
         $decodedValArr = ASN1::decodeBER($encodedBER);
+
         if (isset($decodedValArr[0]['content'][0]['content'])) {
-            return $decodedValArr[0]['content'][0]['content'];
+            $value = $decodedValArr[0]['content'][0]['content'];
+
+            if (!is_string($value)) {
+                return '';
+            }
+
+            $detectionOrder = mb_detect_order();
+            $encoding = mb_detect_encoding($value, is_array($detectionOrder) ? $detectionOrder : null, true);
+
+            if (is_string($encoding)) {
+                if ($encoding !== 'UTF-8') {
+                    // PHPStan implies $value is string, $encoding is valid string, so result is string.
+                    return mb_convert_encoding($value, 'UTF-8', $encoding);
+                }
+                // It is UTF-8
+                return $value;
+            } else { // $encoding is false (detection failed)
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    // PHPStan implies $value is string, so result is string.
+                    return mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+                }
+                return $value; // It's valid UTF-8 despite detection failing
+            }
         }
         return '';
     }
@@ -108,16 +131,28 @@ class AnchorConverter
         $X509 = new X509();
         $X509Data = $X509->loadX509($certificate);
 
-        /** We need because of new 3.0 version phpseclib @link https://github.com/phpseclib/phpseclib/issues/1738 */
         array_walk_recursive($X509Data, function (&$item): void {
-            if (is_string($item) && mb_detect_encoding($item) != 'ASCII') {
-                $item = base64_encode($item);
+            if (is_string($item)) {
+                $detectionOrder = mb_detect_order();
+                $encoding = mb_detect_encoding($item, is_array($detectionOrder) ? $detectionOrder : null, true);
+
+                if (is_string($encoding)) {
+                    if ($encoding !== 'UTF-8' && $encoding !== 'ASCII') {
+                        // PHPStan implies $item is string, $encoding is valid string, so result is string.
+                        // The 'else' branch for base64_encode was deemed unreachable by PHPStan.
+                        $item = mb_convert_encoding($item, 'UTF-8', $encoding);
+                    }
+                    // If $encoding is 'UTF-8' or 'ASCII', $item is left as is.
+                } else { // $encoding is false (detection failed)
+                    if (!mb_check_encoding($item, 'UTF-8') && !mb_check_encoding($item, 'ASCII')) {
+                        $item = base64_encode($item);
+                    }
+                    // If it's valid UTF-8/ASCII despite detection failing, $item is left as is.
+                }
             }
         });
 
         $decodedX509Data = Json::decode(Json::encode(Json::convertFromLatin1ToUtf8Recursively($X509Data)), false);
-        // Ensure serial number is cast to string.
-        // @see \phpseclib\Math\BigInteger::__toString()
         $decodedX509Data
             ->tbsCertificate
             ->serialNumber

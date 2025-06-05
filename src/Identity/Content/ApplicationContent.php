@@ -10,7 +10,7 @@ class ApplicationContent
     private ?ApplicationProfile $profile;
     private ?ExtraData $extraData;
 
-    public function __construct(ApplicationProfile $profile = null, ExtraData $extraData = null)
+    public function __construct(?ApplicationProfile $profile = null, ?ExtraData $extraData = null)
     {
         $this->profile = $profile;
         $this->extraData = $extraData;

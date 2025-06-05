@@ -10,7 +10,7 @@ class UserContent
     private ?UserProfile $profile;
     private ?ExtraData $extraData;
 
-    public function __construct(UserProfile $profile = null, ExtraData $extraData = null)
+    public function __construct(?UserProfile $profile = null, ?ExtraData $extraData = null)
     {
         $this->profile = $profile;
         $this->extraData = $extraData;

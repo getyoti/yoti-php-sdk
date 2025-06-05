@@ -25,7 +25,7 @@ class ActivityDetailsException extends YotiException
         $message = "",
         ?ResponseInterface $response = null,
         ?array $responseBody = null,
-        \Throwable $previous = null
+        ?\Throwable $previous = null
     ) {
         parent::__construct($message, $response, $previous);
 
