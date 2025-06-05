@@ -246,8 +246,10 @@ class DynamicPolicyBuilder
      *
      * @return $this
      */
-    public function withStructuredPostalAddress(?Constraints $constraints = null, ?bool $acceptSelfAsserted = null): self
-    {
+    public function withStructuredPostalAddress(
+        ?Constraints $constraints = null,
+        ?bool $acceptSelfAsserted = null
+    ): self {
         return $this->withWantedAttributeByName(
             UserProfile::ATTR_STRUCTURED_POSTAL_ADDRESS,
             $constraints,
