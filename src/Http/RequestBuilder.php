@@ -75,7 +75,7 @@ class RequestBuilder
     /**
      * @param \Yoti\Util\Config $config
      */
-    public function __construct(Config $config = null)
+    public function __construct(?Config $config = null)
     {
         $this->config = $config ?? new Config();
     }

@@ -15,7 +15,7 @@ class RequestSigner
      * @param \Yoti\Util\PemFile $pemFile
      * @param string $endpoint
      * @param string $httpMethod
-     * @param \Yoti\Http\Payload|NULL $payload
+     * @param \Yoti\Http\Payload|null $payload
      *
      * @return string
      *   The base64 encoded signed message
@@ -26,7 +26,7 @@ class RequestSigner
         PemFile $pemFile,
         string $endpoint,
         string $httpMethod,
-        Payload $payload = null
+        ?Payload $payload = null
     ): string {
         $messageToSign = "{$httpMethod}&$endpoint";
         if ($payload instanceof Payload) {
