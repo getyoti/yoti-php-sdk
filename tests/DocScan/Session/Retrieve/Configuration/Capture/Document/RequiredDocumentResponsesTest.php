@@ -45,14 +45,14 @@ class RequiredDocumentResponsesTest extends TestCase
      * @test
      * @covers ::createTaskFromArray
      * @covers ::getRequestedTasks
-     * @covers \RequiredIdDocumentResourceResponse::__construct
-     * @covers \RequiredIdDocumentResourceResponse::getSupportedCountries
-     * @covers \RequiredIdDocumentResourceResponse::getAllowedCaptureMethods
-     * @covers \RequiredIdDocumentResourceResponse::getAttemptsRemaining
-     * @covers \RequiredSupplementaryDocumentResourceResponse::__construct
-     * @covers \RequiredSupplementaryDocumentResourceResponse::getDocumentTypes
-     * @covers \RequiredSupplementaryDocumentResourceResponse::getCountryCodes
-     * @covers \RequiredSupplementaryDocumentResourceResponse::getObjective
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse::__construct
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse::getSupportedCountries
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse::getAllowedCaptureMethods
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredIdDocumentResourceResponse::getAttemptsRemaining
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse::__construct
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse::getDocumentTypes
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse::getCountryCodes
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Document\RequiredSupplementaryDocumentResourceResponse::getObjective
      */
     public function shouldBuildCorrectly()
     {

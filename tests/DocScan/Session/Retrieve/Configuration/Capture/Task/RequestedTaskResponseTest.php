@@ -19,8 +19,8 @@ class RequestedTaskResponseTest extends TestCase
      * @test
      * @covers ::getType
      * @covers ::getState
-     * @covers \RequestedIdDocTaskResponse::__construct
-     * @covers \RequestedSupplementaryDocTaskResponse::__construct
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedIdDocTaskResponse::__construct
+     * @covers \Yoti\DocScan\Session\Retrieve\Configuration\Capture\Task\RequestedSupplementaryDocTaskResponse::__construct
      */
     public function shouldBuildCorrectly()
     {

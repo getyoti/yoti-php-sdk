@@ -14,7 +14,6 @@ class ReceiptItemKeyTest extends TestCase
      * @covers ::getId
      * @covers ::getIv
      * @covers ::getValue
-     * @covers ::setIv
      * @covers ::__construct
      */
     public function testShouldBuildCorrectly()
