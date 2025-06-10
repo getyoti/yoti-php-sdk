@@ -10,7 +10,7 @@ class ImportTokenBuilder
 
     private int $ttl;
 
-    public function withTtl(int $ttl = null): ImportTokenBuilder
+    public function withTtl(?int $ttl = null): ImportTokenBuilder
     {
         $this->ttl = $ttl ?? self::DEFAULT_TTL;
 

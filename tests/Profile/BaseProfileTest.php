@@ -138,7 +138,7 @@ class BaseProfileTest extends TestCase
 
         $givenNamesAttribute = new ProtobufAttribute([
             'name' => self::SOME_ATTRIBUTE,
-            'value' => utf8_decode('Alan'),
+            'value' => mb_convert_encoding('Alan', 'ISO-8859-1', 'UTF-8'),
             'content_type' => self::CONTENT_TYPE_STRING,
         ]);
         $newAttribute = AttributeConverter::convertToYotiAttribute($givenNamesAttribute);

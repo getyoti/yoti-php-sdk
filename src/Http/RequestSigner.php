@@ -26,7 +26,7 @@ class RequestSigner
         PemFile $pemFile,
         string $endpoint,
         string $httpMethod,
-        Payload $payload = null
+        ?Payload $payload = null
     ): string {
         $messageToSign = "{$httpMethod}&$endpoint";
         if ($payload instanceof Payload) {

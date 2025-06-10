@@ -73,9 +73,9 @@ class RequestBuilder
     private $multipartEntity;
 
     /**
-     * @param \Yoti\Util\Config $config
+     * @param \Yoti\Util\Config|null $config
      */
-    public function __construct(Config $config = null)
+    public function __construct(?Config $config = null)
     {
         $this->config = $config ?? new Config();
     }
