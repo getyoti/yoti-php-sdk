@@ -322,7 +322,7 @@ class SdkConfigBuilderTest extends TestCase
 
         $this->assertEquals('AUTO', $result->getDarkMode());
     }
-  
+
     /**
      * @test
      * @covers ::withDarkModeOn

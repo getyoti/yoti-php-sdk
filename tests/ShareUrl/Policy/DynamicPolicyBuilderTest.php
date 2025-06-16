@@ -719,7 +719,7 @@ class DynamicPolicyBuilderTest extends TestCase
         ];
 
         $dynamicPolicy = (new DynamicPolicyBuilder())
-            ->withAdvancedIdentityProfileRequirements($advancedIdentityProfileSample)
+            ->withAdvIdentityProfileReqs($advancedIdentityProfileSample)
             ->build();
 
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($dynamicPolicy));

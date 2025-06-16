@@ -20,7 +20,7 @@ class YotiException extends \Exception
      * @param ResponseInterface|null $response
      * @param \Throwable|null $previous
      */
-    public function __construct($message = "", ?ResponseInterface $response = null, \Throwable $previous = null)
+    public function __construct($message = "", ?ResponseInterface $response = null, ?\Throwable $previous = null)
     {
         parent::__construct($this->formatMessage($message, $response), 0, $previous);
 

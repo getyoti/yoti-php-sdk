@@ -31,6 +31,36 @@ jobs:
 
       - run: composer test
 
+  php8-4:
+    name: Unit Tests php8.4 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    # always run on push events
+    # only run on pull_request_target event when pull request pulls from fork repository
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.4 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      # Remove php-cs-fixer until compatible with PHP 8
+      # This step might be removable if php-cs-fixer is compatible with 8.4 by the time this runs
+      - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
   php7-4:
     name: Unit Tests php7.4 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
@@ -109,4 +139,3 @@ jobs:
       - run: composer install --no-interaction --prefer-source --dev
 
       - run: composer test
-

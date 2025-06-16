@@ -21,6 +21,11 @@ class ResultTest extends TestCase
      */
     public $amlResult;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Psr\Http\Message\ResponseInterface
+     */
+    private $responseMock;
+
     public function setup(): void
     {
         $this->responseMock = $this->createMock(ResponseInterface::class);

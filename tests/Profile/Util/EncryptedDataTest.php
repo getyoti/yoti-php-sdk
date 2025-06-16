@@ -29,6 +29,11 @@ class EncrypedDataTest extends TestCase
     private $wrappedKey;
 
     /**
+     * @var \Yoti\Protobuf\Compubapi\EncryptedData
+     */
+    private $encryptedDataProto;
+
+    /**
      * Setup test data.
      */
     public function setup(): void
