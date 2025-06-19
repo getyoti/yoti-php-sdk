@@ -3,7 +3,7 @@ on: [ push, pull_request_target ]
 
 jobs:
   php8-1:
-    name: Unit Tests php8.1 (php ${{ matrix.php-version }})
+    name: Unit Tests Php 8.1 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
@@ -46,6 +46,8 @@ jobs:
         include:
           - php-version: 8.2
             job-name: "Unit Tests (PHP 8.2)"
+          - php-version: 8.3
+            job-name: "Unit Tests (PHP 8.3)"
           - php-version: 8.4
             job-name: "Unit Tests (PHP 8.4)"
 
