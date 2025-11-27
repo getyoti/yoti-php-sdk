@@ -62,6 +62,11 @@ class SdkConfigBuilder
     private $allowHandoff;
 
     /**
+     * @var bool|null
+     */
+    private $enforceHandoff;
+
+    /**
      * @var array<string,int>|null
      */
     private $idDocumentTextDataExtractionRetriesConfig;
@@ -153,6 +158,12 @@ class SdkConfigBuilder
     public function withAllowHandoff(bool $allowHandoff): self
     {
         $this->allowHandoff = $allowHandoff;
+        return $this;
+    }
+
+    public function withEnforceHandoff(bool $enforceHandoff): self
+    {
+        $this->enforceHandoff = $enforceHandoff;
         return $this;
     }
 
@@ -264,6 +275,7 @@ class SdkConfigBuilder
             $this->errorUrl,
             $this->privacyPolicyUrl,
             $this->allowHandoff,
+            $this->enforceHandoff,
             $this->idDocumentTextDataExtractionRetriesConfig,
             $this->biometricConsentFlow,
             $this->darkMode,
