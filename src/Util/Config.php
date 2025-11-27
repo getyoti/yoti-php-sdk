@@ -29,6 +29,9 @@ class Config
     /** Logger key */
     public const LOGGER = 'logger';
 
+    /** Authentication token key */
+    public const AUTH_TOKEN = 'auth.token';
+
     public const YOTI_MULTIPART_BOUNDARY = 'X-Yoti-Multipart-Request-Boundary';
 
     /** Type error message */
@@ -51,6 +54,7 @@ class Config
      *   - Config::API_URL 'api.url' (string)
      *   - Config::SDK_IDENTIFIER 'sdk.identifier' (string)
      *   - Config::SDK_VERSION 'sdk.version' (string)
+     *   - Config::AUTH_TOKEN 'auth.token' (string) - For token-based authentication
      *
      *   Example of creating config:
      *
@@ -95,6 +99,7 @@ class Config
                 self::SDK_VERSION,
                 self::HTTP_CLIENT,
                 self::LOGGER,
+                self::AUTH_TOKEN,
             ]
         );
         if (count($invalidKeys) > 0) {
@@ -212,5 +217,13 @@ class Config
             $this->set(self::LOGGER, new Logger());
         }
         return $this->get(self::LOGGER);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthToken(): ?string
+    {
+        return $this->get(self::AUTH_TOKEN);
     }
 }
