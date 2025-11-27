@@ -3,6 +3,7 @@
 namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\SdkConfigBuilder;
 use Yoti\Test\TestCase;
 
@@ -347,5 +348,134 @@ class SdkConfigBuilderTest extends TestCase
             ->build();
 
         $this->assertEquals('OFF', $result->getDarkMode());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function shouldSetEnforceHandoffToTrue()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $this->assertTrue($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function shouldSetEnforceHandoffToFalse()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(false)
+            ->build();
+
+        $this->assertFalse($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfigBuilder::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function enforceHandoffShouldBeNullWhenItIsNotSet()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowedCaptureMethod(self::SOME_CAPTURE_METHOD)
+            ->build();
+
+        $this->assertNull($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers ::withAllowHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     */
+    public function shouldSetBothEnforceHandoffAndAllowHandoffToTrue()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowHandoff(true)
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $this->assertTrue($result->getAllowHandoff());
+        $this->assertTrue($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers ::withAllowHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
+     */
+    public function shouldThrowExceptionWhenEnforceHandoffTrueAndAllowHandoffFalse()
+    {
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage('enforce_handoff cannot be set to true when allow_handoff is false');
+
+        (new SdkConfigBuilder())
+            ->withAllowHandoff(false)
+            ->withEnforceHandoff(true)
+            ->build();
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers ::withAllowHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowHandoff
+     */
+    public function shouldAllowEnforceHandoffFalseWhenAllowHandoffFalse()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowHandoff(false)
+            ->withEnforceHandoff(false)
+            ->build();
+
+        $this->assertFalse($result->getAllowHandoff());
+        $this->assertFalse($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function shouldAllowEnforceHandoffTrueWhenAllowHandoffIsNull()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $this->assertNull($result->getAllowHandoff());
+        $this->assertTrue($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldIncludeEnforceHandoffInJsonSerialization()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withAllowHandoff(true)
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $expected = [
+            'allow_handoff' => true,
+            'enforce_handoff' => true
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
+use Yoti\DocScan\Exception\DocScanException;
 use Yoti\Util\Json;
 
 class SdkConfig implements \JsonSerializable
@@ -59,6 +60,11 @@ class SdkConfig implements \JsonSerializable
     private $allowHandoff;
 
     /**
+     * @var bool|null
+     */
+    private $enforceHandoff;
+
+    /**
      * @var AttemptsConfiguration|null
      */
     private $attemptsConfiguration;
@@ -94,6 +100,7 @@ class SdkConfig implements \JsonSerializable
      * @param string|null $errorUrl
      * @param string|null $privacyPolicyUrl
      * @param bool|null $allowHandoff
+     * @param bool|null $enforceHandoff
      * @param array<string, int>|null $idDocumentTextDataExtractionRetriesConfig
      * @param string|null $biometricConsentFlow
      * @param string|null $darkMode
@@ -111,6 +118,7 @@ class SdkConfig implements \JsonSerializable
         ?string $errorUrl,
         ?string $privacyPolicyUrl = null,
         ?bool $allowHandoff = null,
+        ?bool $enforceHandoff = null,
         ?array $idDocumentTextDataExtractionRetriesConfig = null,
         ?string $biometricConsentFlow = null,
         ?string $darkMode = null,
@@ -127,6 +135,8 @@ class SdkConfig implements \JsonSerializable
         $this->errorUrl = $errorUrl;
         $this->privacyPolicyUrl = $privacyPolicyUrl;
         $this->allowHandoff = $allowHandoff;
+        $this->validateEnforceHandoff($allowHandoff, $enforceHandoff);
+        $this->enforceHandoff = $enforceHandoff;
         if (!is_null($idDocumentTextDataExtractionRetriesConfig)) {
             $this->attemptsConfiguration = new AttemptsConfiguration($idDocumentTextDataExtractionRetriesConfig);
         }
@@ -152,12 +162,29 @@ class SdkConfig implements \JsonSerializable
             'error_url' => $this->getErrorUrl(),
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
             'allow_handoff' => $this->getAllowHandoff(),
+            'enforce_handoff' => $this->getEnforceHandoff(),
             'attempts_configuration' => $this->getAttemptsConfiguration(),
             'biometric_consent_flow' => $this->getBiometricConsentFlow(),
             'dark_mode' => $this->getDarkMode(),
             'primary_colour_dark_mode' => $this->getPrimaryColourDarkMode(),
             'brand_id' => $this->getBrandId()
         ]);
+    }
+
+    /**
+     * Validates that enforce_handoff cannot be true when allow_handoff is false
+     *
+     * @param bool|null $allowHandoff
+     * @param bool|null $enforceHandoff
+     * @throws DocScanException
+     */
+    private function validateEnforceHandoff(?bool $allowHandoff, ?bool $enforceHandoff): void
+    {
+        if ($enforceHandoff === true && $allowHandoff === false) {
+            throw new DocScanException(
+                'enforce_handoff cannot be set to true when allow_handoff is false'
+            );
+        }
     }
 
     /**
@@ -238,6 +265,14 @@ class SdkConfig implements \JsonSerializable
     public function getAllowHandoff(): ?bool
     {
         return $this->allowHandoff;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getEnforceHandoff(): ?bool
+    {
+        return $this->enforceHandoff;
     }
 
     /**
