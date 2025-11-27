@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create;
 
+use Yoti\DocScan\Exception\DocScanException;
 use Yoti\Util\Json;
 
 class SdkConfig implements \JsonSerializable
@@ -175,12 +176,12 @@ class SdkConfig implements \JsonSerializable
      *
      * @param bool|null $allowHandoff
      * @param bool|null $enforceHandoff
-     * @throws \Yoti\DocScan\Exception\DocScanException
+     * @throws DocScanException
      */
     private function validateEnforceHandoff(?bool $allowHandoff, ?bool $enforceHandoff): void
     {
         if ($enforceHandoff === true && $allowHandoff === false) {
-            throw new \Yoti\DocScan\Exception\DocScanException(
+            throw new DocScanException(
                 'enforce_handoff cannot be set to true when allow_handoff is false'
             );
         }

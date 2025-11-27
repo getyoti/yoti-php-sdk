@@ -414,8 +414,6 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withEnforceHandoff
      * @covers ::withAllowHandoff
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
-     * @expectedException \Yoti\DocScan\Exception\DocScanException
-     * @expectedExceptionMessage enforce_handoff cannot be set to true when allow_handoff is false
      */
     public function shouldThrowExceptionWhenEnforceHandoffTrueAndAllowHandoffFalse()
     {
