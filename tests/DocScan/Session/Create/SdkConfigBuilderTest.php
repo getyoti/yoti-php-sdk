@@ -3,6 +3,7 @@
 namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Constants;
+use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\SdkConfigBuilder;
 use Yoti\Test\TestCase;
 
@@ -417,7 +418,7 @@ class SdkConfigBuilderTest extends TestCase
      */
     public function shouldThrowExceptionWhenEnforceHandoffTrueAndAllowHandoffFalse()
     {
-        $this->expectException(\Yoti\DocScan\Exception\DocScanException::class);
+        $this->expectException(DocScanException::class);
         $this->expectExceptionMessage('enforce_handoff cannot be set to true when allow_handoff is false');
 
         (new SdkConfigBuilder())

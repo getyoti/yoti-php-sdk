@@ -161,6 +161,14 @@ class SdkConfigBuilder
         return $this;
     }
 
+    /**
+     * Sets whether handoff should be enforced during the session.
+     * Note: enforce_handoff cannot be set to true if allow_handoff is false.
+     * The validation will throw a DocScanException during build().
+     *
+     * @param bool $enforceHandoff Whether to enforce handoff
+     * @return $this
+     */
     public function withEnforceHandoff(bool $enforceHandoff): self
     {
         $this->enforceHandoff = $enforceHandoff;
