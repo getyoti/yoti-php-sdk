@@ -8,6 +8,9 @@ use GuzzleHttp\Psr7\Request as RequestMessage;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\StreamInterface;
+use Yoti\Http\Auth\AuthStrategyInterface;
+use Yoti\Http\Auth\SignedRequestAuthStrategy;
+use Yoti\Http\Auth\TokenAuthStrategy;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 
@@ -31,6 +34,11 @@ class RequestBuilder
      * @var \Yoti\Util\PemFile
      */
     private $pemFile;
+
+    /**
+     * @var \Yoti\Http\Auth\AuthStrategyInterface|null
+     */
+    private $authStrategy;
 
     /**
      * @var array<string, string>
@@ -112,6 +120,17 @@ class RequestBuilder
     public function withPemFile(PemFile $pemFile): self
     {
         $this->pemFile = $pemFile;
+        return $this;
+    }
+
+    /**
+     * @param \Yoti\Http\Auth\AuthStrategyInterface $authStrategy
+     *
+     * @return RequestBuilder
+     */
+    public function withAuthStrategy(AuthStrategyInterface $authStrategy): self
+    {
+        $this->authStrategy = $authStrategy;
         return $this;
     }
 
@@ -350,28 +369,43 @@ class RequestBuilder
             throw new \InvalidArgumentException('Base URL must be provided to ' . __CLASS__);
         }
 
-        if (!isset($this->pemFile)) {
-            throw new \InvalidArgumentException('Pem file must be provided to ' . __CLASS__);
-        }
-
         $this->validateMethod();
 
-        // Add nonce and timestamp to the URL.
-        $this
-            ->withQueryParam('nonce', self::generateNonce())
-            ->withQueryParam('timestamp', (string)(round(microtime(true) * 1000)));
+        // Determine auth strategy if not explicitly set
+        if (!isset($this->authStrategy)) {
+            $authToken = $this->config->getAuthToken();
+            if ($authToken !== null) {
+                // Use token-based authentication
+                $this->authStrategy = new TokenAuthStrategy($authToken);
+            } elseif (isset($this->pemFile)) {
+                // Use signed request authentication
+                $this->authStrategy = new SignedRequestAuthStrategy($this->pemFile);
+            } else {
+                throw new \InvalidArgumentException(
+                    'Either Pem file or auth token must be provided to ' . __CLASS__
+                );
+            }
+        }
+
+        // Add nonce and timestamp to the URL for signed request auth
+        if ($this->authStrategy instanceof SignedRequestAuthStrategy) {
+            $this
+                ->withQueryParam('nonce', self::generateNonce())
+                ->withQueryParam('timestamp', (string)(round(microtime(true) * 1000)));
+        }
 
         $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
 
         $payload = isset($this->multipartEntity) ? Payload::fromStream($this->multipartEntity->createStream()) :
             $this->payload;
 
-        $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
-            $this->pemFile,
+        // Apply authentication
+        $headers = $this->authStrategy->applyAuth(
+            $this->getHeaders(),
             $endpointWithParams,
             $this->method,
             $payload
-        ));
+        );
 
         $url = $this->baseUrl . $endpointWithParams;
 
@@ -379,7 +413,7 @@ class RequestBuilder
         $message = new RequestMessage(
             $this->method,
             Utils::uriFor($url),
-            $this->getHeaders(),
+            $headers,
             $this->getBodyByTypeOfRequest()
         );
 

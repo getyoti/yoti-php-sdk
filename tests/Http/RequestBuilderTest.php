@@ -436,4 +436,46 @@ class RequestBuilderTest extends TestCase
         $this->assertNotNull($queryParams['nonce']);
         $this->assertNotNull($queryParams['timestamp']);
     }
+
+    /**
+     * @covers ::build
+     * @covers ::withAuthStrategy
+     */
+    public function testWithTokenAuthStrategy()
+    {
+        $token = 'test-token-12345';
+        $config = new Config([
+            Config::AUTH_TOKEN => $token,
+        ]);
+
+        $request = (new RequestBuilder($config))
+            ->withBaseUrl(self::SOME_BASE_URL)
+            ->withEndpoint(self::SOME_ENDPOINT)
+            ->withGet()
+            ->build();
+
+        $message = $request->getMessage();
+        $this->assertArrayHasKey('Authorization', $message->getHeaders());
+        $this->assertEquals(['Bearer ' . $token], $message->getHeader('Authorization'));
+
+        // Token auth should not add nonce/timestamp
+        $uri = (string) $message->getUri();
+        $this->assertStringNotContainsString('nonce=', $uri);
+        $this->assertStringNotContainsString('timestamp=', $uri);
+    }
+
+    /**
+     * @covers ::build
+     */
+    public function testBuildWithoutPemFileOrTokenThrowsException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Either Pem file or auth token must be provided');
+
+        (new RequestBuilder())
+            ->withBaseUrl(self::SOME_BASE_URL)
+            ->withEndpoint(self::SOME_ENDPOINT)
+            ->withGet()
+            ->build();
+    }
 }

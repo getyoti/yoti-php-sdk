@@ -215,4 +215,30 @@ class ConfigTest extends TestCase
 
         $this->assertEquals(Constants::SDK_IDENTIFIER, $config->getSdkIdentifier());
     }
+
+    /**
+     * @covers ::getAuthToken
+     * @covers ::__construct
+     * @covers ::validateKeys
+     * @covers ::get
+     * @covers ::set
+     * @covers ::setStringValue
+     */
+    public function testGetAuthToken()
+    {
+        $token = 'test-auth-token-12345';
+        $config = new Config([
+            Config::AUTH_TOKEN => $token,
+        ]);
+
+        $this->assertEquals($token, $config->getAuthToken());
+    }
+
+    /**
+     * @covers ::getAuthToken
+     */
+    public function testGetAuthTokenDefaultIsNull()
+    {
+        $this->assertNull((new Config())->getAuthToken());
+    }
 }
