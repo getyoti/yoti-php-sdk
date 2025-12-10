@@ -129,4 +129,46 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(3, $result->getLivenessCapture());
         $this->assertCount(2, $result->getZoomLivenessResources());
     }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::parseShareCodes
+     * @covers ::getShareCodes
+     */
+    public function shouldParseShareCodes(): void
+    {
+        $input = [
+            'share_codes' => [
+                [
+                    'id' => 'share_code_id_1',
+                    'source' => 'some_source',
+                    'created_at' => '2021-01-01T00:00:00.000Z',
+                    'last_updated' => '2021-01-01T00:00:00.000Z',
+                ],
+                [
+                    'id' => 'share_code_id_2',
+                    'source' => 'another_source',
+                ],
+            ],
+        ];
+
+        $result = new ResourceContainer($input);
+
+        $this->assertCount(2, $result->getShareCodes());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getShareCodes
+     */
+    public function shouldHandleMissingShareCodes(): void
+    {
+        $input = [];
+
+        $result = new ResourceContainer($input);
+
+        $this->assertCount(0, $result->getShareCodes());
+    }
 }
