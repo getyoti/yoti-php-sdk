@@ -7,6 +7,7 @@ namespace Yoti\DocScan\Session\Create;
 use DateTimeImmutable;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\DocScan\Session\Create\Filters\RequiredShareCode;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
 
 class SessionSpecificationBuilder
@@ -87,6 +88,11 @@ class SessionSpecificationBuilder
      * @var bool
      */
     private bool $createIdentityProfilePreview = false;
+
+    /**
+     * @var RequiredShareCode[]
+     */
+    private $requiredShareCodes = [];
 
     /**
      * @param int $clientSessionTokenTtl
@@ -275,6 +281,32 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Adds a RequiredShareCode to the list of share codes required from the client
+     *
+     * @param RequiredShareCode $requiredShareCode
+     *
+     * @return $this
+     */
+    public function withRequiredShareCode(RequiredShareCode $requiredShareCode): self
+    {
+        $this->requiredShareCodes[] = $requiredShareCode;
+        return $this;
+    }
+
+    /**
+     * Sets the list of share codes required from the client
+     *
+     * @param RequiredShareCode[] $requiredShareCodes
+     *
+     * @return $this
+     */
+    public function withRequiredShareCodes(array $requiredShareCodes): self
+    {
+        $this->requiredShareCodes = $requiredShareCodes;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -295,6 +327,7 @@ class SessionSpecificationBuilder
             $this->identityProfileRequirements,
             $this->createIdentityProfilePreview,
             $this->importToken,
+            $this->requiredShareCodes,
         );
     }
 }

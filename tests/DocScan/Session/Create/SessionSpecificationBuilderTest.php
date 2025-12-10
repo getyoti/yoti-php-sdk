@@ -6,6 +6,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\DocScan\Session\Create\Filters\RequiredShareCode;
 use Yoti\DocScan\Session\Create\IbvOptions;
 use Yoti\DocScan\Session\Create\ImportToken;
 use Yoti\DocScan\Session\Create\NotificationConfig;
@@ -68,6 +69,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $importTokenMock;
 
+    /**
+     * @var RequiredShareCode
+     */
+    private $requiredShareCodeMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -88,6 +94,9 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
 
         $this->importTokenMock = $this->createMock(ImportToken::class);
+
+        $this->requiredShareCodeMock = $this->createMock(RequiredShareCode::class);
+        $this->requiredShareCodeMock->method('jsonSerialize')->willReturn((object)['requiredShareCode']);
 
         $this->subject = (object)[1 => 'some'];
 
@@ -528,6 +537,67 @@ class SessionSpecificationBuilderTest extends TestCase
                 'required_documents' => [],
                 'create_identity_profile_preview' => false,
                 'import_token' => $this->importTokenMock,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::withRequiredShareCode
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequiredShareCodes
+     */
+    public function shouldBuildWithRequiredShareCode()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withRequiredShareCode($this->requiredShareCodeMock)
+            ->build();
+
+        $this->assertCount(1, $sessionSpecification->getRequiredShareCodes());
+        $this->assertEquals($this->requiredShareCodeMock, $sessionSpecification->getRequiredShareCodes()[0]);
+    }
+
+    /**
+     * @test
+     * @covers ::withRequiredShareCodes
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getRequiredShareCodes
+     */
+    public function shouldOverwriteCurrentListWithRequiredShareCodes()
+    {
+        $someOtherRequiredShareCodeMock = $this->createMock(RequiredShareCode::class);
+
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withRequiredShareCode($this->requiredShareCodeMock)
+            ->withRequiredShareCodes([$someOtherRequiredShareCodeMock])
+            ->build();
+
+        $this->assertCount(1, $sessionSpecification->getRequiredShareCodes());
+        $this->assertSame($someOtherRequiredShareCodeMock, $sessionSpecification->getRequiredShareCodes()[0]);
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withRequiredShareCode
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithRequiredShareCodes()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withRequiredShareCode($this->requiredShareCodeMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'create_identity_profile_preview' => false,
+                'required_share_codes' => [$this->requiredShareCodeMock],
             ]),
             json_encode($sessionSpecification)
         );
