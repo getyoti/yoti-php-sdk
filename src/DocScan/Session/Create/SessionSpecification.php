@@ -8,6 +8,7 @@ use JsonSerializable;
 use stdClass;
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
+use Yoti\DocScan\Session\Create\Filters\RequiredShareCode;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
 use Yoti\Util\Json;
 
@@ -86,6 +87,11 @@ class SessionSpecification implements JsonSerializable
     private $importToken;
 
     /**
+     * @var RequiredShareCode[]
+     */
+    private $requiredShareCodes;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -101,6 +107,7 @@ class SessionSpecification implements JsonSerializable
      * @param object|null $identityProfileRequirements
      * @param bool|null $createIdentityProfilePreview
      * @param ImportToken|null $importToken
+     * @param RequiredShareCode[] $requiredShareCodes
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -117,7 +124,8 @@ class SessionSpecification implements JsonSerializable
         ?object $subject = null,
         ?object $identityProfileRequirements = null,
         ?bool $createIdentityProfilePreview = null,
-        ?ImportToken $importToken = null
+        ?ImportToken $importToken = null,
+        array $requiredShareCodes = []
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -134,6 +142,7 @@ class SessionSpecification implements JsonSerializable
         $this->identityProfileRequirements = $identityProfileRequirements;
         $this->createIdentityProfilePreview = $createIdentityProfilePreview;
         $this->importToken = $importToken;
+        $this->requiredShareCodes = $requiredShareCodes;
     }
 
     /**
@@ -157,6 +166,7 @@ class SessionSpecification implements JsonSerializable
             'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
             'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
             'import_token' => $this->getImportToken(),
+            'required_share_codes' => $this->getRequiredShareCodes(),
         ]);
     }
 
@@ -277,5 +287,13 @@ class SessionSpecification implements JsonSerializable
     public function getImportToken(): ?ImportToken
     {
         return $this->importToken;
+    }
+
+    /**
+     * @return RequiredShareCode[]
+     */
+    public function getRequiredShareCodes(): array
+    {
+        return $this->requiredShareCodes;
     }
 }
