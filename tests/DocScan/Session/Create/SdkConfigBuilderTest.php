@@ -42,6 +42,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
      * @covers ::withBrandId
+     * @covers ::withSuppressedScreens
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -56,6 +57,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getDarkMode
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColourDarkMode
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getBrandId
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
