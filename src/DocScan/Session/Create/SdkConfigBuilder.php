@@ -86,6 +86,11 @@ class SdkConfigBuilder
      */
     private $brandId;
 
+    /**
+     * @var array<string>|null
+     */
+    private $suppressedScreens;
+
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -251,6 +256,16 @@ class SdkConfigBuilder
         return $this;
     }
 
+    /**
+     * @param array<string> $suppressedScreens
+     * @return $this
+     */
+    public function withSuppressedScreens(array $suppressedScreens): self
+    {
+        $this->suppressedScreens = $suppressedScreens;
+        return $this;
+    }
+
     public function build(): SdkConfig
     {
         return new SdkConfig(
@@ -268,7 +283,8 @@ class SdkConfigBuilder
             $this->biometricConsentFlow,
             $this->darkMode,
             $this->primaryColourDarkMode,
-            $this->brandId
+            $this->brandId,
+            $this->suppressedScreens
         );
     }
 }
