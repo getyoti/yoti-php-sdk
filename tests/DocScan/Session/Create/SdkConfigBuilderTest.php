@@ -26,6 +26,7 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_DARK_MODE = 'someDarkMode';
     private const SOME_PRIMARY_COLOUR_DARK_MODE = 'somePrimaryColourDarkMode';
     private const SOME_BRAND_ID = 'someBrandId';
+    private const SOME_SUPPRESSED_SCREEN = 'someScreen';
 
     /**
      * @test
@@ -41,6 +42,7 @@ class SdkConfigBuilderTest extends TestCase
      * @covers ::withPrivacyPolicyUrl
      * @covers ::withAllowHandoff
      * @covers ::withBrandId
+     * @covers ::withSuppressedScreens
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::__construct
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getAllowedCaptureMethods
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColour
@@ -55,9 +57,12 @@ class SdkConfigBuilderTest extends TestCase
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getDarkMode
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getPrimaryColourDarkMode
      * @covers \Yoti\DocScan\Session\Create\SdkConfig::getBrandId
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
      */
     public function shouldCorrectlyBuildSdkConfig()
     {
+        $suppressedScreens = [self::SOME_SUPPRESSED_SCREEN, 'anotherScreen'];
+
         $result = (new SdkConfigBuilder())
             ->withAllowedCaptureMethod(self::SOME_CAPTURE_METHOD)
             ->withPrimaryColour(self::SOME_PRIMARY_COLOUR)
@@ -73,6 +78,7 @@ class SdkConfigBuilderTest extends TestCase
             ->withDarkMode(self::SOME_DARK_MODE)
             ->withPrimaryColourDarkMode(self::SOME_PRIMARY_COLOUR_DARK_MODE)
             ->withBrandId(self::SOME_BRAND_ID)
+            ->withSuppressedScreens($suppressedScreens)
             ->build();
 
         $this->assertEquals(self::SOME_CAPTURE_METHOD, $result->getAllowedCaptureMethods());
@@ -89,6 +95,7 @@ class SdkConfigBuilderTest extends TestCase
         $this->assertEquals(self::SOME_DARK_MODE, $result->getDarkMode());
         $this->assertEquals(self::SOME_PRIMARY_COLOUR_DARK_MODE, $result->getPrimaryColourDarkMode());
         $this->assertEquals(self::SOME_BRAND_ID, $result->getBrandId());
+        $this->assertEquals($suppressedScreens, $result->getSuppressedScreens());
     }
 
     /**
@@ -347,5 +354,71 @@ class SdkConfigBuilderTest extends TestCase
             ->build();
 
         $this->assertEquals('OFF', $result->getDarkMode());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreens
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldSetSuppressedScreens()
+    {
+        $suppressedScreens = ['screen1', 'screen2', 'screen3'];
+
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens($suppressedScreens)
+            ->build();
+
+        $this->assertEquals($suppressedScreens, $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function suppressedScreensShouldBeNullWhenNotSet()
+    {
+        $result = (new SdkConfigBuilder())->build();
+
+        $this->assertNull($result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldSerializeSuppressedScreensToJson()
+    {
+        $suppressedScreens = ['screen1', 'screen2'];
+
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens($suppressedScreens)
+            ->build();
+
+        $expected = [
+            'suppressed_screens' => $suppressedScreens
+        ];
+
+        $this->assertJsonStringEqualsJsonString(json_encode($expected), json_encode($result));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldNotSerializeSuppressedScreensWhenEmpty()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens([])
+            ->build();
+
+        // Empty arrays should still be serialized (different from null)
+        $json = json_encode($result);
+        $decoded = json_decode($json, true);
+        
+        $this->assertArrayHasKey('suppressed_screens', $decoded);
+        $this->assertEquals([], $decoded['suppressed_screens']);
     }
 }

@@ -84,6 +84,11 @@ class SdkConfig implements \JsonSerializable
     private $brandId;
 
     /**
+     * @var array<string>|null
+     */
+    private $suppressedScreens;
+
+    /**
      * @param string|null $allowedCaptureMethods
      * @param string|null $primaryColour
      * @param string|null $secondaryColour
@@ -99,6 +104,7 @@ class SdkConfig implements \JsonSerializable
      * @param string|null $darkMode
      * @param string|null $primaryColourDarkMode
      * @param string|null $brandId
+     * @param array<string>|null $suppressedScreens
      */
     public function __construct(
         ?string $allowedCaptureMethods,
@@ -115,7 +121,8 @@ class SdkConfig implements \JsonSerializable
         ?string $biometricConsentFlow = null,
         ?string $darkMode = null,
         ?string $primaryColourDarkMode = null,
-        ?string $brandId = null
+        ?string $brandId = null,
+        ?array $suppressedScreens = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -134,6 +141,7 @@ class SdkConfig implements \JsonSerializable
         $this->darkMode = $darkMode;
         $this->primaryColourDarkMode = $primaryColourDarkMode;
         $this->brandId = $brandId;
+        $this->suppressedScreens = $suppressedScreens;
     }
 
     /**
@@ -156,7 +164,8 @@ class SdkConfig implements \JsonSerializable
             'biometric_consent_flow' => $this->getBiometricConsentFlow(),
             'dark_mode' => $this->getDarkMode(),
             'primary_colour_dark_mode' => $this->getPrimaryColourDarkMode(),
-            'brand_id' => $this->getBrandId()
+            'brand_id' => $this->getBrandId(),
+            'suppressed_screens' => $this->getSuppressedScreens()
         ]);
     }
 
@@ -278,5 +287,13 @@ class SdkConfig implements \JsonSerializable
     public function getBrandId(): ?string
     {
         return $this->brandId;
+    }
+
+    /**
+     * @return array<string>|null
+     */
+    public function getSuppressedScreens(): ?array
+    {
+        return $this->suppressedScreens;
     }
 }
