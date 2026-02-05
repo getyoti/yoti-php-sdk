@@ -21,6 +21,6 @@
   </testsuites>
   <logging/>
   <listeners>
-    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    <!-- <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/> -->
   </listeners>
 </phpunit>
