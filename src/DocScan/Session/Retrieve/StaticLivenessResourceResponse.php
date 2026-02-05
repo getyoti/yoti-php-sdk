@@ -11,6 +11,10 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
      */
     private $image;
 
+    /**
+     * @var string|null
+     */
+    private $captureType;
 
     /**
      * StaticLivenessResourceResponse constructor.
@@ -24,6 +28,8 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
         if (isset($zoomLiveness['image'])) {
             $this->image = new MediaResponse($zoomLiveness['image']['media']);
         }
+
+        $this->captureType = $zoomLiveness['capture_type'] ?? null;
     }
 
     /**
@@ -32,5 +38,13 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
     public function getImage(): ?MediaResponse
     {
         return $this->image;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCaptureType(): ?string
+    {
+        return $this->captureType;
     }
 }
