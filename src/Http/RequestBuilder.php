@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Request as RequestMessage;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\StreamInterface;
+use Yoti\Http\AuthStrategy\AuthStrategyInterface;
+use Yoti\Http\AuthStrategy\SignedRequestStrategy;
 use Yoti\Util\Config;
 use Yoti\Util\PemFile;
 
@@ -31,6 +33,11 @@ class RequestBuilder
      * @var \Yoti\Util\PemFile
      */
     private $pemFile;
+
+    /**
+     * @var AuthStrategyInterface|null
+     */
+    private $authStrategy;
 
     /**
      * @var array<string, string>
@@ -133,6 +140,23 @@ class RequestBuilder
     public function withPemString(string $content): self
     {
         return $this->withPemFile(PemFile::fromString($content));
+    }
+
+    /**
+     * Set the authentication strategy for this request.
+     *
+     * When set, the auth strategy will be used instead of the default
+     * signed request behavior. If neither authStrategy nor pemFile is set,
+     * build() will throw an exception.
+     *
+     * @param AuthStrategyInterface $authStrategy
+     *
+     * @return \Yoti\Http\RequestBuilder
+     */
+    public function withAuthStrategy(AuthStrategyInterface $authStrategy): self
+    {
+        $this->authStrategy = $authStrategy;
+        return $this;
     }
 
     /**
@@ -314,32 +338,6 @@ class RequestBuilder
     }
 
     /**
-     * @return string
-     */
-    private static function generateNonce(): string
-    {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            // 32 bits for "time_low"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
-            // 16 bits for "time_hi_and_version",
-            // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-            // 8 bits for "clk_seq_low",
-            // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
-            // 48 bits for "node"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
-    }
-
-    /**
      * @return \Yoti\Http\Request
      *
      * @throws \InvalidArgumentException
@@ -350,31 +348,37 @@ class RequestBuilder
             throw new \InvalidArgumentException('Base URL must be provided to ' . __CLASS__);
         }
 
-        if (!isset($this->pemFile)) {
-            throw new \InvalidArgumentException('Pem file must be provided to ' . __CLASS__);
-        }
-
         $this->validateMethod();
 
-        // Add nonce and timestamp to the URL.
-        $this
-            ->withQueryParam('nonce', self::generateNonce())
-            ->withQueryParam('timestamp', (string)(round(microtime(true) * 1000)));
+        // Resolve the auth strategy:
+        // 1. Explicit authStrategy takes priority
+        // 2. PemFile present: use legacy SignedRequestStrategy (backward compatible)
+        // 3. Neither: throw
+        $authStrategy = $this->resolveAuthStrategy();
 
-        $endpointWithParams = $this->endpoint . '?' . http_build_query($this->queryParams);
+        // Merge strategy query params with manually set query params.
+        // Manual params go first to preserve backward-compatible URL ordering.
+        $strategyQueryParams = $authStrategy->createQueryParams();
+        $allQueryParams = array_merge($this->queryParams, $strategyQueryParams);
+
+        $endpointWithParams = $this->endpoint . '?' . http_build_query($allQueryParams);
 
         $payload = isset($this->multipartEntity) ? Payload::fromStream($this->multipartEntity->createStream()) :
             $this->payload;
 
-        $this->withHeader(self::YOTI_DIGEST_HEADER_KEY, RequestSigner::sign(
-            $this->pemFile,
-            $endpointWithParams,
+        // Get auth headers from strategy.
+        $authHeaders = $authStrategy->createAuthHeaders(
             $this->method,
+            $endpointWithParams,
             $payload
-        ));
+        );
+
+        // Merge auth headers into manual headers.
+        foreach ($authHeaders as $name => $value) {
+            $this->withHeader($name, $value);
+        }
 
         $url = $this->baseUrl . $endpointWithParams;
-
 
         $message = new RequestMessage(
             $this->method,
@@ -384,6 +388,28 @@ class RequestBuilder
         );
 
         return new Request($message, $this->client ?? $this->config->getHttpClient());
+    }
+
+    /**
+     * Resolve the authentication strategy to use.
+     *
+     * @return AuthStrategyInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function resolveAuthStrategy(): AuthStrategyInterface
+    {
+        if (isset($this->authStrategy)) {
+            return $this->authStrategy;
+        }
+
+        if (isset($this->pemFile)) {
+            return new SignedRequestStrategy($this->pemFile);
+        }
+
+        throw new \InvalidArgumentException(
+            'Either an AuthStrategy or a PEM file must be provided to ' . __CLASS__
+        );
     }
 
     /**

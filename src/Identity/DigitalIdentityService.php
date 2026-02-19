@@ -4,6 +4,7 @@ namespace Yoti\Identity;
 
 use Yoti\Constants;
 use Yoti\Exception\DigitalIdentityException;
+use Yoti\Http\AuthStrategy\AuthStrategyInterface;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestBuilder;
 use Yoti\Util\Config;
@@ -19,11 +20,25 @@ class DigitalIdentityService
     private const IDENTITY_SESSION_RECEIPT_RETRIEVAL = '/v2/receipts/%s';
     private const IDENTITY_SESSION_RECEIPT_KEY_RETRIEVAL = '/v2/wrapped-item-keys/%s';
 
-    private string $sdkId;
+    /**
+     * @var string
+     */
+    private $sdkId;
 
-    private PemFile $pemFile;
+    /**
+     * @var PemFile|null
+     */
+    private $pemFile;
 
-    private Config $config;
+    /**
+     * @var AuthStrategyInterface|null
+     */
+    private $authStrategy;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     public function __construct(string $sdkId, PemFile $pemFile, Config $config)
     {
@@ -32,15 +47,60 @@ class DigitalIdentityService
         $this->config = $config;
     }
 
+    /**
+     * Create a DigitalIdentityService instance using an authentication strategy.
+     *
+     * When using BearerTokenStrategy (central auth), no sdkId or PEM
+     * is required since the Bearer token handles authorization.
+     *
+     * @param AuthStrategyInterface $authStrategy
+     * @param Config $config
+     *
+     * @return self
+     */
+    public static function withAuthStrategy(AuthStrategyInterface $authStrategy, Config $config): self
+    {
+        $instance = new \ReflectionClass(self::class);
+        $service = $instance->newInstanceWithoutConstructor();
+        $service->authStrategy = $authStrategy;
+        $service->config = $config;
+        $service->sdkId = '';
+        return $service;
+    }
+
+    /**
+     * Apply authentication to a RequestBuilder.
+     *
+     * If an explicit auth strategy was set, uses it directly.
+     * Otherwise falls back to the legacy PemFile + X-Yoti-Auth-Id header approach.
+     *
+     * @param RequestBuilder $builder
+     * @param bool $includeAuthId Whether to include X-Yoti-Auth-Id header (legacy mode only)
+     *
+     * @return RequestBuilder
+     */
+    private function applyAuth(RequestBuilder $builder, bool $includeAuthId = true): RequestBuilder
+    {
+        if ($this->authStrategy !== null) {
+            return $builder->withAuthStrategy($this->authStrategy);
+        }
+
+        $builder->withPemFile($this->pemFile);
+        if ($includeAuthId && !empty($this->sdkId)) {
+            $builder->withHeader('X-Yoti-Auth-Id', $this->sdkId);
+        }
+        return $builder;
+    }
+
     public function createShareSession(ShareSessionRequest $shareSessionRequest): ShareSessionCreated
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(self::IDENTITY_SESSION_CREATION)
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
             ->withPost()
-            ->withPayload(Payload::fromJsonData($shareSessionRequest))
-            ->withPemFile($this->pemFile)
+            ->withPayload(Payload::fromJsonData($shareSessionRequest));
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -54,12 +114,12 @@ class DigitalIdentityService
 
     public function createShareQrCode(string $sessionId): ShareSessionCreatedQrCode
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_CREATION, $sessionId))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withPost()
-            ->withPemFile($this->pemFile)
+            ->withPost();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -73,12 +133,12 @@ class DigitalIdentityService
 
     public function fetchShareQrCode(string $qrCodeId): ShareSessionFetchedQrCode
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_QR_CODE_RETRIEVAL, $qrCodeId))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withGet()
-            ->withPemFile($this->pemFile)
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -92,12 +152,12 @@ class DigitalIdentityService
 
     public function fetchShareSession(string $sessionId): ShareSessionFetched
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_RETRIEVAL, $sessionId))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withGet()
-            ->withPemFile($this->pemFile)
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -129,12 +189,12 @@ class DigitalIdentityService
     private function doFetchShareReceipt(string $receiptId): WrappedReceipt
     {
         $receiptIdUrl = strtr($receiptId, '+/', '-_');
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(self::IDENTITY_SESSION_RECEIPT_RETRIEVAL, $receiptIdUrl))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withGet()
-            ->withPemFile($this->pemFile)
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -148,15 +208,15 @@ class DigitalIdentityService
 
     private function fetchShareReceiptKey(WrappedReceipt $wrappedReceipt): ReceiptItemKey
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->config->getApiUrl() ?? Constants::DIGITAL_IDENTITY_API_URL)
             ->withEndpoint(sprintf(
                 self::IDENTITY_SESSION_RECEIPT_KEY_RETRIEVAL,
                 $wrappedReceipt->getWrappedItemKeyId()
             ))
-            ->withHeader('X-Yoti-Auth-Id', $this->sdkId)
-            ->withGet()
-            ->withPemFile($this->pemFile)
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 

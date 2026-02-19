@@ -27,6 +27,11 @@ class SessionConfigurationResponse
     private $capture;
 
     /**
+     * @var array<string, mixed>|null
+     */
+    private $sdkConfig;
+
+    /**
      * @param array<string, mixed> $sessionData
      */
     public function __construct(array $sessionData)
@@ -35,6 +40,7 @@ class SessionConfigurationResponse
         $this->sessionId = $sessionData['session_id'] ?? null;
         $this->requestedChecks = $sessionData['requested_checks'] ?? null;
         $this->capture = isset($sessionData['capture']) ? new CaptureResponse($sessionData['capture']) : null;
+        $this->sdkConfig = $sessionData['sdk_config'] ?? null;
     }
 
     /**
@@ -78,5 +84,28 @@ class SessionConfigurationResponse
     public function getCapture(): ?CaptureResponse
     {
         return $this->capture;
+    }
+
+    /**
+     * Returns the SDK configuration for the session
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getSdkConfig(): ?array
+    {
+        return $this->sdkConfig;
+    }
+
+    /**
+     * Returns the suppressed screens configuration if present in the SDK config
+     *
+     * @return array<string>|null
+     */
+    public function getSuppressedScreens(): ?array
+    {
+        if ($this->sdkConfig === null) {
+            return null;
+        }
+        return $this->sdkConfig['suppressed_screens'] ?? null;
     }
 }

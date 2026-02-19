@@ -27,6 +27,12 @@ class Constants
     /** Environment variable to override the default Doc Scan API URL */
     public const ENV_DOC_SCAN_API_URL = 'YOTI_DOC_SCAN_API_URL';
 
+    /** Default Auth API URL */
+    public const AUTH_API_URL = 'https://auth.api.yoti.com/v1/oauth/token';
+
+    /** Environment variable to override the default Auth API URL */
+    public const ENV_AUTH_API_URL = 'YOTI_AUTH_URL';
+
     /** Default SDK identifier */
     public const SDK_IDENTIFIER = 'PHP';
 

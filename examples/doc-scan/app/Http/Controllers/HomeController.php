@@ -152,6 +152,11 @@ class HomeController extends BaseController
                     ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
                     ->withBiometricConsentFlow('EARLY')
                     ->withBrandId('brand_id')
+                    // Suppress specific screens to shorten the flow
+                    ->withSuppressedScreens(['intro_screen', 'document_capture_instruction'])
+                    // Or add screens individually:
+                    // ->withSuppressedScreen('intro_screen')
+                    // ->withSuppressedScreen('document_capture_instruction')
                     ->build()
             )
             ->withRequiredDocument(
@@ -169,14 +174,14 @@ class HomeController extends BaseController
             ->withRequiredDocument(
                 (new RequiredSupplementaryDocumentBuilder())
                     ->withObjective(
-                        (new ProofOfAddressObjectiveBuilder)
+                        (new ProofOfAddressObjectiveBuilder())
                             ->build()
                     )
                     ->build()
             )
             ->build();
 
-            
+
         $session = $client->createSession($sessionSpec);
 
         $request->session()->put('YOTI_SESSION_ID', $session->getSessionId());
