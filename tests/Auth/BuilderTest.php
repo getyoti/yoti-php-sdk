@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Auth;
 
-use Yoti\Auth\Builder;
 use Yoti\Auth\AuthenticationTokenGenerator;
-use Yoti\Auth\Properties;
+use Yoti\Auth\Builder;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\PemFile;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan;
 
 use Yoti\DocScan\DocScanClient;
-use Yoti\DocScan\DocScanClientBuilder;
 use Yoti\Test\TestCase;
 use Yoti\Test\TestData;
 use Yoti\Util\Config;

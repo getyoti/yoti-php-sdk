@@ -85,8 +85,10 @@ class DigitalIdentityService
             return $builder->withAuthStrategy($this->authStrategy);
         }
 
-        $builder->withPemFile($this->pemFile);
-        if ($includeAuthId && !empty($this->sdkId)) {
+        if ($this->pemFile !== null) {
+            $builder->withPemFile($this->pemFile);
+        }
+        if ($includeAuthId && $this->sdkId !== null && $this->sdkId !== '') {
             $builder->withHeader('X-Yoti-Auth-Id', $this->sdkId);
         }
         return $builder;
@@ -180,7 +182,9 @@ class DigitalIdentityService
         if (null === $wrappedReceipt->getError()) {
             $receiptKey = $this->fetchShareReceiptKey($wrappedReceipt);
 
-            return $receiptParser->createSuccess($wrappedReceipt, $receiptKey, $this->pemFile);
+            /** @var PemFile $pemFile */
+            $pemFile = $this->pemFile;
+            return $receiptParser->createSuccess($wrappedReceipt, $receiptKey, $pemFile);
         }
 
         return $receiptParser->createFailure($wrappedReceipt);

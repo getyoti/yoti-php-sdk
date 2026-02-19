@@ -122,7 +122,7 @@ class Builder
      */
     public function build(): AuthenticationTokenGenerator
     {
-        if (empty($this->sdkId)) {
+        if ($this->sdkId === null || $this->sdkId === '') {
             throw new \InvalidArgumentException("'sdkId' must not be empty or null");
         }
 
@@ -135,8 +135,9 @@ class Builder
         };
 
         // Resolve auth URL: custom > environment variable > default
+        $envAuthUrl = getenv(Properties::ENV_YOTI_AUTH_URL);
         $authApiUrl = $this->authApiUrl
-            ?? getenv(Properties::ENV_YOTI_AUTH_URL) ?: null
+            ?? ($envAuthUrl !== false ? $envAuthUrl : null)
             ?? Properties::DEFAULT_YOTI_AUTH_URL;
 
         return new AuthenticationTokenGenerator(

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yoti\Test;
 
 use Yoti\DigitalIdentityClient;
-use Yoti\DigitalIdentityClientBuilder;
 
 /**
  * @coversDefaultClass \Yoti\DigitalIdentityClientBuilder

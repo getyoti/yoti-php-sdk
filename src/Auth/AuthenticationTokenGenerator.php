@@ -86,7 +86,7 @@ class AuthenticationTokenGenerator
      */
     public function generate(array $scopes): CreateAuthenticationTokenResponse
     {
-        if (empty($scopes)) {
+        if (count($scopes) === 0) {
             throw new \InvalidArgumentException('scopes must not be empty');
         }
 

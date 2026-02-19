@@ -25,7 +25,7 @@ class BearerTokenStrategy implements AuthStrategyInterface
      */
     public function __construct(string $authenticationToken)
     {
-        if (empty($authenticationToken)) {
+        if ($authenticationToken === '') {
             throw new \InvalidArgumentException('Authentication token must not be empty');
         }
         $this->authenticationToken = $authenticationToken;

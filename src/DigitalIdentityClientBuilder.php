@@ -147,13 +147,19 @@ class DigitalIdentityClientBuilder
 
         if ($this->authenticationToken !== null) {
             $this->validateAuthToken();
-            $authStrategy = new BearerTokenStrategy($this->authenticationToken);
+            /** @var string $authToken */
+            $authToken = $this->authenticationToken;
+            $authStrategy = new BearerTokenStrategy($authToken);
             $service = DigitalIdentityService::withAuthStrategy($authStrategy, $config);
             return DigitalIdentityClient::fromService($service);
         }
 
         $this->validateForSignedRequest();
-        $service = new DigitalIdentityService($this->sdkId, $this->pemFile, $config);
+        /** @var string $sdkId */
+        $sdkId = $this->sdkId;
+        /** @var PemFile $pemFile */
+        $pemFile = $this->pemFile;
+        $service = new DigitalIdentityService($sdkId, $pemFile, $config);
         return DigitalIdentityClient::fromService($service);
     }
 
@@ -164,7 +170,7 @@ class DigitalIdentityClientBuilder
      */
     private function validateForSignedRequest(): void
     {
-        if (empty($this->sdkId) || $this->pemFile === null) {
+        if ($this->sdkId === null || $this->sdkId === '' || $this->pemFile === null) {
             throw new \InvalidArgumentException(
                 'An sdkId and PEM file must be provided when not using an authentication token'
             );

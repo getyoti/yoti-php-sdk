@@ -16,7 +16,6 @@ use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
 use Yoti\Exception\PemFileException;
-use Yoti\Http\AuthStrategy\BearerTokenStrategy;
 use Yoti\Media\Media;
 use Yoti\Util\Config;
 use Yoti\Util\Env;

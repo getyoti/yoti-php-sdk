@@ -109,8 +109,10 @@ class Service
             return $builder->withAuthStrategy($this->authStrategy);
         }
 
-        $builder->withPemFile($this->pemFile);
-        if ($includeSdkId && !empty($this->sdkId)) {
+        if ($this->pemFile !== null) {
+            $builder->withPemFile($this->pemFile);
+        }
+        if ($includeSdkId && $this->sdkId !== null && $this->sdkId !== '') {
             $builder->withQueryParam('sdkId', $this->sdkId);
         }
         return $builder;

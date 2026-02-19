@@ -147,13 +147,19 @@ class DocScanClientBuilder
 
         if ($this->authenticationToken !== null) {
             $this->validateAuthToken();
-            $authStrategy = new BearerTokenStrategy($this->authenticationToken);
+            /** @var string $authToken */
+            $authToken = $this->authenticationToken;
+            $authStrategy = new BearerTokenStrategy($authToken);
             $service = Service::withAuthStrategy($authStrategy, $config);
             return DocScanClient::fromService($service);
         }
 
         $this->validateForSignedRequest();
-        $service = new Service($this->sdkId, $this->pemFile, $config);
+        /** @var string $sdkId */
+        $sdkId = $this->sdkId;
+        /** @var PemFile $pemFile */
+        $pemFile = $this->pemFile;
+        $service = new Service($sdkId, $pemFile, $config);
         return DocScanClient::fromService($service);
     }
 
@@ -164,7 +170,7 @@ class DocScanClientBuilder
      */
     private function validateForSignedRequest(): void
     {
-        if (empty($this->sdkId) || $this->pemFile === null) {
+        if ($this->sdkId === null || $this->sdkId === '' || $this->pemFile === null) {
             throw new \InvalidArgumentException(
                 'An sdkId and PEM file must be provided when not using an authentication token'
             );
