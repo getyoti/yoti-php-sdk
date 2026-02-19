@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Auth;
 
+use Psr\Http\Client\ClientInterface;
 use Yoti\Auth\Exception\AuthException;
 use Yoti\Util\PemFile;
 
@@ -47,21 +48,29 @@ class AuthenticationTokenGenerator
     private $authApiUrl;
 
     /**
+     * @var ClientInterface
+     */
+    private $httpClient;
+
+    /**
      * @param string $sdkId
      * @param PemFile $pemFile
      * @param callable $jwtIdSupplier
      * @param string $authApiUrl
+     * @param ClientInterface|null $httpClient
      */
     public function __construct(
         string $sdkId,
         PemFile $pemFile,
         callable $jwtIdSupplier,
-        string $authApiUrl
+        string $authApiUrl,
+        ?ClientInterface $httpClient = null
     ) {
         $this->sdkId = $sdkId;
         $this->pemFile = $pemFile;
         $this->jwtIdSupplier = $jwtIdSupplier;
         $this->authApiUrl = $authApiUrl;
+        $this->httpClient = $httpClient ?? new \GuzzleHttp\Client();
     }
 
     /**
@@ -158,42 +167,35 @@ class AuthenticationTokenGenerator
     {
         $postData = http_build_query($formParams);
 
-        $ch = curl_init($this->authApiUrl);
-        if ($ch === false) {
-            throw new AuthException('Failed to initialize cURL session');
-        }
-
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($postData),
+        $request = new \GuzzleHttp\Psr7\Request(
+            'POST',
+            $this->authApiUrl,
+            [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Content-Length' => (string) strlen($postData),
             ],
-            CURLOPT_FOLLOWLOCATION => false,
-        ]);
+            $postData
+        );
 
-        $responseBody = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-
-        curl_close($ch);
-
-        if ($responseBody === false) {
-            throw new AuthException('Auth token request failed: ' . $curlError);
+        try {
+            $response = $this->httpClient->sendRequest($request);
+        } catch (\Psr\Http\Client\ClientExceptionInterface $e) {
+            throw new AuthException('Auth token request failed: ' . $e->getMessage(), 0, $e);
         }
+
+        $httpCode = $response->getStatusCode();
+        $responseBody = (string) $response->getBody();
 
         if ($httpCode >= 400) {
             throw new AuthException(
                 sprintf(
                     'Auth token request failed with HTTP %d: %s',
                     $httpCode,
-                    is_string($responseBody) ? $responseBody : ''
+                    $responseBody
                 )
             );
         }
 
-        return is_string($responseBody) ? $responseBody : '';
+        return $responseBody;
     }
 }

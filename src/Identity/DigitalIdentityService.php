@@ -180,11 +180,16 @@ class DigitalIdentityService
         $wrappedReceipt = $this->doFetchShareReceipt($receiptId);
 
         if (null === $wrappedReceipt->getError()) {
+            if ($this->pemFile === null) {
+                throw new DigitalIdentityException(
+                    'Cannot decrypt receipt without a PEM file. '
+                    . 'Receipt decryption is not supported in token-auth mode.'
+                );
+            }
+
             $receiptKey = $this->fetchShareReceiptKey($wrappedReceipt);
 
-            /** @var PemFile $pemFile */
-            $pemFile = $this->pemFile;
-            return $receiptParser->createSuccess($wrappedReceipt, $receiptKey, $pemFile);
+            return $receiptParser->createSuccess($wrappedReceipt, $receiptKey, $this->pemFile);
         }
 
         return $receiptParser->createFailure($wrappedReceipt);

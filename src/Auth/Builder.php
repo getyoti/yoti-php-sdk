@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Auth;
 
+use Psr\Http\Client\ClientInterface;
 use Yoti\Util\PemFile;
 
 /**
@@ -35,6 +36,11 @@ class Builder
      * @var string|null
      */
     private $authApiUrl;
+
+    /**
+     * @var ClientInterface|null
+     */
+    private $httpClient;
 
     /**
      * Sets the SDK ID that the authorization token will be generated against.
@@ -114,6 +120,19 @@ class Builder
     }
 
     /**
+     * Sets a custom PSR-18 HTTP client (primarily for testing).
+     *
+     * @param ClientInterface $httpClient
+     *
+     * @return self
+     */
+    public function withHttpClient(ClientInterface $httpClient): self
+    {
+        $this->httpClient = $httpClient;
+        return $this;
+    }
+
+    /**
      * Builds the AuthenticationTokenGenerator.
      *
      * @return AuthenticationTokenGenerator
@@ -144,7 +163,8 @@ class Builder
             $this->sdkId,
             $this->pemFile,
             $jwtIdSupplier,
-            $authApiUrl
+            $authApiUrl,
+            $this->httpClient
         );
     }
 

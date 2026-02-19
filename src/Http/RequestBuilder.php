@@ -361,7 +361,8 @@ class RequestBuilder
         $strategyQueryParams = $authStrategy->createQueryParams();
         $allQueryParams = array_merge($this->queryParams, $strategyQueryParams);
 
-        $endpointWithParams = $this->endpoint . '?' . http_build_query($allQueryParams);
+        $queryString = http_build_query($allQueryParams);
+        $endpointWithParams = $queryString !== '' ? $this->endpoint . '?' . $queryString : $this->endpoint;
 
         $payload = isset($this->multipartEntity) ? Payload::fromStream($this->multipartEntity->createStream()) :
             $this->payload;
