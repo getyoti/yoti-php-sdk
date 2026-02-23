@@ -104,6 +104,8 @@ class ResourceResponse
                 return new TextExtractionTaskResponse($task);
             case Constants::SUPPLEMENTARY_DOCUMENT_TEXT_DATA_EXTRACTION:
                 return new SupplementaryDocTextExtractionTaskResponse($task);
+            case Constants::VERIFY_SHARE_CODE_TASK:
+                return new VerifyShareCodeTaskResponse($task);
             default:
                 return new TaskResponse($task);
         }
