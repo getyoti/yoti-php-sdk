@@ -121,6 +121,9 @@ class AuthenticationTokenGenerator
     /**
      * Create a PS384-signed JWT for the client assertion.
      *
+     * Uses phpseclib3 for RSASSA-PSS (PS384) signing, since
+     * firebase/php-jwt does not support PSS algorithms.
+     *
      * @return string
      *
      * @throws AuthException
@@ -145,13 +148,36 @@ class AuthenticationTokenGenerator
             'iat' => $now,
         ];
 
-        // Get the private key from PEM
-        $privateKey = openssl_pkey_get_private((string) $this->pemFile);
-        if ($privateKey === false) {
-            throw new AuthException('Failed to load private key from PEM file');
+        $headerEncoded = $this->base64UrlEncode((string) json_encode($header));
+        $claimsEncoded = $this->base64UrlEncode((string) json_encode($claims));
+        $signingInput = $headerEncoded . '.' . $claimsEncoded;
+
+        try {
+            /** @var \phpseclib3\Crypt\RSA\PrivateKey $rsaKey */
+            $rsaKey = \phpseclib3\Crypt\PublicKeyLoader::load((string) $this->pemFile);
+            $rsaKey = $rsaKey
+                ->withPadding(\phpseclib3\Crypt\RSA::SIGNATURE_PSS)
+                ->withHash('sha384')
+                ->withMGFHash('sha384');
+        } catch (\Exception $e) {
+            throw new AuthException('Failed to load private key from PEM file: ' . $e->getMessage(), 0, $e);
         }
 
-        return \Firebase\JWT\JWT::encode($claims, $privateKey, 'PS384', null, $header);
+        $signature = $rsaKey->sign($signingInput);
+
+        return $signingInput . '.' . $this->base64UrlEncode($signature);
+    }
+
+    /**
+     * Base64url-encode a string (RFC 7515).
+     *
+     * @param string $data
+     *
+     * @return string
+     */
+    private function base64UrlEncode(string $data): string
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
     /**

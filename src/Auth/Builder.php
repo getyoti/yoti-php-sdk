@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Auth;
 
 use Psr\Http\Client\ClientInterface;
+use Yoti\Util\Env;
 use Yoti\Util\PemFile;
 
 /**
@@ -154,9 +155,8 @@ class Builder
         };
 
         // Resolve auth URL: custom > environment variable > default
-        $envAuthUrl = getenv(Properties::ENV_YOTI_AUTH_URL);
         $authApiUrl = $this->authApiUrl
-            ?? ($envAuthUrl !== false ? $envAuthUrl : null)
+            ?? Env::get(Properties::ENV_YOTI_AUTH_URL)
             ?? Properties::DEFAULT_YOTI_AUTH_URL;
 
         return new AuthenticationTokenGenerator(
