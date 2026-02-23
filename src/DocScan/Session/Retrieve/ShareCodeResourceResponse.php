@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Retrieve;
 
+use Yoti\Exception\DateTimeException;
+use Yoti\Util\DateTime;
+
 class ShareCodeResourceResponse extends ResourceResponse
 {
     /**
-     * @var string|null
+     * @var \DateTime|null
      */
     private $createdAt;
 
     /**
-     * @var string|null
+     * @var \DateTime|null
      */
     private $lastUpdated;
 
@@ -38,14 +41,19 @@ class ShareCodeResourceResponse extends ResourceResponse
 
     /**
      * ShareCodeResourceResponse constructor.
+     *
      * @param array<string, mixed> $shareCode
+     *
+     * @throws DateTimeException
      */
     public function __construct(array $shareCode)
     {
         parent::__construct($shareCode);
 
-        $this->createdAt = $shareCode['created_at'] ?? null;
-        $this->lastUpdated = $shareCode['last_updated'] ?? null;
+        $this->createdAt = isset($shareCode['created_at']) ?
+            DateTime::stringToDateTime($shareCode['created_at']) : null;
+        $this->lastUpdated = isset($shareCode['last_updated']) ?
+            DateTime::stringToDateTime($shareCode['last_updated']) : null;
 
         $this->lookupProfile = isset($shareCode['lookup_profile'])
             ? new ShareCodeMediaResponse($shareCode['lookup_profile'])
@@ -65,17 +73,17 @@ class ShareCodeResourceResponse extends ResourceResponse
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): ?string
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getLastUpdated(): ?string
+    public function getLastUpdated(): ?\DateTime
     {
         return $this->lastUpdated;
     }

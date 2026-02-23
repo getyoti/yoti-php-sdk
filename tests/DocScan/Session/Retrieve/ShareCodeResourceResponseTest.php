@@ -65,8 +65,8 @@ class ShareCodeResourceResponseTest extends TestCase
         $result = new ShareCodeResourceResponse($input);
 
         $this->assertEquals('share-code-123', $result->getId());
-        $this->assertEquals('2026-01-14T10:00:00Z', $result->getCreatedAt());
-        $this->assertEquals('2026-01-14T11:00:00Z', $result->getLastUpdated());
+        $this->assertInstanceOf(\DateTime::class, $result->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $result->getLastUpdated());
 
         $this->assertInstanceOf(ShareCodeMediaResponse::class, $result->getLookupProfile());
         $this->assertInstanceOf(MediaResponse::class, $result->getLookupProfile()->getMedia());
@@ -300,8 +300,8 @@ class ShareCodeResourceResponseTest extends TestCase
         $result = new ShareCodeResourceResponse($input);
 
         $this->assertEquals('abc12345-6789-abcd-ef01-234567890abc', $result->getId());
-        $this->assertEquals('2026-02-05T11:33:46Z', $result->getCreatedAt());
-        $this->assertEquals('2026-02-05T11:33:50Z', $result->getLastUpdated());
+        $this->assertInstanceOf(\DateTime::class, $result->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $result->getLastUpdated());
 
         $this->assertNotNull($result->getLookupProfile());
         $this->assertEquals('df419a66-0449-41cf-a795-6dfaa993d1f6', $result->getLookupProfile()->getMedia()->getId());

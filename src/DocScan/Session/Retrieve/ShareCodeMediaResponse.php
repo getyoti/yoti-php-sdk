@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Retrieve;
 
+use Yoti\Exception\DateTimeException;
+
 class ShareCodeMediaResponse
 {
     /**
@@ -13,6 +15,7 @@ class ShareCodeMediaResponse
 
     /**
      * @param array<string, mixed> $data
+     * @throws DateTimeException
      */
     public function __construct(array $data)
     {
