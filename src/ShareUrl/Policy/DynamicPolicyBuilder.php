@@ -408,12 +408,12 @@ class DynamicPolicyBuilder
     }
 
     /**
-     * Use an Identity Profile Requirement object for the share
+     * Use an Advanced Identity Profile Requirement object for the share
      *
      * @param object $advancedIdentityProfileRequirements
      * @return $this
      */
-    public function withAdvIdentityProfileReqs($advancedIdentityProfileRequirements): self
+    public function withAdvancedIdentityProfileRequirements($advancedIdentityProfileRequirements): self
     {
         $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
         return $this;

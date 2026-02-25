@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
+use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfilePreviewResponse;
+use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
@@ -295,5 +297,61 @@ class GetSessionResultTest extends TestCase
         $this->assertInstanceOf(ImportTokenResponse::class, $result->getImportToken());
         $this->assertInstanceOf(MediaResponse::class, $result->getImportToken()->getMedia());
         $this->assertEquals('SOME_REASON', $result->getImportToken()->getFailureReason());
+    }
+
+    /**
+     * @test
+     * @covers ::getAdvancedIdentityProfile
+     * @covers ::__construct
+     */
+    public function shouldParseAdvancedIdentityProfileResponse()
+    {
+        $input = [
+            'advanced_identity_profile' => self::IDENTITY_PROFILE,
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(AdvancedIdentityProfileResponse::class, $result->getAdvancedIdentityProfile());
+    }
+
+    /**
+     * @test
+     * @covers ::getAdvancedIdentityProfilePreview
+     * @covers ::__construct
+     */
+    public function shouldParseAdvancedIdentityProfilePreviewResponse()
+    {
+        $input = [
+            'advanced_identity_profile_preview' => [
+                'media' => [
+                    'id' => 'SOME_ID',
+                    'type' => 'JSON',
+                    'created' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                ]
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(
+            AdvancedIdentityProfilePreviewResponse::class,
+            $result->getAdvancedIdentityProfilePreview()
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getAdvancedIdentityProfile
+     * @covers ::getAdvancedIdentityProfilePreview
+     * @covers ::__construct
+     */
+    public function shouldReturnNullWhenAdvancedIdentityProfileNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertNull($result->getAdvancedIdentityProfile());
+        $this->assertNull($result->getAdvancedIdentityProfilePreview());
     }
 }
