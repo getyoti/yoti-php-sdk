@@ -79,6 +79,11 @@ class SessionSpecificationBuilder
     private $identityProfileRequirements;
 
     /**
+     * @var object|null
+     */
+    private $advancedIdentityProfileRequirements;
+
+    /**
      * @var ImportToken|null
      */
     private $importToken;
@@ -255,6 +260,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the Advanced Identity Profile Requirements for the session
+     *
+     * @param object $advancedIdentityProfileRequirements
+     *
+     * @return $this
+     */
+    public function withAdvancedIdentityProfileRequirements($advancedIdentityProfileRequirements): self
+    {
+        $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function withCreateIdentityProfilePreview(): self
@@ -293,6 +311,7 @@ class SessionSpecificationBuilder
             $this->ibvOptions,
             $this->subject,
             $this->identityProfileRequirements,
+            $this->advancedIdentityProfileRequirements,
             $this->createIdentityProfilePreview,
             $this->importToken,
         );

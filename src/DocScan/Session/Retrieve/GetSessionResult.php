@@ -53,6 +53,10 @@ class GetSessionResult
 
     private ?IdentityProfilePreviewResponse $identityProfilePreview;
 
+    private ?AdvancedIdentityProfileResponse $advancedIdentityProfile = null;
+
+    private ?AdvancedIdentityProfilePreviewResponse $advancedIdentityProfilePreview = null;
+
     private ?ImportTokenResponse $importToken;
 
     /**
@@ -90,6 +94,18 @@ class GetSessionResult
         if (isset($sessionData['identity_profile_preview'])) {
             $this->identityProfilePreview = new IdentityProfilePreviewResponse(
                 $sessionData['identity_profile_preview']
+            );
+        }
+
+        if (isset($sessionData['advanced_identity_profile'])) {
+            $this->advancedIdentityProfile = new AdvancedIdentityProfileResponse(
+                $sessionData['advanced_identity_profile']
+            );
+        }
+
+        if (isset($sessionData['advanced_identity_profile_preview'])) {
+            $this->advancedIdentityProfilePreview = new AdvancedIdentityProfilePreviewResponse(
+                $sessionData['advanced_identity_profile_preview']
             );
         }
 
@@ -323,6 +339,20 @@ class GetSessionResult
     public function getIdentityProfilePreview(): ?IdentityProfilePreviewResponse
     {
         return $this->identityProfilePreview;
+    }
+
+    public function getAdvancedIdentityProfile(): ?AdvancedIdentityProfileResponse
+    {
+        if (isset($this->advancedIdentityProfile)) {
+            return $this->advancedIdentityProfile;
+        } else {
+            return null;
+        }
+    }
+
+    public function getAdvancedIdentityProfilePreview(): ?AdvancedIdentityProfilePreviewResponse
+    {
+        return $this->advancedIdentityProfilePreview;
     }
 
     public function getImportToken(): ?ImportTokenResponse

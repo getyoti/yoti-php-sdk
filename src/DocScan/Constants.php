@@ -56,4 +56,6 @@ class Constants
 
     public const RECLASSIFICATION = "RECLASSIFICATION";
     public const GENERIC = "GENERIC";
+
+    public const VERIFY_SHARE_CODE_TASK = 'VERIFY_SHARE_CODE_TASK';
 }
