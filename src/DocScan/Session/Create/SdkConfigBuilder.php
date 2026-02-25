@@ -86,6 +86,11 @@ class SdkConfigBuilder
      */
     private $brandId;
 
+    /**
+     * @var array<string>|null
+     */
+    private $suppressedScreens;
+
     public function withAllowsCamera(): self
     {
         return $this->withAllowedCaptureMethod(self::CAMERA);
@@ -251,6 +256,33 @@ class SdkConfigBuilder
         return $this;
     }
 
+    /**
+     * Sets the suppressed screens array for configuration
+     *
+     * @param array<string> $suppressedScreens Array of screen identifiers to suppress
+     * @return $this
+     */
+    public function withSuppressedScreens(array $suppressedScreens): self
+    {
+        $this->suppressedScreens = $suppressedScreens;
+        return $this;
+    }
+
+    /**
+     * Adds a single screen to the suppressed screens list
+     *
+     * @param string $screenIdentifier The screen identifier to suppress
+     * @return $this
+     */
+    public function withSuppressedScreen(string $screenIdentifier): self
+    {
+        if ($this->suppressedScreens === null) {
+            $this->suppressedScreens = [];
+        }
+        $this->suppressedScreens[] = $screenIdentifier;
+        return $this;
+    }
+
     public function build(): SdkConfig
     {
         return new SdkConfig(
@@ -268,7 +300,8 @@ class SdkConfigBuilder
             $this->biometricConsentFlow,
             $this->darkMode,
             $this->primaryColourDarkMode,
-            $this->brandId
+            $this->brandId,
+            $this->suppressedScreens
         );
     }
 }

@@ -336,10 +336,13 @@ class RequestBuilderTest extends TestCase
     public function testBuildWithoutPem()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Pem file must be provided to Yoti\\Http\\RequestBuilder');
+        $this->expectExceptionMessage(
+            'Either an AuthStrategy or a PEM file must be provided to Yoti\\Http\\RequestBuilder'
+        );
 
         (new RequestBuilder())
             ->withBaseUrl(self::SOME_BASE_URL)
+            ->withGet()
             ->build();
     }
 

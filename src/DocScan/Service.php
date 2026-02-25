@@ -18,6 +18,7 @@ use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\Instructions\ContactProfileResponse;
 use Yoti\DocScan\Session\Retrieve\Instructions\InstructionsResponse;
 use Yoti\DocScan\Support\SupportedDocumentsResponse;
+use Yoti\Http\AuthStrategy\AuthStrategyInterface;
 use Yoti\Http\Payload;
 use Yoti\Http\Request;
 use Yoti\Http\RequestBuilder;
@@ -37,9 +38,14 @@ class Service
     private $sdkId;
 
     /**
-     * @var PemFile
+     * @var PemFile|null
      */
     private $pemFile;
+
+    /**
+     * @var AuthStrategyInterface|null
+     */
+    private $authStrategy;
 
     /**
      * @var Config
@@ -65,6 +71,54 @@ class Service
     }
 
     /**
+     * Create a Service instance using an authentication strategy.
+     *
+     * When using BearerTokenStrategy (central auth), no sdkId or PEM
+     * is required since the Bearer token handles authorization.
+     *
+     * @param AuthStrategyInterface $authStrategy
+     * @param Config $config
+     *
+     * @return self
+     */
+    public static function withAuthStrategy(AuthStrategyInterface $authStrategy, Config $config): self
+    {
+        $instance = new \ReflectionClass(self::class);
+        $service = $instance->newInstanceWithoutConstructor();
+        $service->authStrategy = $authStrategy;
+        $service->config = $config;
+        $service->apiUrl = $config->getApiUrl() ?? Constants::DOC_SCAN_API_URL;
+        $service->sdkId = '';
+        return $service;
+    }
+
+    /**
+     * Apply authentication to a RequestBuilder.
+     *
+     * If an explicit auth strategy was set, uses it.
+     * Otherwise falls back to the legacy PemFile + sdkId approach.
+     *
+     * @param RequestBuilder $builder
+     * @param bool $includeSdkId Whether to include sdkId as query param (legacy mode only)
+     *
+     * @return RequestBuilder
+     */
+    private function applyAuth(RequestBuilder $builder, bool $includeSdkId = true): RequestBuilder
+    {
+        if ($this->authStrategy !== null) {
+            return $builder->withAuthStrategy($this->authStrategy);
+        }
+
+        if ($this->pemFile !== null) {
+            $builder->withPemFile($this->pemFile);
+        }
+        if ($includeSdkId && $this->sdkId !== null && $this->sdkId !== '') {
+            $builder->withQueryParam('sdkId', $this->sdkId);
+        }
+        return $builder;
+    }
+
+    /**
      * Creates a Yoti Doc Scan session using the supplied
      * specification.
      *
@@ -76,14 +130,14 @@ class Service
      */
     public function createSession(SessionSpecification $sessionSpec): CreateSessionResult
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint('/sessions')
-            ->withQueryParam('sdkId', $this->sdkId)
             ->withPayload(Payload::fromJsonData($sessionSpec))
             ->withHeader('Content-Type', 'application/json')
-            ->withPemFile($this->pemFile)
-            ->withPost()
+            ->withPost();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -103,12 +157,12 @@ class Service
      */
     public function retrieveSession(string $sessionId): GetSessionResult
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint(sprintf('/sessions/%s', $sessionId))
-            ->withQueryParam('sdkId', $this->sdkId)
-            ->withPemFile($this->pemFile)
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -127,12 +181,12 @@ class Service
      */
     public function deleteSession(string $sessionId): void
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint(sprintf('/sessions/%s', $sessionId))
-            ->withQueryParam('sdkId', $this->sdkId)
-            ->withPemFile($this->pemFile)
-            ->withMethod(Request::METHOD_DELETE)
+            ->withMethod(Request::METHOD_DELETE);
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -150,12 +204,12 @@ class Service
      */
     public function getMediaContent(string $sessionId, string $mediaId): ?Media
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint(sprintf('/sessions/%s/media/%s/content', $sessionId, $mediaId))
-            ->withQueryParam('sdkId', $this->sdkId)
-            ->withPemFile($this->pemFile)
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -181,12 +235,12 @@ class Service
      */
     public function deleteMediaContent(string $sessionId, string $mediaId): void
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint(sprintf('/sessions/%s/media/%s/content', $sessionId, $mediaId))
-            ->withQueryParam('sdkId', $this->sdkId)
-            ->withPemFile($this->pemFile)
-            ->withMethod(Request::METHOD_DELETE)
+            ->withMethod(Request::METHOD_DELETE);
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -203,14 +257,14 @@ class Service
         $requestBuilder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint('/supported-documents')
-            ->withPemFile($this->pemFile)
             ->withGet();
 
         if ($isStrictlyLatin) {
             $requestBuilder->withQueryParam('includeNonLatin', '1');
         }
 
-        $response = $requestBuilder
+        // getSupportedDocuments does not require sdkId in legacy mode
+        $response = $this->applyAuth($requestBuilder, false)
             ->build()
             ->execute();
 
@@ -231,13 +285,13 @@ class Service
         string $sessionId,
         CreateFaceCaptureResourcePayload $createFaceCaptureResourcePayload
     ): CreateFaceCaptureResourceResponse {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withQueryParam('sdkId', $this->sdkId)
             ->withEndpoint("sessions/$sessionId/resources/face-capture")
-            ->withPemFile($this->pemFile)
             ->withPayload(Payload::fromJsonData($createFaceCaptureResourcePayload))
-            ->withPost()
+            ->withPost();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -259,7 +313,7 @@ class Service
         string $resourceId,
         UploadFaceCaptureImagePayload $faceCaptureImagePayload
     ): void {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withMultipartBoundary(Config::YOTI_MULTIPART_BOUNDARY)
             ->withMultipartBinaryBody(
                 "binary-content",
@@ -267,11 +321,11 @@ class Service
                 $faceCaptureImagePayload->getImageContentType(),
                 'face-capture-image'
             )
-            ->withPemFile($this->pemFile)
             ->withBaseUrl($this->apiUrl)
-            ->withQueryParam('sdkId', $this->sdkId)
             ->withEndpoint("/sessions/$sessionId/resources/face-capture/$resourceId/image")
-            ->withPut()
+            ->withPut();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -285,12 +339,12 @@ class Service
      */
     public function fetchSessionConfiguration(string $sessionId): SessionConfigurationResponse
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
             ->withEndpoint(sprintf('/sessions/%s/configuration', $sessionId))
-            ->withQueryParam('sdkId', $this->sdkId)
-            ->withPemFile($this->pemFile)
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -308,12 +362,13 @@ class Service
      */
     public function putIbvInstructions(string $sessionId, Instructions $instructions): void
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withPemFile($this->pemFile)
             ->withEndpoint(sprintf('/sessions/%s/instructions', $sessionId))
             ->withPut()
-            ->withPayload(Payload::fromJsonData($instructions))
+            ->withPayload(Payload::fromJsonData($instructions));
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -327,11 +382,12 @@ class Service
      */
     public function getIbvInstructions(string $sessionId): InstructionsResponse
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withPemFile($this->pemFile)
             ->withEndpoint(sprintf('/sessions/%s/instructions', $sessionId))
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -349,11 +405,12 @@ class Service
      */
     public function getIbvInstructionsPdf(string $sessionId): Media
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withPemFile($this->pemFile)
             ->withEndpoint(sprintf('/sessions/%s/instructions/pdf', $sessionId))
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -372,11 +429,12 @@ class Service
      */
     public function fetchInstructionsContactProfile(string $sessionId): ContactProfileResponse
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withPemFile($this->pemFile)
             ->withEndpoint(sprintf('/sessions/%s/instructions/contact-profile', $sessionId))
-            ->withGet()
+            ->withGet();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
@@ -393,11 +451,12 @@ class Service
      */
     public function triggerIbvEmailNotification(string $sessionId): void
     {
-        $response = (new RequestBuilder($this->config))
+        $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
-            ->withPemFile($this->pemFile)
             ->withEndpoint(sprintf('/sessions/%s/instructions/email', $sessionId))
-            ->withPost()
+            ->withPost();
+
+        $response = $this->applyAuth($builder)
             ->build()
             ->execute();
 
