@@ -78,6 +78,11 @@ class SessionSpecification implements JsonSerializable
      */
     private $identityProfileRequirements;
 
+    /**
+     * @var object|null
+     */
+    private $advancedIdentityProfileRequirements;
+
     private ?bool $createIdentityProfilePreview;
 
     /**
@@ -99,6 +104,7 @@ class SessionSpecification implements JsonSerializable
      * @param IbvOptions|null $ibvOptions
      * @param object|null $subject
      * @param object|null $identityProfileRequirements
+     * @param object|null $advancedIdentityProfileRequirements
      * @param bool|null $createIdentityProfilePreview
      * @param ImportToken|null $importToken
      */
@@ -116,6 +122,7 @@ class SessionSpecification implements JsonSerializable
         ?IbvOptions $ibvOptions = null,
         ?object $subject = null,
         ?object $identityProfileRequirements = null,
+        ?object $advancedIdentityProfileRequirements = null,
         ?bool $createIdentityProfilePreview = null,
         ?ImportToken $importToken = null
     ) {
@@ -132,6 +139,7 @@ class SessionSpecification implements JsonSerializable
         $this->ibvOptions = $ibvOptions;
         $this->subject = $subject;
         $this->identityProfileRequirements = $identityProfileRequirements;
+        $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
         $this->createIdentityProfilePreview = $createIdentityProfilePreview;
         $this->importToken = $importToken;
     }
@@ -155,6 +163,7 @@ class SessionSpecification implements JsonSerializable
             'ibv_options' => $this->getIbvOptions(),
             'subject' => $this->getSubject(),
             'identity_profile_requirements' => $this->getIdentityProfileRequirements(),
+            'advanced_identity_profile_requirements' => $this->getAdvancedIdentityProfileRequirements(),
             'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
             'import_token' => $this->getImportToken(),
         ]);
@@ -267,6 +276,14 @@ class SessionSpecification implements JsonSerializable
     public function getIdentityProfileRequirements(): ?object
     {
         return $this->identityProfileRequirements;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getAdvancedIdentityProfileRequirements(): ?object
+    {
+        return $this->advancedIdentityProfileRequirements;
     }
 
     public function getCreateIdentityProfilePreview(): ?bool

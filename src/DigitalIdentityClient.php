@@ -53,6 +53,34 @@ class DigitalIdentityClient
     }
 
     /**
+     * Returns a new Builder instance for fluent construction.
+     *
+     * @return DigitalIdentityClientBuilder
+     */
+    public static function builder(): DigitalIdentityClientBuilder
+    {
+        return new DigitalIdentityClientBuilder();
+    }
+
+    /**
+     * Internal factory used by DigitalIdentityClientBuilder to create an instance
+     * with an already-configured service.
+     *
+     * @internal
+     * @param DigitalIdentityService $service
+     * @return self
+     */
+    public static function fromService(DigitalIdentityService $service): self
+    {
+        $instance = new \ReflectionClass(self::class);
+        /** @var self $client */
+        $client = $instance->newInstanceWithoutConstructor();
+        $client->digitalIdentityService = $service;
+        $client->id = '';
+        return $client;
+    }
+
+    /**
      * Create a sharing session to initiate a sharing process based on a policy
      *
      * @throws DigitalIdentityException

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Session\Retrieve\ResourceContainer;
+use Yoti\DocScan\Session\Retrieve\ShareCodeResourceResponse;
 use Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse;
 use Yoti\DocScan\Session\Retrieve\ZoomLivenessResourceResponse;
 use Yoti\Test\TestCase;
@@ -27,6 +28,8 @@ class ResourceContainerTest extends TestCase
      * @covers ::parseFaceCapture
      * @covers ::parseSupplementaryDocuments
      * @covers ::getSupplementaryDocuments
+     * @covers ::parseShareCodes
+     * @covers ::getShareCodes
      */
     public function shouldBuildCorrectly()
     {
@@ -46,6 +49,10 @@ class ResourceContainerTest extends TestCase
             ],
             'face_capture' => [
                 ['id' => 'SOME_ID']
+            ],
+            'share_codes' => [
+                ['id' => 'share-code-1'],
+                ['id' => 'share-code-2'],
             ]
         ];
 
@@ -57,6 +64,7 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(1, $result->getStaticLivenessResources());
         $this->assertCount(2, $result->getSupplementaryDocuments());
         $this->assertCount(1, $result->getFaceCapture());
+        $this->assertCount(2, $result->getShareCodes());
     }
 
     /**
@@ -69,6 +77,7 @@ class ResourceContainerTest extends TestCase
 
         $this->assertCount(0, $result->getIdDocuments());
         $this->assertCount(0, $result->getLivenessCapture());
+        $this->assertCount(0, $result->getShareCodes());
     }
 
     /**
@@ -128,5 +137,42 @@ class ResourceContainerTest extends TestCase
 
         $this->assertCount(3, $result->getLivenessCapture());
         $this->assertCount(2, $result->getZoomLivenessResources());
+    }
+
+    /**
+     * @test
+     * @covers ::parseShareCodes
+     * @covers ::getShareCodes
+     */
+    public function shouldParseShareCodes(): void
+    {
+        $input = [
+            'share_codes' => [
+                [
+                    'id' => 'share-code-1',
+                    'source' => ['type' => 'END_USER'],
+                    'created_at' => '2026-01-14T10:00:00Z',
+                    'last_updated' => '2026-01-14T11:00:00Z',
+                    'tasks' => [],
+                ],
+                [
+                    'id' => 'share-code-2',
+                    'source' => ['type' => 'END_USER'],
+                    'created_at' => '2026-01-14T12:00:00Z',
+                    'last_updated' => '2026-01-14T13:00:00Z',
+                    'tasks' => [],
+                ],
+            ],
+        ];
+
+        $result = new ResourceContainer($input);
+
+        $this->assertCount(2, $result->getShareCodes());
+        $this->assertContainsOnlyInstancesOf(
+            ShareCodeResourceResponse::class,
+            $result->getShareCodes()
+        );
+        $this->assertEquals('share-code-1', $result->getShareCodes()[0]->getId());
+        $this->assertEquals('share-code-2', $result->getShareCodes()[1]->getId());
     }
 }

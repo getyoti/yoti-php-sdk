@@ -27,6 +27,11 @@ class ResourceContainer
     private $faceCapture = [];
 
     /**
+     * @var ShareCodeResourceResponse[]
+     */
+    private $shareCodes = [];
+
+    /**
      * ResourceContainer constructor.
      * @param array<string, mixed> $resources
      */
@@ -46,6 +51,10 @@ class ResourceContainer
 
         if (isset($resources['face_capture'])) {
             $this->faceCapture = $this->parseFaceCapture($resources['face_capture']);
+        }
+
+        if (isset($resources['share_codes'])) {
+            $this->shareCodes = $this->parseShareCodes($resources['share_codes']);
         }
     }
 
@@ -159,6 +168,27 @@ class ResourceContainer
     public function getFaceCapture(): array
     {
         return $this->faceCapture;
+    }
+
+    /**
+     * @return ShareCodeResourceResponse[]
+     */
+    public function getShareCodes(): array
+    {
+        return $this->shareCodes;
+    }
+
+    /**
+     * @param array<array<string, mixed>> $shareCodes
+     * @return ShareCodeResourceResponse[]
+     */
+    private function parseShareCodes(array $shareCodes): array
+    {
+        $parsedShareCodes = [];
+        foreach ($shareCodes as $shareCode) {
+            $parsedShareCodes[] = new ShareCodeResourceResponse($shareCode);
+        }
+        return $parsedShareCodes;
     }
 
     /**

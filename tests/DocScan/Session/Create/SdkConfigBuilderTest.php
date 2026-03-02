@@ -26,6 +26,8 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_DARK_MODE = 'someDarkMode';
     private const SOME_PRIMARY_COLOUR_DARK_MODE = 'somePrimaryColourDarkMode';
     private const SOME_BRAND_ID = 'someBrandId';
+    private const SOME_SCREEN_IDENTIFIER = 'someScreenIdentifier';
+    private const ANOTHER_SCREEN_IDENTIFIER = 'anotherScreenIdentifier';
 
     /**
      * @test
@@ -347,5 +349,95 @@ class SdkConfigBuilderTest extends TestCase
             ->build();
 
         $this->assertEquals('OFF', $result->getDarkMode());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreens
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldSetSuppressedScreensArray()
+    {
+        $suppressedScreens = [self::SOME_SCREEN_IDENTIFIER, self::ANOTHER_SCREEN_IDENTIFIER];
+
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens($suppressedScreens)
+            ->build();
+
+        $this->assertEquals($suppressedScreens, $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreen
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldAddSingleSuppressedScreen()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreen(self::SOME_SCREEN_IDENTIFIER)
+            ->build();
+
+        $this->assertEquals([self::SOME_SCREEN_IDENTIFIER], $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreen
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldAddMultipleSuppressedScreensIndividually()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreen(self::SOME_SCREEN_IDENTIFIER)
+            ->withSuppressedScreen(self::ANOTHER_SCREEN_IDENTIFIER)
+            ->build();
+
+        $expectedScreens = [self::SOME_SCREEN_IDENTIFIER, self::ANOTHER_SCREEN_IDENTIFIER];
+        $this->assertEquals($expectedScreens, $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldReturnNullWhenNoSuppressedScreensSet()
+    {
+        $result = (new SdkConfigBuilder())
+            ->build();
+
+        $this->assertNull($result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreens
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldIncludeSuppressedScreensInJsonSerialization()
+    {
+        $suppressedScreens = [self::SOME_SCREEN_IDENTIFIER, self::ANOTHER_SCREEN_IDENTIFIER];
+
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens($suppressedScreens)
+            ->build();
+
+        $jsonData = $result->jsonSerialize();
+        $this->assertEquals($suppressedScreens, $jsonData->suppressed_screens);
+    }
+
+    /**
+     * @test
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldNotIncludeSuppressedScreensInJsonWhenNull()
+    {
+        $result = (new SdkConfigBuilder())
+            ->build();
+
+        $jsonData = $result->jsonSerialize();
+        $this->assertFalse(property_exists($jsonData, 'suppressed_screens'));
     }
 }

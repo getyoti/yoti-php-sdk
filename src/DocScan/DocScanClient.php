@@ -67,6 +67,16 @@ class DocScanClient
     }
 
     /**
+     * Returns a new Builder instance for fluent construction.
+     *
+     * @return DocScanClientBuilder
+     */
+    public static function builder(): DocScanClientBuilder
+    {
+        return new DocScanClientBuilder();
+    }
+
+    /**
      * Creates a session within the Yoti Doc Scan session
      * using the supplied specification.
      *
@@ -243,5 +253,22 @@ class DocScanClient
     public function triggerIbvEmailNotification(string $sessionId): void
     {
         $this->docScanService->triggerIbvEmailNotification($sessionId);
+    }
+
+    /**
+     * Internal factory used by DocScanClientBuilder to create an instance
+     * with an already-configured Service.
+     *
+     * @internal
+     * @param Service $service
+     * @return self
+     */
+    public static function fromService(Service $service): self
+    {
+        $instance = new \ReflectionClass(self::class);
+        /** @var self $client */
+        $client = $instance->newInstanceWithoutConstructor();
+        $client->docScanService = $service;
+        return $client;
     }
 }
