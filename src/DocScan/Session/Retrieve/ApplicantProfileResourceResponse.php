@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Retrieve;
 
+use Yoti\Exception\DateTimeException;
 use Yoti\Util\DateTime;
 
 class ApplicantProfileResourceResponse extends ResourceResponse
@@ -26,6 +27,7 @@ class ApplicantProfileResourceResponse extends ResourceResponse
     /**
      * ApplicantProfileResourceResponse constructor.
      * @param array<string, mixed> $applicantProfile
+     * @throws DateTimeException
      */
     public function __construct(array $applicantProfile)
     {
