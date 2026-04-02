@@ -27,7 +27,7 @@ Please feel free to reach out
 
 ## Requirements
 
-* PHP ^7.4 || ^8.0 || ^8.1
+* PHP ^8.1
 * CURL PHP extension (must support TLSv1.2)
 
 ### Recommended (optional)
@@ -42,13 +42,13 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "^4.4.2"
+    "yoti/yoti-php-sdk" : "^4.5.0"
 }
 ```
 
 Or run this Composer command
 ```console
-$ composer require yoti/yoti-php-sdk "^4.4.2"
+$ composer require yoti/yoti-php-sdk "^4.5.0"
 ```
 
 ## Setup
