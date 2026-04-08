@@ -7,6 +7,8 @@ namespace Yoti\Test\DocScan\Session\Retrieve;
 use Yoti\DocScan\Session\Retrieve\GeneratedCheckResponse;
 use Yoti\DocScan\Session\Retrieve\GeneratedMedia;
 use Yoti\DocScan\Session\Retrieve\GeneratedTextDataCheckResponse;
+use Yoti\DocScan\Session\Retrieve\TaskRecommendationReasonResponse;
+use Yoti\DocScan\Session\Retrieve\TaskRecommendationResponse;
 use Yoti\DocScan\Session\Retrieve\TaskResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
@@ -25,6 +27,9 @@ class TaskResponseTest extends TestCase
     private const SOME_UNKNOWN_TYPE = 'someUnknownType';
     private const ID_DOCUMENT_TEXT_DATA_CHECK = 'ID_DOCUMENT_TEXT_DATA_CHECK';
     private const SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK = 'SUPPLEMENTARY_DOCUMENT_TEXT_DATA_CHECK';
+    private const SOME_RECOMMENDATION_VALUE = 'MUST_TRY_AGAIN';
+    private const SOME_RECOMMENDATION_REASON_VALUE = 'USER_ERROR';
+    private const SOME_RECOMMENDATION_REASON_DETAIL = 'NO_DOCUMENT';
 
     /**
      * @var TaskResponse
@@ -56,6 +61,13 @@ class TaskResponseTest extends TestCase
             'generated_media' => [
                 [],
                 [],
+            ],
+            'recommendation' => [
+                'value' => self::SOME_RECOMMENDATION_VALUE,
+                'reason' => [
+                    'value' => self::SOME_RECOMMENDATION_REASON_VALUE,
+                    'detail' => self::SOME_RECOMMENDATION_REASON_DETAIL,
+                ],
             ],
          ]);
     }
@@ -185,5 +197,22 @@ class TaskResponseTest extends TestCase
         $this->assertNull($result->getLastUpdated());
         $this->assertCount(0, $result->getGeneratedChecks());
         $this->assertCount(0, $result->getGeneratedMedia());
+        $this->assertNull($result->getRecommendation());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getRecommendation
+     */
+    public function shouldReturnRecommendation()
+    {
+        $recommendation = $this->taskResponse->getRecommendation();
+
+        $this->assertInstanceOf(TaskRecommendationResponse::class, $recommendation);
+        $this->assertEquals(self::SOME_RECOMMENDATION_VALUE, $recommendation->getValue());
+        $this->assertInstanceOf(TaskRecommendationReasonResponse::class, $recommendation->getReason());
+        $this->assertEquals(self::SOME_RECOMMENDATION_REASON_VALUE, $recommendation->getReason()->getValue());
+        $this->assertEquals(self::SOME_RECOMMENDATION_REASON_DETAIL, $recommendation->getReason()->getDetail());
     }
 }

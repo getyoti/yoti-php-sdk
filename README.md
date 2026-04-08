@@ -27,9 +27,12 @@ Please feel free to reach out
 
 ## Requirements
 
-* PHP ^7.4 || ^8.0 || ^8.1
+* PHP ^8.1
 * CURL PHP extension (must support TLSv1.2)
 
+> **Breaking change:** this SDK release supports PHP 8.1 and above only.
+> Support for PHP 7.4 and PHP 8.0 has been removed.
+> If you are still running on PHP 7.4/8.0, please remain on an earlier SDK version until you can upgrade your runtime.
 ### Recommended (optional)
 - [Protobuf C extension](https://github.com/protocolbuffers/protobuf/tree/master/php) (PHP package will be used by default)
 
@@ -42,13 +45,13 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "^4.4.1"
+    "yoti/yoti-php-sdk" : "^4.5.0"
 }
 ```
 
 Or run this Composer command
 ```console
-$ composer require yoti/yoti-php-sdk "^4.4.1"
+$ composer require yoti/yoti-php-sdk "^4.5.0"
 ```
 
 ## Setup

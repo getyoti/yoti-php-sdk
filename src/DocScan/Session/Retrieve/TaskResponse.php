@@ -46,6 +46,11 @@ class TaskResponse
     private $generatedMedia = [];
 
     /**
+     * @var TaskRecommendationResponse|null
+     */
+    private $recommendation;
+
+    /**
      * TaskResponse constructor.
      * @param array<string, mixed> $task
      * @throws DateTimeException
@@ -68,6 +73,10 @@ class TaskResponse
 
         if (isset($task['generated_media'])) {
             $this->generatedMedia = $this->parseGeneratedMedia($task['generated_media']);
+        }
+
+        if (isset($task['recommendation'])) {
+            $this->recommendation = new TaskRecommendationResponse($task['recommendation']);
         }
     }
 
@@ -161,6 +170,14 @@ class TaskResponse
     public function getGeneratedMedia(): array
     {
         return $this->generatedMedia;
+    }
+
+    /**
+     * @return TaskRecommendationResponse|null
+     */
+    public function getRecommendation(): ?TaskRecommendationResponse
+    {
+        return $this->recommendation;
     }
 
     /**
