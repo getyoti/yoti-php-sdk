@@ -22,6 +22,11 @@ class PageResponse
     private $frames = [];
 
     /**
+     * @var string[]
+     */
+    private $extractionImageIds = [];
+
+    /**
      * PageInfo constructor.
      * @param array<string, mixed> $page
      */
@@ -38,6 +43,8 @@ class PageResponse
                 $this->frames[] = new FrameResponse($frame);
             }
         }
+
+        $this->extractionImageIds = $page['extraction_image_ids'] ?? [];
     }
 
     /**
@@ -62,5 +69,13 @@ class PageResponse
     public function getFrames(): array
     {
         return $this->frames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExtractionImageIds(): array
+    {
+        return $this->extractionImageIds;
     }
 }

@@ -30,6 +30,9 @@ Please feel free to reach out
 * PHP ^8.1
 * CURL PHP extension (must support TLSv1.2)
 
+> **Breaking change:** this SDK release supports PHP 8.1 and above only.
+> Support for PHP 7.4 and PHP 8.0 has been removed.
+> If you are still running on PHP 7.4/8.0, please remain on an earlier SDK version until you can upgrade your runtime.
 ### Recommended (optional)
 - [Protobuf C extension](https://github.com/protocolbuffers/protobuf/tree/master/php) (PHP package will be used by default)
 
