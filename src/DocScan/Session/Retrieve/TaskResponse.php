@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\Exception\DateTimeException;
 use Yoti\Util\DateTime;
 
 class TaskResponse
@@ -52,6 +53,7 @@ class TaskResponse
     /**
      * TaskResponse constructor.
      * @param array<string, mixed> $task
+     * @throws DateTimeException
      */
     public function __construct(array $task)
     {
