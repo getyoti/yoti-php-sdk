@@ -8,8 +8,8 @@ jobs:
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:
@@ -31,11 +31,61 @@ jobs:
 
       - run: composer test
 
+  php8-2:
+    name: Unit Tests php8.2 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.2 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
+  php8-3:
+    name: Unit Tests php8.3 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.3 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
   php8-4:
     name: Unit Tests php8.4 (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
-    # always run on push events
-    # only run on pull_request_target event when pull request pulls from fork repository
     if: >
       github.event_name == 'push' ||
       github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
@@ -51,8 +101,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      # Remove php-cs-fixer until compatible with PHP 8
-      # This step might be removable if php-cs-fixer is compatible with 8.4 by the time this runs
       - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
 
       - run: composer self-update
@@ -61,66 +109,14 @@ jobs:
 
       - run: composer test
 
-  php7-4:
-    name: Unit Tests php7.4 (php ${{ matrix.php-version }})
-    runs-on: ubuntu-latest
-    # always run on push events
-    # only run on pull_request_target event when pull request pulls from fork repository
-    if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [ 7.4 ]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: shivammathur/setup-php@2.9.0
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - run: composer self-update
-
-      - run: composer install --no-interaction --prefer-source --dev
-
-      - run: composer test
-
-  php8-0:
-    name: Unit Tests php8.0 (php ${{ matrix.php-version }})
-    runs-on: ubuntu-latest
-    # always run on push events
-    # only run on pull_request_target event when pull request pulls from fork repository
-    if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [ 8.0 ]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: shivammathur/setup-php@2.9.0
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - run: composer self-update
-
-      - run: composer install --no-interaction --prefer-source --dev
-
-      - run: composer test
-
   protobuf:
-    name: Unit Tests With Protobuf C Extension 3.13 (php ${{ matrix.php-version }})
+    name: Unit Tests With Protobuf C Extension (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     # always run on push events
     # only run on pull_request_target event when pull request pulls from fork repository
     if: >
-      github.event_name == 'push' || 
-      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository 
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       fail-fast: false
       matrix:

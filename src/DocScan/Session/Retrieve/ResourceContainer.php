@@ -32,6 +32,11 @@ class ResourceContainer
     private $shareCodes = [];
 
     /**
+     * @var ApplicantProfileResourceResponse[]
+     */
+    private $applicantProfiles = [];
+
+    /**
      * ResourceContainer constructor.
      * @param array<string, mixed> $resources
      */
@@ -55,6 +60,10 @@ class ResourceContainer
 
         if (isset($resources['share_codes'])) {
             $this->shareCodes = $this->parseShareCodes($resources['share_codes']);
+        }
+
+        if (isset($resources['applicant_profiles'])) {
+            $this->applicantProfiles = $this->parseApplicantProfiles($resources['applicant_profiles']);
         }
     }
 
@@ -179,6 +188,14 @@ class ResourceContainer
     }
 
     /**
+     * @return ApplicantProfileResourceResponse[]
+     */
+    public function getApplicantProfiles(): array
+    {
+        return $this->applicantProfiles;
+    }
+
+    /**
      * @param array<array<string, mixed>> $shareCodes
      * @return ShareCodeResourceResponse[]
      */
@@ -189,6 +206,19 @@ class ResourceContainer
             $parsedShareCodes[] = new ShareCodeResourceResponse($shareCode);
         }
         return $parsedShareCodes;
+    }
+
+    /**
+     * @param array<array<string, mixed>> $applicantProfiles
+     * @return ApplicantProfileResourceResponse[]
+     */
+    private function parseApplicantProfiles(array $applicantProfiles): array
+    {
+        $parsedApplicantProfiles = [];
+        foreach ($applicantProfiles as $applicantProfile) {
+            $parsedApplicantProfiles[] = new ApplicantProfileResourceResponse($applicantProfile);
+        }
+        return $parsedApplicantProfiles;
     }
 
     /**
