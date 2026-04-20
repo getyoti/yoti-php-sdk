@@ -4,6 +4,7 @@ namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\SdkConfigBuilder;
+use Yoti\DocScan\Session\Create\SuppressedScreen;
 use Yoti\Test\TestCase;
 
 /**
@@ -439,5 +440,115 @@ class SdkConfigBuilderTest extends TestCase
 
         $jsonData = $result->jsonSerialize();
         $this->assertFalse(property_exists($jsonData, 'suppressed_screens'));
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreens
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldAllowEmptySuppressedScreensArray()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens([])
+            ->build();
+
+        $this->assertSame([], $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers ::withSuppressedScreens
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getSuppressedScreens
+     */
+    public function shouldBuildUsingSuppressedScreenConstants()
+    {
+        $suppressedScreens = [
+            SuppressedScreen::ID_DOCUMENT_EDUCATION,
+            SuppressedScreen::ID_DOCUMENT_REQUIREMENTS,
+            SuppressedScreen::SUPPLEMENTARY_DOCUMENT_EDUCATION,
+            SuppressedScreen::ZOOM_LIVENESS_EDUCATION,
+            SuppressedScreen::STATIC_LIVENESS_EDUCATION,
+            SuppressedScreen::FACE_CAPTURE_EDUCATION,
+            SuppressedScreen::FLOW_COMPLETION,
+        ];
+
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens($suppressedScreens)
+            ->build();
+
+        $this->assertEquals($suppressedScreens, $result->getSuppressedScreens());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SuppressedScreen
+     */
+    public function suppressedScreenConstantsShouldHaveExpectedValues()
+    {
+        $this->assertSame('ID_DOCUMENT_EDUCATION', SuppressedScreen::ID_DOCUMENT_EDUCATION);
+        $this->assertSame('ID_DOCUMENT_REQUIREMENTS', SuppressedScreen::ID_DOCUMENT_REQUIREMENTS);
+        $this->assertSame(
+            'SUPPLEMENTARY_DOCUMENT_EDUCATION',
+            SuppressedScreen::SUPPLEMENTARY_DOCUMENT_EDUCATION
+        );
+        $this->assertSame('ZOOM_LIVENESS_EDUCATION', SuppressedScreen::ZOOM_LIVENESS_EDUCATION);
+        $this->assertSame('STATIC_LIVENESS_EDUCATION', SuppressedScreen::STATIC_LIVENESS_EDUCATION);
+        $this->assertSame('FACE_CAPTURE_EDUCATION', SuppressedScreen::FACE_CAPTURE_EDUCATION);
+        $this->assertSame('FLOW_COMPLETION', SuppressedScreen::FLOW_COMPLETION);
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::isScreenSuppressed
+     */
+    public function isScreenSuppressedShouldReturnTrueForListedScreen()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreens([
+                SuppressedScreen::ID_DOCUMENT_EDUCATION,
+                SuppressedScreen::FLOW_COMPLETION,
+            ])
+            ->build();
+
+        $this->assertTrue($result->isScreenSuppressed(SuppressedScreen::ID_DOCUMENT_EDUCATION));
+        $this->assertTrue($result->isScreenSuppressed(SuppressedScreen::FLOW_COMPLETION));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::isScreenSuppressed
+     */
+    public function isScreenSuppressedShouldReturnFalseForUnlistedScreen()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreen(SuppressedScreen::ID_DOCUMENT_EDUCATION)
+            ->build();
+
+        $this->assertFalse($result->isScreenSuppressed(SuppressedScreen::FLOW_COMPLETION));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::isScreenSuppressed
+     */
+    public function isScreenSuppressedShouldReturnFalseWhenSuppressedScreensIsNull()
+    {
+        $result = (new SdkConfigBuilder())->build();
+
+        $this->assertFalse($result->isScreenSuppressed(SuppressedScreen::ID_DOCUMENT_EDUCATION));
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::isScreenSuppressed
+     */
+    public function isScreenSuppressedShouldBeCaseSensitive()
+    {
+        $result = (new SdkConfigBuilder())
+            ->withSuppressedScreen(SuppressedScreen::ID_DOCUMENT_EDUCATION)
+            ->build();
+
+        $this->assertFalse($result->isScreenSuppressed('id_document_education'));
     }
 }

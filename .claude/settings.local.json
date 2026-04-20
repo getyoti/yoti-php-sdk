@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git rev-list *)",
+      "Bash(./vendor/bin/phpunit --filter 'SdkConfigBuilderTest|SessionConfigurationResponseTest')",
+      "Bash(git config *)"
+    ]
+  }
+}
