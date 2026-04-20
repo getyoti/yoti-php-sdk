@@ -151,12 +151,7 @@ class HomeController extends BaseController
                     ->withErrorUrl(config('app.url') . '/error')
                     ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
                     ->withBiometricConsentFlow('EARLY')
-                    ->withBrandId('brand_id')
-                    // Suppress specific screens to shorten the flow
-                    ->withSuppressedScreens(['intro_screen', 'document_capture_instruction'])
-                    // Or add screens individually:
-                    // ->withSuppressedScreen('intro_screen')
-                    // ->withSuppressedScreen('document_capture_instruction')
+                    //->withBrandId('brand_id')
                     ->build()
             )
             ->withRequiredDocument(

@@ -26,8 +26,8 @@ class SdkConfigBuilderTest extends TestCase
     private const SOME_DARK_MODE = 'someDarkMode';
     private const SOME_PRIMARY_COLOUR_DARK_MODE = 'somePrimaryColourDarkMode';
     private const SOME_BRAND_ID = 'someBrandId';
-    private const SOME_SCREEN_IDENTIFIER = 'someScreenIdentifier';
-    private const ANOTHER_SCREEN_IDENTIFIER = 'anotherScreenIdentifier';
+    private const SOME_SCREEN_IDENTIFIER = 'IDENTITY_DOCUMENT_EDUCATION';
+    private const ANOTHER_SCREEN_IDENTIFIER = 'IDENTITY_DOCUMENT_REQUIREMENTS';
 
     /**
      * @test
