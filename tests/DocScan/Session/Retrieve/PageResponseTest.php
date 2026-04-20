@@ -57,6 +57,25 @@ class PageResponseTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::getExtractionImageIds
+     */
+    public function testGetExtractionImageIds()
+    {
+        $extractionImageIds = [
+            '066a9372-0a52-4fe4-a026-866f8aee6fcb',
+            '9b0c9c0a-ff30-41ed-815b-d95d63271d45',
+        ];
+
+        $pageResponse = new PageResponse([
+            'extraction_image_ids' => $extractionImageIds,
+        ]);
+
+        $this->assertCount(2, $pageResponse->getExtractionImageIds());
+        $this->assertEquals($extractionImageIds, $pageResponse->getExtractionImageIds());
+    }
+
+    /**
      * @test
      * @covers ::__construct
      */
@@ -67,5 +86,6 @@ class PageResponseTest extends TestCase
         $this->assertNull($result->getCaptureMethod());
         $this->assertNull($result->getMedia());
         $this->assertEquals([], $result->getFrames());
+        $this->assertEquals([], $result->getExtractionImageIds());
     }
 }

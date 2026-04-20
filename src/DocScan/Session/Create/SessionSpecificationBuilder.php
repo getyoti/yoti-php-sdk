@@ -89,6 +89,11 @@ class SessionSpecificationBuilder
     private $importToken;
 
     /**
+     * @var ResourceCreationContainer|null
+     */
+    private $resources;
+
+    /**
      * @var bool
      */
     private bool $createIdentityProfilePreview = false;
@@ -293,6 +298,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the resources for the session
+     *
+     * @param ResourceCreationContainer $resources
+     *
+     * @return $this
+     */
+    public function withResources(ResourceCreationContainer $resources): self
+    {
+        $this->resources = $resources;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -314,6 +332,7 @@ class SessionSpecificationBuilder
             $this->advancedIdentityProfileRequirements,
             $this->createIdentityProfilePreview,
             $this->importToken,
+            $this->resources,
         );
     }
 }
