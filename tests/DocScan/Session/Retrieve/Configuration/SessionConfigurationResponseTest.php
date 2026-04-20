@@ -14,8 +14,8 @@ class SessionConfigurationResponseTest extends TestCase
     private const SOME_CLIENT_SESSION_TTL = 12345678;
     private const SOME_SESSION_ID = 'SOME_SESSION_ID';
     private const SOME_REQUESTED_CHECKS = ['SOME_CHECK', 'SOME_ANOTHER_CHECK'];
-    private const SOME_SCREEN_IDENTIFIER = 'someScreenIdentifier';
-    private const ANOTHER_SCREEN_IDENTIFIER = 'anotherScreenIdentifier';
+    private const SOME_SCREEN_IDENTIFIER = 'IDENTITY_DOCUMENT_EDUCATION';
+    private const ANOTHER_SCREEN_IDENTIFIER = 'IDENTITY_DOCUMENT_REQUIREMENTS';
     private const SOME_CAPTURE = [
         'biometric_consent' => 'SOME_STRING',
         'required_resources' => [

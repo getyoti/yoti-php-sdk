@@ -152,11 +152,19 @@ class HomeController extends BaseController
                     ->withPrivacyPolicyUrl(config('app.url') . '/privacy-policy')
                     ->withBiometricConsentFlow('EARLY')
                     ->withBrandId('brand_id')
-                    // Suppress specific screens to shorten the flow
-                    ->withSuppressedScreens(['intro_screen', 'document_capture_instruction'])
+                    // Suppress specific screens to shorten the flow.
+                    // Available screen identifiers:
+                    //   'IDENTITY_DOCUMENT_EDUCATION'
+                    //   'IDENTITY_DOCUMENT_REQUIREMENTS'
+                    //   'SUPPLEMENTARY_DOCUMENT_REQUIREMENTS'
+                    //   'ZOOM_LIVENESS_EDUCATION'
+                    //   'STATIC_LIVENESS_EDUCATION'
+                    //   'FACE_CAPTURE_EDUCATION'
+                    //   'FLOW_COMPLETION'
+                    // ->withSuppressedScreens(['IDENTITY_DOCUMENT_EDUCATION', 'IDENTITY_DOCUMENT_REQUIREMENTS'])
                     // Or add screens individually:
-                    // ->withSuppressedScreen('intro_screen')
-                    // ->withSuppressedScreen('document_capture_instruction')
+                    // ->withSuppressedScreen('IDENTITY_DOCUMENT_EDUCATION')
+                    // ->withSuppressedScreen('IDENTITY_DOCUMENT_REQUIREMENTS')
                     ->build()
             )
             ->withRequiredDocument(
