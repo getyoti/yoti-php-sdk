@@ -296,4 +296,19 @@ class SdkConfig implements \JsonSerializable
     {
         return $this->suppressedScreens;
     }
+
+    /**
+     * Returns true when the given screen identifier has been configured to be suppressed.
+     *
+     * @param string $screenIdentifier
+     * @return bool
+     */
+    public function isScreenSuppressed(string $screenIdentifier): bool
+    {
+        if ($this->suppressedScreens === null) {
+            return false;
+        }
+
+        return in_array($screenIdentifier, $this->suppressedScreens, true);
+    }
 }
