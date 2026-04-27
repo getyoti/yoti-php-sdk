@@ -26,6 +26,7 @@ class BreakdownResponseTest extends TestCase
     ];
 
     private const SOME_PROCESS = 'AUTOMATED';
+    private const SOME_EXPERT_REVIEW_PROCESS = 'EXPERT_REVIEW';
 
     /**
      * @test
@@ -79,5 +80,17 @@ class BreakdownResponseTest extends TestCase
         $this->assertNull($result->getResult());
         $this->assertNull($result->getProcess());
         $this->assertCount(0, $result->getDetails());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getProcess
+     */
+    public function shouldExposeExpertReviewProcessValue()
+    {
+        $result = new BreakdownResponse(['process' => self::SOME_EXPERT_REVIEW_PROCESS]);
+
+        $this->assertEquals(self::SOME_EXPERT_REVIEW_PROCESS, $result->getProcess());
     }
 }
