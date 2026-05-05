@@ -17,6 +17,11 @@ class BreakdownResponse
     private $result;
 
     /**
+     * @var string|null
+     */
+    private $process;
+
+    /**
      * @var DetailsResponse[]
      */
     private $details = [];
@@ -29,6 +34,7 @@ class BreakdownResponse
     {
         $this->subCheck = $breakdown['sub_check'] ?? null;
         $this->result = $breakdown['result'] ?? null;
+        $this->process = $breakdown['process'] ?? null;
 
         if (isset($breakdown['details'])) {
             foreach ($breakdown['details'] as $detail) {
@@ -51,6 +57,14 @@ class BreakdownResponse
     public function getResult(): ?string
     {
         return $this->result;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getProcess(): ?string
+    {
+        return $this->process;
     }
 
     /**

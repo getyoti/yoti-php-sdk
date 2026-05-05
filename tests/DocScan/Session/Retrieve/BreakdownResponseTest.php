@@ -25,11 +25,15 @@ class BreakdownResponseTest extends TestCase
         ],
     ];
 
+    private const SOME_PROCESS = 'AUTOMATED';
+    private const SOME_EXPERT_REVIEW_PROCESS = 'EXPERT_REVIEW';
+
     /**
      * @test
      * @covers ::__construct
      * @covers ::getSubCheck
      * @covers ::getResult
+     * @covers ::getProcess
      * @covers ::getDetails
      * @covers \Yoti\DocScan\Session\Retrieve\DetailsResponse::__construct
      * @covers \Yoti\DocScan\Session\Retrieve\DetailsResponse::getName
@@ -40,6 +44,7 @@ class BreakdownResponseTest extends TestCase
         $input = [
             'sub_check' => self::SOME_SUB_CHECK,
             'result' => self::SOME_RESULT,
+            'process' => self::SOME_PROCESS,
             'details' => self::SOME_DETAILS,
         ];
 
@@ -47,6 +52,7 @@ class BreakdownResponseTest extends TestCase
 
         $this->assertEquals(self::SOME_SUB_CHECK, $result->getSubCheck());
         $this->assertEquals(self::SOME_RESULT, $result->getResult());
+        $this->assertEquals(self::SOME_PROCESS, $result->getProcess());
 
         $details = $result->getDetails();
         for ($i = 0; $i < count(self::SOME_DETAILS); $i++) {
@@ -61,6 +67,7 @@ class BreakdownResponseTest extends TestCase
      * @covers ::__construct
      * @covers ::getSubCheck
      * @covers ::getResult
+     * @covers ::getProcess
      * @covers ::getDetails
      */
     public function shouldNotThrowExceptionWhenValuesAreMissing()
@@ -71,6 +78,19 @@ class BreakdownResponseTest extends TestCase
 
         $this->assertNull($result->getSubCheck());
         $this->assertNull($result->getResult());
+        $this->assertNull($result->getProcess());
         $this->assertCount(0, $result->getDetails());
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @covers ::getProcess
+     */
+    public function shouldExposeExpertReviewProcessValue()
+    {
+        $result = new BreakdownResponse(['process' => self::SOME_EXPERT_REVIEW_PROCESS]);
+
+        $this->assertEquals(self::SOME_EXPERT_REVIEW_PROCESS, $result->getProcess());
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
+use Yoti\DocScan\Session\Retrieve\ApplicantProfileResourceResponse;
 use Yoti\DocScan\Session\Retrieve\ResourceContainer;
 use Yoti\DocScan\Session\Retrieve\ShareCodeResourceResponse;
 use Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse;
@@ -53,7 +54,10 @@ class ResourceContainerTest extends TestCase
             'share_codes' => [
                 ['id' => 'share-code-1'],
                 ['id' => 'share-code-2'],
-            ]
+            ],
+            'applicant_profiles' => [
+                ['id' => 'applicant-profile-1'],
+            ],
         ];
 
         $result = new ResourceContainer($input);
@@ -65,6 +69,7 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(2, $result->getSupplementaryDocuments());
         $this->assertCount(1, $result->getFaceCapture());
         $this->assertCount(2, $result->getShareCodes());
+        $this->assertCount(1, $result->getApplicantProfiles());
     }
 
     /**
@@ -78,6 +83,7 @@ class ResourceContainerTest extends TestCase
         $this->assertCount(0, $result->getIdDocuments());
         $this->assertCount(0, $result->getLivenessCapture());
         $this->assertCount(0, $result->getShareCodes());
+        $this->assertCount(0, $result->getApplicantProfiles());
     }
 
     /**
@@ -174,5 +180,43 @@ class ResourceContainerTest extends TestCase
         );
         $this->assertEquals('share-code-1', $result->getShareCodes()[0]->getId());
         $this->assertEquals('share-code-2', $result->getShareCodes()[1]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::parseApplicantProfiles
+     * @covers ::getApplicantProfiles
+     */
+    public function shouldParseApplicantProfiles(): void
+    {
+        $input = [
+            'applicant_profiles' => [
+                [
+                    'id' => '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                    'source' => ['type' => 'END_USER'],
+                    'media' => [
+                        'id' => 'media-id-123',
+                        'type' => 'IMAGE',
+                        'created' => '2021-06-11T11:39:24Z',
+                        'last_updated' => '2021-06-11T11:39:24Z',
+                    ],
+                    'created_at' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                    'tasks' => [],
+                ],
+            ],
+        ];
+
+        $result = new ResourceContainer($input);
+
+        $this->assertCount(1, $result->getApplicantProfiles());
+        $this->assertContainsOnlyInstancesOf(
+            ApplicantProfileResourceResponse::class,
+            $result->getApplicantProfiles()
+        );
+        $this->assertEquals(
+            '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            $result->getApplicantProfiles()[0]->getId()
+        );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Constants;
+use Yoti\Exception\DateTimeException;
 use Yoti\Util\DateTime;
 
 class TaskResponse
@@ -45,8 +46,14 @@ class TaskResponse
     private $generatedMedia = [];
 
     /**
+     * @var TaskRecommendationResponse|null
+     */
+    private $recommendation;
+
+    /**
      * TaskResponse constructor.
      * @param array<string, mixed> $task
+     * @throws DateTimeException
      */
     public function __construct(array $task)
     {
@@ -66,6 +73,10 @@ class TaskResponse
 
         if (isset($task['generated_media'])) {
             $this->generatedMedia = $this->parseGeneratedMedia($task['generated_media']);
+        }
+
+        if (isset($task['recommendation'])) {
+            $this->recommendation = new TaskRecommendationResponse($task['recommendation']);
         }
     }
 
@@ -159,6 +170,14 @@ class TaskResponse
     public function getGeneratedMedia(): array
     {
         return $this->generatedMedia;
+    }
+
+    /**
+     * @return TaskRecommendationResponse|null
+     */
+    public function getRecommendation(): ?TaskRecommendationResponse
+    {
+        return $this->recommendation;
     }
 
     /**

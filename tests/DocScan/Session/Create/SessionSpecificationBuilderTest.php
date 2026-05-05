@@ -9,6 +9,7 @@ use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\IbvOptions;
 use Yoti\DocScan\Session\Create\ImportToken;
 use Yoti\DocScan\Session\Create\NotificationConfig;
+use Yoti\DocScan\Session\Create\ResourceCreationContainer;
 use Yoti\DocScan\Session\Create\SdkConfig;
 use Yoti\DocScan\Session\Create\SessionSpecificationBuilder;
 use Yoti\DocScan\Session\Create\Task\RequestedTask;
@@ -73,6 +74,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $importTokenMock;
 
+    /**
+     * @var ResourceCreationContainer
+     */
+    private $resourcesMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -93,6 +99,11 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->ibvOptionsMock = $this->createMock(IbvOptions::class);
 
         $this->importTokenMock = $this->createMock(ImportToken::class);
+
+        $this->resourcesMock = $this->createMock(ResourceCreationContainer::class);
+        $this->resourcesMock
+            ->method('jsonSerialize')
+            ->willReturn((object)['applicant_profile' => (object)['full_name' => 'John Doe']]);
 
         $this->subject = (object)[1 => 'some'];
 
@@ -601,6 +612,60 @@ class SessionSpecificationBuilderTest extends TestCase
                 'required_documents' => [],
                 'create_identity_profile_preview' => false,
                 'advanced_identity_profile_requirements' => $this->advancedIdentityProfileRequirements,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getResources
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withResources
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldBuildWithResources()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withResources($this->resourcesMock)
+            ->build();
+
+        $this->assertEquals($this->resourcesMock, $sessionSpecificationResult->getResources());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getResources
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldNotImplicitlySetAValueForResources()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->build();
+
+        $this->assertNull($sessionSpecificationResult->getResources());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withResources
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithResources()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withResources($this->resourcesMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'create_identity_profile_preview' => false,
+                'resources' => $this->resourcesMock,
             ]),
             json_encode($sessionSpecification)
         );

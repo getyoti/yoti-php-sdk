@@ -91,6 +91,11 @@ class SessionSpecification implements JsonSerializable
     private $importToken;
 
     /**
+     * @var ResourceCreationContainer|null
+     */
+    private $resources;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -107,6 +112,7 @@ class SessionSpecification implements JsonSerializable
      * @param object|null $advancedIdentityProfileRequirements
      * @param bool|null $createIdentityProfilePreview
      * @param ImportToken|null $importToken
+     * @param ResourceCreationContainer|null $resources
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -124,7 +130,8 @@ class SessionSpecification implements JsonSerializable
         ?object $identityProfileRequirements = null,
         ?object $advancedIdentityProfileRequirements = null,
         ?bool $createIdentityProfilePreview = null,
-        ?ImportToken $importToken = null
+        ?ImportToken $importToken = null,
+        ?ResourceCreationContainer $resources = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -142,6 +149,7 @@ class SessionSpecification implements JsonSerializable
         $this->advancedIdentityProfileRequirements = $advancedIdentityProfileRequirements;
         $this->createIdentityProfilePreview = $createIdentityProfilePreview;
         $this->importToken = $importToken;
+        $this->resources = $resources;
     }
 
     /**
@@ -166,6 +174,7 @@ class SessionSpecification implements JsonSerializable
             'advanced_identity_profile_requirements' => $this->getAdvancedIdentityProfileRequirements(),
             'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
             'import_token' => $this->getImportToken(),
+            'resources' => $this->getResources(),
         ]);
     }
 
@@ -294,5 +303,13 @@ class SessionSpecification implements JsonSerializable
     public function getImportToken(): ?ImportToken
     {
         return $this->importToken;
+    }
+
+    /**
+     * @return ResourceCreationContainer|null
+     */
+    public function getResources(): ?ResourceCreationContainer
+    {
+        return $this->resources;
     }
 }
