@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Yoti\DocScan\Session\Create;
+
+class SuppressedScreen
+{
+    public const ID_DOCUMENT_EDUCATION = 'ID_DOCUMENT_EDUCATION';
+    public const ID_DOCUMENT_REQUIREMENTS = 'ID_DOCUMENT_REQUIREMENTS';
+    public const SUPPLEMENTARY_DOCUMENT_EDUCATION = 'SUPPLEMENTARY_DOCUMENT_EDUCATION';
+    public const ZOOM_LIVENESS_EDUCATION = 'ZOOM_LIVENESS_EDUCATION';
+    public const STATIC_LIVENESS_EDUCATION = 'STATIC_LIVENESS_EDUCATION';
+    public const FACE_CAPTURE_EDUCATION = 'FACE_CAPTURE_EDUCATION';
+    public const FLOW_COMPLETION = 'FLOW_COMPLETION';
+}
