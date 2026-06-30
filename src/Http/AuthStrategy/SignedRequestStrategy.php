@@ -61,7 +61,7 @@ class SignedRequestStrategy implements AuthStrategyInterface
     {
         $params = [
             'nonce' => self::generateNonce(),
-            'timestamp' => (string)(round(microtime(true) * 1000)),
+            'timestamp' => sprintf('%.0F', microtime(true) * 1000),
         ];
 
         if ($this->sdkId !== null) {

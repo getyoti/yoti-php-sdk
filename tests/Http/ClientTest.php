@@ -37,7 +37,7 @@ class ClientTest extends TestCase
 
         $this->assertSame(
             $someResponse,
-            $client->sendRequest(new Request('GET', '/'))
+            $client->sendRequest(new Request('GET', 'https://api.yoti.com/'))
         );
 
         $this->assertEquals(30, $someHandler->getLastOptions()['timeout']);
@@ -138,6 +138,6 @@ class ClientTest extends TestCase
 
         $client = new Client(['handler' => $someHandlerStack]);
 
-        $client->sendRequest(new Request('GET', '/'));
+        $client->sendRequest(new Request('GET', 'https://api.yoti.com/'));
     }
 }
