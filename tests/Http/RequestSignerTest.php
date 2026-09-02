@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti\Test\Http;
 
-use Yoti\Aml\Address;
-use Yoti\Aml\Country;
-use Yoti\Aml\Profile;
 use Yoti\Http\Payload;
 use Yoti\Http\RequestSigner;
 use Yoti\Test\TestCase;
@@ -39,8 +36,11 @@ class RequestSignerTest extends TestCase
 
     public function setup(): void
     {
-        $this->pem = file_get_contents(TestData::AML_PRIVATE_KEY);
-        $this->publicKey = file_get_contents(TestData::AML_PUBLIC_KEY);
+        $this->pem = file_get_contents(TestData::PEM_FILE);
+        $rawPublicKey = file_get_contents(TestData::PEM_AUTH_KEY);
+        $this->publicKey = "-----BEGIN PUBLIC KEY-----\n" .
+            chunk_split($rawPublicKey, 64, "\n") .
+            "-----END PUBLIC KEY-----\n";
         $this->payload = $this->getDummyPayload();
     }
 
@@ -96,8 +96,6 @@ class RequestSignerTest extends TestCase
      */
     public function getDummyPayload()
     {
-        $amlAddress = new Address(new Country('GBR'));
-        $amlProfile = new Profile('Edward Richard George', 'Heath', $amlAddress);
-        return Payload::fromJsonData($amlProfile);
+        return Payload::fromString(json_encode(['given_names' => 'Edward', 'family_name' => 'Heath']));
     }
 }

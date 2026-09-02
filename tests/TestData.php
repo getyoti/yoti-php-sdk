@@ -13,9 +13,6 @@ class TestData
     public const INVALID_PEM_FILE = __DIR__ . '/sample-data/invalid.pem';
     public const DUMMY_SELFIE_FILE = __DIR__ . '/sample-data/dummy-avatar.png';
     public const DUMMY_PDF_FILE = __DIR__ . '/sample-data/barcapdf.pdf';
-    public const AML_PRIVATE_KEY = __DIR__ . '/sample-data/aml-check-private-key.pem';
-    public const AML_PUBLIC_KEY = __DIR__ . '/sample-data/aml-check-public-key.pem';
-    public const AML_CHECK_RESULT_JSON = __DIR__ . '/sample-data/aml-check-result.json';
     public const YOTI_CONNECT_TOKEN = __DIR__ . '/sample-data/connect-token.txt';
     public const YOTI_CONNECT_TOKEN_DECRYPTED = 'i79CctmY-22ad195c-d166-49a2-af16-8f356788c9dd' .
         '-be094d26-19b5-450d-afce-070101760f0b';
