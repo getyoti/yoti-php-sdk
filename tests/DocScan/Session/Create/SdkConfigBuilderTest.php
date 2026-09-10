@@ -440,4 +440,78 @@ class SdkConfigBuilderTest extends TestCase
         $jsonData = $result->jsonSerialize();
         $this->assertFalse(property_exists($jsonData, 'suppressed_screens'));
     }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function shouldSetEnforceHandoff(): void
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $this->assertTrue($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SdkConfigBuilder::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::getEnforceHandoff
+     */
+    public function enforceHandoffShouldBeNullWhenItIsNotSet(): void
+    {
+        $result = (new SdkConfigBuilder())
+            ->build();
+
+        $this->assertNull($result->getEnforceHandoff());
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldIncludeEnforceHandoffInJsonSerialization(): void
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $jsonData = $result->jsonSerialize();
+        $this->assertTrue($jsonData->enforce_handoff);
+    }
+
+    /**
+     * @test
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldNotIncludeEnforceHandoffInJsonWhenNull(): void
+    {
+        $result = (new SdkConfigBuilder())
+            ->build();
+
+        $jsonData = $result->jsonSerialize();
+        $this->assertFalse(property_exists($jsonData, 'enforce_handoff'));
+    }
+
+    /**
+     * @test
+     * @covers ::withEnforceHandoff
+     * @covers \Yoti\DocScan\Session\Create\SdkConfig::jsonSerialize
+     */
+    public function shouldSerializeEnforceHandoffToCorrectJsonKey(): void
+    {
+        $result = (new SdkConfigBuilder())
+            ->withEnforceHandoff(true)
+            ->build();
+
+        $expected = ['enforce_handoff' => true];
+
+        $jsonData = json_decode((string) json_encode($result), true);
+        $this->assertArrayHasKey('enforce_handoff', $jsonData);
+        $this->assertTrue($jsonData['enforce_handoff']);
+    }
 }
