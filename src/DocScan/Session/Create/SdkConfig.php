@@ -59,6 +59,11 @@ class SdkConfig implements \JsonSerializable
     private $allowHandoff;
 
     /**
+     * @var bool|null
+     */
+    private $enforceHandoff;
+
+    /**
      * @var AttemptsConfiguration|null
      */
     private $attemptsConfiguration;
@@ -105,6 +110,7 @@ class SdkConfig implements \JsonSerializable
      * @param string|null $primaryColourDarkMode
      * @param string|null $brandId
      * @param array<string>|null $suppressedScreens
+     * @param bool|null $enforceHandoff
      */
     public function __construct(
         ?string $allowedCaptureMethods,
@@ -122,7 +128,8 @@ class SdkConfig implements \JsonSerializable
         ?string $darkMode = null,
         ?string $primaryColourDarkMode = null,
         ?string $brandId = null,
-        ?array $suppressedScreens = null
+        ?array $suppressedScreens = null,
+        ?bool $enforceHandoff = null
     ) {
         $this->allowedCaptureMethods = $allowedCaptureMethods;
         $this->primaryColour = $primaryColour;
@@ -142,6 +149,7 @@ class SdkConfig implements \JsonSerializable
         $this->primaryColourDarkMode = $primaryColourDarkMode;
         $this->brandId = $brandId;
         $this->suppressedScreens = $suppressedScreens;
+        $this->enforceHandoff = $enforceHandoff;
     }
 
     /**
@@ -160,6 +168,7 @@ class SdkConfig implements \JsonSerializable
             'error_url' => $this->getErrorUrl(),
             'privacy_policy_url' => $this->getPrivacyPolicyUrl(),
             'allow_handoff' => $this->getAllowHandoff(),
+            'enforce_handoff' => $this->getEnforceHandoff(),
             'attempts_configuration' => $this->getAttemptsConfiguration(),
             'biometric_consent_flow' => $this->getBiometricConsentFlow(),
             'dark_mode' => $this->getDarkMode(),
@@ -247,6 +256,14 @@ class SdkConfig implements \JsonSerializable
     public function getAllowHandoff(): ?bool
     {
         return $this->allowHandoff;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getEnforceHandoff(): ?bool
+    {
+        return $this->enforceHandoff;
     }
 
     /**
