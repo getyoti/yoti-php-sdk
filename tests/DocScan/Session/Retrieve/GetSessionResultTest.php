@@ -8,6 +8,7 @@ use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
+use Yoti\DocScan\Session\Retrieve\DigitalIdShareResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
@@ -353,5 +354,45 @@ class GetSessionResultTest extends TestCase
 
         $this->assertNull($result->getAdvancedIdentityProfile());
         $this->assertNull($result->getAdvancedIdentityProfilePreview());
+    }
+
+    /**
+     * @test
+     * @covers ::getDigitalIdShares
+     * @covers ::__construct
+     */
+    public function shouldParseDigitalIdShares()
+    {
+        $input = [
+            'digital_id_shares' => [
+                [
+                    'id' => 'someId',
+                    'document_type' => 'DIGITAL_AADHAAR',
+                    'issuing_country' => 'IND',
+                    'provider' => 'DIGILOCKER',
+                    'created_at' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                    'resource_id' => 'someResourceId',
+                ],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertCount(1, $result->getDigitalIdShares());
+        $this->assertContainsOnlyInstancesOf(DigitalIdShareResponse::class, $result->getDigitalIdShares());
+        $this->assertEquals('someId', $result->getDigitalIdShares()[0]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getDigitalIdShares
+     * @covers ::__construct
+     */
+    public function shouldReturnEmptyArrayWhenDigitalIdSharesNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertCount(0, $result->getDigitalIdShares());
     }
 }

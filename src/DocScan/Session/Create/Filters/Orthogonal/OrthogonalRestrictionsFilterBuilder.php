@@ -6,6 +6,7 @@ namespace Yoti\DocScan\Session\Create\Filters\Orthogonal;
 
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
+use Yoti\DocScan\Session\Create\Filters\Provider;
 
 class OrthogonalRestrictionsFilterBuilder
 {
@@ -28,6 +29,16 @@ class OrthogonalRestrictionsFilterBuilder
      * @var bool|null
      */
     private $allowExpiredDocuments;
+
+    /**
+     * @var bool|null
+     */
+    private $allowDigitalIds;
+
+    /**
+     * @var Provider[]|null
+     */
+    private $allowedProviders;
 
     /**
      * @param string[] $countryCodes
@@ -114,6 +125,31 @@ class OrthogonalRestrictionsFilterBuilder
     }
 
     /**
+     * @return $this
+     */
+    public function withAllowDigitalIds(): OrthogonalRestrictionsFilterBuilder
+    {
+        $this->allowDigitalIds = true;
+        return $this;
+    }
+
+    /**
+     * @param string[] $providerNames
+     *
+     * @return $this
+     */
+    public function withAllowedProviders(array $providerNames): OrthogonalRestrictionsFilterBuilder
+    {
+        $this->allowedProviders = array_map(
+            function (string $providerName): Provider {
+                return new Provider($providerName);
+            },
+            $providerNames
+        );
+        return $this;
+    }
+
+    /**
      * @return OrthogonalRestrictionsFilter
      */
     public function build(): DocumentFilter
@@ -122,7 +158,9 @@ class OrthogonalRestrictionsFilterBuilder
             $this->countryRestriction,
             $this->typeRestriction,
             $this->allowNonLatinDocuments,
-            $this->allowExpiredDocuments
+            $this->allowExpiredDocuments,
+            $this->allowDigitalIds,
+            $this->allowedProviders
         );
     }
 }

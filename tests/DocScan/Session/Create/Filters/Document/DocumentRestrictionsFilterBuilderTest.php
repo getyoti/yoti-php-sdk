@@ -217,4 +217,75 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertNull($filter->isAllowExpiredDocuments());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withAllowDigitalIds
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithAllowDigitalIds(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowDigitalIds()
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'DOCUMENT_RESTRICTIONS',
+                    'allow_digital_ids' => true,
+                    'inclusion' => 'BLACKLIST',
+                    'documents' => [ $this->documentRestrictionMock ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertTrue($filter->isAllowDigitalIds());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::getAllowedProviders
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withAllowedProviders
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithAllowedProviders(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowedProviders(['DIGILOCKER', 'EPHIL_ID_QR'])
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'DOCUMENT_RESTRICTIONS',
+                    'allowed_providers' => [
+                        (object) ['name' => 'DIGILOCKER'],
+                        (object) ['name' => 'EPHIL_ID_QR'],
+                    ],
+                    'inclusion' => 'BLACKLIST',
+                    'documents' => [ $this->documentRestrictionMock ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertCount(2, $filter->getAllowedProviders());
+    }
 }

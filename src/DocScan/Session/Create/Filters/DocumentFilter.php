@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yoti\DocScan\Session\Create\Filters;
 
+use Yoti\Util\Validation;
+
 abstract class DocumentFilter implements \JsonSerializable
 {
     /**
@@ -12,11 +14,29 @@ abstract class DocumentFilter implements \JsonSerializable
     private $type;
 
     /**
-     * @param string $type
+     * @var bool|null
      */
-    public function __construct(string $type)
+    private $allowDigitalIds;
+
+    /**
+     * @var Provider[]|null
+     */
+    private $allowedProviders;
+
+    /**
+     * @param string $type
+     * @param bool|null $allowDigitalIds
+     * @param Provider[]|null $allowedProviders
+     */
+    public function __construct(string $type, ?bool $allowDigitalIds = null, ?array $allowedProviders = null)
     {
         $this->type = $type;
+        $this->allowDigitalIds = $allowDigitalIds;
+
+        if (isset($allowedProviders)) {
+            Validation::isArrayOfType($allowedProviders, [Provider::class], 'allowedProviders');
+        }
+        $this->allowedProviders = $allowedProviders;
     }
 
     /**
@@ -24,8 +44,34 @@ abstract class DocumentFilter implements \JsonSerializable
      */
     public function jsonSerialize(): \stdClass
     {
-        return (object) [
+        $jsonData = (object) [
             'type' => $this->type,
         ];
+
+        if (isset($this->allowDigitalIds)) {
+            $jsonData->allow_digital_ids = $this->allowDigitalIds;
+        }
+
+        if (isset($this->allowedProviders)) {
+            $jsonData->allowed_providers = $this->allowedProviders;
+        }
+
+        return $jsonData;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isAllowDigitalIds(): ?bool
+    {
+        return $this->allowDigitalIds;
+    }
+
+    /**
+     * @return Provider[]|null
+     */
+    public function getAllowedProviders(): ?array
+    {
+        return $this->allowedProviders;
     }
 }
