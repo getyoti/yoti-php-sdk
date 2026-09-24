@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan\Session\Retrieve;
 
 use Yoti\DocScan\Session\Retrieve\ApplicantProfileResourceResponse;
+use Yoti\DocScan\Session\Retrieve\CheckResponse;
 use Yoti\DocScan\Session\Retrieve\ResourceContainer;
 use Yoti\DocScan\Session\Retrieve\ShareCodeResourceResponse;
 use Yoti\DocScan\Session\Retrieve\StaticLivenessResourceResponse;
@@ -218,5 +219,115 @@ class ResourceContainerTest extends TestCase
             '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             $result->getApplicantProfiles()[0]->getId()
         );
+    }
+
+    /**
+     * @test
+     * @covers ::filterForCheck
+     * @covers ::filterResourcesByIds
+     */
+    public function shouldFilterForCheckAndReturnFilteredCollections(): void
+    {
+        $input = [
+            'id_documents' => [
+                ['id' => 'id-document-1'],
+                ['id' => 'id-document-2'],
+            ],
+            'supplementary_documents' => [
+                ['id' => 'supplementary-document-1'],
+                ['id' => 'supplementary-document-2'],
+            ],
+            'liveness_capture' => [
+                ['id' => 'liveness-1', 'liveness_type' => 'ZOOM'],
+                ['id' => 'liveness-2', 'liveness_type' => 'ZOOM'],
+            ],
+            'face_capture' => [
+                ['id' => 'face-capture-1'],
+                ['id' => 'face-capture-2'],
+            ],
+            'share_codes' => [
+                ['id' => 'share-code-1'],
+                ['id' => 'share-code-2'],
+            ],
+            'applicant_profiles' => [
+                ['id' => 'applicant-profile-1'],
+                ['id' => 'applicant-profile-2'],
+            ],
+        ];
+
+        $checkResponse = new CheckResponse([
+            'resources_used' => [
+                'id-document-1',
+                'supplementary-document-1',
+                'liveness-1',
+                'face-capture-1',
+                'share-code-1',
+                'applicant-profile-1',
+            ],
+        ]);
+
+        $result = (new ResourceContainer($input))->filterForCheck($checkResponse);
+
+        $this->assertCount(1, $result->getIdDocuments());
+        $this->assertEquals('id-document-1', $result->getIdDocuments()[0]->getId());
+
+        $this->assertCount(1, $result->getSupplementaryDocuments());
+        $this->assertEquals('supplementary-document-1', $result->getSupplementaryDocuments()[0]->getId());
+
+        $this->assertCount(1, $result->getLivenessCapture());
+        $this->assertEquals('liveness-1', $result->getLivenessCapture()[0]->getId());
+
+        $this->assertCount(1, $result->getFaceCapture());
+        $this->assertEquals('face-capture-1', $result->getFaceCapture()[0]->getId());
+
+        $this->assertCount(1, $result->getShareCodes());
+        $this->assertEquals('share-code-1', $result->getShareCodes()[0]->getId());
+
+        $this->assertCount(1, $result->getApplicantProfiles());
+        $this->assertEquals('applicant-profile-1', $result->getApplicantProfiles()[0]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::filterForCheck
+     * @covers ::filterResourcesByIds
+     */
+    public function shouldFilterForCheckAndReturnEmptyCollectionsWhenNoMatches(): void
+    {
+        $input = [
+            'id_documents' => [
+                ['id' => 'id-document-1'],
+            ],
+        ];
+
+        $checkResponse = new CheckResponse(['resources_used' => ['someUnrelatedResourceId']]);
+
+        $result = (new ResourceContainer($input))->filterForCheck($checkResponse);
+
+        $this->assertCount(0, $result->getIdDocuments());
+        $this->assertCount(0, $result->getSupplementaryDocuments());
+        $this->assertCount(0, $result->getLivenessCapture());
+        $this->assertCount(0, $result->getFaceCapture());
+        $this->assertCount(0, $result->getShareCodes());
+        $this->assertCount(0, $result->getApplicantProfiles());
+    }
+
+    /**
+     * @test
+     * @covers ::filterForCheck
+     * @covers ::filterResourcesByIds
+     */
+    public function shouldFilterForCheckAndReturnEmptyCollectionsWhenContainerHasNoResources(): void
+    {
+        $checkResponse = new CheckResponse(['resources_used' => ['someResourceId']]);
+
+        $result = (new ResourceContainer([]))->filterForCheck($checkResponse);
+
+        $this->assertCount(0, $result->getIdDocuments());
+        $this->assertCount(0, $result->getSupplementaryDocuments());
+        $this->assertCount(0, $result->getLivenessCapture());
+        $this->assertCount(0, $result->getFaceCapture());
+        $this->assertCount(0, $result->getShareCodes());
+        $this->assertCount(0, $result->getApplicantProfiles());
     }
 }
