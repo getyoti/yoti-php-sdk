@@ -60,6 +60,11 @@ class GetSessionResult
     private ?ImportTokenResponse $importToken;
 
     /**
+     * @var DigitalIdShareResponse[]
+     */
+    private $digitalIdShares = [];
+
+    /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
      *
@@ -111,6 +116,12 @@ class GetSessionResult
 
         if (isset($sessionData['import_token'])) {
             $this->importToken = new ImportTokenResponse($sessionData['import_token']);
+        }
+
+        if (isset($sessionData['digital_id_shares'])) {
+            foreach ($sessionData['digital_id_shares'] as $digitalIdShare) {
+                $this->digitalIdShares[] = new DigitalIdShareResponse($digitalIdShare);
+            }
         }
     }
 
@@ -358,5 +369,13 @@ class GetSessionResult
     public function getImportToken(): ?ImportTokenResponse
     {
         return $this->importToken;
+    }
+
+    /**
+     * @return DigitalIdShareResponse[]
+     */
+    public function getDigitalIdShares(): array
+    {
+        return $this->digitalIdShares;
     }
 }

@@ -381,4 +381,83 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertNull($filter->isAllowExpiredDocuments());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowDigitalIds
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     */
+    public function shouldBuildWithAllowDigitalIds()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withBlacklistedDocumentTypes([self::SOME_DOCUMENT_TYPE])
+            ->withBlacklistedCountries([self::SOME_COUNTRY_CODE])
+            ->withAllowDigitalIds()
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'ORTHOGONAL_RESTRICTIONS',
+                    'allow_digital_ids' => true,
+                    'country_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'country_codes' => [self::SOME_COUNTRY_CODE],
+                    ],
+                    'type_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'document_types' => [self::SOME_DOCUMENT_TYPE],
+                    ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertTrue($filter->isAllowDigitalIds());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowedProviders
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::getAllowedProviders
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     */
+    public function shouldBuildWithAllowedProviders()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withBlacklistedDocumentTypes([self::SOME_DOCUMENT_TYPE])
+            ->withBlacklistedCountries([self::SOME_COUNTRY_CODE])
+            ->withAllowedProviders(['DIGILOCKER', 'EPHIL_ID_QR'])
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(
+                (object) [
+                    'type' => 'ORTHOGONAL_RESTRICTIONS',
+                    'allowed_providers' => [
+                        (object) ['name' => 'DIGILOCKER'],
+                        (object) ['name' => 'EPHIL_ID_QR'],
+                    ],
+                    'country_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'country_codes' => [self::SOME_COUNTRY_CODE],
+                    ],
+                    'type_restriction' => (object) [
+                        'inclusion' => 'BLACKLIST',
+                        'document_types' => [self::SOME_DOCUMENT_TYPE],
+                    ],
+                ]
+            ),
+            json_encode($filter)
+        );
+
+        $this->assertCount(2, $filter->getAllowedProviders());
+    }
 }

@@ -35,14 +35,18 @@ class DocumentRestrictionsFilter extends DocumentFilter implements \JsonSerializ
      * @param DocumentRestriction[] $documents
      * @param bool|null $allowNonLatinDocuments
      * @param bool|null $allowExpiredDocuments
+     * @param bool|null $allowDigitalIds
+     * @param \Yoti\DocScan\Session\Create\Filters\Provider[]|null $allowedProviders
      */
     public function __construct(
         string $inclusion,
         array $documents,
         ?bool $allowNonLatinDocuments,
-        ?bool $allowExpiredDocuments
+        ?bool $allowExpiredDocuments,
+        ?bool $allowDigitalIds = null,
+        ?array $allowedProviders = null
     ) {
-        parent::__construct(Constants::DOCUMENT_RESTRICTIONS);
+        parent::__construct(Constants::DOCUMENT_RESTRICTIONS, $allowDigitalIds, $allowedProviders);
 
         Validation::notEmptyString($inclusion, 'inclusion');
         $this->inclusion = $inclusion;
