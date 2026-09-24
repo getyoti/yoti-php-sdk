@@ -13,6 +13,7 @@ use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\ImportTokenResponse;
 use Yoti\DocScan\Session\Retrieve\MediaResponse;
+use Yoti\DocScan\Session\Retrieve\ResourceContainer;
 use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
@@ -353,5 +354,76 @@ class GetSessionResultTest extends TestCase
 
         $this->assertNull($result->getAdvancedIdentityProfile());
         $this->assertNull($result->getAdvancedIdentityProfilePreview());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldReturnResourcesForCheck()
+    {
+        $input = [
+            'checks' => [
+                [
+                    'id' => 'some-check-id',
+                    'type' => self::ID_DOCUMENT_AUTHENTICITY,
+                    'resources_used' => ['some-id-document-id'],
+                ],
+            ],
+            'resources' => [
+                'id_documents' => [
+                    ['id' => 'some-id-document-id'],
+                    ['id' => 'some-other-id-document-id'],
+                ],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $resourcesForCheck = $result->getResourcesForCheck('some-check-id');
+
+        $this->assertInstanceOf(ResourceContainer::class, $resourcesForCheck);
+        $this->assertCount(1, $resourcesForCheck->getIdDocuments());
+        $this->assertEquals('some-id-document-id', $resourcesForCheck->getIdDocuments()[0]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldReturnEmptyResourceContainerWhenSessionHasNoResources()
+    {
+        $input = [
+            'checks' => [
+                ['id' => 'some-check-id', 'type' => self::ID_DOCUMENT_AUTHENTICITY],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $resourcesForCheck = $result->getResourcesForCheck('some-check-id');
+
+        $this->assertInstanceOf(ResourceContainer::class, $resourcesForCheck);
+        $this->assertCount(0, $resourcesForCheck->getIdDocuments());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldThrowExceptionWhenCheckIdNotFound()
+    {
+        $input = [
+            'checks' => [
+                ['id' => 'some-check-id', 'type' => self::ID_DOCUMENT_AUTHENTICITY],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Check not found');
+
+        $result->getResourcesForCheck('some-unknown-check-id');
     }
 }
