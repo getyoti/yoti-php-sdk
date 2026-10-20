@@ -13,6 +13,7 @@ use Yoti\DocScan\Service;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\DocScan\Session\Create\SessionOverviewPdfOptions;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
@@ -1390,5 +1391,141 @@ class ServiceTest extends TestCase
         $docScanService->triggerIbvEmailNotification(
             TestData::DOC_SCAN_SESSION_ID
         );
+    }
+
+    /**
+     * @test
+     * @covers ::createSessionOverviewPdf
+     * @covers ::assertResponseIsSuccess
+     */
+    public function createSessionOverviewPdfShouldReturnMediaObjectOn201Response(): void
+    {
+        $pdfBytes = '%PDF-1.4 fake-pdf-content';
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/pdf\?sdkId=%s&nonce=.*?&timestamp=.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::SDK_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                $this->createResponse(
+                    201,
+                    $pdfBytes,
+                    ['Content-Type' => ['application/pdf']]
+                )
+            );
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config([Config::HTTP_CLIENT => $httpClient])
+        );
+
+        $media = $docScanService->createSessionOverviewPdf(TestData::DOC_SCAN_SESSION_ID);
+
+        $this->assertInstanceOf(Media::class, $media);
+        $this->assertEquals($pdfBytes, $media->getContent());
+        $this->assertEquals('application/pdf', $media->getMimeType());
+    }
+
+    /**
+     * @test
+     * @covers ::createSessionOverviewPdf
+     * @covers ::assertResponseIsSuccess
+     */
+    public function createSessionOverviewPdfShouldSendOptionsBodyWhenProvided(): void
+    {
+        $pdfBytes = '%PDF-1.4 fake-pdf-content';
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $body = (string) $requestMessage->getBody();
+                        $decoded = json_decode($body, true);
+                        $this->assertTrue($decoded['include_images']);
+                        $this->assertFalse($decoded['include_extracted_text']);
+                        $this->assertArrayNotHasKey('include_device_tracking', $decoded);
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                $this->createResponse(
+                    201,
+                    $pdfBytes,
+                    ['Content-Type' => ['application/pdf']]
+                )
+            );
+
+        $options = new SessionOverviewPdfOptions(true, false, null);
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config([Config::HTTP_CLIENT => $httpClient])
+        );
+
+        $media = $docScanService->createSessionOverviewPdf(TestData::DOC_SCAN_SESSION_ID, $options);
+
+        $this->assertInstanceOf(Media::class, $media);
+        $this->assertEquals($pdfBytes, $media->getContent());
+    }
+
+    /**
+     * @test
+     * @covers ::createSessionOverviewPdf
+     * @covers ::assertResponseIsSuccess
+     */
+    public function createSessionOverviewPdfShouldThrowDocScanExceptionOnNon201Response(): void
+    {
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with(
+                $this->callback(
+                    function (RequestInterface $requestMessage) {
+                        $expectedPathPattern = sprintf(
+                            '~^%s/sessions/%s/pdf\?sdkId=%s&nonce=.*?&timestamp=.*?~',
+                            TestData::DOC_SCAN_BASE_URL,
+                            TestData::DOC_SCAN_SESSION_ID,
+                            TestData::SDK_ID
+                        );
+
+                        $this->assertEquals('POST', $requestMessage->getMethod());
+                        $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($this->createResponse(404));
+
+        $docScanService = new Service(
+            TestData::SDK_ID,
+            PemFile::fromFilePath(TestData::PEM_FILE),
+            new Config([Config::HTTP_CLIENT => $httpClient])
+        );
+
+        $this->expectException(DocScanException::class);
+        $this->expectExceptionMessage('Server responded with 404');
+
+        $docScanService->createSessionOverviewPdf(TestData::DOC_SCAN_SESSION_ID);
     }
 }
