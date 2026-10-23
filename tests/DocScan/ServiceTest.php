@@ -1417,6 +1417,10 @@ class ServiceTest extends TestCase
 
                         $this->assertEquals('POST', $requestMessage->getMethod());
                         $this->assertMatchesRegularExpression($expectedPathPattern, (string) $requestMessage->getUri());
+                        $this->assertJsonStringEqualsJsonString(
+                            '{"options":{}}',
+                            (string) $requestMessage->getBody()
+                        );
                         return true;
                     }
                 )
@@ -1460,9 +1464,10 @@ class ServiceTest extends TestCase
                         $this->assertEquals('POST', $requestMessage->getMethod());
                         $body = (string) $requestMessage->getBody();
                         $decoded = json_decode($body, true);
-                        $this->assertTrue($decoded['include_images']);
-                        $this->assertFalse($decoded['include_extracted_text']);
-                        $this->assertArrayNotHasKey('include_device_tracking', $decoded);
+                        $this->assertSame(['options'], array_keys($decoded));
+                        $this->assertTrue($decoded['options']['include_images']);
+                        $this->assertFalse($decoded['options']['include_extracted_text']);
+                        $this->assertArrayNotHasKey('include_device_tracking', $decoded['options']);
                         return true;
                     }
                 )

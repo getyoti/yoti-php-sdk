@@ -470,6 +470,10 @@ class Service
      * Calls POST /sessions/{sessionId}/pdf and returns the raw binary PDF
      * wrapped in a {@see Media} object with MIME type `application/pdf`.
      *
+     * The options are sent nested under an "options" key, as the endpoint
+     * expects: {"options": {"include_images": true, ...}}. When no options
+     * are given, {"options": {}} is sent.
+     *
      * @param string $sessionId
      * @param SessionOverviewPdfOptions|null $options
      * @return Media
@@ -477,7 +481,7 @@ class Service
      */
     public function createSessionOverviewPdf(string $sessionId, ?SessionOverviewPdfOptions $options = null): Media
     {
-        $payload = Payload::fromJsonData($options ?? new SessionOverviewPdfOptions());
+        $payload = Payload::fromJsonData(['options' => $options ?? new SessionOverviewPdfOptions()]);
 
         $builder = (new RequestBuilder($this->config))
             ->withBaseUrl($this->apiUrl)
