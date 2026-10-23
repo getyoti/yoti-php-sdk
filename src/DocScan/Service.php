@@ -10,6 +10,7 @@ use Yoti\DocScan\Exception\DocScanException;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\DocScan\Session\Create\SessionOverviewPdfOptions;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
@@ -461,6 +462,44 @@ class Service
             ->execute();
 
         self::assertResponseIsSuccess($response);
+    }
+
+    /**
+     * Generates a session overview PDF for the given session.
+     *
+     * Calls POST /sessions/{sessionId}/pdf and returns the raw binary PDF
+     * wrapped in a {@see Media} object with MIME type `application/pdf`.
+     *
+     * The options are sent nested under an "options" key, as the endpoint
+     * expects: {"options": {"include_images": true, ...}}. When no options
+     * are given, {"options": {}} is sent.
+     *
+     * @param string $sessionId
+     * @param SessionOverviewPdfOptions|null $options
+     * @return Media
+     * @throws DocScanException
+     */
+    public function createSessionOverviewPdf(string $sessionId, ?SessionOverviewPdfOptions $options = null): Media
+    {
+        $payload = Payload::fromJsonData(['options' => $options ?? new SessionOverviewPdfOptions()]);
+
+        $builder = (new RequestBuilder($this->config))
+            ->withBaseUrl($this->apiUrl)
+            ->withEndpoint(sprintf('/sessions/%s/pdf', $sessionId))
+            ->withPayload($payload)
+            ->withHeader('Content-Type', 'application/json')
+            ->withPost();
+
+        $response = $this->applyAuth($builder)
+            ->build()
+            ->execute();
+
+        self::assertResponseIsSuccess($response);
+
+        $content = (string) $response->getBody();
+        $mimeType = $response->getHeader('Content-Type')[0] ?? 'application/pdf';
+
+        return new Media($mimeType, $content);
     }
 
     /**
