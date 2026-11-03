@@ -25,14 +25,21 @@ class WantedAttribute implements \JsonSerializable
     private ?bool $acceptSelfAsserted;
 
     /**
+     * @var string[]
+     */
+    private array $alternativeNames = [];
+
+    /**
      * @param Constraint[] $constraints
+     * @param string[] $alternativeNames
      */
     public function __construct(
         string $name,
         ?string $derivation = null,
         bool $optional = false,
         ?bool $acceptSelfAsserted = null,
-        ?array $constraints = null
+        ?array $constraints = null,
+        array $alternativeNames = []
     ) {
         Validation::notEmptyString($name, 'name');
         $this->name = $name;
@@ -44,6 +51,11 @@ class WantedAttribute implements \JsonSerializable
         if (null !== $constraints) {
             Validation::isArrayOfType($constraints, [Constraint::class], 'constraints');
             $this->constraints = $constraints;
+        }
+
+        if ($alternativeNames !== []) {
+            Validation::isArrayOfStrings($alternativeNames, 'alternative_names');
+            $this->alternativeNames = $alternativeNames;
         }
     }
 
@@ -60,7 +72,7 @@ class WantedAttribute implements \JsonSerializable
     /**
      * Additional derived criteria.
      *
-     * @return string
+     * @return string|null
      */
     public function getDerivation(): ?string
     {
@@ -73,7 +85,7 @@ class WantedAttribute implements \JsonSerializable
      * If you do not provide any particular constraints, Yoti will provide you with the
      * information from the most recently added source.
      *
-     * @return  Constraint[] $constraints
+     * @return Constraint[]|null
      */
     public function getConstraints(): ?array
     {
@@ -100,6 +112,16 @@ class WantedAttribute implements \JsonSerializable
         return $this->optional;
     }
 
+    /**
+     * Alternative attribute names that can be used as a fallback.
+     *
+     * @return string[]
+     */
+    public function getAlternativeNames(): array
+    {
+        return $this->alternativeNames;
+    }
+
     public function jsonSerialize(): stdClass
     {
         $data = new stdClass();
@@ -108,6 +130,10 @@ class WantedAttribute implements \JsonSerializable
 
         if (null !== $this->getDerivation()) {
             $data->derivation = $this->getDerivation();
+        }
+
+        if ($this->alternativeNames !== []) {
+            $data->alternative_names = $this->alternativeNames;
         }
 
         if (null !== $this->getConstraints()) {
