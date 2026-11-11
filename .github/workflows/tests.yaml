@@ -109,6 +109,32 @@ jobs:
 
       - run: composer test
 
+  php8-5:
+    name: Unit Tests php8.5 (php ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ 8.5 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - run: composer remove --dev --no-update --no-interaction friendsofphp/php-cs-fixer
+
+      - run: composer self-update
+
+      - run: composer install --no-interaction --prefer-source --dev
+
+      - run: composer test
+
   protobuf:
     name: Unit Tests With Protobuf C Extension (php ${{ matrix.php-version }})
     runs-on: ubuntu-latest

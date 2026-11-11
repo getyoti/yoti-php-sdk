@@ -33,6 +33,12 @@ Please feel free to reach out
 > **Breaking change:** this SDK release supports PHP 8.1 and above only.
 > Support for PHP 7.4 and PHP 8.0 has been removed.
 > If you are still running on PHP 7.4/8.0, please remain on an earlier SDK version until you can upgrade your runtime.
+
+### PHP versions and security updates
+
+The SDK is tested on PHP 8.1 to 8.5. PHP 8.1 no longer receives security fixes from the PHP project. Always run a PHP version that still gets security updates and keep it patched. See [PHP supported versions](https://www.php.net/supported-versions.php).
+
+In October 2026 two critical PHP vulnerabilities were published (CVE-2026-109618 and CVE-2026-109619, [CERT-EU advisory 2026-018](https://cert.europa.eu/publications/security-advisories/2026-018)). They are issues in PHP itself, not in this SDK. Fixed PHP versions are 8.2.35, 8.3.36, 8.4.27 and 8.5.12 or later.
 ### Recommended (optional)
 - [Protobuf C extension](https://github.com/protocolbuffers/protobuf/tree/master/php) (PHP package will be used by default)
 
