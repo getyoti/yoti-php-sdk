@@ -55,7 +55,8 @@ class WantedAttribute implements \JsonSerializable
 
         if ($alternativeNames !== []) {
             Validation::isArrayOfStrings($alternativeNames, 'alternative_names');
-            $this->alternativeNames = $alternativeNames;
+            // Re-index so non-sequential keys (e.g. from array_filter) still serialise as a JSON array.
+            $this->alternativeNames = array_values($alternativeNames);
         }
     }
 
