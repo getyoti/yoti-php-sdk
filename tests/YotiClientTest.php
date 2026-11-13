@@ -22,6 +22,9 @@ use Yoti\YotiClient;
  */
 class YotiClientTest extends TestCase
 {
+    private const SOME_ENV_URL = 'https://example.com/env/api';
+    private const SOME_OPTION_URL = 'https://example.com/option/api';
+
     /**
      * Test empty SDK ID
      *
@@ -33,6 +36,88 @@ class YotiClientTest extends TestCase
         $this->expectExceptionMessage('SDK ID cannot be empty');
 
         new YotiClient('', TestData::PEM_FILE);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     */
+    public function testDefaultApiUrl()
+    {
+        $this->assertApiUrlStartsWith(TestData::CONNECT_BASE_URL);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testApiUrlOptionOverridesEnvironmentVariable()
+    {
+        $_SERVER['YOTI_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_OPTION_URL, self::SOME_OPTION_URL);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testApiUrlEnvironmentVariable()
+    {
+        $_SERVER['YOTI_API_URL'] = self::SOME_ENV_URL;
+        $this->assertApiUrlStartsWith(self::SOME_ENV_URL);
+    }
+
+    /**
+     * @test
+     * @covers ::__construct
+     * @backupGlobals enabled
+     */
+    public function testEmptyApiUrlEnvironmentVariable()
+    {
+        $_SERVER['YOTI_API_URL'] = '';
+        $this->assertApiUrlStartsWith(TestData::CONNECT_BASE_URL);
+    }
+
+    /**
+     * Asserts API URL starts with expected URL.
+     *
+     * @param string $expectedUrl
+     * @param string $clientApiUrl
+     */
+    private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'qrcode' => 'http://dynamic-code.yoti.com/some-qr-code',
+            'ref_id' => 'some-ref-id',
+        ])));
+        $response->method('getStatusCode')->willReturn(201);
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->exactly(1))
+            ->method('sendRequest')
+            ->with($this->callback(function ($requestMessage) use ($expectedUrl) {
+                $this->assertStringStartsWith(
+                    $expectedUrl,
+                    (string) $requestMessage->getUri()
+                );
+                return true;
+            }))
+            ->willReturn($response);
+
+        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
+            Config::HTTP_CLIENT => $httpClient,
+            Config::API_URL => $clientApiUrl,
+        ]);
+
+        $dynamicScenario = (new DynamicScenarioBuilder())
+            ->withCallbackEndpoint('/test-callback-url')
+            ->withPolicy((new DynamicPolicyBuilder())->build())
+            ->build();
+
+        $yotiClient->createShareUrl($dynamicScenario);
     }
 
     /**
@@ -103,7 +188,7 @@ class YotiClientTest extends TestCase
     /**
      * Asserts that the AML check method has been removed from the public API.
      *
-     * @covers ::__construct
+     * @coversNothing
      */
     public function testPerformAmlCheckMethodDoesNotExist()
     {
