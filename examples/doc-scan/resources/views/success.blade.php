@@ -45,6 +45,18 @@
                             </td>
                         </tr>
                     @endif
+                    @if ($sessionResult->getOrganisationName())
+                        <tr>
+                            <td>Organisation Name</td>
+                            <td>{{ $sessionResult->getOrganisationName() }}</td>
+                        </tr>
+                    @endif
+                    @if ($sessionResult->getCompanyProfile())
+                        <tr>
+                            <td>Company Name</td>
+                            <td>{{ $sessionResult->getCompanyProfile()->getCompanyName() }}</td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
             </div>

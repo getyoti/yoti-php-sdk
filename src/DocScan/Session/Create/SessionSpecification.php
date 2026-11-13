@@ -96,6 +96,11 @@ class SessionSpecification implements JsonSerializable
     private $resources;
 
     /**
+     * @var CompanyProfile|null
+     */
+    private $companyProfile;
+
+    /**
      * @param int|null $clientSessionTokenTtl
      * @param string|null $sessionDeadline
      * @param int|null $resourcesTtl
@@ -113,6 +118,7 @@ class SessionSpecification implements JsonSerializable
      * @param bool|null $createIdentityProfilePreview
      * @param ImportToken|null $importToken
      * @param ResourceCreationContainer|null $resources
+     * @param CompanyProfile|null $companyProfile
      */
     public function __construct(
         ?int $clientSessionTokenTtl,
@@ -131,7 +137,8 @@ class SessionSpecification implements JsonSerializable
         ?object $advancedIdentityProfileRequirements = null,
         ?bool $createIdentityProfilePreview = null,
         ?ImportToken $importToken = null,
-        ?ResourceCreationContainer $resources = null
+        ?ResourceCreationContainer $resources = null,
+        ?CompanyProfile $companyProfile = null
     ) {
         $this->clientSessionTokenTtl = $clientSessionTokenTtl;
         $this->sessionDeadline = $sessionDeadline;
@@ -150,6 +157,7 @@ class SessionSpecification implements JsonSerializable
         $this->createIdentityProfilePreview = $createIdentityProfilePreview;
         $this->importToken = $importToken;
         $this->resources = $resources;
+        $this->companyProfile = $companyProfile;
     }
 
     /**
@@ -175,6 +183,7 @@ class SessionSpecification implements JsonSerializable
             'create_identity_profile_preview' => $this->getCreateIdentityProfilePreview(),
             'import_token' => $this->getImportToken(),
             'resources' => $this->getResources(),
+            'company_profile' => $this->getCompanyProfile(),
         ]);
     }
 
@@ -311,5 +320,13 @@ class SessionSpecification implements JsonSerializable
     public function getResources(): ?ResourceCreationContainer
     {
         return $this->resources;
+    }
+
+    /**
+     * @return CompanyProfile|null
+     */
+    public function getCompanyProfile(): ?CompanyProfile
+    {
+        return $this->companyProfile;
     }
 }

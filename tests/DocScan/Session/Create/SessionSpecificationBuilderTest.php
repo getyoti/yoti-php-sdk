@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yoti\Test\DocScan\Session\Create;
 
 use Yoti\DocScan\Session\Create\Check\RequestedCheck;
+use Yoti\DocScan\Session\Create\CompanyProfile;
 use Yoti\DocScan\Session\Create\Filters\RequiredDocument;
 use Yoti\DocScan\Session\Create\IbvOptions;
 use Yoti\DocScan\Session\Create\ImportToken;
@@ -79,6 +80,11 @@ class SessionSpecificationBuilderTest extends TestCase
      */
     private $resourcesMock;
 
+    /**
+     * @var CompanyProfile
+     */
+    private $companyProfileMock;
+
     public function setup(): void
     {
         $this->sdkConfigMock = $this->createMock(SdkConfig::class);
@@ -104,6 +110,11 @@ class SessionSpecificationBuilderTest extends TestCase
         $this->resourcesMock
             ->method('jsonSerialize')
             ->willReturn((object)['applicant_profile' => (object)['full_name' => 'John Doe']]);
+
+        $this->companyProfileMock = $this->createMock(CompanyProfile::class);
+        $this->companyProfileMock
+            ->method('jsonSerialize')
+            ->willReturn((object)['company_name' => 'Acme Corp']);
 
         $this->subject = (object)[1 => 'some'];
 
@@ -669,5 +680,73 @@ class SessionSpecificationBuilderTest extends TestCase
             ]),
             json_encode($sessionSpecification)
         );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getCompanyProfile
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withCompanyProfile
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldBuildWithCompanyProfile()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->withCompanyProfile($this->companyProfileMock)
+            ->build();
+
+        $this->assertEquals($this->companyProfileMock, $sessionSpecificationResult->getCompanyProfile());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::getCompanyProfile
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::__construct
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldNotImplicitlySetAValueForCompanyProfile()
+    {
+        $sessionSpecificationResult = (new SessionSpecificationBuilder())
+            ->build();
+
+        $this->assertNull($sessionSpecificationResult->getCompanyProfile());
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::withCompanyProfile
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldReturnCorrectJsonStringWithCompanyProfile()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())
+            ->withCompanyProfile($this->companyProfileMock)
+            ->build();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'requested_checks' => [],
+                'requested_tasks' => [],
+                'required_documents' => [],
+                'create_identity_profile_preview' => false,
+                'company_profile' => $this->companyProfileMock,
+            ]),
+            json_encode($sessionSpecification)
+        );
+    }
+
+    /**
+     * @test
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecification::jsonSerialize
+     * @covers \Yoti\DocScan\Session\Create\SessionSpecificationBuilder::build
+     */
+    public function shouldOmitCompanyProfileFromJsonWhenNotSet()
+    {
+        $sessionSpecification = (new SessionSpecificationBuilder())->build();
+
+        $json = json_decode(json_encode($sessionSpecification), true);
+
+        $this->assertArrayNotHasKey('company_profile', $json);
     }
 }

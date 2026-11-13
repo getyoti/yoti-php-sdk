@@ -8,6 +8,7 @@ use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
+use Yoti\DocScan\Session\Retrieve\CompanyProfileResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
@@ -353,5 +354,66 @@ class GetSessionResultTest extends TestCase
 
         $this->assertNull($result->getAdvancedIdentityProfile());
         $this->assertNull($result->getAdvancedIdentityProfilePreview());
+    }
+
+    /**
+     * @test
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldParseOrganisationName()
+    {
+        $input = [
+            'organisation_name' => 'Some Organisation',
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertEquals('Some Organisation', $result->getOrganisationName());
+    }
+
+    /**
+     * @test
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldReturnNullWhenOrganisationNameNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertNull($result->getOrganisationName());
+    }
+
+    /**
+     * @test
+     * @covers ::getCompanyProfile
+     * @covers ::__construct
+     */
+    public function shouldParseCompanyProfileResponse()
+    {
+        $input = [
+            'company_profile' => [
+                'company_name' => 'Acme Corp',
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(CompanyProfileResponse::class, $result->getCompanyProfile());
+        $this->assertEquals('Acme Corp', $result->getCompanyProfile()->getCompanyName());
+    }
+
+    /**
+     * @test
+     * @covers ::getCompanyProfile
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldReturnNullWhenCompanyProfileAndOrganisationNameNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertNull($result->getCompanyProfile());
+        $this->assertNull($result->getOrganisationName());
     }
 }

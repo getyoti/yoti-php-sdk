@@ -99,6 +99,11 @@ class SessionSpecificationBuilder
     private bool $createIdentityProfilePreview = false;
 
     /**
+     * @var CompanyProfile|null
+     */
+    private ?CompanyProfile $companyProfile = null;
+
+    /**
      * @param int $clientSessionTokenTtl
      * @return $this
      */
@@ -311,6 +316,19 @@ class SessionSpecificationBuilder
     }
 
     /**
+     * Sets the company profile for the session
+     *
+     * @param CompanyProfile $companyProfile
+     *
+     * @return $this
+     */
+    public function withCompanyProfile(CompanyProfile $companyProfile): self
+    {
+        $this->companyProfile = $companyProfile;
+        return $this;
+    }
+
+    /**
      * @return SessionSpecification
      */
     public function build(): SessionSpecification
@@ -333,6 +351,7 @@ class SessionSpecificationBuilder
             $this->createIdentityProfilePreview,
             $this->importToken,
             $this->resources,
+            $this->companyProfile,
         );
     }
 }
