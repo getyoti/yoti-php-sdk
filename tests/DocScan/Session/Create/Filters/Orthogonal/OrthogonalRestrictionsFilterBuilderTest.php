@@ -460,4 +460,62 @@ class OrthogonalRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertCount(2, $filter->getAllowedProviders());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowDigitalIds
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     */
+    public function shouldBuildWithAllowDigitalIdsFalse()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withAllowDigitalIds(false)
+            ->build();
+
+        $this->assertFalse($filter->isAllowDigitalIds());
+        $this->assertStringContainsString('"allow_digital_ids":false', json_encode($filter));
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowDigitalIds
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     */
+    public function shouldBuildWithAllowDigitalIdsTrueExplicitly()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withAllowDigitalIds(true)
+            ->build();
+
+        $this->assertTrue($filter->isAllowDigitalIds());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::withAllowedProviders
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Orthogonal\OrthogonalRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::getAllowedProviders
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     */
+    public function shouldSerializeAllowedProvidersAsJsonArrayWithNonSequentialKeys()
+    {
+        $filter = (new OrthogonalRestrictionsFilterBuilder())
+            ->withAllowedProviders([1 => 'DIGILOCKER', 5 => 'EPHIL_ID_QR'])
+            ->build();
+
+        $this->assertStringContainsString(
+            '"allowed_providers":[{"name":"DIGILOCKER"},{"name":"EPHIL_ID_QR"}]',
+            json_encode($filter)
+        );
+        $this->assertSame([0, 1], array_keys($filter->getAllowedProviders()));
+    }
 }

@@ -125,11 +125,13 @@ class OrthogonalRestrictionsFilterBuilder
     }
 
     /**
+     * @param bool $allowDigitalIds
+     *
      * @return $this
      */
-    public function withAllowDigitalIds(): OrthogonalRestrictionsFilterBuilder
+    public function withAllowDigitalIds(bool $allowDigitalIds = true): OrthogonalRestrictionsFilterBuilder
     {
-        $this->allowDigitalIds = true;
+        $this->allowDigitalIds = $allowDigitalIds;
         return $this;
     }
 
@@ -140,12 +142,12 @@ class OrthogonalRestrictionsFilterBuilder
      */
     public function withAllowedProviders(array $providerNames): OrthogonalRestrictionsFilterBuilder
     {
-        $this->allowedProviders = array_map(
+        $this->allowedProviders = array_values(array_map(
             function (string $providerName): Provider {
                 return new Provider($providerName);
             },
             $providerNames
-        );
+        ));
         return $this;
     }
 

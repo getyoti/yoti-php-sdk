@@ -35,6 +35,8 @@ abstract class DocumentFilter implements \JsonSerializable
 
         if (isset($allowedProviders)) {
             Validation::isArrayOfType($allowedProviders, [Provider::class], 'allowedProviders');
+            // Re-index so non-sequential keys (e.g. from array_filter) still serialise as a JSON array.
+            $allowedProviders = array_values($allowedProviders);
         }
         $this->allowedProviders = $allowedProviders;
     }

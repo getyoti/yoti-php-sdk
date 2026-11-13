@@ -98,11 +98,13 @@ class DocumentRestrictionsFilterBuilder
     }
 
     /**
+     * @param bool $allowDigitalIds
+     *
      * @return $this
      */
-    public function withAllowDigitalIds(): self
+    public function withAllowDigitalIds(bool $allowDigitalIds = true): self
     {
-        $this->allowDigitalIds = true;
+        $this->allowDigitalIds = $allowDigitalIds;
         return $this;
     }
 
@@ -113,12 +115,12 @@ class DocumentRestrictionsFilterBuilder
      */
     public function withAllowedProviders(array $providerNames): self
     {
-        $this->allowedProviders = array_map(
+        $this->allowedProviders = array_values(array_map(
             function (string $providerName): Provider {
                 return new Provider($providerName);
             },
             $providerNames
-        );
+        ));
         return $this;
     }
 

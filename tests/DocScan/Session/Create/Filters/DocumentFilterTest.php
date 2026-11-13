@@ -87,4 +87,29 @@ class DocumentFilterTest extends TestCase
             json_encode($documentFilter)
         );
     }
+
+    /**
+     * @test
+     *
+     * @covers ::__construct
+     * @covers ::jsonSerialize
+     * @covers ::getAllowedProviders
+     */
+    public function shouldSerializeAllowedProvidersAsJsonArrayWithNonSequentialKeys()
+    {
+        $documentFilter = $this->getMockBuilder(DocumentFilter::class)
+            ->setConstructorArgs([
+                self::SOME_TYPE,
+                null,
+                [3 => new Provider('DIGILOCKER'), 7 => new Provider('EPHIL_ID_QR')],
+            ])
+            ->setMethodsExcept(['jsonSerialize', 'getAllowedProviders'])
+            ->getMock();
+
+        $this->assertSame([0, 1], array_keys($documentFilter->getAllowedProviders()));
+        $this->assertSame(
+            '{"type":"some-type","allowed_providers":[{"name":"DIGILOCKER"},{"name":"EPHIL_ID_QR"}]}',
+            json_encode($documentFilter)
+        );
+    }
 }

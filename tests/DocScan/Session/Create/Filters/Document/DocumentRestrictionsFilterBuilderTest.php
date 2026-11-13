@@ -288,4 +288,74 @@ class DocumentRestrictionsFilterBuilderTest extends TestCase
 
         $this->assertCount(2, $filter->getAllowedProviders());
     }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withAllowDigitalIds
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithAllowDigitalIdsFalse(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowDigitalIds(false)
+            ->build();
+
+        $this->assertFalse($filter->isAllowDigitalIds());
+        $this->assertStringContainsString('"allow_digital_ids":false', json_encode($filter));
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::isAllowDigitalIds
+     * @covers ::forBlacklist
+     * @covers ::withAllowDigitalIds
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldBuildWithAllowDigitalIdsTrueExplicitly(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowDigitalIds(true)
+            ->build();
+
+        $this->assertTrue($filter->isAllowDigitalIds());
+    }
+
+    /**
+     * @test
+     *
+     * @covers ::build
+     * @covers \Yoti\DocScan\Session\Create\Filters\Document\DocumentRestrictionsFilter::__construct
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::getAllowedProviders
+     * @covers \Yoti\DocScan\Session\Create\Filters\DocumentFilter::jsonSerialize
+     * @covers ::forBlacklist
+     * @covers ::withAllowedProviders
+     * @covers ::withDocumentRestriction
+     */
+    public function shouldSerializeAllowedProvidersAsJsonArrayWithNonSequentialKeys(): void
+    {
+        $filter = (new DocumentRestrictionsFilterBuilder())
+            ->forBlacklist()
+            ->withDocumentRestriction($this->documentRestrictionMock)
+            ->withAllowedProviders([1 => 'DIGILOCKER', 5 => 'EPHIL_ID_QR'])
+            ->build();
+
+        $this->assertStringContainsString(
+            '"allowed_providers":[{"name":"DIGILOCKER"},{"name":"EPHIL_ID_QR"}]',
+            json_encode($filter)
+        );
+        $this->assertSame([0, 1], array_keys($filter->getAllowedProviders()));
+    }
 }
