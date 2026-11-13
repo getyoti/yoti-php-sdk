@@ -27,6 +27,7 @@ class IdentityController extends BaseController
                 ->withEmail()
                 ->withDocumentDetails()
                 ->withDocumentImages()
+                ->withEstimatedAgeOver(18, 5)
                 ->build();
 
             $redirectUri = 'https://host/redirect/';

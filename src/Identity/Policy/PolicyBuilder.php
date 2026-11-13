@@ -13,6 +13,11 @@ class PolicyBuilder
     private const PIN_AUTH_TYPE = 2;
 
     /**
+     * Attribute name for estimated age.
+     */
+    public const ATTR_ESTIMATED_AGE = 'estimated_age';
+
+    /**
      * @var WantedAttribute[]
      */
     private array $wantedAttributes = [];
@@ -161,6 +166,48 @@ class PolicyBuilder
         }
 
         return $this->withWantedAttribute($wantedAttributeBuilder->build());
+    }
+
+    /**
+     * Request the estimated_age attribute with a fallback to date_of_birth, applying an
+     * age_over derivation. The resulting wanted attribute will have:
+     *   - name: "estimated_age"
+     *   - alternative_names: ["date_of_birth"]
+     *   - derivation: "age_over:<ageOfInterest>:<buffer>"
+     *   - optional: false
+     *   - accept_self_asserted: false
+     *
+     * @param int $ageOfInterest The age threshold of interest. Must be between 1 and 99 (inclusive).
+     * @param int $buffer        The buffer in years applied to both estimated_age and date_of_birth.
+     *                           Must be between 0 and 20 (inclusive).
+     *
+     * @throws \InvalidArgumentException if ageOfInterest or buffer are out of range.
+     */
+    public function withEstimatedAgeOver(int $ageOfInterest, int $buffer): self
+    {
+        if ($ageOfInterest < 1 || $ageOfInterest > 99) {
+            throw new \InvalidArgumentException(
+                'age of interest must be between 1 and 99'
+            );
+        }
+
+        if ($buffer < 0 || $buffer > 20) {
+            throw new \InvalidArgumentException(
+                'buffer must be between 0 and 20'
+            );
+        }
+
+        $derivation = UserProfile::AGE_OVER . $ageOfInterest . ':' . $buffer;
+
+        $wantedAttribute = (new WantedAttributeBuilder())
+            ->withName(self::ATTR_ESTIMATED_AGE)
+            ->withDerivation($derivation)
+            ->withOptional(false)
+            ->withAcceptSelfAsserted(false)
+            ->withAlternativeNames([UserProfile::ATTR_DATE_OF_BIRTH])
+            ->build();
+
+        return $this->withWantedAttribute($wantedAttribute);
     }
 
     /**

@@ -709,4 +709,184 @@ class PolicyBuilderTest extends TestCase
         $this->assertEquals(json_encode($expectedWantedAttributeData), json_encode($policy));
         $this->assertEquals($advancedIdentityProfileSample, $policy->getAdvancedIdentityProfileRequirements());
     }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     * @covers \Yoti\Identity\Policy\WantedAttribute::__construct
+     * @covers \Yoti\Identity\Policy\WantedAttribute::jsonSerialize
+     * @covers \Yoti\Identity\Policy\WantedAttribute::getAlternativeNames
+     */
+    public function testWithEstimatedAgeOverProducesCorrectWantedAttribute()
+    {
+        $policy = (new PolicyBuilder())
+            ->withEstimatedAgeOver(18, 5)
+            ->build();
+
+        $expectedWantedAttributeData = [
+            'wanted' => [
+                [
+                    'name' => 'estimated_age',
+                    'optional' => false,
+                    'derivation' => 'age_over:18:5',
+                    'alternative_names' => ['date_of_birth'],
+                    'accept_self_asserted' => false,
+                ],
+            ],
+            'wanted_auth_types' => [],
+            'wanted_remember_me' => false,
+            'wanted_remember_me_optional' => false,
+            'identity_profile_requirements' => null,
+            'advanced_identity_profile_requirements' => null,
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedWantedAttributeData),
+            json_encode($policy)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverBoundaryValuesValid()
+    {
+        // age 99, buffer 20 should be valid
+        $policy = (new PolicyBuilder())
+            ->withEstimatedAgeOver(99, 20)
+            ->build();
+
+        $jsonData = $policy->jsonSerialize();
+        $this->assertCount(1, $jsonData->wanted);
+
+        $attr = $jsonData->wanted[0];
+        $this->assertEquals('estimated_age', $attr->getName());
+        $this->assertEquals('age_over:99:20', $attr->getDerivation());
+        $this->assertEquals(['date_of_birth'], $attr->getAlternativeNames());
+
+        // age 1, buffer 0 should be valid
+        $policy2 = (new PolicyBuilder())
+            ->withEstimatedAgeOver(1, 0)
+            ->build();
+
+        $jsonData2 = $policy2->jsonSerialize();
+        $this->assertCount(1, $jsonData2->wanted);
+        $attr2 = $jsonData2->wanted[0];
+        $this->assertEquals('age_over:1:0', $attr2->getDerivation());
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverThrowsForAgeOfInterestTooHigh()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('age of interest must be between 1 and 99');
+
+        (new PolicyBuilder())->withEstimatedAgeOver(100, 5);
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverThrowsForAgeOfInterestZero()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('age of interest must be between 1 and 99');
+
+        (new PolicyBuilder())->withEstimatedAgeOver(0, 5);
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverThrowsForNegativeAgeOfInterest()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('age of interest must be between 1 and 99');
+
+        (new PolicyBuilder())->withEstimatedAgeOver(-1, 5);
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverThrowsForBufferTooHigh()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('buffer must be between 0 and 20');
+
+        (new PolicyBuilder())->withEstimatedAgeOver(18, 21);
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverThrowsForNegativeBuffer()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('buffer must be between 0 and 20');
+
+        (new PolicyBuilder())->withEstimatedAgeOver(18, -1);
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverComposesCorrectlyWithOtherAttributes()
+    {
+        $policy = (new PolicyBuilder())
+            ->withFamilyName()
+            ->withEstimatedAgeOver(25, 3)
+            ->withEmail()
+            ->build();
+
+        $jsonData = $policy->jsonSerialize();
+        $this->assertCount(3, $jsonData->wanted);
+
+        // family_name at index 0
+        $this->assertEquals('family_name', $jsonData->wanted[0]->getName());
+
+        // estimated_age at index 1
+        $estimatedAgeAttr = $jsonData->wanted[1];
+        $this->assertEquals('estimated_age', $estimatedAgeAttr->getName());
+        $this->assertEquals('age_over:25:3', $estimatedAgeAttr->getDerivation());
+        $this->assertEquals(['date_of_birth'], $estimatedAgeAttr->getAlternativeNames());
+        $this->assertFalse($estimatedAgeAttr->getAcceptSelfAsserted());
+        $this->assertFalse($estimatedAgeAttr->getOptional());
+
+        // email_address at index 2
+        $this->assertEquals('email_address', $jsonData->wanted[2]->getName());
+    }
+
+    /**
+     * @test
+     * @covers ::withEstimatedAgeOver
+     */
+    public function testWithEstimatedAgeOverDerivationFormat()
+    {
+        $policy = (new PolicyBuilder())
+            ->withEstimatedAgeOver(30, 10)
+            ->build();
+
+        $jsonString = json_encode($policy);
+        $jsonData = json_decode($jsonString, true);
+
+        $attr = $jsonData['wanted'][0];
+        // Verify no spaces in derivation
+        $this->assertEquals('age_over:30:10', $attr['derivation']);
+        // Verify alternative_names is snake_case and has date_of_birth
+        $this->assertEquals(['date_of_birth'], $attr['alternative_names']);
+        // Verify accept_self_asserted is false
+        $this->assertFalse($attr['accept_self_asserted']);
+        // Verify optional is false
+        $this->assertFalse($attr['optional']);
+    }
 }
