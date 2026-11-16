@@ -9,10 +9,6 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
-use Yoti\Aml\Address as AmlAddress;
-use Yoti\Aml\Country as AmlCountry;
-use Yoti\Aml\Profile as AmlProfile;
-use Yoti\Aml\Result as AmlResult;
 use Yoti\Exception\DateTimeException;
 use Yoti\Profile\ActivityDetails;
 use Yoti\ShareUrl\DynamicScenarioBuilder;
@@ -92,10 +88,12 @@ class YotiClientTest extends TestCase
      */
     private function assertApiUrlStartsWith($expectedUrl, $clientApiUrl = null)
     {
-        $body = Psr7\Utils::streamFor(file_get_contents(TestData::AML_CHECK_RESULT_JSON));
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn($body);
-        $response->method('getStatusCode')->willReturn(200);
+        $response->method('getBody')->willReturn(Psr7\Utils::streamFor(json_encode([
+            'qrcode' => 'http://dynamic-code.yoti.com/some-qr-code',
+            'ref_id' => 'some-ref-id',
+        ])));
+        $response->method('getStatusCode')->willReturn(201);
 
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->exactly(1))
@@ -114,7 +112,12 @@ class YotiClientTest extends TestCase
             Config::API_URL => $clientApiUrl,
         ]);
 
-        $yotiClient->performAmlCheck($this->createMock(AmlProfile::class));
+        $dynamicScenario = (new DynamicScenarioBuilder())
+            ->withCallbackEndpoint('/test-callback-url')
+            ->withPolicy((new DynamicPolicyBuilder())->build())
+            ->build();
+
+        $yotiClient->createShareUrl($dynamicScenario);
     }
 
     /**
@@ -144,34 +147,6 @@ class YotiClientTest extends TestCase
             ActivityDetails::class,
             $yotiClient->getActivityDetails(file_get_contents(TestData::YOTI_CONNECT_TOKEN))
         );
-    }
-
-    /**
-     * @covers ::performAmlCheck
-     * @covers ::__construct
-     */
-    public function testPerformAmlCheck()
-    {
-        $amlAddress = new AmlAddress(new AmlCountry('GBR'));
-        $amlProfile = new AmlProfile('Edward Richard George', 'Heath', $amlAddress);
-
-        $body = Psr7\Utils::streamFor(file_get_contents(TestData::AML_CHECK_RESULT_JSON));
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn($body);
-        $response->method('getStatusCode')->willReturn(200);
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->expects($this->exactly(1))
-            ->method('sendRequest')
-            ->willReturn($response);
-
-        $yotiClient = new YotiClient(TestData::SDK_ID, TestData::PEM_FILE, [
-            Config::HTTP_CLIENT => $httpClient,
-        ]);
-
-        $result = $yotiClient->performAmlCheck($amlProfile);
-
-        $this->assertInstanceOf(AmlResult::class, $result);
     }
 
     /**
@@ -209,6 +184,19 @@ class YotiClientTest extends TestCase
         $this->assertInstanceOf(ShareUrlResult::class, $result);
     }
 
+
+    /**
+     * Asserts that the AML check method has been removed from the public API.
+     *
+     * @coversNothing
+     */
+    public function testPerformAmlCheckMethodDoesNotExist()
+    {
+        $this->assertFalse(
+            method_exists(YotiClient::class, 'performAmlCheck'),
+            'performAmlCheck() must not exist on YotiClient — the AML check endpoint has been decommissioned'
+        );
+    }
 
     /**
      * @covers ::getLoginUrl
