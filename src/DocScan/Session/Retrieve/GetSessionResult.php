@@ -60,6 +60,16 @@ class GetSessionResult
     private ?ImportTokenResponse $importToken;
 
     /**
+     * @var string|null
+     */
+    private $organisationName;
+
+    /**
+     * @var CompanyProfileResponse|null
+     */
+    private $companyProfile;
+
+    /**
      * @var DigitalIdShareResponse[]
      */
     private $digitalIdShares = [];
@@ -116,6 +126,12 @@ class GetSessionResult
 
         if (isset($sessionData['import_token'])) {
             $this->importToken = new ImportTokenResponse($sessionData['import_token']);
+        }
+
+        $this->organisationName = $sessionData['organisation_name'] ?? null;
+
+        if (isset($sessionData['company_profile'])) {
+            $this->companyProfile = new CompanyProfileResponse($sessionData['company_profile']);
         }
 
         if (isset($sessionData['digital_id_shares'])) {
@@ -369,6 +385,22 @@ class GetSessionResult
     public function getImportToken(): ?ImportTokenResponse
     {
         return $this->importToken;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrganisationName(): ?string
+    {
+        return $this->organisationName;
+    }
+
+    /**
+     * @return CompanyProfileResponse|null
+     */
+    public function getCompanyProfile(): ?CompanyProfileResponse
+    {
+        return $this->companyProfile;
     }
 
     /**
