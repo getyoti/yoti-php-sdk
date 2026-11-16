@@ -159,4 +159,44 @@ class WantedAttributeBuilderTest extends TestCase
 
         $this->assertEquals($constraints, $wantedAttribute->getConstraints());
     }
+
+    /**
+     * @covers ::withAlternativeNames
+     * @covers \Yoti\Identity\Policy\WantedAttribute::__construct
+     * @covers \Yoti\Identity\Policy\WantedAttribute::getAlternativeNames
+     * @covers \Yoti\Identity\Policy\WantedAttribute::jsonSerialize
+     */
+    public function testWithAlternativeNames()
+    {
+        $wantedAttribute = (new WantedAttributeBuilder())
+            ->withName('estimated_age')
+            ->withAlternativeNames(['date_of_birth'])
+            ->build();
+
+        $this->assertEquals(['date_of_birth'], $wantedAttribute->getAlternativeNames());
+        $this->assertJsonStringEqualsJsonString(
+            json_encode(['name' => 'estimated_age', 'optional' => false, 'alternative_names' => ['date_of_birth']]),
+            json_encode($wantedAttribute)
+        );
+    }
+
+    /**
+     * @covers ::withAlternativeNames
+     * @covers \Yoti\Identity\Policy\WantedAttribute::__construct
+     * @covers \Yoti\Identity\Policy\WantedAttribute::getAlternativeNames
+     * @covers \Yoti\Identity\Policy\WantedAttribute::jsonSerialize
+     */
+    public function testWithAlternativeNamesNonSequentialKeysSerialiseAsJsonArray()
+    {
+        $wantedAttribute = (new WantedAttributeBuilder())
+            ->withName('estimated_age')
+            ->withAlternativeNames([1 => 'date_of_birth', 5 => 'age'])
+            ->build();
+
+        $this->assertSame(['date_of_birth', 'age'], $wantedAttribute->getAlternativeNames());
+        $this->assertStringContainsString(
+            '"alternative_names":["date_of_birth","age"]',
+            json_encode($wantedAttribute)
+        );
+    }
 }
