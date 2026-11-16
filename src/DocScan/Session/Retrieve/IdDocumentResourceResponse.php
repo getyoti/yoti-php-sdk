@@ -35,6 +35,11 @@ class IdDocumentResourceResponse extends ResourceResponse
     private $documentIdPhoto;
 
     /**
+     * @var string|null
+     */
+    private $provider;
+
+    /**
      * DocumentResourceResponse constructor.
      * @param array<string, mixed> $idDocument
      */
@@ -44,6 +49,7 @@ class IdDocumentResourceResponse extends ResourceResponse
 
         $this->documentType = $idDocument['document_type'] ?? null;
         $this->issuingCountry = $idDocument['issuing_country'] ?? null;
+        $this->provider = $idDocument['provider'] ?? null;
 
         if (isset($idDocument['pages'])) {
             foreach ($idDocument['pages'] as $page) {
@@ -109,6 +115,16 @@ class IdDocumentResourceResponse extends ResourceResponse
     public function getDocumentIdPhoto(): ?DocumentIdPhotoResponse
     {
         return $this->documentIdPhoto;
+    }
+
+    /**
+     * Returns the digital ID provider this document was shared from, if any.
+     *
+     * @return string|null
+     */
+    public function getProvider(): ?string
+    {
+        return $this->provider;
     }
 
     /**

@@ -816,5 +816,36 @@
             @endforeach
 
         @endif
+
+        @if (isset($sessionOverviewPdf) && $sessionOverviewPdf !== null)
+            <div class="row pt-4">
+                <div class="col">
+                    <h2>Session Overview PDF</h2>
+
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>MIME Type</td>
+                                <td>{{ $sessionOverviewPdf->getMimeType() }}</td>
+                            </tr>
+                            <tr>
+                                <td>Size (bytes)</td>
+                                <td>{{ strlen($sessionOverviewPdf->getContent()) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Download</td>
+                                <td>
+                                    <a href="data:application/pdf;base64,{{ base64_encode($sessionOverviewPdf->getContent()) }}"
+                                       download="session-overview.pdf"
+                                       class="btn btn-sm btn-primary">
+                                        Download session-overview.pdf
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
