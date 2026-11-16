@@ -6,6 +6,7 @@ namespace Yoti\DocScan\Session\Create\Filters\Document;
 
 use Yoti\DocScan\Constants;
 use Yoti\DocScan\Session\Create\Filters\DocumentFilter;
+use Yoti\DocScan\Session\Create\Filters\Provider;
 use Yoti\Util\Validation;
 
 class DocumentRestrictionsFilterBuilder
@@ -29,6 +30,16 @@ class DocumentRestrictionsFilterBuilder
      * @var bool|null
      */
     private $allowExpiredDocuments;
+
+    /**
+     * @var bool|null
+     */
+    private $allowDigitalIds;
+
+    /**
+     * @var Provider[]|null
+     */
+    private $allowedProviders;
 
     /**
      * @return $this
@@ -87,6 +98,33 @@ class DocumentRestrictionsFilterBuilder
     }
 
     /**
+     * @param bool $allowDigitalIds
+     *
+     * @return $this
+     */
+    public function withAllowDigitalIds(bool $allowDigitalIds = true): self
+    {
+        $this->allowDigitalIds = $allowDigitalIds;
+        return $this;
+    }
+
+    /**
+     * @param string[] $providerNames
+     *
+     * @return $this
+     */
+    public function withAllowedProviders(array $providerNames): self
+    {
+        $this->allowedProviders = array_values(array_map(
+            function (string $providerName): Provider {
+                return new Provider($providerName);
+            },
+            $providerNames
+        ));
+        return $this;
+    }
+
+    /**
      * @return DocumentRestrictionsFilter
      */
     public function build(): DocumentFilter
@@ -96,7 +134,9 @@ class DocumentRestrictionsFilterBuilder
             $this->inclusion,
             $this->documents,
             $this->allowNonLatinDocuments,
-            $this->allowExpiredDocuments
+            $this->allowExpiredDocuments,
+            $this->allowDigitalIds,
+            $this->allowedProviders
         );
     }
 }

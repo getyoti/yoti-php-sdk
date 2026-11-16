@@ -70,6 +70,11 @@ class GetSessionResult
     private $companyProfile;
 
     /**
+     * @var DigitalIdShareResponse[]
+     */
+    private $digitalIdShares = [];
+
+    /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
      *
@@ -127,6 +132,12 @@ class GetSessionResult
 
         if (isset($sessionData['company_profile'])) {
             $this->companyProfile = new CompanyProfileResponse($sessionData['company_profile']);
+        }
+
+        if (isset($sessionData['digital_id_shares'])) {
+            foreach ($sessionData['digital_id_shares'] as $digitalIdShare) {
+                $this->digitalIdShares[] = new DigitalIdShareResponse($digitalIdShare);
+            }
         }
     }
 
@@ -390,5 +401,34 @@ class GetSessionResult
     public function getCompanyProfile(): ?CompanyProfileResponse
     {
         return $this->companyProfile;
+    }
+
+    /**
+     * Returns the resources used by the check matching the given check ID.
+     *
+     * @param string $checkId
+     * @return ResourceContainer
+     *
+     * @throws \InvalidArgumentException if no check exists with the given ID
+     */
+    public function getResourcesForCheck(string $checkId): ResourceContainer
+    {
+        foreach ($this->checks as $check) {
+            if ($check->getId() === $checkId) {
+                return isset($this->resources)
+                    ? $this->resources->filterForCheck($check)
+                    : new ResourceContainer([]);
+            }
+        }
+
+        throw new \InvalidArgumentException('Check not found');
+    }
+
+    /**
+     * @return DigitalIdShareResponse[]
+     */
+    public function getDigitalIdShares(): array
+    {
+        return $this->digitalIdShares;
     }
 }
