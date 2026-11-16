@@ -13,17 +13,20 @@ class StaticLivenessResourceResponseTest extends TestCase
 {
     private const SOME_LIVENESS_TYPE = 'someLivenessType';
     private const SOME_ID = '493ru49358gh945fh305';
+    private const SOME_CAPTURE_TYPE = 'someCaptureType';
 
     /**
      * @test
      * @covers ::__construct
      * @covers ::getLivenessType
      * @covers ::getImage
+     * @covers ::getCaptureType
      */
     public function shouldBuildCorrectly()
     {
         $input = [
             'liveness_type' => self::SOME_LIVENESS_TYPE,
+            'capture_type' => self::SOME_CAPTURE_TYPE,
             'image' => [
                 'media' => [
                     'id' => self::SOME_ID,
@@ -38,6 +41,7 @@ class StaticLivenessResourceResponseTest extends TestCase
         $result = new StaticLivenessResourceResponse($input);
 
         $this->assertEquals(self::SOME_LIVENESS_TYPE, $result->getLivenessType());
+        $this->assertEquals(self::SOME_CAPTURE_TYPE, $result->getCaptureType());
         $this->assertEquals(self::SOME_ID, $result->getImage()->getId());
         $this->assertNotNull($result->getImage());
         $this->assertInstanceOf(MediaResponse::class, $result->getImage());
@@ -48,6 +52,7 @@ class StaticLivenessResourceResponseTest extends TestCase
      * @covers ::__construct
      * @covers ::getLivenessType
      * @covers ::getImage
+     * @covers ::getCaptureType
      */
     public function shouldNotThrowExceptionIfMissingValues()
     {
@@ -55,5 +60,6 @@ class StaticLivenessResourceResponseTest extends TestCase
 
         $this->assertNull($result->getLivenessType());
         $this->assertNull($result->getImage());
+        $this->assertNull($result->getCaptureType());
     }
 }

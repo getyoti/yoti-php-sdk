@@ -18,6 +18,7 @@ class IdDocumentResourceResponseTest extends TestCase
     private const ID_DOCUMENT_TEXT_DATA_EXTRACTION = 'ID_DOCUMENT_TEXT_DATA_EXTRACTION';
     private const SOME_DOCUMENT_TYPE = 'someDocumentType';
     private const SOME_ISSUING_COUNTRY = 'someIssuingCountry';
+    private const SOME_PROVIDER = 'DIGILOCKER';
 
     /**
      * @test
@@ -28,12 +29,14 @@ class IdDocumentResourceResponseTest extends TestCase
      * @covers ::getDocumentFields
      * @covers ::getDocumentIdPhoto
      * @covers ::getTextExtractionTasks
+     * @covers ::getProvider
      */
     public function shouldBuildCorrectly()
     {
         $input = [
             'document_type' => self::SOME_DOCUMENT_TYPE,
             'issuing_country' => self::SOME_ISSUING_COUNTRY,
+            'provider' => self::SOME_PROVIDER,
             'document_id_photo' => [],
             'pages' => [
                 [ 'someKey' => 'someValue' ],
@@ -54,6 +57,7 @@ class IdDocumentResourceResponseTest extends TestCase
 
         $this->assertEquals(self::SOME_DOCUMENT_TYPE, $result->getDocumentType());
         $this->assertEquals(self::SOME_ISSUING_COUNTRY, $result->getIssuingCountry());
+        $this->assertEquals(self::SOME_PROVIDER, $result->getProvider());
         $this->assertCount(2, $result->getPages());
         $this->assertInstanceOf(DocumentFieldsResponse::class, $result->getDocumentFields());
         $this->assertInstanceOf(DocumentIdPhotoResponse::class, $result->getDocumentIdPhoto());
@@ -74,6 +78,7 @@ class IdDocumentResourceResponseTest extends TestCase
 
         $this->assertNull($result->getDocumentType());
         $this->assertNull($result->getIssuingCountry());
+        $this->assertNull($result->getProvider());
         $this->assertCount(0, $result->getPages());
         $this->assertNull($result->getDocumentFields());
         $this->assertNull($result->getDocumentIdPhoto());

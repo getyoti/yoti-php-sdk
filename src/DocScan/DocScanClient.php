@@ -8,6 +8,7 @@ use Yoti\Constants;
 use Yoti\DocScan\Session\Create\CreateSessionResult;
 use Yoti\DocScan\Session\Create\FaceCapture\CreateFaceCaptureResourcePayload;
 use Yoti\DocScan\Session\Create\FaceCapture\UploadFaceCaptureImagePayload;
+use Yoti\DocScan\Session\Create\SessionOverviewPdfOptions;
 use Yoti\DocScan\Session\Create\SessionSpecification;
 use Yoti\DocScan\Session\Instructions\Instructions;
 use Yoti\DocScan\Session\Retrieve\Configuration\SessionConfigurationResponse;
@@ -253,6 +254,22 @@ class DocScanClient
     public function triggerIbvEmailNotification(string $sessionId): void
     {
         $this->docScanService->triggerIbvEmailNotification($sessionId);
+    }
+
+    /**
+     * Generates a session overview PDF for the given session.
+     *
+     * Sends a POST to /sessions/{sessionId}/pdf and returns the binary PDF
+     * content wrapped in a {@see \Yoti\Media\Media} object.
+     *
+     * @param string $sessionId
+     * @param SessionOverviewPdfOptions|null $options  Optional flags controlling PDF content.
+     * @return \Yoti\Media\Media
+     * @throws Exception\DocScanException
+     */
+    public function createSessionOverviewPdf(string $sessionId, ?SessionOverviewPdfOptions $options = null): Media
+    {
+        return $this->docScanService->createSessionOverviewPdf($sessionId, $options);
     }
 
     /**

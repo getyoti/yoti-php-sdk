@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yoti;
 
-use Yoti\Aml\Profile as AmlProfile;
-use Yoti\Aml\Result as AmlResult;
-use Yoti\Aml\Service as AmlService;
 use Yoti\Exception\ActivityDetailsException;
 use Yoti\Exception\PemFileException;
 use Yoti\Exception\ReceiptException;
@@ -28,8 +25,6 @@ use Yoti\Util\Validation;
  */
 class YotiClient
 {
-    private AmlService $amlService;
-
     private ProfileService $profileService;
 
     private ShareUrlService $shareUrlService;
@@ -60,7 +55,6 @@ class YotiClient
         $config = new Config($options);
 
         $this->profileService = new ProfileService($sdkId, $pemFile, $config);
-        $this->amlService = new AmlService($sdkId, $pemFile, $config);
         $this->shareUrlService = new ShareUrlService($sdkId, $pemFile, $config);
     }
 
@@ -91,20 +85,6 @@ class YotiClient
     public function getActivityDetails(string $encryptedConnectToken): ActivityDetails
     {
         return $this->profileService->getActivityDetails($encryptedConnectToken);
-    }
-
-    /**
-     * Perform AML profile check.
-     *
-     * @param AmlProfile $amlProfile
-     *
-     * @return AmlResult
-     *
-     * @throws Exception\AmlException
-     */
-    public function performAmlCheck(AmlProfile $amlProfile): AmlResult
-    {
-        return $this->amlService->performCheck($amlProfile);
     }
 
     /**

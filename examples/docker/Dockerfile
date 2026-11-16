@@ -7,7 +7,7 @@ RUN rm -rf /usr/share/nginx/html/index.html \
     && chown -R www-data:www-data /usr/share/nginx/html
 
 RUN apt-get update \
-    && apt-get install php7.0 php-curl openssl -y
+    && apt-get install openssl -y
 
 RUN openssl req \
     -config /etc/ssl/openssl.localhost.cnf \
