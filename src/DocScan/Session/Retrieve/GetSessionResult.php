@@ -60,6 +60,21 @@ class GetSessionResult
     private ?ImportTokenResponse $importToken;
 
     /**
+     * @var string|null
+     */
+    private $organisationName;
+
+    /**
+     * @var CompanyProfileResponse|null
+     */
+    private $companyProfile;
+
+    /**
+     * @var DigitalIdShareResponse[]
+     */
+    private $digitalIdShares = [];
+
+    /**
      * DocScanSession constructor.
      * @param array<string, mixed> $sessionData
      *
@@ -111,6 +126,18 @@ class GetSessionResult
 
         if (isset($sessionData['import_token'])) {
             $this->importToken = new ImportTokenResponse($sessionData['import_token']);
+        }
+
+        $this->organisationName = $sessionData['organisation_name'] ?? null;
+
+        if (isset($sessionData['company_profile'])) {
+            $this->companyProfile = new CompanyProfileResponse($sessionData['company_profile']);
+        }
+
+        if (isset($sessionData['digital_id_shares'])) {
+            foreach ($sessionData['digital_id_shares'] as $digitalIdShare) {
+                $this->digitalIdShares[] = new DigitalIdShareResponse($digitalIdShare);
+            }
         }
     }
 
@@ -358,5 +385,50 @@ class GetSessionResult
     public function getImportToken(): ?ImportTokenResponse
     {
         return $this->importToken;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrganisationName(): ?string
+    {
+        return $this->organisationName;
+    }
+
+    /**
+     * @return CompanyProfileResponse|null
+     */
+    public function getCompanyProfile(): ?CompanyProfileResponse
+    {
+        return $this->companyProfile;
+    }
+
+    /**
+     * Returns the resources used by the check matching the given check ID.
+     *
+     * @param string $checkId
+     * @return ResourceContainer
+     *
+     * @throws \InvalidArgumentException if no check exists with the given ID
+     */
+    public function getResourcesForCheck(string $checkId): ResourceContainer
+    {
+        foreach ($this->checks as $check) {
+            if ($check->getId() === $checkId) {
+                return isset($this->resources)
+                    ? $this->resources->filterForCheck($check)
+                    : new ResourceContainer([]);
+            }
+        }
+
+        throw new \InvalidArgumentException('Check not found');
+    }
+
+    /**
+     * @return DigitalIdShareResponse[]
+     */
+    public function getDigitalIdShares(): array
+    {
+        return $this->digitalIdShares;
     }
 }

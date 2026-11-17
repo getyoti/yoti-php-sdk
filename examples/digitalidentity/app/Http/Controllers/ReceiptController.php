@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Yoti\DigitalIdentityClient;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Yoti\Identity\Policy\PolicyBuilder;
 use Yoti\Profile\Attribute;
 use Yoti\Profile\UserProfile;
 use Yoti\Util\Logger;
@@ -86,6 +87,9 @@ class ReceiptController extends BaseController
                     break;
                 case UserProfile::ATTR_DOCUMENT_IMAGES:
                     $profileAttributes[] = $this->createAttributeDisplayItem($attribute, 'Document Images', 'yoti-icon-profile');
+                    break;
+                case PolicyBuilder::ATTR_ESTIMATED_AGE:
+                    $profileAttributes[] = $this->createAttributeDisplayItem($attribute, 'Estimated Age', 'yoti-icon-calendar');
                     break;
                 default:
                     // Skip age verifications (name containing ":").

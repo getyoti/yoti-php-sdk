@@ -19,6 +19,11 @@ class WantedAttributeBuilder
 
     private ?bool $acceptSelfAsserted = null;
 
+    /**
+     * @var string[]
+     */
+    private array $alternativeNames = [];
+
     public function withName(string $name): self
     {
         $this->name = $name;
@@ -64,6 +69,16 @@ class WantedAttributeBuilder
         return $this;
     }
 
+    /**
+     * @param string[] $alternativeNames
+     */
+    public function withAlternativeNames(array $alternativeNames): self
+    {
+        $this->alternativeNames = $alternativeNames;
+
+        return $this;
+    }
+
     public function build(): WantedAttribute
     {
         return new WantedAttribute(
@@ -72,6 +87,7 @@ class WantedAttributeBuilder
             $this->optional,
             $this->acceptSelfAsserted,
             $this->constraints,
+            $this->alternativeNames,
         );
     }
 }

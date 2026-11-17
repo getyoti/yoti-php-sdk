@@ -236,4 +236,43 @@ class ResourceContainer
 
         return array_values($filtered);
     }
+
+    /**
+     * Returns a new ResourceContainer containing only the resources referenced
+     * by the given check's "resources used" list.
+     *
+     * @param CheckResponse $checkResponse
+     * @return ResourceContainer
+     */
+    public function filterForCheck(CheckResponse $checkResponse): ResourceContainer
+    {
+        $resourceIds = $checkResponse->getResourcesUsed();
+
+        $filtered = new ResourceContainer([]);
+        $filtered->idDocuments = $this->filterResourcesByIds($this->idDocuments, $resourceIds);
+        $filtered->supplementaryDocuments = $this->filterResourcesByIds($this->supplementaryDocuments, $resourceIds);
+        $filtered->livenessCapture = $this->filterResourcesByIds($this->livenessCapture, $resourceIds);
+        $filtered->faceCapture = $this->filterResourcesByIds($this->faceCapture, $resourceIds);
+        $filtered->shareCodes = $this->filterResourcesByIds($this->shareCodes, $resourceIds);
+        $filtered->applicantProfiles = $this->filterResourcesByIds($this->applicantProfiles, $resourceIds);
+
+        return $filtered;
+    }
+
+    /**
+     * @param ResourceResponse[] $resources
+     * @param string[] $resourceIds
+     * @return mixed[]
+     */
+    private function filterResourcesByIds(array $resources, array $resourceIds): array
+    {
+        $filtered = array_filter(
+            $resources,
+            function (ResourceResponse $resource) use ($resourceIds): bool {
+                return in_array($resource->getId(), $resourceIds, true);
+            }
+        );
+
+        return array_values($filtered);
+    }
 }

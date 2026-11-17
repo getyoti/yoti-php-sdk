@@ -8,11 +8,14 @@ use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\AdvancedIdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\AuthenticityCheckResponse;
 use Yoti\DocScan\Session\Retrieve\CheckResponse;
+use Yoti\DocScan\Session\Retrieve\CompanyProfileResponse;
+use Yoti\DocScan\Session\Retrieve\DigitalIdShareResponse;
 use Yoti\DocScan\Session\Retrieve\GetSessionResult;
 use Yoti\DocScan\Session\Retrieve\IdentityProfilePreviewResponse;
 use Yoti\DocScan\Session\Retrieve\IdentityProfileResponse;
 use Yoti\DocScan\Session\Retrieve\ImportTokenResponse;
 use Yoti\DocScan\Session\Retrieve\MediaResponse;
+use Yoti\DocScan\Session\Retrieve\ResourceContainer;
 use Yoti\DocScan\Session\Retrieve\ThirdPartyIdentityFraudOneCheckResponse;
 use Yoti\Test\TestCase;
 use Yoti\Util\DateTime;
@@ -353,5 +356,177 @@ class GetSessionResultTest extends TestCase
 
         $this->assertNull($result->getAdvancedIdentityProfile());
         $this->assertNull($result->getAdvancedIdentityProfilePreview());
+    }
+
+    /**
+     * @test
+     * @covers ::getDigitalIdShares
+     * @covers ::__construct
+     */
+    public function shouldParseDigitalIdShares()
+    {
+        $input = [
+            'digital_id_shares' => [
+                [
+                    'id' => 'someId',
+                    'document_type' => 'DIGITAL_AADHAAR',
+                    'issuing_country' => 'IND',
+                    'provider' => 'DIGILOCKER',
+                    'created_at' => '2021-06-11T11:39:24Z',
+                    'last_updated' => '2021-06-11T11:39:24Z',
+                    'resource_id' => 'someResourceId',
+                ],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertCount(1, $result->getDigitalIdShares());
+        $this->assertContainsOnlyInstancesOf(DigitalIdShareResponse::class, $result->getDigitalIdShares());
+        $this->assertEquals('someId', $result->getDigitalIdShares()[0]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getDigitalIdShares
+     * @covers ::__construct
+     */
+    public function shouldReturnEmptyArrayWhenDigitalIdSharesNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertCount(0, $result->getDigitalIdShares());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldReturnResourcesForCheck()
+    {
+        $input = [
+            'checks' => [
+                [
+                    'id' => 'some-check-id',
+                    'type' => self::ID_DOCUMENT_AUTHENTICITY,
+                    'resources_used' => ['some-id-document-id'],
+                ],
+            ],
+            'resources' => [
+                'id_documents' => [
+                    ['id' => 'some-id-document-id'],
+                    ['id' => 'some-other-id-document-id'],
+                ],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $resourcesForCheck = $result->getResourcesForCheck('some-check-id');
+
+        $this->assertInstanceOf(ResourceContainer::class, $resourcesForCheck);
+        $this->assertCount(1, $resourcesForCheck->getIdDocuments());
+        $this->assertEquals('some-id-document-id', $resourcesForCheck->getIdDocuments()[0]->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldReturnEmptyResourceContainerWhenSessionHasNoResources()
+    {
+        $input = [
+            'checks' => [
+                ['id' => 'some-check-id', 'type' => self::ID_DOCUMENT_AUTHENTICITY],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $resourcesForCheck = $result->getResourcesForCheck('some-check-id');
+
+        $this->assertInstanceOf(ResourceContainer::class, $resourcesForCheck);
+        $this->assertCount(0, $resourcesForCheck->getIdDocuments());
+    }
+
+    /**
+     * @test
+     * @covers ::getResourcesForCheck
+     */
+    public function shouldThrowExceptionWhenCheckIdNotFound()
+    {
+        $input = [
+            'checks' => [
+                ['id' => 'some-check-id', 'type' => self::ID_DOCUMENT_AUTHENTICITY],
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Check not found');
+
+        $result->getResourcesForCheck('some-unknown-check-id');
+    }
+
+    /**
+     * @test
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldParseOrganisationName()
+    {
+        $input = [
+            'organisation_name' => 'Some Organisation',
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertEquals('Some Organisation', $result->getOrganisationName());
+    }
+
+    /**
+     * @test
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldReturnNullWhenOrganisationNameNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertNull($result->getOrganisationName());
+    }
+
+    /**
+     * @test
+     * @covers ::getCompanyProfile
+     * @covers ::__construct
+     */
+    public function shouldParseCompanyProfileResponse()
+    {
+        $input = [
+            'company_profile' => [
+                'company_name' => 'Acme Corp',
+            ],
+        ];
+
+        $result = new GetSessionResult($input);
+
+        $this->assertInstanceOf(CompanyProfileResponse::class, $result->getCompanyProfile());
+        $this->assertEquals('Acme Corp', $result->getCompanyProfile()->getCompanyName());
+    }
+
+    /**
+     * @test
+     * @covers ::getCompanyProfile
+     * @covers ::getOrganisationName
+     * @covers ::__construct
+     */
+    public function shouldReturnNullWhenCompanyProfileAndOrganisationNameNotPresent()
+    {
+        $result = new GetSessionResult([]);
+
+        $this->assertNull($result->getCompanyProfile());
+        $this->assertNull($result->getOrganisationName());
     }
 }
