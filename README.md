@@ -51,13 +51,13 @@ Add the Yoti SDK dependency:
 
 ```json
 "require": {
-    "yoti/yoti-php-sdk" : "^4.5.0"
+    "yoti/yoti-php-sdk" : "^4.6.0"
 }
 ```
 
 Or run this Composer command
 ```console
-$ composer require yoti/yoti-php-sdk "^4.5.0"
+$ composer require yoti/yoti-php-sdk "^4.6.0"
 ```
 
 ## Setup

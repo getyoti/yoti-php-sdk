@@ -44,7 +44,9 @@ class PageResponse
             }
         }
 
-        $this->extractionImageIds = $page['extraction_image_ids'] ?? [];
+        $this->extractionImageIds = isset($page['extraction_image_ids']) && is_array($page['extraction_image_ids'])
+            ? $page['extraction_image_ids']
+            : [];
     }
 
     /**

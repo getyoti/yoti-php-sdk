@@ -53,7 +53,7 @@ class PageResponseTest extends TestCase
         ]);
 
         $this->assertCount(2, $pageResponse->getFrames());
-        $this->containsOnlyInstancesOf(FrameResponse::class, $pageResponse->getFrames());
+        $this->assertContainsOnlyInstancesOf(FrameResponse::class, $pageResponse->getFrames());
     }
 
     /**

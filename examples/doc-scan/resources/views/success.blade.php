@@ -574,6 +574,23 @@
                                                 </div>
                                             @endif
 
+                                            @if (count($page->getExtractionImageIds()) > 0)
+                                                <div class="card-group">
+                                                    <div class="card" style="width: 18rem;">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title">Extraction Image IDs</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                @foreach ($page->getExtractionImageIds() as $extractionImageId)
+                                                                    <li>
+                                                                        <a href="/media/{{ $extractionImageId }}" target="_blank">{{ $extractionImageId }}</a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                 @endforeach
@@ -752,6 +769,23 @@
                                                             </div>
                                                         @endif
                                                     @endforeach
+                                                </div>
+                                            @endif
+
+                                            @if (count($page->getExtractionImageIds()) > 0)
+                                                <div class="card-group">
+                                                    <div class="card" style="width: 18rem;">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title">Extraction Image IDs</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                @foreach ($page->getExtractionImageIds() as $extractionImageId)
+                                                                    <li>
+                                                                        <a href="/media/{{ $extractionImageId }}" target="_blank">{{ $extractionImageId }}</a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             @endif
 

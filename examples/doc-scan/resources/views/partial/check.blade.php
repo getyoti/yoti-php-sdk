@@ -67,6 +67,12 @@
                                 <td>Result</td>
                                 <td>{{ $breakdown->getResult() }}</td>
                             </tr>
+                            @if ($breakdown->getProcess())
+                                <tr>
+                                    <td>Process</td>
+                                    <td>{{ $breakdown->getProcess() }}</td>
+                                </tr>
+                            @endif
                             @if (count($breakdown->getDetails()) > 0)
                                 <tr>
                                     <td>Details</td>
