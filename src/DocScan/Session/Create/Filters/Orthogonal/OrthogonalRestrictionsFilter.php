@@ -34,14 +34,18 @@ class OrthogonalRestrictionsFilter extends DocumentFilter
      * @param TypeRestriction|null $typeRestriction
      * @param bool|null $allowNonLatinDocuments
      * @param bool|null $allowExpiredDocuments
+     * @param bool|null $allowDigitalIds
+     * @param \Yoti\DocScan\Session\Create\Filters\Provider[]|null $allowedProviders
      */
     public function __construct(
         ?CountryRestriction $countryRestriction,
         ?TypeRestriction $typeRestriction,
         ?bool $allowNonLatinDocuments,
-        ?bool $allowExpiredDocuments
+        ?bool $allowExpiredDocuments,
+        ?bool $allowDigitalIds = null,
+        ?array $allowedProviders = null
     ) {
-        parent::__construct(Constants::ORTHOGONAL_RESTRICTIONS);
+        parent::__construct(Constants::ORTHOGONAL_RESTRICTIONS, $allowDigitalIds, $allowedProviders);
         $this->countryRestriction = $countryRestriction;
         $this->typeRestriction = $typeRestriction;
         $this->allowNonLatinDocuments = $allowNonLatinDocuments;

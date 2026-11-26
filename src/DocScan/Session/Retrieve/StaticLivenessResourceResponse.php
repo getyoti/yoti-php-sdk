@@ -11,6 +11,17 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
      */
     private $image;
 
+    /**
+     * The capture type of the static liveness resource.
+     *
+     * This is a string specific to STATIC liveness resources and may be null or
+     * absent for older sessions. It is populated when the Relying Business
+     * fetches the session.
+     *
+     * @var string|null
+     */
+    private $captureType;
+
 
     /**
      * StaticLivenessResourceResponse constructor.
@@ -24,6 +35,8 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
         if (isset($zoomLiveness['image'])) {
             $this->image = new MediaResponse($zoomLiveness['image']['media']);
         }
+
+        $this->captureType = $zoomLiveness['capture_type'] ?? null;
     }
 
     /**
@@ -32,5 +45,19 @@ class StaticLivenessResourceResponse extends LivenessResourceResponse
     public function getImage(): ?MediaResponse
     {
         return $this->image;
+    }
+
+    /**
+     * The capture type of the static liveness resource.
+     *
+     * This is specific to STATIC liveness resources and may be null when the
+     * value is absent (e.g. for older sessions). It is populated when the
+     * Relying Business fetches the session.
+     *
+     * @return string|null
+     */
+    public function getCaptureType(): ?string
+    {
+        return $this->captureType;
     }
 }
